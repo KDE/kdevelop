@@ -112,15 +112,20 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     // Show the selected frame when clicked, even if it has previously been selected
     connect(m_framesTreeView, &QTreeView::clicked, this, &FramestackWidget::frameSelectionChanged);
 
-    currentSessionChanged(controller->currentSession());
+    currentSessionChanged(controller->currentSession(), nullptr);
 }
 
 FramestackWidget::~FramestackWidget()
 {
 }
 
-void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
+void FramestackWidget::currentSessionChanged(IDebugSession* session, IDebugSession* previousSession)
 {
+    Q_ASSERT(m_session == previousSession);
+    if (previousSession) {
+        disconnect(previousSession, nullptr, this, nullptr);
+        disconnect(previousSession->frameStackModel(), nullptr, this, nullptr);
+    }
     m_session = session;
 
     m_threadsListView->setModel(session ? session->frameStackModel() : nullptr);

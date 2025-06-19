@@ -387,7 +387,7 @@ protected:
 private:
     void addGdbExitCommand();
     void killDebuggerImpl();
-    void currentSessionChanged(IDebugSession* session);
+    void currentSessionChanged(IDebugSession* session, IDebugSession* previousSession);
 
     /**
      * Call when this session is no longer the current session of DebugController.

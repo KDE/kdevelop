@@ -87,7 +87,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
 
     auto* const debugController = KDevelop::ICore::self()->debugController();
     connect(debugController, &KDevelop::IDebugController::currentSessionChanged, this,
-            &DebuggerConsoleView::handleSessionChanged);
+            &DebuggerConsoleView::currentSessionChanged);
 
     if (plugin) {
         connect(plugin, &MIDebuggerPlugin::reset, this, &DebuggerConsoleView::clear);
@@ -96,7 +96,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
         });
     }
 
-    handleSessionChanged(debugController->currentSession());
+    currentSessionChanged(debugController->currentSession(), nullptr);
 
     updateColors();
 }
@@ -386,9 +386,15 @@ void DebuggerConsoleView::trySendCommand(QString cmd)
     }
 }
 
-void DebuggerConsoleView::handleSessionChanged(KDevelop::IDebugSession* s)
+void DebuggerConsoleView::currentSessionChanged(KDevelop::IDebugSession* iSession,
+                                                KDevelop::IDebugSession* iPreviousSession)
 {
-    auto *session = qobject_cast<MIDebugSession*>(s);
+    if (auto* const previousSession = qobject_cast<MIDebugSession*>(iPreviousSession)) {
+        disconnect(this, nullptr, previousSession, nullptr);
+        disconnect(previousSession, nullptr, this, nullptr);
+    }
+
+    auto* const session = qobject_cast<MIDebugSession*>(iSession);
     if (!session) {
         handleDebuggerNotRunning();
         return;

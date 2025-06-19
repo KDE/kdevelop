@@ -284,8 +284,20 @@ void DebugController::addSession(IDebugSession* session)
     Q_ASSERT(session->frameStackModel());
 
     //TODO support multiple sessions
-    if (m_currentSession) {
-        m_currentSession.data()->stopDebugger();
+    auto* previousSession = m_currentSession.get();
+    if (previousSession) {
+        // Disconnect from no longer relevant signals of the previous session. But keep the stateChanged
+        // and killAllDebuggersNow connections because they are always applicable to all sessions.
+        disconnect(previousSession, &IDebugSession::showStepInSource, this, &DebugController::showStepInSource);
+        disconnect(previousSession, &IDebugSession::clearExecutionPoint, this, &DebugController::clearExecutionPoint);
+        disconnect(previousSession, &IDebugSession::raiseFramestackViews, this, &DebugController::raiseFramestackViews);
+
+        // Remove the execution point, if any, of the previous session.
+        clearExecutionPoint();
+
+        previousSession->stopDebugger();
+        // Stopping the debugger can set m_currentSession to nullptr synchronously => update previousSession pointer.
+        previousSession = m_currentSession;
     }
     m_currentSession = session;
 
@@ -297,7 +309,7 @@ void DebugController::addSession(IDebugSession* session)
 
     updateDebuggerState(session->state(), session);
 
-    emit currentSessionChanged(session);
+    Q_EMIT currentSessionChanged(session, previousSession);
 
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
@@ -388,7 +400,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
     if (state == IDebugSession::EndedState) {
         if (session == m_currentSession.data()) {
             m_currentSession.clear();
-            emit currentSessionChanged(nullptr);
+            Q_EMIT currentSessionChanged(nullptr, session);
             if (!Core::self()->shuttingDown()) {
                 auto* const uiController = Core::self()->uiControllerInternal();
                 auto* const mainWindow = uiController->activeSublimeWindow();

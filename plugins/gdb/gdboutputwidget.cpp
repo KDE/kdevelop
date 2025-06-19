@@ -101,7 +101,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
         });
     }
 
-    currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
+    currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession(), nullptr);
 
 //     TODO Port to KF5
 //     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
@@ -117,9 +117,15 @@ void GDBOutputWidget::updateColors()
     m_errorColor = scheme.foreground(KColorScheme::NegativeText).color();
 }
 
-void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
+void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
+                                            KDevelop::IDebugSession* iPreviousSession)
 {
-    auto *session = qobject_cast<DebugSession*>(s);
+    if (auto* const previousSession = qobject_cast<DebugSession*>(iPreviousSession)) {
+        disconnect(this, nullptr, previousSession, nullptr);
+        disconnect(previousSession, nullptr, this, nullptr);
+    }
+
+    auto* const session = qobject_cast<DebugSession*>(iSession);
     if (!session) {
         handleDebuggerNotRunning();
         return;

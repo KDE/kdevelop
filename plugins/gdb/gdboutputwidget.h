@@ -60,7 +60,6 @@ public Q_SLOTS:
     void toggleShowInternalCommands();
 
 private Q_SLOTS:
-    void currentSessionChanged(KDevelop::IDebugSession *session);
     void updateColors();
 
 protected:
@@ -72,6 +71,7 @@ Q_SIGNALS:
     void breakInto();
 
 private:
+    void currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession);
     /**
      * Call this function when the debugger state of the current session changes to update the UI accordingly.
      */

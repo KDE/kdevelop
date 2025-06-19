@@ -1269,16 +1269,14 @@ void MIDebugSession::setSourceInitFile(bool enable)
     m_sourceInitFile = enable;
 }
 
-void MIDebugSession::currentSessionChanged(IDebugSession* session)
+void MIDebugSession::currentSessionChanged(IDebugSession* session, IDebugSession* previousSession)
 {
-    if (session && session != this) {
-        // another debug session became current
+    if (session && previousSession == this) {
+        // another debug session replaced this one as current
         stopBeingCurrentSession();
     }
     // else one of the following statements is true:
-    // * this session just became current => nothing to do;
-    // * (unlikely) some other current session just ended =>
-    //   this session must have already stopped being current earlier;
+    // * some other session stopped being current (probably *this* session just became current);
     // * this session just ended and DebugController is about to switch away from
     //   the Debug sublime area => setSessionState() will stop being current a bit later.
 }

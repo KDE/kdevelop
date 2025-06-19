@@ -29,7 +29,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public AutoOrientedSplitter
         ~FramestackWidget() override;
 
     private Q_SLOTS:
-        void currentSessionChanged(KDevelop::IDebugSession* session);
+        void currentSessionChanged(KDevelop::IDebugSession* session, KDevelop::IDebugSession* previousSession);
 
         void setThreadShown(const QModelIndex& current);
         void checkFetchMoreFrames();

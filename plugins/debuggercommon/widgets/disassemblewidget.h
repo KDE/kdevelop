@@ -111,15 +111,13 @@ public Q_SLOTS:
     void runToCursor();
     void setDisassemblyFlavor(QAction* action);
 
-private Q_SLOTS:
-    void currentSessionChanged(KDevelop::IDebugSession* session);
-
 protected:
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
     void enableControls(bool enabled);
 
 private:
+    void currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession);
     bool displayCurrent();
     void updateDisassemblyFlavor();
 

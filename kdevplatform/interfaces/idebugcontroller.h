@@ -49,7 +49,7 @@ public:
     virtual VariableCollection *variableCollection() = 0;
 
 Q_SIGNALS:
-    void currentSessionChanged(KDevelop::IDebugSession* session);
+    void currentSessionChanged(KDevelop::IDebugSession* session, KDevelop::IDebugSession* previousSession);
     void raiseFramestackViews();
 };
 

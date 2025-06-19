@@ -227,7 +227,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
     // show the data if debug session is active
     KDevelop::IDebugSession* pS = pDC->currentSession();
 
-    currentSessionChanged(pS);
+    currentSessionChanged(pS, nullptr);
 
     if(pS && !pS->currentAddr().isEmpty())
         slotShowStepInSource(pS->currentUrl(), pS->currentLine(), pS->currentAddr());
@@ -251,9 +251,14 @@ void DisassembleWidget::runToCursor(){
     }
 }
 
-void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
+void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
+                                              KDevelop::IDebugSession* iPreviousSession)
 {
-    auto *session = qobject_cast<MIDebugSession*>(s);
+    if (auto* const previousSession = qobject_cast<MIDebugSession*>(iPreviousSession)) {
+        disconnect(previousSession, nullptr, this, nullptr);
+    }
+
+    auto* const session = qobject_cast<MIDebugSession*>(iSession);
 
     enableControls( session != nullptr ); // disable if session closed
 

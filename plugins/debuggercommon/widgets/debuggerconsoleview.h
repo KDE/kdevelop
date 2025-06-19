@@ -91,7 +91,6 @@ protected Q_SLOTS:
     void flushPending();
     void clear();
 
-    void handleSessionChanged(KDevelop::IDebugSession *session);
     void receivedInternalCommandStdout(const QString &line);
     void receivedUserCommandStdout(const QString &line);
     void receivedStdout(const QString &line, bool internal);
@@ -102,6 +101,7 @@ protected Q_SLOTS:
 private:
     void textViewContextMenuRequested(const QPoint& viewportPosition);
 
+    void currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession);
     /**
      * Call this function when the debugger state of the current session changes to update the UI accordingly.
      */

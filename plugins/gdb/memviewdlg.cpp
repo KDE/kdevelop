@@ -101,12 +101,16 @@ MemoryView::MemoryView(QWidget* parent)
 
     connect(debugController, &KDevelop::IDebugController::currentSessionChanged,
             this, &MemoryView::currentSessionChanged);
-    currentSessionChanged(debugController->currentSession());
+    currentSessionChanged(debugController->currentSession(), nullptr);
 }
 
-void MemoryView::currentSessionChanged(KDevelop::IDebugSession* s)
+void MemoryView::currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession)
 {
-    auto *session = qobject_cast<DebugSession*>(s);
+    if (auto* const previousSession = qobject_cast<DebugSession*>(iPreviousSession)) {
+        disconnect(previousSession, nullptr, this, nullptr);
+    }
+
+    auto* const session = qobject_cast<DebugSession*>(iSession);
     if (!session) {
         m_appHasStarted = false;
         enableOrDisable();

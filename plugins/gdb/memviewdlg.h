@@ -67,8 +67,9 @@ namespace GDB
         void sizeComputed(const QString& value);
         void addReadMemoryCommand(const QString& arguments);
         void memoryRead(const MI::ResultRecord& r);
-
         void memoryEdited(int start, int end);
+
+        void currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession);
         /** Informs the view about changes in debugger state.
          *  Allows view to disable itself when debugger is not running. */
         void debuggerStateChanged(DBGStateFlags state);
@@ -93,8 +94,6 @@ namespace GDB
         QString m_memStartStr, m_memAmountStr;
         QByteArray m_memData;
         bool m_appHasStarted = false;
-
-        void currentSessionChanged(KDevelop::IDebugSession* session);
     };
 
 } // end of namespace GDB
