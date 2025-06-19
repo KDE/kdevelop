@@ -98,7 +98,11 @@ void FrameStackModel::setFrames(int threadNumber, const QVector<FrameItem>& fram
     Q_D(FrameStackModel);
 
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
-    Q_ASSERT(threadIndex.isValid());
+    if (!threadIndex.isValid()) {
+        qCDebug(DEBUGGER).nospace() << "fetched " << frames.size() << " new frames for nonexistent thread #"
+                                    << threadNumber;
+        return;
+    }
 
     auto& threadFrames = d->m_frames[threadNumber];
     if (!threadFrames.empty()) {
@@ -133,7 +137,11 @@ void FrameStackModel::insertFrames(int threadNumber, const QVector<FrameItem>& f
     Q_D(FrameStackModel);
 
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
-    Q_ASSERT(threadIndex.isValid());
+    if (!threadIndex.isValid()) {
+        qCDebug(DEBUGGER).nospace() << "fetched " << frames.size() << " additional frames for nonexistent thread #"
+                                    << threadNumber;
+        return;
+    }
 
     auto& threadFrames = d->m_frames[threadNumber];
     beginInsertRows(threadIndex, threadFrames.size() - 1, threadFrames.size() + frames.size() - 1);
