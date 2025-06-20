@@ -3,6 +3,7 @@
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
     SPDX-FileCopyrightText: 2009 Andreas Pakulat <apaku@gmx.de>
     SPDX-FileCopyrightText: 2016 Aetf <aetf@unlimitedcodeworks.xyz>
+    SPDX-FileCopyrightText: 2025 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,7 +13,6 @@
 
 #include <outputview/outputjob.h>
 
-#include <QPointer>
 #include <QUrl>
 
 #include <memory>
@@ -43,9 +43,17 @@ protected:
      * Call this function when the debug session finishes or fails to start.
      */
     void done();
+
+    /**
+     * Cease tracking the state of the debug session and stop its debugger.
+     *
+     * The caller of this function must finish the job by means other than the usual debug session end.
+     */
+    void stopDebugger();
+
     bool doKill() override;
 
-    QPointer<MIDebugSession> m_session;
+    MIDebugSession* m_session;
 };
 
 class MIDebugJob : public MIDebugJobBase<KDevelop::OutputJob>

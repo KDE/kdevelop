@@ -64,7 +64,12 @@ protected:
     }
     void initializeDebugger() override
     {
-        QTimer::singleShot(500, this, &TestDebugSession::finished);
+        QTimer::singleShot(500, this, [this] {
+            // do the same as MIDebugSession::stopDebugger() does when the debugger is not started
+            constexpr auto notStartedDebuggerFlags{KDevMI::s_dbgNotStarted | KDevMI::s_appNotStarted};
+            setDebuggerState(notStartedDebuggerFlags);
+            setSessionState(EndedState);
+        });
     }
     void configInferior(KDevelop::ILaunchConfiguration *, IExecutePlugin *, const QString &) override {}
     bool execInferior(KDevelop::ILaunchConfiguration *, IExecutePlugin *, const QString &) override { return false; }

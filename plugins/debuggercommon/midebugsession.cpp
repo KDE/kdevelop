@@ -430,7 +430,6 @@ void MIDebugSession::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateF
     if (newState & s_dbgNotStarted) {
         if (changedState & s_dbgNotStarted) {
             message = i18n("Debugger stopped");
-            emit finished();
         }
         if (oldSessionState != NotStartedState || newState & s_dbgFailedStart) {
             newSessionState = EndedState;

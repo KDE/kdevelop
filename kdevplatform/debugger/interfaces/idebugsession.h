@@ -154,7 +154,6 @@ Q_SIGNALS:
     void showStepInSource(const QUrl& file, int line, const QString &addr);
     void showStepInDisassemble(const QString &addr);
     void clearExecutionPoint();
-    void finished();
 
     void raiseFramestackViews();
 

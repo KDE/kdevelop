@@ -3,6 +3,7 @@
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
     SPDX-FileCopyrightText: 2009 Andreas Pakulat <apaku@gmx.de>
     SPDX-FileCopyrightText: 2016 Aetf <aetf@unlimitedcodeworks.xyz>
+    SPDX-FileCopyrightText: 2025 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -35,7 +36,11 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
     JobBase::setCapabilities(KJob::Killable);
 
     m_session = plugin->createSession();
-    QObject::connect(m_session, &MIDebugSession::finished, this, &MIDebugJobBase::done);
+    QObject::connect(m_session, &MIDebugSession::stateChanged, this, [this](IDebugSession::DebuggerState state) {
+        if (state == IDebugSession::EndedState) {
+            done();
+        }
+    });
 
     qCDebug(DEBUGGERCOMMON) << "created debug job" << this << "with" << m_session;
 }
@@ -43,13 +48,12 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
 template<class JobBase>
 MIDebugJobBase<JobBase>::~MIDebugJobBase()
 {
-    // Don't print m_session unconditionally, because it can be already destroyed.
-    qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this;
-    // If this job is destroyed before it starts, m_session can be already destroyed even if this job is not finished.
-    // For example, this occurs when the user starts debugging and immediately exits KDevelop.
-    if (m_session && !JobBase::isFinished()) {
-        qCDebug(DEBUGGERCOMMON) << "debug job destroyed before it finished, stopping debugger of" << m_session;
-        m_session->stopDebugger();
+    if (this->isFinished()) {
+        // do not print m_session, because it can be already destroyed
+        qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this;
+    } else {
+        qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this << "before it finished";
+        stopDebugger();
     }
 }
 
@@ -61,10 +65,18 @@ void MIDebugJobBase<JobBase>::done()
 }
 
 template<typename JobBase>
+void MIDebugJobBase<JobBase>::stopDebugger()
+{
+    qCDebug(DEBUGGERCOMMON) << "stopping debugger of" << m_session;
+    QObject::disconnect(m_session, &MIDebugSession::stateChanged, this, nullptr);
+    m_session->stopDebugger();
+}
+
+template<typename JobBase>
 bool MIDebugJobBase<JobBase>::doKill()
 {
-    qCDebug(DEBUGGERCOMMON) << "killing debug job" << this << "and stopping debugger of" << m_session;
-    m_session->stopDebugger();
+    qCDebug(DEBUGGERCOMMON) << "killing debug job" << this;
+    stopDebugger();
     return true;
 }
 
@@ -77,8 +89,8 @@ MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
 
     initializeStartupInfo(execute, launchcfg);
     if (!m_startupInfo) {
-        qCDebug(DEBUGGERCOMMON) << "failing" << this << "and stopping debugger of" << m_session;
-        m_session->stopDebugger();
+        qCDebug(DEBUGGERCOMMON) << "failing debug job" << this;
+        stopDebugger();
         // The dependency job, if any, will not be created, and an output view
         // for this job will never be added, so do not raise any tool view.
         return;
