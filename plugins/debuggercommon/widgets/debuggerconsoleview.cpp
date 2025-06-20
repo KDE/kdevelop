@@ -364,7 +364,10 @@ void DebuggerConsoleView::trimList(QStringList& l, int max_size)
 void DebuggerConsoleView::trySendCommand(QString cmd)
 {
     if (m_repeatLastCommand && cmd.isEmpty()) {
-        cmd = m_cmdEditor->historyItems().last();
+        const auto& historyItems = m_cmdEditor->historyItems();
+        if (!historyItems.empty()) {
+            cmd = historyItems.constLast();
+        }
     }
     if (!cmd.isEmpty())
     {
