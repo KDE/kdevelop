@@ -13,6 +13,8 @@
 #include <interfaces/iruncontroller.h>
 #include <util/executecompositejob.h>
 
+#include <QDebug>
+
 /**
  * @return a job that combines a given job with its dependency, if any
  *
@@ -43,6 +45,15 @@
     if (!dependency) {
         return dependentJob;
     }
+
+    QObject::connect(dependentJob, &KJob::finished, dependency, [dependentJob, dependency] {
+        // The dependent job must have been canceled if it finishes while the dependency is still alive.
+        // Kill the no longer needed dependency job. This can also happen if a failure or a
+        // cancellation of the dependency aborts the composite job and consequently the unstarted
+        // dependent job, in which case killing the already finished dependency here has no effect.
+        qDebug() << "dependent job" << dependentJob << "finished, so killing its obsolete dependency" << dependency;
+        dependency->kill();
+    });
 
     auto* const compositeJob =
         new KDevelop::ExecuteCompositeJob(KDevelop::ICore::self()->runController(), {dependency, dependentJob});
