@@ -20,10 +20,12 @@
 #include <Okteta/ByteArrayModel>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QContextMenuEvent>
-#include <QFormLayout>
-#include <QLineEdit>
 #include <QDialogButtonBox>
+#include <QFormLayout>
+#include <QIcon>
+#include <QLineEdit>
 #include <QMenu>
 #include <QPushButton>
 #include <QToolBox>
