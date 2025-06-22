@@ -58,12 +58,10 @@ namespace GDB
     public:
         explicit MemoryView(QWidget* parent);
 
-        void debuggerStateChanged(DBGStateFlags state);
-
     Q_SIGNALS:
         void captionChanged(const QString& caption);
 
-    private: // Callbacks
+    private:
         void sizeComputed(const QString& value);
 
         void memoryRead(const MI::ResultRecord& r);
@@ -72,19 +70,17 @@ namespace GDB
         // can work.
         bool isOk() const;
 
-    private Q_SLOTS:
         void memoryEdited(int start, int end);
         /** Informs the view about changes in debugger state.
          *  Allows view to disable itself when debugger is not running. */
-        void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
+        void debuggerStateChanged(DBGStateFlags state);
 
         /** Invoked when user has changed memory range.
             Gets memory for the new range. */
-        void slotChangeMemoryRange();
-        void slotHideRangeDialog();
-        void slotEnableOrDisable();
+        void changeMemoryRange();
+        void hideRangeDialog();
+        void enableOrDisable();
 
-    private: // QWidget overrides
         void contextMenuEvent(QContextMenuEvent* e) override;
 
         void initWidget();
@@ -98,7 +94,6 @@ namespace GDB
         QByteArray m_memData;
         int m_debuggerState;
 
-    private Q_SLOTS:
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };
 
