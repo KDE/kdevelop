@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -1642,13 +1642,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Cesta"
 
-#: project/projectchangesmodel.cpp:308
+#: project/projectchangesmodel.cpp:317
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "žiadna vetva"
 
-#: project/projectchangesmodel.cpp:309
+#: project/projectchangesmodel.cpp:318
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
@@ -1863,121 +1863,121 @@ msgstr ""
 "Build_from_source#Set_up_the_runtime_environment\">tento článok</a> pre viac "
 "informácií."
 
-#: shell/debugcontroller.cpp:111
+#: shell/debugcontroller.cpp:113
 #, kde-format
 msgid "Debugger"
 msgstr "Ladič"
 
-#: shell/debugcontroller.cpp:141
+#: shell/debugcontroller.cpp:143
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Rámcový zásobník"
 
-#: shell/debugcontroller.cpp:146
+#: shell/debugcontroller.cpp:148
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Zarážky"
 
-#: shell/debugcontroller.cpp:151
+#: shell/debugcontroller.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Premenné"
 
-#: shell/debugcontroller.cpp:217
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "&Restart"
 msgstr "&Reštart"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restart program"
 msgstr "Reštartovať program"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Reštartuje aplikácie od začiatku"
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Prerušenie"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:228
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Prerušiť aplikáciu"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:229
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Preruší ladiaci proces alebo aktuálny príkaz ladiaceho programu."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Bežať na kurzor"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Bežať na kurzor"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Pokračuje vo vykonávaní pokiaľ nie je dosiahnutá pozícia kurzora."
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:240
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Nastaviť pozíciu &vykonávania na kurzor"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:241
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "&Skočiť na kurzor"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:242
 #, fuzzy, kde-format
 #| msgid "Continue execution from the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Pokračovať vo vykonávaní od súčasnej pozície kurzora."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Krok cez"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:248
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Prekročiť nasledujúci riadok"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:249
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -1993,42 +1993,42 @@ msgstr ""
 "riadok volanie funkcie, vykoná sa celá funkcia a aplikácia sa zastaví na "
 "riadku nasledujúcom po volaní funkcie."
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:257
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Prekročiť inš&trukciu"
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:258
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Prekročiť inštrukciu"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:259
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Prekročí nasledujúcu inštrukciu zostavenia."
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:264
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Prejsť do vnútra"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:266
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Vstúpiť do nasledujúceho príkazu"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:267
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2041,42 +2041,42 @@ msgstr ""
 "Vykoná presne jeden riadok zdroja. Ak je zdrojový riadok volanie funkcie, "
 "potom sa vykonávanie zastaví po vstupe do funkcie."
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:274
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Vstúpiť do i&nštrukcie"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:275
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Vstúpiť do inštrukcie "
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:276
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Vstúpi do nasledujúcej inštrukcie zostavenia."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:280
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Krok von"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:282
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Vystúpiť zo súčasnej funkcie"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:283
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2095,67 +2095,74 @@ msgstr ""
 "vykonávanie programu v najvonkajšom tele (t.j. v main ()), potom táto "
 "operácia nemá žiadny efekt."
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:291
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Prepnúť zarážku"
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:293
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Prepnúť zarážku"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:294
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Prepne bod zastavenia na aktuálny riadok v editore."
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Show Current Line"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Zobraziť aktuálny riadok"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:299
 #, fuzzy, kde-format
 #| msgid "Show the current execution position"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Zobraziť aktuálnu pozíciu vykonávania"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:300
 #, fuzzy, kde-format
 #| msgid "Jumps to the execution line in the editor."
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Skočí na riadok vykonávania v editore."
 
-#: shell/debugcontroller.cpp:474 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:313
+#, fuzzy, kde-format
+#| msgid "Delete Current Session..."
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Vymazať aktuálne sedenie..."
+
+#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Odladiť spustenie"
 
-#: shell/debugcontroller.cpp:476 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Odladiť aktuálne spustenie"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2165,21 +2172,21 @@ msgstr ""
 "Vykoná cieľ alebo program určený v práve aktívnej konfigurácii spustenia v "
 "ladiacom programe."
 
-#: shell/debugcontroller.cpp:480
+#: shell/debugcontroller.cpp:506
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "Pokračovať"
 
-#: shell/debugcontroller.cpp:482
+#: shell/debugcontroller.cpp:508
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Pokračovať vo vykonávaní aplikácie"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:509
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "
@@ -3360,23 +3367,23 @@ msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Otvoriť projekt pre aktuálny súbor"
 
-#: shell/projectcontroller.cpp:766
+#: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Už otvorený projekt: %1"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
 msgstr "Žiadny aktívny dokument"
 
-#: shell/projectcontroller.cpp:851
+#: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Už otvorený projekt"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3385,26 +3392,26 @@ msgstr ""
 "Projekt, ktorý sa snažíte otvoriť, je už otvorený v najmenej jednom ďalšom "
 "sedení.<br>Čo chcete robiť?"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:856
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Pridať projekt do súčasného sedenia"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:860
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Otvoriť sedenie"
 
-#: shell/projectcontroller.cpp:923
+#: shell/projectcontroller.cpp:921
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Žiadny zo zapnutých rozšírení nepodporuje túto adresu úložiska: %1"
 
-#: shell/projectcontroller.cpp:1227
+#: shell/projectcontroller.cpp:1225
 #, fuzzy, kde-format
 #| msgid "Reparse the Entire Project"
 msgctxt "@action"
@@ -6280,14 +6287,14 @@ msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "?"
 
-#: vcs/models/vcsfilechangesmodel.cpp:131
+#: vcs/models/vcsfilechangesmodel.cpp:137
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Názov súboru"
 
-#: vcs/models/vcsfilechangesmodel.cpp:132
+#: vcs/models/vcsfilechangesmodel.cpp:138
 #, kde-format
 msgctxt "@title:column"
 msgid "Status"

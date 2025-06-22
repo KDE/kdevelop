@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2025-05-17 13:06+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -151,7 +151,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erro interno do depurador"
 
-#: midebugger.cpp:335 midebugsession.cpp:412
+#: midebugger.cpp:335 midebugsession.cpp:447
 #, kde-format
 msgid "Process exited"
 msgstr "O proceso saíu"
@@ -192,13 +192,22 @@ msgstr "O depurador quebrou"
 msgid "Process crashed"
 msgstr "O proceso quebrou"
 
-#: midebuggerplugin.cpp:108
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Xa se está a depurar un programa. Quere interromper a sesión de depuración "
+"actual e continuar?"
+
+#: midebuggerplugin.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Examinar o ficheiro core con %1"
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:120
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -212,13 +221,13 @@ msgstr ""
 "ficheiro core contén unha imaxe da memoria do programa no momento que "
 "quebrou, permitíndolle facer unha análise post-mortem.</p>"
 
-#: midebuggerplugin.cpp:122
+#: midebuggerplugin.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Anexar a un proceso con %1"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -226,104 +235,101 @@ msgid ""
 msgstr ""
 "<b>Anexar ao proceso</b><p>Anexa o depurador a un proceso en execución.</p>"
 
-#: midebuggerplugin.cpp:137
+#: midebuggerplugin.cpp:147
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:205
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Escoller un ficheiro core a examinar…"
 
-#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-"Xa se está a depurar un programa. Quere interromper a sesión de depuración "
-"actual e continuar?"
-
-#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "Interromper a sesión"
-
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Escolla un proceso ao que anexar…"
 
-#: midebuggerplugin.cpp:246
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Non se anexa ao proceso %1: non é posíbel xuntar o depurador consigo mesmo."
 
-#: midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "Depurador"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:95
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "«%1» non é un executábel"
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug core file"
 msgstr "Depurar un ficheiro core"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:210
 #, kde-format
 msgid "Debug process %1"
 msgstr "Depurar o proceso %1"
 
-#: midebugsession.cpp:198
+#: midebuglauncher.cpp:61
+#, fuzzy, kde-format
+#| msgid ""
+#| "A program is already being debugged. Do you want to abort the currently "
+#| "running debug session and continue?"
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Xa se está a depurar un programa. Quere interromper a sesión de depuración "
+"actual e continuar?"
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "Executando o programa"
 
-#: midebugsession.cpp:284
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Anexando ao proceso %1"
 
-#: midebugsession.cpp:315
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Non foi posíbel anexar o depurador:</b><br />"
 
-#: midebugsession.cpp:325
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Examinando o ficheiro core %1"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Depurador detido"
 
-#: midebugsession.cpp:417
+#: midebugsession.cpp:452
 #, kde-format
 msgid "Application is running"
 msgstr "A aplicación está en execución"
 
-#: midebugsession.cpp:422
+#: midebugsession.cpp:457
 #, kde-format
 msgid "Application is paused"
 msgstr "A aplicación está en pausa"
 
-#: midebugsession.cpp:737
+#: midebugsession.cpp:772
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -332,39 +338,39 @@ msgstr ""
 "<b>Enviouse a orde gdb cando o depurador non se estaba a executar</b> <br>A "
 "orde era:<br>%1"
 
-#: midebugsession.cpp:849
+#: midebugsession.cpp:884
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Orde incorrecta do depurador</b><br>%1"
 
-#: midebugsession.cpp:985
+#: midebugsession.cpp:1020
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Saíu co código de retorno: %1"
 
-#: midebugsession.cpp:987
+#: midebugsession.cpp:1022
 #, kde-format
 msgid "Exited normally"
 msgstr "Saíu con normalidade"
 
-#: midebugsession.cpp:994
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Saíuse co sinal %1"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1064
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "O programa recibiu o sinal %1 (%2)"
 
-#: midebugsession.cpp:1161
+#: midebugsession.cpp:1196
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 orde na fila\n"
 msgstr[1] "%1 ordes na fila\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1197
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -372,12 +378,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 orde a ser procesada por gdb\n"
 msgstr[1] "%1 ordes a ser procesadas por gdb\n"
 
-#: midebugsession.cpp:1163
+#: midebugsession.cpp:1198
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Estado do depurador: %1\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1201
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -388,7 +394,7 @@ msgstr ""
 "Texto da orde actual: «%2»\n"
 "Texto orixinal da orde actual: «%3»\n"
 
-#: midebugsession.cpp:1193
+#: midebugsession.cpp:1228
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -728,6 +734,10 @@ msgstr "Escolla o enderezo arredor do cal desensamblar"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Enderezo arredor do cal desensamblar:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "Interromper a sesión"
 
 #~ msgctxt "@action:inmenu"
 #~ msgid "Evaluate: %1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -123,7 +123,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Hjemmelavet formateringsstreng"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -135,22 +135,22 @@ msgstr ""
 "Ingen miljøgruppe er angivet, det ligner en ødelagt konfiguration, tjek "
 "venligst kør konfiguration \"%1\". Brug standard miljøgruppe."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Du skal have gdb 7.0.0 eller nyere.</b><br />Du bruger: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Kunne ikke starte fejlsøgeren:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
@@ -165,27 +165,14 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Kunne ikke finde fejlsøgnings shell \"%1\"."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Konfiguration af GDB"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Executes a Native application in GDB"
 msgid "Executes a native application in GDB"
@@ -500,14 +487,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Kør &GDB-script:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB Output"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -520,28 +507,28 @@ msgstr ""
 "<b>GDB-output</b><p>Viser alle GDB-kommandoer der eksekveres. Du kan også "
 "give andre GDB-kommandoer under fejlsøgningen.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB cmd:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Stop applikationen for at indtaste GDB-kommandoer"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Vis interne kommandoer"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -557,7 +544,7 @@ msgstr ""
 "indstilling vil kun påvirke fremtidige kommandoer, den vil ikke tilføje "
 "eller fjerne kommandoer er udført fra visningen."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

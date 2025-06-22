@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2024-12-20 22:01+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: committoolview.cpp:195 committoolview.cpp:196
+#: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "सञ्चिकानाम/प्रकल्पनाम्ना फ़िल्टर कुर्वन्तु"
 
-#: committoolview.cpp:213
+#: committoolview.cpp:215
 #, kde-format
 msgid "Refresh"
 msgstr "ताजगी"
 
-#: committoolview.cpp:214
+#: committoolview.cpp:216
 #, kde-format
 msgid "Stage selected"
 msgstr "चरण चयनितम्"
 
-#: committoolview.cpp:216
+#: committoolview.cpp:218
 #, kde-format
 msgid "Unstage selected"
 msgstr "अनस्टेज चयनितम्"
 
-#: committoolview.cpp:218
+#: committoolview.cpp:220
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "अमञ्चित सम्पादनानि प्रत्यावर्तयन्तु"
 
-#: committoolview.cpp:471
+#: committoolview.cpp:473
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "प्रतिबद्धता असफलम् अभवत्। संस्करणनियन्त्रणसाधनदृश्यं पश्यन्तु ।"
@@ -201,99 +201,99 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "वैश्विकविन्यासे लिखन्तु"
 
-#: gitplugin.cpp:192
+#: gitplugin.cpp:190
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "git कार्यान्वयनीयम् अन्वेष्टुं असमर्थः । किं प्रणाल्यां संस्थापितम् अस्ति ?"
 
-#: gitplugin.cpp:201
+#: gitplugin.cpp:199
 #, kde-format
 msgid "Git Commit"
 msgstr "गिट् कमिट"
 
-#: gitplugin.cpp:258
+#: gitplugin.cpp:256
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "एकः शृगालः"
 
-#: gitplugin.cpp:259
+#: gitplugin.cpp:257
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "गिट् स्टैशेस्"
 
-#: gitplugin.cpp:260
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Stash Manager"
 
-#: gitplugin.cpp:261
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "पुश स्टैश"
 
-#: gitplugin.cpp:262
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "पॉप स्टैश"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "सञ्चिकानां सूचीं न निर्दिष्टवान्"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:458
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "परिवर्तनं पुनः सेट् कर्तुं न शक्तवान् (मार्गस्य रिक्तसूची)"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:492
 #, kde-format
 msgid "Could not revert changes"
 msgstr "परिवर्तनं प्रत्यागन्तुं न शक्तवान्"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:503
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr "निम्नलिखितसञ्चिकासु अप्रतिबद्धपरिवर्तनानि सन्ति, ये नष्टाः भविष्यन्ति । अनुवर्तते?"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:528
 #, kde-format
 msgid "No files or message specified"
 msgstr "न सञ्चिकाः सन्देशः वा निर्दिष्टः"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:532 gitplugin.cpp:551
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git इत्यस्य ईमेल वा नाम वा निर्दिष्टं नास्ति"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:548
 #, kde-format
 msgid "No message specified"
 msgstr "न सन्देशः निर्दिष्टः"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:622
 #, kde-format
 msgid "No files to remove"
 msgstr "निष्कासयितुं सञ्चिकाः नास्ति"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:902
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "परिवर्तनानि लम्बितानि सन्ति, किं भवन्तः प्रथमं तान् निगूर्तुं इच्छन्ति?"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "स्तशः"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:904
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

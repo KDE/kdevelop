@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2022-08-03 09:57+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -22,33 +22,33 @@ msgstr ""
 msgid "(running)"
 msgstr "(kör)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:48
+#: debuggerplugin.cpp:30 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:93
+#: debuggerplugin.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "LLDB-terminal"
 
-#: debugsession.cpp:136
+#: debugsession.cpp:138
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Försök att utföra användarkommando med LLDB-version som inte stöds"
 
-#: debugsession.cpp:335
+#: debugsession.cpp:337
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Kunde inte starta avlusaren:</b><br />"
 
-#: debugsession.cpp:346
+#: debugsession.cpp:348
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Fel vid anslutning till fjärrmål:</b><br />"
 
-#: debugsession.cpp:359
+#: debugsession.cpp:361
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -57,7 +57,7 @@ msgstr ""
 "<b>Misslyckades läsa in core-fil</b><p>Avlusaren rapporterade följande fel: "
 "<p><tt>%1"
 
-#: debugsession.cpp:390
+#: debugsession.cpp:392
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -70,12 +70,12 @@ msgstr ""
 "information.<br/>Avlusningsterminalen kommer att inaktiveras för att undvika "
 "en krasch.<br/>Vill du fortsätta?"
 
-#: debugsession.cpp:394
+#: debugsession.cpp:396
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB-version stöds inte"
 
-#: debugsession.cpp:440
+#: debugsession.cpp:442
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -88,25 +88,10 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Avlusningsverktygsrad"
 
-#: lldblauncher.cpp:53
+#: lldblauncher.cpp:32
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Avlusa ett program för den här datorn i LLDB"
-
-#: lldblauncher.cpp:78
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"Ett program håller redan på att avlusas. Vill du avbryta avlusningssessionen "
-"som pågår och fortsätta starten?"
-
-#: lldblauncher.cpp:80
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "Avbryt aktuell session"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -246,6 +231,17 @@ msgstr "Fjärrsökväg:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/sökväg/till/en/skrivbar/katalog/på/enheten"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "Ett program håller redan på att avlusas. Vill du avbryta "
+#~ "avlusningssessionen som pågår och fortsätta starten?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "Avbryt aktuell session"
 
 #~ msgid "Startup error"
 #~ msgstr "Startfel"

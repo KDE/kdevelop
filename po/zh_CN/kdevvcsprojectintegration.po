@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,37 +17,37 @@ msgstr ""
 "X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevvcsprojectintegration.pot\n"
 "X-Crowdin-File-ID: 54510\n"
 
-#: vcschangesview.cpp:84
+#: vcschangesview.cpp:88
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "刷新"
 
-#: vcschangesviewplugin.cpp:63
+#: vcschangesviewplugin.cpp:54
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "工程更改"
 
-#: vcschangesviewplugin.cpp:66
+#: vcschangesviewplugin.cpp:57
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "定位当前文档"
 
-#: vcschangesviewplugin.cpp:68
+#: vcschangesviewplugin.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "定位当前文档并选中"
 
-#: vcschangesviewplugin.cpp:71
+#: vcschangesviewplugin.cpp:62
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "重新加载视图"
 
-#: vcschangesviewplugin.cpp:73
+#: vcschangesviewplugin.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

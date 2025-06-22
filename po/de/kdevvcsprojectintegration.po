@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcsprojectintegration\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2020-08-19 18:31+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -15,37 +15,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: vcschangesview.cpp:84
+#: vcschangesview.cpp:88
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Aktualisieren"
 
-#: vcschangesviewplugin.cpp:63
+#: vcschangesviewplugin.cpp:54
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Projekt-Änderungen"
 
-#: vcschangesviewplugin.cpp:66
+#: vcschangesviewplugin.cpp:57
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Aktuelles Dokument suchen"
 
-#: vcschangesviewplugin.cpp:68
+#: vcschangesviewplugin.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Das aktuelle Dokument suchen und auswählen"
 
-#: vcschangesviewplugin.cpp:71
+#: vcschangesviewplugin.cpp:62
 #, kde-format
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Ansicht neu laden"
 
-#: vcschangesviewplugin.cpp:73
+#: vcschangesviewplugin.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"

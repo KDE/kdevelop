@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2013-11-14 02:49+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -17,42 +17,42 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: vcschangesview.cpp:84
+#: vcschangesview.cpp:88
 #, fuzzy, kde-format
 #| msgid "Refresh"
 msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Жаңарту"
 
-#: vcschangesviewplugin.cpp:63
+#: vcschangesviewplugin.cpp:54
 #, fuzzy, kde-format
 #| msgid "VCS Changes"
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Нұсқаларды қадағалау жүйесінің өзгерісі"
 
-#: vcschangesviewplugin.cpp:66
+#: vcschangesviewplugin.cpp:57
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Назардағы құжатты табу"
 
-#: vcschangesviewplugin.cpp:68
+#: vcschangesviewplugin.cpp:59
 #, fuzzy, kde-format
 #| msgid "Locates the current document and selects it."
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Назардағы құжатты тауып таңдау."
 
-#: vcschangesviewplugin.cpp:71
+#: vcschangesviewplugin.cpp:62
 #, fuzzy, kde-format
 #| msgid "Reload View"
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Деректерін қайта жүктеу"
 
-#: vcschangesviewplugin.cpp:73
+#: vcschangesviewplugin.cpp:64
 #, fuzzy, kde-format
 #| msgid "Refreshes the view for all projects, in case anything changed."
 msgctxt "@info:tooltip"

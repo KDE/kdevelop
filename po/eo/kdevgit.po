@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: committoolview.cpp:195 committoolview.cpp:196
+#: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtru laŭ dosiernomo/projektnomo"
 
-#: committoolview.cpp:213
+#: committoolview.cpp:215
 #, kde-format
 msgid "Refresh"
 msgstr "Refreŝigi"
 
-#: committoolview.cpp:214
+#: committoolview.cpp:216
 #, kde-format
 msgid "Stage selected"
 msgstr "Etapo elektita"
 
-#: committoolview.cpp:216
+#: committoolview.cpp:218
 #, kde-format
 msgid "Unstage selected"
 msgstr "Malscenigite elektita"
 
-#: committoolview.cpp:218
+#: committoolview.cpp:220
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Reverti nescenigitajn redaktojn"
 
-#: committoolview.cpp:471
+#: committoolview.cpp:473
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "Farado malsukcesis. Vidu vido de ilo de Versiokontrolo."
@@ -201,62 +201,62 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Skribu al tutmonda agordo"
 
-#: gitplugin.cpp:192
+#: gitplugin.cpp:190
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Ne eblas trovi git ruleblan. Ĉu ĝi estas instalita en la sistemo?"
 
-#: gitplugin.cpp:201
+#: gitplugin.cpp:199
 #, kde-format
 msgid "Git Commit"
 msgstr "Git Commit"
 
-#: gitplugin.cpp:258
+#: gitplugin.cpp:256
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Rebazi"
 
-#: gitplugin.cpp:259
+#: gitplugin.cpp:257
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git Stashes"
 
-#: gitplugin.cpp:260
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Stash Manager"
 
-#: gitplugin.cpp:261
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Puŝu Stash"
 
-#: gitplugin.cpp:262
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Pop Stash"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Ne specifis la liston de dosieroj"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:458
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Ne eblis restarigi ŝanĝojn (malplena listo de vojoj)"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:492
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Ne eblis reverti ŝanĝojn"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:503
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -264,38 +264,38 @@ msgstr ""
 "La sekvaj dosieroj havas neengaĝitajn ŝanĝojn, kiuj estos perditaj. Ĉu "
 "daŭrigi?"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:528
 #, kde-format
 msgid "No files or message specified"
 msgstr "Neniuj dosieroj aŭ mesaĝo specifitaj"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:532 gitplugin.cpp:551
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Retpoŝto aŭ nomo por Git ne specifita"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:548
 #, kde-format
 msgid "No message specified"
 msgstr "Neniu mesaĝo specifita"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:622
 #, kde-format
 msgid "No files to remove"
 msgstr "Neniuj dosieroj por forigi"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:902
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Estas pritraktataj ŝanĝoj, ĉu vi unue volas konservi ilin?"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Stash"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:904
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

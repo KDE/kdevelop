@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2024-11-10 19:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,32 +21,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: committoolview.cpp:195 committoolview.cpp:196
+#: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Dosya/proje adı ile süz"
 
-#: committoolview.cpp:213
+#: committoolview.cpp:215
 #, kde-format
 msgid "Refresh"
 msgstr "Yenile"
 
-#: committoolview.cpp:214
+#: committoolview.cpp:216
 #, kde-format
 msgid "Stage selected"
 msgstr "Seçiliyi hazırla"
 
-#: committoolview.cpp:216
+#: committoolview.cpp:218
 #, kde-format
 msgid "Unstage selected"
 msgstr "Seçiliyi hazırlıktan çıkar"
 
-#: committoolview.cpp:218
+#: committoolview.cpp:220
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Hazırlıktan çıkarılmaş düzenlemeleri geri al"
 
-#: committoolview.cpp:471
+#: committoolview.cpp:473
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "İşleme başarısız. Sürüm Denetimi araç görünümüne bakın."
@@ -203,62 +203,62 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Global yapılandırmaya yaz"
 
-#: gitplugin.cpp:192
+#: gitplugin.cpp:190
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "Git yürütülebiliri bulunamadı. Sistemde kurulu mu?"
 
-#: gitplugin.cpp:201
+#: gitplugin.cpp:199
 #, kde-format
 msgid "Git Commit"
 msgstr "Git İşle"
 
-#: gitplugin.cpp:258
+#: gitplugin.cpp:256
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Yeniden Temellendir"
 
-#: gitplugin.cpp:259
+#: gitplugin.cpp:257
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git Zulaları"
 
-#: gitplugin.cpp:260
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Zula Yöneticisi"
 
-#: gitplugin.cpp:261
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Zulayı İt"
 
-#: gitplugin.cpp:262
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Zulayı Patlat"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Dosyaların listesi belirtilmedi"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:458
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Değişiklikler sıfırlanamadı (boş yol listesi)"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:492
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Değişiklikler geri alınamadı"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:503
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -266,38 +266,38 @@ msgstr ""
 "Aşağıdaki dosyalarda işlenmemiş ve kaybolacak değişiklikler var. Sürdürülsün "
 "mü?"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:528
 #, kde-format
 msgid "No files or message specified"
 msgstr "Dosya veya ileti belirtilmedi"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:532 gitplugin.cpp:551
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git için e-posta veya ad belirtilmemiş"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:548
 #, kde-format
 msgid "No message specified"
 msgstr "Bir ileti belirtilmedi"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:622
 #, kde-format
 msgid "No files to remove"
 msgstr "Kaldırılacak dosya yok"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:902
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "Bekleyen değişiklikler var, önce bunları zulalamak istiyor musunuz?"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Zulala"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:904
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -159,7 +159,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern Fehlersöök-Fehler"
 
-#: midebugger.cpp:335 midebugsession.cpp:412
+#: midebugger.cpp:335 midebugsession.cpp:447
 #, kde-format
 msgid "Process exited"
 msgstr "Perzess verlaten"
@@ -199,14 +199,21 @@ msgstr "Fehlersöker anhollen"
 msgid "Process crashed"
 msgstr "Perzess verlaten"
 
-#: midebuggerplugin.cpp:108
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+
+#: midebuggerplugin.cpp:118
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Karndatei bekieken..."
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:120
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -225,14 +232,14 @@ msgstr ""
 "Spiekertogriep-Fehler. De Karndatei bargt en Afbild vun den Programmspieker, "
 "as he bi den Afstört weer, so dat Du em later noch bekieken kannst.</p>"
 
-#: midebuggerplugin.cpp:122
+#: midebuggerplugin.cpp:132
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Perzess griepen"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -242,104 +249,98 @@ msgid ""
 msgstr ""
 "<b>Perzess griepen</b><p>Lett den Fehlersöker en lopen Perzess griepen.</p>"
 
-#: midebuggerplugin.cpp:137
+#: midebuggerplugin.cpp:147
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:205
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Karndatei för't Bekieken utsöken..."
 
-#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-
-#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Perzess för't Griepen utsöken..."
 
-#: midebuggerplugin.cpp:246
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Perzess %1 lett sik nich griepen: de Fehlersöker kann sik nich sülven "
 "griepen."
 
-#: midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "Fehlersöker"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:95
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug core file"
 msgstr "Fehlersöök binnen Karndatei"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:210
 #, kde-format
 msgid "Debug process %1"
 msgstr "Fehlersöök in Perzess \"%1\""
 
-#: midebugsession.cpp:198
+#: midebuglauncher.cpp:61
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "Programm warrt utföhrt"
 
-#: midebugsession.cpp:284
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Perzess \"%1\" warrt grepen"
 
-#: midebugsession.cpp:315
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Fehlersöker lett sik nich griepen:</b><br />"
 
-#: midebugsession.cpp:325
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Karndatei \"%1\" warrt bekeken"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Fehlersöker anhollen"
 
-#: midebugsession.cpp:417
+#: midebugsession.cpp:452
 #, kde-format
 msgid "Application is running"
 msgstr "Programm löppt"
 
-#: midebugsession.cpp:422
+#: midebugsession.cpp:457
 #, kde-format
 msgid "Application is paused"
 msgstr "Programm wöör ophollen"
 
-#: midebugsession.cpp:737
+#: midebugsession.cpp:772
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -348,39 +349,39 @@ msgstr ""
 "<b>\"gdb\"-Befehl geven, man de Fehlersöker löppt nich.</b><br>De Befehl "
 "weer:<br> %1"
 
-#: midebugsession.cpp:849
+#: midebugsession.cpp:884
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Leeg Fehlersöök-Befehl</b><br>%1"
 
-#: midebugsession.cpp:985
+#: midebugsession.cpp:1020
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Mit Utstiegkode %1 afslaten"
 
-#: midebugsession.cpp:987
+#: midebugsession.cpp:1022
 #, kde-format
 msgid "Exited normally"
 msgstr "Normaal beendt"
 
-#: midebugsession.cpp:994
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Na Signaal %1 verlaten"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1064
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programm hett Signaal %1 (%2) kregen"
 
-#: midebugsession.cpp:1161
+#: midebugsession.cpp:1196
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 Befehl in de Reeg\n"
 msgstr[1] "%1 Befehlen in de Reeg\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1197
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -388,12 +389,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 Befehl warrt vun \"gdb\" afarbeidt\n"
 msgstr[1] "%1 Befehlen warrt vun \"gdb\" afarbeidt\n"
 
-#: midebugsession.cpp:1163
+#: midebugsession.cpp:1198
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Fehlersöker-Status: %1\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1201
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -404,7 +405,7 @@ msgstr ""
 "Aktuell Befehltext: \"%2\"\n"
 "Aktuell Befehl-Orginaaltext: \"%3\"\n"
 
-#: midebugsession.cpp:1193
+#: midebugsession.cpp:1228
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""

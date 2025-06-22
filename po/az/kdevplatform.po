@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -1623,13 +1623,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Yolu"
 
-#: project/projectchangesmodel.cpp:308
+#: project/projectchangesmodel.cpp:317
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "bölmə yoxdur"
 
-#: project/projectchangesmodel.cpp:309
+#: project/projectchangesmodel.cpp:318
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
@@ -1826,111 +1826,111 @@ msgstr ""
 "Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment\">bu "
 "məqalə</a> ilə tanış olun."
 
-#: shell/debugcontroller.cpp:111
+#: shell/debugcontroller.cpp:113
 #, kde-format
 msgid "Debugger"
 msgstr "Xəta sazlayıcı"
 
-#: shell/debugcontroller.cpp:141
+#: shell/debugcontroller.cpp:143
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Çərçivələr yığını"
 
-#: shell/debugcontroller.cpp:146
+#: shell/debugcontroller.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Qırılma nöqtələri"
 
-#: shell/debugcontroller.cpp:151
+#: shell/debugcontroller.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Dəyişənlər"
 
-#: shell/debugcontroller.cpp:217
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "&Restart"
 msgstr "&Yenidən başladın"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restart program"
 msgstr "Yenidən başlatma proqramı"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Tətbiqləri ən başdan yenidən başladın."
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Fasilə"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:228
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Tətbiqi dayandırın"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "XƏta sazlama prosesini və ya cari xəta sazlama əmrini dayandırır."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "&Kursora qədər icra etmək"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Kursora qədər icra etmək"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "İcra edilməni kursorun mövqeyinə çatanadək davam etdirir."
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "İ&cra olunma sahəsini kursora qədər təyin edin"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Kursor mövqeyinə keçin"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "İcra olunmanı kursor mövqeyindən davam etdirin."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Üzərindən &adlayın"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Sonrakı sətirdən keçin"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1942,37 +1942,37 @@ msgstr ""
 "çağırarsa, bütöv funksiya icra olunur və tətbiq, funksiyanı işə salan "
 "sətirdən sonra dayanacaqdır."
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "&Təlimata üzrə adımlamaq"
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Təlimata üzrə adımlamaq"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Növbəti aseembler təlimatına keçin."
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Bir addım &daxilə"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Növbəti izahata keçin"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1982,37 +1982,37 @@ msgstr ""
 "Tam olaraq bir qaynaq sətri icra olunur. Əgər aynaq sətri funksiyanın "
 "çağrılmasıdırsa, funksiya daxil edildikdən sonra icra olunma dayanacaqdır."
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "&Təlimata daxil olun"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Təlimata daxil olun"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Növbəti assembler təlimatına daxil olun."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Çıx&maq"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Cari təlimatdan çıxmaq"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:283
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2026,60 +2026,68 @@ msgstr ""
 "göstərcək. Əgər proqram xarici çərçivədədirsə (yəni, main () daxilində) bu "
 "funksiyanın təsiri olmayacaq."
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Qırılma nötəsini dəyişdirin"
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Qırılma nötəsini dəyişdirin"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Redaktorda, cari sətirdəki qırılma nöqtəsini dəyişir."
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Cari sətri göstərmək"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Cari icra mövqeyini göstərmək"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Redaktorda icra sətrinə keçir."
 
-#: shell/debugcontroller.cpp:474 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:313
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Delete Current Session..."
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Cari sessiyanı silin..."
+
+#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Başlatmanın xətalarını düzəldin"
 
-#: shell/debugcontroller.cpp:476 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Cari başlatmanın xətalarını düzəldin"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2089,19 +2097,19 @@ msgstr ""
 "Sazlayıcı daxilindəki cari aktiv başlatma tənzimləməsində göstərilmiş "
 "hədəfin və ya proramın kodunu icra edir."
 
-#: shell/debugcontroller.cpp:480
+#: shell/debugcontroller.cpp:506
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Davam edin"
 
-#: shell/debugcontroller.cpp:482
+#: shell/debugcontroller.cpp:508
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Tətbiqin kodunun icra edilməsini davam etdirin"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:509
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3188,23 +3196,23 @@ msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Cari fayl üçün layihəni açın"
 
-#: shell/projectcontroller.cpp:766
+#: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Layihə artıq açıqdır: %1"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
 msgstr "Aktiv sənəd yoxdur"
 
-#: shell/projectcontroller.cpp:851
+#: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Layihə artıq açıqdır"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3213,24 +3221,24 @@ msgstr ""
 "Açmağa cəhd etdiyiniz layihə artıq ən azı bir başqa sessiyada açıqdır. "
 "<br>Nə etmək istəyirsiniz?"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:856
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Layihəni cari sessiyaya əlavə etmək"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:860
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "%1 sessiyasını açmaq"
 
-#: shell/projectcontroller.cpp:923
+#: shell/projectcontroller.cpp:921
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Bu saxlama yeri URL-nu dəstəkləyən aktiv qoşma yoxdur: %1"
 
-#: shell/projectcontroller.cpp:1227
+#: shell/projectcontroller.cpp:1225
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -5915,13 +5923,13 @@ msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "?"
 
-#: vcs/models/vcsfilechangesmodel.cpp:131
+#: vcs/models/vcsfilechangesmodel.cpp:137
 #, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Faylın adı"
 
-#: vcs/models/vcsfilechangesmodel.cpp:132
+#: vcs/models/vcsfilechangesmodel.cpp:138
 #, kde-format
 msgctxt "@title:column"
 msgid "Status"

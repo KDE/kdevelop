@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -125,7 +125,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Egen Formaat"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -137,23 +137,23 @@ msgstr ""
 "Keen Ümgevenkoppel angeven, lett as en schaadhaftig Instellen. Prööv bitte "
 "de Utföhr-Instellen \"%1\". De Standard-Ümgevenkoppel warrt ansteed bruukt."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""
 "<b>\"gdb 7.0.0\" oder nieger deit noot.</b><br />Du bruukst opstunns: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Fehlersöker lett sik nich opropen:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
@@ -168,27 +168,14 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Fehlersöök-Konsool \"%1\" lett sik nich finnen."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB instellen"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Executes a Native application in GDB"
 msgid "Executes a native application in GDB"
@@ -499,14 +486,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Utföhrskript för \"&gdb\":"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB-Utgaav"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -519,28 +506,28 @@ msgstr ""
 "<b>GDB-Utgaav</b><p>Wiest all utföhrte gdb-Befehlen. Du kannst bi de "
 "Fehlersöök ok egen gdb-Befehlen utföhren.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&gdb-Befehl:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Programm för't Ingeven vun gdb-Befehlen anhollen"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Intern Befehlen wiesen"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -556,7 +543,7 @@ msgstr ""
 "Optschoon gellt bloots för tokamen Befehlen, al geven Befehlen warrt de "
 "Ansicht nich toföögt oder ut ehr wegmaakt."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

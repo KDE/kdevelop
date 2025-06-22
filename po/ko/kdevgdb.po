@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2023-08-06 20:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -98,7 +98,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "사용자 정의 형식 문자열"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -107,22 +107,22 @@ msgstr ""
 "환경 프로필을 지정하지 않았습니다. 설정이 잘못된 것 같습니다. '%1' 실행 설정"
 "을 확인하십시오. 기본 환경 프로필을 사용합니다."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr "<알 수 없는 버전>"
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>gdb 7.0.0 이상이 필요합니다.</b><br />사용 중인 버전: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>디버거를 시작할 수 없음:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -136,28 +136,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "'%1' 디버깅 셸을 찾을 수 없습니다."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB 설정"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
-"실행하시겠습니까?"
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "현재 세션 중단"
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "GDB에서 네이티브 앱 실행"
@@ -404,13 +389,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "GDB 스크립트 실행(&G):"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB 출력"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -420,25 +405,25 @@ msgstr ""
 "<b>GDB 출력</b><p>실행 중인 모든 GDB 명령어를 표시합니다. 또한 디버깅 중에 다"
 "른 GDB 명령어를 내릴 수 있습니다.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "GDB 명령(&G):"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "앱의 실행을 일시 정지하여 GDB 명령 입력"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "내부 명령 표시"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -450,7 +435,7 @@ msgstr ""
 "후의 명령에만 적용되며, 보기에 이미 있는 명령을 추가하거나 삭제하지는 않습니"
 "다."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -599,6 +584,17 @@ msgstr "새 메모리 뷰어"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "새 메모리 뷰어 열기"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계"
+#~ "속 실행하시겠습니까?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "현재 세션 중단"
 
 #~ msgid "<html><head/><body><p><br/></p></body></html>"
 #~ msgstr "<html><head/><body><p><br/></p></body></html>"

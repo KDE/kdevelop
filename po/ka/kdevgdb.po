@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2024-07-21 05:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -105,7 +105,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "ფორმატის ხელით მითითებული სტრიქონი"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -114,22 +114,22 @@ msgstr ""
 "გარემოს პროფილი არჩეული არაა. როგორც ჩანს, რაღაც გაფუჭდა. შეამოწმეთ %1-ის "
 "კონფიგურაცია. გამოიყენება გარემოს ნაგულისხმები პროფილი."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr "<უცნობი ვერსია>"
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>გჭირდებათ gdb 7.0.0 ან უფრო ახალი.</b><br />იყენებთ: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>გამართვის პროგრამის გაშვების შეცდომა:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -142,28 +142,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "გამართვის გარსი '%1' ვერ ვიპოვე."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB -ის მორგება"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
-"გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "მიმდინარე სესიის გაუქმება"
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "უშვებს ადგილობრივ აპლიკაციას GDB-ში"
@@ -413,13 +398,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "&gdb-ის სკრიპტის გაშვება:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB გამოტანა"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -429,25 +414,25 @@ msgstr ""
 "<b>GDB-ის გამოტანა</b><p>აჩვენებს GDB-ის ყველა გაშვებულ ბრძანებას. GDB-ის "
 "ნებისმიერი ბრძანება ასევე შეგიძლიათ, გამართვისას შეიყვანოთ.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB ბრძანება:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "შეაჩერეთ აპის შესრულება GDB-ის ბრძანებების შესაყვანად"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "შიდა ბრძანებების ჩვენება"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -459,7 +444,7 @@ msgstr ""
 "პარამეტრი გავლებას იქონიებს, მხოლოდ, მომავალში გაშვებულ ბრძანებებზე. ის არ "
 "წაშლის ან დაამატებს უკვე ჩამოთვლილ ბრძანებებს ფანჯრიდან."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -609,3 +594,14 @@ msgstr "მეხსიერების ახალი მნახველ�
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "მეხსიერების ახალი მნახველის გახსნა"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
+#~ "გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "მიმდინარე სესიის გაუქმება"

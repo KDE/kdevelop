@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2025-04-17 12:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1627,13 +1627,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Sökväg"
 
-#: project/projectchangesmodel.cpp:308
+#: project/projectchangesmodel.cpp:317
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "ingen gren"
 
-#: project/projectchangesmodel.cpp:309
+#: project/projectchangesmodel.cpp:318
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
@@ -1829,111 +1829,111 @@ msgstr ""
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">denna artikel</a> för mer information."
 
-#: shell/debugcontroller.cpp:111
+#: shell/debugcontroller.cpp:113
 #, kde-format
 msgid "Debugger"
 msgstr "Avlusare"
 
-#: shell/debugcontroller.cpp:141
+#: shell/debugcontroller.cpp:143
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Aktiveringspoststack"
 
-#: shell/debugcontroller.cpp:146
+#: shell/debugcontroller.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Brytpunkter"
 
-#: shell/debugcontroller.cpp:151
+#: shell/debugcontroller.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variabler"
 
-#: shell/debugcontroller.cpp:217
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "&Restart"
 msgstr "Sta&rta om"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restart program"
 msgstr "Starta om program"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Startar om program från början."
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Avbrott"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:228
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Avbryt programmet"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Avbryter processen som avlusas, eller det aktuella avlusarkommandot."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Kör till mar&kör"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Kör till markör"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Fortsätter köra till markörens position nås."
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Flytta &körposition till markör"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Gå till markör"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Fortsätt köra från nuvarande markörposition."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Stega för&bi"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Stega förbi nästa rad"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1945,37 +1945,37 @@ msgstr ""
 "metodanrop så körs hela metoden och programmet stannar på raden efter "
 "metodanropet."
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Stega förbi ins&truktion"
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Stega förbi instruktion"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Stegar förbi nästa assemblerinstruktion."
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Stega &in i"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Stega in i nästa sats"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1985,37 +1985,37 @@ msgstr ""
 "Kör exakt en källkodsrad. Om källkodsraden är ett anrop till en funktion så "
 "stannar körningen efter funktionen har anropats."
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Stega in i i&nstruktion"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Stega in i instruktion"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Stegar in i nästa assemblerinstruktion."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Stega &ur"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Stegar ur den nuvarande funktionen"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:283
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2029,60 +2029,68 @@ msgstr ""
 "metoden. Om vi är i den första aktiveringsposten (dvs i main()), så har "
 "denna åtgärd ingen inverkan."
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Växla brytpunkt"
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Växla brytpunkt"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Växlar brytpunkten på nuvarande rad i editorn."
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Visa nuvarande rad"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Visa den nuvarande körpositionen"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Går till raden som körs i editorn."
 
-#: shell/debugcontroller.cpp:474 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:313
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Delete Current Session..."
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Ta bort nuvarande session..."
+
+#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Avlusa start"
 
-#: shell/debugcontroller.cpp:476 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Avlusa nuvarande start"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2092,19 +2100,19 @@ msgstr ""
 "Kör målet eller programmet som är angivet i startinställningen som för "
 "närvarande är aktiv inne i en avlusare."
 
-#: shell/debugcontroller.cpp:480
+#: shell/debugcontroller.cpp:506
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Fortsätt"
 
-#: shell/debugcontroller.cpp:482
+#: shell/debugcontroller.cpp:508
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Fortsätter köra programmet"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:509
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3191,23 +3199,23 @@ msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Öppna projekt för aktuell fil"
 
-#: shell/projectcontroller.cpp:766
+#: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Projektet redan öppnat: %1"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
 msgstr "Inget aktivt dokument"
 
-#: shell/projectcontroller.cpp:851
+#: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Projektet redan öppnat"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3216,24 +3224,24 @@ msgstr ""
 "Projektet du försöker öppna är redan öppet i minst en annan session.<br>Vad "
 "vill du göra?"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:856
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Lägg till projektet i aktuell session"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:860
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Öppna session %1"
 
-#: shell/projectcontroller.cpp:923
+#: shell/projectcontroller.cpp:921
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Inget aktiverat insticksprogram stöder arkivwebbadressen: %1"
 
-#: shell/projectcontroller.cpp:1227
+#: shell/projectcontroller.cpp:1225
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -5911,13 +5919,13 @@ msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "?"
 
-#: vcs/models/vcsfilechangesmodel.cpp:131
+#: vcs/models/vcsfilechangesmodel.cpp:137
 #, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Filnamn"
 
-#: vcs/models/vcsfilechangesmodel.cpp:132
+#: vcs/models/vcsfilechangesmodel.cpp:138
 #, kde-format
 msgctxt "@title:column"
 msgid "Status"

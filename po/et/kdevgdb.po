@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2020-01-15 14:31+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.08.1\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -124,7 +124,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Kohandatud vormindusstring"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -134,22 +134,22 @@ msgstr ""
 "seadistusega. Palun käivita kontrolliks '%1' konfigureerimine. Kasutatakse "
 "vaikimisi keskkonnaprofiili."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Vajalik on GDB 7.0.0 või uuem.</b><br />Sina kasutad: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Siluri käivitamine nurjus.</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -163,29 +163,14 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Silumisshelli \"%1\" tuvastamine nurjus."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB seadistamine"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
-"jätkata käivitamisega?"
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Omarakenduse käivitamine GDB-s"
@@ -501,14 +486,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Käivitamise &GDB skript:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB väljund"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -521,28 +506,28 @@ msgstr ""
 "<b>GDB väljund</b><p>Kõigi täidetavate GDB käskude näitamine. Silumise ajal "
 "võib anda ka mis tahes muid GDB käske.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB käsk:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Paus rakenduse täitmises GDB käskude sisestamiseks"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Näita sisemisi käske"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -558,7 +543,7 @@ msgstr ""
 "<br>See mõjutab ainult tulevasi käske ning ei lisa ega eemalda vaatest juba "
 "antud käske."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"
@@ -732,6 +717,13 @@ msgstr "Uus mälunäitaja"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Uue mälunäitaja avamine."
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist "
+#~ "ja jätkata käivitamisega?"
 
 #~ msgid "<html><head/><body><p><br/></p></body></html>"
 #~ msgstr "<html><head/><body><p><br/></p></body></html>"

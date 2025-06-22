@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2025-04-17 10:17+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1631,13 +1631,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Camí"
 
-#: project/projectchangesmodel.cpp:308
+#: project/projectchangesmodel.cpp:317
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "sense branca"
 
-#: project/projectchangesmodel.cpp:309
+#: project/projectchangesmodel.cpp:318
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
@@ -1835,111 +1835,111 @@ msgstr ""
 "consulteu <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">este article</a>."
 
-#: shell/debugcontroller.cpp:111
+#: shell/debugcontroller.cpp:113
 #, kde-format
 msgid "Debugger"
 msgstr "Depurador"
 
-#: shell/debugcontroller.cpp:141
+#: shell/debugcontroller.cpp:143
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Pila d'execució"
 
-#: shell/debugcontroller.cpp:146
+#: shell/debugcontroller.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Punts d'interrupció"
 
-#: shell/debugcontroller.cpp:151
+#: shell/debugcontroller.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variables"
 
-#: shell/debugcontroller.cpp:217
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "&Restart"
 msgstr "&Reinicia"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restart program"
 msgstr "Reinicia el programa"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Reinicia les aplicacions des del començament."
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Interromp"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:228
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Interromp l'aplicació"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Interromp el procés depurat o l'ordre de depuració actual."
 
-#: shell/debugcontroller.cpp:231
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Executa fins al &cursor"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Executa fins al cursor"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Continua l'execució fins a assolir la posició del cursor."
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Es&tablix la posició d'execució en el cursor"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Salta fins al cursor"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Continua l'execució des de la posició actual del cursor."
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Avança per s&obri"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Avança sobre la línia següent"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1951,37 +1951,37 @@ msgstr ""
 "codi és una crida a una funció, s'executarà la funció sencera i l'aplicació "
 "es pararà a la línia que seguix a la crida de funció."
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Avança sobre la ins&trucció"
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Avança sobre la instrucció"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Avança sobre la següent instrucció d'assemblador."
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Avança per d&ins"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Avança dins de la següent sentència"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1991,37 +1991,37 @@ msgstr ""
 "Executa exactament una línia de codi. Si la línia de codi és una crida a una "
 "funció, l'execució es pararà després d'entrar en la funció."
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Avança dins de la &instrucció"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Avança dins de la instrucció"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Avança dins de la següent instrucció d'assemblador."
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Avança per &fora"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Avança fora de la funció actual"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:283
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2035,60 +2035,68 @@ msgstr ""
 "original a esta funció. Si l'execució del programa està en el marc més "
 "exterior (és a dir, a «main()»), esta operació no tindrà efecte."
 
-#: shell/debugcontroller.cpp:289
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Canvia el punt d'interrupció"
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Canvia el punt d'interrupció"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Canvia el punt d'interrupció a la línia actual de l'editor."
 
-#: shell/debugcontroller.cpp:296
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Mostra la línia actual"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Mostra la posició actual de l'execució"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Salta fins a la línia d'execució en l'editor."
 
-#: shell/debugcontroller.cpp:474 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:313
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Delete Current Session..."
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Suprimix la sessió actual…"
+
+#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Inicia al depurador"
 
-#: shell/debugcontroller.cpp:476 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Depura el llançament actual"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2098,19 +2106,19 @@ msgstr ""
 "Executa l'objectiu o el programa especificat en la configuració de "
 "llançament activa dins d'un depurador."
 
-#: shell/debugcontroller.cpp:480
+#: shell/debugcontroller.cpp:506
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Continua"
 
-#: shell/debugcontroller.cpp:482
+#: shell/debugcontroller.cpp:508
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Continua l'execució de l'aplicació"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:509
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3205,23 +3213,23 @@ msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Obri el projecte per al fitxer actual"
 
-#: shell/projectcontroller.cpp:766
+#: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
 msgstr "El projecte ja es troba obert: %1"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
 msgstr "Cap document actiu"
 
-#: shell/projectcontroller.cpp:851
+#: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "El projecte ja es troba obert"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3230,24 +3238,24 @@ msgstr ""
 "El projecte que esteu intentant obrir ja es troba obert en almenys una altra "
 "sessió.<br>Què voleu fer?"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:856
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Afig-lo a la sessió actual"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:860
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Obri'l en la sessió %1"
 
-#: shell/projectcontroller.cpp:923
+#: shell/projectcontroller.cpp:921
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "No s'ha habilitat un connector que admeta este URL de repositori: %1"
 
-#: shell/projectcontroller.cpp:1227
+#: shell/projectcontroller.cpp:1225
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -5968,13 +5976,13 @@ msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "?"
 
-#: vcs/models/vcsfilechangesmodel.cpp:131
+#: vcs/models/vcsfilechangesmodel.cpp:137
 #, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Nom de fitxer"
 
-#: vcs/models/vcsfilechangesmodel.cpp:132
+#: vcs/models/vcsfilechangesmodel.cpp:138
 #, kde-format
 msgctxt "@title:column"
 msgid "Status"

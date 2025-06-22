@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2023-07-26 07:12+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -104,7 +104,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Niz oblikovan po meri"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -113,22 +113,22 @@ msgstr ""
 "Ni bilo podanega profila okolja, kar namiguje na pokvarjene nastavitve. "
 "Preverite zagonske nastavitve »%1«. Uporabljen bo privzeti profil okolja."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr "<unknown version>"
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Potrebujete gdb 7.0.0 ali novejšega.</b><br />Uporabljate: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Razhroščevalnika ni bilo mogoče zagnati:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -142,28 +142,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Ni bilo mogoče najti lupine za razhroščevanje '%1'."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Nastavitev GDB"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"Program se že razhroščuje. Ali želite prekiniti trenutno razhroščevalno sejo "
-"in nadaljevati z zagonom?"
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "Prekini trenutno sejo"
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Izvede lastni program v GDB"
@@ -413,13 +398,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Zaženi skript &gdb:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "Izhod GDB"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -429,25 +414,25 @@ msgstr ""
 "<b>Izhod GDB</b><p>Prikaže vse ukaze gdb, ki se izvajajo. Med "
 "razhroščevanjem lahko izvedete tudi katerikoli drug ukaz.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "Ukaz &GDB:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Naredi premor izvajanja programa za vnos ukazov GDB"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Prikaži notranje ukaze"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -459,7 +444,7 @@ msgstr ""
 "možnost bo vplivala le na prihodnje ukaze, že izdanih ukazov ne bo dodala "
 "ali odstranila iz prikaza."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -611,6 +596,17 @@ msgstr "Nov pregledovalnik pomnilnika"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Odpri nov pregledovalnik pomnilnika"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "Program se že razhroščuje. Ali želite prekiniti trenutno razhroščevalno "
+#~ "sejo in nadaljevati z zagonom?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "Prekini trenutno sejo"
 
 #~ msgid "<html><head/><body><p><br/></p></body></html>"
 #~ msgstr "<html><head/><body><p><br/></p></body></html>"

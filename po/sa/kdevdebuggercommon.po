@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-17 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -143,7 +143,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "आन्तरिकं त्रुटिनिवारणदोषः"
 
-#: midebugger.cpp:335 midebugsession.cpp:412
+#: midebugger.cpp:335 midebugsession.cpp:447
 #, kde-format
 msgid "Process exited"
 msgstr "प्रक्रिया निर्गतवती"
@@ -184,13 +184,22 @@ msgstr "त्रुटिनिवारणकर्ता दुर्घट�
 msgid "Process crashed"
 msgstr "प्रक्रिया दुर्घटना अभवत्"
 
-#: midebuggerplugin.cpp:108
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
+"निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
+
+#: midebuggerplugin.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "%1 इत्यनेन सह Core File इत्यस्य परीक्षणं कुर्वन्तु"
 
-#: midebuggerplugin.cpp:110
+#: midebuggerplugin.cpp:120
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -204,13 +213,13 @@ msgstr ""
 "प्रोग्रामस्मृतेः प्रतिबिम्बं भवति यदा सा दुर्घटना अभवत्, येन भवान् मृत्योः पश्चात् विश्लेषणं कर्तुं "
 "शक्नोति ।</p>"
 
-#: midebuggerplugin.cpp:122
+#: midebuggerplugin.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "%1 इत्यनेन सह Process इत्यत्र संलग्नं कुर्वन्तु"
 
-#: midebuggerplugin.cpp:124
+#: midebuggerplugin.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -218,103 +227,100 @@ msgid ""
 msgstr ""
 "<b>प्रक्रियां प्रति संलग्नं कुर्वन्तु</b><p> त्रुटिनिवारणं चालितप्रक्रियायां संलग्नं करोति ।</p>"
 
-#: midebuggerplugin.cpp:137
+#: midebuggerplugin.cpp:147
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:205
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "परीक्षितुं कोरसञ्चिकां चिनोतु..."
 
-#: midebuggerplugin.cpp:210 midebuggerplugin.cpp:230
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-"पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
-"निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
-
-#: midebuggerplugin.cpp:212 midebuggerplugin.cpp:232
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "वर्तमान सत्रं निरस्तं कुर्वन्तु"
-
-#: midebuggerplugin.cpp:225
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "संलग्नं कर्तुं प्रक्रियां चिनुत..."
 
-#: midebuggerplugin.cpp:246
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "%1 प्रक्रियायां न संलग्नम्: त्रुटिनिवारणं स्वयमेव संलग्नं कर्तुं न शक्नोति ।"
 
-#: midebuggerplugin.cpp:266
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "त्रुटिनिवारकः"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:95
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' कार्यान्वयनीयं नास्ति"
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:194
 #, kde-format
 msgid "Debug core file"
 msgstr "कोर सञ्चिकां त्रुटिनिवारणं कुर्वन्तु"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:210
 #, kde-format
 msgid "Debug process %1"
 msgstr "त्रुटिनिवारणप्रक्रिया %1"
 
-#: midebugsession.cpp:198
+#: midebuglauncher.cpp:61
+#, fuzzy, kde-format
+#| msgid ""
+#| "A program is already being debugged. Do you want to abort the currently "
+#| "running debug session and continue?"
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
+"निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "कार्यक्रमं चालयति"
 
-#: midebugsession.cpp:284
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "प्रक्रिया %1 सह संलग्नम्"
 
-#: midebugsession.cpp:315
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
 
-#: midebugsession.cpp:325
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "कोर सञ्चिकायाः परीक्षणं %1"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "त्रुटिनिवारणकर्ता स्थगितवान्"
 
-#: midebugsession.cpp:417
+#: midebugsession.cpp:452
 #, kde-format
 msgid "Application is running"
 msgstr "अनुप्रयोगः प्रचलति"
 
-#: midebugsession.cpp:422
+#: midebugsession.cpp:457
 #, kde-format
 msgid "Application is paused"
 msgstr "अनुप्रयोगः विरामः भवति"
 
-#: midebugsession.cpp:737
+#: midebugsession.cpp:772
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -322,39 +328,39 @@ msgid ""
 msgstr ""
 "<b>यदा debugger न चाल्यते तदा Gdb आदेशः प्रेषितः</b><br> आदेशः आसीत् - १.<br> %1"
 
-#: midebugsession.cpp:849
+#: midebugsession.cpp:884
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>अमान्यः त्रुटिनिवारणनिर्देशः</b><br> %1"
 
-#: midebugsession.cpp:985
+#: midebugsession.cpp:1020
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "रिटर्न् कोड् इत्यनेन सह निर्गतम्: %1"
 
-#: midebugsession.cpp:987
+#: midebugsession.cpp:1022
 #, kde-format
 msgid "Exited normally"
 msgstr "सामान्यतया निर्गतः"
 
-#: midebugsession.cpp:994
+#: midebugsession.cpp:1029
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "%1 संकेते निर्गतम्"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1064
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "कार्यक्रमः संकेतं प्राप्तवान् %1 (%2) ."
 
-#: midebugsession.cpp:1161
+#: midebugsession.cpp:1196
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "१ पङ्क्तौ आदेशः\n"
 msgstr[1] "%1 आदेशाः पङ्क्तौ\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1197
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -362,12 +368,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "१ आदेशः gdb द्वारा संसाधितः भवति\n"
 msgstr[1] "%1 आदेशाः gdb द्वारा संसाधिताः भवन्ति\n"
 
-#: midebugsession.cpp:1163
+#: midebugsession.cpp:1198
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "त्रुटिनिवारणस्थितिः: %1\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1201
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -378,7 +384,7 @@ msgstr ""
 "वर्तमान आदेशपाठः '%2' ।\n"
 "वर्तमान आदेशः मूलपाठः: '%3'.\n"
 
-#: midebugsession.cpp:1193
+#: midebugsession.cpp:1228
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -714,6 +720,10 @@ msgstr "परितः विच्छेदनार्थं पतां च
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "परितः विच्छेदनार्थं पताः :"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "वर्तमान सत्रं निरस्तं कुर्वन्तु"
 
 #~ msgctxt "@action:inmenu"
 #~ msgid "Evaluate: %1"

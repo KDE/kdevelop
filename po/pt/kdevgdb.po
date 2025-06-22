@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2022-07-09 12:56+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-POFile-SpellExtra: argumentosDepurador argumentosPrograma xc mov eax ATT\n"
 "X-POFile-SpellExtra: ebp DWORD PTR\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -109,7 +109,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Texto de formato personalizado"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -119,22 +119,22 @@ msgstr ""
 "inválida; verifique por favor a configuração de execução '%1'. A usar o "
 "perfil de ambientes por omissão."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Precisa do gdb 7.0.0 ou superior.</b><br />Está a usar: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Não foi possível iniciar o depurador:</b><br/>"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -148,28 +148,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Não foi possível localizar a linha de comandos de depuração '%1'."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Configuração do GDB"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"Já se encontra  um programa em depuração. Deseja interromper a sessão de "
-"depuração actualmente em execução e prosseguir com o lançamento?"
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "Interromper a Sessão Actual"
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Executa uma aplicação nativa no GDB"
@@ -423,13 +408,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Executar o programa do '&gdb':"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "Resultado do GDB"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -440,25 +425,25 @@ msgstr ""
 "executados. Você também poderá emitir qualquer outro comando do 'gdb' "
 "enquanto faz a depuração.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "Comando do &GDB:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Põe em pausa a execução da aplicação, para indicar comandos do 'gdb'"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Mostrar os Comandos Internos"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -470,7 +455,7 @@ msgstr ""
 "apresentados ou não.<br>Esta opção irá afectar apenas os comandos futuros; "
 "não irá adicionar ou remover os comandos já emitidos na janela."
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:385
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -620,3 +605,14 @@ msgstr "Novo Visualizador da Memória"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Abre um novo visualizador da memória."
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "Já se encontra  um programa em depuração. Deseja interromper a sessão de "
+#~ "depuração actualmente em execução e prosseguir com o lançamento?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "Interromper a Sessão Actual"
