@@ -149,7 +149,6 @@ void MemoryView::initWidget()
     connect(m_rangeSelector->okButton, &QPushButton::clicked, this, &MemoryView::changeMemoryRange);
     connect(m_rangeSelector->cancelButton, &QPushButton::clicked, this, &MemoryView::hideRangeDialog);
     connect(m_rangeSelector->startAddressLineEdit, &QLineEdit::textChanged, this, &MemoryView::enableOrDisable);
-    connect(m_rangeSelector->amountLineEdit, &QLineEdit::textChanged, this, &MemoryView::enableOrDisable);
 
     l->addWidget(m_memViewView);
 }
