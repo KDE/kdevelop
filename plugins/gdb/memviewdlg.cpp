@@ -100,7 +100,7 @@ MemoryView::MemoryView(QWidget* parent)
     initWidget();
 
     if (isOk())
-        slotEnableOrDisable();
+        enableOrDisable();
 
     auto debugController = KDevelop::ICore::self()->debugController();
     Q_ASSERT(debugController);
@@ -114,14 +114,10 @@ void MemoryView::currentSessionChanged(KDevelop::IDebugSession* s)
     auto *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
 
-    connect(session, &DebugSession::debuggerStateChanged,
-             this, &MemoryView::slotStateChanged);
-}
-
-void MemoryView::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
-{
-    Q_UNUSED(oldState);
-    debuggerStateChanged(newState);
+    connect(session, &DebugSession::debuggerStateChanged, this, [this](DBGStateFlags oldState, DBGStateFlags newState) {
+        Q_UNUSED(oldState);
+        debuggerStateChanged(newState);
+    });
 }
 
 void MemoryView::initWidget()
@@ -152,21 +148,10 @@ void MemoryView::initWidget()
     m_rangeSelector = new MemoryRangeSelector(this);
     l->addWidget(m_rangeSelector);
 
-    connect(m_rangeSelector->okButton, &QPushButton::clicked,
-            this, &MemoryView::slotChangeMemoryRange);
-
-    connect(m_rangeSelector->cancelButton, &QPushButton::clicked,
-            this, &MemoryView::slotHideRangeDialog);
-
-    connect(m_rangeSelector->startAddressLineEdit,
-            &QLineEdit::textChanged,
-            this,
-            &MemoryView::slotEnableOrDisable);
-
-    connect(m_rangeSelector->amountLineEdit,
-            &QLineEdit::textChanged,
-            this,
-            &MemoryView::slotEnableOrDisable);
+    connect(m_rangeSelector->okButton, &QPushButton::clicked, this, &MemoryView::changeMemoryRange);
+    connect(m_rangeSelector->cancelButton, &QPushButton::clicked, this, &MemoryView::hideRangeDialog);
+    connect(m_rangeSelector->startAddressLineEdit, &QLineEdit::textChanged, this, &MemoryView::enableOrDisable);
+    connect(m_rangeSelector->amountLineEdit, &QLineEdit::textChanged, this, &MemoryView::enableOrDisable);
 
     l->addWidget(m_memViewView);
 }
@@ -176,17 +161,16 @@ void MemoryView::debuggerStateChanged(DBGStateFlags state)
     if (isOk())
     {
         m_debuggerState = state;
-        slotEnableOrDisable();
+        enableOrDisable();
     }
 }
 
-
-void MemoryView::slotHideRangeDialog()
+void MemoryView::hideRangeDialog()
 {
     m_rangeSelector->hide();
 }
 
-void MemoryView::slotChangeMemoryRange()
+void MemoryView::changeMemoryRange()
 {
     auto *session = qobject_cast<DebugSession*>(
         KDevelop::ICore::self()->debugController()->currentSession());
@@ -232,7 +216,7 @@ void MemoryView::memoryRead(const MI::ResultRecord& r)
 
     m_memViewModel->setData(reinterpret_cast<Okteta::Byte*>(m_memData.data()), m_memData.size());
 
-    slotHideRangeDialog();
+    hideRangeDialog();
 }
 
 
@@ -404,7 +388,7 @@ bool MemoryView::isOk() const
     return m_memViewView;
 }
 
-void MemoryView::slotEnableOrDisable()
+void MemoryView::enableOrDisable()
 {
     bool app_started = !(m_debuggerState & s_appNotStarted);
 
