@@ -66,10 +66,6 @@ namespace GDB
 
         void memoryRead(const MI::ResultRecord& r);
 
-        // Returns true is we successfully created the memoryView, and
-        // can work.
-        bool isOk() const;
-
         void memoryEdited(int start, int end);
         /** Informs the view about changes in debugger state.
          *  Allows view to disable itself when debugger is not running. */

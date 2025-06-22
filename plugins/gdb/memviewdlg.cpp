@@ -92,15 +92,13 @@ MemoryView::MemoryView(QWidget* parent)
 : QWidget(parent),
     // New memory view can be created only when debugger is active,
     // so don't set s_appNotStarted here.
-    m_memViewView(nullptr),
     m_debuggerState(0)
 {
     setWindowTitle(i18nc("@title:window", "Memory View"));
 
     initWidget();
 
-    if (isOk())
-        enableOrDisable();
+    enableOrDisable();
 
     auto debugController = KDevelop::ICore::self()->debugController();
     Q_ASSERT(debugController);
@@ -158,11 +156,8 @@ void MemoryView::initWidget()
 
 void MemoryView::debuggerStateChanged(DBGStateFlags state)
 {
-    if (isOk())
-    {
-        m_debuggerState = state;
-        enableOrDisable();
-    }
+    m_debuggerState = state;
+    enableOrDisable();
 }
 
 void MemoryView::hideRangeDialog()
@@ -238,9 +233,6 @@ void MemoryView::memoryEdited(int start, int end)
 
 void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 {
-    if (!isOk())
-        return;
-
     QMenu menu(this);
 
     bool app_running = !(m_debuggerState & s_appNotStarted);
@@ -251,7 +243,6 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     QActionGroup* formatGroup = nullptr;
     QActionGroup* groupingGroup = nullptr;
-    if (m_memViewModel && m_memViewView)
     {
         // make Format menu with action group
         QMenu* formatMenu = menu.addMenu(i18nc("@title:menu", "&Format"));
@@ -329,7 +320,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     QAction* write = menu.addAction(i18nc("@action:inmenu", "Write Changes"));
     write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
-    write->setEnabled(app_running && m_memViewView && m_memViewView->isModified());
+    write->setEnabled(app_running && m_memViewView->isModified());
 
     QAction* range = menu.addAction(i18nc("@action:inmenu", "Change Memory Range"));
     range->setEnabled(app_running && !m_rangeSelector->isVisible());
@@ -381,11 +372,6 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     if (result == close)
         deleteLater();
-}
-
-bool MemoryView::isOk() const
-{
-    return m_memViewView;
 }
 
 void MemoryView::enableOrDisable()
