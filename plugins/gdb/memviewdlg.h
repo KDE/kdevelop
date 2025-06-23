@@ -88,7 +88,7 @@ namespace GDB
         quintptr m_memStart;
         QString m_memStartStr, m_memAmountStr;
         QByteArray m_memData;
-        int m_debuggerState;
+        bool m_appRunning = false;
 
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };
