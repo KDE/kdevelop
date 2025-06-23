@@ -220,8 +220,7 @@ void MemoryView::memoryEdited(int start, int end)
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
-    for(int i = start; i <= end; ++i)
-    {
+    for (auto i = start; i < end; ++i) {
         session->addCommand(MI::GdbSet,
                 QStringLiteral("*(char*)(%1 + %2) = %3")
                     .arg(m_memStart)
