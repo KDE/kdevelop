@@ -89,33 +89,34 @@ class MemoryRangeSelector : public QWidget
 };
 
 MemoryView::MemoryView(QWidget* parent)
-: QWidget(parent),
-    // New memory view can be created only when debugger is active,
-    // so don't set s_appNotStarted here.
-    m_debuggerState(0)
+    : QWidget(parent)
 {
     setWindowTitle(i18nc("@title:window", "Memory View"));
 
     initWidget();
-
-    enableOrDisable();
 
     auto debugController = KDevelop::ICore::self()->debugController();
     Q_ASSERT(debugController);
 
     connect(debugController, &KDevelop::IDebugController::currentSessionChanged,
             this, &MemoryView::currentSessionChanged);
+    currentSessionChanged(debugController->currentSession());
 }
 
 void MemoryView::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     auto *session = qobject_cast<DebugSession*>(s);
-    if (!session) return;
+    if (!session) {
+        m_appHasStarted = false;
+        enableOrDisable();
+        return;
+    }
 
     connect(session, &DebugSession::debuggerStateChanged, this, [this](DBGStateFlags oldState, DBGStateFlags newState) {
         Q_UNUSED(oldState);
         debuggerStateChanged(newState);
     });
+    debuggerStateChanged(session->debuggerState());
 }
 
 void MemoryView::initWidget()
@@ -155,7 +156,7 @@ void MemoryView::initWidget()
 
 void MemoryView::debuggerStateChanged(DBGStateFlags state)
 {
-    m_debuggerState = state;
+    m_appHasStarted = !state.testFlag(s_appNotStarted);
     enableOrDisable();
 }
 
@@ -233,11 +234,9 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 {
     QMenu menu(this);
 
-    bool app_running = !(m_debuggerState & s_appNotStarted);
-
     QAction* reload = menu.addAction(i18nc("@action::inmenu", "&Reload"));
     reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
-    reload->setEnabled(app_running && !m_memData.isEmpty() );
+    reload->setEnabled(m_appHasStarted && !m_memData.isEmpty());
 
     QActionGroup* formatGroup = nullptr;
     QActionGroup* groupingGroup = nullptr;
@@ -318,10 +317,10 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     QAction* write = menu.addAction(i18nc("@action:inmenu", "Write Changes"));
     write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
-    write->setEnabled(app_running && m_memViewView->isModified());
+    write->setEnabled(m_appHasStarted && m_memViewView->isModified());
 
     QAction* range = menu.addAction(i18nc("@action:inmenu", "Change Memory Range"));
-    range->setEnabled(app_running && !m_rangeSelector->isVisible());
+    range->setEnabled(m_appHasStarted && !m_rangeSelector->isVisible());
     range->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
 
     QAction* close = menu.addAction(i18nc("@action:inmenu", "Close View"));
@@ -374,11 +373,8 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
 void MemoryView::enableOrDisable()
 {
-    bool app_started = !(m_debuggerState & s_appNotStarted);
-
-    bool enabled_ = app_started && !m_rangeSelector->startAddressLineEdit->text().isEmpty();
-
-    m_rangeSelector->okButton->setEnabled(enabled_);
+    const auto enable = m_appHasStarted && !m_rangeSelector->startAddressLineEdit->text().isEmpty();
+    m_rangeSelector->okButton->setEnabled(enable);
 }
 
 
