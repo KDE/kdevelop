@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-04-17 13:22+0300\n"
+"PO-Revision-Date: 2025-06-22 10:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2087,12 +2087,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "Перехід до виконуваного рядка у редакторі."
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Вилучити поточний сеанс…"
+msgstr "Перервати поточний сеанс"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format

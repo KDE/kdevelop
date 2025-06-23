@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-05-17 01:57+0100\n"
+"PO-Revision-Date: 2025-06-22 04:05+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: dialogs/processselection.cpp:148
@@ -280,16 +280,13 @@ msgid "Debug process %1"
 msgstr "Depurar el proceso %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Ya se está depurando un programa. ¿Desea interrumpir la sesión de depuración "
-"actual y continuar?"
+"actual y continuar el lanzamiento?"
 
 #: midebugsession.cpp:236
 #, kde-format
@@ -736,31 +733,3 @@ msgstr "Seleccione la dirección en torno a la que desensamblar"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Dirección en torno a la que desensamblar:"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Interrumpir la sesión actual"
-
-#~ msgctxt "@action:inmenu"
-#~ msgid "Evaluate: %1"
-#~ msgstr "Evaluar: %1"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#~ "cursor.</p>"
-#~ msgstr ""
-#~ "<b>Evaluar expresión</b><p>Muestra el valor de la expresión que hay bajo "
-#~ "el cursor.</p>"
-
-#~ msgctxt "@action:inmenu"
-#~ msgid "Watch: %1"
-#~ msgstr "Observar: %1"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
-#~ "Variables/Watch list.</p>"
-#~ msgstr ""
-#~ "<b>Observar expresión</b><p>Añade la expresión bajo el cursor a la lista "
-#~ "de variables/observaciones.</p>"

@@ -2030,12 +2030,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "跳转到编辑器中的执行的行。"
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "删除当前会话..."
+msgstr ""
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format

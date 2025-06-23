@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-04-17 10:17+0200\n"
+"PO-Revision-Date: 2025-06-22 16:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2076,12 +2076,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "Salta a la línia d'execució de l'editor."
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Suprimeix la sessió actual..."
+msgstr "Interromp la sessió actual"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format

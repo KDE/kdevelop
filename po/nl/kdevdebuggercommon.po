@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-05-16 12:32+0200\n"
+"PO-Revision-Date: 2025-06-22 15:47+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -275,16 +275,13 @@ msgid "Debug process %1"
 msgstr "Proces %1 debuggen"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Een programma wordt al gedebugd. Wilt u de nu actieve debugsessie afbreken "
-"en doorgaan?"
+"en doorgaan met het starten?"
 
 #: midebugsession.cpp:236
 #, kde-format

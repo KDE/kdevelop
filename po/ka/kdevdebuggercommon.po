@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-05-16 03:38+0200\n"
+"PO-Revision-Date: 2025-06-22 04:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -278,16 +278,13 @@ msgid "Debug process %1"
 msgstr "პროცესის გამართვა %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
-"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
-"გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
+"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ, შეწყვიტოთ უკვე გაშვებული "
+"გამმართველის სესია და გააგრძელოთ გაშვება?"
 
 #: midebugsession.cpp:236
 #, kde-format

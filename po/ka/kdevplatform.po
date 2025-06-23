@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-04-17 03:47+0200\n"
+"PO-Revision-Date: 2025-06-22 04:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2074,12 +2074,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "გადახტება შესრულების ხაზზე რედაქტორში."
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "მიმდინარე სესიის წაშლა..."
+msgstr "მიმდინარე სესიის შეწყვეტა"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-05-17 13:06+0200\n"
+"PO-Revision-Date: 2025-06-22 11:40+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -283,16 +283,13 @@ msgid "Debug process %1"
 msgstr "Depurar o proceso %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Xa se está a depurar un programa. Quere interromper a sesión de depuración "
-"actual e continuar?"
+"actual e continuar co inicio?"
 
 #: midebugsession.cpp:236
 #, kde-format

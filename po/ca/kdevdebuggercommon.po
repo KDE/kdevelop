@@ -5,13 +5,13 @@
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2021.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024, 2025.
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-05-16 09:32+0200\n"
+"PO-Revision-Date: 2025-06-22 16:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -282,16 +282,13 @@ msgid "Debug process %1"
 msgstr "S'està depurant el procés %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
-"actualment en execució i continuar?"
+"actualment en execució i continuar amb el llançament?"
 
 #: midebugsession.cpp:236
 #, kde-format
