@@ -51,7 +51,6 @@ public Q_SLOTS:
     void slotInternalCommandStdout(const QString& line);
     void slotUserCommandStdout(const QString& line);
     void slotReceivedStderr(const char* line);
-    void slotStateChanged(DBGStateFlags oldStatus, DBGStateFlags newStatus);
 
     void slotGDBCmd();
 
@@ -73,6 +72,15 @@ Q_SIGNALS:
     void breakInto();
 
 private:
+    /**
+     * Call this function when the debugger state of the current session changes to update the UI accordingly.
+     */
+    void debuggerStateChanged(DBGStateFlags newState);
+    /**
+     * Call this function when the debugger is not running to update the UI accordingly.
+     */
+    void handleDebuggerNotRunning();
+
     void newStdoutLine(const QString& line, bool internal);
 
     /** Arranges for 'line' to be shown to the user.

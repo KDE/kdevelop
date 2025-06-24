@@ -82,8 +82,6 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 
     setLayout(topLayout);
 
-    slotStateChanged(s_none, s_dbgNotStarted);
-
     connect(m_userGDBCmdEditor, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
             this, &GDBOutputWidget::slotGDBCmd);
     connect(m_Interrupt, &QToolButton::clicked, this, &GDBOutputWidget::breakInto);
@@ -121,12 +119,11 @@ void GDBOutputWidget::updateColors()
 
 void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
-    if (!s)
-        return;
-
     auto *session = qobject_cast<DebugSession*>(s);
-    if (!session)
+    if (!session) {
+        handleDebuggerNotRunning();
         return;
+    }
 
     connect(this, &GDBOutputWidget::userGDBCmd, session, &DebugSession::addUserCommand);
     connect(this, &GDBOutputWidget::breakInto, session, &DebugSession::interruptDebugger);
@@ -136,9 +133,12 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     // debugger internal output, treat it as an internal command output
     connect(session, &DebugSession::debuggerInternalOutput, this, &GDBOutputWidget::slotInternalCommandStdout);
 
-    connect(session, &DebugSession::debuggerStateChanged, this, &GDBOutputWidget::slotStateChanged);
+    connect(session, &DebugSession::debuggerStateChanged, this, [this](DBGStateFlags oldState, DBGStateFlags newState) {
+        Q_UNUSED(oldState);
+        debuggerStateChanged(newState);
+    });
 
-    slotStateChanged(s_none, session->debuggerState());
+    debuggerStateChanged(session->debuggerState());
 }
 
 
@@ -314,15 +314,10 @@ void GDBOutputWidget::flushPending()
     }
 }
 
-/***************************************************************************/
-
-void GDBOutputWidget::slotStateChanged(KDevMI::DBGStateFlags oldStatus, KDevMI::DBGStateFlags newStatus)
+void GDBOutputWidget::debuggerStateChanged(DBGStateFlags newState)
 {
-    Q_UNUSED(oldStatus)
-    if (newStatus & s_dbgNotStarted)
-    {
-        m_Interrupt->setEnabled(false);
-        m_userGDBCmdEditor->setEnabled(false);
+    if (newState & s_dbgNotStarted) {
+        handleDebuggerNotRunning();
         return;
     }
     else
@@ -330,8 +325,7 @@ void GDBOutputWidget::slotStateChanged(KDevMI::DBGStateFlags oldStatus, KDevMI::
         m_Interrupt->setEnabled(true);
     }
 
-    if (newStatus & s_dbgBusy)
-    {
+    if (newState & s_dbgBusy) {
         if (m_userGDBCmdEditor->isEnabled()) {
             m_cmdEditorHadFocus = m_userGDBCmdEditor->hasFocus();
         }
@@ -343,7 +337,11 @@ void GDBOutputWidget::slotStateChanged(KDevMI::DBGStateFlags oldStatus, KDevMI::
     }
 }
 
-/***************************************************************************/
+void GDBOutputWidget::handleDebuggerNotRunning()
+{
+    m_Interrupt->setEnabled(false);
+    m_userGDBCmdEditor->setEnabled(false);
+}
 
 void GDBOutputWidget::focusInEvent(QFocusEvent* /*e*/)
 {

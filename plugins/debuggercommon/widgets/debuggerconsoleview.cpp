@@ -81,8 +81,6 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     connect(m_actShowInternal, &QAction::toggled,
             this, &DebuggerConsoleView::toggleShowInternalCommands);
 
-    handleDebuggerStateChange(s_none, s_dbgNotStarted);
-
     m_updateTimer.setSingleShot(true);
     m_updateTimer.setInterval(100);
     connect(&m_updateTimer, &QTimer::timeout, this, &DebuggerConsoleView::flushPending);
@@ -278,17 +276,16 @@ void DebuggerConsoleView::clear()
     m_allOutput.clear();
 }
 
-void DebuggerConsoleView::handleDebuggerStateChange(DBGStateFlags, DBGStateFlags newStatus)
+void DebuggerConsoleView::debuggerStateChanged(DBGStateFlags newState)
 {
-    if (newStatus & s_dbgNotStarted) {
-        m_actInterrupt->setEnabled(false);
-        m_cmdEditor->setEnabled(false);
+    if (newState & s_dbgNotStarted) {
+        handleDebuggerNotRunning();
         return;
     } else {
         m_actInterrupt->setEnabled(true);
     }
 
-    if (newStatus & s_dbgBusy) {
+    if (newState & s_dbgBusy) {
         if (m_cmdEditor->isEnabled()) {
             m_cmdEditorHadFocus = m_cmdEditor->hasFocus();
         }
@@ -392,7 +389,10 @@ void DebuggerConsoleView::trySendCommand(QString cmd)
 void DebuggerConsoleView::handleSessionChanged(KDevelop::IDebugSession* s)
 {
     auto *session = qobject_cast<MIDebugSession*>(s);
-    if (!session) return;
+    if (!session) {
+        handleDebuggerNotRunning();
+        return;
+    }
 
     connect(this, &DebuggerConsoleView::sendCommand, session, &MIDebugSession::addUserCommand);
     connect(this, &DebuggerConsoleView::interruptDebugger, session, &MIDebugSession::interruptDebugger);
@@ -402,9 +402,19 @@ void DebuggerConsoleView::handleSessionChanged(KDevelop::IDebugSession* s)
     connect(session, &MIDebugSession::debuggerUserCommandOutput, this, &DebuggerConsoleView::receivedUserCommandStdout);
     connect(session, &MIDebugSession::debuggerInternalOutput, this, &DebuggerConsoleView::receivedStderr);
 
-    connect(session, &MIDebugSession::debuggerStateChanged, this, &DebuggerConsoleView::handleDebuggerStateChange);
+    connect(session, &MIDebugSession::debuggerStateChanged, this,
+            [this](DBGStateFlags oldState, DBGStateFlags newState) {
+                Q_UNUSED(oldState);
+                debuggerStateChanged(newState);
+            });
 
-    handleDebuggerStateChange(s_none, session->debuggerState());
+    debuggerStateChanged(session->debuggerState());
+}
+
+void DebuggerConsoleView::handleDebuggerNotRunning()
+{
+    m_actInterrupt->setEnabled(false);
+    m_cmdEditor->setEnabled(false);
 }
 
 #include "moc_debuggerconsoleview.cpp"
