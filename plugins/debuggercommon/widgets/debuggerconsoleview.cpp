@@ -383,22 +383,17 @@ void DebuggerConsoleView::handleSessionChanged(KDevelop::IDebugSession* s)
     auto *session = qobject_cast<MIDebugSession*>(s);
     if (!session) return;
 
-    connect(this, &DebuggerConsoleView::sendCommand,
-             session, &MIDebugSession::addUserCommand);
-    connect(this, &DebuggerConsoleView::interruptDebugger,
-             session, &MIDebugSession::interruptDebugger);
+    connect(this, &DebuggerConsoleView::sendCommand, session, &MIDebugSession::addUserCommand);
+    connect(this, &DebuggerConsoleView::interruptDebugger, session, &MIDebugSession::interruptDebugger);
 
-     connect(session, &MIDebugSession::debuggerInternalCommandOutput,
-             this, &DebuggerConsoleView::receivedInternalCommandStdout);
-     connect(session, &MIDebugSession::debuggerUserCommandOutput,
-             this, &DebuggerConsoleView::receivedUserCommandStdout);
-     connect(session, &MIDebugSession::debuggerInternalOutput,
-             this, &DebuggerConsoleView::receivedStderr);
+    connect(session, &MIDebugSession::debuggerInternalCommandOutput, this,
+            &DebuggerConsoleView::receivedInternalCommandStdout);
+    connect(session, &MIDebugSession::debuggerUserCommandOutput, this, &DebuggerConsoleView::receivedUserCommandStdout);
+    connect(session, &MIDebugSession::debuggerInternalOutput, this, &DebuggerConsoleView::receivedStderr);
 
-     connect(session, &MIDebugSession::debuggerStateChanged,
-             this, &DebuggerConsoleView::handleDebuggerStateChange);
+    connect(session, &MIDebugSession::debuggerStateChanged, this, &DebuggerConsoleView::handleDebuggerStateChange);
 
-     handleDebuggerStateChange(s_none, session->debuggerState());
+    handleDebuggerStateChange(s_none, session->debuggerState());
 }
 
 #include "moc_debuggerconsoleview.cpp"
