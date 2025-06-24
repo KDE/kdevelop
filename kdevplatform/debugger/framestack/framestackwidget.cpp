@@ -126,27 +126,30 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
     m_threadsListView->setModel(session ? session->frameStackModel() : nullptr);
     m_framesTreeView->setModel(session ? session->frameStackModel() : nullptr);
 
-    if (session) {
-        connect(session->frameStackModel(), &IFrameStackModel::dataChanged,
-                this, &FramestackWidget::checkFetchMoreFrames);
-        connect(session->frameStackModel(), &IFrameStackModel::currentThreadChanged,
-                this, &FramestackWidget::currentThreadChanged);
-        currentThreadChanged(session->frameStackModel()->currentThread());
-        connect(session->frameStackModel(), &IFrameStackModel::currentFrameChanged,
-                this, &FramestackWidget::currentFrameChanged);
-        currentFrameChanged(session->frameStackModel()->currentFrame());
-        connect(session, &IDebugSession::stateChanged,
-                this, &FramestackWidget::sessionStateChanged);
-
-        connect(m_threadsListView->selectionModel(), &QItemSelectionModel::currentChanged,
-                this, &FramestackWidget::setThreadShown);
-
-        // Show the selected frame, independent of the means by which it has been selected
-        connect(m_framesTreeView->selectionModel(), &QItemSelectionModel::currentChanged,
-                this, &FramestackWidget::frameSelectionChanged);
-
-        sessionStateChanged(session->state());
+    if (!session) {
+        setEnabled(false);
+        return;
     }
+
+    connect(session->frameStackModel(), &IFrameStackModel::dataChanged,
+            this, &FramestackWidget::checkFetchMoreFrames);
+    connect(session->frameStackModel(), &IFrameStackModel::currentThreadChanged,
+            this, &FramestackWidget::currentThreadChanged);
+    currentThreadChanged(session->frameStackModel()->currentThread());
+    connect(session->frameStackModel(), &IFrameStackModel::currentFrameChanged,
+            this, &FramestackWidget::currentFrameChanged);
+    currentFrameChanged(session->frameStackModel()->currentFrame());
+    connect(session, &IDebugSession::stateChanged,
+            this, &FramestackWidget::sessionStateChanged);
+
+    connect(m_threadsListView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &FramestackWidget::setThreadShown);
+
+    // Show the selected frame, independent of the means by which it has been selected
+    connect(m_framesTreeView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &FramestackWidget::frameSelectionChanged);
+
+    sessionStateChanged(session->state());
 }
 
 void FramestackWidget::setThreadShown(const QModelIndex& current)
