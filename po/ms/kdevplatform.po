@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -267,30 +267,30 @@ msgstr "Hidupkan"
 msgid "&Remove All"
 msgstr "Buang Semua"
 
-#: debugger/framestack/framestackmodel.cpp:179
+#: debugger/framestack/framestackmodel.cpp:187
 #, fuzzy, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "Semakan"
 
-#: debugger/framestack/framestackmodel.cpp:181
+#: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr ""
 
-#: debugger/framestack/framestackmodel.cpp:282
+#: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
 msgstr "Kedalaman"
 
-#: debugger/framestack/framestackmodel.cpp:284
+#: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "Fungsi"
 
-#: debugger/framestack/framestackmodel.cpp:286
+#: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
 msgstr "Sumber"

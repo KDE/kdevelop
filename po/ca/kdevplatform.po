@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 16:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -284,30 +284,30 @@ msgstr "&Activa-ho tot"
 msgid "&Remove All"
 msgstr "&Elimina-ho tot"
 
-#: debugger/framestack/framestackmodel.cpp:179
+#: debugger/framestack/framestackmodel.cpp:187
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "Núm. %1 a %2 (ha fallat)"
 
-#: debugger/framestack/framestackmodel.cpp:181
+#: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "Núm. %1 a %2"
 
-#: debugger/framestack/framestackmodel.cpp:282
+#: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
 msgstr "Profunditat"
 
-#: debugger/framestack/framestackmodel.cpp:284
+#: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "Funció"
 
-#: debugger/framestack/framestackmodel.cpp:286
+#: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
 msgstr "Codi font"

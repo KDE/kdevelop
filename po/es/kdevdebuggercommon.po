@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 04:05+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -258,23 +258,23 @@ msgstr ""
 msgid "Debugger"
 msgstr "Depurador"
 
-#: midebugjobs.cpp:95
+#: midebugjobs.cpp:92
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:158
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "«%1» no es un ejecutable"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "Debug core file"
 msgstr "Depurar un archivo de volcado de memoria"
 
-#: midebugjobs.cpp:210
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr "Depurar el proceso %1"

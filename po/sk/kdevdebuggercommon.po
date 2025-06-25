@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -253,23 +253,23 @@ msgstr ""
 msgid "Debugger"
 msgstr "Debugger"
 
-#: midebugjobs.cpp:95
+#: midebugjobs.cpp:92
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:158
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' nie je program"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "Debug core file"
 msgstr "Ladiť súbor core"
 
-#: midebugjobs.cpp:210
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr "Proces ladenia %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcppdebugger.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -243,24 +243,24 @@ msgstr ""
 msgid "Debugger"
 msgstr "Dífhabhtóir"
 
-#: midebugjobs.cpp:95
+#: midebugjobs.cpp:92
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:158
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:176
 #, fuzzy, kde-format
 #| msgid "Debug views"
 msgid "Debug core file"
 msgstr "Amhairc dhífhabhtaithe"
 
-#: midebugjobs.cpp:210
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr ""

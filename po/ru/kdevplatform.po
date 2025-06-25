@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -290,30 +290,30 @@ msgstr "В&ключить все"
 msgid "&Remove All"
 msgstr "У&далить все"
 
-#: debugger/framestack/framestackmodel.cpp:179
+#: debugger/framestack/framestackmodel.cpp:187
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "№%1 в %2 (сбой)"
 
-#: debugger/framestack/framestackmodel.cpp:181
+#: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "№%1 в %2"
 
-#: debugger/framestack/framestackmodel.cpp:282
+#: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
 msgstr "Глубина"
 
-#: debugger/framestack/framestackmodel.cpp:284
+#: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "Функция"
 
-#: debugger/framestack/framestackmodel.cpp:286
+#: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
 msgstr "Исходный код"

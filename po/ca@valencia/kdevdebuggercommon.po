@@ -4,15 +4,15 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2021.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024, 2025.
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2021, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-05-16 09:32+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"PO-Revision-Date: 2025-06-23 22:35+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -160,7 +160,7 @@ msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
-"<b>No s'ha pogut iniciar el depurador.</b><p>No s'ha pogut executar «%1»."
+"<b>No s'ha pogut iniciar el depurador.</b><p>No s'ha pogut executar «%1». "
 "Assegureu-vos que el nom de camí s'ha especificat correctament."
 
 #: midebugger.cpp:352
@@ -260,38 +260,35 @@ msgstr ""
 msgid "Debugger"
 msgstr "Depurador"
 
-#: midebugjobs.cpp:95
+#: midebugjobs.cpp:92
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:158
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "«%1» no és un executable"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "Debug core file"
 msgstr "Depura el fitxer de nucli"
 
-#: midebugjobs.cpp:210
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr "S'està depurant el procés %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
-"actualment en execució i continuar?"
+"actualment en execució i continuar amb el llançament?"
 
 #: midebugsession.cpp:236
 #, kde-format
@@ -737,31 +734,3 @@ msgstr "Seleccioneu l'adreça al voltant de la qual es desassemblarà"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Adreça al voltant de la qual es desassemblarà:"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Interromp la sessió actual"
-
-#~ msgctxt "@action:inmenu"
-#~ msgid "Evaluate: %1"
-#~ msgstr "Avalua: %1"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#~ "cursor.</p>"
-#~ msgstr ""
-#~ "<b>Avalua expressió</b><p>Mostra el valor de l'expressió baix el cursor.</"
-#~ "p>"
-
-#~ msgctxt "@action:inmenu"
-#~ msgid "Watch: %1"
-#~ msgstr "Observa: %1"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
-#~ "Variables/Watch list.</p>"
-#~ msgstr ""
-#~ "<b>Observa expressió</b><p>Afig l'expressió baix el cursor a la llista de "
-#~ "variables/observacions.</p>"

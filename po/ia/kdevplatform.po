@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2025-03-04 15:02+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -266,30 +266,30 @@ msgstr "&Habilita toto"
 msgid "&Remove All"
 msgstr "&Remove Toto"
 
-#: debugger/framestack/framestackmodel.cpp:179
+#: debugger/framestack/framestackmodel.cpp:187
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr ""
 
-#: debugger/framestack/framestackmodel.cpp:181
+#: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "#%1 a %2"
 
-#: debugger/framestack/framestackmodel.cpp:282
+#: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
 msgstr "Profunditate"
 
-#: debugger/framestack/framestackmodel.cpp:284
+#: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "Function"
 
-#: debugger/framestack/framestackmodel.cpp:286
+#: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
 msgstr "Fonte"

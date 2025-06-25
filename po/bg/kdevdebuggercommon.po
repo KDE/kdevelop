@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2021-11-09 00:15+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -232,23 +232,23 @@ msgstr ""
 msgid "Debugger"
 msgstr ""
 
-#: midebugjobs.cpp:95
+#: midebugjobs.cpp:92
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:158
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:176
 #, kde-format
 msgid "Debug core file"
 msgstr ""
 
-#: midebugjobs.cpp:210
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr ""

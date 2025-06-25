@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-06-25 00:41+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -295,31 +295,31 @@ msgstr "Бүкілін &рұқсат ету"
 msgid "&Remove All"
 msgstr "Бүкілін өшіру"
 
-#: debugger/framestack/framestackmodel.cpp:179
+#: debugger/framestack/framestackmodel.cpp:187
 #, fuzzy, kde-format
 #| msgid "%1 has crashed"
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "%1 қирады"
 
-#: debugger/framestack/framestackmodel.cpp:181
+#: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "%2 дегендегі #%1"
 
-#: debugger/framestack/framestackmodel.cpp:282
+#: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
 msgstr "Тереңдігі"
 
-#: debugger/framestack/framestackmodel.cpp:284
+#: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "Функция"
 
-#: debugger/framestack/framestackmodel.cpp:286
+#: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
 msgstr "Бастапқы коды"
