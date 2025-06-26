@@ -23,6 +23,8 @@ namespace KDevelop {
 class IDebugSession;
 }
 
+class QMenu;
+class QPoint;
 class QToolBox;
 
 
@@ -77,7 +79,9 @@ namespace GDB
         void hideRangeDialog();
         void enableOrDisable();
 
+        void memoryViewContextMenuRequested(const QPoint& viewportPosition);
         void contextMenuEvent(QContextMenuEvent* e) override;
+        void addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalPosition);
 
         void initWidget();
 

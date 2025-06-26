@@ -144,6 +144,9 @@ void MemoryView::initWidget()
     m_memViewView->setShowsNonprinting(false);
     m_memViewView->setSubstituteChar(QLatin1Char('*'));
 
+    m_memViewView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_memViewView, &QWidget::customContextMenuRequested, this, &MemoryView::memoryViewContextMenuRequested);
+
     m_rangeSelector = new MemoryRangeSelector(this);
     l->addWidget(m_rangeSelector);
 
@@ -230,10 +233,24 @@ void MemoryView::memoryEdited(int start, int end)
     }
 }
 
+void MemoryView::memoryViewContextMenuRequested(const QPoint& viewportPosition)
+{
+    auto* menu = m_memViewView->createStandardContextMenu(viewportPosition);
+    if (!menu) {
+        menu = new QMenu(m_memViewView);
+    } else if (!menu->isEmpty()) {
+        menu->addSeparator();
+    }
+    addActionsAndShowContextMenu(menu, m_memViewView->viewport()->mapToGlobal(viewportPosition));
+}
+
 void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 {
-    auto* const menu = new QMenu(this);
+    addActionsAndShowContextMenu(new QMenu(this), e->globalPos());
+}
 
+void MemoryView::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalPosition)
+{
     auto* const reload = menu->addAction(i18nc("@action::inmenu", "&Reload"));
     reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reload->setEnabled(m_appRunning && !m_memData.isEmpty());
@@ -327,7 +344,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     close->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
 
     menu->setAttribute(Qt::WA_DeleteOnClose);
-    auto* const result = menu->exec(e->globalPos());
+    auto* const result = menu->exec(globalPosition);
 
     if (result == reload)
     {
