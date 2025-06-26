@@ -232,9 +232,9 @@ void MemoryView::memoryEdited(int start, int end)
 
 void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 {
-    QMenu menu(this);
+    auto* const menu = new QMenu(this);
 
-    QAction* reload = menu.addAction(i18nc("@action::inmenu", "&Reload"));
+    auto* const reload = menu->addAction(i18nc("@action::inmenu", "&Reload"));
     reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reload->setEnabled(m_appHasStarted && !m_memData.isEmpty());
 
@@ -242,7 +242,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     QActionGroup* groupingGroup = nullptr;
     {
         // make Format menu with action group
-        QMenu* formatMenu = menu.addMenu(i18nc("@title:menu", "&Format"));
+        auto* const formatMenu = menu->addMenu(i18nc("@title:menu", "&Format"));
         formatGroup = new QActionGroup(formatMenu);
 
         QAction *binary = formatGroup->addAction(i18nc("@item:inmenu display format", "&Binary"));
@@ -274,7 +274,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
 
         // make Grouping menu with action group
-        QMenu* groupingMenu = menu.addMenu(i18nc("@title:menu", "&Grouping"));
+        auto* const groupingMenu = menu->addMenu(i18nc("@title:menu", "&Grouping"));
         groupingGroup = new QActionGroup(groupingMenu);
 
         QAction *group0 = groupingGroup->addAction(i18nc("@item:inmenu no byte grouping", "&0"));
@@ -315,20 +315,19 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
         }
     }
 
-    QAction* write = menu.addAction(i18nc("@action:inmenu", "Write Changes"));
+    auto* const write = menu->addAction(i18nc("@action:inmenu", "Write Changes"));
     write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     write->setEnabled(m_appHasStarted && m_memViewView->isModified());
 
-    QAction* range = menu.addAction(i18nc("@action:inmenu", "Change Memory Range"));
+    auto* const range = menu->addAction(i18nc("@action:inmenu", "Change Memory Range"));
     range->setEnabled(m_appHasStarted && !m_rangeSelector->isVisible());
     range->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
 
-    QAction* close = menu.addAction(i18nc("@action:inmenu", "Close View"));
+    auto* const close = menu->addAction(i18nc("@action:inmenu", "Close View"));
     close->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
 
-
-    QAction* result = menu.exec(e->globalPos());
-
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    auto* const result = menu->exec(e->globalPos());
 
     if (result == reload)
     {
