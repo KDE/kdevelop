@@ -13,6 +13,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <util/shellutils.h>
 
 #include <KLocalizedString>
 
@@ -239,11 +240,7 @@ void MemoryView::memoryViewContextMenuRequested(const QPoint& viewportPosition)
     // Add our actions also to the context menu of m_memViewView because MemoryView's
     // own context menu is difficult to trigger when the range selector is hidden.
     auto* menu = m_memViewView->createStandardContextMenu(viewportPosition);
-    if (!menu) {
-        menu = new QMenu(m_memViewView);
-    } else if (!menu->isEmpty()) {
-        menu->addSeparator();
-    }
+    KDevelop::prepareStandardContextMenuToAddingCustomActions(menu, m_memViewView);
     addActionsAndShowContextMenu(menu, m_memViewView->viewport()->mapToGlobal(viewportPosition));
 }
 

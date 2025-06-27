@@ -13,6 +13,7 @@
 #include <QList>
 #include <QStringList>
 
+class QMenu;
 class QUrl;
 class QWidget;
 
@@ -52,6 +53,21 @@ bool KDEVPLATFORMUTIL_EXPORT ensureWritable(const QList<QUrl>& urls);
  */
 bool KDEVPLATFORMUTIL_EXPORT restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName,
                                                         const QString& configSubgroupName = QString{});
+
+/**
+ * Prepare a QMenu pointer returned from createStandardContextMenu() to adding custom actions into the menu.
+ *
+ * The member function createStandardContextMenu() of a widget such as QTextEdit may return @c nullptr, in
+ * which case this function assigns @c new QMenu(@p menuParent) to @p standardContextMenu.
+ *
+ * If @p standardContextMenu is not empty, this function adds a separator to the menu.
+ *
+ * @param[in,out] standardContextMenu a pointer returned from createStandardContextMenu()
+ * @param menuParent the parent widget for the possible new context menu, this should be the widget on which
+ *        createStandardContextMenu() was invoked so that the parent of the displayed menu is always the same
+ */
+void KDEVPLATFORMUTIL_EXPORT prepareStandardContextMenuToAddingCustomActions(QMenu*& standardContextMenu,
+                                                                             QWidget* menuParent);
 
 struct KDEVPLATFORMUTIL_EXPORT LaunchConfigurationEntryName
 {

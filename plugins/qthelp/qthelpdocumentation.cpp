@@ -28,6 +28,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
+#include <util/shellutils.h>
+
 #include "qthelpproviderabstract.h"
 
 #include <algorithm>
@@ -403,11 +405,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
     auto menu = view->createStandardContextMenu();
 
     if (m_info.count() > 1) {
-        if (!menu) {
-            menu = new QMenu(view);
-        } else if (!menu->isEmpty()) {
-            menu->addSeparator();
-        }
+        prepareStandardContextMenuToAddingCustomActions(menu, view);
 
         auto* actionGroup = new QActionGroup(menu);
         for (auto it = m_info.constBegin(), end = m_info.constEnd(); it != end; ++it) {
