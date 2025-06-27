@@ -11,7 +11,6 @@
 #include "dbgglobal.h"
 
 #include <QColor>
-#include <QPlainTextEdit>
 #include <QStringList>
 #include <QTimer>
 #include <QWidget>
@@ -21,6 +20,10 @@ class IDebugSession;
 }
 
 class KHistoryComboBox;
+
+class QMenu;
+class QPlainTextEdit;
+class QPoint;
 class QToolButton;
 
 namespace KDevMI
@@ -41,8 +44,6 @@ public:
 
     void savePartialProjectSession();
     void restorePartialProjectSession();
-
-    bool showInternalCommands() const;
 
 public Q_SLOTS:
     void clear();
@@ -84,6 +85,9 @@ private:
     */
     void trimList(QStringList& l, int max_size);
 
+    void gdbViewContextMenuRequested(const QPoint& viewportPosition);
+    void addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalPosition);
+
     GDBController* m_controller;
     KHistoryComboBox*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
@@ -120,17 +124,6 @@ private:
 
     QColor m_gdbColor;
     QColor m_errorColor;
-};
-
-class OutputTextEdit : public QPlainTextEdit
-{
-    Q_OBJECT
-
-public:
-    explicit OutputTextEdit(GDBOutputWidget* parent);
-
-protected:
-    void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
 } // end of namespace GDB
