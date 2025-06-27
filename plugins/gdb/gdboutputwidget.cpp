@@ -31,7 +31,6 @@
 #include <QToolButton>
 #include <QToolTip>
 #include <QScrollBar>
-#include <QScopedPointer>
 
 using namespace KDevMI::GDB;
 
@@ -362,7 +361,7 @@ void GDBOutputWidget::restorePartialProjectSession()
 
 void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
 {
-    QScopedPointer<QMenu> popup(new QMenu(this));
+    auto* const popup = new QMenu(this);
 
     QAction* action = popup->addAction(i18nc("@action:inmenu", "Show Internal Commands"),
                                this,
@@ -380,6 +379,7 @@ void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
                       this,
                       SLOT(copyAll()));
 
+    popup->setAttribute(Qt::WA_DeleteOnClose);
     popup->exec(e->globalPos());
 }
 
@@ -410,7 +410,7 @@ OutputTextEdit::OutputTextEdit(GDBOutputWidget * parent)
 
 void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
 {
-    QScopedPointer<QMenu> popup(createStandardContextMenu());
+    auto* popup = createStandardContextMenu();
 
     QAction* action = popup->addAction(i18nc("@action:inmenu", "Show Internal Commands"),
                                parent(),
@@ -424,6 +424,7 @@ void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
             "This option will affect only future commands, it will not "
             "add or remove already issued commands from the view."));
 
+    popup->setAttribute(Qt::WA_DeleteOnClose);
     popup->exec(event->globalPos());
 }
 
