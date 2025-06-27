@@ -27,6 +27,7 @@
 #include <QFocusEvent>
 #include <QMenu>
 #include <QLabel>
+#include <QPlainTextEdit>
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QToolTip>
@@ -50,9 +51,12 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
                     "Shows all GDB commands being executed. "
                     "You can also issue any other GDB command while debugging.</p>"));
 
-    m_gdbView = new OutputTextEdit(this);
+    m_gdbView = new QPlainTextEdit(this);
     m_gdbView->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     m_gdbView->setReadOnly(true);
+
+    m_gdbView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_gdbView, &QWidget::customContextMenuRequested, this, &GDBOutputWidget::gdbViewContextMenuRequested);
 
     m_userGDBCmdEditor = new KHistoryComboBox (this);
 
@@ -358,14 +362,21 @@ void GDBOutputWidget::restorePartialProjectSession()
     m_showInternalCommands = config.readEntry("showInternalCommands", false);
 }
 
+void GDBOutputWidget::gdbViewContextMenuRequested(const QPoint& viewportPosition)
+{
+    auto* menu = m_gdbView->createStandardContextMenu();
+    addActionsAndShowContextMenu(menu, m_gdbView->viewport()->mapToGlobal(viewportPosition));
+}
 
 void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
 {
-    auto* const popup = new QMenu(this);
+    addActionsAndShowContextMenu(new QMenu(this), e->globalPos());
+}
 
-    QAction* action = popup->addAction(i18nc("@action:inmenu", "Show Internal Commands"),
-                               this,
-                               SLOT(toggleShowInternalCommands()));
+void GDBOutputWidget::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalPosition)
+{
+    auto* const action = menu->addAction(i18nc("@action:inmenu", "Show Internal Commands"), this,
+                                         &GDBOutputWidget::toggleShowInternalCommands);
 
     action->setCheckable(true);
     action->setChecked(m_showInternalCommands);
@@ -375,12 +386,10 @@ void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
             "This option will affect only future commands, it will not "
             "add or remove already issued commands from the view."));
 
-    popup->addAction(i18nc("@action:inmenu", "Copy All"),
-                      this,
-                      SLOT(copyAll()));
+    menu->addAction(i18nc("@action:inmenu", "Copy All"), this, &GDBOutputWidget::copyAll);
 
-    popup->setAttribute(Qt::WA_DeleteOnClose);
-    popup->exec(e->globalPos());
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    menu->exec(globalPosition);
 }
 
 void GDBOutputWidget::copyAll()
@@ -400,37 +409,6 @@ void GDBOutputWidget::copyAll()
 void GDBOutputWidget::toggleShowInternalCommands()
 {
     setShowInternalCommands(!m_showInternalCommands);
-}
-
-
-OutputTextEdit::OutputTextEdit(GDBOutputWidget * parent)
-    : QPlainTextEdit(parent)
-{
-}
-
-void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
-{
-    auto* popup = createStandardContextMenu();
-
-    QAction* action = popup->addAction(i18nc("@action:inmenu", "Show Internal Commands"),
-                               parent(),
-                               SLOT(toggleShowInternalCommands()));
-
-    action->setCheckable(true);
-    action->setChecked(static_cast<GDBOutputWidget*>(parent())->showInternalCommands());
-    action->setWhatsThis(i18nc("@info:tooltip",
-            "Controls if commands issued internally by KDevelop "
-            "will be shown or not.<br>"
-            "This option will affect only future commands, it will not "
-            "add or remove already issued commands from the view."));
-
-    popup->setAttribute(Qt::WA_DeleteOnClose);
-    popup->exec(event->globalPos());
-}
-
-bool GDBOutputWidget::showInternalCommands() const
-{
-    return m_showInternalCommands;
 }
 
 #include "moc_gdboutputwidget.cpp"
