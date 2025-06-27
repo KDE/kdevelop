@@ -10,9 +10,11 @@
 
 #include "dbgglobal.h"
 
+#include <QColor>
 #include <QPlainTextEdit>
-#include <QTimer>
 #include <QStringList>
+#include <QTimer>
+#include <QWidget>
 
 namespace KDevelop {
 class IDebugSession;
