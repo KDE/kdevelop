@@ -16,6 +16,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <util/shellutils.h>
 
 #include <KColorScheme>
 #include <KHistoryComboBox>
@@ -209,7 +210,7 @@ void DebuggerConsoleView::showContextMenu(const QPoint &pos)
     // Seems not a big issue currently as menu content seems position independent, but still better fix
     auto* popup = m_textView->createStandardContextMenu(pos);
 
-    popup->addSeparator();
+    KDevelop::prepareStandardContextMenuToAddingCustomActions(popup, m_textView);
     popup->addAction(m_actShowInternal);
 
     popup->setAttribute(Qt::WA_DeleteOnClose);
