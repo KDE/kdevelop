@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QList>
+#include <QMenu>
 #include <QTextStream>
 #include <QUrl>
 #include <QWidget>
@@ -200,6 +201,15 @@ bool restoreAndAutoSaveGeometry(QWidget& widget, const QString& configGroupName,
     const auto* const saver = new WidgetGeometrySaver(widget, configGroupName, configSubgroupName);
     return saver->restoreWidgetGeometry();
 }
+
+void prepareStandardContextMenuToAddingCustomActions(QMenu*& standardContextMenu, QWidget* menuParent)
+{
+    if (!standardContextMenu) {
+        standardContextMenu = new QMenu(menuParent);
+    } else if (!standardContextMenu->isEmpty()) {
+        standardContextMenu->addSeparator();
+    }
 }
+} // namespace KDevelop
 
 #include "shellutils.moc"

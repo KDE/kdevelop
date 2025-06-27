@@ -13,6 +13,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <util/shellutils.h>
 
 #include <KLocalizedString>
 
@@ -236,11 +237,7 @@ void MemoryView::memoryEdited(int start, int end)
 void MemoryView::memoryViewContextMenuRequested(const QPoint& viewportPosition)
 {
     auto* menu = m_memViewView->createStandardContextMenu(viewportPosition);
-    if (!menu) {
-        menu = new QMenu(m_memViewView);
-    } else if (!menu->isEmpty()) {
-        menu->addSeparator();
-    }
+    KDevelop::prepareStandardContextMenuToAddingCustomActions(menu, m_memViewView);
     addActionsAndShowContextMenu(menu, m_memViewView->viewport()->mapToGlobal(viewportPosition));
 }
 
