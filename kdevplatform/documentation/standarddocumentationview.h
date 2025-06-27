@@ -77,6 +77,9 @@ public:
      */
     void setDelegateLinks(bool delegate);
 
+    /**
+     * @return the standard context menu for this documentation view or @c nullptr if there are no actions to show
+     */
     QMenu* createStandardContextMenu();
 
 Q_SIGNALS:

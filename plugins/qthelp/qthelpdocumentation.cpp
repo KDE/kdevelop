@@ -403,7 +403,9 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
     auto menu = view->createStandardContextMenu();
 
     if (m_info.count() > 1) {
-        if (!menu->isEmpty()) {
+        if (!menu) {
+            menu = new QMenu(view);
+        } else if (!menu->isEmpty()) {
             menu->addSeparator();
         }
 
@@ -417,8 +419,10 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
         }
     }
 
-    menu->setAttribute(Qt::WA_DeleteOnClose);
-    menu->exec(view->mapToGlobal(pos));
+    if (menu) {
+        menu->setAttribute(Qt::WA_DeleteOnClose);
+        menu->exec(view->mapToGlobal(pos));
+    }
 }
 
 

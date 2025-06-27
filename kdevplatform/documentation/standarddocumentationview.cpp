@@ -309,12 +309,14 @@ QMenu* StandardDocumentationView::createStandardContextMenu()
 {
     Q_D(StandardDocumentationView);
 
-    auto menu = new QMenu(this);
     auto copyAction = d->m_view->pageAction(QWebEnginePage::Copy);
-    if (copyAction) {
-        copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
-        menu->addAction(copyAction);
+    if (!copyAction) {
+        return nullptr;
     }
+
+    copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+    auto* const menu = new QMenu(this);
+    menu->addAction(copyAction);
     return menu;
 }
 
@@ -365,8 +367,7 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
 void StandardDocumentationView::contextMenuEvent(QContextMenuEvent* event)
 {
     auto menu = createStandardContextMenu();
-    if (menu->isEmpty()) {
-        delete menu;
+    if (!menu) {
         return;
     }
 
