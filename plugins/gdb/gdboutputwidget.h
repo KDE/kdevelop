@@ -90,7 +90,6 @@ private:
     bool m_cmdEditorHadFocus;
 
     void setShowInternalCommands(bool);
-    friend class OutputText;
 
     /** The output from user commands only and from
         all commands. We keep it here so that if we switch
