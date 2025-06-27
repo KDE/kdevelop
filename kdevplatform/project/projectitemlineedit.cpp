@@ -167,8 +167,10 @@ ProjectItemLineEdit::~ProjectItemLineEdit() = default;
 
 void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
 {
-    QScopedPointer<QMenu> menu(createStandardContextMenu());
+    auto* menu = createStandardContextMenu();
     menu->addActions(actions());
+
+    menu->setAttribute(Qt::WA_DeleteOnClose);
     menu->exec(mapToGlobal(p));
 }
 

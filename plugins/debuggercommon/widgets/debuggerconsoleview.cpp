@@ -27,7 +27,6 @@
 #include <QIcon>
 #include <QLabel>
 #include <QMenu>
-#include <QScopedPointer>
 #include <QScrollBar>
 #include <QStyle>
 #include <QTextEdit>
@@ -208,11 +207,12 @@ void DebuggerConsoleView::showContextMenu(const QPoint &pos)
     // FIXME: QTextEdit::createStandardContextMenu takes position in document coordinates
     // while pos is in QTextEdit::viewport coordinates.
     // Seems not a big issue currently as menu content seems position independent, but still better fix
-    QScopedPointer<QMenu> popup(m_textView->createStandardContextMenu(pos));
+    auto* popup = m_textView->createStandardContextMenu(pos);
 
     popup->addSeparator();
     popup->addAction(m_actShowInternal);
 
+    popup->setAttribute(Qt::WA_DeleteOnClose);
     popup->exec(m_textView->viewport()->mapToGlobal(pos));
 }
 
