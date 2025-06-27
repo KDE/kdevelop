@@ -16,6 +16,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <util/shellutils.h>
 
 #include <KColorScheme>
 #include <KConfigGroup>
@@ -365,6 +366,7 @@ void GDBOutputWidget::restorePartialProjectSession()
 void GDBOutputWidget::gdbViewContextMenuRequested(const QPoint& viewportPosition)
 {
     auto* menu = m_gdbView->createStandardContextMenu();
+    KDevelop::prepareStandardContextMenuToAddingCustomActions(menu, m_gdbView);
     addActionsAndShowContextMenu(menu, m_gdbView->viewport()->mapToGlobal(viewportPosition));
 }
 
