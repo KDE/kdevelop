@@ -122,7 +122,7 @@ void DebuggerConsoleView::setupUi()
     m_textView->setReadOnly(true);
     m_textView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_textView, &QTextEdit::customContextMenuRequested,
-            this, &DebuggerConsoleView::showContextMenu);
+            this, &DebuggerConsoleView::textViewContextMenuRequested);
 
     auto vbox = new QVBoxLayout;
     vbox->setContentsMargins(0, 0, 0, 0);
@@ -203,18 +203,25 @@ void DebuggerConsoleView::setShowInternalCommands(bool enable)
     }
 }
 
-void DebuggerConsoleView::showContextMenu(const QPoint &pos)
+void DebuggerConsoleView::textViewContextMenuRequested(const QPoint& viewportPosition)
 {
-    // FIXME: QTextEdit::createStandardContextMenu takes position in document coordinates
-    // while pos is in QTextEdit::viewport coordinates.
-    // Seems not a big issue currently as menu content seems position independent, but still better fix
-    auto* popup = m_textView->createStandardContextMenu(pos);
+    // Map viewportPosition to the document coordinates expected by QTextEdit::createStandardContextMenu()
+    // similarly to how QTextEdit::contextMenuEvent() does it using QTextEditPrivate::horizontalOffset()
+    // and QTextEditPrivate::verticalOffset(). The unfortunate requirement
+    // to duplicate private Qt code is reported in QTBUG-138099.
+    const auto horizontalScrollBar = m_textView->horizontalScrollBar();
+    const auto horizontalOffset = m_textView->isRightToLeft()
+        ? horizontalScrollBar->maximum() - horizontalScrollBar->value()
+        : horizontalScrollBar->value();
+    const auto verticalOffset = m_textView->verticalScrollBar()->value();
+    const auto documentPosition = viewportPosition + QPoint{horizontalOffset, verticalOffset};
 
+    auto* popup = m_textView->createStandardContextMenu(documentPosition);
     KDevelop::prepareStandardContextMenuToAddingCustomActions(popup, m_textView);
     popup->addAction(m_actShowInternal);
 
     popup->setAttribute(Qt::WA_DeleteOnClose);
-    popup->exec(m_textView->viewport()->mapToGlobal(pos));
+    popup->exec(m_textView->viewport()->mapToGlobal(viewportPosition));
 }
 
 void DebuggerConsoleView::toggleRepeat(bool checked)
