@@ -86,7 +86,6 @@ protected:
     void focusInEvent(QFocusEvent *e) override;
 
 protected Q_SLOTS:
-    void showContextMenu(const QPoint &pos);
     void toggleRepeat(bool checked);
     void toggleShowInternalCommands(bool checked);
     void flushPending();
@@ -100,7 +99,10 @@ protected Q_SLOTS:
     void receivedStderr(const QString &line);
 
     void trySendCommand(QString cmd);
+
 private:
+    void textViewContextMenuRequested(const QPoint& viewportPosition);
+
     QAction *m_actRepeat;
     QAction *m_actInterrupt;
     QAction *m_actShowInternal;

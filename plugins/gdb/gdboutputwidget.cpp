@@ -365,7 +365,10 @@ void GDBOutputWidget::restorePartialProjectSession()
 
 void GDBOutputWidget::gdbViewContextMenuRequested(const QPoint& viewportPosition)
 {
-    auto* menu = m_gdbView->createStandardContextMenu();
+    // Even though the documentation for QPlainTextEdit::createStandardContextMenu() asks
+    // for a position in the document coordinates, only passing a position in the viewport
+    // coordinates works correctly in practice. This bug is reported in QTBUG-138099.
+    auto* menu = m_gdbView->createStandardContextMenu(viewportPosition);
     KDevelop::prepareStandardContextMenuToAddingCustomActions(menu, m_gdbView);
     addActionsAndShowContextMenu(menu, m_gdbView->viewport()->mapToGlobal(viewportPosition));
 }
