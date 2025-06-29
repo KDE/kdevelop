@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:41+0000\n"
-"PO-Revision-Date: 2025-05-31 10:58+0200\n"
+"PO-Revision-Date: 2025-06-28 19:56+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -278,16 +278,13 @@ msgid "Debug process %1"
 msgstr "Avlusa processen %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Ett program håller redan på att avlusas. Vill du avbryta avlusningssessionen "
-"som pågår och fortsätta?"
+"som pågår och fortsätta starta programmet?"
 
 #: midebugsession.cpp:236
 #, kde-format
