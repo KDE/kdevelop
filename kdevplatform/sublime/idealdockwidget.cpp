@@ -12,8 +12,6 @@
 #include "idealcontroller.h"
 #include "view.h"
 
-#include <util/scopeddialog.h>
-
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -97,7 +95,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     Q_ASSERT(senderWidget);
 
-    KDevelop::ScopedDialog<QMenu> menu(senderWidget);
+    auto* const menu = new QMenu(senderWidget);
     menu->addSection(windowIcon(), m_view->document()->title());
 
     const QList<QAction*> viewActions = m_view->contextMenuActions();
@@ -155,6 +153,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     menu->addSeparator();
     QAction* remove = menu->addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18nc("@action:inmenu", "Remove Tool View"));
 
+    menu->setAttribute(Qt::WA_DeleteOnClose);
     QAction* triggered = menu->exec(senderWidget->mapToGlobal(point));
 
     if (triggered)
