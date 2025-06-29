@@ -221,7 +221,7 @@ void DebuggerConsoleView::textViewContextMenuRequested(const QPoint& viewportPos
     popup->addAction(m_actShowInternal);
 
     popup->setAttribute(Qt::WA_DeleteOnClose);
-    popup->exec(m_textView->viewport()->mapToGlobal(viewportPosition));
+    popup->popup(m_textView->viewport()->mapToGlobal(viewportPosition));
 }
 
 void DebuggerConsoleView::toggleRepeat(bool checked)
