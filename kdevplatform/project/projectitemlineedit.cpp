@@ -174,7 +174,7 @@ void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
     menu->addActions(actions());
 
     menu->setAttribute(Qt::WA_DeleteOnClose);
-    menu->exec(mapToGlobal(p));
+    menu->popup(mapToGlobal(p));
 }
 
 bool ProjectItemLineEdit::selectItemDialog()

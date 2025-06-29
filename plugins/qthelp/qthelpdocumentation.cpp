@@ -419,7 +419,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 
     if (menu) {
         menu->setAttribute(Qt::WA_DeleteOnClose);
-        menu->exec(view->mapToGlobal(pos));
+        menu->popup(view->mapToGlobal(pos));
     }
 }
 

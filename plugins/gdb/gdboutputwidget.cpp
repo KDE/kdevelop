@@ -394,7 +394,7 @@ void GDBOutputWidget::addActionsAndShowContextMenu(QMenu* menu, const QPoint& gl
     menu->addAction(i18nc("@action:inmenu", "Copy All"), this, &GDBOutputWidget::copyAll);
 
     menu->setAttribute(Qt::WA_DeleteOnClose);
-    menu->exec(globalPosition);
+    menu->popup(globalPosition);
 }
 
 void GDBOutputWidget::copyAll()

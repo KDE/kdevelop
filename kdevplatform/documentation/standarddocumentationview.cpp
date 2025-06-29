@@ -372,7 +372,7 @@ void StandardDocumentationView::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu->setAttribute(Qt::WA_DeleteOnClose);
-    menu->exec(event->globalPos());
+    menu->popup(event->globalPos());
 }
 
 void StandardDocumentationView::updateZoomFactor(double zoomFactor)
