@@ -207,16 +207,11 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
         s.replace(QLatin1Char('\n'), QLatin1String("<br>"));
 
     m_allCommands.append(s);
-    m_allCommandsRaw.append(line);
     trimList(m_allCommands, m_maxLines);
-    trimList(m_allCommandsRaw, m_maxLines);
-
     if (!internal)
     {
         m_userCommands_.append(s);
-        m_userCommandsRaw.append(line);
         trimList(m_userCommands_, m_maxLines);
-        trimList(m_userCommandsRaw, m_maxLines);
     }
 
     if (!internal || m_showInternalCommands)
@@ -277,11 +272,6 @@ void GDBOutputWidget::slotReceivedStderr(const char* line)
     trimList(m_allCommands, m_maxLines);
     m_userCommands_.append(colored);
     trimList(m_userCommands_, m_maxLines);
-
-    m_allCommandsRaw.append(lineEncoded);
-    trimList(m_allCommandsRaw, m_maxLines);
-    m_userCommandsRaw.append(lineEncoded);
-    trimList(m_userCommandsRaw, m_maxLines);
 
     showLine(colored);
 }
@@ -408,12 +398,7 @@ void GDBOutputWidget::addActionsAndShowContextMenu(QMenu* menu, const QPoint& gl
 
 void GDBOutputWidget::copyAll()
 {
-    /* See comments for allCommandRaw_ for explanations of
-       this complex logic, as opposed to calling text(). */
-    const QStringList& raw = m_showInternalCommands ?
-        m_allCommandsRaw : m_userCommandsRaw;
-    const QString text = raw.join(QString());
-
+    const auto text = m_gdbView->toPlainText();
     // Make sure the text is pastable both with Ctrl-C and with
     // middle click.
     QApplication::clipboard()->setText(text, QClipboard::Clipboard);
