@@ -274,6 +274,9 @@ void DebuggerConsoleView::clear()
 
     m_userOutput.clear();
     m_allOutput.clear();
+
+    m_pendingOutput.clear();
+    m_updateTimer.stop();
 }
 
 void DebuggerConsoleView::debuggerStateChanged(DBGStateFlags newState)

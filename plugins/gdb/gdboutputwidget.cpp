@@ -165,6 +165,9 @@ void GDBOutputWidget::clear()
 
     m_userCommands_.clear();
     m_allCommands.clear();
+
+    m_pendingOutput.clear();
+    m_updateTimer.stop();
 }
 
 /***************************************************************************/
