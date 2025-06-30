@@ -306,11 +306,9 @@ QString DebuggerConsoleView::toHtmlEscaped(QString text)
     return text;
 }
 
-
-QString DebuggerConsoleView::colorify(QString text, const QColor& color)
+void DebuggerConsoleView::colorify(QString& text, const QColor& color)
 {
     text = QLatin1String("<font color=\"") + color.name() +  QLatin1String("\">") + text + QLatin1String("</font>");
-    return text;
 }
 
 void DebuggerConsoleView::receivedInternalCommandStdout(const QString& line)
@@ -330,7 +328,7 @@ void DebuggerConsoleView::receivedStdout(const QString& line, bool internal)
         if (!m_alterPrompt.isEmpty()) {
             colored.replace(0, 5, m_alterPrompt);
         }
-        colored = colorify(colored, m_stdColor);
+        colorify(colored, m_stdColor);
     }
 
     m_allOutput.append(colored);
@@ -348,7 +346,7 @@ void DebuggerConsoleView::receivedStdout(const QString& line, bool internal)
 void DebuggerConsoleView::receivedStderr(const QString& line)
 {
     QString colored = toHtmlEscaped(line);
-    colored = colorify(colored, m_errorColor);
+    colorify(colored, m_errorColor);
 
     // Errors are shown inside user commands too.
     m_allOutput.append(colored);

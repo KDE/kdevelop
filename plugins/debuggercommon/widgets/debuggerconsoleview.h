@@ -74,7 +74,7 @@ protected:
      */
     QString toHtmlEscaped(QString text);
 
-    QString colorify(QString text, const QColor &color);
+    void colorify(QString& text, const QColor& color);
 
     /**
      * Makes 'l' no longer than 'max_size' by

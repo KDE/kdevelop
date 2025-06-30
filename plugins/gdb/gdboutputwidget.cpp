@@ -184,13 +184,12 @@ void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 }
 
 namespace {
-    QString colorify(QString text, const QColor& color)
+    void colorify(QString& text, const QColor& color)
     {
         if (text.endsWith(QLatin1Char('\n'))) {
             text.chop(1);
         }
         text = QLatin1String("<font color=\"") + color.name() + QLatin1String("\">") + text + QLatin1String("</font><br>");
-        return text;
     }
 }
 
@@ -201,7 +200,7 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     QString s = line.toHtmlEscaped();
     if (s.startsWith(QLatin1String("(gdb)")))
     {
-        s = colorify(s, m_gdbColor);
+        colorify(s, m_gdbColor);
     }
     else
         s.replace(QLatin1Char('\n'), QLatin1String("<br>"));
@@ -265,8 +264,8 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
-    const auto lineEncoded = QString::fromUtf8(line);
-    const auto colored = colorify(lineEncoded.toHtmlEscaped(), m_errorColor);
+    auto colored = QString::fromUtf8(line).toHtmlEscaped();
+    colorify(colored, m_errorColor);
     // Errors are shown inside user commands too.
     m_allCommands.append(colored);
     trimList(m_allCommands, m_maxLines);
