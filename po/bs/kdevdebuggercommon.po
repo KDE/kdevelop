@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
 "PO-Revision-Date: 2013-12-15 19:17+0000\n"
 "Last-Translator: Nermina Ahmić <nahmic1@etf.unsa.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -157,7 +157,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Interna debagerska greška"
 
-#: midebugger.cpp:335 midebugsession.cpp:447
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "Proces izašao"
@@ -277,23 +277,23 @@ msgstr "Ne kači se za proces %1: ne može se zakačiti za sam debager."
 msgid "Debugger"
 msgstr "Ispravljač grešaka"
 
-#: midebugjobs.cpp:92
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:158
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Traži greške u datoteci jezgra"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "Traženje grešaka u procesu %1"
@@ -330,17 +330,17 @@ msgstr "Ispitujem datoteku jezgra %1"
 msgid "Debugger stopped"
 msgstr "Debager zaustavljen"
 
-#: midebugsession.cpp:452
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "Program se izvršava"
 
-#: midebugsession.cpp:457
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "Program je pauziran"
 
-#: midebugsession.cpp:772
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -349,32 +349,32 @@ msgstr ""
 "<b>Gdb komanda je poslana kada se debager nije izvršavao</b><br>Komanda je "
 "bila:<br> %1"
 
-#: midebugsession.cpp:884
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Pogrešna debagerska komanda</b><br>%1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Izašao s izlaznim kodom: %1"
 
-#: midebugsession.cpp:1022
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "Izašao normalno"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Izašao na signal %1"
 
-#: midebugsession.cpp:1064
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Program primio signal %1 (%2)"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -382,7 +382,7 @@ msgstr[0] "%1 komanda u redu čekanja\n"
 msgstr[1] "%1 komande u redu čekanja\n"
 msgstr[2] "%1 komandi u redu čekanja\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -391,12 +391,12 @@ msgstr[0] "%1 komandu obrađuje gdb\n"
 msgstr[1] "%1 komande obrađuje gdb\n"
 msgstr[2] "%1 komandi obrađuje gdb\n"
 
-#: midebugsession.cpp:1198
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Debagersko stanje: %1\n"
 
-#: midebugsession.cpp:1201
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -407,7 +407,7 @@ msgstr ""
 "Tekst trenutne naredbe: '%2'\n"
 "Originalni tekst trenutne naredbe: '%3'\n"
 
-#: midebugsession.cpp:1228
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Debagerska greška</b><p>Debager je javio sljedeću grešku:<p><tt>%1"

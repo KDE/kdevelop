@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
 "PO-Revision-Date: 2021-06-28 00:20+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -142,7 +142,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Daxili sazlayıcı xətası"
 
-#: midebugger.cpp:335 midebugsession.cpp:447
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "Proses başa çatdı"
@@ -250,23 +250,23 @@ msgstr "%1 prosesinə qoşulmur: sazlayıcı ğzünə qoşula bilməz."
 msgid "Debugger"
 msgstr "Sazlayıcı"
 
-#: midebugjobs.cpp:92
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:158
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' icra ediləbilən deyil"
 
-#: midebugjobs.cpp:176
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Sazlama özək faylı"
 
-#: midebugjobs.cpp:192
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "Sazlama prosesi %1"
@@ -308,17 +308,17 @@ msgstr "%1 özək faylı araşdırılır"
 msgid "Debugger stopped"
 msgstr "Sazlayıcı dayandı"
 
-#: midebugsession.cpp:452
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "Tətbiq işləyir"
 
-#: midebugsession.cpp:457
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "Tətbiq fasilədədir"
 
-#: midebugsession.cpp:772
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -326,39 +326,39 @@ msgid ""
 msgstr ""
 "<b>Sazlayıcı işləmədikdə gdb əmri göndərildi</b><br>Əmr belə idi: <br> %1"
 
-#: midebugsession.cpp:884
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Səhv sazlayıcı əmri</b><br>%1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Bu cavab kodu ilə bağlandı: %1"
 
-#: midebugsession.cpp:1022
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "Normal halda bağlandı"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "%1 siqnalı ilə bağlandı"
 
-#: midebugsession.cpp:1064
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Proqram %1 siqnalını aldı (%2)"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 əmr növbədədir\n"
 msgstr[1] "%1 əmr növbədədir\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -366,12 +366,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 əmr gdb tərəfindən işlənir\n"
 msgstr[1] "%1 əmr gdb tərəfindəb işlənir\n"
 
-#: midebugsession.cpp:1198
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Sazlayıcının vəziyyəti: %1\n"
 
-#: midebugsession.cpp:1201
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -382,7 +382,7 @@ msgstr ""
 "Hazırkı əmr mətni: %2'\n"
 "Hazırkı əmrin orijinal mətni: '%3'\n"
 
-#: midebugsession.cpp:1228
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
