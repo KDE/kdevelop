@@ -148,7 +148,7 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
+DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
         : QWidget(parent),
         active_(false),
         lower_(0),
@@ -217,10 +217,6 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
     connect(pDC,
             &KDevelop::IDebugController::currentSessionChanged,
             this, &DisassembleWidget::currentSessionChanged);
-
-    if (plugin) {
-        connect(plugin, &MIDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
-    }
 
     m_dlg = new SelectAddressDialog(this);
 
@@ -420,11 +416,6 @@ void DisassembleWidget::showEvent(QShowEvent*)
 }
 
 void DisassembleWidget::hideEvent(QHideEvent*)
-{
-    slotActivate(false);
-}
-
-void DisassembleWidget::slotDeactivate()
 {
     slotActivate(false);
 }

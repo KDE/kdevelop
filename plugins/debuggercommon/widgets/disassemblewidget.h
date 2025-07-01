@@ -102,7 +102,6 @@ public:
 
 public Q_SLOTS:
     void slotActivate(bool activate);
-    void slotDeactivate();
     void slotShowStepInSource(const QUrl &fileName, int lineNum, const QString &address);
     void slotChangeAddress();
     ///Disassembles code at @p address and updates registers
