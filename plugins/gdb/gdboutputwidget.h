@@ -50,7 +50,6 @@ public Q_SLOTS:
 
     void slotInternalCommandStdout(const QString& line);
     void slotUserCommandStdout(const QString& line);
-    void slotReceivedStderr(const char* line);
 
     void slotGDBCmd();
 
@@ -81,7 +80,9 @@ private:
      */
     void handleDebuggerNotRunning();
 
+    void receivedStderrOrLog(const QString& line);
     void newStdoutLine(const QString& line, bool internal);
+    void addFormattedLine(const QString& line, bool internal);
 
     /** Arranges for 'line' to be shown to the user.
         Adds 'line' to pendingOutput_ and makes sure
@@ -124,7 +125,7 @@ private:
     int m_maxLines;
 
     QColor m_gdbColor;
-    QColor m_errorColor;
+    QColor m_stderrOrLogColor;
 };
 
 } // end of namespace GDB

@@ -114,7 +114,7 @@ void GDBOutputWidget::updateColors()
 {
     KColorScheme scheme(QPalette::Active);
     m_gdbColor = scheme.foreground(KColorScheme::LinkText).color();
-    m_errorColor = scheme.foreground(KColorScheme::NegativeText).color();
+    m_stderrOrLogColor = scheme.foreground(KColorScheme::NeutralText).color();
 }
 
 void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
@@ -136,8 +136,7 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
 
     connect(session, &DebugSession::debuggerInternalCommandOutput, this, &GDBOutputWidget::slotInternalCommandStdout);
     connect(session, &DebugSession::debuggerUserCommandOutput, this, &GDBOutputWidget::slotUserCommandStdout);
-    // debugger internal output, treat it as an internal command output
-    connect(session, &DebugSession::debuggerInternalOutput, this, &GDBOutputWidget::slotInternalCommandStdout);
+    connect(session, &DebugSession::debuggerInternalOutput, this, &GDBOutputWidget::receivedStderrOrLog);
 
     connect(session, &DebugSession::debuggerStateChanged, this, [this](DBGStateFlags oldState, DBGStateFlags newState) {
         Q_UNUSED(oldState);
@@ -193,6 +192,22 @@ namespace {
     }
 }
 
+void GDBOutputWidget::receivedStderrOrLog(const QString& line)
+{
+    // Multiple regular messages like the following arrive through the GDB 'log' MI channel:
+    // * handle SIG32 pass nostop noprint
+    // * python sys.path.insert(0, "/path/to/installed-kdevelop/share/kdevgdb/printers")
+    // * Quit
+    // The following complaint about a breakpoint location that looks like
+    // an error or a warning also arrives through the GDB 'log' MI channel:
+    // * Function "nonexistentFunction" not defined.
+    // So color the diverse log messages as warnings rather than as errors
+    // and do not show them among user commands to avoid clutter.
+
+    auto colored = line.toHtmlEscaped();
+    colorify(colored, m_stderrOrLogColor);
+    addFormattedLine(colored, true);
+}
 
 void GDBOutputWidget::newStdoutLine(const QString& line,
                                     bool internal)
@@ -205,18 +220,22 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     else
         s.replace(QLatin1Char('\n'), QLatin1String("<br>"));
 
-    m_allCommands.append(s);
+    addFormattedLine(s, internal);
+}
+
+void GDBOutputWidget::addFormattedLine(const QString& line, bool internal)
+{
+    m_allCommands.append(line);
     trimList(m_allCommands, m_maxLines);
     if (!internal)
     {
-        m_userCommands_.append(s);
+        m_userCommands_.append(line);
         trimList(m_userCommands_, m_maxLines);
     }
 
     if (!internal || m_showInternalCommands)
-        showLine(s);
+        showLine(line);
 }
-
 
 void GDBOutputWidget::showLine(const QString& line)
 {
@@ -259,23 +278,6 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
         }
     }
 }
-
-/***************************************************************************/
-
-void GDBOutputWidget::slotReceivedStderr(const char* line)
-{
-    auto colored = QString::fromUtf8(line).toHtmlEscaped();
-    colorify(colored, m_errorColor);
-    // Errors are shown inside user commands too.
-    m_allCommands.append(colored);
-    trimList(m_allCommands, m_maxLines);
-    m_userCommands_.append(colored);
-    trimList(m_userCommands_, m_maxLines);
-
-    showLine(colored);
-}
-
-/***************************************************************************/
 
 void GDBOutputWidget::slotGDBCmd()
 {
