@@ -446,8 +446,6 @@ void DisassembleWidget::enableControls(bool enabled)
 
 void DisassembleWidget::slotChangeAddress()
 {
-    if(!m_dlg) return;
-
     if (!m_disassembleWindow->selectedItems().isEmpty()) {
         m_dlg->setAddress(m_disassembleWindow->selectedItems().first()->text(Address));
     }
