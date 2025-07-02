@@ -459,9 +459,7 @@ void DisassembleWidget::slotChangeAddress()
     if (m_dlg->exec() == QDialog::Rejected)
         return;
 
-    const auto addr = knownValidAddressFromString(m_dlg->address());
-    if (addr < lower_ || addr > upper_ || !displayCurrent())
-        disassembleMemoryRegion(m_dlg->address());
+    disassembleMemoryRegion(m_dlg->address());
 }
 
 void SelectAddressDialog::setAddress ( const QString& address )
