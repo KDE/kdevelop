@@ -86,7 +86,7 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
 
 QString SelectAddressDialog::address() const
 {
-    return hasValidAddress() ? m_ui.comboBox->currentText() : QString();
+    return m_ui.comboBox->currentText();
 }
 
 bool SelectAddressDialog::hasValidAddress() const
