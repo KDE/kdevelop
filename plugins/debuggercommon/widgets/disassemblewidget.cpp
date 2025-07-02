@@ -492,7 +492,7 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 
 void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
 {
-    if (r.reason == QLatin1String("done") && active_) {
+    if (r.reason == QLatin1String("done")) {
         disassembleMemoryRegion();
     }
 }
