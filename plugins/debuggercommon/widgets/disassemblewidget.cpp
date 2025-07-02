@@ -95,6 +95,12 @@ QString SelectAddressDialog::address() const
     return m_ui.comboBox->currentText();
 }
 
+void SelectAddressDialog::clearHistory()
+{
+    m_ui.comboBox->clearEditText();
+    m_ui.comboBox->clearHistory();
+}
+
 bool SelectAddressDialog::hasValidAddress() const
 {
     bool ok;
@@ -177,9 +183,6 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
         : QWidget(parent),
         active_(false),
-        lower_(0),
-        upper_(0),
-        address_(0),
         m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
         auto* topLayout = new QVBoxLayout(this);
@@ -278,6 +281,15 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
 {
     if (auto* const previousSession = qobject_cast<MIDebugSession*>(iPreviousSession)) {
         disconnect(previousSession, nullptr, this, nullptr);
+
+        // Clear out all addresses of the previous debug session because
+        // they are unlikely to be valid or useful in the next session.
+        m_upToDate = true;
+        m_currentAddress.reset();
+        m_regionFirst.reset();
+        m_regionLast.reset();
+        m_disassembleWindow->clear();
+        m_dlg->clearHistory();
     }
 
     auto* const session = qobject_cast<MIDebugSession*>(iSession);
@@ -301,19 +313,27 @@ DisassembleWidget::~DisassembleWidget()
    m_config.writeEntry("splitterState", m_splitter->saveState());
 }
 
-/***************************************************************************/
+bool DisassembleWidget::isMemoryRegionDisplayed() const
+{
+    Q_ASSERT(m_regionFirst.isValid() == m_regionLast.isValid());
+    return m_regionFirst.isValid();
+}
 
 bool DisassembleWidget::displayCurrent()
 {
-    if(address_ < lower_ || address_ > upper_) return false;
+    if (!isMemoryRegionDisplayed() || !m_currentAddress.isValid()) {
+        return false;
+    }
+    if (m_currentAddress < m_regionFirst || m_currentAddress > m_regionLast) {
+        return false; // cannot highlight the current address because it is outside of the displayed memory region
+    }
 
     bool bFound=false;
     for (int line=0; line < m_disassembleWindow->topLevelItemCount(); line++)
     {
         QTreeWidgetItem* item = m_disassembleWindow->topLevelItem(line);
         const auto address = knownValidAddressFromString(item->text(Address));
-        if (address == address_)
-        {
+        if (address == m_currentAddress.integer()) {
             // put cursor at start of line and highlight the line
             m_disassembleWindow->setCurrentItem(item);
             item->setIcon(Icon, QIcon::fromTheme(QStringLiteral("go-next")));
@@ -337,9 +357,12 @@ void DisassembleWidget::slotActivate(bool activate)
         if (active_)
         {
             updateDisassemblyFlavor();
-            m_registersManager->updateRegisters();
-            if (!displayCurrent())
-                disassembleMemoryRegion();
+            if (!m_upToDate) {
+                m_upToDate = true;
+                m_registersManager->updateRegisters();
+                if (!displayCurrent())
+                    disassembleMemoryRegion(m_currentAddress.string());
+            }
         }
     }
 }
@@ -352,39 +375,17 @@ void DisassembleWidget::slotShowStepInSource(const QUrl&, int,
     update(currentAddress);
 }
 
-void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
-{
-    const Value& content = r[QStringLiteral("asm_insns")];
-    const Value& pc = content[0];
-    if( pc.hasField(QStringLiteral("address")) ){
-        QString addr = pc[QStringLiteral("address")].literal();
-        address_ = knownValidAddressFromString(addr);
-
-        disassembleMemoryRegion(addr);
-    }
-}
-
-/***************************************************************************/
-
 void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QString& to)
 {
+    Q_ASSERT(!from.isEmpty());
+
     auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) return;
 
-    //only get $pc
-    if (from.isEmpty()){
-        s->addCommand(DataDisassemble, QStringLiteral("-s \"$pc\" -e \"$pc+1\" -- 0"),
-                      this, &DisassembleWidget::updateExecutionAddressHandler);
-    }else{
-
-        QString cmd = (to.isEmpty())?
-        QStringLiteral("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
-        QStringLiteral("-s %1 -e %2+1 -- 0").arg(from, to); // if both addr set
-
-        s->addCommand(DataDisassemble, cmd,
-                      this, &DisassembleWidget::disassembleMemoryHandler);
-   }
+    const auto command = to.isEmpty() ? QLatin1String{"-s %1 -e \"%1 + 256\" -- 0"}.arg(from)
+                                      : QLatin1String{"-s %1 -e %2+1 -- 0"}.arg(from, to);
+    s->addCommand(DataDisassemble, command, this, &DisassembleWidget::disassembleMemoryHandler);
 }
 
 /***************************************************************************/
@@ -418,9 +419,9 @@ void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
                                                                  QStringList{QString(), addr, fct, inst}));
 
         if (i == 0) {
-            lower_ = knownValidAddressFromString(addr);
+            m_regionFirst = addr;
         } else  if (i == content.size()-1) {
-            upper_ = knownValidAddressFromString(addr);
+            m_regionLast = addr;
         }
     }
 
@@ -469,13 +470,15 @@ void SelectAddressDialog::setAddress ( const QString& address )
 
 void DisassembleWidget::update(const QString &address)
 {
+    m_currentAddress = address;
+
     if (!active_) {
+        m_upToDate = false;
         return;
     }
 
-    address_ = knownValidAddressFromString(address);
     if (!displayCurrent()) {
-        disassembleMemoryRegion();
+        disassembleMemoryRegion(m_currentAddress.string());
     }
     m_registersManager->updateRegisters();
 }
@@ -511,8 +514,8 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 
 void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
 {
-    if (r.reason == QLatin1String("done")) {
-        disassembleMemoryRegion();
+    if (isMemoryRegionDisplayed() && r.reason == QLatin1String("done")) {
+        disassembleMemoryRegion(m_regionFirst.string(), m_regionLast.string());
     }
 }
 
@@ -541,6 +544,50 @@ void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
         disassemblyFlavor = DisassemblyFlavorATT;
     }
     m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);
+}
+
+auto DisassembleWidget::StoredAddress::operator=(const QString& address) -> StoredAddress&
+{
+    m_string = address;
+    m_integer = knownValidAddressFromString(m_string);
+    return *this;
+}
+
+void DisassembleWidget::StoredAddress::reset()
+{
+    m_string.clear();
+    m_integer = 0;
+}
+
+bool DisassembleWidget::StoredAddress::isValid() const
+{
+    return !m_string.isEmpty();
+}
+
+const QString& DisassembleWidget::StoredAddress::string() const
+{
+    return m_string;
+}
+auto DisassembleWidget::StoredAddress::integer() const -> AddressInteger
+{
+    return m_integer;
+}
+
+bool DisassembleWidget::StoredAddress::operator==(const StoredAddress& other) const
+{
+    return m_integer == other.m_integer;
+}
+bool DisassembleWidget::StoredAddress::operator!=(const StoredAddress& other) const
+{
+    return !(*this == other);
+}
+bool DisassembleWidget::StoredAddress::operator<(const StoredAddress& other) const
+{
+    return m_integer < other.m_integer;
+}
+bool DisassembleWidget::StoredAddress::operator>(const StoredAddress& other) const
+{
+    return other < *this;
 }
 
 #include "disassemblewidget.moc"
