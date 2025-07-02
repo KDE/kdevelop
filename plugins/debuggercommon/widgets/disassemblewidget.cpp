@@ -80,8 +80,7 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
 
     m_ui.comboBox->setValidator(new AddressValidator(m_ui.comboBox));
 
-    connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
-            this, &SelectAddressDialog::validateInput);
+    connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged, this, &SelectAddressDialog::updateOkState);
 }
 
 QString SelectAddressDialog::address() const
@@ -99,11 +98,6 @@ bool SelectAddressDialog::hasValidAddress() const
 void SelectAddressDialog::updateOkState()
 {
     m_ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasValidAddress());
-}
-
-void SelectAddressDialog::validateInput()
-{
-    updateOkState();
 }
 
 DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)

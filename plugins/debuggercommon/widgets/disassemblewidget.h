@@ -44,9 +44,6 @@ public:
     bool hasValidAddress() const;
     void updateOkState();
 
-private Q_SLOTS:
-    void validateInput();
-
 private:
     Ui::SelectAddressDialog m_ui;
 };
