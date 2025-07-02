@@ -41,10 +41,11 @@ public:
 
     QString address() const;
     void setAddress(const QString& address);
+
+private:
     bool hasValidAddress() const;
     void updateOkState();
 
-private:
     Ui::SelectAddressDialog m_ui;
 };
 

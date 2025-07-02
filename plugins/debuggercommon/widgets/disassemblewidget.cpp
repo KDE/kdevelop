@@ -81,6 +81,7 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
     m_ui.comboBox->setValidator(new AddressValidator(m_ui.comboBox));
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged, this, &SelectAddressDialog::updateOkState);
+    updateOkState();
 }
 
 QString SelectAddressDialog::address() const
@@ -446,7 +447,6 @@ void DisassembleWidget::enableControls(bool enabled)
 void DisassembleWidget::slotChangeAddress()
 {
     if(!m_dlg) return;
-    m_dlg->updateOkState();
 
     if (!m_disassembleWindow->selectedItems().isEmpty()) {
         m_dlg->setAddress(m_disassembleWindow->selectedItems().first()->text(Address));
