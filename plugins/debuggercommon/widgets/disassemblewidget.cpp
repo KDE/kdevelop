@@ -32,6 +32,7 @@
 #include <QPushButton>
 #include <QSplitter>
 #include <QFontDatabase>
+#include <QValidator>
 
 using namespace KDevMI;
 using namespace KDevMI::MI;
@@ -51,6 +52,24 @@ unsigned long knownValidAddressFromString(QStringView stringAddress)
     return address;
 }
 
+class AddressValidator : public QValidator
+{
+    Q_OBJECT
+public:
+    explicit AddressValidator(QObject* parent = nullptr)
+        : QValidator(parent)
+    {
+    }
+
+    [[nodiscard]] State validate(QString& input, int& pos) const override
+    {
+        Q_UNUSED(pos)
+        bool ok;
+        addressFromString(input, &ok);
+        return ok ? Acceptable : Intermediate;
+    }
+};
+
 } // unnamed namespace
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)
@@ -58,6 +77,8 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
 {
     m_ui.setupUi(this);
     setWindowTitle(i18nc("@title:window", "Address Selector"));
+
+    m_ui.comboBox->setValidator(new AddressValidator(m_ui.comboBox));
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
             this, &SelectAddressDialog::validateInput);
@@ -526,4 +547,5 @@ void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
     m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);
 }
 
+#include "disassemblewidget.moc"
 #include "moc_disassemblewidget.cpp"
