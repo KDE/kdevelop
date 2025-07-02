@@ -61,8 +61,6 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
             this, &SelectAddressDialog::validateInput);
-    connect(m_ui.comboBox, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
-            this, &SelectAddressDialog::itemSelected);
 }
 
 QString SelectAddressDialog::address() const
@@ -86,15 +84,6 @@ void SelectAddressDialog::validateInput()
 {
     updateOkState();
 }
-
-void SelectAddressDialog::itemSelected()
-{
-    QString text = m_ui.comboBox->currentText();
-    if( hasValidAddress() && m_ui.comboBox->findText(text) < 0 )
-        m_ui.comboBox->addItem(text);
-}
-
-
 
 DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     : QTreeWidget(parent)

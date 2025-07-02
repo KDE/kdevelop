@@ -46,7 +46,6 @@ public:
 
 private Q_SLOTS:
     void validateInput();
-    void itemSelected();
 
 private:
     Ui::SelectAddressDialog m_ui;
