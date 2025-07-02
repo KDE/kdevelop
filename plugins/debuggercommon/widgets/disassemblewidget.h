@@ -132,8 +132,6 @@ private:
     void setDisassemblyFlavorHandler(const MI::ResultRecord& r);
     void showDisassemblyFlavorHandler(const MI::ResultRecord& r);
 
-    //for str to uint conversion.
-    bool ok;
     bool    active_;
     unsigned long    lower_;
     unsigned long    upper_;

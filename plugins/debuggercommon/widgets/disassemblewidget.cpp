@@ -36,6 +36,22 @@
 using namespace KDevMI;
 using namespace KDevMI::MI;
 
+namespace {
+unsigned long addressFromString(QStringView stringAddress, bool* ok)
+{
+    return stringAddress.toULong(ok, 16);
+}
+
+unsigned long knownValidAddressFromString(QStringView stringAddress)
+{
+    Q_ASSERT(!stringAddress.isEmpty());
+    bool ok;
+    const auto address = addressFromString(stringAddress, &ok);
+    Q_ASSERT(ok);
+    return address;
+}
+
+} // unnamed namespace
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)
     : QDialog(parent)
@@ -57,8 +73,7 @@ QString SelectAddressDialog::address() const
 bool SelectAddressDialog::hasValidAddress() const
 {
     bool ok;
-    m_ui.comboBox->currentText().toLongLong(&ok, 16);
-
+    addressFromString(m_ui.comboBox->currentText(), &ok);
     return ok;
 }
 
@@ -285,8 +300,7 @@ bool DisassembleWidget::displayCurrent()
     for (int line=0; line < m_disassembleWindow->topLevelItemCount(); line++)
     {
         QTreeWidgetItem* item = m_disassembleWindow->topLevelItem(line);
-        unsigned long address = item->text(Address).toULong(&ok,16);
-
+        const auto address = knownValidAddressFromString(item->text(Address));
         if (address == address_)
         {
             // put cursor at start of line and highlight the line
@@ -333,7 +347,7 @@ void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
     const Value& pc = content[0];
     if( pc.hasField(QStringLiteral("address")) ){
         QString addr = pc[QStringLiteral("address")].literal();
-        address_ = addr.toULong(&ok,16);
+        address_ = knownValidAddressFromString(addr);
 
         disassembleMemoryRegion(addr);
     }
@@ -393,9 +407,9 @@ void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
                                                                  QStringList{QString(), addr, fct, inst}));
 
         if (i == 0) {
-            lower_ = addr.toULong(&ok,16);
+            lower_ = knownValidAddressFromString(addr);
         } else  if (i == content.size()-1) {
-            upper_ = addr.toULong(&ok,16);
+            upper_ = knownValidAddressFromString(addr);
         }
     }
 
@@ -437,8 +451,7 @@ void DisassembleWidget::slotChangeAddress()
     if (m_dlg->exec() == QDialog::Rejected)
         return;
 
-    unsigned long addr = m_dlg->address().toULong(&ok,16);
-
+    const auto addr = knownValidAddressFromString(m_dlg->address());
     if (addr < lower_ || addr > upper_ || !displayCurrent())
         disassembleMemoryRegion(m_dlg->address());
 }
@@ -454,7 +467,7 @@ void DisassembleWidget::update(const QString &address)
         return;
     }
 
-    address_ = address.toULong(&ok, 16);
+    address_ = knownValidAddressFromString(address);
     if (!displayCurrent()) {
         disassembleMemoryRegion();
     }
