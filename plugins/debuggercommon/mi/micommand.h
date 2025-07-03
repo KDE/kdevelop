@@ -325,18 +325,6 @@ private:
 };
 
 template<class Handler>
-FunctionCommandHandler::Function guarded_callback(Handler *handler_this,
-                                                 void (Handler::* handler_method)(const ResultRecord&))
-{
-    QPointer<Handler> guarded_this(handler_this);
-    return [guarded_this, handler_method](const ResultRecord& r) {
-        if (guarded_this) {
-            (guarded_this.data()->*handler_method)(r);
-        }
-    };
-}
-
-template<class Handler>
 void MICommand::setHandler(Handler* handler_this,
                            void (Handler::* handler_method)(const ResultRecord&))
 {
