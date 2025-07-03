@@ -285,6 +285,7 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
         // Clear out all addresses of the previous debug session because
         // they are unlikely to be valid or useful in the next session.
         m_upToDate = true;
+        m_regionDisassemblyFlavorUpToDate = true;
         m_currentAddress.reset();
         m_regionFirst.reset();
         m_regionLast.reset();
@@ -375,7 +376,7 @@ void DisassembleWidget::slotShowStepInSource(const QUrl&, int,
     update(currentAddress);
 }
 
-void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QString& to)
+void DisassembleWidget::disassembleMemoryRegion(QStringView from, QStringView to, HandlerMethod handlerMethod)
 {
     Q_ASSERT(!from.isEmpty());
 
@@ -385,7 +386,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
     const auto command = to.isEmpty() ? QLatin1String{"-s %1 -e \"%1 + 256\" -- 0"}.arg(from)
                                       : QLatin1String{"-s %1 -e %2+1 -- 0"}.arg(from, to);
-    s->addCommand(DataDisassemble, command, this, &DisassembleWidget::disassembleMemoryHandler);
+    s->addCommand(DataDisassemble, command, this, handlerMethod);
 }
 
 /***************************************************************************/
@@ -394,6 +395,8 @@ void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
 {
     const Value& content = r[QStringLiteral("asm_insns")];
     QString currentFunction;
+
+    m_regionDisassemblyFlavorUpToDate = true;
 
     m_disassembleWindow->clear();
 
@@ -515,7 +518,21 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
 {
     if (isMemoryRegionDisplayed() && r.reason == QLatin1String("done")) {
-        disassembleMemoryRegion(m_regionFirst.string(), m_regionLast.string());
+        m_regionDisassemblyFlavorUpToDate = false;
+        disassembleMemoryRegion(m_regionFirst.string(), m_regionLast.string(),
+                                &DisassembleWidget::refreshRegionDisassemblyFlavorHandler);
+    }
+}
+
+void DisassembleWidget::refreshRegionDisassemblyFlavorHandler(const MI::ResultRecord& r)
+{
+    if (m_regionDisassemblyFlavorUpToDate) {
+        qCDebug(DEBUGGERCOMMON) << "a new memory region disassembled right after a disassembly flavor change";
+        // A new memory region was disassembled with the updated disassembly flavor. Therefore,
+        // refreshing its flavor is not needed. Furthermore, applying our result here would wrongly
+        // replace the new region range with an obsolete one. So just ignore it and do nothing.
+    } else {
+        disassembleMemoryHandler(r);
     }
 }
 

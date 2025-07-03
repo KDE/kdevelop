@@ -118,6 +118,8 @@ protected:
     void enableControls(bool enabled);
 
 private:
+    using HandlerMethod = void (DisassembleWidget::*)(const MI::ResultRecord&);
+
     void currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession);
 
     /**
@@ -132,12 +134,15 @@ private:
      *
      * @param from a valid memory address
      * @param to a valid memory address greater than @p from, or an empty string (the default) to signify @p from + 255
+     * @param handlerMethod a member function that shall handle the result of the disassemble MI command
      */
-    void disassembleMemoryRegion(const QString& from, const QString& to = {});
+    void disassembleMemoryRegion(QStringView from, QStringView to = {},
+                                 HandlerMethod handlerMethod = &DisassembleWidget::disassembleMemoryHandler);
 
     /// callbacks for GDBCommands
     void disassembleMemoryHandler(const MI::ResultRecord& r);
     void setDisassemblyFlavorHandler(const MI::ResultRecord& r);
+    void refreshRegionDisassemblyFlavorHandler(const MI::ResultRecord& r);
     void showDisassemblyFlavorHandler(const MI::ResultRecord& r);
 
     using AddressInteger = unsigned long;
@@ -188,6 +193,10 @@ private:
      * and the registers will be updated as soon as this widget becomes active.
      */
     bool m_upToDate = true;
+    /**
+     * Whether the disassembly flavor of the currently displayed memory region is up to date.
+     */
+    bool m_regionDisassemblyFlavorUpToDate = true;
     StoredAddress m_currentAddress; ///< the address, at which the debugger last stopped/paused, or invalid address
     StoredAddress m_regionFirst; ///< the first address of the currently displayed memory region or invalid address
     StoredAddress m_regionLast; ///< the last address of the currently displayed memory region or invalid address
