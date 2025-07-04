@@ -82,6 +82,12 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged, this, &SelectAddressDialog::updateOkState);
     updateOkState();
+
+    connect(m_ui.buttonBox, &QDialogButtonBox::accepted, this, [this] {
+        // Pressing the Enter key adds the current text to the history automatically, but clicking the
+        // OK button does not. Add it manually here so that clicking OK is equivalent to pressing Enter.
+        m_ui.comboBox->addToHistory(m_ui.comboBox->currentText());
+    });
 }
 
 QString SelectAddressDialog::address() const
