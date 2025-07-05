@@ -7,6 +7,8 @@
 #include "documentationfindwidget.h"
 #include "ui_documentationfindwidget.h"
 
+#include <QGuiApplication>
+
 using namespace KDevelop;
 
 DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
@@ -19,8 +21,13 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
             this, &DocumentationFindWidget::emitDataChanged);
     connect(m_ui->matchCase, &QAbstractButton::toggled,
             this, &DocumentationFindWidget::emitDataChanged);
-    connect(m_ui->findText, &QLineEdit::returnPressed,
-            this, &DocumentationFindWidget::searchNext);
+    connect(m_ui->findText, &QLineEdit::returnPressed, this, [this]() {
+        if (QGuiApplication::keyboardModifiers().testFlag(Qt::ShiftModifier)) {
+            searchPrevious();
+        } else {
+            searchNext();
+        }
+    });
     connect(m_ui->nextButton, &QToolButton::clicked,
             this, &DocumentationFindWidget::searchNext);
     connect(m_ui->previousButton, &QToolButton::clicked,
