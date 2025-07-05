@@ -358,13 +358,8 @@ void DisassembleWidget::slotActivate(bool activate)
 
     if (m_active) {
         updateDisassemblyFlavor();
-        if (!m_upToDate) {
-            m_upToDate = true;
-            m_registersManager->updateRegisters();
-            if (!displayCurrent())
-                disassembleMemoryRegion(m_currentAddress.string());
-        }
     }
+    updateIfNeeded();
 }
 
 /***************************************************************************/
@@ -473,16 +468,23 @@ void SelectAddressDialog::setAddress ( const QString& address )
 void DisassembleWidget::update(const QString &address)
 {
     m_currentAddress = address;
+    m_upToDate = false;
+    updateIfNeeded();
+}
 
+void DisassembleWidget::updateIfNeeded()
+{
     if (!m_active) {
-        m_upToDate = false;
-        return;
+        return; // updating is not useful at this time, so postpone it to optimize
     }
 
-    if (!displayCurrent()) {
-        disassembleMemoryRegion(m_currentAddress.string());
+    if (!m_upToDate) {
+        m_upToDate = true;
+        if (!displayCurrent()) {
+            disassembleMemoryRegion(m_currentAddress.string());
+        }
+        m_registersManager->updateRegisters();
     }
-    m_registersManager->updateRegisters();
 }
 
 void DisassembleWidget::setDisassemblyFlavor(QAction* action)

@@ -139,6 +139,11 @@ private:
     void disassembleMemoryRegion(QStringView from, QStringView to = {},
                                  HandlerMethod handlerMethod = &DisassembleWidget::disassembleMemoryHandler);
 
+    /**
+     * Update out-of-date information displayed in the UI if this widget is active.
+     */
+    void updateIfNeeded();
+
     /// callbacks for GDBCommands
     void disassembleMemoryHandler(const MI::ResultRecord& r);
     void setDisassemblyFlavorHandler(const MI::ResultRecord& r);
