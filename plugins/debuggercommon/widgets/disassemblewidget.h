@@ -186,7 +186,12 @@ private:
         AddressInteger m_integer = 0;
     };
 
-    bool    active_;
+    /**
+     * Whether the contents of this widget needs to be updated. The purpose of this data member
+     * is optimization: skip issuing MI commands and updating subviews while the tool view is
+     * hidden (as is likely the case); update once - if and when the tool view becomes visible.
+     */
+    bool m_active = false;
     /**
      * Whether the currently displayed memory region is up to date.
      * If @c false, the current address will be displayed in a disassembled memory region

@@ -182,7 +182,6 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 /***************************************************************************/
 DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
         : QWidget(parent),
-        active_(false),
         m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
         auto* topLayout = new QVBoxLayout(this);
@@ -352,18 +351,18 @@ void DisassembleWidget::slotActivate(bool activate)
 {
     qCDebug(DEBUGGERCOMMON) << "Disassemble widget active: " << activate;
 
-    if (active_ != activate)
-    {
-        active_ = activate;
-        if (active_)
-        {
-            updateDisassemblyFlavor();
-            if (!m_upToDate) {
-                m_upToDate = true;
-                m_registersManager->updateRegisters();
-                if (!displayCurrent())
-                    disassembleMemoryRegion(m_currentAddress.string());
-            }
+    if (m_active == activate) {
+        return;
+    }
+    m_active = activate;
+
+    if (m_active) {
+        updateDisassemblyFlavor();
+        if (!m_upToDate) {
+            m_upToDate = true;
+            m_registersManager->updateRegisters();
+            if (!displayCurrent())
+                disassembleMemoryRegion(m_currentAddress.string());
         }
     }
 }
@@ -475,7 +474,7 @@ void DisassembleWidget::update(const QString &address)
 {
     m_currentAddress = address;
 
-    if (!active_) {
+    if (!m_active) {
         m_upToDate = false;
         return;
     }
