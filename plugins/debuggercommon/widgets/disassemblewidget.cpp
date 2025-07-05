@@ -281,6 +281,9 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
     if (auto* const previousSession = qobject_cast<MIDebugSession*>(iPreviousSession)) {
         disconnect(previousSession, nullptr, this, nullptr);
 
+        // The disassembly flavor in the next debug session may differ from that in the previous one.
+        m_disassemblyFlavorActionsUpToDate = false;
+
         // Clear out all addresses of the previous debug session because
         // they are unlikely to be valid or useful in the next session.
         m_upToDate = true;
@@ -356,9 +359,6 @@ void DisassembleWidget::slotActivate(bool activate)
     }
     m_active = activate;
 
-    if (m_active) {
-        updateDisassemblyFlavor();
-    }
     updateIfNeeded();
 }
 
@@ -485,6 +485,10 @@ void DisassembleWidget::updateIfNeeded()
         }
         m_registersManager->updateRegisters();
     }
+
+    if (!m_disassemblyFlavorActionsUpToDate) {
+        updateDisassemblyFlavor();
+    }
 }
 
 void DisassembleWidget::setDisassemblyFlavor(QAction* action)
@@ -545,6 +549,8 @@ void DisassembleWidget::updateDisassemblyFlavor()
         return;
     }
 
+    // Mark as up to date now rather than in the handler function so as to execute the MI command once.
+    m_disassemblyFlavorActionsUpToDate = true;
     s->addCommand(GdbShow, QStringLiteral("disassembly-flavor"), this, &DisassembleWidget::showDisassemblyFlavorHandler);
 }
 

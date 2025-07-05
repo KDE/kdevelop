@@ -198,6 +198,10 @@ private:
      */
     bool m_active = false;
     /**
+     * Whether the checked states of the disassembly flavor actions are up to date.
+     */
+    bool m_disassemblyFlavorActionsUpToDate = false;
+    /**
      * Whether the currently displayed memory region is up to date.
      * If @c false, the current address will be displayed in a disassembled memory region
      * and the registers will be updated as soon as this widget becomes active.
