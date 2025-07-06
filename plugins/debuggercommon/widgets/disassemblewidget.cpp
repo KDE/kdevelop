@@ -155,14 +155,16 @@ void DisassembleWindow::setDisassemblyFlavor(DisassemblyFlavor flavor)
 
 void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 {
-    QMenu popup(this);
-    popup.addAction(m_selectAddrAction);
-    popup.addAction(m_jumpToLocation);
-    popup.addAction(m_runUntilCursor);
-    QMenu* disassemblyFlavorMenu = popup.addMenu(i18nc("@title:menu", "Disassembly Flavor"));
+    auto* const menu = new QMenu(this);
+    menu->addAction(m_selectAddrAction);
+    menu->addAction(m_jumpToLocation);
+    menu->addAction(m_runUntilCursor);
+    auto* const disassemblyFlavorMenu = menu->addMenu(i18nc("@title:menu", "Disassembly Flavor"));
     disassemblyFlavorMenu->addAction(m_disassemblyFlavorAtt);
     disassemblyFlavorMenu->addAction(m_disassemblyFlavorIntel);
-    popup.exec(e->globalPos());
+
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    menu->popup(e->globalPos());
 }
 /***************************************************************************/
 /***************************************************************************/
