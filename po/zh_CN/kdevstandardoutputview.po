@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevstandardoutputview.pot\n"
-"X-Crowdin-File-ID: 54614\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevstandardoutputview.pot\n"
+"X-Crowdin-File-ID: 54804\n"
 
 #: outputwidget.cpp:44
 #, kde-format
