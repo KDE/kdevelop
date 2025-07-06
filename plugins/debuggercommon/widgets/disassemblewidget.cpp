@@ -144,6 +144,14 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     m_disassemblyFlavorActionGroup->addAction(m_disassemblyFlavorAtt);
     m_disassemblyFlavorActionGroup->addAction(m_disassemblyFlavorIntel);
     connect(m_disassemblyFlavorActionGroup, &QActionGroup::triggered, widget, &DisassembleWidget::setDisassemblyFlavor);
+
+    connect(this, &QTreeWidget::itemSelectionChanged, this, [this] {
+        // On the off chance that our context menu is currently visible, prevent accidentally wrong behavior:
+        // disable actions that depend on selected items because their effect changes along with the selection.
+        m_selectAddrAction->setEnabled(false);
+        m_jumpToLocation->setEnabled(false);
+        m_runUntilCursor->setEnabled(false);
+    });
     }
 }
 
@@ -162,6 +170,13 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
     auto* const disassemblyFlavorMenu = menu->addMenu(i18nc("@title:menu", "Disassembly Flavor"));
     disassemblyFlavorMenu->addAction(m_disassemblyFlavorAtt);
     disassemblyFlavorMenu->addAction(m_disassemblyFlavorIntel);
+
+    m_selectAddrAction->setEnabled(true);
+
+    /// These two actions require nonempty selection.
+    const auto enableJumpAndRunActions = !selectedItems().empty();
+    m_jumpToLocation->setEnabled(enableJumpAndRunActions);
+    m_runUntilCursor->setEnabled(enableJumpAndRunActions);
 
     menu->setAttribute(Qt::WA_DeleteOnClose);
     menu->popup(e->globalPos());
