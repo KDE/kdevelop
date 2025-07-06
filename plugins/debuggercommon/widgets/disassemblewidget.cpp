@@ -174,11 +174,6 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
         auto* topLayout = new QVBoxLayout(this);
         topLayout->setContentsMargins(0, 0, 0, 0);
 
-        auto* controlsLayout = new QHBoxLayout;
-
-        topLayout->addLayout(controlsLayout);
-
-
     {   // initialize disasm/registers views
         topLayout->addWidget(m_splitter);
 
