@@ -155,14 +155,14 @@ void DisassembleWindow::setDisassemblyFlavor(DisassemblyFlavor flavor)
 
 void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 {
-        QMenu popup(this);
-        popup.addAction(m_selectAddrAction);
-        popup.addAction(m_jumpToLocation);
-        popup.addAction(m_runUntilCursor);
-        QMenu* disassemblyFlavorMenu = popup.addMenu(i18nc("@title:menu", "Disassembly Flavor"));
-        disassemblyFlavorMenu->addAction(m_disassemblyFlavorAtt);
-        disassemblyFlavorMenu->addAction(m_disassemblyFlavorIntel);
-        popup.exec(e->globalPos());
+    QMenu popup(this);
+    popup.addAction(m_selectAddrAction);
+    popup.addAction(m_jumpToLocation);
+    popup.addAction(m_runUntilCursor);
+    QMenu* disassemblyFlavorMenu = popup.addMenu(i18nc("@title:menu", "Disassembly Flavor"));
+    disassemblyFlavorMenu->addAction(m_disassemblyFlavorAtt);
+    disassemblyFlavorMenu->addAction(m_disassemblyFlavorIntel);
+    popup.exec(e->globalPos());
 }
 /***************************************************************************/
 /***************************************************************************/
@@ -171,8 +171,8 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
         : QWidget(parent),
         m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
-        auto* topLayout = new QVBoxLayout(this);
-        topLayout->setContentsMargins(0, 0, 0, 0);
+    auto* topLayout = new QVBoxLayout(this);
+    topLayout->setContentsMargins(0, 0, 0, 0);
 
     {   // initialize disasm/registers views
         topLayout->addWidget(m_splitter);
