@@ -149,21 +149,8 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
 
 void DisassembleWindow::setDisassemblyFlavor(DisassemblyFlavor flavor)
 {
-    switch(flavor)
-    {
-    case DisassemblyFlavorUnknown:
-        m_disassemblyFlavorAtt->setChecked(false);
-        m_disassemblyFlavorIntel->setChecked(false);
-        break;
-    case DisassemblyFlavorATT:
-        m_disassemblyFlavorAtt->setChecked(true);
-        m_disassemblyFlavorIntel->setChecked(false);
-        break;
-    case DisassemblyFlavorIntel:
-        m_disassemblyFlavorAtt->setChecked(false);
-        m_disassemblyFlavorIntel->setChecked(true);
-        break;
-    }
+    m_disassemblyFlavorAtt->setChecked(flavor == DisassemblyFlavorATT);
+    m_disassemblyFlavorIntel->setChecked(flavor == DisassemblyFlavorIntel);
 }
 
 void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
