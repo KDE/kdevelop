@@ -392,7 +392,8 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 {
     Q_ASSERT(qobject_cast<IDebugSession*>(sender()));
     auto* session = static_cast<IDebugSession*>(sender());
-    qCDebug(SHELL) << session << state << "current" << m_currentSession.data();
+    qCDebug(SHELL) << "debugger state of" << (session == m_currentSession ? "current" : "noncurrent") << session
+                   << "changed to" << state;
     if (session == m_currentSession.data()) {
         updateDebuggerState(state, session);
     }
