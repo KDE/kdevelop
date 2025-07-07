@@ -16,14 +16,24 @@
 #include "mi/micommand.h"
 #include "modelsmanager.h"
 
+#include <QStringList>
+
 using namespace KDevMI::MI;
 using namespace KDevMI;
 
-void ArchitectureParser::parseArchitecture()
+namespace {
+enum Architecture {
+    x86,
+    x86_64,
+    arm,
+    other
+};
+
+[[nodiscard]] Architecture determineArchitecture(const QStringList& registerNames)
 {
     Architecture arch = other;
 
-    for (const QString& reg : std::as_const(m_registerNames)) {
+    for (const auto& reg : registerNames) {
         if (reg == QLatin1String("rax")) {
             arch = x86_64;
             break;
@@ -36,50 +46,40 @@ void ArchitectureParser::parseArchitecture()
         }
     }
 
-    emit architectureParsed(arch);
+    return arch;
 }
 
-void ArchitectureParser::registerNamesHandler(const ResultRecord& r)
+[[nodiscard]] QStringList parseRegisterNames(const ResultRecord& r)
 {
     const Value& names = r[QStringLiteral("register-names")];
 
-    m_registerNames.clear();
+    QStringList registerNames;
     for (int i = 0; i < names.size(); ++i) {
         const Value& entry = names[i];
         if (!entry.literal().isEmpty()) {
-            m_registerNames << entry.literal();
+            registerNames.push_back(entry.literal());
         }
     }
-
-    parseArchitecture();
+    return registerNames;
 }
 
-void ArchitectureParser::determineArchitecture(MIDebugSession* debugSession)
-{
-    if (!debugSession || debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-        return;
-    }
-
-    debugSession->addCommand(DataListRegisterNames, QString(), this, &ArchitectureParser::registerNamesHandler);
-}
+} // unnamed namespace
 
 RegistersManager::RegistersManager(QWidget* parent)
     : QObject(parent)
     , m_modelsManager{new ModelsManager(this)}
     , m_registersView{new RegistersView(parent)}
-    , m_architectureParser{new ArchitectureParser(this)}
 {
-    connect(m_architectureParser, &ArchitectureParser::architectureParsed, this, &RegistersManager::architectureParsedSlot);
-
     m_registersView->setModel(m_modelsManager);
     setController(nullptr);
 }
 
-void RegistersManager::architectureParsedSlot(Architecture arch)
+void RegistersManager::registerNamesHandler(const ResultRecord& record)
 {
     Q_ASSERT(!m_registerController);
 
-    switch (arch) {
+    const auto registerNames = parseRegisterNames(record);
+    switch (determineArchitecture(registerNames)) {
     case x86:
         qCDebug(DEBUGGERCOMMON) << "Found x86 architecture";
         setController(new RegisterController_x86(m_debugSession));
@@ -125,12 +125,9 @@ void RegistersManager::updateRegisters()
         m_registersView->updateRegisters();
     } else {
         qCDebug(DEBUGGERCOMMON) << "No registerController, yet?";
-        m_architectureParser->determineArchitecture(m_debugSession);
+        m_debugSession->addCommand(DataListRegisterNames, {}, this, &RegistersManager::registerNamesHandler);
     }
 }
-
-ArchitectureParser::ArchitectureParser(QObject* parent)
-: QObject(parent) {}
 
 void RegistersManager::setController(IRegisterController* c)
 {

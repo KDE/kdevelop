@@ -8,7 +8,6 @@
 #define REGISTERSMANAGER_H
 
 #include <QObject>
-#include <QStringList>
 #include <QScopedPointer>
 
 namespace KDevMI {
@@ -23,37 +22,6 @@ class RegistersView;
 class IRegisterController;
 class ModelsManager;
 
-enum Architecture {
-    x86,
-    x86_64,
-    arm,
-    other = 100
-};
-
-/** @brief Determines current CPU architecture */
-class ArchitectureParser : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit ArchitectureParser(QObject* parent);
-
-    ///Asynchronously determines current architecture. emits @p architectureParsed when ready.
-    void determineArchitecture(MIDebugSession* debugSession);
-
-Q_SIGNALS:
-    ///Emits current CPU architecture. @sa determineArchitecture
-    void architectureParsed(Architecture arch);
-
-private:
-
-    void registerNamesHandler(const MI::ResultRecord& r);
-    void parseArchitecture();
-
-    QStringList m_registerNames;
-};
-
 class RegistersManager : public QObject
 {
     Q_OBJECT
@@ -65,10 +33,9 @@ public Q_SLOTS:
     void setSession(MIDebugSession* debugSession);
     ///Updates all registers.
     void updateRegisters();
-    ///@sa ArchitectureParser::determineArchitecture
-    void architectureParsedSlot(const Architecture arch);
 
 private:
+    void registerNamesHandler(const MI::ResultRecord& record);
     void setController(IRegisterController* c);
 
     ModelsManager* const m_modelsManager;
@@ -76,8 +43,6 @@ private:
 
     MIDebugSession* m_debugSession = nullptr;
     QScopedPointer<IRegisterController> m_registerController;
-
-    ArchitectureParser* const m_architectureParser;
 };
 
 } // end of namespace KDevMI
