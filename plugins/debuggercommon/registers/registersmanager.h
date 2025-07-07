@@ -66,20 +66,16 @@ public Q_SLOTS:
 private:
     void setController(IRegisterController* c);
 
-    RegistersView* m_registersView;
+    ModelsManager* const m_modelsManager;
+    RegistersView* const m_registersView;
 
+    MIDebugSession* m_debugSession = nullptr;
     QScopedPointer<IRegisterController> m_registerController;
 
-    ArchitectureParser* m_architectureParser;
-
-    MIDebugSession* m_debugSession;
-
-    ModelsManager* m_modelsManager;
-
-    Architecture m_currentArchitecture;
-
+    ArchitectureParser* const m_architectureParser;
+    Architecture m_currentArchitecture = undefined;
     ///True if architecture could has changed(e.g. from x86 to arm)
-    bool m_needToCheckArch;
+    bool m_needToCheckArch = false;
 };
 
 } // end of namespace KDevMI
