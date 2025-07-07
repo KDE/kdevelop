@@ -123,7 +123,9 @@ void DebugController::initializeUi()
 
 void DebugController::cleanup()
 {
-    if (m_currentSession) m_currentSession.data()->stopDebugger();
+    if (m_currentSession) {
+        m_currentSession->stopDebugger();
+    }
 }
 
 DebugController::~DebugController()
@@ -164,7 +166,7 @@ void DebugController::textDocumentCreated(KDevelop::IDocument* document)
 
 IDebugSession* DebugController::currentSession()
 {
-    return m_currentSession.data();
+    return m_currentSession;
 }
 
 void DebugController::setupActions()
@@ -394,12 +396,12 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
     auto* session = static_cast<IDebugSession*>(sender());
     qCDebug(SHELL) << "debugger state of" << (session == m_currentSession ? "current" : "noncurrent") << session
                    << "changed to" << state;
-    if (session == m_currentSession.data()) {
+    if (session == m_currentSession) {
         updateDebuggerState(state, session);
     }
 
     if (state == IDebugSession::EndedState) {
-        if (session == m_currentSession.data()) {
+        if (session == m_currentSession) {
             m_currentSession.clear();
             Q_EMIT currentSessionChanged(nullptr, session);
             if (!Core::self()->shuttingDown()) {
@@ -500,7 +502,7 @@ ContextMenuExtension DebugController::contextMenuExtension(Context* context, QWi
     if (!econtext)
         return menuExt;
 
-    if (m_currentSession && m_currentSession.data()->isRunning()) {
+    if (m_currentSession && m_currentSession->isRunning()) {
         menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, m_runToCursor);
     }
 
@@ -513,25 +515,25 @@ ContextMenuExtension DebugController::contextMenuExtension(Context* context, QWi
 #if 0
 void DebugController::restartDebugger() {
     if (m_currentSession) {
-        m_currentSession.data()->restartDebugger();
+        m_currentSession->restartDebugger();
     }
 }
 #endif
 
 void DebugController::stopDebugger() {
     if (m_currentSession) {
-        m_currentSession.data()->stopDebugger();
+        m_currentSession->stopDebugger();
     }
 }
 void DebugController::interruptDebugger() {
     if (m_currentSession) {
-        m_currentSession.data()->interruptDebugger();
+        m_currentSession->interruptDebugger();
     }
 }
 
 void DebugController::run() {
     if (m_currentSession) {
-        m_currentSession.data()->run();
+        m_currentSession->run();
     } else {
         auto runController = ICore::self()->runController();
         if (runController->launchConfigurations().isEmpty()) {
@@ -543,37 +545,37 @@ void DebugController::run() {
 
 void DebugController::runToCursor() {
     if (m_currentSession) {
-        m_currentSession.data()->runToCursor();
+        m_currentSession->runToCursor();
     }
 }
 void DebugController::jumpToCursor() {
     if (m_currentSession) {
-        m_currentSession.data()->jumpToCursor();
+        m_currentSession->jumpToCursor();
     }
 }
 void DebugController::stepOver() {
     if (m_currentSession) {
-        m_currentSession.data()->stepOver();
+        m_currentSession->stepOver();
     }
 }
 void DebugController::stepIntoInstruction() {
     if (m_currentSession) {
-        m_currentSession.data()->stepIntoInstruction();
+        m_currentSession->stepIntoInstruction();
     }
 }
 void DebugController::stepInto() {
     if (m_currentSession) {
-        m_currentSession.data()->stepInto();
+        m_currentSession->stepInto();
     }
 }
 void DebugController::stepOverInstruction() {
     if (m_currentSession) {
-        m_currentSession.data()->stepOverInstruction();
+        m_currentSession->stepOverInstruction();
     }
 }
 void DebugController::stepOut() {
     if (m_currentSession) {
-        m_currentSession.data()->stepOut();
+        m_currentSession->stepOut();
     }
 }
 
