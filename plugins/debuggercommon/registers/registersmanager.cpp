@@ -81,28 +81,26 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
         return;
     }
 
-    switch (arch) {
-    case x86:
-        m_registerController.reset(new RegisterController_x86(m_debugSession)) ;
-        qCDebug(DEBUGGERCOMMON) << "Found x86 architecture";
-        break;
-    case x86_64:
-        m_registerController.reset(new RegisterController_x86_64(m_debugSession));
-        qCDebug(DEBUGGERCOMMON) << "Found x86_64 architecture";
-        break;
-    case arm:
-        m_registerController.reset(new RegisterController_Arm(m_debugSession));
-        qCDebug(DEBUGGERCOMMON) << "Found Arm architecture";
-        break;
-    default:
-        m_registerController.reset();
-        qCWarning(DEBUGGERCOMMON) << "Unsupported architecture. Registers won't be available.";
-        break;
-    }
-
     m_currentArchitecture = arch;
 
-    setController(m_registerController.data());
+    switch (arch) {
+    case x86:
+        qCDebug(DEBUGGERCOMMON) << "Found x86 architecture";
+        setController(new RegisterController_x86(m_debugSession));
+        break;
+    case x86_64:
+        qCDebug(DEBUGGERCOMMON) << "Found x86_64 architecture";
+        setController(new RegisterController_x86_64(m_debugSession));
+        break;
+    case arm:
+        qCDebug(DEBUGGERCOMMON) << "Found Arm architecture";
+        setController(new RegisterController_Arm(m_debugSession));
+        break;
+    default:
+        qCWarning(DEBUGGERCOMMON) << "Unsupported architecture. Registers won't be available.";
+        setController(nullptr);
+        break;
+    }
 
     if (m_registerController) {
         updateRegisters();
