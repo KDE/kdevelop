@@ -98,7 +98,7 @@ private:
     QAction* m_toggleBreakpoint = nullptr;
     QAction* m_showCurrentLine = nullptr;
 
-    QPointer<IDebugSession> m_currentSession;
+    IDebugSession* m_currentSession = nullptr;
     BreakpointModel *m_breakpointModel;
     VariableCollection *m_variableCollection;
 

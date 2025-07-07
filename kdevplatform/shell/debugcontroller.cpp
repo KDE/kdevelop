@@ -286,21 +286,22 @@ void DebugController::addSession(IDebugSession* session)
     Q_ASSERT(session->frameStackModel());
 
     //TODO support multiple sessions
-    auto* previousSession = m_currentSession.get();
-    if (previousSession) {
+    if (m_currentSession) {
         // Disconnect from no longer relevant signals of the previous session. But keep the stateChanged
         // and killAllDebuggersNow connections because they are always applicable to all sessions.
-        disconnect(previousSession, &IDebugSession::showStepInSource, this, &DebugController::showStepInSource);
-        disconnect(previousSession, &IDebugSession::clearExecutionPoint, this, &DebugController::clearExecutionPoint);
-        disconnect(previousSession, &IDebugSession::raiseFramestackViews, this, &DebugController::raiseFramestackViews);
+        disconnect(m_currentSession, &IDebugSession::showStepInSource, this, &DebugController::showStepInSource);
+        disconnect(m_currentSession, &IDebugSession::clearExecutionPoint, this, &DebugController::clearExecutionPoint);
+        disconnect(m_currentSession, &IDebugSession::raiseFramestackViews, this,
+                   &DebugController::raiseFramestackViews);
 
         // Remove the execution point, if any, of the previous session.
         clearExecutionPoint();
 
-        previousSession->stopDebugger();
-        // Stopping the debugger can set m_currentSession to nullptr synchronously => update previousSession pointer.
-        previousSession = m_currentSession;
+        // NOTE: stopping the debugger can synchronously transition m_currentSession into the
+        //       ended state (e.g. if it is not started) and consequently set it to nullptr.
+        m_currentSession->stopDebugger();
     }
+    auto* const previousSession = m_currentSession;
     m_currentSession = session;
 
     connect(session, &IDebugSession::stateChanged, this, &DebugController::debuggerStateChanged);
@@ -402,7 +403,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 
     if (state == IDebugSession::EndedState) {
         if (session == m_currentSession) {
-            m_currentSession.clear();
+            m_currentSession = nullptr;
             Q_EMIT currentSessionChanged(nullptr, session);
             if (!Core::self()->shuttingDown()) {
                 auto* const uiController = Core::self()->uiControllerInternal();
