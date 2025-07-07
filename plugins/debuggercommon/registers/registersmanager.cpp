@@ -52,12 +52,14 @@ enum Architecture {
 [[nodiscard]] QStringList parseRegisterNames(const ResultRecord& r)
 {
     const Value& names = r[QStringLiteral("register-names")];
+    const auto nameCount = names.size();
 
     QStringList registerNames;
-    for (int i = 0; i < names.size(); ++i) {
-        const Value& entry = names[i];
-        if (!entry.literal().isEmpty()) {
-            registerNames.push_back(entry.literal());
+    registerNames.reserve(nameCount);
+    for (auto i = 0; i < nameCount; ++i) {
+        const auto& literal = names[i].literal();
+        if (!literal.isEmpty()) {
+            registerNames.push_back(literal);
         }
     }
     return registerNames;
