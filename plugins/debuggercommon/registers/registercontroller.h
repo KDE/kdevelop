@@ -112,9 +112,6 @@ class IRegisterController : public QObject
     Q_OBJECT
 
 public:
-    ///Sets session @p debugSession to send commands to.
-    void setSession(MIDebugSession* debugSession);
-
     ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
     virtual QVector<GroupsName> namesOfRegisterGroups() const = 0;
 
@@ -218,7 +215,7 @@ protected:
     QVector<FormatsModes > m_formatsModes;
 
     ///Current debug session;
-    MIDebugSession* m_debugSession;
+    MIDebugSession* const m_debugSession;
 };
 
 } // end of namespace KDevMI

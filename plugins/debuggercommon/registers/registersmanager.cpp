@@ -77,14 +77,7 @@ RegistersManager::RegistersManager(QWidget* parent)
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
 {
-    qCDebug(DEBUGGERCOMMON) << "Current controller:" << m_registerController.get()
-                            << "; current arch:" << m_currentArchitecture;
-
-    if (m_registerController || m_currentArchitecture != undefined) {
-        return;
-    }
-
-    m_currentArchitecture = arch;
+    Q_ASSERT(!m_registerController);
 
     switch (arch) {
     case x86:
@@ -99,7 +92,7 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
         qCDebug(DEBUGGERCOMMON) << "Found Arm architecture";
         setController(new RegisterController_Arm(m_debugSession));
         break;
-    default:
+    case other:
         qCWarning(DEBUGGERCOMMON) << "Unsupported architecture. Registers won't be available.";
         setController(nullptr);
         break;
@@ -113,15 +106,12 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
 void RegistersManager::setSession(MIDebugSession* debugSession)
 {
     qCDebug(DEBUGGERCOMMON) << "Change session " << debugSession;
-    m_debugSession = debugSession;
-    if (m_registerController) {
-        m_registerController->setSession(debugSession);
-    }
-    if (!m_debugSession) {
+    if (m_debugSession) {
         qCDebug(DEBUGGERCOMMON) << "Will reparse arch";
-        m_needToCheckArch = true;
         setController(nullptr);
     }
+    Q_ASSERT(!m_registerController);
+    m_debugSession = debugSession;
 }
 
 void RegistersManager::updateRegisters()
@@ -131,19 +121,11 @@ void RegistersManager::updateRegisters()
     }
 
     qCDebug(DEBUGGERCOMMON) << "Updating registers";
-    if (m_needToCheckArch) {
-        m_needToCheckArch = false;
-        m_currentArchitecture = undefined;
-        setController(nullptr);
-    }
-    if (m_currentArchitecture == undefined) {
-        m_architectureParser->determineArchitecture(m_debugSession);
-    }
-
     if (m_registerController) {
         m_registersView->updateRegisters();
     } else {
         qCDebug(DEBUGGERCOMMON) << "No registerController, yet?";
+        m_architectureParser->determineArchitecture(m_debugSession);
     }
 }
 

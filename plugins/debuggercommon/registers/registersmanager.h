@@ -23,7 +23,12 @@ class RegistersView;
 class IRegisterController;
 class ModelsManager;
 
-enum Architecture {x86, x86_64, arm, other = 100, undefined};
+enum Architecture {
+    x86,
+    x86_64,
+    arm,
+    other = 100
+};
 
 /** @brief Determines current CPU architecture */
 class ArchitectureParser : public QObject
@@ -73,9 +78,6 @@ private:
     QScopedPointer<IRegisterController> m_registerController;
 
     ArchitectureParser* const m_architectureParser;
-    Architecture m_currentArchitecture = undefined;
-    ///True if architecture could has changed(e.g. from x86 to arm)
-    bool m_needToCheckArch = false;
 };
 
 } // end of namespace KDevMI

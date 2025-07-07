@@ -18,11 +18,6 @@
 using namespace KDevMI::MI;
 using namespace KDevMI;
 
-void IRegisterController::setSession(MIDebugSession* debugSession)
-{
-    m_debugSession = debugSession;
-}
-
 void IRegisterController::updateRegisters(const GroupsName& group)
 {
     if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
