@@ -78,6 +78,7 @@ RegistersManager::RegistersManager(QWidget* parent)
 
 void RegistersManager::registerNamesHandler(const ResultRecord& record)
 {
+    Q_ASSERT(m_debugSession);
     Q_ASSERT(!m_registerController);
 
     const auto registerNames = parseRegisterNames(record);

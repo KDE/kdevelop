@@ -18,8 +18,12 @@ class RegisterController_Arm : public IRegisterController
     Q_OBJECT
 
 public:
-
-    explicit RegisterController_Arm(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
+    /**
+     * Create an ARM register controller.
+     *
+     * @copydetails IRegisterController::IRegisterController()
+     */
+    explicit RegisterController_Arm(MIDebugSession* debugSession, QObject* parent = nullptr);
 
     QVector<GroupsName> namesOfRegisterGroups() const override;
 

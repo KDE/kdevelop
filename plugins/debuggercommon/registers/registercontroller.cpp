@@ -20,7 +20,7 @@ using namespace KDevMI;
 
 void IRegisterController::updateRegisters(const GroupsName& group)
 {
-    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 
@@ -166,7 +166,7 @@ QString IRegisterController::registerValue(const QString& name) const
 
 bool IRegisterController::initializeRegisters()
 {
-    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return false;
     }
 
@@ -220,7 +220,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 
 void IRegisterController::setGeneralRegister(const Register& reg, const GroupsName& group)
 {
-    if (!m_debugSession || m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
     }
 
@@ -232,7 +232,11 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
 }
 
 IRegisterController::IRegisterController(MIDebugSession* debugSession, QObject* parent)
-: QObject(parent), m_debugSession(debugSession) {}
+    : QObject(parent)
+    , m_debugSession{debugSession}
+{
+    Q_ASSERT(m_debugSession);
+}
 
 IRegisterController::~IRegisterController() {}
 

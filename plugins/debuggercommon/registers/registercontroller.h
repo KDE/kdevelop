@@ -139,7 +139,12 @@ public Q_SLOTS:
     virtual void setRegisterValue(const Register& reg);
 
 protected:
-    explicit IRegisterController(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
+    /**
+     * Create a register controller.
+     *
+     * @param debugSession a non-null debug session that must remain valid throughout this controller's lifetime
+     */
+    explicit IRegisterController(MIDebugSession* debugSession, QObject* parent = nullptr);
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid.
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const = 0;

@@ -24,7 +24,7 @@ public Q_SLOTS:
     void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
-    explicit RegisterControllerGeneral_x86(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
+    explicit RegisterControllerGeneral_x86(MIDebugSession* debugSession, QObject* parent = nullptr);
 
     RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
@@ -60,7 +60,12 @@ class RegisterController_x86 : public RegisterControllerGeneral_x86
     Q_OBJECT
 
 public:
-    explicit RegisterController_x86(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
+    /**
+     * Create an x86 register controller.
+     *
+     * @copydetails IRegisterController::IRegisterController()
+     */
+    explicit RegisterController_x86(MIDebugSession* debugSession, QObject* parent = nullptr);
 
 private:
     void initRegisterNames();
@@ -71,7 +76,12 @@ class RegisterController_x86_64 : public RegisterControllerGeneral_x86
     Q_OBJECT
 
 public:
-    explicit RegisterController_x86_64(MIDebugSession* debugSession = nullptr, QObject* parent = nullptr);
+    /**
+     * Create an x86-64 register controller.
+     *
+     * @copydetails IRegisterController::IRegisterController()
+     */
+    explicit RegisterController_x86_64(MIDebugSession* debugSession, QObject* parent = nullptr);
 
 private:
     void initRegisterNames();
