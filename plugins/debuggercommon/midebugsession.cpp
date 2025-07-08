@@ -1269,6 +1269,11 @@ void MIDebugSession::setSourceInitFile(bool enable)
     m_sourceInitFile = enable;
 }
 
+bool MIDebugSession::isCurrentDebugSession(const QObject* object)
+{
+    return object == ICore::self()->debugController()->currentSession();
+}
+
 void MIDebugSession::currentSessionChanged(IDebugSession* session, IDebugSession* previousSession)
 {
     if (session && previousSession == this) {

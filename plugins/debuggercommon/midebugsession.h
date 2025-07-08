@@ -19,6 +19,7 @@
 #include "mi/micommand.h"
 
 #include <QMap>
+#include <QPointer>
 #include <QStringList>
 
 #include <memory>
@@ -255,6 +256,17 @@ public:
     void addCommand(MI::CommandType type, const QString& arguments, Handler* handler_this,
                     MI::MICommand::ResultRecordMethod<Handler> handler_method, MI::CommandFlags flags = {});
 
+    /**
+     * Add a specified command with a given handler to be invoked only if this session is
+     * (still) the current session of DebugController when a result of the command arrives.
+     *
+     * @sa addCommand()
+     */
+    template<class Handler>
+    void addCommandWithCurrentSessionHandler(MI::CommandType type, const QString& arguments, Handler* handler_this,
+                                             MI::MICommand::ResultRecordMethod<Handler> handler_method,
+                                             MI::CommandFlags flags = {});
+
     QMap<QString, MIVariable*> & variableMapping();
     MIVariable* findVariableByVarobjName(const QString &varobjName) const;
     void markAllVariableDead();
@@ -390,6 +402,14 @@ protected:
     QMap<QString, MIVariable*> m_allVariables;
 
 private:
+    /**
+     * @return whether a given object is the current session of DebugController
+     *
+     * @note A partially destroyed debug session may be passed to
+     *       this function, hence the general type of the parameter.
+     */
+    [[nodiscard]] static bool isCurrentDebugSession(const QObject* object);
+
     void addGdbExitCommand();
     void killDebuggerImpl();
     void currentSessionChanged(IDebugSession* session, IDebugSession* previousSession);
@@ -411,6 +431,29 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments, 
 {
     auto cmd = createCommand(type, arguments, flags);
     cmd->setHandler(handler_this, handler_method);
+    queueCmd(std::move(cmd));
+}
+
+template<class Handler>
+void MIDebugSession::addCommandWithCurrentSessionHandler(MI::CommandType type, const QString& arguments,
+                                                         Handler* handler_this,
+                                                         MI::MICommand::ResultRecordMethod<Handler> handler_method,
+                                                         MI::CommandFlags flags)
+{
+    auto cmd = createCommand(type, arguments, flags);
+
+    // Capture the QObject pointer instead of `this` to ensure safety in case the handler is
+    // invoked from ~MIDebugger(), which is invoked when this->~QObject() destroys child objects.
+    const QObject* const thisSession = this;
+    cmd->setHandler(new MI::FunctionCommandHandler(
+        [guarded_this = QPointer{handler_this}, handler_method, thisSession](const MI::ResultRecord& record) {
+            auto* const handler = guarded_this.get();
+            if (handler && isCurrentDebugSession(thisSession)) {
+                (handler->*handler_method)(record);
+            }
+        },
+        flags));
+
     queueCmd(std::move(cmd));
 }
 

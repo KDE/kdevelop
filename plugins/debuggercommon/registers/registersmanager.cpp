@@ -127,7 +127,8 @@ void RegistersManager::updateRegisters()
         m_registersView->updateRegisters();
     } else {
         qCDebug(DEBUGGERCOMMON) << "No registerController, yet?";
-        m_debugSession->addCommand(DataListRegisterNames, {}, this, &RegistersManager::registerNamesHandler);
+        m_debugSession->addCommandWithCurrentSessionHandler(DataListRegisterNames, {}, this,
+                                                            &RegistersManager::registerNamesHandler);
     }
 }
 

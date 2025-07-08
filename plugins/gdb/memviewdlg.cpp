@@ -9,7 +9,6 @@
 
 #include "dbgglobal.h"
 #include "debugsession.h"
-#include "mi/micommand.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
@@ -183,11 +182,12 @@ void MemoryView::changeMemoryRange()
     if(amount.isEmpty())
         amount = QLatin1String{"sizeof(*%1)"}.arg(m_rangeSelector->startAddressLineEdit->text());
 
-    session->addCommand(std::make_unique<MI::ExpressionValueCommand>(amount, this, &MemoryView::sizeComputed));
+    session->addCommandWithCurrentSessionHandler(MI::DataEvaluateExpression, amount, this, &MemoryView::sizeComputed);
 }
 
-void MemoryView::sizeComputed(const QString& size)
+void MemoryView::sizeComputed(const MI::ResultRecord& record)
 {
+    const auto& size = record[QStringLiteral("value")].literal();
     addReadMemoryCommand(QLatin1String{"%1 x 1 1 %2"}.arg(m_rangeSelector->startAddressLineEdit->text(), size));
 }
 
@@ -197,7 +197,7 @@ void MemoryView::addReadMemoryCommand(const QString& arguments)
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
-    session->addCommand(MI::DataReadMemory, arguments, this, &MemoryView::memoryRead);
+    session->addCommandWithCurrentSessionHandler(MI::DataReadMemory, arguments, this, &MemoryView::memoryRead);
 }
 
 void MemoryView::memoryRead(const MI::ResultRecord& r)

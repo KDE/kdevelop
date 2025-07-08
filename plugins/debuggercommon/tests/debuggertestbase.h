@@ -152,6 +152,9 @@ private Q_SLOTS:
 
     void testCoreFile();
 
+    void testCommandHandler_data();
+    void testCommandHandler();
+
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();

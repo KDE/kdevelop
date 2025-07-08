@@ -379,7 +379,7 @@ void DisassembleWidget::disassembleMemoryRegion(QStringView from, QStringView to
 
     const auto command = to.isEmpty() ? QLatin1String{"-s %1 -e \"%1 + 256\" -- 0"}.arg(from)
                                       : QLatin1String{"-s %1 -e %2+1 -- 0"}.arg(from, to);
-    s->addCommand(DataDisassemble, command, this, handlerMethod);
+    s->addCommandWithCurrentSessionHandler(DataDisassemble, command, this, handlerMethod);
 }
 
 /***************************************************************************/
@@ -515,7 +515,7 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
     qCDebug(DEBUGGERCOMMON) << "Disassemble widget set " << cmd;
 
     if (!cmd.isEmpty()) {
-        s->addCommand(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler);
+        s->addCommandWithCurrentSessionHandler(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler);
     }
 }
 
@@ -550,7 +550,8 @@ void DisassembleWidget::updateDisassemblyFlavor()
 
     // Mark as up to date now rather than in the handler function so as to execute the MI command once.
     m_disassemblyFlavorActionsUpToDate = true;
-    s->addCommand(GdbShow, QStringLiteral("disassembly-flavor"), this, &DisassembleWidget::showDisassemblyFlavorHandler);
+    s->addCommandWithCurrentSessionHandler(GdbShow, QStringLiteral("disassembly-flavor"), this,
+                                           &DisassembleWidget::showDisassemblyFlavorHandler);
 }
 
 void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)

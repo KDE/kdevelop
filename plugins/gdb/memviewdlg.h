@@ -64,7 +64,7 @@ namespace GDB
         void captionChanged(const QString& caption);
 
     private:
-        void sizeComputed(const QString& value);
+        void sizeComputed(const MI::ResultRecord& r);
         void addReadMemoryCommand(const QString& arguments);
         void memoryRead(const MI::ResultRecord& r);
         void memoryEdited(int start, int end);

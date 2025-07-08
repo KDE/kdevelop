@@ -12,7 +12,6 @@
 
 #include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
-#include <QObject>
 #include <QPointer>
 #include <QString>
 #include <QStringList>
@@ -296,35 +295,6 @@ public:
 
 private:
     Function handler;
-};
-
-class ExpressionValueCommand : public QObject, public MICommand
-{
-    Q_OBJECT
-
-public:
-    using handler_method_t = void (QObject::*)(const QString&);
-
-    template<class Handler>
-    ExpressionValueCommand(
-        const QString& expression,
-        Handler* handler_this,
-        void (Handler::* handler_method)(const QString&))
-    : MICommand(DataEvaluateExpression, expression),
-      handler_this(handler_this),
-      handler_method(static_cast<handler_method_t>(handler_method))
-    {
-        setHandler(this, &ExpressionValueCommand::handleResponse);
-    }
-
-    void handleResponse(const ResultRecord& r)
-    {
-        (handler_this.data()->*handler_method)(r[QStringLiteral("value")].literal());
-    }
-
-private:
-    QPointer<QObject> handler_this;
-    handler_method_t handler_method;
 };
 
 template<class Handler>

@@ -9,6 +9,7 @@
 
 #include "debuggertestbase.h"
 
+#include "mi/mi.h"
 #include "midebugsession.h"
 #include "testhelper.h"
 
@@ -36,6 +37,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QMetaObject>
+#include <QPointer>
 #include <QSignalBlocker>
 #include <QSignalSpy>
 #include <QStandardPaths>
@@ -46,6 +48,7 @@
 
 #include <algorithm>
 #include <array>
+#include <memory>
 
 using namespace KDevelop;
 using namespace KDevMI;
@@ -141,6 +144,15 @@ void verifyCurrentLocation(const IDebugSession* session, const QUrl& url, int mi
         else                                                                                                           \
             QCOMPARE_EQ(stackModel->rowCount(threadIndex), expectedFrameCount);                                        \
     } while (false)
+
+class MICommandResultSpy : public QObject, public QStringList
+{
+public:
+    void handle(const MI::ResultRecord& record)
+    {
+        push_back(record["value"].literal());
+    }
+};
 
 } // unnamed namespace
 
@@ -1440,6 +1452,90 @@ void DebuggerTestBase::testCoreFile()
 
     session->stopDebugger();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testCommandHandler_data()
+{
+    QTest::addColumn<bool>("addCommandWithCurrentSessionHandler");
+    QTest::addColumn<bool>("destroyHandler");
+    QTest::addColumn<bool>("replaceSession");
+
+    for (const auto addCommandWithCurrentSessionHandler : {false, true}) {
+        for (const auto destroyHandler : {false, true}) {
+            for (const auto replaceSession : {false, true}) {
+                QTest::addRow("%s-%s-%s",
+                              addCommandWithCurrentSessionHandler ? "addCommandWithCurrentSessionHandler"
+                                                                  : "addCommand",
+                              destroyHandler ? "destroy_handler" : "", replaceSession ? "replace_session" : "")
+                    << addCommandWithCurrentSessionHandler << destroyHandler << replaceSession;
+            }
+        }
+    }
+}
+
+void DebuggerTestBase::testCommandHandler()
+{
+    QFETCH(const bool, addCommandWithCurrentSessionHandler);
+    QFETCH(const bool, destroyHandler);
+    QFETCH(const bool, replaceSession);
+
+    const QPointer session{createTestDebugSession()};
+    TestLaunchConfiguration cfg;
+
+    constexpr auto breakpointLine = 40; // return 0;
+    addDebugeeBreakpoint(breakpointLine);
+
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), breakpointLine);
+
+    auto handler = std::make_unique<MICommandResultSpy>();
+
+    const auto addCommand = [addCommandWithCurrentSessionHandler](MIDebugSession& session, const auto&... args) {
+        if (addCommandWithCurrentSessionHandler) {
+            session.addCommandWithCurrentSessionHandler(args...);
+        } else {
+            session.addCommand(args...);
+        }
+    };
+    addCommand(*session, MI::DataEvaluateExpression, "ts.a", handler.get(), &MICommandResultSpy::handle);
+
+    // NOTE: the run() command (continue execution) is removed from the command queue and never sent to the debugger if
+    //       another session is created below (because starting a new session stops the debugger of the previous one).
+    session->run();
+    QCOMPARE(handler->size(), 0); // an MI command is asynchronous
+
+    if (destroyHandler) {
+        handler.reset();
+    }
+
+    if (replaceSession) {
+        auto* const session2 = createTestDebugSession();
+
+        const ActiveStateSessionSpy sessionSpy2(session2);
+        START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session2, cfg, sessionSpy2);
+        QCOMPARE(currentMiLine(session2), breakpointLine);
+
+        session2->run();
+        WAIT_FOR_STATE(session2, IDebugSession::EndedState);
+    }
+
+    // Wait for the (first) session to finish and be destroyed (if it is still alive).
+    QTRY_COMPARE(session, nullptr);
+
+    QCOMPARE(static_cast<bool>(handler), !destroyHandler);
+    if (destroyHandler) {
+        return; // no crash - good, nothing else to verify
+    }
+
+    if (addCommandWithCurrentSessionHandler && replaceSession) {
+        // The first session stopped being current before the result of the command
+        // arrived, therefore the current-session handler must not be invoked.
+        QCOMPARE(handler->size(), 0);
+    } else {
+        QCOMPARE(handler->size(), 1);
+        QCOMPARE(handler->constFirst(), "1");
+    }
 }
 
 void DebuggerTestBase::testVariablesLocalsStruct()
