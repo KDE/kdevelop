@@ -244,6 +244,13 @@ public:
                     const MI::FunctionCommandHandler::Function& callback,
                     MI::CommandFlags flags = {});
 
+    /**
+     * Add a specified command with a given handler.
+     *
+     * @tparam Handler a class derived from QObject
+     * @param handler_this an object that unless destroyed earlier shall handle an eventual result of the command
+     * @param handler_method a member function to invoke on @p handler_this to handle the result
+     */
     template<class Handler>
     void addCommand(MI::CommandType type, const QString& arguments, Handler* handler_this,
                     MI::MICommand::ResultRecordMethod<Handler> handler_method, MI::CommandFlags flags = {});
