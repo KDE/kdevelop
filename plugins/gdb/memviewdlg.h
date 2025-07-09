@@ -65,7 +65,7 @@ namespace GDB
 
     private:
         void sizeComputed(const QString& value);
-
+        void addReadMemoryCommand(const QString& arguments);
         void memoryRead(const MI::ResultRecord& r);
 
         void memoryEdited(int start, int end);

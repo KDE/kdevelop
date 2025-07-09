@@ -183,15 +183,16 @@ void MemoryView::changeMemoryRange()
 
 void MemoryView::sizeComputed(const QString& size)
 {
+    addReadMemoryCommand(QLatin1String{"%1 x 1 1 %2"}.arg(m_rangeSelector->startAddressLineEdit->text(), size));
+}
+
+void MemoryView::addReadMemoryCommand(const QString& arguments)
+{
     auto *session = qobject_cast<DebugSession*>(
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
-    session->addCommand(MI::DataReadMemory,
-            QStringLiteral("%1 x 1 1 %2")
-                .arg(m_rangeSelector->startAddressLineEdit->text(), size),
-            this,
-            &MemoryView::memoryRead);
+    session->addCommand(MI::DataReadMemory, arguments, this, &MemoryView::memoryRead);
 }
 
 void MemoryView::memoryRead(const MI::ResultRecord& r)
@@ -354,14 +355,7 @@ void MemoryView::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalP
         // not textual m_memStartStr and m_memAmountStr,
         // because program position might have changes and expressions
         // are no longer valid.
-        auto *session = qobject_cast<DebugSession*>(
-            KDevelop::ICore::self()->debugController()->currentSession());
-        if (session) {
-            session->addCommand(MI::DataReadMemory,
-                    QStringLiteral("%1 x 1 1 %2").arg(m_memStart).arg(m_memData.size()),
-                    this,
-                    &MemoryView::memoryRead);
-        }
+        addReadMemoryCommand(QStringLiteral("%1 x 1 1 %2").arg(m_memStart).arg(m_memData.size()));
     }
 
     if (result && formatGroup && formatGroup == result->actionGroup())
