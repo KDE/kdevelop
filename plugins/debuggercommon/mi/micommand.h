@@ -147,7 +147,10 @@ public:
     void setHandler(const FunctionCommandHandler::Function &callback);
 
     template<class Handler>
-    void setHandler(Handler* handler_this, void (Handler::* handler_method)(const ResultRecord&));
+    using ResultRecordMethod = void (Handler::*)(const ResultRecord&);
+
+    template<class Handler>
+    void setHandler(Handler* handler_this, ResultRecordMethod<Handler> handler_method);
 
     /* The command that should be sent to debugger.
        This method is virtual so the command can compute this
@@ -325,8 +328,7 @@ private:
 };
 
 template<class Handler>
-void MICommand::setHandler(Handler* handler_this,
-                           void (Handler::* handler_method)(const ResultRecord&))
+void MICommand::setHandler(Handler* handler_this, ResultRecordMethod<Handler> handler_method)
 {
     QPointer<Handler> guarded_this(handler_this);
     setHandler(new FunctionCommandHandler([guarded_this, handler_method](const ResultRecord& r) {

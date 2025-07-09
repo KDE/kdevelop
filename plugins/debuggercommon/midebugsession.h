@@ -245,10 +245,8 @@ public:
                     MI::CommandFlags flags = {});
 
     template<class Handler>
-    void addCommand(MI::CommandType type, const QString& arguments,
-                    Handler* handler_this,
-                    void (Handler::* handler_method)(const MI::ResultRecord&),
-                    MI::CommandFlags flags = {});
+    void addCommand(MI::CommandType type, const QString& arguments, Handler* handler_this,
+                    MI::MICommand::ResultRecordMethod<Handler> handler_method, MI::CommandFlags flags = {});
 
     QMap<QString, MIVariable*> & variableMapping();
     MIVariable* findVariableByVarobjName(const QString &varobjName) const;
@@ -401,10 +399,8 @@ private:
 };
 
 template<class Handler>
-void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
-                                Handler* handler_this,
-                                void (Handler::* handler_method)(const MI::ResultRecord&),
-                                MI::CommandFlags flags)
+void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments, Handler* handler_this,
+                                MI::MICommand::ResultRecordMethod<Handler> handler_method, MI::CommandFlags flags)
 {
     auto cmd = createCommand(type, arguments, flags);
     cmd->setHandler(handler_this, handler_method);
