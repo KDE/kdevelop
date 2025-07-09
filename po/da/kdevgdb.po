@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -521,14 +521,14 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Stop applikationen for at indtaste GDB-kommandoer"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Vis interne kommandoer"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -544,7 +544,7 @@ msgstr ""
 "indstilling vil kun påvirke fremtidige kommandoer, den vil ikke tilføje "
 "eller fjerne kommandoer er udført fra visningen."
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

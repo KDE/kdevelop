@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2023-09-18 11:34-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -435,13 +435,13 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Coloca em pausa a execução do aplicativo, para inserir comandos do GDB"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Mostrar comandos internos"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -453,7 +453,7 @@ msgstr ""
 "apresentados ou não.<br>Esta opção irá afetar apenas os comandos futuros; "
 "não irá adicionar ou remover os comandos já emitidos na janela."
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2024-03-02 17:22+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -436,13 +436,13 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Pausa a execución do aplicativo para inserir ordes de GDB"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Amosar as ordes internas"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -454,7 +454,7 @@ msgstr ""
 "<br>Esta opción afectará só ás ordes futuras, non engadirá nin retirará da "
 "vista ordes xa emitidas."
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2024-05-06 09:56+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -413,13 +413,13 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "暫停執行應用程式，以輸入 GDB 指令"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "顯示內部指令"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -430,7 +430,7 @@ msgstr ""
 "控制 KDevelop 內部下的指令是否要顯示。<br/> 這個選項只會影響以後的指令，而不"
 "會新增或移除任何已產生的指令。"
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

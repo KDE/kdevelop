@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -420,13 +420,13 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "GDB आदेशान् प्रविष्टुं एप्लिकेशनस्य निष्पादनं विरामयन्तु"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "आन्तरिक आदेशान् दर्शयतु"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -438,7 +438,7 @@ msgstr ""
 "नियन्त्रणानि ।<br> एषः विकल्पः केवलं भविष्यत् आदेशान् प्रभावितं करिष्यति, पूर्वमेव निर्गतान् "
 "आदेशान् दृश्यात् न योजयिष्यति न निष्कासयिष्यति वा ।"
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"

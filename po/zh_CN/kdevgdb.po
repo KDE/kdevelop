@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -408,13 +408,13 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "暂停执行中的程序以输入 GDB 命令"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "显示内部命令"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -425,7 +425,7 @@ msgstr ""
 "控制是否显示 KDevelop 内部执行的命令。<br>此命令仅会影响以后的命令，而不会将"
 "已经执行的命令从视图中添加或移除。"
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
