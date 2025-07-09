@@ -176,7 +176,7 @@ void MemoryView::changeMemoryRange()
 
     QString amount = m_rangeSelector->amountLineEdit->text();
     if(amount.isEmpty())
-        amount = QStringLiteral("sizeof(%1)").arg(m_rangeSelector->startAddressLineEdit->text());
+        amount = QLatin1String{"sizeof(*%1)"}.arg(m_rangeSelector->startAddressLineEdit->text());
 
     session->addCommand(std::make_unique<MI::ExpressionValueCommand>(amount, this, &MemoryView::sizeComputed));
 }
