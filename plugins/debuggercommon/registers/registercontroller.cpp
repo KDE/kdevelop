@@ -32,7 +32,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     if (group.name().isEmpty()) {
         const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
         for (const GroupsName& g : namesOfRegisterGroups) {
-            IRegisterController::updateRegisters(g);
+            updateRegisters(g);
         }
         return;
     } else {
@@ -98,20 +98,6 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     m_debugSession->addCommand(DataListRegisterValues, registers, this, handler);
 }
 
-void IRegisterController::registerNamesHandler(const ResultRecord& r)
-{
-    const Value& names = r[QStringLiteral("register-names")];
-
-    m_rawRegisterNames.clear();
-    for (int i = 0; i < names.size(); ++i) {
-        const Value& entry = names[i];
-        m_rawRegisterNames.push_back(entry.literal());
-    }
-
-    //When here probably request for updating registers was sent, but m_rawRegisterNames were not initialized yet, so it wasn't successful. Update everything once again.
-    updateRegisters();
-}
-
 void IRegisterController::generalRegistersHandler(const ResultRecord& r)
 {
     Q_ASSERT(!m_rawRegisterNames.isEmpty());
@@ -162,16 +148,6 @@ QString IRegisterController::registerValue(const QString& name) const
         }
     }
     return value;
-}
-
-bool IRegisterController::initializeRegisters()
-{
-    if (m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-        return false;
-    }
-
-    m_debugSession->addCommand(DataListRegisterNames, QString(), this, &IRegisterController::registerNamesHandler);
-    return true;
 }
 
 GroupsName IRegisterController::groupForRegisterName(const QString& name) const
@@ -231,8 +207,10 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     updateRegisters(group);
 }
 
-IRegisterController::IRegisterController(MIDebugSession* debugSession, QObject* parent)
+IRegisterController::IRegisterController(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                         QObject* parent)
     : QObject(parent)
+    , m_rawRegisterNames(debuggerRegisterNames)
     , m_debugSession{debugSession}
 {
     Q_ASSERT(m_debugSession);

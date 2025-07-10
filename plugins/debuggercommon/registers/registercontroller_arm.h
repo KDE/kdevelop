@@ -23,12 +23,10 @@ public:
      *
      * @copydetails IRegisterController::IRegisterController()
      */
-    explicit RegisterController_Arm(MIDebugSession* debugSession, QObject* parent = nullptr);
+    explicit RegisterController_Arm(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                    QObject* parent = nullptr);
 
     QVector<GroupsName> namesOfRegisterGroups() const override;
-
-public Q_SLOTS:
-    void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
     RegistersGroup registersFromGroup(const GroupsName& group) const override;
@@ -54,8 +52,6 @@ private:
     void initRegisterNames();
 
     static FlagRegister m_cpsr;
-
-    bool m_registerNamesInitialized = false;
 };
 
 } // end of namespace KDevMI

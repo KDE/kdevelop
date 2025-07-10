@@ -133,7 +133,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     ///Updates registers in @p group. If @p group is empty - updates all registers.
-    virtual void updateRegisters(const GroupsName& group = GroupsName());
+    void updateRegisters(const GroupsName& group = {});
 
     ///Sends updated register's @p reg value to the debugger.
     virtual void setRegisterValue(const Register& reg);
@@ -143,8 +143,11 @@ protected:
      * Create a register controller.
      *
      * @param debugSession a non-null debug session that must remain valid throughout this controller's lifetime
+     * @param debuggerRegisterNames an ordered list of register names reported by the debugger
+     *        in response to an MI command -data-list-register-names without arguments
      */
-    explicit IRegisterController(MIDebugSession* debugSession, QObject* parent = nullptr);
+    explicit IRegisterController(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                 QObject* parent = nullptr);
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid.
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const = 0;
@@ -181,9 +184,6 @@ protected:
     ///Returns group that given register belongs to.
     GroupsName groupForRegisterName(const QString& name) const;
 
-    ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
-    bool initializeRegisters();
-
     GroupsName createGroupName(const QString& name, int idx, RegisterType t = general, const QString& flag = QString()) const;
 
     ///Returns register's number for @p name.
@@ -193,9 +193,6 @@ public:
     ~IRegisterController() override;
 
 private :
-    ///Handles initialization of register's names.
-    void registerNamesHandler(const MI::ResultRecord& r);
-
     ///Parses new values for general registers from @p r and updates it in m_registers.
     ///Emits registersChanged signal.
     void generalRegistersHandler(const MI::ResultRecord& r);
@@ -211,7 +208,7 @@ private:
 
 protected:
     ///Register names as it sees debugger (in format: number, name).
-    QVector<QString > m_rawRegisterNames;
+    const QStringList m_rawRegisterNames;
 
     ///Registers in format: name, value
     QHash<QString, QString > m_registers;

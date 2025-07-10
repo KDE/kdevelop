@@ -84,17 +84,6 @@ void RegisterController_Arm::setVFPQ_Register(const Register& reg)
     setStructuredRegister(reg, enumToGroupName(VFP_quad));
 }
 
-void RegisterController_Arm::updateRegisters(const GroupsName& group)
-{
-    if (!m_registerNamesInitialized) {
-        if (initializeRegisters()) {
-            m_registerNamesInitialized = true;
-        }
-    }
-
-    IRegisterController::updateRegisters(group);
-}
-
 GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) const
 {
     static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General) , createGroupName(i18n("Flags"), Flags, flag, m_cpsr.registerName), createGroupName(i18n("VFP single-word"), VFP_single, floatPoint), createGroupName(i18n("VFP double-word"), VFP_double, structured), createGroupName(i18n("VFP quad-word"), VFP_quad, structured)};
@@ -102,7 +91,9 @@ GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) cons
     return groups[group];
 }
 
-RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent)
+RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                               QObject* parent)
+    : IRegisterController(debugSession, debuggerRegisterNames, parent)
 {
     if (m_registerNames.isEmpty()) {
         const int registerCount = static_cast<int>(LAST_REGISTER);

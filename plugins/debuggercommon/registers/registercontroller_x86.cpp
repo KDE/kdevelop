@@ -84,17 +84,6 @@ void RegisterControllerGeneral_x86::setSegmentRegister(const Register& reg)
     setGeneralRegister(reg, enumToGroupName(Segment));
 }
 
-void RegisterControllerGeneral_x86::updateRegisters(const GroupsName& group)
-{
-    if (!m_registerNamesInitialized) {
-        if (initializeRegisters()) {
-            m_registerNamesInitialized = true;
-        }
-    }
-
-    IRegisterController::updateRegisters(group);
-}
-
 GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups group) const
 {
     static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General), createGroupName(i18n("Flags"), Flags, flag, m_eflags.registerName), createGroupName(i18n("FPU"), FPU, floatPoint), createGroupName(i18n("XMM"), XMM, structured), createGroupName(i18n("Segment"), Segment)};
@@ -102,20 +91,23 @@ GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups grou
     return groups[group];
 }
 
-RegisterController_x86::RegisterController_x86(MIDebugSession* debugSession, QObject* parent)
-    : RegisterControllerGeneral_x86(debugSession, parent)
+RegisterController_x86::RegisterController_x86(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                               QObject* parent)
+    : RegisterControllerGeneral_x86(debugSession, debuggerRegisterNames, parent)
 {
     initRegisterNames();
 }
 
-RegisterController_x86_64::RegisterController_x86_64(MIDebugSession* debugSession, QObject* parent)
-    : RegisterControllerGeneral_x86(debugSession, parent)
+RegisterController_x86_64::RegisterController_x86_64(MIDebugSession* debugSession,
+                                                     const QStringList& debuggerRegisterNames, QObject* parent)
+    : RegisterControllerGeneral_x86(debugSession, debuggerRegisterNames, parent)
 {
     initRegisterNames();
 }
 
-RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* debugSession, QObject* parent)
-    : IRegisterController(debugSession, parent)
+RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* debugSession,
+                                                             const QStringList& debuggerRegisterNames, QObject* parent)
+    : IRegisterController(debugSession, debuggerRegisterNames, parent)
 {
     if (m_registerNames.isEmpty()) {
         const int registerCount = static_cast<int>(LAST_REGISTER);

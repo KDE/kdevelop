@@ -57,10 +57,7 @@ enum Architecture {
     QStringList registerNames;
     registerNames.reserve(nameCount);
     for (auto i = 0; i < nameCount; ++i) {
-        const auto& literal = names[i].literal();
-        if (!literal.isEmpty()) {
-            registerNames.push_back(literal);
-        }
+        registerNames.push_back(names[i].literal());
     }
     return registerNames;
 }
@@ -85,15 +82,15 @@ void RegistersManager::registerNamesHandler(const ResultRecord& record)
     switch (determineArchitecture(registerNames)) {
     case x86:
         qCDebug(DEBUGGERCOMMON) << "Found x86 architecture";
-        setController(new RegisterController_x86(m_debugSession));
+        setController(new RegisterController_x86(m_debugSession, registerNames));
         break;
     case x86_64:
         qCDebug(DEBUGGERCOMMON) << "Found x86_64 architecture";
-        setController(new RegisterController_x86_64(m_debugSession));
+        setController(new RegisterController_x86_64(m_debugSession, registerNames));
         break;
     case arm:
         qCDebug(DEBUGGERCOMMON) << "Found Arm architecture";
-        setController(new RegisterController_Arm(m_debugSession));
+        setController(new RegisterController_Arm(m_debugSession, registerNames));
         break;
     case other:
         qCWarning(DEBUGGERCOMMON) << "Unsupported architecture. Registers won't be available.";

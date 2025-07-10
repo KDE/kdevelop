@@ -20,11 +20,9 @@ class RegisterControllerGeneral_x86 : public IRegisterController
 public:
     QVector<GroupsName> namesOfRegisterGroups() const override;
 
-public Q_SLOTS:
-    void updateRegisters(const GroupsName& group = GroupsName()) override;
-
 protected:
-    explicit RegisterControllerGeneral_x86(MIDebugSession* debugSession, QObject* parent = nullptr);
+    explicit RegisterControllerGeneral_x86(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                           QObject* parent = nullptr);
 
     RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
@@ -48,11 +46,7 @@ private:
 
 protected:
     static QVector<QStringList> m_registerNames;
-
     static FlagRegister m_eflags;
-
-    ///Indicates if register names were initialized.
-    bool m_registerNamesInitialized = false;
 };
 
 class RegisterController_x86 : public RegisterControllerGeneral_x86
@@ -65,7 +59,8 @@ public:
      *
      * @copydetails IRegisterController::IRegisterController()
      */
-    explicit RegisterController_x86(MIDebugSession* debugSession, QObject* parent = nullptr);
+    explicit RegisterController_x86(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                    QObject* parent = nullptr);
 
 private:
     void initRegisterNames();
@@ -81,7 +76,8 @@ public:
      *
      * @copydetails IRegisterController::IRegisterController()
      */
-    explicit RegisterController_x86_64(MIDebugSession* debugSession, QObject* parent = nullptr);
+    explicit RegisterController_x86_64(MIDebugSession* debugSession, const QStringList& debuggerRegisterNames,
+                                       QObject* parent = nullptr);
 
 private:
     void initRegisterNames();
