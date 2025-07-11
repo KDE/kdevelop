@@ -175,7 +175,7 @@ void RegistersView::setModel(ModelsManager* m)
     m_modelsManager = m;
 }
 
-QStringList RegistersView::activeViews()
+QStringList RegistersView::activeViews() const
 {
     return tabWidget->tabText(tabWidget->currentIndex()).split(QLatin1Char('/'));
 }

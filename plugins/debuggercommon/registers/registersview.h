@@ -39,7 +39,7 @@ protected:
 
 private:
     ///Returns list of active views.
-    QStringList activeViews();
+    [[nodiscard]] QStringList activeViews() const;
 
     ///Adds @p v to the list of views with assigning it a name.
     void addView(QTableView* view, int idx);
