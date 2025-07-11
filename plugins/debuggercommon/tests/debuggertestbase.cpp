@@ -482,6 +482,26 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
     QCOMPARE_EQ(outputProcessor.processedLineCount(), 3);
 }
 
+void DebuggerTestBase::testBreakpointInSharedLibrary()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("multifile/debuggee_debugeemultifile");
+    breakpoints()->addCodeBreakpoint("multifile_main.cpp:14"); // return 0;
+    breakpoints()->addCodeBreakpoint("multifile_shared.cpp:11"); // return n * n;
+
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(session->currentUrl().fileName(), "multifile_shared.cpp");
+    QCOMPARE(currentMiLine(session), 11);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(session->currentUrl().fileName(), "multifile_main.cpp");
+    QCOMPARE(currentMiLine(session), 14);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testVariablesLocalsStruct()
 {
     auto* const session = createTestDebugSession();

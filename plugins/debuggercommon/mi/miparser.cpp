@@ -83,7 +83,9 @@ std::unique_ptr<Record> MIParser::parse(FileSymbol *file)
         auto * result = static_cast<ResultRecord *>(record.get());
         result->token = token;
     } else {
-        Q_ASSERT(token == 0);
+        // NOTE: a non-zero value of the variable `token` is not necessarily an MI token at this point.
+        //       For example, when LLDB-MI resolves a pending breakpoint in a shared library, it sends an invalid
+        //       message like "1 location added to breakpoint 2", in which we incorrectly parse "1" as a token.
     }
 
     return record;
