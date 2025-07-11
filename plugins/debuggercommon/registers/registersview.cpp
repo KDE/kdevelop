@@ -20,7 +20,15 @@ using namespace KDevMI;
 namespace
 {
 const int TABLES_COUNT = 5;
+constexpr QLatin1Char viewNameSeparator{'/'};
+
+[[nodiscard]] QString currentTabText(const QTabWidget* tabWidget)
+{
+    Q_ASSERT(tabWidget);
+    return tabWidget->tabText(tabWidget->currentIndex());
 }
+
+} // unnamed namespace
 
 RegistersView::RegistersView(QWidget* p)
     : QWidget(p), m_menu(new QMenu(this))
@@ -40,7 +48,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
         m_menu->removeAction(actions[i]);
     }
 
-    QString group = activeViews().first();
+    const auto group = primaryActiveView();
 
     for (QAction* act : std::as_const(m_actions)) {
         act->setChecked(false);
@@ -79,11 +87,13 @@ void RegistersView::updateRegisters()
 
 void RegistersView::menuTriggered(const QString& formatOrMode)
 {
+    const auto group = primaryActiveView();
+
     Format f = Converters::stringToFormat(formatOrMode);
     if (f != LAST_FORMAT) {
-        m_modelsManager->setFormat(activeViews().first(), f);
+        m_modelsManager->setFormat(group, f);
     } else {
-        m_modelsManager->setMode(activeViews().first(), Converters::stringToMode(formatOrMode));
+        m_modelsManager->setMode(group, Converters::stringToMode(formatOrMode));
     }
 
     updateRegisters();
@@ -91,13 +101,13 @@ void RegistersView::menuTriggered(const QString& formatOrMode)
 
 void RegistersView::changeAvaliableActions()
 {
-    const QString view = activeViews().first();
-    if (view.isEmpty()) {
+    const auto group = primaryActiveView();
+    if (group.isEmpty()) {
         return;
     }
 
-    const QVector<Format> formats = m_modelsManager->formats(view) ;
-    const QVector<Mode> modes = m_modelsManager->modes(view);
+    const auto formats = m_modelsManager->formats(group);
+    const auto modes = m_modelsManager->modes(group);
 
     for (QAction* a : std::as_const(m_actions)) {
         bool enable = false;
@@ -166,7 +176,7 @@ void RegistersView::setNameForTable(int idx, const QString& name)
     qCDebug(DEBUGGERCOMMON) << name << " " << idx;
     const QString text = tabWidget->tabText(idx);
     if (!text.contains(name)) {
-        tabWidget->setTabText(idx, text.isEmpty() ? name : text + QLatin1Char('/') + name);
+        tabWidget->setTabText(idx, text.isEmpty() ? name : text + viewNameSeparator + name);
     }
 }
 
@@ -177,7 +187,16 @@ void RegistersView::setModel(ModelsManager* m)
 
 QStringList RegistersView::activeViews() const
 {
-    return tabWidget->tabText(tabWidget->currentIndex()).split(QLatin1Char('/'));
+    return currentTabText(tabWidget).split(viewNameSeparator);
+}
+
+QString RegistersView::primaryActiveView() const
+{
+    auto tabText = currentTabText(tabWidget);
+    if (const auto firstSeparator = tabText.indexOf(viewNameSeparator); firstSeparator != -1) {
+        tabText.resize(firstSeparator);
+    }
+    return tabText;
 }
 
 void RegistersView::clear()

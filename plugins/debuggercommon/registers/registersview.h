@@ -41,6 +41,19 @@ private:
     ///Returns list of active views.
     [[nodiscard]] QStringList activeViews() const;
 
+    /**
+     * @return the group name of the active view that may have multiple available actions
+     *
+     * @note Currently only the first tab contains multiple views - @e General and @e Flags. And the @e Flags
+     *       view has only a single action @e Update, which is available to all views. So this function returns
+     *       the name "General" if the first tab is current to enable all @e Format actions of the @e General view.
+     *       Then triggering a @e Format action also affects only the primary active view @e General. Enabling all
+     *       possible actions is important because of the handy one-letter action shortcuts. A side effect is
+     *       that the context menu of the @e Flags view contains the @e Format actions as well, triggering which
+     *       counterintuitively affects the neighboring @e General view, but this should be an acceptable compromise.
+     */
+    [[nodiscard]] QString primaryActiveView() const;
+
     ///Adds @p v to the list of views with assigning it a name.
     void addView(QTableView* view, int idx);
 
