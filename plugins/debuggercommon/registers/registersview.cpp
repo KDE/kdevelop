@@ -96,7 +96,7 @@ void RegistersView::menuTriggered(const QString& formatOrMode)
         m_modelsManager->setMode(group, Converters::stringToMode(formatOrMode));
     }
 
-    updateRegisters();
+    m_modelsManager->updateRegisters(group);
 }
 
 void RegistersView::changeAvaliableActions()
