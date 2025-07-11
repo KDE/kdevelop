@@ -225,7 +225,6 @@ MIDebugSession* MIDebuggerPlugin::createSession()
 
     connect(session, &MIDebugSession::showMessage, this, &MIDebuggerPlugin::showStatusMessage);
     connect(session, &MIDebugSession::raiseDebuggerConsoleViews, this, &MIDebuggerPlugin::raiseDebuggerConsoleViews);
-    connect(session, &MIDebugSession::reset, this, &MIDebuggerPlugin::reset);
     return session;
 }
 

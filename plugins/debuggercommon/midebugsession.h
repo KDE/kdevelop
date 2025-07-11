@@ -103,11 +103,6 @@ Q_SIGNALS:
      */
     void raiseDebuggerConsoleViews();
 
-    /**
-     * Emits when need to reset
-     */
-    void reset();
-
 public:
     /**
      * Start the debugger and execute the inferior program specified by @p startupInfo.

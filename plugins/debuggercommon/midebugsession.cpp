@@ -277,7 +277,6 @@ bool MIDebugSession::startDebugging(const InferiorStartupInfo& startupInfo)
         m_commandQueue->clear();
         setDebuggerStateOn(s_shuttingDown);
         addGdbExitCommand();
-        emit reset();
         return false;
     }
 #endif
@@ -562,8 +561,6 @@ void MIDebugSession::stopDebugger()
             killDebuggerImpl();
         }
     });
-
-    emit reset();
 }
 
 void MIDebugSession::addGdbExitCommand()

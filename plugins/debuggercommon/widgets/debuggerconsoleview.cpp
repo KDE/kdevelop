@@ -90,7 +90,6 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
             &DebuggerConsoleView::currentSessionChanged);
 
     if (plugin) {
-        connect(plugin, &MIDebuggerPlugin::reset, this, &DebuggerConsoleView::clear);
         connect(plugin, &MIDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
             plugin->core()->uiController()->raiseToolView(this);
         });
@@ -393,6 +392,7 @@ void DebuggerConsoleView::currentSessionChanged(KDevelop::IDebugSession* iSessio
     if (auto* const previousSession = qobject_cast<MIDebugSession*>(iPreviousSession)) {
         disconnect(this, nullptr, previousSession, nullptr);
         disconnect(previousSession, nullptr, this, nullptr);
+        clear();
     }
 
     auto* const session = qobject_cast<MIDebugSession*>(iSession);

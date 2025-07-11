@@ -58,7 +58,6 @@ Q_SIGNALS:
 //END IStatus
 
 Q_SIGNALS:
-    void reset();
     void raiseDebuggerConsoleViews();
 
 protected Q_SLOTS:

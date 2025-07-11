@@ -95,7 +95,6 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
             this, &GDBOutputWidget::currentSessionChanged);
 
     if (plugin) {
-        connect(plugin, &CppDebuggerPlugin::reset, this, &GDBOutputWidget::clear);
         connect(plugin, &CppDebuggerPlugin::raiseDebuggerConsoleViews, this, [plugin, this] {
             plugin->core()->uiController()->raiseToolView(this);
         });
@@ -123,6 +122,7 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* iSession,
     if (auto* const previousSession = qobject_cast<DebugSession*>(iPreviousSession)) {
         disconnect(this, nullptr, previousSession, nullptr);
         disconnect(previousSession, nullptr, this, nullptr);
+        clear();
     }
 
     auto* const session = qobject_cast<DebugSession*>(iSession);
