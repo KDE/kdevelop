@@ -252,8 +252,11 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
 
     currentSessionChanged(pS, nullptr);
 
-    if(pS && !pS->currentAddr().isEmpty())
-        slotShowStepInSource(pS->currentUrl(), pS->currentLine(), pS->currentAddr());
+    if (const auto* const session = qobject_cast<MIDebugSession*>(pS)) {
+        if (const auto address = session->currentAddr(); !address.isEmpty()) {
+            update(address);
+        }
+    }
 }
 
 void DisassembleWidget::jumpToCursor() {
