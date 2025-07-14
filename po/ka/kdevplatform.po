@@ -3938,7 +3938,7 @@ msgstr "მოირგეთ გარემოს ცვლადები"
 #: shell/settings/environmentprofilelistmodel.cpp:48
 #, kde-format
 msgid "%1 (default profile)"
-msgstr "%1 (ნაგულისხმები პროფილი)"
+msgstr "%1 (ნაგულისხმევი პროფილი)"
 
 #: shell/settings/environmentprofilemodel.cpp:91
 #, kde-format
@@ -4003,7 +4003,7 @@ msgstr "პროფილის წაშლა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "ნაგულისხმებად დაყენება"
+msgstr "ნაგულისხმევად დაყენება"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114

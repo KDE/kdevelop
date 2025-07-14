@@ -565,7 +565,7 @@ msgstr "<html><head/><body><h3>პროექტისსახელი</h3></
 #: settings/mesonrewriterpage.ui:112
 #, kde-format
 msgid "Project default options"
-msgstr "პროექტის ნაგულისხმები პარამეტრები"
+msgstr "პროექტის ნაგულისხმევი პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_newOpt)
 #: settings/mesonrewriterpage.ui:152
