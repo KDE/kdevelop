@@ -77,7 +77,7 @@ msgstr "&გამშვები ფაილის შექმნა:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Default make &target:"
-msgstr "გამშვები ფაილის ნაგულისხმებად შექმნა:"
+msgstr "გამშვები ფაილის ნაგულისხმევად შექმნა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: makeconfig.ui:199

@@ -80,7 +80,7 @@ msgstr "შემოწმებების ნაკრების წაშ�
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "ნაგულისხმებად დაყენება"
+msgstr "ნაგულისხმევად დაყენება"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
@@ -99,13 +99,13 @@ msgstr "ხელით მითითება"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr "ნაგულისხმების გამოყენება (ამჟამად: %1)"
+msgstr "ნაგულისხმევის გამოყენება (ამჟამად: %1)"
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr "%1 (ნაგულისხმები არჩევანი)"
+msgstr "%1 (ნაგულისხმევი არჩევანი)"
 
 #: config/clangtidypreferences.cpp:60 config/clangtidyprojectconfigpage.cpp:55
 #, kde-format

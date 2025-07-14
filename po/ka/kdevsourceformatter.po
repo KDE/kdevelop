@@ -35,7 +35,7 @@ msgstr "წყაროს ფორმატირების მორგე�
 #, kde-format
 msgctxt "@option:check"
 msgid "&Use default"
-msgstr "ნაგულისხმების გამოყენება"
+msgstr "ნაგულისხმევის გამოყენება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
 #: config/projectconfigpage.ui:36
