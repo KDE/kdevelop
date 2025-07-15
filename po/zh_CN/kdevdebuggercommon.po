@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
@@ -11,11 +12,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: kdeorg\n"
-"X-Crowdin-Project-ID: 269464\n"
-"X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevdebuggercommon.pot\n"
 "X-Crowdin-File-ID: 54788\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -105,6 +106,8 @@ msgid ""
 "\n"
 "Old value: %1"
 msgstr ""
+"\n"
+"旧值：%1"
 
 #: mibreakpointcontroller.cpp:812
 #, kde-format
@@ -112,6 +115,8 @@ msgid ""
 "\n"
 "New value: %1"
 msgstr ""
+"\n"
+"新值：%1"
 
 #: midebugger.cpp:317
 #, kde-format
@@ -267,7 +272,7 @@ msgstr "调试进程 %1"
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
-msgstr ""
+msgstr "一个程序正在被调试。你想终止正在运行的调试会话并继续启动吗？"
 
 #: midebugsession.cpp:236
 #, kde-format

@@ -175,7 +175,7 @@ msgstr "调试"
 #, kde-format
 msgctxt "@title:window"
 msgid "Analyze"
-msgstr ""
+msgstr "分析"
 
 #: standardoutputview.cpp:92
 #, kde-format
