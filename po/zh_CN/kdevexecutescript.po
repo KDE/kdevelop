@@ -82,7 +82,7 @@ msgstr ""
 msgid ""
 "Splitting the interpreter command for the launch configuration '%1' yields "
 "an empty list. Aborting start."
-msgstr ""
+msgstr "拆分启动配置“%1”的解释器命令得到空列表。中止启动。"
 
 #: scriptappconfig.cpp:83
 #, kde-format
