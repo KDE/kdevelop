@@ -34,6 +34,8 @@
 #include <iterator>
 #include <vector>
 
+namespace {
+
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
 
@@ -63,6 +65,8 @@ bool writeFile(const QString &path, const QString& content, QIODevice::OpenModeF
 
     return true;
 }
+
+} // unnamed namespace
 
 void GitInitTest::initTestCase()
 {
