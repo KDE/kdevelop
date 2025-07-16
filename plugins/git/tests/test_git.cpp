@@ -23,6 +23,7 @@
 #include <KPluginMetaData>
 
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QRegularExpression>
 #include <QSignalSpy>
 #include <QStandardPaths>
@@ -64,6 +65,22 @@ bool writeFile(const QString &path, const QString& content, QIODevice::OpenModeF
     input << content;
 
     return true;
+}
+
+void timeSwitchingBranch(GitPlugin* plugin, const QUrl& repository, const QString& branchName)
+{
+    QVERIFY(plugin);
+
+    QElapsedTimer timer;
+    timer.start();
+
+    auto* const job = plugin->switchBranch(repository, branchName);
+    const auto createJobElapsedMs = timer.restart();
+    VERIFYJOB(job);
+    const auto runJobElapsedMs = timer.elapsed();
+
+    qDebug().noquote() << "switching to" << branchName.leftJustified(8, ' ') << ": creating a job took"
+                       << createJobElapsedMs << "ms; running the job took" << runJobElapsedMs << "ms";
 }
 
 } // unnamed namespace
@@ -731,8 +748,8 @@ void GitInitTest::testRegisterRepositoryForCurrentBranchChanges()
 
 #define SWITCH_BRANCH(branchName)                                                                                      \
     do {                                                                                                               \
-        auto* const job = m_plugin->switchBranch(baseUrl, branchName);                                                 \
-        VERIFYJOB(job);                                                                                                \
+        timeSwitchingBranch(m_plugin, baseUrl, branchName);                                                            \
+        RETURN_IF_TEST_FAILED();                                                                                       \
     } while (false)
 
     // The signal GitPlugin::repositoryBranchChanged() is emitted
