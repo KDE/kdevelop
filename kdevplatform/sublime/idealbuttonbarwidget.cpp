@@ -24,7 +24,6 @@
 #include <QBoxLayout>
 #include <QApplication>
 #include <QList>
-#include <QPointer>
 #include <QScopeGuard>
 
 #include <algorithm>
@@ -38,6 +37,8 @@ class ToolViewAction : public QAction
 public:
     ToolViewAction(IdealDockWidget *dock, QObject* parent) : QAction(parent), m_dock(dock)
     {
+        Q_ASSERT(dock);
+
         setCheckable(true);
 
         const QString title = dock->view()->document()->title();
@@ -54,9 +55,11 @@ public:
         refreshText();
     }
 
+    /**
+     * @return the non-null dock widget associated with this action
+     */
     IdealDockWidget *dockWidget() const
     {
-        Q_ASSERT(m_dock);
         return m_dock;
     }
 
@@ -65,6 +68,7 @@ public:
         return m_button;
     }
     void setButton(IdealToolButton* button) {
+        Q_ASSERT(button);
         m_button = button;
         refreshText();
     }
@@ -97,8 +101,8 @@ private:
         setText(widget->isEnabled() ? title : QStringLiteral("(%1)").arg(title));
     }
 
-    QPointer<IdealDockWidget> m_dock;
-    QPointer<IdealToolButton> m_button;
+    IdealDockWidget* const m_dock;
+    IdealToolButton* m_button = nullptr;
 };
 
 static ToolViewAction* knownValidToolViewAction(QObject* object)
@@ -236,7 +240,6 @@ private:
         }
 
         auto* const dockWidget = m_actions.constLast()->dockWidget();
-        Q_ASSERT(dockWidget);
 
         if (!dockWidget->isVisible()) {
             // The visibility of this dock widget is out of sync with the checked state of its tool view action.
@@ -377,8 +380,6 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     action->setButton(button);
     button->setDefaultAction(action);
-
-    Q_ASSERT(action->dockWidget());
 
     connect(action, &QAction::toggled, this, &IdealButtonBarWidget::showWidget);
     connect(button, &IdealToolButton::customContextMenuRequested,
