@@ -40,6 +40,13 @@ namespace {
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
 
+#define VERIFYJOB_RETURN(job, retval)                                                                                  \
+    do {                                                                                                               \
+        QVERIFY_RETURN(job, retval);                                                                                   \
+        QVERIFY_RETURN(job->exec(), retval);                                                                           \
+        QCOMPARE_RETURN(job->status(), KDevelop::VcsJob::JobSucceeded, retval);                                        \
+    } while (false)
+
 #define VERIFYJOBFAILURE(j) \
 do { QVERIFY(j); QVERIFY(((!j->exec()) || ((j)->status() != KDevelop::VcsJob::JobSucceeded))); } while(0)
 
@@ -67,20 +74,27 @@ bool writeFile(const QString &path, const QString& content, QIODevice::OpenModeF
     return true;
 }
 
-void timeSwitchingBranch(GitPlugin* plugin, const QUrl& repository, const QString& branchName)
+/**
+ * Switch a given repository to a given branch using a given plugin.
+ *
+ * @return the total time in milliseconds spent on the branch switching or -1 on failure
+ */
+int timeSwitchingBranch(GitPlugin* plugin, const QUrl& repository, const QString& branchName)
 {
-    QVERIFY(plugin);
+    QVERIFY_RETURN(plugin, -1);
 
     QElapsedTimer timer;
     timer.start();
 
     auto* const job = plugin->switchBranch(repository, branchName);
     const auto createJobElapsedMs = timer.restart();
-    VERIFYJOB(job);
+    VERIFYJOB_RETURN(job, -1);
     const auto runJobElapsedMs = timer.elapsed();
 
     qDebug().noquote() << "switching to" << branchName.leftJustified(8, ' ') << ": creating a job took"
                        << createJobElapsedMs << "ms; running the job took" << runJobElapsedMs << "ms";
+
+    return createJobElapsedMs + runJobElapsedMs;
 }
 
 } // unnamed namespace
@@ -795,12 +809,43 @@ void GitInitTest::testRegisterRepositoryForCurrentBranchChanges()
     VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
 
     // A single signal is emitted for multiple close-by current branch changes due to an optimizing compression.
+    auto maxBranchSwitchingTimeMs = 0;
     for (auto i = 0; i < 5; ++i) {
         for (const auto* const branch : {&branch1, &branch2, &master}) {
-            SWITCH_BRANCH(*branch);
+            maxBranchSwitchingTimeMs =
+                std::max(maxBranchSwitchingTimeMs, timeSwitchingBranch(m_plugin, baseUrl, *branch));
+            RETURN_IF_TEST_FAILED();
         }
     }
-    VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+    if (maxBranchSwitchingTimeMs < 500) {
+        VERIFY_AND_REMOVE_SINGLE_SIGNAL_AFTER_WAIT();
+    } else {
+        // GitPlugin uses a KDirWatch to detect modifications of the file .git/HEAD. KDirWatch scans watched
+        // filesystem entries for changes every 500 ms (its default poll interval). After the KDirWatch reports
+        // a file modification, GitPlugin delays emitting the signal repositoryBranchChanged() for 1000 ms.
+        // So if a noninitial switching to another branch takes 1000-500=500 ms or more, the signal
+        // for the prior branch switches can be emitted before GitPlugin detects the slow switch.
+        // Therefore warn instead of failing when too many signals are emitted in this scenario.
+        const auto verifyAndRemoveSignals = [&branchChangedSpy, &baseUrl,
+                                             maxBranchSwitchingTimeMs](int expectedSignalCount) {
+            QCOMPARE_GE(branchChangedSpy.count(), expectedSignalCount);
+            if (branchChangedSpy.count() != expectedSignalCount) {
+                qWarning() << "could not verify signal compression because switching to another branch took"
+                           << maxBranchSwitchingTimeMs << "≥ 500 ms:\n\texpected" << expectedSignalCount
+                           << "signal(s), but" << branchChangedSpy.count()
+                           << (branchChangedSpy.count() == 1 ? "was" : "were") << "actually emitted";
+            }
+            while (!branchChangedSpy.empty()) {
+                QCOMPARE(branchChangedSpy.takeFirst().constFirst().toUrl(), baseUrl); // verify and remove each signal
+            }
+            QCOMPARE(branchChangedSpy.count(), 0);
+        };
+        verifyAndRemoveSignals(0);
+        RETURN_IF_TEST_FAILED();
+        QTest::qWait(signalWaitInterval);
+        verifyAndRemoveSignals(1);
+        RETURN_IF_TEST_FAILED();
+    }
 
     m_plugin->registerRepositoryForCurrentBranchChanges(baseUrl, &listeners[1]);
 
