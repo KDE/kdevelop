@@ -97,6 +97,7 @@ private Q_SLOTS:
     void cleanupTestCase();
     void init();
 
+    void testStdout();
     void testEnvironmentSet();
     void testUnsupportedUrlExpressionBreakpoints();
     void testDisableBreakpoint();

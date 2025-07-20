@@ -121,24 +121,6 @@ bool GdbTest::isLldb() const
     return false;
 }
 
-void GdbTest::testStdOut()
-{
-    auto *session = new TestDebugSession;
-
-    QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
-
-    TestLaunchConfiguration cfg;
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
-
-    {
-        QCOMPARE(outputSpy.count(), 1);
-        QList<QVariant> arguments = outputSpy.takeFirst();
-        QCOMPARE(arguments.count(), 1);
-        QCOMPARE(arguments.first().toStringList(), QStringList() << "Hello, world!" << "Hello");
-    }
-}
-
 void GdbTest::testBreakpoint()
 {
     auto *session = new TestDebugSession;

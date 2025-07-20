@@ -166,6 +166,12 @@ void DebuggerTestBase::init()
     finishInit();
 }
 
+void DebuggerTestBase::testStdout()
+{
+    TestLaunchConfiguration cfg;
+    verifyInferiorStdout(cfg, {"Hello, world!", "Hello"});
+}
+
 void DebuggerTestBase::testEnvironmentSet()
 {
     TestLaunchConfiguration cfg("debuggee_debugeeechoenv");
