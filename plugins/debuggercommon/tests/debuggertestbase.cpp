@@ -113,19 +113,17 @@ void DebuggerTestBase::verifyInferiorStdout(TestLaunchConfiguration& launchConfi
                                             const QStringList& expectedOutputLines)
 {
     auto* const session = createTestDebugSession();
-    QSignalSpy outputSpy(session, &MIDebugSession::inferiorStdoutLines);
+    const QSignalSpy outputSpy(session, &MIDebugSession::inferiorStdoutLines);
 
     START_DEBUGGING_E(session, launchConfiguration);
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 
-    QVERIFY(outputSpy.count() > 0);
+    QCOMPARE_GT(outputSpy.count(), 0);
 
     QStringList outputLines;
-    while (outputSpy.count() > 0) {
-        const QList<QVariant> arguments = outputSpy.takeFirst();
-        for (const auto& item : arguments) {
-            outputLines.append(item.toStringList());
-        }
+    for (const auto& arguments : outputSpy) {
+        QCOMPARE_EQ(arguments.size(), 1); // MIDebugSession::inferiorStdoutLines() has one parameter
+        outputLines << arguments.constFirst().toStringList();
     }
     QCOMPARE(outputLines, expectedOutputLines);
 }
