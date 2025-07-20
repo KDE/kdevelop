@@ -78,8 +78,6 @@ private Q_SLOTS:
 
     void testSpecialPath();
 
-    void testEnvironmentCd();
-
 private:
     // convenient access methods
     KDevelop::Variable *watchVariableAt(int i);

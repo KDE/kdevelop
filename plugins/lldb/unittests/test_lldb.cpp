@@ -1427,13 +1427,6 @@ void LldbTest::testSpecialPath()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void KDevMI::LLDB::LldbTest::testEnvironmentCd()
-{
-    auto path = KIO::upUrl(findExecutable(QStringLiteral("path with space/debuggee_spacedebugee")));
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeepath"), path);
-    verifyInferiorStdout(cfg, {path.toLocalFile()});
-}
-
 QTEST_MAIN(KDevMI::LLDB::LldbTest)
 
 #include "test_lldb.moc"
