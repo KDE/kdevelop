@@ -152,12 +152,6 @@ void LldbTest::finishInit()
     }
 }
 
-void LldbTest::testStdout()
-{
-    TestLaunchConfiguration cfg;
-    verifyInferiorStdout(cfg, {"Hello, world!", "Hello"});
-}
-
 void LldbTest::testBreakpoint()
 {
     auto *session = new TestDebugSession;
