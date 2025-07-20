@@ -20,8 +20,6 @@ protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
 private Q_SLOTS:
-    void testStdOut();
-
     void testBreakpoint();
     void testChangeLocationBreakpoint();
     void testDeleteBreakpoint();
