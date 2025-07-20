@@ -10,8 +10,8 @@
 #include <tests/testhelpermacros.h>
 
 #include <QObject>
+#include <QStringList>
 #include <QUrl>
-#include <QString>
 
 class IExecutePlugin;
 class QModelIndex;
@@ -25,6 +25,10 @@ class VariableCollection;
 
 namespace KDevMI {
 class MIDebugSession;
+
+namespace Testing {
+class TestLaunchConfiguration;
+}
 
 /**
  * A convenience macro for use in member functions of DebuggerTestBase and derived classes.
@@ -78,6 +82,13 @@ protected:
      * Call RETURN_IF_TEST_FAILED() after this function or use the wrapper macro EXPAND_VARIABLE_COLLECTION() instead.
      */
     void expandVariableCollection(const QModelIndex& index);
+
+    /**
+     * Debug the inferior program specified by @p launchConfiguration
+     * and verify that its standard output matches a given list of lines.
+     */
+    void verifyInferiorStdout(Testing::TestLaunchConfiguration& launchConfiguration,
+                              const QStringList& expectedOutputLines);
 
     [[nodiscard]] virtual MIDebugSession* createTestDebugSession() = 0;
 

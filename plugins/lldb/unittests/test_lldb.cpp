@@ -154,25 +154,8 @@ void LldbTest::finishInit()
 
 void LldbTest::testStdout()
 {
-    auto *session = new TestDebugSession;
-
-    QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
-
     TestLaunchConfiguration cfg;
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
-
-    QVERIFY(outputSpy.count() > 0);
-
-    QStringList outputLines;
-    while (outputSpy.count() > 0) {
-        const QList<QVariant> arguments = outputSpy.takeFirst();
-        for (const auto &item : arguments) {
-            outputLines.append(item.toStringList());
-        }
-    }
-    QCOMPARE(outputLines, QStringList() << "Hello, world!"
-                                        << "Hello");
+    verifyInferiorStdout(cfg, {"Hello, world!", "Hello"});
 }
 
 void LldbTest::testBreakpoint()
@@ -1452,26 +1435,9 @@ void LldbTest::testSpecialPath()
 
 void KDevMI::LLDB::LldbTest::testEnvironmentCd()
 {
-    auto *session = new TestDebugSession;
-
-    QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
-
     auto path = KIO::upUrl(findExecutable(QStringLiteral("path with space/debuggee_spacedebugee")));
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeepath"), path);
-
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
-
-    QVERIFY(outputSpy.count() > 0);
-
-    QStringList outputLines;
-    while (outputSpy.count() > 0) {
-        const QList<QVariant> arguments = outputSpy.takeFirst();
-        for (const auto &item : arguments) {
-            outputLines.append(item.toStringList());
-        }
-    }
-    QCOMPARE(outputLines, QStringList() << path.toLocalFile());
+    verifyInferiorStdout(cfg, {path.toLocalFile()});
 }
 
 QTEST_MAIN(KDevMI::LLDB::LldbTest)

@@ -110,6 +110,27 @@ void DebuggerTestBase::expandVariableCollection(const QModelIndex& index)
     }
 }
 
+void DebuggerTestBase::verifyInferiorStdout(TestLaunchConfiguration& launchConfiguration,
+                                            const QStringList& expectedOutputLines)
+{
+    auto* const session = createTestDebugSession();
+    QSignalSpy outputSpy(session, &MIDebugSession::inferiorStdoutLines);
+
+    START_DEBUGGING_E(session, launchConfiguration);
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    QVERIFY(outputSpy.count() > 0);
+
+    QStringList outputLines;
+    while (outputSpy.count() > 0) {
+        const QList<QVariant> arguments = outputSpy.takeFirst();
+        for (const auto& item : arguments) {
+            outputLines.append(item.toStringList());
+        }
+    }
+    QCOMPARE(outputLines, expectedOutputLines);
+}
+
 void DebuggerTestBase::initTestCase()
 {
     startInitTestCase();
@@ -149,7 +170,6 @@ void DebuggerTestBase::init()
 
 void DebuggerTestBase::testEnvironmentSet()
 {
-    auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg("debuggee_debugeeechoenv");
     const QString profileName = isLldb() ? "LldbTestGroup" : "GdbTestGroup";
 
@@ -164,21 +184,7 @@ void DebuggerTestBase::testEnvironmentSet()
     envs["VariableB"] = variableB;
     envProfiles.saveSettings(cfg.rootConfig());
 
-    QSignalSpy outputSpy(session, &MIDebugSession::inferiorStdoutLines);
-
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, IDebugSession::EndedState);
-
-    QVERIFY(outputSpy.count() > 0);
-
-    QStringList outputLines;
-    while (outputSpy.count() > 0) {
-        const QList<QVariant> arguments = outputSpy.takeFirst();
-        for (const auto& item : arguments) {
-            outputLines.append(item.toStringList());
-        }
-    }
-    QCOMPARE(outputLines, QStringList() << variableA << variableB);
+    verifyInferiorStdout(cfg, {variableA, variableB});
 }
 
 void DebuggerTestBase::testUnsupportedUrlExpressionBreakpoints()
