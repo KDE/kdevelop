@@ -478,16 +478,17 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
         }
 
         qDebug() << "Waiting for debuggee output...";
-        QVERIFY(outputSpy.wait(5'000));
+        const auto outputArrived = outputSpy.wait(20'000);
+        // Verify that the debugger did not stop at the disabled breakpoint while we waited for the debuggee output.
+        QCOMPARE(session->state(), IDebugSession::ActiveState);
+
+        QVERIFY(outputArrived);
         QCOMPARE_GT(outputSpy.size(), 0);
     }
 
     // If the debuggee has already produced all 3 lines of output,
     // the paused state waited for below will never be reached!
     QCOMPARE_EQ(outputProcessor.processedLineCount(), 2);
-
-    qDebug() << "Waiting for active";
-    WAIT_FOR_STATE(session, IDebugSession::ActiveState);
 
     qDebug() << "Enabling breakpoint";
     breakpoint->setData(Breakpoint::EnableColumn, Qt::Checked);
