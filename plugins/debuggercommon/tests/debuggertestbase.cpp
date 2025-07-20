@@ -25,6 +25,7 @@
 #include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
+#include <KIO/Global>
 #include <KSharedConfig>
 
 #include <QDebug>
@@ -45,6 +46,7 @@ using KDevMI::Testing::ActiveStateSessionSpy;
 using KDevMI::Testing::breakpointMiLine;
 using KDevMI::Testing::currentMiLine;
 using KDevMI::Testing::DebugeeslowOutputProcessor;
+using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findSourceFile;
 using KDevMI::Testing::TestLaunchConfiguration;
 
@@ -188,6 +190,13 @@ void DebuggerTestBase::testEnvironmentSet()
     envProfiles.saveSettings(cfg.rootConfig());
 
     verifyInferiorStdout(cfg, {variableA, variableB});
+}
+
+void DebuggerTestBase::testEnvironmentCd()
+{
+    const auto path = KIO::upUrl(findExecutable("path with space/debuggee_spacedebugee"));
+    TestLaunchConfiguration cfg("debuggee_debugeepath", path);
+    verifyInferiorStdout(cfg, {path.toLocalFile()});
 }
 
 void DebuggerTestBase::testUnsupportedUrlExpressionBreakpoints()
