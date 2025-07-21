@@ -64,29 +64,12 @@ void GdbTest::finishInit()
     vc->watches()->clear();
 }
 
-class TestFrameStackModel : public GdbFrameStackModel
-{
-    Q_OBJECT
-public:
-    explicit TestFrameStackModel(DebugSession* session)
-        : GdbFrameStackModel(session)
-    {
-    }
-
-    int fetchFramesCalled = 0;
-
-protected:
-    void fetchFrames(int threadNumber, int from, int to) override
-    {
-        fetchFramesCalled++;
-        GdbFrameStackModel::fetchFrames(threadNumber, from, to);
-    }
-};
-
 class TestDebugSession : public DebugSession
 {
     Q_OBJECT
 public:
+    using TestFrameStackModel = KDevMI::Testing::TestFrameStackModel<DebugSession, GdbFrameStackModel>;
+
     TestDebugSession() : DebugSession()
     {
         setSourceInitFile(false);
