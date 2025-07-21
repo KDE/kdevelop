@@ -44,6 +44,14 @@ using KDevMI::Testing::validateColumnCountsThreadCountAndStackFrameNumbers;
 
 namespace {
 
+// NOTE: unlike kdevgdb, kdevlldb reports several frames under the main() frame. Possible names
+//       of these frames in different versions of GNU/Linux and FreeBSD systems are the following:
+//       * (optional) "__libc_start_call_main" or something like "___lldb_unnamed_symbol3264";
+//       * "__libc_start_main_impl" or "__libc_start_main" or "__libc_start1";
+//       * "_start".
+//       Therefore, when some of these frames are fetched, test_lldb verifies
+//       the row count of the frame stack model via QCOMPARE_GE().
+
 class TestFrameStackModel : public LldbFrameStackModel
 {
     Q_OBJECT
@@ -68,22 +76,6 @@ public:
     int fetchFramesCalled;
     int fetchThreadsCalled;
 };
-
-/// Check success with RETURN_IF_TEST_FAILED().
-void verifyStackFrameCountNotLessThan(const QModelIndex& threadIndex, int expectedStackFrameCount)
-{
-    const auto* const stackModel = threadIndex.model();
-    QVERIFY(stackModel);
-
-    const auto stackFrameCount = stackModel->rowCount(threadIndex);
-    qDebug() << "actual stack frame count:" << stackFrameCount;
-    qDebug() << "minimum expected count:  " << expectedStackFrameCount;
-    QVERIFY(stackFrameCount >= expectedStackFrameCount);
-
-    // the optional third last frame name is something like "___lldb_unnamed_symbol3264";
-    // the penultimate frame name is "__libc_start_main" or "__libc_start1";
-    // the last frame name is "_start".
-}
 
 class TestDebugSession : public DebugSession
 {
@@ -817,8 +809,7 @@ void LldbTest::testStack()
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at foo()");
-    verifyStackFrameCountNotLessThan(tIdx, 2);
-    RETURN_IF_TEST_FAILED();
+    QCOMPARE_GE(stackModel->rowCount(tIdx), 2);
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "foo()");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeLocationAt(23));
     COMPARE_DATA(stackModel->index(1, 1, tIdx), "main");
@@ -829,8 +820,7 @@ void LldbTest::testStack()
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at main");
-    verifyStackFrameCountNotLessThan(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
+    QCOMPARE_GE(stackModel->rowCount(tIdx), 1);
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeLocationAt(30));
 
@@ -889,8 +879,7 @@ void LldbTest::testStackFetchMore()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
-    verifyStackFrameCountNotLessThan(tIdx, 299);
-    RETURN_IF_TEST_FAILED();
+    QCOMPARE_GE(stackModel->rowCount(tIdx), 299);
     COMPARE_DATA(stackModel->index(298, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(298, 2, tIdx), fileName+":30");
 
@@ -903,8 +892,7 @@ void LldbTest::testStackFetchMore()
 
         validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
         RETURN_IF_TEST_FAILED();
-        verifyStackFrameCountNotLessThan(tIdx, 299);
-        RETURN_IF_TEST_FAILED();
+        QCOMPARE_GE(stackModel->rowCount(tIdx), 299);
     }
 
     session->run();
@@ -928,8 +916,7 @@ void LldbTest::testStackSwitchThread()
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
     RETURN_IF_TEST_FAILED();
     COMPARE_DATA(tIdx, "#1 at main");
-    verifyStackFrameCountNotLessThan(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
+    QCOMPARE_GE(stackModel->rowCount(tIdx), 1);
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
     COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":44"); // QThread::msleep(600);
 
@@ -944,8 +931,7 @@ void LldbTest::testStackSwitchThread()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
     RETURN_IF_TEST_FAILED();
-    verifyStackFrameCountNotLessThan(tIdx, 4);
-    RETURN_IF_TEST_FAILED();
+    QCOMPARE_GE(stackModel->rowCount(tIdx), 4);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
