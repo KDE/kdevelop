@@ -726,7 +726,7 @@ void LldbTest::testCatchpoint()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeexception"));
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-    TestFrameStackModel* fsModel = session->frameStackModel();
+    const auto* const fsModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("debugeeexception.cpp")), 29);
 
@@ -792,7 +792,7 @@ void LldbTest::testStack()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    const auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 21);
     ActiveStateSessionSpy sessionSpy(session);
@@ -830,7 +830,7 @@ void LldbTest::testStackFetchMore()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile("debugeerecursion.cpp");
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
     ActiveStateSessionSpy sessionSpy(session);
@@ -899,7 +899,7 @@ void LldbTest::testStackSwitchThread()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile("debugeethreads.cpp");
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
     ActiveStateSessionSpy sessionSpy(session);
@@ -1025,7 +1025,7 @@ void LldbTest::testCoreFile()
     session->examineCoreFile(findExecutable(QStringLiteral("debuggee_crash")),
                              QUrl::fromLocalFile(f.canonicalFilePath()));
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    const auto* const stackModel = session->frameStackModel();
 
     WAIT_FOR_STATE(session, DebugSession::StoppedState);
 
@@ -1194,7 +1194,7 @@ void LldbTest::testVariablesSwitchFrame()
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
     ActiveStateSessionSpy sessionSpy(session);
@@ -1228,7 +1228,7 @@ void LldbTest::testVariablesQuicklySwitchFrame()
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
     ActiveStateSessionSpy sessionSpy(session);
@@ -1271,7 +1271,7 @@ void LldbTest::testSwitchFrameLldbConsole()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
     ActiveStateSessionSpy sessionSpy(session);
