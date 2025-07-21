@@ -207,6 +207,25 @@ private:
     KSharedConfigPtr c;
 };
 
+template<class DebugSession, class BaseFrameStackModel>
+class TestFrameStackModel : public BaseFrameStackModel
+{
+public:
+    explicit TestFrameStackModel(DebugSession* session)
+        : BaseFrameStackModel(session)
+    {
+    }
+
+    int fetchFramesCalled = 0;
+
+protected:
+    void fetchFrames(int threadNumber, int from, int to) override
+    {
+        fetchFramesCalled++;
+        BaseFrameStackModel::fetchFrames(threadNumber, from, to);
+    }
+};
+
 /**
  * This class processes and verifies output of @c debugeeslow inferior.
  */

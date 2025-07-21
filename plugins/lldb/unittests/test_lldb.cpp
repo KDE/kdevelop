@@ -52,29 +52,12 @@ namespace {
 //       Therefore, when some of these frames are fetched, test_lldb verifies
 //       the row count of the frame stack model via QCOMPARE_GE().
 
-class TestFrameStackModel : public LldbFrameStackModel
-{
-    Q_OBJECT
-public:
-    explicit TestFrameStackModel(DebugSession* session)
-        : LldbFrameStackModel(session)
-    {
-    }
-
-    int fetchFramesCalled = 0;
-
-protected:
-    void fetchFrames(int threadNumber, int from, int to) override
-    {
-        fetchFramesCalled++;
-        LldbFrameStackModel::fetchFrames(threadNumber, from, to);
-    }
-};
-
 class TestDebugSession : public DebugSession
 {
     Q_OBJECT
 public:
+    using TestFrameStackModel = KDevMI::Testing::TestFrameStackModel<DebugSession, LldbFrameStackModel>;
+
     TestDebugSession() : DebugSession()
     {
         // explicit set formatter path to force use in-tree formatters, not the one installed in system.
