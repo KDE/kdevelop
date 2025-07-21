@@ -55,26 +55,20 @@ namespace {
 class TestFrameStackModel : public LldbFrameStackModel
 {
     Q_OBJECT
-
 public:
-
     explicit TestFrameStackModel(DebugSession* session)
-        : LldbFrameStackModel(session), fetchFramesCalled(0), fetchThreadsCalled(0) {}
+        : LldbFrameStackModel(session)
+    {
+    }
 
+    int fetchFramesCalled = 0;
+
+protected:
     void fetchFrames(int threadNumber, int from, int to) override
     {
         fetchFramesCalled++;
         LldbFrameStackModel::fetchFrames(threadNumber, from, to);
     }
-
-    void fetchThreads() override
-    {
-        fetchThreadsCalled++;
-        LldbFrameStackModel::fetchThreads();
-    }
-
-    int fetchFramesCalled;
-    int fetchThreadsCalled;
 };
 
 class TestDebugSession : public DebugSession

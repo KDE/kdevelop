@@ -67,24 +67,19 @@ void GdbTest::finishInit()
 class TestFrameStackModel : public GdbFrameStackModel
 {
     Q_OBJECT
-
 public:
-
     explicit TestFrameStackModel(DebugSession* session)
-        : GdbFrameStackModel(session), fetchFramesCalled(0), fetchThreadsCalled(0) {}
+        : GdbFrameStackModel(session)
+    {
+    }
 
-    int fetchFramesCalled;
-    int fetchThreadsCalled;
+    int fetchFramesCalled = 0;
+
+protected:
     void fetchFrames(int threadNumber, int from, int to) override
     {
         fetchFramesCalled++;
         GdbFrameStackModel::fetchFrames(threadNumber, from, to);
-    }
-
-    void fetchThreads() override
-    {
-        fetchThreadsCalled++;
-        GdbFrameStackModel::fetchThreads();
     }
 };
 
