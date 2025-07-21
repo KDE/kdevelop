@@ -577,7 +577,7 @@ void GdbTest::testStack()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    const auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 21);
     START_DEBUGGING_E(session, cfg);
@@ -622,7 +622,7 @@ void GdbTest::testStackFetchMore()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile(QStringLiteral("debugeerecursion.cpp"));
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
     START_DEBUGGING_E(session, cfg);
@@ -686,7 +686,7 @@ void GdbTest::testStackSwitchThread()
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
     START_DEBUGGING_E(session, cfg);
@@ -810,7 +810,7 @@ void GdbTest::testCoreFile()
     session->examineCoreFile(findExecutable(QStringLiteral("debuggee_crash")),
                              QUrl::fromLocalFile(f.canonicalFilePath()));
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    const auto* const stackModel = session->frameStackModel();
 
     WAIT_FOR_STATE(session, DebugSession::StoppedState);
 
@@ -989,7 +989,7 @@ void GdbTest::testVariablesSwitchFrame()
     TestLaunchConfiguration cfg;
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
     START_DEBUGGING_E(session, cfg);
@@ -1023,7 +1023,7 @@ void GdbTest::testVariablesQuicklySwitchFrame()
     TestLaunchConfiguration cfg;
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
     START_DEBUGGING_E(session, cfg);
@@ -1092,7 +1092,7 @@ void GdbTest::testSwitchFrameGdbConsole()
 
     TestLaunchConfiguration cfg;
 
-    TestFrameStackModel *stackModel = session->frameStackModel();
+    auto* const stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeUrl(), 24);
     START_DEBUGGING_E(session, cfg);
@@ -1433,7 +1433,7 @@ void GdbTest::testCatchpoint()
     START_DEBUGGING_E(session, cfg);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     WAIT_FOR_A_WHILE(session, 1000);
-    TestFrameStackModel* fsModel = session->frameStackModel();
+    const auto* const fsModel = session->frameStackModel();
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->line(), 29);
 
