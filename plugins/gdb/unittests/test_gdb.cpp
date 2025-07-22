@@ -604,6 +604,7 @@ void GdbTest::testStackFetchMore()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile(QStringLiteral("debugeerecursion.cpp"));
+    constexpr auto recursionDepth = 295;
 
     auto* const stackModel = session->frameStackModel();
 
@@ -647,9 +648,9 @@ void GdbTest::testStackFetchMore()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
-    QCOMPARE(stackModel->rowCount(tIdx), 299);
-    COMPARE_DATA(stackModel->index(298, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(298, 2, tIdx), fileName+":30");
+    QCOMPARE(stackModel->rowCount(tIdx), recursionDepth + 1);
+    COMPARE_DATA(stackModel->index(recursionDepth, 1, tIdx), "main");
+    COMPARE_DATA(stackModel->index(recursionDepth, 2, tIdx), fileName + ":30");
 
     stackModel->fetchMoreFrames(); //nothing to fetch, we are at the end
     WAIT_FOR_A_WHILE(session, 200);
@@ -657,7 +658,7 @@ void GdbTest::testStackFetchMore()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
-    QCOMPARE(stackModel->rowCount(tIdx), 299);
+    QCOMPARE(stackModel->rowCount(tIdx), recursionDepth + 1);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);

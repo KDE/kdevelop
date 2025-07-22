@@ -812,6 +812,7 @@ void LldbTest::testStackFetchMore()
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile("debugeerecursion.cpp");
+    constexpr auto recursionDepth = 295;
 
     auto* const stackModel = session->frameStackModel();
 
@@ -856,21 +857,17 @@ void LldbTest::testStackFetchMore()
 
     validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
     RETURN_IF_TEST_FAILED();
-    QCOMPARE_GE(stackModel->rowCount(tIdx), 299);
-    COMPARE_DATA(stackModel->index(298, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(298, 2, tIdx), fileName+":30");
+    QCOMPARE_GE(stackModel->rowCount(tIdx), recursionDepth + 1);
+    COMPARE_DATA(stackModel->index(recursionDepth, 1, tIdx), "main");
+    COMPARE_DATA(stackModel->index(recursionDepth, 2, tIdx), fileName + ":30");
 
-    for (int counter = 0; counter < 2; ++counter) {
-        stackModel->fetchMoreFrames(); // possibly nothing more to fetch if we are at the end
-        WAIT_FOR_A_WHILE(session, 200);
-        qDebug() << "fetchFrames() was called" << stackModel->fetchFramesCalled << "times.";
-        QVERIFY(stackModel->fetchFramesCalled >= 4);
-        QVERIFY(stackModel->fetchFramesCalled <= 5);
+    stackModel->fetchMoreFrames(); // nothing to fetch, we are at the end
+    WAIT_FOR_A_WHILE(session, 200);
+    QCOMPARE(stackModel->fetchFramesCalled, 4);
 
-        validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-        RETURN_IF_TEST_FAILED();
-        QCOMPARE_GE(stackModel->rowCount(tIdx), 299);
-    }
+    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
+    RETURN_IF_TEST_FAILED();
+    QCOMPARE_GE(stackModel->rowCount(tIdx), recursionDepth + 1);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
