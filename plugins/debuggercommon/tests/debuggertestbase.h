@@ -109,6 +109,10 @@ private Q_SLOTS:
     void testChangeBreakpointWhileRunning();
     void testBreakpointInSharedLibrary();
 
+    void testStack();
+    void testStackFetchMore();
+    void testStackSwitchThread();
+
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();
@@ -131,6 +135,8 @@ private:
     virtual void finishInit()
     {
     }
+
+    [[nodiscard]] QString adjustedStackModelFrameName(QString frameName) const;
 
     KDevelop::ICore* m_core;
     IExecutePlugin* m_executePlugin;

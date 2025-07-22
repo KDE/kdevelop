@@ -18,6 +18,7 @@
 #include <debugger/variable/variablecollection.h>
 #include <execute/iexecuteplugin.h>
 #include <interfaces/idebugcontroller.h>
+#include <interfaces/iframestackmodel.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -63,7 +64,34 @@ public:
     using EnvironmentProfileList::saveSettings;
     using EnvironmentProfileList::variables;
 };
+
+[[nodiscard]] int fetchFramesCallCount(const IFrameStackModel* model)
+{
+    QVERIFY_RETURN(model, -1);
+    const auto* const testModel = dynamic_cast<const Testing::ITestFrameStackModel*>(model);
+    QVERIFY_RETURN(testModel, -1);
+    return testModel->fetchFramesCallCount();
+}
+
 } // unnamed namespace
+
+/**
+ * Unlike kdevgdb, kdevlldb reports several frames under the main() frame. Possible names of the frames at
+ * the bottom of the call stack in different versions of GNU/Linux and FreeBSD systems are the following:
+ * - (expected and verified) "main";
+ * - (optional) "__libc_start_call_main" or something like "___lldb_unnamed_symbol3264";
+ * - "__libc_start_main_impl" or "__libc_start_main" or "__libc_start1";
+ * - "_start".
+ * Therefore, when some (usually all) of the frames under "main" are fetched,
+ * test_lldb verifies the row count of the frame stack model via QCOMPARE_GE().
+ */
+#define COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, expectedFrameCount)                      \
+    do {                                                                                                               \
+        if (isLldb())                                                                                                  \
+            QCOMPARE_GE(stackModel->rowCount(threadIndex), expectedFrameCount);                                        \
+        else                                                                                                           \
+            QCOMPARE_EQ(stackModel->rowCount(threadIndex), expectedFrameCount);                                        \
+    } while (false)
 
 ICore* DebuggerTestBase::core() const
 {
@@ -522,6 +550,132 @@ void DebuggerTestBase::testBreakpointInSharedLibrary()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void DebuggerTestBase::testStack()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    const auto* const stackModel = session->frameStackModel();
+
+    addDebugeeBreakpoint(22);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    const auto threadIndex = stackModel->index(0, 0);
+
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    COMPARE_DATA(threadIndex, adjustedStackModelFrameName("#1 at foo"));
+    COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, 2);
+    COMPARE_DATA(stackModel->index(0, 1, threadIndex), adjustedStackModelFrameName("foo"));
+    COMPARE_DATA(stackModel->index(0, 2, threadIndex), debugeeLocationAt(23));
+    COMPARE_DATA(stackModel->index(1, 1, threadIndex), "main");
+    COMPARE_DATA(stackModel->index(1, 2, threadIndex), debugeeLocationAt(29));
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    COMPARE_DATA(threadIndex, "#1 at main");
+    COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, 1);
+    COMPARE_DATA(stackModel->index(0, 1, threadIndex), "main");
+    COMPARE_DATA(stackModel->index(0, 2, threadIndex), debugeeLocationAt(30));
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testStackFetchMore()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("debuggee_debugeerecursion");
+    const auto fileName = findSourceFile("debugeerecursion.cpp");
+    constexpr auto recursionDepth = 295;
+
+    auto* const stackModel = session->frameStackModel();
+
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    const auto threadIndex = stackModel->index(0, 0);
+
+    QCOMPARE(fetchFramesCallCount(stackModel), 1);
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    COMPARE_DATA(threadIndex, adjustedStackModelFrameName("#1 at foo"));
+    QCOMPARE(stackModel->rowCount(threadIndex), 21);
+    COMPARE_DATA(stackModel->index(0, 1, threadIndex), adjustedStackModelFrameName("foo"));
+    COMPARE_DATA(stackModel->index(0, 2, threadIndex), fileName + ":26");
+    COMPARE_DATA(stackModel->index(1, 1, threadIndex), adjustedStackModelFrameName("foo"));
+    COMPARE_DATA(stackModel->index(1, 2, threadIndex), fileName + ":24");
+    COMPARE_DATA(stackModel->index(2, 1, threadIndex), adjustedStackModelFrameName("foo"));
+    COMPARE_DATA(stackModel->index(2, 2, threadIndex), fileName + ":24");
+
+    stackModel->fetchMoreFrames();
+    WAIT_FOR_A_WHILE(session, 200);
+    QCOMPARE(fetchFramesCallCount(stackModel), 2);
+
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    QCOMPARE(stackModel->rowCount(threadIndex), 41);
+
+    stackModel->fetchMoreFrames();
+    WAIT_FOR_A_WHILE(session, 200);
+    QCOMPARE(fetchFramesCallCount(stackModel), 3);
+
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    QCOMPARE(stackModel->rowCount(threadIndex), 121);
+
+    stackModel->fetchMoreFrames();
+    WAIT_FOR_A_WHILE(session, 200);
+    QCOMPARE(fetchFramesCallCount(stackModel), 4);
+
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, recursionDepth + 1);
+    COMPARE_DATA(stackModel->index(recursionDepth, 1, threadIndex), "main");
+    COMPARE_DATA(stackModel->index(recursionDepth, 2, threadIndex), fileName + ":30");
+
+    stackModel->fetchMoreFrames(); // nothing to fetch, we are at the end
+    WAIT_FOR_A_WHILE(session, 200);
+    QCOMPARE(fetchFramesCallCount(stackModel), 4);
+
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, recursionDepth + 1);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testStackSwitchThread()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("debuggee_debugeethreads");
+    const auto fileName = findSourceFile("debugeethreads.cpp");
+
+    auto* const stackModel = session->frameStackModel();
+
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    auto threadIndex = stackModel->index(0, 0);
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
+    COMPARE_DATA(threadIndex, "#1 at main");
+    COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, 1);
+    COMPARE_DATA(stackModel->index(0, 1, threadIndex), "main");
+    COMPARE_DATA(stackModel->index(0, 2, threadIndex), fileName + ":44"); // QThread::msleep(600);
+
+    threadIndex = stackModel->index(1, 0);
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
+    QVERIFY(stackModel->data(threadIndex).toString().startsWith("#2 at "));
+
+    stackModel->setCurrentThread(2);
+    QTRY_COMPARE_GE(stackModel->rowCount(threadIndex), 4);
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testVariablesLocalsStruct()
 {
     auto* const session = createTestDebugSession();
@@ -651,6 +805,14 @@ void DebuggerTestBase::testDebugInExternalTerminal()
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+QString DebuggerTestBase::adjustedStackModelFrameName(QString frameName) const
+{
+    if (isLldb()) {
+        frameName += "()";
+    }
+    return frameName;
 }
 
 #include "moc_debuggertestbase.cpp"
