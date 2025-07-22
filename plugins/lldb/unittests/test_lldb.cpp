@@ -40,17 +40,8 @@ using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findFile;
 using KDevMI::Testing::findSourceFile;
 using KDevMI::Testing::TestLaunchConfiguration;
-using KDevMI::Testing::validateColumnCountsThreadCountAndStackFrameNumbers;
 
 namespace {
-
-// NOTE: unlike kdevgdb, kdevlldb reports several frames under the main() frame. Possible names
-//       of these frames in different versions of GNU/Linux and FreeBSD systems are the following:
-//       * (optional) "__libc_start_call_main" or something like "___lldb_unnamed_symbol3264";
-//       * "__libc_start_main_impl" or "__libc_start_main" or "__libc_start1";
-//       * "_start".
-//       Therefore, when some of these frames are fetched, test_lldb verifies
-//       the row count of the frame stack model via QCOMPARE_GE().
 
 class TestDebugSession : public DebugSession
 {
@@ -770,147 +761,6 @@ void LldbTest::testShowStepInSource()
     }
 }
 
-void LldbTest::testStack()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    const auto* const stackModel = session->frameStackModel();
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 21);
-    ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    QModelIndex tIdx = stackModel->index(0,0);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    COMPARE_DATA(tIdx, "#1 at foo()");
-    QCOMPARE_GE(stackModel->rowCount(tIdx), 2);
-    COMPARE_DATA(stackModel->index(0, 1, tIdx), "foo()");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeLocationAt(23));
-    COMPARE_DATA(stackModel->index(1, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(1, 2, tIdx), debugeeLocationAt(29));
-
-    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    COMPARE_DATA(tIdx, "#1 at main");
-    QCOMPARE_GE(stackModel->rowCount(tIdx), 1);
-    COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeLocationAt(30));
-
-    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void LldbTest::testStackFetchMore()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
-    QString fileName = findSourceFile("debugeerecursion.cpp");
-    constexpr auto recursionDepth = 295;
-
-    auto* const stackModel = session->frameStackModel();
-
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 25);
-    ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    QCOMPARE(session->frameStackModel()->fetchFramesCalled, 1);
-
-    QModelIndex tIdx = stackModel->index(0,0);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    COMPARE_DATA(tIdx, "#1 at foo()");
-    QCOMPARE(stackModel->rowCount(tIdx), 21);
-    COMPARE_DATA(stackModel->index(0, 1, tIdx), "foo()");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":26");
-    COMPARE_DATA(stackModel->index(1, 1, tIdx), "foo()");
-    COMPARE_DATA(stackModel->index(1, 2, tIdx), fileName+":24");
-    COMPARE_DATA(stackModel->index(2, 1, tIdx), "foo()");
-    COMPARE_DATA(stackModel->index(2, 2, tIdx), fileName+":24");
-
-    stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
-    QCOMPARE(stackModel->fetchFramesCalled, 2);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    QCOMPARE(stackModel->rowCount(tIdx), 41);
-
-    stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
-    QCOMPARE(stackModel->fetchFramesCalled, 3);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    QCOMPARE(stackModel->rowCount(tIdx), 121);
-
-    stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
-    QCOMPARE(stackModel->fetchFramesCalled, 4);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    QCOMPARE_GE(stackModel->rowCount(tIdx), recursionDepth + 1);
-    COMPARE_DATA(stackModel->index(recursionDepth, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(recursionDepth, 2, tIdx), fileName + ":30");
-
-    stackModel->fetchMoreFrames(); // nothing to fetch, we are at the end
-    WAIT_FOR_A_WHILE(session, 200);
-    QCOMPARE(stackModel->fetchFramesCalled, 4);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
-    QCOMPARE_GE(stackModel->rowCount(tIdx), recursionDepth + 1);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void LldbTest::testStackSwitchThread()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
-    QString fileName = findSourceFile("debugeethreads.cpp");
-
-    auto* const stackModel = session->frameStackModel();
-
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
-    ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    QModelIndex tIdx = stackModel->index(0,0);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
-    RETURN_IF_TEST_FAILED();
-    COMPARE_DATA(tIdx, "#1 at main");
-    QCOMPARE_GE(stackModel->rowCount(tIdx), 1);
-    COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), fileName+":44"); // QThread::msleep(600);
-
-    tIdx = stackModel->index(1,0);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
-    RETURN_IF_TEST_FAILED();
-    QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at "));
-
-    stackModel->setCurrentThread(2);
-    WAIT_FOR_A_WHILE(session, 200);
-
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 4);
-    RETURN_IF_TEST_FAILED();
-    QCOMPARE_GE(stackModel->rowCount(tIdx), 4);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
 void LldbTest::testAttach()
 {
     SKIP_IF_ATTACH_FORBIDDEN();
@@ -1010,8 +860,7 @@ void LldbTest::testCoreFile()
     WAIT_FOR_STATE(session, DebugSession::StoppedState);
 
     QModelIndex tIdx = stackModel->index(0,0);
-    validateColumnCountsThreadCountAndStackFrameNumbers(tIdx, 1);
-    RETURN_IF_TEST_FAILED();
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(tIdx, 1);
     COMPARE_DATA(tIdx, "#1 at foo()");
 
     session->stopDebugger();
