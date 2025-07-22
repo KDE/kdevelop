@@ -86,6 +86,12 @@ class QSignalSpy;
 #define COMPARE_DATA(index, expected) \
     do { if (!KDevMI::Testing::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
 
+#define VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, expectedThreadCount)                  \
+    do {                                                                                                               \
+        KDevMI::Testing::validateColumnCountsThreadCountAndStackFrameNumbers(threadIndex, expectedThreadCount);        \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
 #define SKIP_IF_ATTACH_FORBIDDEN() \
     do { \
         if (KDevMI::Testing::isAttachForbidden(__FILE__, __LINE__)) \
@@ -110,9 +116,13 @@ int currentMiLine(const KDevelop::IDebugSession* session);
 
 bool compareData(const QModelIndex& index, const QString& expected, const char* file, int line, bool useRE = false);
 
-/// Verify that a given thread index's frame stack model has 3 columns, an expected number of threads
-/// and returns correct stack frame numbers (at column=0) for the thread index (as the parent index).
-/// Check success with RETURN_IF_TEST_FAILED().
+/**
+ * Verify that a given thread index's frame stack model has 3 columns, an expected number of threads
+ * and returns correct stack frame numbers (at column=0) for the thread index (as the parent index).
+ *
+ * Call RETURN_IF_TEST_FAILED() after this function or use the wrapper macro
+ * VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS() instead.
+ */
 void validateColumnCountsThreadCountAndStackFrameNumbers(const QModelIndex& threadIndex, int expectedThreadCount);
 
 /**
@@ -207,8 +217,19 @@ private:
     KSharedConfigPtr c;
 };
 
+class ITestFrameStackModel
+{
+public:
+    [[nodiscard]] virtual int fetchFramesCallCount() const = 0;
+
+protected:
+    ITestFrameStackModel() = default;
+    Q_DISABLE_COPY_MOVE(ITestFrameStackModel)
+    ~ITestFrameStackModel() = default;
+};
+
 template<class DebugSession, class BaseFrameStackModel>
-class TestFrameStackModel : public BaseFrameStackModel
+class TestFrameStackModel : public BaseFrameStackModel, public ITestFrameStackModel
 {
 public:
     explicit TestFrameStackModel(DebugSession* session)
@@ -216,14 +237,20 @@ public:
     {
     }
 
-    int fetchFramesCalled = 0;
+    [[nodiscard]] int fetchFramesCallCount() const override
+    {
+        return m_fetchFramesCallCount;
+    }
 
 protected:
     void fetchFrames(int threadNumber, int from, int to) override
     {
-        fetchFramesCalled++;
+        ++m_fetchFramesCallCount;
         BaseFrameStackModel::fetchFrames(threadNumber, from, to);
     }
+
+private:
+    int m_fetchFramesCallCount = 0;
 };
 
 /**

@@ -51,10 +51,6 @@ private Q_SLOTS:
 
     void testShowStepInSource();
 
-    void testStack();
-    void testStackFetchMore();
-    void testStackSwitchThread();
-
     void testAttach();
     void testRemoteDebugging();
 
