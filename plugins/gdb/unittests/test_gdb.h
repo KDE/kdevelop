@@ -37,9 +37,6 @@ private Q_SLOTS:
     void testInsertBreakpointFunctionName();
     void testManualBreakpoint();
     void testShowStepInSource();
-    void testStack();
-    void testStackFetchMore();
-    void testStackSwitchThread();
     void testAttach();
     void testManualAttach();
     void testCoreFile();
