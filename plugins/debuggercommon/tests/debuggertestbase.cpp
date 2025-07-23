@@ -683,11 +683,13 @@ void DebuggerTestBase::testStackSwitchThread()
     threadIndex = stackModel->index(1, 0);
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
     QVERIFY(stackModel->data(threadIndex).toString().startsWith("#2 at "));
+    QCOMPARE(stackModel->rowCount(threadIndex), 0); // frames are not fetched for non-current threads
 
     stackModel->setCurrentThread(2);
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
 
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
+    QVERIFY(stackModel->data(threadIndex).toString().startsWith("#2 at "));
     QCOMPARE_GE(stackModel->rowCount(threadIndex), 4);
 
     session->run();
