@@ -665,6 +665,7 @@ void DebuggerTestBase::testStackSwitchThread()
     COMPARE_DATA(stackModel->index(0, 2, threadIndex), fileName + ":44"); // QThread::msleep(600);
 
     threadIndex = stackModel->index(1, 0);
+    QCOMPARE(stackModel->rowCount(threadIndex), 0); // frames are not fetched for non-current threads
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
     QVERIFY(stackModel->data(threadIndex).toString().startsWith("#2 at "));
 
