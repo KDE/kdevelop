@@ -628,21 +628,21 @@ void DebuggerTestBase::testStackFetchMore()
     COMPARE_DATA(stackModel->index(2, 2, threadIndex), fileName + ":24");
 
     stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(fetchFramesCallCount(stackModel), 2);
 
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
     QCOMPARE(stackModel->rowCount(threadIndex), 41);
 
     stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(fetchFramesCallCount(stackModel), 3);
 
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
     QCOMPARE(stackModel->rowCount(threadIndex), 121);
 
     stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(fetchFramesCallCount(stackModel), 4);
 
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
@@ -651,7 +651,7 @@ void DebuggerTestBase::testStackFetchMore()
     COMPARE_DATA(stackModel->index(recursionDepth, 2, threadIndex), fileName + ":30");
 
     stackModel->fetchMoreFrames(); // nothing to fetch, we are at the end
-    WAIT_FOR_A_WHILE(session, 200);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(fetchFramesCallCount(stackModel), 4);
 
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
