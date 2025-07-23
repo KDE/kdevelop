@@ -83,7 +83,7 @@ public:
  * - "__libc_start_main_impl" or "__libc_start_main" or "__libc_start1";
  * - "_start".
  * Therefore, when some (usually all) of the frames under "main" are fetched,
- * test_lldb verifies the row count of the frame stack model via QCOMPARE_GE().
+ * test_lldb verifies the row count of the frame stack model via QCOMPARE_GE() or QTRY_COMPARE_GE().
  */
 #define COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, expectedFrameCount)                      \
     do {                                                                                                               \
@@ -91,6 +91,17 @@ public:
             QCOMPARE_GE(stackModel->rowCount(threadIndex), expectedFrameCount);                                        \
         else                                                                                                           \
             QCOMPARE_EQ(stackModel->rowCount(threadIndex), expectedFrameCount);                                        \
+    } while (false)
+
+/**
+ * @sa COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT()
+ */
+#define TRY_COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, expectedFrameCount)                  \
+    do {                                                                                                               \
+        if (isLldb())                                                                                                  \
+            QTRY_COMPARE_GE(stackModel->rowCount(threadIndex), expectedFrameCount);                                    \
+        else                                                                                                           \
+            QTRY_COMPARE_EQ(stackModel->rowCount(threadIndex), expectedFrameCount);                                    \
     } while (false)
 
 ICore* DebuggerTestBase::core() const
@@ -612,25 +623,19 @@ void DebuggerTestBase::testStackFetchMore()
     COMPARE_DATA(stackModel->index(2, 2, threadIndex), fileName + ":24");
 
     stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
+    QTRY_COMPARE(stackModel->rowCount(threadIndex), 41);
     QCOMPARE(fetchFramesCallCount(stackModel), 2);
-
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
-    QCOMPARE(stackModel->rowCount(threadIndex), 41);
 
     stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
+    QTRY_COMPARE(stackModel->rowCount(threadIndex), 121);
     QCOMPARE(fetchFramesCallCount(stackModel), 3);
-
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
-    QCOMPARE(stackModel->rowCount(threadIndex), 121);
 
     stackModel->fetchMoreFrames();
-    WAIT_FOR_A_WHILE(session, 200);
+    TRY_COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, recursionDepth + 1);
     QCOMPARE(fetchFramesCallCount(stackModel), 4);
-
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
-    COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, recursionDepth + 1);
     COMPARE_DATA(stackModel->index(recursionDepth, 1, threadIndex), "main");
     COMPARE_DATA(stackModel->index(recursionDepth, 2, threadIndex), fileName + ":30");
 
