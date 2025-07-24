@@ -327,10 +327,9 @@ void DebuggerTestBase::testDisableBreakpoint()
 
     // add another disabled breakpoint
     breakpoint = addDebugeeBreakpoint(fourthBreakLine);
-    WAIT_FOR_A_WHILE(session, 300);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     breakpoint->setData(Breakpoint::EnableColumn, Qt::Unchecked);
 
-    WAIT_FOR_A_WHILE(session, 300);
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
