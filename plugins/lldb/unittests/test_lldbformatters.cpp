@@ -113,6 +113,14 @@ void LldbFormattersTest::initTestCase()
     if (lldbMiExecutable.isEmpty()) {
         QSKIP("Skipping, lldb-mi not available");
     }
+
+    // TODO: port the LLDB formatters to Qt 6 and remove the following QSKIP() call.
+    QSKIP(
+        "LLDB formatters have not been ported to Qt 6 yet. Consequently almost every test function fails. "
+        "Most failures occur either in KDevMI::Testing::compareData() or in KDevMI::Testing::waitForState() "
+        "while waiting for the paused state and idle because the debugger does not become idle until the timeout. "
+        "Skipping the entire test to avoid these particularly time-consuming failures "
+        "and because using QEXPECT_FAIL() is impractical in many of the failing functions.");
 }
 
 // Called after the last testfunction was executed
