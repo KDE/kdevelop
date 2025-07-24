@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-07-24 00:41+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -5403,13 +5403,13 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "Κλείσιμο όλων"
 
-#: sublime/idealbuttonbarwidget.cpp:45
+#: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Εναλλαγή '%1' εργαλειοπροβολής"
 
-#: sublime/idealbuttonbarwidget.cpp:304
+#: sublime/idealbuttonbarwidget.cpp:352
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-07-24 00:41+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -5209,13 +5209,13 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "सर्वं बन्दं कुर्वन्तु"
 
-#: sublime/idealbuttonbarwidget.cpp:45
+#: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "'%1' साधनदृश्यं टॉग्ल् कुर्वन्तु"
 
-#: sublime/idealbuttonbarwidget.cpp:304
+#: sublime/idealbuttonbarwidget.cpp:352
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."

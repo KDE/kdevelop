@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-07-24 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 10:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -5321,13 +5321,13 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "Закрити всі"
 
-#: sublime/idealbuttonbarwidget.cpp:45
+#: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Увімкнути або вимкнути показ панелі інструментів «%1»"
 
-#: sublime/idealbuttonbarwidget.cpp:304
+#: sublime/idealbuttonbarwidget.cpp:352
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
