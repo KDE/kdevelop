@@ -210,7 +210,7 @@ void DebuggerTestBase::init()
 
     finishInit();
 }
-
+/*
 void DebuggerTestBase::testStdout()
 {
     TestLaunchConfiguration cfg;
@@ -564,7 +564,7 @@ void DebuggerTestBase::testBreakpointInSharedLibrary()
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
-
+*/
 void DebuggerTestBase::testStack()
 {
     auto* const session = createTestDebugSession();

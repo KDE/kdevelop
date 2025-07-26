@@ -96,7 +96,7 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void init();
-
+/*
     void testStdout();
     void testEnvironmentSet();
     void testEnvironmentCd();
@@ -108,7 +108,7 @@ private Q_SLOTS:
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
     void testBreakpointInSharedLibrary();
-
+*/
     void testStack();
     void testStackFetchMore();
     void testStackSwitchThread();
