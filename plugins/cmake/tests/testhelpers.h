@@ -113,7 +113,7 @@ inline KDevelop::IProject* loadProject(const QString& name, const QString& relat
 
     KDevelop::ICore::self()->projectController()->openProject(paths.projectFile.toUrl());
 
-    if ( spy.isEmpty() && !spy.wait(30000) ) {
+    if (spy.empty() && !spy.wait(60'000)) {
         qFatal( "Timeout while waiting for opened signal" );
     }
 
