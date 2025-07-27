@@ -578,17 +578,22 @@ void DebuggerTestBase::testStack()
     COMPARE_DATA(threadIndex, "#1 at main");
     COMPARE_ENTIRE_MAIN_THREAD_STACK_FRAME_COUNT(stackModel, threadIndex, 1);
     COMPARE_DATA(stackModel->index(0, 1, threadIndex), "main");
-    if (isLldb()) {
-        COMPARE_DATA(stackModel->index(0, 2, threadIndex), debugeeLocationAt(30));
-    } else {
-        // depending on the compiler and gdb version, we may either end up in one line or the other
+    // As the What's This for KDevelop's Step Out action says, the debugger should
+    // now display the line after the original call to the stepped-out function: 30.
+    if (!isLldb()) {
+        // On a given system, all GDB/MI output records consistently report a certain line number as current
+        // after the step-out. But for some reason since 2020 this MI line number is 29 (wrong) on the openSUSE
+        // Tumbleweed CI servers. The line number remains 30 (correct) on developers' local GNU/Linux systems
+        // and on the FreeBSD CI server. Work around the difference by accepting either line number.
+        // TODO: why does this difference in line numbers persists for many years?
+        //       Is this some openSUSE bug or a CI server configuration issue?
         const auto currentLocation = stackModel->index(0, 2, threadIndex).data().toString();
         if (currentLocation.endsWith(":29")) {
             QCOMPARE(currentLocation, debugeeLocationAt(29));
-        } else {
-            QCOMPARE(currentLocation, debugeeLocationAt(30));
+            QEXPECT_FAIL("", "Wrong line number after stepping out: 29 instead of the expected 30", Continue);
         }
     }
+    COMPARE_DATA(stackModel->index(0, 2, threadIndex), debugeeLocationAt(30));
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
