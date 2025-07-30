@@ -22,7 +22,8 @@ struct PrintPosition
 QDebug operator<<(QDebug debug, const PrintPosition& p)
 {
     const QDebugStateSaver saver(debug);
-    debug.noquote().nospace() << p.url.toString(QUrl::PreferLocalFile) << ':' << p.line << ", addr: " << p.addr;
+    // IDebugSession::currentLine() is zero-based, so add 1 to print the conventional one-based line number.
+    debug.noquote().nospace() << p.url.toString(QUrl::PreferLocalFile) << ':' << p.line + 1 << ", addr: " << p.addr;
     return debug;
 }
 } // unnamed namespace
