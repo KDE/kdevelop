@@ -111,6 +111,8 @@ private:
     int m_lastExecMarkLine = -1;
 
     bool m_uiInitialized = false;
+    // Initialize to false to let setupActions() flip the value and initialize the UI properties of the action.
+    bool m_continueStartsDebug = false;
 };
 
 }

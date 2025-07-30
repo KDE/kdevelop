@@ -473,6 +473,11 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
 
 void DebugController::setContinueStartsDebug(bool startsDebug)
 {
+    if (m_continueStartsDebug == startsDebug) {
+        return; // the action is already up to date, so nothing to do
+    }
+    m_continueStartsDebug = startsDebug;
+
     if (startsDebug) {
         m_continueDebugger->setText(i18nc("@action", "Debug Launch"));
         m_continueDebugger->setIcon(QIcon::fromTheme(QStringLiteral("debug-run")));
@@ -480,6 +485,7 @@ void DebugController::setContinueStartsDebug(bool startsDebug)
         m_continueDebugger->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in "
                                               "currently active launch configuration inside a Debugger."));
     } else {
+        Q_ASSERT(m_currentSession);
         m_continueDebugger->setText(i18nc("@action", "&Continue"));
         m_continueDebugger->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
         m_continueDebugger->setToolTip(i18nc("@info:tooltip", "Continue application execution") );
@@ -533,10 +539,11 @@ void DebugController::interruptDebugger() {
 }
 
 void DebugController::run() {
-    if (m_currentSession) {
-        m_currentSession->run();
-    } else {
+    if (m_continueStartsDebug) {
         Core::self()->runControllerInternal()->debugCurrentLaunch();
+    } else {
+        Q_ASSERT(m_currentSession);
+        m_currentSession->run();
     }
 }
 
