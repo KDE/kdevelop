@@ -33,7 +33,7 @@
     <State name="ended">
          <enable>
              <Action name="debug_continue"/>
-+        </enable>
+         </enable>
         <disable>
             <Action name="debug_pause"/>
             <Action name="debug_runtocursor"/>
