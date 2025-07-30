@@ -105,6 +105,11 @@ public:
      */
     void showConfigurationDialog() const override;
 
+    /**
+     * Execute the default launch (if any) in the debug mode.
+     */
+    void debugCurrentLaunch();
+
     ContextMenuExtension contextMenuExtension(KDevelop::Context* ctx, QWidget* parent);
 
 public Q_SLOTS:
@@ -119,7 +124,6 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void slotExecute();
-    void slotDebug();
     void slotProfile();
     void slotProjectOpened(KDevelop::IProject* project);
     void slotProjectClosing(KDevelop::IProject* project);

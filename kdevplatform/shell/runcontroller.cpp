@@ -476,7 +476,7 @@ void RunController::setupActions()
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
     ac->addAction(QStringLiteral("run_debug"), d->dbgAction);
-    connect(d->dbgAction, &QAction::triggered, this, &RunController::slotDebug);
+    connect(d->dbgAction, &QAction::triggered, this, &RunController::debugCurrentLaunch);
     Core::self()->uiControllerInternal()->area(0, QStringLiteral("code"))->addAction(d->dbgAction);
 
 //     TODO: at least get a profile target, it's sad to have the menu entry without a profiler
@@ -550,7 +550,7 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
     }
 }
 
-void RunController::slotDebug()
+void RunController::debugCurrentLaunch()
 {
     Q_D(RunController);
 

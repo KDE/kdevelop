@@ -35,8 +35,8 @@
 #include "../debugger/variable/variablecollection.h"
 #include "core.h"
 #include "debug.h"
+#include "runcontroller.h"
 #include "uicontroller.h"
-#include "iruncontroller.h"
 
 #include <util/simpletoolviewfactory.h>
 
@@ -536,11 +536,7 @@ void DebugController::run() {
     if (m_currentSession) {
         m_currentSession->run();
     } else {
-        auto runController = ICore::self()->runController();
-        if (runController->launchConfigurations().isEmpty()) {
-            runController->showConfigurationDialog();
-        }
-        runController->executeDefaultLaunch(QStringLiteral("debug"));
+        Core::self()->runControllerInternal()->debugCurrentLaunch();
     }
 }
 
