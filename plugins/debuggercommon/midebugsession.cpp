@@ -49,7 +49,16 @@ using namespace KDevMI::MI;
 
 namespace {
 constexpr DBGStateFlags notStartedDebuggerFlags{s_dbgNotStarted | s_appNotStarted};
+
+/**
+ * @return the string literal value of a given field of a given tuple value,
+ *         or an empty string if the tuple value does not contain the field
+ */
+[[nodiscard]] QString literalIfHasField(const MI::Value& tupleValue, const QString& fieldName)
+{
+    return tupleValue.hasField(fieldName) ? tupleValue[fieldName].literal() : QString{};
 }
+} // unnamed namespace
 
 MIDebugSession::MIDebugSession()
     : m_procLineMaker(new ProcessLineMaker(this))
@@ -948,6 +957,18 @@ void MIDebugSession::raiseEvent(event_t e)
     }
 }
 
+void MIDebugSession::setCurrentPositionToFrameFieldOf(const TupleRecord& record)
+{
+    const auto& frame = record[QStringLiteral("frame")];
+    const auto file = literalIfHasField(frame, QStringLiteral("fullname"));
+    const auto line = literalIfHasField(frame, QStringLiteral("line"));
+    const auto addr = literalIfHasField(frame, QStringLiteral("addr"));
+
+    // An MI line is one-based and IDebugSession::currentLine() is zero-based. If line is an empty string,
+    // the value -1 that means "invalid, missing or unknown line number" is passed to setCurrentPosition().
+    setCurrentPosition(QUrl::fromLocalFile(file), line.toInt() - 1, addr);
+}
+
 bool KDevMI::MIDebugSession::hasCrashed() const
 {
     return m_hasCrashed;
@@ -1092,24 +1113,8 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         // the entire list of threads -- otherwise we might set a thread
         // id that is not already in the list, and it will be upset.
 
-        //Indicates if program state should be reloaded immediately.
-        bool updateState = false;
-
         if (r.hasField(QStringLiteral("frame"))) {
-            const MI::Value& frame = r[QStringLiteral("frame")];
-            QString file, line, addr;
-
-            if (frame.hasField(QStringLiteral("fullname"))) file = frame[QStringLiteral("fullname")].literal();
-            if (frame.hasField(QStringLiteral("line")))     line = frame[QStringLiteral("line")].literal();
-            if (frame.hasField(QStringLiteral("addr")))     addr = frame[QStringLiteral("addr")].literal();
-
-            // gdb counts lines from 1 and we don't
-            setCurrentPosition(QUrl::fromLocalFile(file), line.toInt() - 1, addr);
-
-            updateState = true;
-        }
-
-        if (updateState) {
+            setCurrentPositionToFrameFieldOf(r);
             reloadProgramState();
         }
     }

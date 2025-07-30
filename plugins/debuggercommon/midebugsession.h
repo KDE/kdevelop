@@ -412,6 +412,13 @@ private:
      */
     [[nodiscard]] static bool isCurrentDebugSession(const QObject* object);
 
+    /**
+     * Call setCurrentPosition() with the arguments set to values retrieved from the "frame" field of a given record.
+     *
+     * @pre @p record contains a field named "frame"
+     */
+    void setCurrentPositionToFrameFieldOf(const MI::TupleRecord& record);
+
     void addGdbExitCommand();
     void killDebuggerImpl();
     void currentSessionChanged(IDebugSession* session, IDebugSession* previousSession);
