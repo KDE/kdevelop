@@ -314,7 +314,7 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
         stopDebuggerOnError(messageText);
         return;
     }
-    setDebuggerStateOn(s_programExited | s_core);
+    coreFileLoaded();
 }
 
 #include "moc_debugsession.cpp"

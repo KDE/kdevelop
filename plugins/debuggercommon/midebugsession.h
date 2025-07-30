@@ -356,6 +356,11 @@ protected:
 
     void raiseEvent(event_t e) override;
 
+    /**
+     * Call when the debugger loads a core file successfully.
+     */
+    void coreFileLoaded();
+
     /** Called when there are no pending commands and 'm_stateReloadNeeded'
         is true. Also can be used to immediately reload program state.
         Issues commands to completely reload all program state shown
@@ -418,6 +423,11 @@ private:
      * @pre @p record contains a field named "frame"
      */
     void setCurrentPositionToFrameFieldOf(const MI::TupleRecord& record);
+
+    /**
+     * Update the current position from a given MI result record.
+     */
+    void handleStackInfoFrame(const MI::ResultRecord& result);
 
     void addGdbExitCommand();
     void killDebuggerImpl();

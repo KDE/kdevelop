@@ -1440,11 +1440,13 @@ void DebuggerTestBase::testCoreFile()
     }
 
     auto* const session = createTestDebugSession();
+    VERIFY_INVALID_CURRENT_LOCATION(session);
     session->examineCoreFile(findExecutable("debuggee_crash"), QUrl::fromLocalFile(f.canonicalFilePath()));
 
     const auto* const stackModel = session->frameStackModel();
 
     WAIT_FOR_STATE(session, IDebugSession::StoppedState);
+    VERIFY_VALID_CURRENT_LOCATION(session, QUrl::fromLocalFile(findSourceFile("debugeecrash.cpp")), 25);
 
     const auto threadIndex = stackModel->index(0, 0);
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);

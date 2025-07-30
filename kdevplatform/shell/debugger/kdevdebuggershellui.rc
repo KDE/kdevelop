@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="kdevdebuggershellui" version="9" translationDomain="kdevplatform">
+<gui name="kdevdebuggershellui" version="10" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">
             <Separator group="debug"/>
@@ -78,6 +78,7 @@
     <State name="stopped">
         <enable>
             <Action name="debug_continue"/>
+            <Action name="debug_showcurrentline"/>
         </enable>
         <disable>
             <Action name="debug_pause"/>
@@ -88,7 +89,6 @@
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
             <Action name="debug_jumptocursor"/>
-            <Action name="debug_showcurrentline"/>
         </disable>
     </State>
 </gui>

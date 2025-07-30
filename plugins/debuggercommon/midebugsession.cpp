@@ -969,6 +969,17 @@ void MIDebugSession::setCurrentPositionToFrameFieldOf(const TupleRecord& record)
     setCurrentPosition(QUrl::fromLocalFile(file), line.toInt() - 1, addr);
 }
 
+void MIDebugSession::handleStackInfoFrame(const ResultRecord& result)
+{
+    setCurrentPositionToFrameFieldOf(result);
+}
+
+void MIDebugSession::coreFileLoaded()
+{
+    addCommand(StackInfoFrame, {}, this, &MIDebugSession::handleStackInfoFrame);
+    setDebuggerStateOn(s_programExited | s_core);
+}
+
 bool KDevMI::MIDebugSession::hasCrashed() const
 {
     return m_hasCrashed;

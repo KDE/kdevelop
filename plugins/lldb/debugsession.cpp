@@ -354,7 +354,7 @@ void DebugSession::handleCoreFile(const QStringList &s)
     // see MIDebugSession::processNotification(const MI::AsyncRecord & async)
     setDebuggerStateOff(s_appNotStarted | s_programExited);
 
-    setDebuggerStateOn(s_programExited | s_core);
+    coreFileLoaded();
 }
 
 void DebugSession::handleVersion(const QStringList& s)
