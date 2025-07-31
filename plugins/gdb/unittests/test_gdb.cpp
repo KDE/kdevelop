@@ -100,7 +100,6 @@ public:
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
 
-    QUrl url() { return currentUrl(); }
     int line() { return currentLine(); }
 
     TestFrameStackModel* frameStackModel() const override
