@@ -440,6 +440,11 @@ void MIDebugSession::setSessionState(DebuggerState state)
     }
 }
 
+bool MIDebugSession::acceptsCommands() const
+{
+    return !debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown);
+}
+
 bool MIDebugSession::debuggerStateIsOn(DBGStateFlags state) const
 {
     return m_debuggerState & state;

@@ -20,7 +20,7 @@ using namespace KDevMI;
 
 void IRegisterController::updateRegisters(const GroupsName& group)
 {
-    if (m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession->acceptsCommands()) {
         return;
     }
 
@@ -196,7 +196,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 
 void IRegisterController::setGeneralRegister(const Register& reg, const GroupsName& group)
 {
-    if (m_debugSession->debuggerStateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+    if (!m_debugSession->acceptsCommands()) {
         return;
     }
 

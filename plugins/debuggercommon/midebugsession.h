@@ -111,6 +111,14 @@ public:
      */
     bool startDebugging(const InferiorStartupInfo& startupInfo);
 
+    /**
+     * @return whether a command can be added to this session
+     *
+     * @note The session object itself may add certain commands (e.g. commands needed
+     *       to properly finish debugging) even if this function returns @c false.
+     */
+    [[nodiscard]] bool acceptsCommands() const;
+
     bool debuggerStateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
 
