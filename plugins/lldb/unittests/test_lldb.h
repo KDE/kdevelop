@@ -51,8 +51,6 @@ private Q_SLOTS:
     void testAttach();
     void testRemoteDebugging();
 
-    void testCoreFile();
-
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();

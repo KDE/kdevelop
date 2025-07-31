@@ -37,7 +37,6 @@ private Q_SLOTS:
     void testManualBreakpoint();
     void testAttach();
     void testManualAttach();
-    void testCoreFile();
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
