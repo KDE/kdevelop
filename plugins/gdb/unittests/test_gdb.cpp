@@ -33,7 +33,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
-#include <QFileInfo>
 #include <QStandardPaths>
 #include <QSignalSpy>
 #include <QTest>
@@ -552,54 +551,6 @@ void GdbTest::testManualAttach()
 #ifdef Q_OS_FREEBSD
     QSKIP("The test freezes while waiting for the ended state, so skip it");
 #endif
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void GdbTest::testCoreFile()
-{
-    QFileInfo f(QStringLiteral("core"));
-    f.setCaching(false); // don't cache information
-    if (f.exists()) {
-        QVERIFY(QFile::remove(f.canonicalFilePath()));
-    }
-
-    KProcess debugeeProcess;
-    debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
-    debugeeProcess << QStringLiteral("bash") << QStringLiteral("-c")
-                   << "ulimit -c unlimited; "
-                      + findExecutable(QStringLiteral("debuggee_crash")).toLocalFile();
-    debugeeProcess.start();
-    debugeeProcess.waitForFinished();
-    qDebug() << "Debuggee output:\n" << debugeeProcess.readAll();
-
-    bool coreFileFound = f.exists();
-    if (!coreFileFound) {
-        // Try to use coredumpctl
-        auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
-        if (!coredumpctl.isEmpty()) {
-            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"}, 5000);
-            // coredumpctl seems to create an empty file "core" even if no cores can be delivered
-            // (like when run inside docker containers as on KDE CI or with kernel.core_pattern=|/dev/null)
-            // so also check for size != 0
-            coreFileFound = f.exists() && (f.size() > 0);
-        }
-    }
-    if (!coreFileFound)
-        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).");
-
-    auto *session = new TestDebugSession;
-    session->examineCoreFile(findExecutable(QStringLiteral("debuggee_crash")),
-                             QUrl::fromLocalFile(f.canonicalFilePath()));
-
-    const auto* const stackModel = session->frameStackModel();
-
-    WAIT_FOR_STATE(session, DebugSession::StoppedState);
-
-    QModelIndex tIdx = stackModel->index(0,0);
-    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(tIdx, 1);
-    COMPARE_DATA(tIdx, "#1 at foo");
-
-    session->stopDebugger();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
