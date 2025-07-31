@@ -27,10 +27,12 @@
 
 #include <KConfigGroup>
 #include <KIO/Global>
+#include <KProcess>
 #include <KSharedConfig>
 #include <KShell>
 
 #include <QDebug>
+#include <QFileInfo>
 #include <QMetaObject>
 #include <QSignalBlocker>
 #include <QSignalSpy>
@@ -794,6 +796,53 @@ void DebuggerTestBase::testStackSwitchThread()
     QCOMPARE_GE(stackModel->rowCount(threadIndex), 4);
 
     session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testCoreFile()
+{
+    QFileInfo f("core");
+    f.setCaching(false); // don't cache information
+    if (f.exists()) {
+        QVERIFY(QFile::remove(f.canonicalFilePath()));
+    }
+
+    KProcess debugeeProcess;
+    debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
+    debugeeProcess << "bash" << "-c"
+                   << "ulimit -c unlimited; " + findExecutable("debuggee_crash").toLocalFile();
+    debugeeProcess.start();
+    debugeeProcess.waitForFinished();
+    qDebug() << "Debuggee output:\n" << debugeeProcess.readAll();
+
+    auto coreFileFound = f.exists();
+    if (!coreFileFound) {
+        qDebug() << "try to use coredumpctl";
+        const auto coredumpctl = QStandardPaths::findExecutable("coredumpctl");
+        if (!coredumpctl.isEmpty()) {
+            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"}, 5000);
+            // coredumpctl seems to create an empty file "core" even if no cores can be delivered
+            // (like when run inside docker containers as on KDE CI or with kernel.core_pattern=|/dev/null)
+            // so also check for size != 0
+            coreFileFound = f.exists() && (f.size() > 0);
+        }
+    }
+    if (!coreFileFound) {
+        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).");
+    }
+
+    auto* const session = createTestDebugSession();
+    session->examineCoreFile(findExecutable("debuggee_crash"), QUrl::fromLocalFile(f.canonicalFilePath()));
+
+    const auto* const stackModel = session->frameStackModel();
+
+    WAIT_FOR_STATE(session, IDebugSession::StoppedState);
+
+    const auto threadIndex = stackModel->index(0, 0);
+    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+    COMPARE_DATA(threadIndex, adjustedStackModelFrameName("#1 at foo"));
+
+    session->stopDebugger();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 

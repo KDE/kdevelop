@@ -116,6 +116,8 @@ private Q_SLOTS:
     void testStackFetchMore();
     void testStackSwitchThread();
 
+    void testCoreFile();
+
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();
