@@ -98,28 +98,6 @@ bool GdbTest::isLldb() const
     return false;
 }
 
-void GdbTest::testBreakpoint()
-{
-    auto *session = new TestDebugSession;
-
-    TestLaunchConfiguration cfg;
-
-    auto* const b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 28);
-    QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
-
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
-}
-
 void GdbTest::testChangeLocationBreakpoint()
 {
     auto *session = new TestDebugSession;
@@ -518,40 +496,6 @@ void GdbTest::testManualBreakpoint()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void GdbTest::testShowStepInSource()
-{
-    auto *session = new TestDebugSession;
-
-    QSignalSpy showStepInSourceSpy(session, &TestDebugSession::showStepInSource);
-
-    TestLaunchConfiguration cfg;
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 29);
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    {
-        QCOMPARE(showStepInSourceSpy.count(), 3);
-        QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().toUrl(), debugeeUrl());
-        QCOMPARE(arguments.at(1).toInt(), 29);
-
-        arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().toUrl(), debugeeUrl());
-        QCOMPARE(arguments.at(1).toInt(), 22);
-
-        arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().toUrl(), debugeeUrl());
-        QCOMPARE(arguments.at(1).toInt(), 23);
-    }
 }
 
 void GdbTest::testAttach()

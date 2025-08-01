@@ -280,6 +280,28 @@ void DebuggerTestBase::testUnsupportedUrlExpressionBreakpoints()
     RETURN_IF_TEST_FAILED();
 }
 
+void DebuggerTestBase::testBreakpoint()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    auto* const breakpoint = addDebugeeBreakpoint(30);
+    QCOMPARE(breakpoint->state(), Breakpoint::NotStartedState);
+
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    QCOMPARE(breakpoint->state(), Breakpoint::CleanState);
+    QCOMPARE(currentMiLine(session), 30);
+
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+    QCOMPARE(breakpoint->state(), Breakpoint::NotStartedState);
+}
+
 void DebuggerTestBase::testDisableBreakpoint()
 {
     auto* const session = createTestDebugSession();
@@ -548,6 +570,40 @@ void DebuggerTestBase::testBreakpointInSharedLibrary()
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testShowStepInSource()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    const QSignalSpy showStepInSourceSpy(session, &IDebugSession::showStepInSource);
+
+    constexpr auto breakpointLine = 30;
+    addDebugeeBreakpoint(breakpointLine);
+
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    const auto verifyArgumentsOfShowStepInSource = [this](const QVariantList& arguments, int miLine) {
+        QCOMPARE(arguments.at(0).toUrl(), debugeeUrl());
+        // an MI line is one-based and IDebugSession::currentLine() is zero-based
+        QCOMPARE(arguments.at(1).toInt(), miLine - 1);
+    };
+
+    QCOMPARE(showStepInSourceSpy.count(), 3);
+    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(0), breakpointLine);
+    RETURN_IF_TEST_FAILED();
+    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(1), 23);
+    RETURN_IF_TEST_FAILED();
+    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(2), 24);
+    RETURN_IF_TEST_FAILED();
 }
 
 void DebuggerTestBase::testStack()
