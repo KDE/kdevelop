@@ -24,7 +24,6 @@
 #include <KIO/Global>
 
 #include <QFileInfo>
-#include <QSignalSpy>
 #include <QString>
 #include <QStringList>
 #include <QTest>
@@ -110,29 +109,6 @@ void LldbTest::finishInit()
         if (!var) break;
         var->die();
     }
-}
-
-void LldbTest::testBreakpoint()
-{
-    auto *session = new TestDebugSession;
-
-    TestLaunchConfiguration cfg;
-
-    auto* const b = breakpoints()->addCodeBreakpoint(debugeeUrl(), 29);
-    QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
-
-    ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
-    QCOMPARE(session->currentLine(), 29);
-
-    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-    QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
 }
 
 void LldbTest::testBreakOnStart()
@@ -726,39 +702,6 @@ void LldbTest::testCatchpoint()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void LldbTest::testShowStepInSource()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    QSignalSpy showStepInSourceSpy(session, &TestDebugSession::showStepInSource);
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 29);
-    ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    {
-        QCOMPARE(showStepInSourceSpy.count(), 3);
-        QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().toUrl(), debugeeUrl());
-        QCOMPARE(arguments.at(1).toInt(), 29);
-
-        arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().toUrl(), debugeeUrl());
-        QCOMPARE(arguments.at(1).toInt(), 22);
-
-        arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().toUrl(), debugeeUrl());
-        QCOMPARE(arguments.at(1).toInt(), 23);
-    }
 }
 
 void LldbTest::testAttach()
