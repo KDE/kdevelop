@@ -66,6 +66,44 @@ public:
     using EnvironmentProfileList::variables;
 };
 
+#define VERIFY_VALID_ADDRESS(address)                                                                                  \
+    do {                                                                                                               \
+        QVERIFY(!address.isEmpty());                                                                                   \
+        QVERIFY2(address.startsWith("0x"), qPrintable("unexpected address format: \"" + address + '"'));               \
+    } while (false)
+
+enum class AddressKind {
+    Empty,
+    Valid
+};
+
+void verifyCurrentLocation(const IDebugSession* session, const QUrl& url, int miLine, AddressKind address)
+{
+    QVERIFY(session);
+
+    QCOMPARE(session->currentUrl(), url);
+    QCOMPARE(currentMiLine(session), miLine);
+    switch (address) {
+    case AddressKind::Empty:
+        QCOMPARE(session->currentAddr(), QString{});
+        break;
+    case AddressKind::Valid:
+        VERIFY_VALID_ADDRESS(session->currentAddr());
+        break;
+    }
+}
+
+#define VERIFY_CURRENT_LOCATION(session, url, miLine, address)                                                         \
+    do {                                                                                                               \
+        verifyCurrentLocation(session, url, miLine, address);                                                          \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
+#define VERIFY_INVALID_CURRENT_LOCATION(session) VERIFY_CURRENT_LOCATION(session, {}, 0, AddressKind::Empty);
+
+#define VERIFY_VALID_CURRENT_LOCATION(session, url, miLine)                                                            \
+    VERIFY_CURRENT_LOCATION(session, url, miLine, AddressKind::Valid);
+
 [[nodiscard]] int fetchFramesCallCount(const IFrameStackModel* model)
 {
     QVERIFY_RETURN(model, -1);
@@ -559,14 +597,13 @@ void DebuggerTestBase::testBreakpointInSharedLibrary()
     breakpoints()->addCodeBreakpoint("multifile_main.cpp:14"); // return 0;
     breakpoints()->addCodeBreakpoint("multifile_shared.cpp:11"); // return n * n;
 
+    VERIFY_INVALID_CURRENT_LOCATION(session);
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-    QCOMPARE(session->currentUrl().fileName(), "multifile_shared.cpp");
-    QCOMPARE(currentMiLine(session), 11);
+    VERIFY_VALID_CURRENT_LOCATION(session, QUrl::fromLocalFile(findSourceFile("multifile/multifile_shared.cpp")), 11);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-    QCOMPARE(session->currentUrl().fileName(), "multifile_main.cpp");
-    QCOMPARE(currentMiLine(session), 14);
+    VERIFY_VALID_CURRENT_LOCATION(session, QUrl::fromLocalFile(findSourceFile("multifile/multifile_main.cpp")), 14);
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
@@ -582,27 +619,36 @@ void DebuggerTestBase::testShowStepInSource()
     constexpr auto breakpointLine = 30;
     addDebugeeBreakpoint(breakpointLine);
 
+    VERIFY_INVALID_CURRENT_LOCATION(session);
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    VERIFY_VALID_CURRENT_LOCATION(session, debugeeUrl(), breakpointLine);
 
     STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    constexpr auto firstStepIntoLine = 23;
+    VERIFY_VALID_CURRENT_LOCATION(session, debugeeUrl(), firstStepIntoLine);
+
     STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    constexpr auto secondStepIntoLine = 24;
+    VERIFY_VALID_CURRENT_LOCATION(session, debugeeUrl(), secondStepIntoLine);
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 
     const auto verifyArgumentsOfShowStepInSource = [this](const QVariantList& arguments, int miLine) {
+        QCOMPARE(arguments.size(), 3);
         QCOMPARE(arguments.at(0).toUrl(), debugeeUrl());
         // an MI line is one-based and IDebugSession::currentLine() is zero-based
         QCOMPARE(arguments.at(1).toInt(), miLine - 1);
+        VERIFY_VALID_ADDRESS(arguments.at(2).toString());
     };
 
     QCOMPARE(showStepInSourceSpy.count(), 3);
     verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(0), breakpointLine);
     RETURN_IF_TEST_FAILED();
-    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(1), 23);
+    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(1), firstStepIntoLine);
     RETURN_IF_TEST_FAILED();
-    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(2), 24);
+    verifyArgumentsOfShowStepInSource(showStepInSourceSpy.at(2), secondStepIntoLine);
     RETURN_IF_TEST_FAILED();
 }
 
