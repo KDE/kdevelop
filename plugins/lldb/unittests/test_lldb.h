@@ -22,7 +22,6 @@ protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
 private Q_SLOTS:
-    void testBreakpoint();
     void testBreakOnStart();
     void testChangeLocationBreakpoint();
     void testDeleteBreakpoint();
@@ -48,8 +47,6 @@ private Q_SLOTS:
     void testRegularExpressionBreakpoint();
 
     void testCatchpoint();
-
-    void testShowStepInSource();
 
     void testAttach();
     void testRemoteDebugging();
