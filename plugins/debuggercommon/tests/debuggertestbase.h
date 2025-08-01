@@ -102,12 +102,15 @@ private Q_SLOTS:
     void testEnvironmentCd();
 
     void testUnsupportedUrlExpressionBreakpoints();
+    void testBreakpoint();
     void testDisableBreakpoint();
     void testBreakpointsOnNoOpLines();
     void testBreakpointErrors();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
     void testBreakpointInSharedLibrary();
+
+    void testShowStepInSource();
 
     void testStack();
     void testStackFetchMore();
