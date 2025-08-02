@@ -340,6 +340,14 @@ namespace KDevMI { namespace MI {
         {
         }
 
+        /**
+         * @return whether the reason (result indication) of this record is an error
+         */
+        [[nodiscard]] bool isReasonError() const
+        {
+            return reason == QLatin1String{"error"};
+        }
+
         uint32_t token = 0;
         QString reason;
     };

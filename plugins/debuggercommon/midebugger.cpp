@@ -214,9 +214,7 @@ void MIDebugger::processLine(const QByteArray& line)
                                         << m_currentCmd->queueTime()
                                         << m_currentCmd->gdbProcessingTime();
                 m_currentCmd->invokeHandler(result);
-            }
-            else if (result.reason == QLatin1String("error"))
-            {
+            } else if (result.isReasonError()) {
                 qCDebug(DEBUGGERCOMMON) << "Handling error";
                 m_currentCmd->markAsCompleted();
                 qCDebug(DEBUGGERCOMMON) << "Command error, times"

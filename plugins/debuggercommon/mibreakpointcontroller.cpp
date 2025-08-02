@@ -102,7 +102,7 @@ struct MIBreakpointController::Handler : public MICommandHandler
     {
         breakpoint->sent &= ~columns;
 
-        if (r.reason == QLatin1String("error")) {
+        if (r.isReasonError()) {
             breakpoint->errors |= columns;
 
             int row = controller->breakpointRow(breakpoint);
@@ -169,7 +169,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
 
         int row = controller->breakpointRow(breakpoint);
 
-        if (r.reason != QLatin1String("error")) {
+        if (!r.isReasonError()) {
             QString bkptKind;
             for (auto& kind : {QStringLiteral("bkpt"), QStringLiteral("wpt"), QStringLiteral("hw-rwpt"), QStringLiteral("hw-awpt")}) {
                 if (r.hasField(kind)) {

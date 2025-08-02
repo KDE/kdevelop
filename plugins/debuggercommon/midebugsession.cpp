@@ -346,7 +346,7 @@ bool MIDebugSession::attachToProcess(int pid)
 
 void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
 {
-    if (r.reason == QLatin1String("error")) {
+    if (r.isReasonError()) {
         const QString messageText =
             i18n("<b>Could not attach debugger:</b><br />")+
                  r[QStringLiteral("msg")].literal();

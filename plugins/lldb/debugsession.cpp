@@ -54,7 +54,7 @@ struct ExecRunHandler : public MICommandHandler
     void handle(const ResultRecord& r) override
     {
         --m_activeCommands;
-        if (r.reason == QLatin1String("error")) {
+        if (r.isReasonError()) {
             if (r.hasField(QStringLiteral("msg"))
                 && r[QStringLiteral("msg")].literal().contains(QLatin1String("Invalid process during debug session"))) {
                 // for some unknown reason, lldb-mi sometimes fails to start process
@@ -325,7 +325,7 @@ void DebugSession::ensureDebuggerListening()
 
 void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
 {
-    if (r.reason == QLatin1String("error")) {
+    if (r.isReasonError()) {
         const QString messageText = i18n("<b>Could not start debugger:</b><br />")+
             r[QStringLiteral("msg")].literal();
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
@@ -336,7 +336,7 @@ void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
 
 void DebugSession::handleTargetSelect(const MI::ResultRecord& r)
 {
-    if (r.reason == QLatin1String("error")) {
+    if (r.isReasonError()) {
         const QString messageText = i18n("<b>Error connecting to remote target:</b><br />")+
             r[QStringLiteral("msg")].literal();
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);

@@ -102,7 +102,7 @@ public:
         MIVariable* variable = m_variable.data();
         variable->deleteChildren();
         variable->setInScope(true);
-        if (r.reason == QLatin1String("error")) {
+        if (r.isReasonError()) {
             variable->setShowError(true);
         } else {
             variable->setVarobj(r[QStringLiteral("name")].literal());

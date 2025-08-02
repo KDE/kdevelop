@@ -299,7 +299,7 @@ void DebugSession::handleVersion(const QStringList& s)
 
 void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 {
-    if (r.reason == QLatin1String("error")) {
+    if (r.isReasonError()) {
         const QString messageText =
             i18n("<b>Could not start debugger:</b><br />")+
                  r[QStringLiteral("msg")].literal();
@@ -311,9 +311,7 @@ void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 
 void DebugSession::handleCoreFile(const ResultRecord& r)
 {
-    if (r.reason != QLatin1String("error")) {
-        setDebuggerStateOn(s_programExited | s_core);
-    } else {
+    if (r.isReasonError()) {
         const QString messageText =
             i18n("<b>Failed to load core file</b>"
                  "<p>Debugger reported the following error:"
@@ -322,7 +320,9 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
         ICore::self()->uiController()->postMessage(message);
         stopDebugger();
+        return;
     }
+    setDebuggerStateOn(s_programExited | s_core);
 }
 
 #include "moc_debugsession.cpp"
