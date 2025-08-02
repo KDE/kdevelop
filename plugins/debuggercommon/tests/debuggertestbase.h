@@ -11,7 +11,10 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QTemporaryFile>
 #include <QUrl>
+
+#include <array>
 
 class IExecutePlugin;
 class QModelIndex;
@@ -150,6 +153,7 @@ private Q_SLOTS:
     void testStackFetchMore();
     void testStackSwitchThread();
 
+    void testCoreFile_data();
     void testCoreFile();
 
     void testCommandHandler_data();
@@ -191,10 +195,42 @@ private:
 
     [[nodiscard]] QString adjustedStackModelFrameName(QString frameName) const;
 
+    enum class FileKind {
+        Valid,
+        EmptyName,
+        Nonexistent,
+        Directory,
+        NotReadable,
+        Invalid
+    };
+    Q_ENUM(FileKind)
+
+    static constexpr std::array allFileKinds{FileKind::Valid,     FileKind::EmptyName,   FileKind::Nonexistent,
+                                             FileKind::Directory, FileKind::NotReadable, FileKind::Invalid};
+
+    static constexpr FileKind acceptableCoreFileKind = FileKind::Valid;
+    [[nodiscard]] static bool isAcceptableExecutableFileKindForCore(FileKind executableFileKind);
+
+    /**
+     * @return an URL of a specified kind
+     *
+     * @param validUrlCallback a function (object) without parameters that returns
+     *        a valid URL and is called in case @p fileKind equals FileKind::Valid
+     *
+     * @note The URL of a C++ source file is returned if @p fileKind equals FileKind::Invalid.
+     *
+     * Call RETURN_IF_TEST_FAILED() after this function.
+     */
+    template<typename UrlProvider>
+    [[nodiscard]] QUrl urlForFileKind(FileKind fileKind, UrlProvider validUrlCallback) const;
+
     KDevelop::ICore* m_core;
     IExecutePlugin* m_executePlugin;
     QString m_debugeeFilePath;
     QUrl m_debugeeUrl;
+
+    bool m_generatedCoreFile = false; ///< whether a core file has been generated during the current test run
+    mutable QTemporaryFile m_notReadableFile;
 };
 } // namespace KDevMI
 

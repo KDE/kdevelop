@@ -183,6 +183,23 @@ public:
     // all "stream" messages, but does not include MI responses.
     void newOutput(const QString&);
 
+    /**
+     * This function should be called when new log stream output arrives while this command is being executed.
+     *
+     * @param receivedLine the received log stream message
+     */
+    void newLogStreamOutput(const QString& receivedLine);
+
+    /**
+     * Call this function to store the log stream output along with the console
+     * stream output so that allStreamOutput() returns both (interspersed).
+     */
+    void storeLogStreamOutput();
+
+    /**
+     * @return all stored stream output lines (only console stream output is stored by default)
+     * @sa storeLogStreamOutput()
+     */
     const QStringList& allStreamOutput() const;
 
     QString command() const;
@@ -218,6 +235,7 @@ protected:
     QString command_;
     MICommandHandler *commandHandler_;
     QStringList lines;
+    bool m_storeLogStreamOutput = false;
     bool stateReloading_;
 
     int m_thread;

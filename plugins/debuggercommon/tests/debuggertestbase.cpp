@@ -1407,12 +1407,25 @@ void DebuggerTestBase::testStackSwitchThread()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
-void DebuggerTestBase::testCoreFile()
+/**
+ * @return the name of a core dump file
+ *
+ * @param reuseExisting whether to reuse an existing file at the location of a core file;
+ *        if @c false, the existing file (if any) is removed and a new core dump is generated
+ *
+ * Call RETURN_IF_TEST_RESOLVED() after this function.
+ */
+[[nodiscard]] static QString generateCoreFile(bool reuseExisting)
 {
     QFileInfo f("core");
     f.setCaching(false); // don't cache information
     if (f.exists()) {
-        QVERIFY(QFile::remove(f.canonicalFilePath()));
+        if (reuseExisting) {
+            qDebug() << "reusing an existing core file";
+            return f.canonicalFilePath();
+        }
+        qDebug() << "removing an existing core file to generate a new one";
+        QVERIFY_RETURN(QFile::remove(f.canonicalFilePath()), QString{});
     }
 
     KProcess debugeeProcess;
@@ -1436,23 +1449,97 @@ void DebuggerTestBase::testCoreFile()
         }
     }
     if (!coreFileFound) {
-        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).");
+        QSKIP_RETURN("No core dump found, check your system configuration (see /proc/sys/kernel/core_pattern)",
+                     QString{});
     }
+
+    return f.canonicalFilePath();
+}
+
+void DebuggerTestBase::testCoreFile_data()
+{
+    QTest::addColumn<FileKind>("executableFileKind");
+    QTest::addColumn<FileKind>("coreFileKind");
+
+    const auto addRow = [](FileKind executableFileKind, FileKind coreFileKind) {
+        QTest::addRow("executable-%s,core-%s", enumeratorName(executableFileKind), enumeratorName(coreFileKind))
+            << executableFileKind << coreFileKind;
+    };
+
+    // Save time: do not test the combinations where neither executable nor core file kind is acceptable.
+    for (const auto executableFileKind : allFileKinds) {
+        if (isAcceptableExecutableFileKindForCore(executableFileKind)) {
+            for (const auto coreFileKind : allFileKinds) {
+                addRow(executableFileKind, coreFileKind);
+            }
+        } else {
+            addRow(executableFileKind, acceptableCoreFileKind);
+        }
+    }
+
+    // Add a single representative smoke test for two unacceptable file kinds.
+    addRow(FileKind::Invalid, FileKind::Nonexistent);
+}
+
+void DebuggerTestBase::testCoreFile()
+{
+    QFETCH(const FileKind, executableFileKind);
+    QFETCH(const FileKind, coreFileKind);
+
+    const auto findDebuggeeExecutable = [] {
+        return findExecutable("debuggee_crash");
+    };
+    const auto generateCoreFile = [this] {
+        // If a core file was just generated for another data row, it is up-to-date and can be reused.
+        // Otherwise, generate a new core file in place of a possibly incompatible existing one.
+        const auto reuseExisting = m_generatedCoreFile;
+        const auto fileName = ::generateCoreFile(reuseExisting);
+        m_generatedCoreFile = !fileName.isEmpty();
+        return QUrl::fromLocalFile(fileName);
+    };
+
+    const auto executable = urlForFileKind(executableFileKind, findDebuggeeExecutable);
+    RETURN_IF_TEST_RESOLVED();
+    const auto core = urlForFileKind(coreFileKind, generateCoreFile);
+    RETURN_IF_TEST_RESOLVED();
 
     auto* const session = createTestDebugSession();
     VERIFY_INVALID_CURRENT_LOCATION(session);
-    session->examineCoreFile(findExecutable("debuggee_crash"), QUrl::fromLocalFile(f.canonicalFilePath()));
+    QVERIFY(session->examineCoreFile(executable, core));
 
-    const auto* const stackModel = session->frameStackModel();
+    const auto isExecutableAcceptable = isAcceptableExecutableFileKindForCore(executableFileKind);
+    if (isExecutableAcceptable && coreFileKind == acceptableCoreFileKind) {
+        const auto* const stackModel = session->frameStackModel();
 
-    WAIT_FOR_STATE(session, IDebugSession::StoppedState);
-    VERIFY_VALID_CURRENT_LOCATION(session, QUrl::fromLocalFile(findSourceFile("debugeecrash.cpp")), 25);
+        WAIT_FOR_STATE(session, IDebugSession::StoppedState);
 
-    const auto threadIndex = stackModel->index(0, 0);
-    VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
-    COMPARE_DATA(threadIndex, adjustedStackModelFrameName("#1 at foo"));
+        const auto missingCurrentLocation =
+            executableFileKind == FileKind::EmptyName && !isLldb() && session->currentUrl().isEmpty();
+        if (missingCurrentLocation) {
+            // No idea why one day GDB loads the current location from the core file, then 10 days later it does not...
+            qWarning() << "GDB failed to load current location from the core file";
+        } else {
+            VERIFY_VALID_CURRENT_LOCATION(session, QUrl::fromLocalFile(findSourceFile("debugeecrash.cpp")), 25);
+        }
 
-    session->stopDebugger();
+        const auto threadIndex = stackModel->index(0, 0);
+        VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 1);
+        if (!missingCurrentLocation) {
+            COMPARE_DATA(threadIndex, adjustedStackModelFrameName("#1 at foo"));
+        }
+
+        session->stopDebugger();
+    } else if (isExecutableAcceptable && coreFileKind == FileKind::EmptyName && !isLldb()) {
+        // If the core filename is empty, KDevelop sends a non-MI command `core` without argument, GDB
+        // outputs a message "No core file now." and replies with "done". Consequently, the debug session
+        // is stuck in the starting state instead of ending with an error.
+        WAIT_FOR_A_WHILE(session, 1000);
+        QEXPECT_FAIL("", "Debug session is stuck in the starting state", Continue);
+        QCOMPARE(session->state(), IDebugSession::EndedState);
+        QCOMPARE(session->state(), IDebugSession::StartingState);
+        session->stopDebugger();
+    } // else: the debug session ends with an error => nothing to do other than verify the ending
+
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
@@ -1979,6 +2066,41 @@ QString DebuggerTestBase::adjustedStackModelFrameName(QString frameName) const
         frameName += "()";
     }
     return frameName;
+}
+
+bool DebuggerTestBase::isAcceptableExecutableFileKindForCore(FileKind executableFileKind)
+{
+    return executableFileKind == FileKind::Valid || executableFileKind == FileKind::EmptyName;
+}
+
+template<typename UrlProvider>
+QUrl DebuggerTestBase::urlForFileKind(FileKind fileKind, UrlProvider validUrlCallback) const
+{
+    switch (fileKind) {
+    case FileKind::Valid:
+        return validUrlCallback();
+    case FileKind::EmptyName:
+        return QUrl{};
+    case FileKind::Nonexistent:
+        return QUrl::fromLocalFile("/this/path/should/not/exist");
+    case FileKind::Directory:
+        return debugeeUrl().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
+    case FileKind::NotReadable: {
+        if (m_notReadableFile.fileName().isEmpty()) {
+            QVERIFY_RETURN(m_notReadableFile.open(), QUrl{});
+            m_notReadableFile.close();
+            QCOMPARE_RETURN(m_notReadableFile.error(), QFileDevice::NoError, QUrl{});
+            QVERIFY_RETURN(m_notReadableFile.setPermissions({}), QUrl{});
+        }
+        const auto fileName = m_notReadableFile.fileName();
+        QVERIFY_RETURN(!fileName.isEmpty(), QUrl{});
+        QVERIFY_RETURN(!QFileInfo{fileName}.isReadable(), QUrl{});
+        return QUrl::fromLocalFile(fileName);
+    }
+    case FileKind::Invalid:
+        return debugeeUrl(); // a C++ source file is neither an executable nor a core dump file
+    }
+    Q_UNREACHABLE_RETURN(QUrl{});
 }
 
 #include "moc_debuggertestbase.cpp"

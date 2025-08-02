@@ -115,6 +115,18 @@ void MICommand::newOutput(const QString& line)
     lines.push_back(line);
 }
 
+void MICommand::newLogStreamOutput(const QString& receivedLine)
+{
+    if (m_storeLogStreamOutput) {
+        lines.push_back(receivedLine);
+    }
+}
+
+void MICommand::storeLogStreamOutput()
+{
+    m_storeLogStreamOutput = true;
+}
+
 const QStringList& MICommand::allStreamOutput() const
 {
     return lines;

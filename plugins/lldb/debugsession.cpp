@@ -287,8 +287,12 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, con
 
 void DebugSession::loadCoreFile(const QString& coreFile)
 {
-    addCommand(std::make_unique<CliCommand>(NonMI, QLatin1String("target create -c ") + Utils::quote(coreFile), this,
-                                            &DebugSession::handleCoreFile, CmdHandlesError));
+    auto command = std::make_unique<CliCommand>(NonMI, QLatin1String("target create -c ") + Utils::quote(coreFile),
+                                                this, &DebugSession::handleCoreFile, CmdHandlesError);
+    // A newer version of LLDB-MI sends error messages in the log stream output. handleCoreFile()
+    // heuristically identifies error messages to detect that loading a core file has failed.
+    command->storeLogStreamOutput();
+    addCommand(std::move(command));
 }
 
 void DebugSession::interruptDebugger()

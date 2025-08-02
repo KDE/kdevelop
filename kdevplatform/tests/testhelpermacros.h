@@ -64,6 +64,12 @@
 #define QCOMPARE_GE_RETURN(computed, baseline, retval)                                                                 \
     QCOMPARE_OP_IMPL_RETURN(computed, baseline, >=, GreaterThanOrEqual, retval)
 
+#define QSKIP_RETURN(statement, retval)                                                                                \
+    do {                                                                                                               \
+        QTest::qSkip(static_cast<const char*>(statement), __FILE__, __LINE__);                                         \
+        return retval;                                                                                                 \
+    } while (false)
+
 #define RETURN_IF_TEST_FAILED(...)                                                                                     \
     do {                                                                                                               \
         if (QTest::currentTestFailed()) {                                                                              \

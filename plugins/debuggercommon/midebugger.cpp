@@ -293,6 +293,10 @@ void MIDebugger::processLine(const QByteArray& line)
                     m_currentCmd->newOutput(s.message);
             } else {
                 emit debuggerInternalOutput(s.message);
+
+                if (m_currentCmd) {
+                    m_currentCmd->newLogStreamOutput(s.message);
+                }
             }
 
             emit streamRecord(s);
