@@ -982,12 +982,7 @@ void MIDebugSession::coreFileLoaded()
 
 void MIDebugSession::failedToLoadCoreFile(const QString& debuggerErrorMessage)
 {
-    const auto messageText = i18n(
-        "<b>Failed to load core file</b>"
-        "<p>Debugger reported the following error:"
-        "<p><tt>%1",
-        debuggerErrorMessage);
-    stopDebuggerOnError(messageText);
+    stopDebuggerOnError(i18n("<b>Failed to load core file:</b><br />") + debuggerErrorMessage);
 }
 
 bool KDevMI::MIDebugSession::hasCrashed() const
@@ -1266,10 +1261,7 @@ void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
         return;
     }
 
-    const QString messageText =
-        i18n("<b>Debugger error</b>"
-             "<p>Debugger reported the following error:"
-             "<p><tt>%1", errorMessage);
+    const QString messageText = i18n("<b>Debugger error:</b><br />") + errorMessage;
     auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
     ICore::self()->uiController()->postMessage(message);
 
