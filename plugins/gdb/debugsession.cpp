@@ -26,8 +26,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iuicontroller.h>
-#include <sublime/message.h>
 #include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
@@ -292,9 +290,7 @@ void DebugSession::handleVersion(const QStringList& s)
     const QString messageText = i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
         "You are using: %1",
         detectedVersion);
-    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-    ICore::self()->uiController()->postMessage(message);
-    stopDebugger();
+    stopDebuggerOnError(messageText);
 }
 
 void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
@@ -303,9 +299,7 @@ void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
         const QString messageText =
             i18n("<b>Could not start debugger:</b><br />")+
             r.errorMessage();
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        stopDebuggerOnError(messageText);
     }
 }
 
@@ -317,9 +311,7 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
                  "<p>Debugger reported the following error:"
                  "<p><tt>%1",
                  r.errorMessage());
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        stopDebuggerOnError(messageText);
         return;
     }
     setDebuggerStateOn(s_programExited | s_core);

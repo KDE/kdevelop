@@ -347,13 +347,16 @@ bool MIDebugSession::attachToProcess(int pid)
 void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
 {
     if (r.isReasonError()) {
-        const QString messageText =
-            i18n("<b>Could not attach debugger:</b><br />")+
-            r.errorMessage();
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        stopDebuggerOnError(i18n("<b>Could not attach debugger:</b><br />") + r.errorMessage());
     }
+}
+
+void MIDebugSession::stopDebuggerOnError(const QString& errorMessage)
+{
+    Q_ASSERT(!errorMessage.isEmpty());
+    auto* const message = new Sublime::Message(errorMessage, Sublime::Message::Error);
+    ICore::self()->uiController()->postMessage(message);
+    stopDebugger();
 }
 
 bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)

@@ -21,9 +21,7 @@
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <sublime/message.h>
 #include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
@@ -328,20 +326,14 @@ void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
     if (r.isReasonError()) {
         const QString messageText = i18n("<b>Could not start debugger:</b><br />")+
                                     r.errorMessage();
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        stopDebuggerOnError(messageText);
     }
 }
 
 void DebugSession::handleTargetSelect(const MI::ResultRecord& r)
 {
     if (r.isReasonError()) {
-        const QString messageText = i18n("<b>Error connecting to remote target:</b><br />")+
-                                    r.errorMessage();
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        stopDebuggerOnError(i18n("<b>Error connecting to remote target:</b><br />") + r.errorMessage());
     }
 }
 
@@ -354,9 +346,7 @@ void DebugSession::handleCoreFile(const QStringList &s)
                 "<p>Debugger reported the following error:"
                 "<p><tt>%1",
                 s.join(QLatin1Char('\n')));
-            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-            ICore::self()->uiController()->postMessage(message);
-            stopDebugger();
+            stopDebuggerOnError(messageText);
             return;
         }
     }
@@ -433,9 +423,7 @@ void DebugSession::handleVersion(const QStringList& s)
 
         const QString messageText = i18n("<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />"
             "You are using: %1", s.first());
-        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
-        ICore::self()->uiController()->postMessage(message);
-        stopDebugger();
+        stopDebuggerOnError(messageText);
     }
 }
 

@@ -336,6 +336,13 @@ protected:
                               const QString &debugee, const QString &corefile) = 0;
 
     /**
+     * Display a given error message to the user and call stopDebugger().
+     *
+     * @param errorMessage a nonempty translatable error message
+     */
+    void stopDebuggerOnError(const QString& errorMessage);
+
+    /**
      * Manipulate debugger instance state
      */
     void setDebuggerStateOn(DBGStateFlags stateOn);
