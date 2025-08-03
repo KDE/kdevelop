@@ -306,12 +306,7 @@ void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 void DebugSession::handleCoreFile(const ResultRecord& r)
 {
     if (r.isReasonError()) {
-        const QString messageText =
-            i18n("<b>Failed to load core file</b>"
-                 "<p>Debugger reported the following error:"
-                 "<p><tt>%1",
-                 r.errorMessage());
-        stopDebuggerOnError(messageText);
+        failedToLoadCoreFile(r.errorMessage());
         return;
     }
     coreFileLoaded();

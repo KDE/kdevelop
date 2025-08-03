@@ -980,6 +980,16 @@ void MIDebugSession::coreFileLoaded()
     setDebuggerStateOn(s_programExited | s_core);
 }
 
+void MIDebugSession::failedToLoadCoreFile(const QString& debuggerErrorMessage)
+{
+    const auto messageText = i18n(
+        "<b>Failed to load core file</b>"
+        "<p>Debugger reported the following error:"
+        "<p><tt>%1",
+        debuggerErrorMessage);
+    stopDebuggerOnError(messageText);
+}
+
 bool KDevMI::MIDebugSession::hasCrashed() const
 {
     return m_hasCrashed;

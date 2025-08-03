@@ -361,6 +361,13 @@ protected:
      */
     void coreFileLoaded();
 
+    /**
+     * Call when the debugger fails to load a core file.
+     *
+     * @param debuggerErrorMessage the relevant error message reported by the debugger
+     */
+    void failedToLoadCoreFile(const QString& debuggerErrorMessage);
+
     /** Called when there are no pending commands and 'm_stateReloadNeeded'
         is true. Also can be used to immediately reload program state.
         Issues commands to completely reload all program state shown

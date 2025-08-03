@@ -342,11 +342,7 @@ void DebugSession::handleCoreFile(const QStringList &s)
     qCDebug(DEBUGGERLLDB) << s;
     for (const auto &line : s) {
         if (line.startsWith(QLatin1String("error:"))) {
-            const QString messageText = i18n("<b>Failed to load core file</b>"
-                "<p>Debugger reported the following error:"
-                "<p><tt>%1",
-                s.join(QLatin1Char('\n')));
-            stopDebuggerOnError(messageText);
+            failedToLoadCoreFile(s.join(QLatin1Char{'\n'}));
             return;
         }
     }
