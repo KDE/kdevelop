@@ -302,7 +302,7 @@ void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
     if (r.isReasonError()) {
         const QString messageText =
             i18n("<b>Could not start debugger:</b><br />")+
-                 r[QStringLiteral("msg")].literal();
+            r.errorMessage();
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
         ICore::self()->uiController()->postMessage(message);
         stopDebugger();
@@ -316,7 +316,7 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
             i18n("<b>Failed to load core file</b>"
                  "<p>Debugger reported the following error:"
                  "<p><tt>%1",
-                 r[QStringLiteral("msg")].literal());
+                 r.errorMessage());
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
         ICore::self()->uiController()->postMessage(message);
         stopDebugger();

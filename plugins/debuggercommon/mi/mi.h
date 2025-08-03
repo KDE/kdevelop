@@ -348,6 +348,17 @@ namespace KDevMI { namespace MI {
             return reason == QLatin1String{"error"};
         }
 
+        /**
+         * @return the error message of an error record
+         *
+         * @pre isReasonError() is @c true
+         */
+        [[nodiscard]] QString errorMessage() const
+        {
+            Q_ASSERT(isReasonError());
+            return (*this)[QStringLiteral("msg")].literal();
+        }
+
         uint32_t token = 0;
         QString reason;
     };

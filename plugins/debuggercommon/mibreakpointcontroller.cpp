@@ -107,9 +107,10 @@ struct MIBreakpointController::Handler : public MICommandHandler
 
             int row = controller->breakpointRow(breakpoint);
             if (row >= 0) {
-                controller->updateErrorText(row, r[QStringLiteral("msg")].literal());
-                qCWarning(DEBUGGERCOMMON).nospace() << "debugger reports an error for breakpoint #" << row << ": "
-                                                    << r[QStringLiteral("msg")].literal();
+                const auto errorMessage = r.errorMessage();
+                controller->updateErrorText(row, errorMessage);
+                qCWarning(DEBUGGERCOMMON).nospace()
+                    << "debugger reports an error for breakpoint #" << row << ": " << errorMessage;
             }
         } else {
             if (breakpoint->errors & columns) {

@@ -349,7 +349,7 @@ void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
     if (r.isReasonError()) {
         const QString messageText =
             i18n("<b>Could not attach debugger:</b><br />")+
-                 r[QStringLiteral("msg")].literal();
+            r.errorMessage();
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
         ICore::self()->uiController()->postMessage(message);
         stopDebugger();
@@ -1229,10 +1229,9 @@ void MIDebugSession::explainDebuggerStatus()
 // FIXME: connect to debugger's slot.
 void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
 {
-    QString msg = result[QStringLiteral("msg")].literal();
+    const auto errorMessage = result.errorMessage();
 
-    if (msg.contains(QLatin1String("No such process")))
-    {
+    if (errorMessage.contains(QLatin1String("No such process"))) {
         setDebuggerState(s_appNotStarted|s_programExited);
         raiseEvent(program_exited);
         return;
@@ -1241,7 +1240,7 @@ void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
     const QString messageText =
         i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
-             "<p><tt>%1", result[QStringLiteral("msg")].literal());
+             "<p><tt>%1", errorMessage);
     auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
     ICore::self()->uiController()->postMessage(message);
 
