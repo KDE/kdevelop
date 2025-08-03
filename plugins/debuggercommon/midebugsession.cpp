@@ -360,6 +360,19 @@ void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
     }
 }
 
+void MIDebugSession::addFileExecAndSymbolsCommand(const QString& debuggeeExecutable)
+{
+    addCommand(MI::FileExecAndSymbols, debuggeeExecutable, this, &MIDebugSession::handleFileExecAndSymbols,
+               CmdHandlesError);
+}
+
+void MIDebugSession::handleFileExecAndSymbols(const ResultRecord& r)
+{
+    if (r.isReasonError()) {
+        stopDebuggerOnError(i18n("<b>Could not start debugger:</b><br />") + r.errorMessage());
+    }
+}
+
 void MIDebugSession::stopDebuggerOnError(const QString& errorMessage)
 {
     Q_ASSERT(!errorMessage.isEmpty());

@@ -58,7 +58,6 @@ protected:
 
 private Q_SLOTS:
     void handleVersion(const QStringList& s);
-    void handleFileExecAndSymbols(const MI::ResultRecord& r);
     void handleCoreFile(const MI::ResultRecord& r);
 
 private:

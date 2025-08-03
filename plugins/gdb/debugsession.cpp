@@ -230,9 +230,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
             CmdMaybeStartsRunning));
     } else {
         // normal local debugging
-        addCommand(MI::FileExecAndSymbols, KShell::quoteArg(executable),
-                   this, &DebugSession::handleFileExecAndSymbols,
-                   CmdHandlesError);
+        addFileExecAndSymbolsCommand(KShell::quoteArg(executable));
         raiseEvent(connected_to_program);
 
         addCommand(std::make_unique<SentinelCommand>(
@@ -248,9 +246,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
 bool DebugSession::loadCoreFile(KDevelop::ILaunchConfiguration*,
                                 const QString& debugee, const QString& corefile)
 {
-    addCommand(MI::FileExecAndSymbols, debugee,
-               this, &DebugSession::handleFileExecAndSymbols,
-               CmdHandlesError);
+    addFileExecAndSymbolsCommand(debugee);
     raiseEvent(connected_to_program);
 
     addCommand(NonMI, QLatin1String("core ") + corefile,
@@ -291,16 +287,6 @@ void DebugSession::handleVersion(const QStringList& s)
         "You are using: %1",
         detectedVersion);
     stopDebuggerOnError(messageText);
-}
-
-void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
-{
-    if (r.isReasonError()) {
-        const QString messageText =
-            i18n("<b>Could not start debugger:</b><br />")+
-            r.errorMessage();
-        stopDebuggerOnError(messageText);
-    }
 }
 
 void DebugSession::handleCoreFile(const ResultRecord& r)

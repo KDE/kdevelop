@@ -357,6 +357,11 @@ protected:
     void raiseEvent(event_t e) override;
 
     /**
+     * Specify a given debuggee executable path via the MI command -file-exec-and-symbols and handle errors if any.
+     */
+    void addFileExecAndSymbolsCommand(const QString& debuggeeExecutable);
+
+    /**
      * Call when the debugger loads a core file successfully.
      */
     void coreFileLoaded();
@@ -435,6 +440,8 @@ private:
      * Update the current position from a given MI result record.
      */
     void handleStackInfoFrame(const MI::ResultRecord& result);
+
+    void handleFileExecAndSymbols(const MI::ResultRecord& r);
 
     void addGdbExitCommand();
     void killDebuggerImpl();

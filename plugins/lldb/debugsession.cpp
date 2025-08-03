@@ -179,9 +179,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
 
         filesymbols += QLatin1String(" -r ") + Utils::quote(remoteExe);
 
-        addCommand(MI::FileExecAndSymbols, filesymbols,
-                   this, &DebugSession::handleFileExecAndSymbols,
-                   CmdHandlesError);
+        addFileExecAndSymbolsCommand(filesymbols);
 
         addCommand(MI::TargetSelect, QLatin1String("remote ") + connStr,
                    this, &DebugSession::handleTargetSelect, CmdHandlesError);
@@ -191,9 +189,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
         addCommand(MI::NonMI, QStringLiteral("platform put-file %0 %1")
                               .arg(Utils::quote(executable), Utils::quote(remoteExe)));
     } else {
-        addCommand(MI::FileExecAndSymbols, filesymbols,
-                   this, &DebugSession::handleFileExecAndSymbols,
-                   CmdHandlesError);
+        addFileExecAndSymbolsCommand(filesymbols);
     }
 
     raiseEvent(connected_to_program);
@@ -292,9 +288,7 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, con
 bool DebugSession::loadCoreFile(ILaunchConfiguration *,
                                 const QString &debugee, const QString &corefile)
 {
-    addCommand(MI::FileExecAndSymbols, debugee,
-               this, &DebugSession::handleFileExecAndSymbols,
-               CmdHandlesError);
+    addFileExecAndSymbolsCommand(debugee);
     raiseEvent(connected_to_program);
 
     addCommand(std::make_unique<CliCommand>(NonMI, QLatin1String("target create -c ") + Utils::quote(corefile), this,
@@ -319,15 +313,6 @@ void DebugSession::ensureDebuggerListening()
     // NOTE: there is actually a bug in lldb-mi that, when receiving SIGINT,
     // it would print '^done', which doesn't corresponds to any previous command.
     // This confuses our command queue.
-}
-
-void DebugSession::handleFileExecAndSymbols(const MI::ResultRecord& r)
-{
-    if (r.isReasonError()) {
-        const QString messageText = i18n("<b>Could not start debugger:</b><br />")+
-                                    r.errorMessage();
-        stopDebuggerOnError(messageText);
-    }
 }
 
 void DebugSession::handleTargetSelect(const MI::ResultRecord& r)
