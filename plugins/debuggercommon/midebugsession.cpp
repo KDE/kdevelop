@@ -393,10 +393,10 @@ bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
     }
 
     // FIXME: support non-local URLs
-    if (!loadCoreFile(nullptr, debugee.toLocalFile(), coreFile.toLocalFile())) {
-        return false;
-    }
+    addFileExecAndSymbolsCommand(debugee.toLocalFile());
+    raiseEvent(connected_to_program);
 
+    loadCoreFile(coreFile.toLocalFile());
     raiseEvent(program_state_changed);
 
     return true;

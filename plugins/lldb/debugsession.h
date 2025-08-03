@@ -57,8 +57,7 @@ protected:
 
     bool execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec,
                       const QString &executable) override;
-    bool loadCoreFile(KDevelop::ILaunchConfiguration * cfg,
-                      const QString & debugee, const QString & corefile) override;
+    void loadCoreFile(const QString& coreFile) override;
 
     void ensureDebuggerListening() override;
 

@@ -285,15 +285,10 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, con
     return true;
 }
 
-bool DebugSession::loadCoreFile(ILaunchConfiguration *,
-                                const QString &debugee, const QString &corefile)
+void DebugSession::loadCoreFile(const QString& coreFile)
 {
-    addFileExecAndSymbolsCommand(debugee);
-    raiseEvent(connected_to_program);
-
-    addCommand(std::make_unique<CliCommand>(NonMI, QLatin1String("target create -c ") + Utils::quote(corefile), this,
+    addCommand(std::make_unique<CliCommand>(NonMI, QLatin1String("target create -c ") + Utils::quote(coreFile), this,
                                             &DebugSession::handleCoreFile, CmdHandlesError));
-    return true;
 }
 
 void DebugSession::interruptDebugger()

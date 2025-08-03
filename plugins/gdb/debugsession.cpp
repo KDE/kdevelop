@@ -243,16 +243,9 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
     return true;
 }
 
-bool DebugSession::loadCoreFile(KDevelop::ILaunchConfiguration*,
-                                const QString& debugee, const QString& corefile)
+void DebugSession::loadCoreFile(const QString& coreFile)
 {
-    addFileExecAndSymbolsCommand(debugee);
-    raiseEvent(connected_to_program);
-
-    addCommand(NonMI, QLatin1String("core ") + corefile,
-               this, &DebugSession::handleCoreFile,
-               CmdHandlesError);
-    return true;
+    addCommand(NonMI, QLatin1String("core ") + coreFile, this, &DebugSession::handleCoreFile, CmdHandlesError);
 }
 
 void DebugSession::handleVersion(const QStringList& s)

@@ -73,7 +73,9 @@ protected:
     }
     void configInferior(KDevelop::ILaunchConfiguration *, IExecutePlugin *, const QString &) override {}
     bool execInferior(KDevelop::ILaunchConfiguration *, IExecutePlugin *, const QString &) override { return false; }
-    bool loadCoreFile(KDevelop::ILaunchConfiguration *, const QString &, const QString &) override { return false; }
+    void loadCoreFile(const QString&) override
+    {
+    }
 
     KDevMI::MIBreakpointController* breakpointController() const override
     {

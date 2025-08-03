@@ -52,9 +52,7 @@ protected:
 
     bool execInferior(KDevelop::ILaunchConfiguration* cfg, IExecutePlugin*,
                       const QString& executable) override;
-
-    bool loadCoreFile(KDevelop::ILaunchConfiguration *cfg,
-                      const QString &debugee, const QString &corefile) override;
+    void loadCoreFile(const QString& coreFile) override;
 
 private Q_SLOTS:
     void handleVersion(const QStringList& s);

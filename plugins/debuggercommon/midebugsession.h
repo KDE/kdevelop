@@ -330,10 +330,9 @@ protected:
                               const QString &executable) = 0;
 
     /**
-     * Further config the debugger and load the core dump
+     * Load a core dump file.
      */
-    virtual bool loadCoreFile(KDevelop::ILaunchConfiguration *cfg,
-                              const QString &debugee, const QString &corefile) = 0;
+    virtual void loadCoreFile(const QString& coreFile) = 0;
 
     /**
      * Display a given error message to the user and call stopDebugger().
