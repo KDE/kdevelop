@@ -393,8 +393,18 @@ bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
     }
 
     // FIXME: support non-local URLs
-    addFileExecAndSymbolsCommand(debugee.toLocalFile());
-    raiseEvent(connected_to_program);
+    const auto debugeePath = debugee.toLocalFile();
+
+    // If the file argument is not passed to the MI command -file-exec-and-symbols, GDB/MI clears the executable and
+    // symbol information. But since such information is absent at this time, sending the command is not useful.
+    // LLDB-MI does not support the absence of the file argument and replies to the bare
+    // -file-exec-and-symbols command with an error that terminates the debug session:
+    // 5^error,msg="Command 'file-exec-and-symbols'. Command Args. Validation failed. Mandatory args not found: file"
+    // Examining a core file works both with GDB and with LLDB if the command -file-exec-and-symbols is not sent at all.
+    if (!debugeePath.isEmpty()) {
+        addFileExecAndSymbolsCommand(debugeePath);
+        raiseEvent(connected_to_program);
+    }
 
     loadCoreFile(coreFile.toLocalFile());
     raiseEvent(program_state_changed);
