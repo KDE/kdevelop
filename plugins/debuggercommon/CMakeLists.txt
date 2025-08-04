@@ -81,6 +81,7 @@ target_link_libraries(kdevdebuggercommon
     KDev::Util
     KDev::IExecute
     KF6::KIOWidgets
+    KF6::WidgetsAddons
 )
 target_include_directories(kdevdebuggercommon
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}

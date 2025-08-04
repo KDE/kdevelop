@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>442</width>
-    <height>83</height>
+    <height>173</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -42,6 +42,16 @@
     </layout>
    </item>
    <item>
+    <widget class="KMessageWidget" name="selectionValidWidget">
+     <property name="closeButtonVisible">
+      <bool>false</bool>
+     </property>
+     <property name="messageType">
+      <enum>KMessageWidget::MessageType::Error</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
@@ -56,6 +66,11 @@
    <extends>QWidget</extends>
    <header>KUrlRequester</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header>KMessageWidget</header>
   </customwidget>
  </customwidgets>
  <resources/>

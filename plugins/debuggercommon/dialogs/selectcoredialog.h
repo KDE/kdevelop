@@ -23,6 +23,8 @@ public:
     QUrl core() const;
 
 private:
+    void validateSelection();
+
     Ui::SelectCoreDialog m_ui;
 };
 

@@ -1532,7 +1532,8 @@ void DebuggerTestBase::testCoreFile()
     } else if (isExecutableAcceptable && coreFileKind == FileKind::EmptyName && !isLldb()) {
         // If the core filename is empty, KDevelop sends a non-MI command `core` without argument, GDB
         // outputs a message "No core file now." and replies with "done". Consequently, the debug session
-        // is stuck in the starting state instead of ending with an error.
+        // is stuck in the starting state instead of ending with an error. This is not a problem in
+        // practice, because the Select Core File dialog cannot be accepted if the core filename is empty.
         WAIT_FOR_A_WHILE(session, 1000);
         QEXPECT_FAIL("", "Debug session is stuck in the starting state", Continue);
         QCOMPARE(session->state(), IDebugSession::EndedState);
