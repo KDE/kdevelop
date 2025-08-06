@@ -167,6 +167,13 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     }
 }
 
+QString DisassembleWindow::selectedAddress() const
+{
+    const auto selected = selectedItems();
+    Q_ASSERT(selected.size() <= 1); // due to QTreeWidget::SingleSelection mode
+    return selected.empty() ? QString{} : selected.constFirst()->text(DisassembleWidget::Address);
+}
+
 void DisassembleWindow::setDisassemblyFlavor(DisassemblyFlavor flavor)
 {
     m_disassemblyFlavorAtt->setChecked(flavor == DisassemblyFlavorATT);
@@ -274,7 +281,8 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
 void DisassembleWidget::jumpToCursor()
 {
     if (auto* const session = currentRunningSession()) {
-        QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
+        const auto address = m_disassembleWindow->selectedAddress();
+        Q_ASSERT(!address.isEmpty());
         session->jumpToMemoryAddress(address);
     }
 }
@@ -282,7 +290,8 @@ void DisassembleWidget::jumpToCursor()
 void DisassembleWidget::runToCursor()
 {
     if (auto* const session = currentRunningSession()) {
-        QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
+        const auto address = m_disassembleWindow->selectedAddress();
+        Q_ASSERT(!address.isEmpty());
         session->runUntil(address);
     }
 }
@@ -463,8 +472,8 @@ void DisassembleWidget::enableControls(bool enabled)
 
 void DisassembleWidget::slotChangeAddress()
 {
-    if (!m_disassembleWindow->selectedItems().isEmpty()) {
-        m_dlg->setAddress(m_disassembleWindow->selectedItems().first()->text(Address));
+    if (const auto selectedAddress = m_disassembleWindow->selectedAddress(); !selectedAddress.isEmpty()) {
+        m_dlg->setAddress(selectedAddress);
     }
 
     if (m_dlg->exec() == QDialog::Rejected)

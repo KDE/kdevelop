@@ -69,6 +69,11 @@ class DisassembleWindow : public QTreeWidget
 public:
     DisassembleWindow(QWidget *parent, DisassembleWidget* widget);
 
+    /**
+     * @return the currently selected address or an empty string if no address is selected
+     */
+    [[nodiscard]] QString selectedAddress() const;
+
     void setDisassemblyFlavor(DisassemblyFlavor flavor);
 
 protected:
