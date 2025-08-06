@@ -185,8 +185,8 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 
     m_selectAddrAction->setEnabled(true);
 
-    /// These two actions require nonempty selection.
-    const auto enableJumpAndRunActions = !selectedItems().empty();
+    /// These two actions require nonempty selection and a running program.
+    const auto enableJumpAndRunActions = !selectedItems().empty() && currentRunningSession();
     m_jumpToLocation->setEnabled(enableJumpAndRunActions);
     m_runUntilCursor->setEnabled(enableJumpAndRunActions);
 
