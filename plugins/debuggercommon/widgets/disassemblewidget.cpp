@@ -70,6 +70,18 @@ public:
     }
 };
 
+[[nodiscard]] MIDebugSession* currentSessionThatAcceptsCommands()
+{
+    auto* const session = qobject_cast<MIDebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+    return session && session->acceptsCommands() ? session : nullptr;
+}
+
+[[nodiscard]] MIDebugSession* currentRunningSession()
+{
+    auto* const session = qobject_cast<MIDebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+    return session && session->isRunning() ? session : nullptr;
+}
+
 } // unnamed namespace
 
 SelectAddressDialog::SelectAddressDialog(QWidget* parent)
@@ -259,21 +271,19 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin*, QWidget* parent)
     }
 }
 
-void DisassembleWidget::jumpToCursor() {
-    auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
-            self()->debugController()->currentSession());
-    if (s && s->isRunning()) {
+void DisassembleWidget::jumpToCursor()
+{
+    if (auto* const session = currentRunningSession()) {
         QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
-        s->jumpToMemoryAddress(address);
+        session->jumpToMemoryAddress(address);
     }
 }
 
-void DisassembleWidget::runToCursor(){
-    auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
-            self()->debugController()->currentSession());
-    if (s && s->isRunning()) {
+void DisassembleWidget::runToCursor()
+{
+    if (auto* const session = currentRunningSession()) {
         QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
-        s->runUntil(address);
+        session->runUntil(address);
     }
 }
 
@@ -376,13 +386,14 @@ void DisassembleWidget::disassembleMemoryRegion(QStringView from, QStringView to
 {
     Q_ASSERT(!from.isEmpty());
 
-    auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
-            self()->debugController()->currentSession());
-    if(!s || !s->isRunning()) return;
+    auto* const session = currentSessionThatAcceptsCommands();
+    if (!session) {
+        return;
+    }
 
     const auto command = to.isEmpty() ? QLatin1String{"-s %1 -e \"%1 + 256\" -- 0"}.arg(from)
                                       : QLatin1String{"-s %1 -e %2+1 -- 0"}.arg(from, to);
-    s->addCommandWithCurrentSessionHandler(DataDisassemble, command, this, handlerMethod);
+    session->addCommandWithCurrentSessionHandler(DataDisassemble, command, this, handlerMethod);
 }
 
 /***************************************************************************/
@@ -495,9 +506,8 @@ void DisassembleWidget::updateIfNeeded()
 
 void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 {
-    auto* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
-            self()->debugController()->currentSession());
-    if(!s || !s->isRunning()) {
+    auto* const session = currentSessionThatAcceptsCommands();
+    if (!session) {
         return;
     }
 
@@ -518,7 +528,8 @@ void DisassembleWidget::setDisassemblyFlavor(QAction* action)
     qCDebug(DEBUGGERCOMMON) << "Disassemble widget set " << cmd;
 
     if (!cmd.isEmpty()) {
-        s->addCommandWithCurrentSessionHandler(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler);
+        session->addCommandWithCurrentSessionHandler(GdbSet, cmd, this,
+                                                     &DisassembleWidget::setDisassemblyFlavorHandler);
     }
 }
 
@@ -545,16 +556,15 @@ void DisassembleWidget::refreshRegionDisassemblyFlavorHandler(const MI::ResultRe
 
 void DisassembleWidget::updateDisassemblyFlavor()
 {
-    auto* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
-            self()->debugController()->currentSession());
-    if(!s || !s->isRunning()) {
+    auto* const session = currentSessionThatAcceptsCommands();
+    if (!session) {
         return;
     }
 
     // Mark as up to date now rather than in the handler function so as to execute the MI command once.
     m_disassemblyFlavorActionsUpToDate = true;
-    s->addCommandWithCurrentSessionHandler(GdbShow, QStringLiteral("disassembly-flavor"), this,
-                                           &DisassembleWidget::showDisassemblyFlavorHandler);
+    session->addCommandWithCurrentSessionHandler(GdbShow, QStringLiteral("disassembly-flavor"), this,
+                                                 &DisassembleWidget::showDisassemblyFlavorHandler);
 }
 
 void DisassembleWidget::showDisassemblyFlavorHandler(const ResultRecord& r)
