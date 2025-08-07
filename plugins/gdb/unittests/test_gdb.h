@@ -20,20 +20,7 @@ protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
 private Q_SLOTS:
-    void testChangeLocationBreakpoint();
-    void testDeleteBreakpoint();
-    void testPendingBreakpoint();
     void testUpdateBreakpoint();
-    void testIgnoreHitsBreakpoint();
-    void testConditionBreakpoint();
-    void testBreakOnWriteBreakpoint();
-    void testBreakOnWriteWithConditionBreakpoint();
-    void testBreakOnReadBreakpoint();
-    void testBreakOnReadBreakpoint2();
-    void testBreakOnAccessBreakpoint();
-    void testInsertBreakpointWhileRunning();
-    void testInsertBreakpointWhileRunningMultiple();
-    void testInsertBreakpointFunctionName();
     void testManualBreakpoint();
     void testAttach();
     void testManualAttach();
