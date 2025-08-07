@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2010, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022.
-# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# SPDX-FileCopyrightText: 2010, 2025 Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>
 # Marcus Gama <marcus.gama@gmail.com>, 2010, 2011, 2012.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Aracele Torres <araceletorres@gmail.com>, 2010.
@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-24 00:41+0000\n"
-"PO-Revision-Date: 2022-07-14 09:50-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
-"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"POT-Creation-Date: 2025-08-07 18:28+0000\n"
+"PO-Revision-Date: 2025-08-07 07:12-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -198,6 +198,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Não é possível adicionar um ponto de parada a um documento sem título. Salve "
+"o documento primeiro."
 
 #: debugger/breakpoint/breakpointwidget.cpp:59
 #, kde-format
@@ -414,7 +416,7 @@ msgstr "Variáveis do Depurador"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Redimensionar colunas automaticamente ao clicar"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -892,7 +894,7 @@ msgstr "enumerador "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[dependente-do-valor]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, kde-format
@@ -2075,12 +2077,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "Pular para a linha de execução no editor."
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Apagar a sessão atual..."
+msgstr "Interromper a sessão atual"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
@@ -2370,26 +2370,29 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"As seguintes linguagens são mais bem suportados pelos plugins dedicados do "
+"KDevelop e, portanto, estão desabilitadas no plugin %1 para evitar "
+"conflitos: <var>%2</var>. Para comparar os níveis de suporte ou contornar "
+"erros graves, desabilite o(s) plugin(s) dedicado(s) do KDevelop e defina a "
+"variável de ambiente <var>%3</var> (<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "atualmente definida"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "atualmente não definida"
 
 #: shell/ktexteditorpluginintegration.cpp:492
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Mensagem"
+msgstr "Mensagens"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -2725,10 +2728,9 @@ msgid "Adds a new tool view to this window."
 msgstr "Adiciona uma nova janela de ferramentas a esta janela."
 
 #: shell/mainwindow_p.cpp:320
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Esquema de cores"
+msgstr "&Esquema de cores da janela"
 
 #: shell/mainwindow_p.cpp:354
 #, kde-format
@@ -2773,11 +2775,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Bloquear o painel de ocultar"
 
 #: shell/openprojectdialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "Todos os arquivos de projeto (%1)"
+msgstr "Todos os arquivos de projeto"
 
 #: shell/openprojectdialog.cpp:141
 #, kde-format
@@ -3638,12 +3639,10 @@ msgid "Delete Session"
 msgstr "Excluir a sessão"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "Iniciar uma nova sessão"
+msgstr "Iniciar nova sessão"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
@@ -3684,20 +3683,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Iniciar uma nova instância do KDevelop com uma sessão vazia"
 
 #: shell/sessioncontroller.cpp:281
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Iniciar uma nova sessão"
+msgstr "Iniciar nova sessão nomeada..."
 
 #: shell/sessioncontroller.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Iniciar uma nova instância do KDevelop com uma sessão vazia"
+msgstr "Inicia uma nova instância do KDevelop com uma sessão nomeada"
 
 #: shell/sessioncontroller.cpp:288
 #, kde-format
@@ -3929,13 +3924,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Alternar a visibilidade da visualização para este estilo.\n"
+"A visualização deve ser desativada para estilos cuja formatação depende do "
+"caminho do arquivo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Pré-visualização"
+msgstr "Mostrar visualização"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4048,12 +4045,12 @@ msgid_plural " files"
 msgstr[0] " arquivo"
 msgstr[1] " arquivos"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
 msgstr "Suporte à linguagem"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Configurar os realces de completação de código e semântica"
@@ -4192,6 +4189,13 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Por padrão, as cores globais para tipos, funções, espaços de nome e assim "
+"por diante são geradas automaticamente e se adaptarão ao tema do editor "
+"selecionado com base na intensidade da colorização global. Se desejar ter "
+"controle total sobre as cores, você pode usar o tema do editor como fonte de "
+"cores. Você pode então ajustar as cores nas configurações em Editor &gt; "
+"Temas de Cores &gt; Destacando Estilos de Texto &gt; KDevelop/Cores "
+"Semânticas.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
@@ -4383,14 +4387,14 @@ msgstr "Tamanho mínimo do projeto para o processamento simplificado:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Armazenamento e Uso de Memória"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Armazene preâmbulos pré-compilados em:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4408,20 +4412,32 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Os preâmbulos pré-compilados permanecem no diretório temporário após o "
+"KDevelop travar e são excluídos somente quando a mesma sessão é reiniciada."
+"<br>\n"
+"Quando os preâmbulos são armazenados na memória, é garantido que eles "
+"desaparecerão ao sair, mesmo se o KDevelop travar.<br>\n"
+"Escolher o armazenamento em Diretório Temporário da Sessão faz sentido em "
+"sistemas onde a RAM é limitada e o diretório temporário não usa tmpfs, pois "
+"os arquivos de preâmbulo podem ocupar gigabytes de espaço.<br>\n"
+"A alteração desta opção entra em vigor após reiniciar o KDevelop.<br>\n"
+"Esta opção só tem efeito se o KDevelop tiver sido compilado com o Clang "
+"versão 17 ou posterior.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Memória"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Pasta temporária de sessão"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4900,26 +4916,25 @@ msgid "Reformat Files..."
 msgstr "Reformatar arquivos..."
 
 #: shell/sourceformattercontroller.cpp:235
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Format file(s) using the current theme"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Formatar os arquivos com o tema atual"
+msgstr ""
+"Formata o(s) arquivo(s) usando o(s) formatador(es) de código configurado(s)"
 
 #: shell/sourceformattercontroller.cpp:237
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Formatting functionality using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr "Funcionalidade de formatação com a biblioteca <b>astyle</b>."
+msgstr ""
+"Funcionalidade de formatação usando o(s) formatador(es) de código "
+"configurado(s)."
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "Reformata seleção ou arquivo usando <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4928,32 +4943,30 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"Reformata o texto selecionado ou o arquivo inteiro se nada estiver "
+"selecionado, usando a ferramenta <i>%1</i> com o estilo <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:619
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr "Reformatar a linha atual usando o AStyle"
+msgstr "Reformata a linha atual usando <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:622
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
-"Reformatação de código da linha sob o cursor com a biblioteca <b>astyle</b>."
+"Reformatação da fonte da linha sob o cursor usando a ferramenta <i>%1</i> "
+"com o estilo <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
-msgstr ""
+msgstr "Reformata seleção ou arquivo usando o formatador de código configurado"
 
 #: shell/sourceformattercontroller.cpp:628
 #, kde-format
@@ -4962,26 +4975,24 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Reformata o texto selecionado ou o arquivo inteiro, caso nada esteja "
+"selecionado, usando o formatador de código configurado."
 
 #: shell/sourceformattercontroller.cpp:630
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr "Reformatar a linha atual usando o AStyle"
+msgstr "Reformata a linha atual usando o formatador de código configurado"
 
 #: shell/sourceformattercontroller.cpp:632
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
-"Reformatação de código da linha sob o cursor com a biblioteca <b>astyle</b>."
+"Reformatação do código da linha sob o cursor usando o formatador de código "
+"configurado."
 
 #: shell/sourceformattercontroller.cpp:867
 #, kde-format
@@ -5050,7 +5061,7 @@ msgstr "Linguagem:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Como configurar estilos de formatação"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5069,6 +5080,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Selecione as linguagens que você usa, uma por uma, na caixa de combinação "
+"<i>Linguagem</i> abaixo e escolha o formatador e o estilo desejados para "
+"cada uma. <i>Ctrl+Clique</i> em um estilo selecionado para desmarcá-lo.</p>\n"
+"<p>Configurar o formatador e o estilo corretos para cada linguagem usado é "
+"muito importante: não apenas as ações explícitas <i>Reformatar Código-Fonte</"
+"i>/<i>Linha</i>/<i>Arquivos...</i> são afetadas, mas também a formatação de "
+"código gerado, refatorado ou corrigido automaticamente (por exemplo, a ação "
+"do menu de contexto <i>Renomear</i>).</p>\n"
+"<p>Observe que o KDevelop formata todos os arquivos <i>*.h</i> com "
+"formatador e estilo configurados para a linguagem <i>C</i>, até mesmo "
+"cabeçalhos C++ que pertencem a um projeto C++ puro. Isso ocorre porque o "
+"formatador de código mapeia os tipos MIME para as linguagens.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5081,7 +5104,7 @@ msgstr "Formatação:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Descrição de um formatador selecionado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -5517,7 +5540,7 @@ msgstr "Imprimir a cadeia de definições de uso se processado com sucesso"
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Imprimir contextos pais ao despejar contextos"
 
 #: util/duchainify/main.cpp:300
 #, kde-format
@@ -5652,7 +5675,7 @@ msgstr "O comando terminou com o valor %1."
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "erro: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format

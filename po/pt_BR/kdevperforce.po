@@ -4,20 +4,21 @@
 #
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2018, 2020.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020.
+# SPDX-FileCopyrightText: 2025 Marcus Gama <marcus.gama@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2020-09-09 11:41-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"PO-Revision-Date: 2025-08-07 06:49-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 20.04.3\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: perforceplugin.cpp:108
 #, kde-format
@@ -62,16 +63,18 @@ msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
+"Não foi possível encontrar o executável do perforce. Ele está instalado no "
+"sistema? Está no seu PATH?"
 
 #: ui/perforceimportmetadatawidget.cpp:152
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
-msgstr ""
+msgstr "Falha do cliente P4 com código de saída: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:196
 #, kde-format
 msgid "P4 Client failed with error code: %1"
-msgstr ""
+msgstr "Falha do cliente P4 com código de erro: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: ui/perforceimportmetadatawidget.ui:29
