@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 20:24+0000\n"
 "PO-Revision-Date: 2025-07-23 22:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -4051,12 +4051,12 @@ msgid_plural " files"
 msgstr[0] " fitxer"
 msgstr[1] " fitxers"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
 msgstr "Implementació del llenguatge"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Configura la compleció de codi i el ressaltat semàntic"

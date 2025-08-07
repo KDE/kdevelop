@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 20:24+0000\n"
 "PO-Revision-Date: 2025-06-22 04:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -4027,12 +4027,12 @@ msgid_plural " files"
 msgstr[0] " ფაილი"
 msgstr[1] " ფაილი"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
 msgstr "ენის მხარდაჭერა"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "კოდის დასრულებისა და სემანტიკური გამოკვეთის მორგება"

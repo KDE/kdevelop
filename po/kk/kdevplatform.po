@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 20:24+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -4265,14 +4265,14 @@ msgid " file"
 msgid_plural " files"
 msgstr[0] " файл"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Language Support"
 msgid "Language Support"
 msgstr "Тілді қолдау"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 20:24+0000\n"
 "PO-Revision-Date: 2025-06-22 11:37+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -4050,12 +4050,12 @@ msgid_plural " files"
 msgstr[0] " ficheiro"
 msgstr[1] " ficheiros"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
 msgstr "Linguaxes admitidas"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Configurar o completado de código e o realce semántico"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 20:24+0000\n"
 "PO-Revision-Date: 2021-05-15 15:28+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -4181,13 +4181,13 @@ msgstr[0] " fișiere"
 msgstr[1] " fișiere"
 msgstr[2] " fișiere"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, fuzzy, kde-format
 #| msgid "Language:"
 msgid "Language Support"
 msgstr "Limba:"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""
