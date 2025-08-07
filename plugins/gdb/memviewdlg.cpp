@@ -103,6 +103,18 @@ MemoryView::MemoryView(QWidget* parent)
     currentSessionChanged(debugController->currentSession(), nullptr);
 }
 
+DebugSession* MemoryView::currentSessionWithStartedApp() const
+{
+    return m_appHasStarted ? qobject_cast<DebugSession*>(KDevelop::ICore::self()->debugController()->currentSession())
+                           : nullptr;
+}
+
+DebugSession* MemoryView::currentRunningSession() const
+{
+    auto* const session = currentSessionWithStartedApp();
+    return session && session->isRunning() ? session : nullptr;
+}
+
 void MemoryView::currentSessionChanged(KDevelop::IDebugSession* iSession, KDevelop::IDebugSession* iPreviousSession)
 {
     if (auto* const previousSession = qobject_cast<DebugSession*>(iPreviousSession)) {
@@ -174,8 +186,7 @@ void MemoryView::hideRangeDialog()
 
 void MemoryView::changeMemoryRange()
 {
-    auto *session = qobject_cast<DebugSession*>(
-        KDevelop::ICore::self()->debugController()->currentSession());
+    auto* const session = currentSessionWithStartedApp();
     if (!session) return;
 
     QString amount = m_rangeSelector->amountLineEdit->text();
@@ -193,8 +204,7 @@ void MemoryView::sizeComputed(const MI::ResultRecord& record)
 
 void MemoryView::addReadMemoryCommand(const QString& arguments)
 {
-    auto *session = qobject_cast<DebugSession*>(
-        KDevelop::ICore::self()->debugController()->currentSession());
+    auto* const session = currentSessionWithStartedApp();
     if (!session) return;
 
     session->addCommandWithCurrentSessionHandler(MI::DataReadMemory, arguments, this, &MemoryView::memoryRead);
@@ -226,8 +236,7 @@ void MemoryView::memoryRead(const MI::ResultRecord& r)
 
 void MemoryView::memoryEdited(int start, int end)
 {
-    auto *session = qobject_cast<DebugSession*>(
-        KDevelop::ICore::self()->debugController()->currentSession());
+    auto* const session = currentRunningSession();
     if (!session) return;
 
     for (auto i = start; i < end; ++i) {
@@ -338,7 +347,7 @@ void MemoryView::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalP
 
     auto* const write = menu->addAction(i18nc("@action:inmenu", "Write Changes"));
     write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
-    write->setEnabled(m_appHasStarted && m_memViewView->isModified());
+    write->setEnabled(currentRunningSession() && m_memViewView->isModified());
 
     auto* const range = menu->addAction(i18nc("@action:inmenu", "Change Memory Range"));
     range->setEnabled(m_appHasStarted && !m_rangeSelector->isVisible());

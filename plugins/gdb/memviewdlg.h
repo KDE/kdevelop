@@ -33,6 +33,7 @@ namespace KDevMI
 namespace GDB
 {
     class CppDebuggerPlugin;
+    class DebugSession;
     class MemoryView;
     class GDBController;
     class MemoryRangeSelector;
@@ -64,6 +65,9 @@ namespace GDB
         void captionChanged(const QString& caption);
 
     private:
+        [[nodiscard]] DebugSession* currentSessionWithStartedApp() const;
+        [[nodiscard]] DebugSession* currentRunningSession() const;
+
         void sizeComputed(const MI::ResultRecord& r);
         void addReadMemoryCommand(const QString& arguments);
         void memoryRead(const MI::ResultRecord& r);
