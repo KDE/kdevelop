@@ -386,6 +386,78 @@ void DebuggerTestBase::testDisableBreakpoint()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void DebuggerTestBase::testChangeLocationBreakpoint()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    auto* const breakpoint = addDebugeeBreakpoint(28);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 28);
+
+    WAIT_FOR_A_WHILE(session, 100);
+    breakpoint->setLine(28); // i.e. MI line 29
+    WAIT_FOR_A_WHILE(session, 100);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 29);
+
+    WAIT_FOR_A_WHILE(session, 500);
+    breakpoints()->setData(breakpoints()->index(0, Breakpoint::LocationColumn), debugeeLocationAt(30));
+    QCOMPARE(breakpointMiLine(breakpoint), 30);
+    WAIT_FOR_A_WHILE(session, 100);
+    QCOMPARE(breakpointMiLine(breakpoint), 30);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 30);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testDeleteBreakpoint()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    QCOMPARE(breakpoints()->rowCount(), 0);
+    // add breakpoint before startDebugging()
+    addDebugeeBreakpoint(22);
+    QCOMPARE(breakpoints()->rowCount(), 1);
+    QVERIFY(breakpoints()->removeRow(0));
+    QCOMPARE(breakpoints()->rowCount(), 0);
+
+    addDebugeeBreakpoint(23);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    QVERIFY(breakpoints()->removeRow(0));
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testPendingBreakpoint()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    addDebugeeBreakpoint(29);
+
+    const auto* const breakpoint =
+        breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("debugeeqt.cpp")), 10);
+    QCOMPARE(breakpoint->state(), Breakpoint::NotStartedState);
+
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    QCOMPARE(breakpoint->state(), Breakpoint::PendingState);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testBreakpointsOnNoOpLines()
 {
     auto* const session = createTestDebugSession();
@@ -431,6 +503,199 @@ void DebuggerTestBase::testBreakpointsOnNoOpLines()
     // and permanently keeps it in the pending state.
     QCOMPARE(breakpointMiLine(lastLineBreakpoint), 42);
     QCOMPARE(lastLineBreakpoint->state(), Breakpoint::PendingState);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testIgnoreHitsBreakpoint()
+{
+    if (isLldb()) {
+        QSKIP("Skipping... LLDB-MI does not provide breakpoint hit count update");
+    }
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    auto* const b1 = addDebugeeBreakpoint(22);
+    b1->setIgnoreHits(1);
+
+    auto* const b2 = addDebugeeBreakpoint(23);
+
+    START_DEBUGGING_E(session, cfg);
+    WAIT_FOR(session, session->state() == IDebugSession::PausedState && b2->hitCount() == 1);
+
+    b2->setIgnoreHits(1);
+
+    session->run();
+    WAIT_FOR(session, session->state() == IDebugSession::PausedState && b1->hitCount() == 1);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testConditionBreakpoint()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    auto* breakpoint = addDebugeeBreakpoint(40);
+    breakpoint->setCondition("x[0] == 'H'");
+
+    breakpoint = addDebugeeBreakpoint(24);
+    breakpoint->setCondition("i==2");
+
+    breakpoint = addDebugeeBreakpoint(25);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    breakpoint->setCondition("i == 0");
+    WAIT_FOR_A_WHILE(session, 100);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 24);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 40);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testBreakOnWriteBreakpoint()
+{
+    if (isLldb()) {
+        QSKIP("Skipping... LLDB-MI does not have proper watchpoint support");
+    }
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    addDebugeeBreakpoint(25);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    breakpoints()->addWatchpoint("i");
+    WAIT_FOR_A_WHILE(session, 100);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // ++i; int j = i;
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testBreakOnWriteWithConditionBreakpoint()
+{
+    if (isLldb()) {
+        QSKIP("Skipping... LLDB-MI does not have proper watchpoint support");
+    }
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    addDebugeeBreakpoint(25);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    auto* const breakpoint = breakpoints()->addWatchpoint("i");
+    breakpoint->setCondition("i==2");
+    WAIT_FOR_A_WHILE(session, 100);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // ++i; int j = i;
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testBreakOnReadBreakpoint()
+{
+    if (isLldb()) {
+        QSKIP("Skipping... LLDB-MI does not have proper watchpoint support");
+    }
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addReadWatchpoint("foo::i");
+
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_E(session, cfg);
+
+    for (int fooCall = 0; fooCall < 2; ++fooCall) {
+        WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+        QCOMPARE(currentMiLine(session), 23); // ++i;
+
+        CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+        QCOMPARE(currentMiLine(session), 23); // int j = i;
+
+        session->run();
+    }
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+// This test adds a read watchpoint during a debug session rather than before it in order to
+// work around the (already fixed) GDB bug http://sourceware.org/bugzilla/show_bug.cgi?id=10136
+void DebuggerTestBase::testBreakOnReadBreakpoint2()
+{
+    if (isLldb()) {
+        QSKIP("Skipping... LLDB-MI does not have proper watchpoint support");
+    }
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    addDebugeeBreakpoint(25);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    breakpoints()->addReadWatchpoint("i");
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // ++i
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // int j = i
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testBreakOnAccessBreakpoint()
+{
+    if (isLldb()) {
+        QSKIP("Skipping... LLDB-MI does not have proper watchpoint support");
+    }
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    addDebugeeBreakpoint(25);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    breakpoints()->addAccessWatchpoint("i");
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // ++i (read)
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // ++i (write)
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // int j = i (read)
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
@@ -485,6 +750,80 @@ void DebuggerTestBase::testBreakpointErrors()
     QCOMPARE(currentMiLine(session), 30);
     session->run();
 
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testInsertBreakpointWhileRunning()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("debuggee_debugeeslow");
+    const auto fileName = findSourceFile("debugeeslow.cpp");
+
+    START_DEBUGGING_E(session, cfg);
+
+    WAIT_FOR_STATE(session, IDebugSession::ActiveState);
+    WAIT_FOR_A_WHILE(session, 2000);
+
+    qDebug() << "adding breakpoint";
+    auto* const breakpoint = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
+    WAIT_FOR_A_WHILE(session, 500);
+
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    WAIT_FOR_A_WHILE(session, 500);
+    QCOMPARE(session->currentLine(), 29); // ++i;
+
+    breakpoints()->removeBreakpoint(breakpoint);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testInsertBreakpointWhileRunningMultiple()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("debuggee_debugeeslow");
+    const auto fileName = findSourceFile("debugeeslow.cpp");
+
+    START_DEBUGGING_E(session, cfg);
+
+    WAIT_FOR_STATE(session, IDebugSession::ActiveState);
+    WAIT_FOR_A_WHILE(session, 2000);
+
+    qDebug() << "adding breakpoints";
+    auto* const b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
+    auto* const b2 =
+        breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
+    WAIT_FOR_A_WHILE(session, 500);
+
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    WAIT_FOR_A_WHILE(session, 500);
+    QCOMPARE(session->currentLine(), 29);
+
+    const ActiveStateSessionSpy sessionSpy(session);
+    session->run();
+    WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
+    WAIT_FOR_A_WHILE(session, 500);
+    QCOMPARE(session->currentLine(), 30);
+
+    breakpoints()->removeBreakpoint(b1);
+    breakpoints()->removeBreakpoint(b2);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testInsertBreakpointFunctionName()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint("main");
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 28);
+
+    session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
