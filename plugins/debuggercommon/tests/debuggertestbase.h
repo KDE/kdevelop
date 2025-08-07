@@ -104,8 +104,24 @@ private Q_SLOTS:
     void testUnsupportedUrlExpressionBreakpoints();
     void testBreakpoint();
     void testDisableBreakpoint();
+    void testChangeLocationBreakpoint();
+    void testDeleteBreakpoint();
+    void testPendingBreakpoint();
     void testBreakpointsOnNoOpLines();
+
+    void testIgnoreHitsBreakpoint();
+    void testConditionBreakpoint();
+    void testBreakOnWriteBreakpoint();
+    void testBreakOnWriteWithConditionBreakpoint();
+    void testBreakOnReadBreakpoint();
+    void testBreakOnReadBreakpoint2();
+    void testBreakOnAccessBreakpoint();
+
     void testBreakpointErrors();
+
+    void testInsertBreakpointWhileRunning();
+    void testInsertBreakpointWhileRunningMultiple();
+    void testInsertBreakpointFunctionName();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
     void testBreakpointInSharedLibrary();

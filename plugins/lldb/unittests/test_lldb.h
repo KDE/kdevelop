@@ -23,20 +23,7 @@ protected:
 
 private Q_SLOTS:
     void testBreakOnStart();
-    void testChangeLocationBreakpoint();
-    void testDeleteBreakpoint();
-    void testPendingBreakpoint();
     void testUpdateBreakpoint();
-    void testIgnoreHitsBreakpoint();
-    void testConditionBreakpoint();
-    void testBreakOnWriteBreakpoint();
-    void testBreakOnWriteWithConditionBreakpoint();
-    void testBreakOnReadBreakpoint();
-    void testBreakOnReadBreakpoint2();
-    void testBreakOnAccessBreakpoint();
-    void testInsertBreakpointWhileRunning();
-    void testInsertBreakpointWhileRunningMultiple();
-    void testInsertBreakpointFunctionName();
     void testManualBreakpoint();
     void testPickupManuallyInsertedBreakpoint();
     void testPickupManuallyInsertedBreakpointOnlyOnce();
