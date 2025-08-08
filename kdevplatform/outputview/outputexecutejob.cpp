@@ -538,6 +538,7 @@ QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment(const QUrl& wo
         environmentProfile = environmentProfiles.defaultProfileName();
     }
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    environment.insert(QStringLiteral("QT_LOGGING_TO_CONSOLE"), QStringLiteral("1"));
     auto userEnv = environmentProfiles.variables(environmentProfile);
     expandVariables(userEnv, environment);
 
