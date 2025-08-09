@@ -594,19 +594,27 @@ void DebuggerTestBase::testBreakOnWriteWithConditionBreakpoint()
         QSKIP("Skipping... LLDB-MI does not have proper watchpoint support");
     }
     auto* const session = createTestDebugSession();
-    TestLaunchConfiguration cfg;
+    TestLaunchConfiguration cfg("debuggee_debugee4foo");
 
-    addDebugeeBreakpoint(25);
+    breakpoints()->addCodeBreakpoint("debugee4foo.cpp:25");
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 25);
 
     auto* const breakpoint = breakpoints()->addWatchpoint("i");
-    breakpoint->setCondition("i==2");
-    WAIT_FOR_A_WHILE(session, 100);
+    breakpoint->setCondition("i==3");
+    // The state is already paused. Wait for the debugger to become idle again
+    // so that the breakpoint condition is set before the debugging continues.
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 23); // ++i; int j = i;
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 25);

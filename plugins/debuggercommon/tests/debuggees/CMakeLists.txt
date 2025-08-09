@@ -17,6 +17,7 @@ function(add_debuggable_executable target)
 endfunction()
 
 add_debuggable_executable(debuggee_debugee SRCS debugee.cpp)
+add_debuggable_executable(debuggee_debugee4foo SRCS debugee4foo.cpp)
 add_debuggable_executable(debuggee_debugeeslow SRCS debugeeslow.cpp)
 add_debuggable_executable(debuggee_crash SRCS debugeecrash.cpp)
 add_debuggable_executable(debuggee_debugeerecursion SRCS debugeerecursion.cpp)
