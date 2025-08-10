@@ -832,7 +832,6 @@ void GdbTest::testCatchpoint()
     QCOMPARE(session->line(), 29);
 
     session->addCommand(MI::NonMI, QStringLiteral("catch throw"));
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     session->run();
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
