@@ -92,6 +92,9 @@ protected:
 
     [[nodiscard]] virtual MIDebugSession* createTestDebugSession() = 0;
 
+    [[nodiscard]] virtual const char* configScriptEntryKey() const = 0;
+    [[nodiscard]] virtual const char* runScriptEntryKey() const = 0;
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
@@ -100,6 +103,8 @@ private Q_SLOTS:
     void testStdout();
     void testEnvironmentSet();
     void testEnvironmentCd();
+
+    void testRunDebuggerScript();
 
     void testUnsupportedUrlExpressionBreakpoints();
     void testBreakpoint();
@@ -124,7 +129,20 @@ private Q_SLOTS:
     void testInsertBreakpointFunctionName();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
+
+    void testPickupManuallyInsertedBreakpoint();
+    void testPickupManuallyInsertedBreakpointOnlyOnce();
+
+    void testBreakpointWithSpaceInPath();
+    void testPathWithSpace();
+
     void testBreakpointInSharedLibrary();
+
+    void testMultipleLocationsBreakpoint();
+    void testMultipleBreakpoint();
+    void testRegularExpressionBreakpoint();
+
+    void testCatchpoint();
 
     void testShowStepInSource();
 
@@ -137,7 +155,17 @@ private Q_SLOTS:
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();
+    void testVariablesStartSecondSession();
+    void testVariablesSameWatchInSecondSession();
+    void testVariablesSwitchFrame();
+    void testVariablesQuicklySwitchFrame();
     void testVariablesChanged();
+
+    void testSwitchFrameDebuggerConsole();
+
+    void testCommandOrderFastStepping();
+
+    void testSegfaultDebugee();
 
     void testDebugInExternalTerminal_data();
     void testDebugInExternalTerminal();
