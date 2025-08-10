@@ -21,19 +21,14 @@ class LldbTest : public DebuggerTestBase
 protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
+    [[nodiscard]] const char* configScriptEntryKey() const override;
+    [[nodiscard]] const char* runScriptEntryKey() const override;
+
 private Q_SLOTS:
     void testBreakOnStart();
     void testUpdateBreakpoint();
     void testManualBreakpoint();
-    void testPickupManuallyInsertedBreakpoint();
-    void testPickupManuallyInsertedBreakpointOnlyOnce();
-    void testBreakpointWithSpaceInPath();
     void testBreakpointDisabledOnStart();
-    void testMultipleLocationsBreakpoint();
-    void testMultipleBreakpoint();
-    void testRegularExpressionBreakpoint();
-
-    void testCatchpoint();
 
     void testAttach();
     void testRemoteDebugging();
@@ -41,20 +36,6 @@ private Q_SLOTS:
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
-    void testVariablesStartSecondSession();
-    void testVariablesSwitchFrame();
-    void testVariablesQuicklySwitchFrame();
-    void testSwitchFrameLldbConsole();
-
-    void testSegfaultDebugee();
-
-    void testCommandOrderFastStepping();
-
-    void testRunLldbScript();
-
-    void testBug301287();
-
-    void testSpecialPath();
 
 private:
     // convenient access methods
