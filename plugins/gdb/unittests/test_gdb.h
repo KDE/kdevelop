@@ -19,6 +19,9 @@ class GdbTest : public DebuggerTestBase
 protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
+    [[nodiscard]] const char* configScriptEntryKey() const override;
+    [[nodiscard]] const char* runScriptEntryKey() const override;
+
 private Q_SLOTS:
     void testUpdateBreakpoint();
     void testManualBreakpoint();
@@ -27,29 +30,17 @@ private Q_SLOTS:
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
-    void testVariablesStartSecondSession();
-    void testVariablesSwitchFrame();
-    void testVariablesQuicklySwitchFrame();
-    void testSegfaultDebugee();
-    void testSwitchFrameGdbConsole();
-    void testCommandOrderFastStepping();
-    void testPickupManuallyInsertedBreakpoint();
-    void testPickupManuallyInsertedBreakpointOnlyOnce();
+
     void testPickupCatchThrowOnlyOnce();
-    void testRunGdbScript();
+
     void testRemoteDebug();
     void testRemoteDebugInsertBreakpoint();
     void testRemoteDebugInsertBreakpointPickupOnlyOnce();
-    void testBreakpointWithSpaceInPath();
+
     void testBreakpointDisabledOnStart();
-    void testCatchpoint();
+
     void testThreadAndFrameInfo();
     void parseBug304730();
-    void testMultipleLocationsBreakpoint();
-    void testBug301287();
-    void testMultipleBreakpoint();
-    void testRegularExpressionBreakpoint();
-    void testPathWithSpace();
 
 private:
     [[nodiscard]] bool isLldb() const override;
