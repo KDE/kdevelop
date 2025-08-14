@@ -30,6 +30,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QList>
+#include <QScopeGuard>
 #include <QStandardPaths>
 #include <QSignalSpy>
 #include <QTest>
@@ -409,12 +410,32 @@ void GdbTest::testRemoteDebug()
         addDebugeeBreakpoint(line);
     }
 
-    QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
-    OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(
-        shellScript,
-        QLatin1String{"gdbserver localhost:2345 %1\n"}.arg(findExecutable("debuggee_debugee").toLocalFile()));
-    QVERIFY(shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser));
-    QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
+    // In case the shell script QTemporaryFile object is alive during debugging:
+    // 1) the sh process started in DebugSession::execInferior() exits immediately with the code 126
+    //    (which means "A specified command_file could not be executed due to an [ENOEXEC]  error");
+    // 2) the GDB command `source path/to/runscript` fails with the following error message:
+    //    "/path/to/runscript:2: Error in sourced command file:
+    //     could not connect: Connection timed out.";
+    // 3) and the debug session is stuck in the starting state, so the test
+    //    fails due to a timeout while waiting for the first paused state.
+    // These errors likely occur because the QTemporaryFile object always keeps
+    // the unique temporary file open internally (according to its documentation).
+    // Prevent the errors by destroying the QTemporaryFile object before starting debugging.
+    QString shellScriptFileName;
+    {
+        QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
+        OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(
+            shellScript,
+            QLatin1String{"gdbserver localhost:2345 %1\n"}.arg(findExecutable("debuggee_debugee").toLocalFile()));
+        QVERIFY(shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser));
+
+        shellScriptFileName = shellScript.fileName();
+        shellScript.setAutoRemove(false);
+    }
+    QVERIFY(!shellScriptFileName.isEmpty());
+    const QScopeGuard shellScriptGuard([&shellScriptFileName] {
+        QFile::remove(shellScriptFileName);
+    });
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     const auto runScriptContents = QLatin1String{R"(file %1
@@ -427,7 +448,7 @@ continue
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile(shellScript.fileName()+"-copy"));
+    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile(shellScriptFileName));
     grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     START_DEBUGGING_E(session, cfg);
@@ -465,8 +486,6 @@ continue
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
     }
-
-    QFile::remove(shellScript.fileName()+"-copy");
 }
 
 void GdbTest::testBreakpointDisabledOnStart()
