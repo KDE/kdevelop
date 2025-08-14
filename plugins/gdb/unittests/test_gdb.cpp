@@ -21,6 +21,7 @@
 #include <debugger/variable/variablecollection.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
+#include <tests/temporaryfilehelpers.h>
 #include <tests/testhelpers.h>
 
 #include <KProcess>
@@ -368,9 +369,7 @@ void GdbTest::testVariablesWatchesTwoSessions()
 void GdbTest::testPickupCatchThrowOnlyOnce()
 {
     QTemporaryFile configScript;
-    configScript.open();
-    configScript.write("catch throw\n");
-    configScript.close();
+    OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(configScript, u"catch throw\n");
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
@@ -411,19 +410,20 @@ void GdbTest::testRemoteDebug()
     }
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
-    shellScript.open();
-    shellScript.write("gdbserver localhost:2345 " + findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toUtf8() + "\n");
-    shellScript.close();
+    OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(
+        shellScript,
+        QLatin1String{"gdbserver localhost:2345 %1\n"}.arg(findExecutable("debuggee_debugee").toLocalFile()));
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
-    runScript.open();
-    runScript.write("file " + findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toUtf8() + '\n');
-    runScript.write("target remote localhost:2345\n");
-    runScript.write("break debugee.cpp:30\n");
-    runScript.write("continue\n");
-    runScript.close();
+    const auto runScriptContents = QLatin1String{R"(file %1
+target remote localhost:2345
+break debugee.cpp:30
+continue
+)"}
+                                       .arg(findExecutable("debuggee_debugee").toLocalFile());
+    OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(runScript, runScriptContents);
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();

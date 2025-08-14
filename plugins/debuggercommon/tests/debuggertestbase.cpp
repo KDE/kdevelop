@@ -22,6 +22,7 @@
 #include <interfaces/iframestackmodel.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
+#include <tests/temporaryfilehelpers.h>
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
 #include <util/environmentprofilelist.h>
@@ -275,15 +276,19 @@ void DebuggerTestBase::testRunDebuggerScript()
     auto* const session = createTestDebugSession();
 
     QTemporaryFile runScript;
-    runScript.open();
-    if (isLldb()) {
-        runScript.write(QLatin1String{"break set --file %1 --line 28\n"}.arg(debugeeFilePath()).toUtf8());
-    } else {
-        runScript.write("file " + KShell::quoteArg(findExecutable("debuggee_debugee").toLocalFile()).toUtf8() + "\n");
-        runScript.write("break main\n");
-        runScript.write("run\n");
-    }
-    runScript.close();
+
+    const auto makeScriptContents = [this] {
+        if (isLldb()) {
+            return QLatin1String{"break set --file %1 --line 28\n"}.arg(debugeeFilePath());
+        } else {
+            return QLatin1String{R"(file %1
+break main
+run
+)"}
+                .arg(KShell::quoteArg(findExecutable("debuggee_debugee").toLocalFile()));
+        }
+    };
+    OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(runScript, makeScriptContents());
 
     TestLaunchConfiguration cfg;
     cfg.config().writeEntry(runScriptEntryKey(), QUrl::fromLocalFile(runScript.fileName()));
@@ -994,15 +999,18 @@ void DebuggerTestBase::testPickupManuallyInsertedBreakpointOnlyOnce()
 
     // inject here so that it behaves like a command from .gdbinit or .lldbinit
     QTemporaryFile configScript;
-    configScript.open();
-    if (isLldb()) {
-        configScript.write(QLatin1String{"break set --file %0 --line 32\n"}.arg(debugeeFilePath()).toLocal8Bit());
-    } else {
-        configScript.write(
-            QLatin1String{"file %0\n"}.arg(findExecutable("debuggee_debugee").toLocalFile()).toLocal8Bit());
-        configScript.write("break debugee.cpp:32\n");
-    }
-    configScript.close();
+
+    const auto makeScriptContents = [this] {
+        if (isLldb()) {
+            return QLatin1String{"break set --file %1 --line 32\n"}.arg(debugeeFilePath());
+        } else {
+            return QLatin1String{R"(file %1
+break debugee.cpp:32
+)"}
+                .arg(findExecutable("debuggee_debugee").toLocalFile());
+        }
+    };
+    OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(configScript, makeScriptContents());
 
     TestLaunchConfiguration cfg;
     cfg.config().writeEntry(configScriptEntryKey(), QUrl::fromLocalFile(configScript.fileName()));
