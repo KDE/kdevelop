@@ -5,6 +5,7 @@ set(kdevtests_LIB_SRCS
     kdevsignalspy.cpp
     plugintesthelpers.cpp
     projectsgenerator.cpp
+    temporaryfilehelpers.cpp
     testcore.cpp
     testproject.cpp
     testfile.cpp
@@ -38,6 +39,7 @@ install(FILES
     kdevsignalspy.h
     plugintesthelpers.h
     projectsgenerator.h
+    temporaryfilehelpers.h
     testcore.h
     testproject.h
     testfile.h
