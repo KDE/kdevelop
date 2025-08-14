@@ -13,7 +13,6 @@
 #include "tests/debuggers-tests-config.h"
 #include "tests/testhelper.h"
 
-#include <execute/iexecuteplugin.h>
 #include <debugger/breakpoint/breakpointmodel.h>
 #include <debugger/variable/variablecollection.h>
 #include <interfaces/icore.h>
@@ -26,7 +25,6 @@
 #include <QStringList>
 #include <QTest>
 #include <QUrl>
-#include <QDir>
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;

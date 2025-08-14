@@ -15,7 +15,6 @@
 #include "tests/debuggers-tests-config.h"
 #include "tests/testhelper.h"
 
-#include <execute/iexecuteplugin.h>
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
 #include <debugger/interfaces/ivariablecontroller.h>
@@ -23,7 +22,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <tests/testhelpers.h>
-#include <shell/shellextension.h>
 
 #include <KProcess>
 
