@@ -33,9 +33,8 @@ private Q_SLOTS:
 
     void testPickupCatchThrowOnlyOnce();
 
+    void testRemoteDebug_data();
     void testRemoteDebug();
-    void testRemoteDebugInsertBreakpoint();
-    void testRemoteDebugInsertBreakpointPickupOnlyOnce();
 
     void testBreakpointDisabledOnStart();
 
