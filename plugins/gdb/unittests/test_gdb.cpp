@@ -28,11 +28,13 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
+#include <QList>
 #include <QStandardPaths>
 #include <QSignalSpy>
 #include <QTest>
 #include <QTemporaryFile>
 
+using KDevMI::Testing::currentMiLine;
 using KDevMI::Testing::findExecutable;
 using KDevMI::Testing::findFile;
 using KDevMI::Testing::findSourceFile;
@@ -384,6 +386,16 @@ void GdbTest::testPickupCatchThrowOnlyOnce()
     QTRY_COMPARE(breakpoints()->rowCount(), 1); //one from kdevelop, one from runScript
 }
 
+void GdbTest::testRemoteDebug_data()
+{
+    QTest::addColumn<QList<int>>("linesToAddBreakpointsAt");
+    QTest::addColumn<bool>("startSecondSession");
+
+    QTest::newRow("no-custom-breakpoints") << QList<int>{} << false;
+    QTest::newRow("breakpoints-at-same-and-another-line") << QList<int>{30, 36} << false;
+    QTest::newRow("breakpoint-at-another-line-start-second-session") << QList<int>{36} << true;
+}
+
 void GdbTest::testRemoteDebug()
 {
     const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
@@ -393,49 +405,10 @@ void GdbTest::testRemoteDebug()
 
     auto *session = new TestDebugSession;
 
-    QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
-    shellScript.open();
-    shellScript.write("gdbserver localhost:2345 " + findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toUtf8() + "\n");
-    shellScript.close();
-    shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
-    QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
-
-    QTemporaryFile runScript(QDir::currentPath()+"/runscript");
-    runScript.open();
-    runScript.write("file " + findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toUtf8() + "\n");
-    runScript.write("target remote localhost:2345\n");
-    runScript.write("break debugee.cpp:30\n");
-    runScript.write("continue\n");
-    runScript.close();
-
-    TestLaunchConfiguration cfg;
-    KConfigGroup grp = cfg.config();
-    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
-    grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
-
-    START_DEBUGGING_E(session, cfg);
-
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->line(), 29);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    QFile::remove(shellScript.fileName()+"-copy");
-}
-
-void GdbTest::testRemoteDebugInsertBreakpoint()
-{
-    const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
-    if (gdbserverExecutable.isEmpty()) {
-        QSKIP("Skipping, gdbserver not available");
+    QFETCH(const QList<int>, linesToAddBreakpointsAt);
+    for (const auto line : linesToAddBreakpointsAt) {
+        addDebugeeBreakpoint(line);
     }
-
-    auto *session = new TestDebugSession;
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 29);
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 35);
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
@@ -458,89 +431,40 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
     grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     START_DEBUGGING_E(session, cfg);
-
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(currentMiLine(session), 30);
 
-    QCOMPARE(session->line(), 29);
+    // the run script adds one breakpoint
+    const auto expectedBreakpointCount = linesToAddBreakpointsAt.empty() ? 1 : 2;
+    QCOMPARE(breakpoints()->breakpoints().size(), expectedBreakpointCount);
 
-    QCOMPARE(breakpoints()->breakpoints().count(), 2); //one from kdevelop, one from runScript
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->line(), 35);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    QFile::remove(shellScript.fileName()+"-copy");
-}
-
-
-void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
-{
-    const QString gdbserverExecutable = QStandardPaths::findExecutable(QStringLiteral("gdbserver"));
-    if (gdbserverExecutable.isEmpty()) {
-        QSKIP("Skipping, gdbserver not available");
+    if (!linesToAddBreakpointsAt.empty()) {
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        QCOMPARE(currentMiLine(session), 36);
     }
 
-    auto *session = new TestDebugSession;
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 35);
-
-    QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
-    shellScript.open();
-    shellScript.write("gdbserver localhost:2345 "+findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toLatin1()+"\n");
-    shellScript.close();
-    shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
-    QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
-
-    QTemporaryFile runScript(QDir::currentPath()+"/runscript");
-    runScript.open();
-    runScript.write("file "+findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toLatin1()+"\n");
-    runScript.write("target remote localhost:2345\n");
-    runScript.write("break debugee.cpp:30\n");
-    runScript.write("continue\n");
-    runScript.close();
-
-    TestLaunchConfiguration cfg;
-    KConfigGroup grp = cfg.config();
-    grp.writeEntry(Config::RemoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
-    grp.writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
-
-    START_DEBUGGING_E(session, cfg);
-
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->line(), 29);
-
-    QCOMPARE(breakpoints()->breakpoints().count(), 2); //one from kdevelop, one from runScript
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->line(), 35);
-
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
-    //************************** second session
-    session = new TestDebugSession;
-    START_DEBUGGING_E(session, cfg);
+    QFETCH(const bool, startSecondSession);
+    if (startSecondSession) {
+        session = new TestDebugSession;
+        START_DEBUGGING_E(session, cfg);
+        WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+        QCOMPARE(currentMiLine(session), 30);
 
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+        QCOMPARE(breakpoints()->breakpoints().size(), expectedBreakpointCount);
 
-    QCOMPARE(session->line(), 29);
+        if (!linesToAddBreakpointsAt.empty()) {
+            session->run();
+            WAIT_FOR_STATE(session, DebugSession::PausedState);
+            QCOMPARE(currentMiLine(session), 36);
+        }
 
-    QCOMPARE(breakpoints()->breakpoints().count(), 2); //one from kdevelop, one from runScript
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    QCOMPARE(session->line(), 35);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::EndedState);
+    }
 
     QFile::remove(shellScript.fileName()+"-copy");
 }
