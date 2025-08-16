@@ -1139,6 +1139,10 @@ void DebuggerTestBase::testRegularExpressionBreakpoint()
     session->addCommand(MI::NonMI, isLldb() ? "break set --func-regex .*aPl.*B" : "rbreak .*aPl.*B");
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 20);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 24);
 
     if (isLldb()) {
         QCOMPARE_GE(breakpoints()->breakpoints().size(), 2);
@@ -1154,7 +1158,6 @@ void DebuggerTestBase::testRegularExpressionBreakpoint()
     // GDB/MI creates two separate breakpoints for the two locations matched by the regular expression.
     QCOMPARE(breakpoints()->breakpoints().size(), 3);
 
-    QVERIFY(breakpoints()->removeRows(0, breakpoints()->rowCount()));
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
