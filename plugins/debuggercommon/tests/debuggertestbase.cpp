@@ -1129,11 +1129,6 @@ void DebuggerTestBase::testMultipleBreakpoint()
 
 void DebuggerTestBase::testRegularExpressionBreakpoint()
 {
-    if (isLldb()) {
-        QSKIP(
-            "Skipping... Unlike GDB, LLDB creates a single breakpoint for multiple locations "
-            "and LLDB-MI reports only one of the locations. This is not supported yet.");
-    }
     auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg("debuggee_debugeemultilocbreakpoint");
 
@@ -1144,9 +1139,22 @@ void DebuggerTestBase::testRegularExpressionBreakpoint()
     session->addCommand(MI::NonMI, isLldb() ? "break set --func-regex .*aPl.*B" : "rbreak .*aPl.*B");
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+
+    if (isLldb()) {
+        QCOMPARE_GE(breakpoints()->breakpoints().size(), 2);
+        QCOMPARE_LE(breakpoints()->breakpoints().size(), 3);
+
+        // FIXME: the peculiar behavior (bug?) of LLDB-MI tricks KDevelop into wrongly replacing a multiple-location
+        //        breakpoint with a single-location breakpoint (debugeemultilocbreakpoint.cpp:24 in this case).
+        QEXPECT_FAIL("",
+                     "Unlike GDB, LLDB creates a single breakpoint for multiple locations matched "
+                     "by a regular expression, and LLDB-MI reports only one of the locations",
+                     Continue);
+    }
+    // GDB/MI creates two separate breakpoints for the two locations matched by the regular expression.
     QCOMPARE(breakpoints()->breakpoints().size(), 3);
 
-    session->addCommand(MI::BreakDelete);
+    QVERIFY(breakpoints()->removeRows(0, breakpoints()->rowCount()));
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
