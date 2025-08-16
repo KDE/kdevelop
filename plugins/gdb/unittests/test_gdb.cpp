@@ -413,7 +413,7 @@ void GdbTest::testRemoteDebug()
     OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(
         shellScript,
         QLatin1String{"gdbserver localhost:2345 %1\n"}.arg(findExecutable("debuggee_debugee").toLocalFile()));
-    shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
+    QVERIFY(shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser));
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
