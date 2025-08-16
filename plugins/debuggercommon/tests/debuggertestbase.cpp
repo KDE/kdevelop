@@ -1087,14 +1087,24 @@ void DebuggerTestBase::testMultipleLocationsBreakpoint()
 
     breakpoints()->addCodeBreakpoint("aPlusB");
 
-    // TODO: check if the additional location breakpoint is added
-
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 20);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 24);
+
+    const auto breakpointList = breakpoints()->breakpoints();
+    QCOMPARE(breakpointList.size(), 1);
+    if (isLldb()) {
+        // FIXME: the peculiar behavior (bug?) of LLDB-MI tricks KDevelop into wrongly replacing a multiple-location
+        //        breakpoint with a single-location breakpoint (debugeemultilocbreakpoint.cpp:24 in this case).
+        QEXPECT_FAIL("", "Unlike GDB/MI, LLDB-MI reports only one of the locations of a multiple-location breakpoint",
+                     Continue);
+    }
+    // GDB/MI reports the individual locations of a multiple-location breakpoint, but KDevelop
+    // displays only the original location string in the UI. There is room for improvement here.
+    QCOMPARE(breakpointList.front()->location(), "aPlusB");
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
