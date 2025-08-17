@@ -429,14 +429,11 @@ void DebuggerTestBase::testChangeLocationBreakpoint()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 28);
 
-    WAIT_FOR_A_WHILE(session, 100);
     breakpoint->setLine(28); // i.e. MI line 29
-    WAIT_FOR_A_WHILE(session, 100);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 29);
 
-    WAIT_FOR_A_WHILE(session, 500);
     breakpoints()->setData(breakpoints()->index(0, Breakpoint::LocationColumn), debugeeLocationAt(30));
     QCOMPARE(breakpointMiLine(breakpoint), 30);
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
@@ -583,7 +580,6 @@ void DebuggerTestBase::testConditionBreakpoint()
     QCOMPARE(currentMiLine(session), 25);
 
     breakpoint->setCondition("i == 0");
-    WAIT_FOR_A_WHILE(session, 100);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 24);
@@ -609,7 +605,6 @@ void DebuggerTestBase::testBreakOnWriteBreakpoint()
     QCOMPARE(currentMiLine(session), 25);
 
     breakpoints()->addWatchpoint("i");
-    WAIT_FOR_A_WHILE(session, 100);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 23); // ++i; int j = i;
@@ -807,10 +802,8 @@ void DebuggerTestBase::testInsertBreakpointWhileRunning()
 
     qDebug() << "adding breakpoint";
     auto* const breakpoint = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
-    WAIT_FOR_A_WHILE(session, 500);
 
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(session->currentLine(), 29); // ++i;
 
     breakpoints()->removeBreakpoint(breakpoint);
@@ -834,17 +827,13 @@ void DebuggerTestBase::testInsertBreakpointWhileRunningMultiple()
     auto* const b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
     auto* const b2 =
         breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // std::cout << i << std::endl;
-    WAIT_FOR_A_WHILE(session, 500);
 
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(session->currentLine(), 29);
 
     const ActiveStateSessionSpy sessionSpy(session);
     session->run();
     WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-
-    WAIT_FOR_A_WHILE(session, 500);
     QCOMPARE(session->currentLine(), 30);
 
     breakpoints()->removeBreakpoint(b1);
@@ -1438,8 +1427,6 @@ void DebuggerTestBase::testVariablesLocalsStruct()
     addDebugeeBreakpoint(39);
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    WAIT_FOR_A_WHILE(session, 1000);
 
     const auto i = variableCollection()->index(1, 0);
     QCOMPARE(variableCollection()->rowCount(i), 4);
