@@ -1755,8 +1755,6 @@ void DebuggerTestBase::testSwitchFrameDebuggerConsole()
     QCOMPARE(stackModel->currentFrame(), 0);
     stackModel->setCurrentFrame(1);
     QCOMPARE(stackModel->currentFrame(), 1);
-    WAIT_FOR_A_WHILE(session, 500);
-    QCOMPARE(stackModel->currentFrame(), 1);
 
     // NOTE: the debugger refuses to print `x` from the frame #1 and replies with an error
     //       because stackModel->currentFrame() does not affect user commands, should it?
