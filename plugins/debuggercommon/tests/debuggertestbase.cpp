@@ -1605,7 +1605,7 @@ void DebuggerTestBase::testVariablesSwitchFrame()
     COMPARE_DATA(variableCollection()->index(jRow, 1, localsIndex), "1");
 
     stackModel->setCurrentFrame(1);
-    WAIT_FOR_A_WHILE(session, 200);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
 
     localsIndex = variableCollection()->index(1, 0);
     QCOMPARE(variableCollection()->rowCount(localsIndex), 4);
@@ -1632,15 +1632,15 @@ void DebuggerTestBase::testVariablesQuicklySwitchFrame()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     stackModel->setCurrentFrame(1);
-    WAIT_FOR_A_WHILE(session, 300);
-    stackModel->setCurrentFrame(0);
-    WAIT_FOR_A_WHILE(session, 1);
-    stackModel->setCurrentFrame(1);
     WAIT_FOR_A_WHILE(session, 1);
     stackModel->setCurrentFrame(0);
     WAIT_FOR_A_WHILE(session, 1);
     stackModel->setCurrentFrame(1);
-    WAIT_FOR_A_WHILE(session, 500);
+    WAIT_FOR_A_WHILE(session, 1);
+    stackModel->setCurrentFrame(0);
+    WAIT_FOR_A_WHILE(session, 1);
+    stackModel->setCurrentFrame(1);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
 
     const auto localsIndex = variableCollection()->index(1, 0);
     QCOMPARE(variableCollection()->rowCount(localsIndex), 4);
