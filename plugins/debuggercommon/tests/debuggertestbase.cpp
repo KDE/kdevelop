@@ -1472,7 +1472,7 @@ void DebuggerTestBase::testVariablesWatches()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add("ts");
-    WAIT_FOR_A_WHILE(session, 300);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
 
     const auto i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
@@ -1548,7 +1548,7 @@ void DebuggerTestBase::testVariablesSameWatchInSecondSession()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add("argc");
-    WAIT_FOR_A_WHILE(session, 300);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
 
     auto watchesIndex = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(watchesIndex), 1);

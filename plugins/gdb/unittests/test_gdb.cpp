@@ -279,7 +279,7 @@ void GdbTest::testVariablesWatchesQuotes()
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     variableCollection()->watches()->add(quotedTestString); //just a constant string
-    WAIT_FOR_A_WHILE(session, 300);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QModelIndex i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
@@ -324,7 +324,7 @@ void GdbTest::testVariablesWatchesTwoSessions()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     variableCollection()->watches()->add(QStringLiteral("ts"));
-    WAIT_FOR_A_WHILE(session, 300);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
     EXPAND_VARIABLE_COLLECTION(ts);

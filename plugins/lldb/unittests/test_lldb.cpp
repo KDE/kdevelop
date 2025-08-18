@@ -332,7 +332,7 @@ void LldbTest::testVariablesWatchesQuotes()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add(quotedTestString); //just a constant string
-    WAIT_FOR_A_WHILE(session, 3000);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QModelIndex i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
@@ -370,7 +370,7 @@ void LldbTest::testVariablesWatchesTwoSessions()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     variableCollection()->watches()->add(QStringLiteral("ts"));
-    WAIT_FOR_A_WHILE(session, 300);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
     QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
     EXPAND_VARIABLE_COLLECTION(ts);
