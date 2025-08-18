@@ -29,7 +29,7 @@ class KDEVPLATFORMUTIL_EXPORT ZoomController : public QObject
 
 public:
     /**
-     * @param configGroup A place to store zoom factor in
+     * @param configGroup a writable (not read-only) config group to store the zoom factor in
      */
     explicit ZoomController(const KConfigGroup& configGroup,
                             QObject* parent = nullptr);
