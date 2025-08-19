@@ -16,9 +16,7 @@
 #include <KSharedConfig>
 
 #include <QObject>
-#include <QPointer>
 #include <QString>
-#include <QElapsedTimer>
 #include <QUrl>
 
 namespace KDevelop {
@@ -79,12 +77,6 @@ class QSignalSpy;
         if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__))                                      \
             return;                                                                                                    \
     } while (false)
-
-#define WAIT_FOR(session, condition) \
-    do { \
-        KDevMI::Testing::TestWaiter w((session), #condition, __FILE__, __LINE__); \
-        while (w.waitUnless((condition))) /* nothing */ ; \
-    } while(0)
 
 #define COMPARE_DATA(index, expected) \
     do { if (!KDevMI::Testing::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
@@ -184,21 +176,6 @@ bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerStat
                   bool waitForIdle = false, const ActiveStateSessionSpy* sessionSpy = nullptr);
 
 bool waitForAWhile(MIDebugSession* session, int ms, const char* file, int line);
-
-class TestWaiter
-{
-public:
-    TestWaiter(MIDebugSession* session_, const char* condition_, const char* file_, int line_);
-
-    bool waitUnless(bool ok);
-
-private:
-    QElapsedTimer stopWatch;
-    QPointer<MIDebugSession> session;
-    const char* condition;
-    const char* file;
-    int line;
-};
 
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
