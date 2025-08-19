@@ -373,9 +373,7 @@ void GdbTest::testPickupCatchThrowOnlyOnce()
     OPEN_WRITE_AND_CLOSE_TEMPORARY_FILE(configScript, u"catch throw\n");
 
     TestLaunchConfiguration cfg;
-    KConfigGroup grp = cfg.config();
-    grp.writeEntry(Config::RemoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
-
+    cfg.config().writeEntry(Config::RemoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
 
     for (int i = 0; i < 2; ++i) {
         auto* session = new TestDebugSession;
