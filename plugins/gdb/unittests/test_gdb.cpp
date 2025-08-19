@@ -379,9 +379,13 @@ void GdbTest::testPickupCatchThrowOnlyOnce()
         auto* session = new TestDebugSession;
         START_DEBUGGING_E(session, cfg);
         WAIT_FOR_STATE(session, DebugSession::EndedState);
-    }
 
-    QTRY_COMPARE(breakpoints()->rowCount(), 1); //one from kdevelop, one from runScript
+        // During the second iteration there are two equivalent breakpoints:
+        // 1) from KDevelop's breakpoint model (left over from the first session);
+        // 2) from the config script.
+        // Verify that KDevelop removes the duplicate and retains a single breakpoint.
+        QCOMPARE(breakpoints()->rowCount(), 1);
+    }
 }
 
 void GdbTest::testRemoteDebug_data()
