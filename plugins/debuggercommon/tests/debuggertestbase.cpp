@@ -546,21 +546,35 @@ void DebuggerTestBase::testIgnoreHitsBreakpoint()
     auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg;
 
-    auto* const b1 = addDebugeeBreakpoint(22);
+    auto* const b1 = addDebugeeBreakpoint(23);
     b1->setIgnoreHits(1);
+    auto* const b2 = addDebugeeBreakpoint(24);
 
-    auto* const b2 = addDebugeeBreakpoint(23);
+    QCOMPARE(b1->hitCount(), 0);
+    QCOMPARE(b2->hitCount(), 0);
 
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR(session, session->state() == IDebugSession::PausedState && b2->hitCount() == 1);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    // one b1 hit ignored
+    QCOMPARE(currentMiLine(session), 24); // b2
+
+    QCOMPARE(b1->hitCount(), 1);
+    QCOMPARE(b2->hitCount(), 1);
 
     b2->setIgnoreHits(1);
 
-    session->run();
-    WAIT_FOR(session, session->state() == IDebugSession::PausedState && b1->hitCount() == 1);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23); // b1
+
+    QCOMPARE(b1->hitCount(), 2);
+    QCOMPARE(b2->hitCount(), 1);
 
     session->run();
+    // one b2 hit ignored
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    QCOMPARE(b1->hitCount(), 2);
+    QCOMPARE(b2->hitCount(), 2);
 }
 
 void DebuggerTestBase::testConditionBreakpoint()
