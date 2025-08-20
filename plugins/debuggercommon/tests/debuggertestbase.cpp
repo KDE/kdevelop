@@ -109,6 +109,13 @@ void verifyCurrentLocation(const IDebugSession* session, const QUrl& url, int mi
 #define VERIFY_VALID_CURRENT_LOCATION(session, url, miLine)                                                            \
     VERIFY_CURRENT_LOCATION(session, url, miLine, AddressKind::Valid);
 
+/// LLDB-MI almost always reports times="0"
+#define QEXPECT_FAIL_BREAKPOINT_HIT_COUNT_IF_LLDB()                                                                    \
+    do {                                                                                                               \
+        if (isLldb())                                                                                                  \
+            QEXPECT_FAIL("", "LLDB-MI reports inaccurate breakpoint hit count", Continue);                             \
+    } while (false)
+
 [[nodiscard]] int fetchFramesCallCount(const IFrameStackModel* model)
 {
     QVERIFY_RETURN(model, -1);
@@ -540,9 +547,6 @@ void DebuggerTestBase::testBreakpointsOnNoOpLines()
 
 void DebuggerTestBase::testIgnoreHitsBreakpoint()
 {
-    if (isLldb()) {
-        QSKIP("Skipping... LLDB-MI does not provide breakpoint hit count update");
-    }
     auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg;
 
@@ -558,7 +562,9 @@ void DebuggerTestBase::testIgnoreHitsBreakpoint()
     // one b1 hit ignored
     QCOMPARE(currentMiLine(session), 24); // b2
 
+    QEXPECT_FAIL_BREAKPOINT_HIT_COUNT_IF_LLDB();
     QCOMPARE(b1->hitCount(), 1);
+    QEXPECT_FAIL_BREAKPOINT_HIT_COUNT_IF_LLDB();
     QCOMPARE(b2->hitCount(), 1);
 
     b2->setIgnoreHits(1);
@@ -566,14 +572,18 @@ void DebuggerTestBase::testIgnoreHitsBreakpoint()
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 23); // b1
 
+    QEXPECT_FAIL_BREAKPOINT_HIT_COUNT_IF_LLDB();
     QCOMPARE(b1->hitCount(), 2);
+    // LLDB-MI accidentally reports the correct hit count here
     QCOMPARE(b2->hitCount(), 1);
 
     session->run();
     // one b2 hit ignored
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 
+    QEXPECT_FAIL_BREAKPOINT_HIT_COUNT_IF_LLDB();
     QCOMPARE(b1->hitCount(), 2);
+    QEXPECT_FAIL_BREAKPOINT_HIT_COUNT_IF_LLDB();
     QCOMPARE(b2->hitCount(), 2);
 }
 
