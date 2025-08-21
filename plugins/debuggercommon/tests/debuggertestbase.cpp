@@ -439,7 +439,7 @@ void DebuggerTestBase::testChangeLocationBreakpoint()
     WAIT_FOR_A_WHILE(session, 500);
     breakpoints()->setData(breakpoints()->index(0, Breakpoint::LocationColumn), debugeeLocationAt(30));
     QCOMPARE(breakpointMiLine(breakpoint), 30);
-    WAIT_FOR_A_WHILE(session, 100);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     QCOMPARE(breakpointMiLine(breakpoint), 30);
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
