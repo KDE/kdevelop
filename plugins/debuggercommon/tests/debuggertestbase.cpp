@@ -1759,7 +1759,7 @@ void DebuggerTestBase::testSwitchFrameDebuggerConsole()
     // NOTE: the debugger refuses to print `x` from the frame #1 and replies with an error
     //       because stackModel->currentFrame() does not affect user commands, should it?
     session->addUserCommand("print x");
-    WAIT_FOR_A_WHILE(session, 500);
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
     // currentFrame must not reset to 0; Bug 222882
     QCOMPARE(stackModel->currentFrame(), 1);
 }
