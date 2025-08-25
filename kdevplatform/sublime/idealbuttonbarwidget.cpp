@@ -17,6 +17,7 @@
 
 #include <util/toggleonlybool.h>
 
+#include <KColorScheme>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -24,7 +25,7 @@
 #include <QBoxLayout>
 #include <QApplication>
 #include <QList>
-#include <QPointer>
+#include <QPalette>
 #include <QScopeGuard>
 
 #include <algorithm>
@@ -38,6 +39,8 @@ class ToolViewAction : public QAction
 public:
     ToolViewAction(IdealDockWidget *dock, QObject* parent) : QAction(parent), m_dock(dock)
     {
+        Q_ASSERT(dock);
+
         setCheckable(true);
 
         const QString title = dock->view()->document()->title();
@@ -51,12 +54,13 @@ public:
         setShortcuts({ QKeySequence::fromString(shortcutStrings.value(0)), QKeySequence::fromString(shortcutStrings.value(1)) });
 
         dock->view()->widget()->installEventFilter(this);
-        refreshText();
     }
 
+    /**
+     * @return the non-null dock widget associated with this action
+     */
     IdealDockWidget *dockWidget() const
     {
-        Q_ASSERT(m_dock);
         return m_dock;
     }
 
@@ -65,8 +69,9 @@ public:
         return m_button;
     }
     void setButton(IdealToolButton* button) {
+        Q_ASSERT(button);
         m_button = button;
-        refreshText();
+        updateButtonForWidget();
     }
 
     [[nodiscard]] QString id() const
@@ -75,30 +80,74 @@ public:
     }
 
 private:
+    /**
+     * @return the non-null tool view widget associated with this action
+     *
+     * @note The tool view widget is always valid because it is always created before and destroyed after the action.
+     */
+    [[nodiscard]] const QWidget* toolViewWidget() const
+    {
+        Q_ASSERT(m_dock->view());
+        auto* const widget = m_dock->view()->widget();
+        Q_ASSERT(widget);
+        return widget;
+    }
+
     bool eventFilter(QObject * watched, QEvent * event) override
     {
         // an event may arrive when m_dock->view()->widget() is already destroyed
         // so check for event type first.
-        if (event->type() == QEvent::EnabledChange) {
-            const auto* const widget = m_dock->view()->widget();
-            Q_ASSERT(widget);
-            if (watched == widget) {
-                refreshText();
+        switch (event->type()) {
+        case QEvent::EnabledChange:
+            if (watched == toolViewWidget()) {
+                updateButtonForWidget();
             }
+            break;
+        case QEvent::PaletteChange:
+            if (watched == m_button) {
+                updateButtonForWidget();
+            }
+            break;
+        default:
+            break;
         }
 
         return QAction::eventFilter(watched, event);
     }
 
-    void refreshText()
+    void updateButtonForWidget()
     {
-        const auto widget = m_dock->view()->widget();
-        const QString title = m_dock->view()->document()->title();
-        setText(widget->isEnabled() ? title : QStringLiteral("(%1)").arg(title));
+        Q_ASSERT(m_button);
+
+        // Use the inactive color for the text of the tool button if its tool view widget is disabled
+        // in order to indicate whether the tool view is enabled even while it is hidden.
+
+        const auto enabled = toolViewWidget()->isEnabled();
+        if (enabled && !m_wasToolViewWidgetEverDisabled) {
+            // Most tool view widgets are never disabled. So this is a fast path:
+            // keep the default (enabled) button text color, nothing to do.
+            return;
+        }
+
+        if (!m_wasToolViewWidgetEverDisabled) {
+            Q_ASSERT(!enabled); // otherwise should have returned earlier
+            m_wasToolViewWidgetEverDisabled = true;
+            // Once the palette of the button is adjusted, we have to handle its palette-change events because the text
+            // color of the button is no longer updated automatically when the user switches between color schemes.
+            m_button->installEventFilter(this);
+        }
+
+        auto palette = m_button->palette();
+        // Replacing the specialized color role QPalette::ButtonText has no effect
+        // for some reason, so replace the more general role QPalette::WindowText instead.
+        KColorScheme::adjustForeground(palette, enabled ? KColorScheme::NormalText : KColorScheme::InactiveText,
+                                       QPalette::WindowText, KColorScheme::Button);
+        m_button->setPalette(palette);
     }
 
-    QPointer<IdealDockWidget> m_dock;
-    QPointer<IdealToolButton> m_button;
+    IdealDockWidget* const m_dock;
+    IdealToolButton* m_button = nullptr;
+    bool m_wasToolViewWidgetEverDisabled = false;
 };
 
 static ToolViewAction* knownValidToolViewAction(QObject* object)
@@ -236,7 +285,6 @@ private:
         }
 
         auto* const dockWidget = m_actions.constLast()->dockWidget();
-        Q_ASSERT(dockWidget);
 
         if (!dockWidget->isVisible()) {
             // The visibility of this dock widget is out of sync with the checked state of its tool view action.
@@ -377,8 +425,6 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     action->setButton(button);
     button->setDefaultAction(action);
-
-    Q_ASSERT(action->dockWidget());
 
     connect(action, &QAction::toggled, this, &IdealButtonBarWidget::showWidget);
     connect(button, &IdealToolButton::customContextMenuRequested,

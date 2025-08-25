@@ -109,7 +109,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr "CMake-ის ნაგულისხმები დაყენების პრეფიქსი"
+msgstr "CMake-ის ნაგულისხმევი დაყენების პრეფიქსი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119

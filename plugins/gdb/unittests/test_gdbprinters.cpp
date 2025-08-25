@@ -132,6 +132,11 @@ void QtPrintersTest::initTestCase()
     // Prevent SIGPIPE, then "ICE default IO error handler doing an exit(), pid = <PID>, errno = 32"
     // crash when the test runs for at least 60 seconds. This is a workaround for QTBUG-58709.
     QCoreApplication::processEvents();
+
+    const auto gdbExecutable = QStandardPaths::findExecutable("gdb");
+    if (gdbExecutable.isEmpty()) {
+        QSKIP("Skipping because `gdb` executable is not available");
+    }
 }
 
 void QtPrintersTest::testQString()

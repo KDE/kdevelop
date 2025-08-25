@@ -54,7 +54,7 @@ msgstr "可视化工具："
 #, kde-format
 msgctxt "%1 - process ID"
 msgid "PID: %1"
-msgstr ""
+msgstr "PID: %1"
 
 #: job.cpp:97
 #, kde-format
@@ -65,7 +65,7 @@ msgstr "Heaptrack 分析 (%1)"
 #, kde-format
 msgctxt "%1 - the name of the target of a Heaptrack analysis"
 msgid "Heaptrack (%1)"
-msgstr ""
+msgstr "Heaptrack (%1)"
 
 #: plugin.cpp:59
 #, kde-format

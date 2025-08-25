@@ -176,7 +176,7 @@ msgstr "持续时间(毫秒)"
 #, kde-format
 msgctxt "example text to test a font"
 msgid "The lazy dog jumps over<br>the quick brown fox."
-msgstr "The Quick Brown Fox Jumps Over The Lazy Dog<br>龙跳天门，虎卧凰阁"
+msgstr "The Quick Brown Fox Jumps Over The Lazy Dog<br>龙跳天门 虎卧凰阁"
 
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format

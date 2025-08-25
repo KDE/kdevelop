@@ -10,8 +10,8 @@
 #include <tests/testhelpermacros.h>
 
 #include <QObject>
+#include <QStringList>
 #include <QUrl>
-#include <QString>
 
 class IExecutePlugin;
 class QModelIndex;
@@ -25,6 +25,10 @@ class VariableCollection;
 
 namespace KDevMI {
 class MIDebugSession;
+
+namespace Testing {
+class TestLaunchConfiguration;
+}
 
 /**
  * A convenience macro for use in member functions of DebuggerTestBase and derived classes.
@@ -79,23 +83,87 @@ protected:
      */
     void expandVariableCollection(const QModelIndex& index);
 
+    /**
+     * Debug the inferior program specified by @p launchConfiguration
+     * and verify that its standard output matches a given list of lines.
+     */
+    void verifyInferiorStdout(Testing::TestLaunchConfiguration& launchConfiguration,
+                              const QStringList& expectedOutputLines);
+
     [[nodiscard]] virtual MIDebugSession* createTestDebugSession() = 0;
+
+    [[nodiscard]] virtual const char* configScriptEntryKey() const = 0;
+    [[nodiscard]] virtual const char* runScriptEntryKey() const = 0;
 
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void init();
 
+    void testStdout();
     void testEnvironmentSet();
+    void testEnvironmentCd();
+
+    void testRunDebuggerScript();
+
     void testUnsupportedUrlExpressionBreakpoints();
+    void testBreakpoint();
     void testDisableBreakpoint();
+    void testChangeLocationBreakpoint();
+    void testDeleteBreakpoint();
+    void testPendingBreakpoint();
     void testBreakpointsOnNoOpLines();
+
+    void testIgnoreHitsBreakpoint();
+    void testConditionBreakpoint();
+    void testBreakOnWriteBreakpoint();
+    void testBreakOnWriteWithConditionBreakpoint();
+    void testBreakOnReadBreakpoint();
+    void testBreakOnReadBreakpoint2();
+    void testBreakOnAccessBreakpoint();
+
     void testBreakpointErrors();
+
+    void testInsertBreakpointWhileRunning();
+    void testInsertBreakpointWhileRunningMultiple();
+    void testInsertBreakpointFunctionName();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
+
+    void testPickupManuallyInsertedBreakpoint();
+    void testPickupManuallyInsertedBreakpointOnlyOnce();
+
+    void testBreakpointWithSpaceInPath();
+    void testPathWithSpace();
+
+    void testBreakpointInSharedLibrary();
+
+    void testMultipleLocationsBreakpoint();
+    void testMultipleBreakpoint();
+    void testRegularExpressionBreakpoint();
+
+    void testCatchpoint();
+
+    void testShowStepInSource();
+
+    void testStack();
+    void testStackFetchMore();
+    void testStackSwitchThread();
+
+    void testCoreFile();
+
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();
+    void testVariablesStartSecondSession();
+    void testVariablesSameWatchInSecondSession();
+    void testVariablesSwitchFrame();
+    void testVariablesQuicklySwitchFrame();
+    void testSwitchFrameDebuggerConsole();
+
+    void testCommandOrderFastStepping();
+
+    void testSegfaultDebugee();
 
     void testDebugInExternalTerminal_data();
     void testDebugInExternalTerminal();
@@ -115,6 +183,8 @@ private:
     virtual void finishInit()
     {
     }
+
+    [[nodiscard]] QString adjustedStackModelFrameName(QString frameName) const;
 
     KDevelop::ICore* m_core;
     IExecutePlugin* m_executePlugin;

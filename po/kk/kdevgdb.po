@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2013-11-15 06:17+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -510,14 +510,14 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "gdb командаларын енгізу үшін бағдарлама орындауын аялдату"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Ішкі командалары көрсетілсін"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -532,7 +532,7 @@ msgstr ""
 "KDevelop берген ішкі командаларын көрсету-көрсетпеуін басқару.<br>Бұл "
 "параметр тек болашақ командаларға әсер етеді, өткен командаларға қатысуы жоқ."
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

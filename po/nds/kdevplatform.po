@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
+"POT-Creation-Date: 2025-07-24 00:41+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -5759,14 +5759,14 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "&All tomaken"
 
-#: sublime/idealbuttonbarwidget.cpp:45
+#: sublime/idealbuttonbarwidget.cpp:48
 #, fuzzy, kde-format
 #| msgid "Toggle '%1' tool view."
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "%1-Warktüüchansicht an- oder utmaken"
 
-#: sublime/idealbuttonbarwidget.cpp:304
+#: sublime/idealbuttonbarwidget.cpp:352
 #, fuzzy, kde-format
 #| msgid "Right click to add new tool views."
 msgctxt "@info:tooltip"

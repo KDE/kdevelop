@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-30 00:40+0000\n"
-"PO-Revision-Date: 2025-06-10 23:25+0200\n"
+"PO-Revision-Date: 2025-07-21 01:03+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -270,16 +270,13 @@ msgid "Debug process %1"
 msgstr "프로세스 %1 디버그"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
-"진행하시겠습니까?"
+"실행을 진행하시겠습니까?"
 
 #: midebugsession.cpp:236
 #, kde-format

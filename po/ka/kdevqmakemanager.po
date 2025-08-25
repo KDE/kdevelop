@@ -96,7 +96,7 @@ msgstr "აგების &ტიპი:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "(Use default from .pro file)"
-msgstr "(ნაგულისხმების .pro ფაილიდან გამოყენება)"
+msgstr "(ნაგულისხმევის .pro ფაილიდან გამოყენება)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: qmakebuilddirchooser.ui:123

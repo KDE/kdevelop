@@ -21,66 +21,21 @@ class LldbTest : public DebuggerTestBase
 protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
+    [[nodiscard]] const char* configScriptEntryKey() const override;
+    [[nodiscard]] const char* runScriptEntryKey() const override;
+
 private Q_SLOTS:
-    void testStdout();
-
-    void testBreakpoint();
     void testBreakOnStart();
-    void testChangeLocationBreakpoint();
-    void testDeleteBreakpoint();
-    void testPendingBreakpoint();
     void testUpdateBreakpoint();
-    void testIgnoreHitsBreakpoint();
-    void testConditionBreakpoint();
-    void testBreakOnWriteBreakpoint();
-    void testBreakOnWriteWithConditionBreakpoint();
-    void testBreakOnReadBreakpoint();
-    void testBreakOnReadBreakpoint2();
-    void testBreakOnAccessBreakpoint();
-    void testInsertBreakpointWhileRunning();
-    void testInsertBreakpointWhileRunningMultiple();
-    void testInsertBreakpointFunctionName();
     void testManualBreakpoint();
-    void testPickupManuallyInsertedBreakpoint();
-    void testPickupManuallyInsertedBreakpointOnlyOnce();
-    void testBreakpointWithSpaceInPath();
     void testBreakpointDisabledOnStart();
-    void testMultipleLocationsBreakpoint();
-    void testMultipleBreakpoint();
-    void testRegularExpressionBreakpoint();
-
-    void testCatchpoint();
-
-    void testShowStepInSource();
-
-    void testStack();
-    void testStackFetchMore();
-    void testStackSwitchThread();
 
     void testAttach();
     void testRemoteDebugging();
 
-    void testCoreFile();
-
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
-    void testVariablesStartSecondSession();
-    void testVariablesSwitchFrame();
-    void testVariablesQuicklySwitchFrame();
-    void testSwitchFrameLldbConsole();
-
-    void testSegfaultDebugee();
-
-    void testCommandOrderFastStepping();
-
-    void testRunLldbScript();
-
-    void testBug301287();
-
-    void testSpecialPath();
-
-    void testEnvironmentCd();
 
 private:
     // convenient access methods

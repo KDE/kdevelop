@@ -38,7 +38,7 @@ msgstr "“%1”的标签名称："
 #, kde-format
 msgctxt "%1 - Docker tag name"
 msgid "Docker Build \"%1\""
-msgstr ""
+msgstr "Docker 构建 “%1”"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dockerpreferences.ui:29

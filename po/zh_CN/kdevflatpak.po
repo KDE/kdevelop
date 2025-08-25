@@ -62,7 +62,7 @@ msgstr "Flatpak 包 (*.flatpak)"
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export Bundle %1"
-msgstr ""
+msgstr "Flatpak 导出包 %1"
 
 #: flatpakplugin.cpp:236
 #, kde-format
@@ -98,46 +98,46 @@ msgstr "Flatpak"
 #, kde-format
 msgctxt "%1 - application ID or name"
 msgid "Flatpak Create %1"
-msgstr ""
+msgstr "Flatpak 创建 %1"
 
 #: flatpakruntime.cpp:217
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Finalize %1"
-msgstr ""
+msgstr "Flatpak 完成 %1"
 
 #: flatpakruntime.cpp:223
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export %1"
-msgstr ""
+msgstr "Flatpak 导出 %1"
 
 #: flatpakruntime.cpp:226
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Bundle %1"
-msgstr ""
+msgstr "Flatpak 包 %1"
 
 #: flatpakruntime.cpp:243
 #, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Run %1 on %2"
-msgstr ""
+msgstr "Flatpak 运行 %1 在 %2 上"
 
 #: flatpakruntime.cpp:248
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer .flatpak to %1"
-msgstr ""
+msgstr "传输 .flatpak 到 %1"
 
 #: flatpakruntime.cpp:250
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer replicate.sh to %1"
-msgstr ""
+msgstr "传输 replicate.sh 到 %1"
 
 #: flatpakruntime.cpp:254
 #, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Install %1 to %2"
-msgstr ""
+msgstr "Flatpak 安装 %1 到 %2 上"

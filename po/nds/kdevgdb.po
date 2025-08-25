@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -520,14 +520,14 @@ msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Programm för't Ingeven vun gdb-Befehlen anhollen"
 
-#: gdboutputwidget.cpp:373 gdboutputwidget.cpp:421
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Intern Befehlen wiesen"
 
-#: gdboutputwidget.cpp:380 gdboutputwidget.cpp:428
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -543,7 +543,7 @@ msgstr ""
 "Optschoon gellt bloots för tokamen Befehlen, al geven Befehlen warrt de "
 "Ansicht nich toföögt oder ut ehr wegmaakt."
 
-#: gdboutputwidget.cpp:385
+#: gdboutputwidget.cpp:379
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

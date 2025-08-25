@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-17 00:40+0000\n"
-"PO-Revision-Date: 2025-03-14 11:32+0200\n"
+"PO-Revision-Date: 2025-07-25 11:41+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: bazaarplugin.cpp:37
 #, kde-format
@@ -26,4 +26,4 @@ msgstr "לא ניתן למצוא את קובץ ההפעלה של Bazaar ‏(bzr)
 #: bazaarplugin.cpp:84
 #, kde-format
 msgid "No files selected to commit"
-msgstr ""
+msgstr "לא נבחרו קבצים לקיבוע"

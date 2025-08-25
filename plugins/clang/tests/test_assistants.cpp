@@ -155,7 +155,8 @@ public:
         view->insertText(what);
         QCoreApplication::processEvents();
         if (waitForUpdate) {
-            DUChain::self()->waitForUpdate(IndexedString(document.url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
+            QVERIFY(
+                DUChain::self()->waitForUpdate(IndexedString(document.url), TopDUContext::AllDeclarationsAndContexts));
         }
     }
 
@@ -539,7 +540,9 @@ void TestAssistants::testSignatureAssistant()
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
             QEXPECT_FAIL("change_return_type_impl", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't include the function's AST and thus we never get updated about the new return type...", Abort);
 #endif
-            QVERIFY(assistant && !assistant->actions().isEmpty());
+            QVERIFY(problem);
+            QVERIFY(assistant);
+            QVERIFY(!assistant->actions().empty());
         } else {
             QVERIFY(!assistant || assistant->actions().isEmpty());
         }
@@ -600,9 +603,9 @@ void TestAssistants::testUnknownDeclarationAssistant()
     QVERIFY(topCtx);
 
     const auto problems = topCtx->problems();
+    QVERIFY(!problems.empty());
 
     if (actions == NoUnknownDeclarationAction) {
-        QVERIFY(!problems.isEmpty());
         return;
     }
 

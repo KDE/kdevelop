@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2017.
-# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:41+0000\n"
-"PO-Revision-Date: 2022-01-20 19:01+0400\n"
+"POT-Creation-Date: 2025-07-24 00:41+0000\n"
+"PO-Revision-Date: 2025-08-03 23:25+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16,7 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -150,7 +151,7 @@ msgstr "ع&طّل نقطة التّوقّف"
 #: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
-msgstr "&فعّل نقطة التّوقّف"
+msgstr "&مكّن نقطة التّوقّف"
 
 #: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
@@ -264,7 +265,7 @@ msgstr "عطّل ال&كلّ"
 #: debugger/breakpoint/breakpointwidget.cpp:157
 #, kde-format
 msgid "&Enable All"
-msgstr "ف&عّل الكلّ"
+msgstr "&مكّن الكل"
 
 #: debugger/breakpoint/breakpointwidget.cpp:158
 #, kde-format
@@ -5104,13 +5105,13 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "أغلق الكلّ"
 
-#: sublime/idealbuttonbarwidget.cpp:45
+#: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr ""
 
-#: sublime/idealbuttonbarwidget.cpp:304
+#: sublime/idealbuttonbarwidget.cpp:352
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."

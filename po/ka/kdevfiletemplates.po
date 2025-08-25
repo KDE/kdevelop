@@ -275,7 +275,7 @@ msgstr "შაბლონის მორგება"
 #, kde-format
 msgctxt "@item default declarations"
 msgid "Default"
-msgstr "ნაგულისხმები"
+msgstr "ნაგულისხმევი"
 
 #: templateoptionspage.cpp:124
 #, kde-format

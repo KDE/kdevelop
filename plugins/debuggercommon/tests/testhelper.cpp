@@ -15,9 +15,11 @@
 
 #include <QAbstractItemModel>
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
 #include <QModelIndex>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QSignalSpy>
 #include <QStringList>
@@ -182,8 +184,7 @@ bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerStat
             && (!sessionSpy || sessionSpy->hasEnteredActiveState());
     };
 
-    const auto timeout = waitForIdle ? 50'000 : 20'000;
-
+    constexpr auto timeout = 50'000;
     while (s && !areWaitConditionsSatisfied()) {
         if (stopWatch.elapsed() > timeout) {
             qWarning() << "current state" << s->state() << "waiting for" << state;
@@ -204,39 +205,6 @@ bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerStat
     }
 
     qDebug() << "Reached state " << state << " in " << file << ':' << line;
-    return true;
-}
-
-TestWaiter::TestWaiter(MIDebugSession * session_, const char * condition_, const char * file_, int line_)
-    : session(session_)
-    , condition(condition_)
-    , file(file_)
-    , line(line_)
-{
-    stopWatch.start();
-}
-
-bool TestWaiter::waitUnless(bool ok)
-{
-    if (ok) {
-        qDebug() << "Condition " << condition << " reached in " << file << ':' << line;
-        return false;
-    }
-
-    if (stopWatch.elapsed() > 5000) {
-        QTest::qFail(qPrintable(QString("Timeout before reaching condition %0").arg(condition)),
-            file, line);
-        return false;
-    }
-
-    QTest::qWait(100);
-
-    if (!session) {
-        QTest::qFail(qPrintable(QString("Session ended without reaching condition %0").arg(condition)),
-            file, line);
-        return false;
-    }
-
     return true;
 }
 

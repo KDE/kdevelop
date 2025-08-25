@@ -17,6 +17,7 @@ function(add_debuggable_executable target)
 endfunction()
 
 add_debuggable_executable(debuggee_debugee SRCS debugee.cpp)
+add_debuggable_executable(debuggee_debugee4foo SRCS debugee4foo.cpp)
 add_debuggable_executable(debuggee_debugeeslow SRCS debugeeslow.cpp)
 add_debuggable_executable(debuggee_crash SRCS debugeecrash.cpp)
 add_debuggable_executable(debuggee_debugeerecursion SRCS debugeerecursion.cpp)
@@ -35,6 +36,7 @@ target_link_libraries(debuggee_debugeeqt Qt::Core)
 add_debuggable_executable(debuggee_debugeeexception SRCS debugeeexception.cpp)
 kde_target_enable_exceptions(debuggee_debugeeexception PRIVATE)
 
+add_subdirectory(multifile)
 add_subdirectory("path with space")
 
 add_debuggable_executable(debuggee_qstring SRCS qstring.cpp)

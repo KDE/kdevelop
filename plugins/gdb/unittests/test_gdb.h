@@ -19,58 +19,27 @@ class GdbTest : public DebuggerTestBase
 protected:
     [[nodiscard]] MIDebugSession* createTestDebugSession() override;
 
-private Q_SLOTS:
-    void testStdOut();
+    [[nodiscard]] const char* configScriptEntryKey() const override;
+    [[nodiscard]] const char* runScriptEntryKey() const override;
 
-    void testBreakpoint();
-    void testChangeLocationBreakpoint();
-    void testDeleteBreakpoint();
-    void testPendingBreakpoint();
+private Q_SLOTS:
     void testUpdateBreakpoint();
-    void testIgnoreHitsBreakpoint();
-    void testConditionBreakpoint();
-    void testBreakOnWriteBreakpoint();
-    void testBreakOnWriteWithConditionBreakpoint();
-    void testBreakOnReadBreakpoint();
-    void testBreakOnReadBreakpoint2();
-    void testBreakOnAccessBreakpoint();
-    void testInsertBreakpointWhileRunning();
-    void testInsertBreakpointWhileRunningMultiple();
-    void testInsertBreakpointFunctionName();
     void testManualBreakpoint();
-    void testShowStepInSource();
-    void testStack();
-    void testStackFetchMore();
-    void testStackSwitchThread();
     void testAttach();
     void testManualAttach();
-    void testCoreFile();
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
     void testVariablesWatchesTwoSessions();
-    void testVariablesStartSecondSession();
-    void testVariablesSwitchFrame();
-    void testVariablesQuicklySwitchFrame();
-    void testSegfaultDebugee();
-    void testSwitchFrameGdbConsole();
-    void testCommandOrderFastStepping();
-    void testPickupManuallyInsertedBreakpoint();
-    void testPickupManuallyInsertedBreakpointOnlyOnce();
+
     void testPickupCatchThrowOnlyOnce();
-    void testRunGdbScript();
+
+    void testRemoteDebug_data();
     void testRemoteDebug();
-    void testRemoteDebugInsertBreakpoint();
-    void testRemoteDebugInsertBreakpointPickupOnlyOnce();
-    void testBreakpointWithSpaceInPath();
+
     void testBreakpointDisabledOnStart();
-    void testCatchpoint();
+
     void testThreadAndFrameInfo();
     void parseBug304730();
-    void testMultipleLocationsBreakpoint();
-    void testBug301287();
-    void testMultipleBreakpoint();
-    void testRegularExpressionBreakpoint();
-    void testPathWithSpace();
 
 private:
     [[nodiscard]] bool isLldb() const override;

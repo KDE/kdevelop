@@ -1,0 +1,5 @@
+add_library(multifile_shared SHARED multifile_shared.h multifile_shared.cpp)
+generate_export_header(multifile_shared EXPORT_FILE_NAME multifile_export.h)
+
+add_debuggable_executable(debuggee_debugeemultifile SRCS multifile_main.cpp)
+target_link_libraries(debuggee_debugeemultifile multifile_shared)
