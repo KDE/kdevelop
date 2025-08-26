@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-24 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 18:28+0000\n"
 "PO-Revision-Date: 2025-06-22 10:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -4049,12 +4049,12 @@ msgstr[1] " файли"
 msgstr[2] " файлів"
 msgstr[3] " файл"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
 msgstr "Підтримка мов"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""

@@ -55,6 +55,11 @@ CXIndex createIndex()
     options.StorePreamblesInMemory = storePreamblesInMemory;
     options.PreambleStoragePath = preambleStoragePath.constData();
 
+    // TODO: remove the following workaround line as well as a complementary workaround
+    //       that hides the related configuration UI in languagepreferences.cpp after fixing
+    //       the crash reported in https://bugs.kde.org/show_bug.cgi?id=486932 properly.
+    options.StorePreamblesInMemory = false;
+
     index = clang_createIndexWithOptions(&options);
     if (index) {
         return index;

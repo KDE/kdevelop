@@ -33,7 +33,6 @@ function(kdevplatform_add_library target)
     target_include_directories(${target}
             INTERFACE   "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>"
                         "$<BUILD_INTERFACE:${KDevPlatform_SOURCE_DIR}>" "$<BUILD_INTERFACE:${KDevPlatform_BINARY_DIR}>"
-                        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>" # useful for the "something.export.h" includes
     )
     set_target_properties(${target} PROPERTIES
         VERSION ${KDEVPLATFORM_VERSION}

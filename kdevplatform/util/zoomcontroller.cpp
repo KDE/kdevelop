@@ -52,7 +52,6 @@ ZoomControllerPrivate::ZoomControllerPrivate(const KConfigGroup& configGroup)
 void ZoomControllerPrivate::writeConfig()
 {
     m_configGroup.writeEntry(factorConfigEntryKey(), m_factor);
-    m_configGroup.sync();
 }
 
 ZoomController::ZoomController(const KConfigGroup& configGroup, QObject* parent)

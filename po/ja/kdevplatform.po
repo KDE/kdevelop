@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-24 00:41+0000\n"
+"POT-Creation-Date: 2025-08-07 18:28+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -4189,13 +4189,13 @@ msgid " file"
 msgid_plural " files"
 msgstr[0] "ファイル"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, fuzzy, kde-format
 #| msgid "Language Support Settings"
 msgid "Language Support"
 msgstr "言語サポートの設定"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""

@@ -41,6 +41,11 @@ LanguagePreferences::LanguagePreferences(QWidget* parent)
 
     preferencesDialog->label_precompiledPreambleStorage->setToolTip(
         preferencesDialog->kcfg_precompiledPreambleStorage->toolTip());
+
+    // TODO: remove the following workaround line as well as a complementary workaround
+    //       that disables storing preambles in memory in clangindex.cpp after fixing
+    //       the crash reported in https://bugs.kde.org/show_bug.cgi?id=486932 properly.
+    preferencesDialog->groupBox_4->hide();
 }
 
 void LanguagePreferences::notifySettingsChanged()

@@ -311,9 +311,6 @@ function(kdevelop_add_private_library target)
 
     generate_export_header(${target} EXPORT_FILE_NAME ${shortTargetNameToLower}export.h)
 
-    target_include_directories(${target}
-        INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>" # useful for the "something.export.h" includes
-    )
     set_target_properties(${target} PROPERTIES
         VERSION ${KDEV_PLUGIN_VERSION}
         SOVERSION ${KDEV_PLUGIN_VERSION}

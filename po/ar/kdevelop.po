@@ -859,7 +859,7 @@ msgstr "نقّح %1"
 #, kde-format
 msgid ""
 "A session with the name %1 exists already. Use the -s switch to open it."
-msgstr "توجد جلسة بالاسم %1 بالفعل. استخدم المبدّل ‎-s لفتحها."
+msgstr "توجد جلسة بالاسم %1 فعلًا. استخدم المبدّل ‎-s لفتحها."
 
 #: main.cpp:671
 #, kde-format

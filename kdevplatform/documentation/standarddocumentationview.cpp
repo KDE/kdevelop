@@ -189,7 +189,8 @@ void StandardDocumentationView::initZoom(const QString& configSubGroup)
 
     Q_ASSERT_X(!d->m_zoomController, "StandardDocumentationView::initZoom", "Can not initZoom a second time.");
 
-    const KConfigGroup outerGroup(KSharedConfig::openConfig(), QStringLiteral("Documentation View"));
+    // ZoomController writes to configGroup, so it cannot be read-only, and therefore outerGroup cannot be const.
+    KConfigGroup outerGroup(KSharedConfig::openConfig(), QStringLiteral("Documentation View"));
     const KConfigGroup configGroup(&outerGroup, configSubGroup);
     d->m_zoomController = new ZoomController(configGroup, this);
     connect(d->m_zoomController, &ZoomController::factorChanged,
