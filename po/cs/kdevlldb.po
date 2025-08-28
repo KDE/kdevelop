@@ -224,7 +224,3 @@ msgstr ""
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr ""
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Zrušit aktuální sezení"

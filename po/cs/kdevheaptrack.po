@@ -62,12 +62,10 @@ msgid "Heaptrack Analysis (%1)"
 msgstr ""
 
 #: job.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Heaptrack"
+#, kde-format
 msgctxt "%1 - the name of the target of a Heaptrack analysis"
 msgid "Heaptrack (%1)"
-msgstr "Heaptrack"
+msgstr ""
 
 #: plugin.cpp:59
 #, kde-format

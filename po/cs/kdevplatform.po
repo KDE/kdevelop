@@ -5975,7 +5975,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
-
-#~ msgctxt "@title:window"
-#~ msgid "Debug"
-#~ msgstr "Ladění"

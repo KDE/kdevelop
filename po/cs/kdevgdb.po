@@ -538,7 +538,3 @@ msgstr "Nový prohlížeč paměti"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Otevřít nový prohlížeč paměti"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Zrušit aktuální sezení"
