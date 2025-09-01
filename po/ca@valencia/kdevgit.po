@@ -311,7 +311,7 @@ msgstr "Mantín"
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Selection"
-msgstr "Seleccioneu la branca"
+msgstr "Trieu la branca"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
 #: rebasedialog.ui:14

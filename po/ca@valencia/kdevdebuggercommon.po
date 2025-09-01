@@ -88,7 +88,7 @@ msgstr "Tots els processos"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
-msgstr "Seleccioneu un fitxer de nucli"
+msgstr "Trieu un fitxer de nucli"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -241,12 +241,12 @@ msgstr "KDevelop (%1) - %2"
 #: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
-msgstr "Seleccioneu un fitxer de nucli que s'haja d'examinar…"
+msgstr "Tria un fitxer de nucli que s'haja d'examinar…"
 
 #: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
-msgstr "Seleccioneu un procés al qual adjuntar…"
+msgstr "Trieu un procés al qual adjuntar…"
 
 #: midebuggerplugin.cpp:250
 #, kde-format
@@ -726,7 +726,7 @@ msgstr "Vista del desassemblador/registres"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the address to disassemble around"
-msgstr "Seleccioneu l'adreça al voltant de la qual es desassemblarà"
+msgstr "Trieu l'adreça al voltant de la qual es desassemblarà"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/selectaddressdialog.ui:23

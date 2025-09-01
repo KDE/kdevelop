@@ -219,9 +219,9 @@ msgid ""
 "<html><head/><body><p>Choose language profile. </p><p>Use &quot;Custom&quot; "
 "profile to modify parser command-line arguments</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Seleccioneu el perfil del llenguatge. </p><p>Utilitzeu "
-"el perfil «Personalitza» per a modificar els arguments de la línia d'ordres "
-"de l'analitzador</p></body></html>"
+"<html><head/><body><p>Trieu el perfil del llenguatge. </p><p>Utilitzeu el "
+"perfil «Personalitza» per a modificar els arguments de la línia d'ordres de "
+"l'analitzador</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)
@@ -287,7 +287,7 @@ msgstr "Arguments &de la línia d'ordres de CUDA C:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
-msgstr "Seleccioneu el camí cap al projecte"
+msgstr "Trieu el camí cap al projecte"
 
 #: kcm_widget/projectpathswidget.cpp:183
 #, kde-format
@@ -352,9 +352,8 @@ msgid ""
 "<html><head/><body><p>Select compiler that will be used to retrieve standard "
 "include directories and defined macros.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Seleccioneu el compilador que s'utilitzarà per a "
-"recuperar els directoris «include» estàndard i les macros definides.</p></"
-"body></html>"
+"<html><head/><body><p>Trieu el compilador que s'utilitzarà per a recuperar "
+"els directoris «include» estàndard i les macros definides.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: kcm_widget/projectpathswidget.ui:73
@@ -422,7 +421,7 @@ msgstr "Configuració personalitzada dels camins cap als «include»"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"
-msgstr "Seleccioneu un directori que s'haja d'incloure"
+msgstr "Trieu un directori que s'haja d'incloure"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
@@ -466,7 +465,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to include."
-msgstr "Seleccioneu un directori que s'inclourà."
+msgstr "Trieu un directori que s'inclourà."
 
 #. i18n: ectx: property (text), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69

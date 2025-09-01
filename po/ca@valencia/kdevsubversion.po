@@ -37,7 +37,7 @@ msgstr "Mou…"
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
 msgid "Please select only one item for this operation"
-msgstr "Seleccioneu només un element per a esta operació"
+msgstr "Trieu només un element per a esta operació"
 
 #: kdevsvnplugin.cpp:370
 #, kde-format
@@ -390,7 +390,7 @@ msgstr "Ubicació del repositori"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the repository into which the source directory is imported"
-msgstr "Seleccioneu el repositori on s'importarà el directori d'origen"
+msgstr "Trieu el repositori on s'importarà el directori d'origen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57

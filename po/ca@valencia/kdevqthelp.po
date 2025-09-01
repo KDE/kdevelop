@@ -165,7 +165,7 @@ msgstr "Icona:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an icon"
-msgstr "Seleccioneu una icona"
+msgstr "Trieu una icona"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qthelpconfigeditdialog.ui:34
@@ -186,7 +186,7 @@ msgstr "Introduïu un nom"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr "Seleccioneu un nom…"
+msgstr "Tria un nom…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
@@ -200,14 +200,14 @@ msgstr "Camí:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
-msgstr "Seleccioneu un fitxer d'ajuda de les Qt…"
+msgstr "Tria un fitxer d'ajuda de les Qt…"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:67
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
-msgstr "Seleccioneu un fitxer d'ajuda de les Qt…"
+msgstr "Tria un fitxer d'ajuda de les Qt…"
 
 #: qthelpdocumentation.cpp:382
 #, kde-format

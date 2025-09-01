@@ -66,7 +66,7 @@ msgid ""
 "Select the directory where the tools are being executed in.\n"
 "If this is the same as the source directory you can leave it empty."
 msgstr ""
-"Selecciona el directori a on s'executaran les eines.\n"
+"Tria el directori a on s'executaran les eines.\n"
 "Si és el mateix que el directori del codi font, el podeu deixar buit."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
@@ -141,7 +141,7 @@ msgstr "Entorn:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
-msgstr "Seleccioneu un entorn preconfigurat per a l'eina"
+msgstr "Trieu un entorn preconfigurat per a l'eina"
 
 #: custombuildjob.cpp:67
 #, kde-format

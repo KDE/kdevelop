@@ -534,7 +534,7 @@ msgstr "Ha fallat la càrrega de les dades reescrites de Meson"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
-msgstr "Seleccioneu una opció addicional de Meson"
+msgstr "Trieu una opció addicional de Meson"
 
 #: settings/mesonrewriterpage.cpp:407
 #, kde-format

@@ -64,7 +64,7 @@ msgstr "Eixida següent"
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
-msgstr "Selecciona l'element activat"
+msgstr "Tria l'element activat"
 
 #: outputwidget.cpp:101
 #, kde-format
