@@ -3,6 +3,7 @@
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
     SPDX-FileCopyrightText: 2009 Andreas Pakulat <apaku@gmx.de>
     SPDX-FileCopyrightText: 2016 Aetf <aetf@unlimitedcodeworks.xyz>
+    SPDX-FileCopyrightText: 2025 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -10,21 +11,16 @@
 #include "midebugjobs.h"
 
 #include "debuglog.h"
-#include "dialogs/selectcoredialog.h"
 #include "midebugsession.h"
 #include "midebuggerplugin.h"
 
 #include <execute/iexecuteplugin.h>
-#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/iuicontroller.h>
 #include <outputview/outputmodel.h>
-#include <util/scopeddialog.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KParts/MainWindow>
 
 #include <QFileInfo>
 
@@ -40,7 +36,11 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
     JobBase::setCapabilities(KJob::Killable);
 
     m_session = plugin->createSession();
-    QObject::connect(m_session, &MIDebugSession::finished, this, &MIDebugJobBase::done);
+    QObject::connect(m_session, &MIDebugSession::stateChanged, this, [this](IDebugSession::DebuggerState state) {
+        if (state == IDebugSession::EndedState) {
+            done();
+        }
+    });
 
     qCDebug(DEBUGGERCOMMON) << "created debug job" << this << "with" << m_session;
 }
@@ -48,13 +48,12 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
 template<class JobBase>
 MIDebugJobBase<JobBase>::~MIDebugJobBase()
 {
-    // Don't print m_session unconditionally, because it can be already destroyed.
-    qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this;
-    // If this job is destroyed before it starts, m_session can be already destroyed even if this job is not finished.
-    // For example, this occurs when the user starts debugging and immediately exits KDevelop.
-    if (m_session && !JobBase::isFinished()) {
-        qCDebug(DEBUGGERCOMMON) << "debug job destroyed before it finished, stopping debugger of" << m_session;
-        m_session->stopDebugger();
+    if (this->isFinished()) {
+        // do not print m_session, because it can be already destroyed
+        qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this;
+    } else {
+        qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this << "before it finished";
+        stopDebugger();
     }
 }
 
@@ -66,21 +65,40 @@ void MIDebugJobBase<JobBase>::done()
 }
 
 template<typename JobBase>
+void MIDebugJobBase<JobBase>::stopDebugger()
+{
+    qCDebug(DEBUGGERCOMMON) << "stopping debugger of" << m_session;
+    QObject::disconnect(m_session, &MIDebugSession::stateChanged, this, nullptr);
+    m_session->stopDebugger();
+}
+
+template<typename JobBase>
 bool MIDebugJobBase<JobBase>::doKill()
 {
-    qCDebug(DEBUGGERCOMMON) << "killing debug job" << this << "and stopping debugger of" << m_session;
-    m_session->stopDebugger();
+    qCDebug(DEBUGGERCOMMON) << "killing debug job" << this;
+    stopDebugger();
     return true;
 }
 
 MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
                    IExecutePlugin* execute, QObject* parent)
     : MIDebugJobBase(p, parent)
-    , m_launchcfg(launchcfg)
-    , m_execute(execute)
 {
-    connect(m_session, &MIDebugSession::inferiorStdoutLines, this, &MIDebugJob::stdoutReceived);
-    connect(m_session, &MIDebugSession::inferiorStderrLines, this, &MIDebugJob::stderrReceived);
+    Q_ASSERT(launchcfg);
+    Q_ASSERT(execute);
+
+    initializeStartupInfo(execute, launchcfg);
+    if (!m_startupInfo) {
+        qCDebug(DEBUGGERCOMMON) << "failing debug job" << this;
+        stopDebugger();
+        // The dependency job, if any, will not be created, and an output view
+        // for this job will never be added, so do not raise any tool view.
+        return;
+    }
+
+    // This job may have a dependency builder job. If the dependency job fails, this debug job is destroyed
+    // instead of being started. Raise the Build output tool view to show build error(s) in this scenario.
+    m_session->setToolViewToRaiseAtEnd(IDebugSession::ToolView::Build);
 
     if (launchcfg->project()) {
         setObjectName(i18nc("ProjectName: run configuration name", "%1: %2",
@@ -92,27 +110,12 @@ MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
 
 void MIDebugJob::start()
 {
-    Q_ASSERT(m_execute);
-
-    QString err;
-
-    // check if the config is valid
-    QString executable = m_execute->executable(m_launchcfg, err).toLocalFile();
-    if (!err.isEmpty()) {
-        finishWithError(InvalidExecutable, err);
+    if (!m_startupInfo) {
+        Q_ASSERT(error() != NoError);
+        emitResult();
         return;
     }
-
-    if (!QFileInfo(executable).isExecutable()) {
-        finishWithError(ExecutableIsNotExecutable, i18n("'%1' is not an executable", executable));
-        return;
-    }
-
-    QStringList arguments = m_execute->arguments(m_launchcfg, err);
-    if (!err.isEmpty()) {
-        finishWithError(InvalidArguments, err);
-        return;
-    }
+    Q_ASSERT(error() == NoError);
 
     setStandardToolView(IOutputView::DebugView);
     setBehaviours(IOutputView::Behaviours(IOutputView::AllowUserClose) | KDevelop::IOutputView::AutoScroll);
@@ -120,9 +123,13 @@ void MIDebugJob::start()
     auto model = new KDevelop::OutputModel;
     model->setFilteringStrategy(OutputModel::NativeAppErrorFilter);
     setModel(model);
-    setTitle(m_launchcfg->name());
 
-    KConfigGroup grp = m_launchcfg->config();
+    connect(m_session, &MIDebugSession::inferiorStdoutLines, model, &OutputModel::appendLines);
+    connect(m_session, &MIDebugSession::inferiorStderrLines, model, &OutputModel::appendLines);
+
+    setTitle(m_startupInfo->launchConfiguration->name());
+
+    const auto grp = m_startupInfo->launchConfiguration->config();
     QString startWith = grp.readEntry(Config::StartWithEntry, QStringLiteral("ApplicationOutput"));
     if (startWith == QLatin1String("ApplicationOutput")) {
         setVerbosity(Verbose);
@@ -132,65 +139,68 @@ void MIDebugJob::start()
 
     startOutput();
 
-    if (!m_session->startDebugging(m_launchcfg, m_execute)) {
+    // An output view for this job was just added to the Debug tool view. Raise the
+    // Debug tool view in the end to show the output of the debuggee in the Code area.
+    m_session->setToolViewToRaiseAtEnd(IDebugSession::ToolView::Debug);
+
+    if (!m_session->startDebugging(std::move(*m_startupInfo))) {
         done();
     }
+    m_startupInfo.reset(); // no more use for the info, so release the memory
 }
 
-void MIDebugJob::stderrReceived(const QStringList& l)
+void MIDebugJob::initializeStartupInfo(IExecutePlugin* execute, ILaunchConfiguration* launchConfiguration)
 {
-    if (OutputModel* m = model()) {
-        m->appendLines(l);
+    QString errorString;
+    const auto detectError = [&errorString, this](int errorCode) {
+        if (errorString.isEmpty()) {
+            return false;
+        }
+        setError(errorCode);
+        setErrorText(errorString);
+        return true;
+    };
+
+    auto executable = execute->executable(launchConfiguration, errorString).toLocalFile();
+    if (detectError(InvalidExecutable)) {
+        return;
     }
-}
-
-void MIDebugJob::stdoutReceived(const QStringList& l)
-{
-    if (OutputModel* m = model()) {
-        m->appendLines(l);
+    if (!QFileInfo{executable}.isExecutable()) {
+        setError(ExecutableIsNotExecutable);
+        setErrorText(i18n("'%1' is not an executable", executable));
+        return;
     }
+
+    auto arguments = execute->arguments(launchConfiguration, errorString);
+    if (detectError(InvalidArguments)) {
+        return;
+    }
+
+    m_startupInfo.reset(
+        new InferiorStartupInfo{execute, launchConfiguration, std::move(executable), std::move(arguments)});
 }
 
-void MIDebugJob::finishWithError(int errorCode, const QString& errorText)
-{
-    qCDebug(DEBUGGERCOMMON) << "failing" << this << "and stopping debugger of" << m_session;
-    m_session->stopDebugger();
-    setError(errorCode);
-    setErrorText(errorText);
-    emitResult();
-}
-
-OutputModel* MIDebugJob::model()
-{
-    return qobject_cast<OutputModel*>(OutputJob::model());
-}
-
-MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent)
+MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin* plugin, CoreInfo coreInfo, QObject* parent)
     : MIDebugJobBase(plugin, parent)
+    , m_coreInfo{std::move(coreInfo)}
 {
+    // This job has no dependency job and does not show output, so do not raise any tool view.
     setObjectName(i18n("Debug core file"));
 }
 
 void MIExamineCoreJob::start()
 {
-    ScopedDialog<SelectCoreDialog> dlg(ICore::self()->uiController()->activeMainWindow());
-    if (dlg->exec() == QDialog::Rejected) {
-        qCDebug(DEBUGGERCOMMON) << "Select Core File dialog rejected, finishing" << this << "and stopping debugger of"
-                                << m_session;
-        m_session->stopDebugger();
-        done();
-        return;
-    }
-
-    if (!m_session->examineCoreFile(dlg->executableFile(), dlg->core())) {
+    if (!m_session->examineCoreFile(std::move(m_coreInfo.executableFile), std::move(m_coreInfo.coreFile))) {
         done();
     }
+    m_coreInfo = {}; // no more use for the info, so release the memory
 }
 
 MIAttachProcessJob::MIAttachProcessJob(MIDebuggerPlugin *plugin, int pid, QObject *parent)
     : MIDebugJobBase(plugin, parent)
     , m_pid(pid)
 {
+    // This job has no dependency job and does not show output, so do not raise any tool view.
     setObjectName(i18n("Debug process %1", pid));
 }
 

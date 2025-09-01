@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
 "PO-Revision-Date: 2020-01-15 14:24+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -153,7 +153,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Sisemine siluri viga"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "Protsess lõpetas"
@@ -195,14 +195,23 @@ msgstr "Silurit tabas krahh"
 msgid "Process crashed"
 msgstr "Protsessi tabas krahh"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
+"jätkata?"
+
+#: midebuggerplugin.cpp:118
 #, fuzzy, kde-format
 #| msgid "Examine Core File with %1"
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Uuri mälupildifaili rakendusega %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:120
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -220,14 +229,14 @@ msgstr ""
 "luuakse pärast rakenduse krahhi. See fail sisaldab rakenduse mälu tõmmist "
 "krahhi hetkel, võimaldades nii omamoodi \"lahkamist\".</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:132
 #, fuzzy, kde-format
 #| msgid "Attach to Process with %1"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Seonda protsessiga rakenduse %1 abil"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -237,181 +246,139 @@ msgid ""
 msgstr ""
 "<b>Protsessiga seondamine</b><p>Seondab siluri töötava protsessiga.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:147
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
-#, fuzzy, kde-format
-#| msgid "Evaluate: %1"
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Hinda: %1"
-
-#: midebuggerplugin.cpp:219
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>Avaldise hindamine</b><p>Näitab kursori all oleva avaldise väärtust.</p>"
-
-#: midebuggerplugin.cpp:227
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Jälgi: %1"
-
-#: midebuggerplugin.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds the expression under the cursor to the "
-#| "Variables/Watch list.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Avaldise jälgimine</b><p>Lisab kursori all oleva avaldise muutujate/"
-"jälgimisnimekirja.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Vali uuritav mälupildifail..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-"Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
-"jätkata?"
-
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Vali protsess, millega seondada..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Protsessiga %1 ei seondata: silurit ei saa seondada iseendaga."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "Silur"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "\"%1\" ei ole täitmisfail"
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Mälupildifaili silumine"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "Protsessi %1 silumine"
 
-#: midebugsession.cpp:202
+#: midebuglauncher.cpp:61
+#, fuzzy, kde-format
+#| msgid ""
+#| "A program is already being debugged. Do you want to abort the currently "
+#| "running debug session and continue?"
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
+"jätkata?"
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "Programm töötab"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Seondamine protsessiga %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Siluri kaasamine nurjus.</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Mälupildifaili %1 uurimine"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Silur peatatud"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "Rakendus töötab"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "Rakenduse töös on paus"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>Saadeti GDB käsk, kui silur ei töötanud</b><br>Käsk oli:<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Vigane siluri käsk</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Väljuti koodiga %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "Lõpetati normaalselt"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Lõpetati signaaliga %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programm sai signaali %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 käsk järjekorras\n"
 msgstr[1] "%1 käsku järjekorras\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -419,12 +386,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "GDB töötleb 1 käsku\n"
 msgstr[1] "GDB töötleb %1 käsku\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Siluri olek: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -435,7 +402,7 @@ msgstr ""
 "Aktiivse käsu tekst: '%2'\n"
 "Aktiivse käsu originaaltekst: '%3'\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Siluri viga</b><p>Silur andis teada järgmisest veast:<p><tt>%1"
@@ -814,6 +781,42 @@ msgstr "Aadressi valimine pöördtransleerimiseks"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Aadressi valimine pöördtransleerimiseks"
+
+#, fuzzy
+#~| msgid "Evaluate: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Hinda: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~| "cursor.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Avaldise hindamine</b><p>Näitab kursori all oleva avaldise väärtust.</"
+#~ "p>"
+
+#, fuzzy
+#~| msgid "Watch: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Jälgi: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~| "Variables/Watch list.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Avaldise jälgimine</b><p>Lisab kursori all oleva avaldise muutujate/"
+#~ "jälgimisnimekirja.</p>"
 
 #~ msgid "toolBar"
 #~ msgstr "tööriistariba"

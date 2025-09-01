@@ -19,8 +19,6 @@
 #include "variablecontroller.h"
 #include "mi/mi.h"
 
-#include <KConfigGroup>
-
 class IExecutePlugin;
 
 namespace KDevelop {
@@ -65,8 +63,6 @@ private Q_SLOTS:
     void handleCoreFile(const MI::ResultRecord& r);
 
 private:
-    friend class GdbTest;
-
     BreakpointController *m_breakpointController = nullptr;
     VariableController *m_variableController = nullptr;
     GdbFrameStackModel *m_frameStackModel = nullptr;

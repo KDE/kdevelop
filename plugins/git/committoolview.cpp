@@ -40,16 +40,20 @@
 
 using namespace KDevelop;
 
-CommitToolViewFactory::CommitToolViewFactory(RepoStatusModel* model)
-    :
-    m_statusmodel(model),
-    m_diffViewsCtrl(new DiffViewsCtrl)
+CommitToolViewFactory::CommitToolViewFactory()
+    : m_diffViewsCtrl(new DiffViewsCtrl)
 {
 }
 
 QWidget* CommitToolViewFactory::create(QWidget* parent)
 {
-    auto* tool =  new CommitToolView(parent, m_statusmodel);
+    auto statusModel = m_statusModel.lock();
+    if (!statusModel) {
+        statusModel = std::make_shared<RepoStatusModel>();
+        m_statusModel = statusModel;
+    }
+
+    auto* const tool = new CommitToolView(std::move(statusModel), parent);
     tool->connect(tool, &CommitToolView::updateDiff, m_diffViewsCtrl, [=](const QUrl& url, const RepoStatusModel::Areas area){
         m_diffViewsCtrl->updateDiff(url, area, DiffViewsCtrl::NoActivate);
     });
@@ -160,11 +164,9 @@ void CommitToolView::doLayOut(const Qt::DockWidgetArea area)
     setLayout(_layout);
 }
 
-
-
-CommitToolView::CommitToolView ( QWidget* parent, RepoStatusModel* repostatusmodel)
+CommitToolView::CommitToolView(std::shared_ptr<RepoStatusModel> statusModel, QWidget* parent)
     : QWidget(parent)
-    , m_statusmodel(repostatusmodel)
+    , m_statusmodel(std::move(statusModel))
     , m_proxymodel(new FilterEmptyItemsProxyModel(this))
     , m_commitForm(new SimpleCommitForm(this))
     , m_view(new QTreeView(this))
@@ -186,7 +188,7 @@ CommitToolView::CommitToolView ( QWidget* parent, RepoStatusModel* repostatusmod
 
     // Creates a proxy model so that we can filter the
     // items by the text entered into the filter lineedit
-    m_proxymodel->setSourceModel(m_statusmodel);
+    m_proxymodel->setSourceModel(m_statusmodel.get());
     m_proxymodel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_proxymodel->setSortCaseSensitivity(Qt::CaseInsensitive);
     m_proxymodel->setSortRole(Qt::DisplayRole);
@@ -231,12 +233,12 @@ CommitToolView::CommitToolView ( QWidget* parent, RepoStatusModel* repostatusmod
     connect(m_commitForm, &SimpleCommitForm::committed, this, &CommitToolView::commitActiveProject);
 
     // Disable the commit button if the active project has no staged changes
-    connect(m_statusmodel, &QAbstractItemModel::rowsRemoved, this, [=](const QModelIndex& parent) {
+    connect(m_statusmodel.get(), &QAbstractItemModel::rowsRemoved, this, [this](const QModelIndex& parent) {
         if (parent.data(RepoStatusModel::AreaRole) == RepoStatusModel::IndexRoot
             && m_statusmodel->itemFromIndex(parent)->rowCount() == 0 && isActiveProject(parent.parent()))
             m_commitForm->disableCommitButton();
     });
-    connect(m_statusmodel, &QAbstractItemModel::rowsInserted, this, [=](const QModelIndex& parent) {
+    connect(m_statusmodel.get(), &QAbstractItemModel::rowsInserted, this, [this](const QModelIndex& parent) {
         if (parent.data(RepoStatusModel::AreaRole) == RepoStatusModel::IndexRoot
             && m_statusmodel->itemFromIndex(parent)->rowCount() > 0 && isActiveProject(parent.parent()))
             m_commitForm->enableCommitButton();

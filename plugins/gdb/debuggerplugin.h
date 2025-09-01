@@ -7,17 +7,10 @@
 #ifndef GDBDEBUGGERPLUGIN_H
 #define GDBDEBUGGERPLUGIN_H
 
-#include <config-kdevelop.h>
-
-#include <QVariantList>
-
-#include <KConfigGroup>
-
-#include <interfaces/iplugin.h>
-#include <interfaces/istatus.h>
-
 #include "midebuggerplugin.h"
-#include "debugsession.h"
+
+#include <QHash>
+#include <QVariantList>
 
 class GdbLauncher;
 
@@ -31,10 +24,7 @@ class MemoryViewerWidget;
 class CppDebuggerPlugin : public MIDebuggerPlugin
 {
     Q_OBJECT
-
 public:
-    friend class DebugSession;
-
     explicit CppDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~CppDebuggerPlugin() override;
 
@@ -46,7 +36,7 @@ public:
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
 
-    [[nodiscard]] DebugSession* createSessionObject() override;
+    [[nodiscard]] MIDebugSession* createSessionObject() override;
 
     DebuggerToolFactory<DisassembleWidget>* disassemblefactory;
     DebuggerToolFactory<GDBOutputWidget, CppDebuggerPlugin>* gdbfactory;

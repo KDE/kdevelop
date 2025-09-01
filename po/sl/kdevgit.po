@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2022-09-27 19:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -21,32 +21,32 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Lokalize 22.04.1\n"
 
-#: committoolview.cpp:195 committoolview.cpp:196
+#: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtriraj po imenu datoteke/projekta"
 
-#: committoolview.cpp:213
+#: committoolview.cpp:215
 #, kde-format
 msgid "Refresh"
 msgstr "Osveži"
 
-#: committoolview.cpp:214
+#: committoolview.cpp:216
 #, kde-format
 msgid "Stage selected"
 msgstr "Priredi izbrano"
 
-#: committoolview.cpp:216
+#: committoolview.cpp:218
 #, kde-format
 msgid "Unstage selected"
 msgstr "Odpriredi izbrano"
 
-#: committoolview.cpp:218
+#: committoolview.cpp:220
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Povrni neprirejena urejanja"
 
-#: committoolview.cpp:471
+#: committoolview.cpp:473
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr "Objavljanje ni uspelo. Oglejte si pogled orodja za nadzor različic."
@@ -203,63 +203,63 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Zapiši med splošne nastavitve"
 
-#: gitplugin.cpp:192
+#: gitplugin.cpp:190
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 "Ni bilo mogoče najti izvedljive datoteke git. Ali je nameščena na sistemu?"
 
-#: gitplugin.cpp:201
+#: gitplugin.cpp:199
 #, kde-format
 msgid "Git Commit"
 msgstr "Objava Git"
 
-#: gitplugin.cpp:258
+#: gitplugin.cpp:256
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Ponovno osnuj"
 
-#: gitplugin.cpp:259
+#: gitplugin.cpp:257
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Zaloge Gita"
 
-#: gitplugin.cpp:260
+#: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Upravljalnik zalog"
 
-#: gitplugin.cpp:261
+#: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Objavi zalogo"
 
-#: gitplugin.cpp:262
+#: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Izvedi \"pop\" zaloge"
 
-#: gitplugin.cpp:387 gitplugin.cpp:398
+#: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "Ni podanega seznama datotek"
 
-#: gitplugin.cpp:460
+#: gitplugin.cpp:458
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "Sprememb ni bilo mogoče ponovno nastaviti (prazen seznam poti)"
 
-#: gitplugin.cpp:494
+#: gitplugin.cpp:492
 #, kde-format
 msgid "Could not revert changes"
 msgstr "Sprememb ni bilo mogoče povrniti"
 
-#: gitplugin.cpp:505
+#: gitplugin.cpp:503
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -267,39 +267,39 @@ msgstr ""
 "Naslednje datoteke imajo neuveljavljene spremembe, ki bodo izgubljene. Ali "
 "želite nadaljevati?"
 
-#: gitplugin.cpp:530
+#: gitplugin.cpp:528
 #, kde-format
 msgid "No files or message specified"
 msgstr "Ni podanih datotek ali sporočil"
 
-#: gitplugin.cpp:534 gitplugin.cpp:553
+#: gitplugin.cpp:532 gitplugin.cpp:551
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "E-naslov ali ime za Git nista navedena"
 
-#: gitplugin.cpp:550
+#: gitplugin.cpp:548
 #, kde-format
 msgid "No message specified"
 msgstr "Ni podanega nobenega sporočila"
 
-#: gitplugin.cpp:624
+#: gitplugin.cpp:622
 #, kde-format
 msgid "No files to remove"
 msgstr "Ni datotek za odstraniti"
 
-#: gitplugin.cpp:904
+#: gitplugin.cpp:902
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Obstajajo čakajoče spremembe, ali jih želite najprej prestaviti v zalogo?"
 
-#: gitplugin.cpp:905
+#: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Stash"
 
-#: gitplugin.cpp:906
+#: gitplugin.cpp:904
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
 "PO-Revision-Date: 2024-09-20 13:52+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -154,7 +154,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Εσωτερικό σφάλμα debugger"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "Η διεργασία τερμάτισε"
@@ -196,13 +196,22 @@ msgstr "Ο debugger κατέρρευσε"
 msgid "Process crashed"
 msgstr "Η διεργασία κατέρρευσε"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Ένα πρόγραμμα ήδη βρίσκεται σε διαδικασία αποσφαλμάτωσης. Θέλετε να "
+"εγκαταλείψετε την τρέχουσα συνεδρία αποσφαλμάτωσης και να συνεχίσετε;"
+
+#: midebuggerplugin.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Εξέταση αρχείου πυρήνα με %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:120
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -217,13 +226,13 @@ msgstr ""
 "της μνήμης του προγράμματος τη στιγμή της κατάρρευσης, δίνοντας τη "
 "δυνατότητα για περαιτέρω ανάλυση.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Πρόσδεση σε διεργασία με %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -232,137 +241,102 @@ msgstr ""
 "<b>Πρόσδεση σε διεργασία</b><p>Πρόσδεση του debugger σε μια εκτελούμενη "
 "διεργασία.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:147
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - (%2)"
 
-#: midebuggerplugin.cpp:217
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Υπολογισμός: %1"
-
-#: midebuggerplugin.cpp:219
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>Υπολογισμός έκφρασης</b><p>Εμφανίζει την τιμή της έκφρασης κάτω από το "
-"δρομέα.</p>"
-
-#: midebuggerplugin.cpp:227
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Παρακολούθηση: %1"
-
-#: midebuggerplugin.cpp:229
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Παρακολούθηση έκφρασης</b><p>Προσθέτει την έκφραση κάτω από το δρομέα στη "
-"λίστα παρακολουθήσεων μεταβλητών.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Επιλογή αρχείου πυρήνα για εξέταση..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-"Ένα πρόγραμμα ήδη βρίσκεται σε διαδικασία αποσφαλμάτωσης. Θέλετε να "
-"εγκαταλείψετε την τρέχουσα συνεδρία αποσφαλμάτωσης και να συνεχίσετε;"
-
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Επιλογή μιας διεργασίας για πρόσδεση..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Δεν έγινε πρόσδεση στη διεργασία %1: αδυναμία πρόσδεσης του debugger στον "
 "εαυτό του."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "Debugger"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "Το '%1' δεν είναι εκτελέσιμο"
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Διόρθωση αρχείου πυρήνα"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "Διόρθωση διεργασίας %1"
 
-#: midebugsession.cpp:202
+#: midebuglauncher.cpp:61
+#, fuzzy, kde-format
+#| msgid ""
+#| "A program is already being debugged. Do you want to abort the currently "
+#| "running debug session and continue?"
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Ένα πρόγραμμα ήδη βρίσκεται σε διαδικασία αποσφαλμάτωσης. Θέλετε να "
+"εγκαταλείψετε την τρέχουσα συνεδρία αποσφαλμάτωσης και να συνεχίσετε;"
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "Εκτέλεση προγράμματος"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Πρόσδεση με διεργασία %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Αδυναμία εκκίνησης του debugger</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Εξέταση αρχείου πυρήνα %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Ο debugger σταμάτησε"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "Η εφαρμογή εκτελείται"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "Η εφαρμογή είναι σε παύση"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -371,39 +345,39 @@ msgstr ""
 "<b>Στάλθηκε εντολή Gdb χωρίς να εκτελείται ο debugger</b><br>Η εντολή ήταν η:"
 "<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Μη έγκυρη εντολή debugger</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Έξοδος με επιστροφή κωδικού: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "Τερμάτισε κανονικά"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Έξοδος με σήμα %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Το πρόγραμμα έλαβε το σήμα %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 εντολή σε αναμονή\n"
 msgstr[1] "%1 εντολές σε αναμονή\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -411,12 +385,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 εντολή επεξεργάζεται από το gdb\n"
 msgstr[1] "%1 εντολές επεξεργάζονται από το gdb\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Κατάσταση debugger: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -427,7 +401,7 @@ msgstr ""
 "Τρέχον κείμενο εντολής: '%2'\n"
 "Αρχικό κείμενο τρέχουσας εντολής: '%3'\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -771,6 +745,30 @@ msgstr "Επιλογή της διεύθυνσης για αποσυναρμολ
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Επιλογή της διεύθυνσης για αποσυναρμολόγηση"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Υπολογισμός: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Υπολογισμός έκφρασης</b><p>Εμφανίζει την τιμή της έκφρασης κάτω από το "
+#~ "δρομέα.</p>"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Παρακολούθηση: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Παρακολούθηση έκφρασης</b><p>Προσθέτει την έκφραση κάτω από το δρομέα "
+#~ "στη λίστα παρακολουθήσεων μεταβλητών.</p>"
 
 #~ msgid "toolBar"
 #~ msgstr "toolBar"

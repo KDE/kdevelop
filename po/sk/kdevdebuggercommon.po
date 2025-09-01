@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -142,7 +142,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Vnútorná chyba ladenia"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "Proces ukončený"
@@ -183,13 +183,22 @@ msgstr "Ladenie spadlo"
 msgid "Process crashed"
 msgstr "Proces spadol"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
+"pokračovať so spustením?"
+
+#: midebuggerplugin.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Preskúmať súbor core s %1"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:120
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -203,13 +212,13 @@ msgstr ""
 "obsahuje obraz pamäte programu v čase, keď havaroval, čo vám umožňuje "
 "vykonať následnú analýzu.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Pripojiť k procesu s %1"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -217,135 +226,102 @@ msgid ""
 msgstr ""
 "<b>Pripojiť k procesu</b><p>Pripojí ladiaci program k bežiacemu procesu.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:147
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Vyhodnotiť: %1"
-
-#: midebuggerplugin.cpp:219
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr "<b>Vyhodnotiť výraz</b><p>Ukazuje hodnotu výrazu pod kurzorom.</p>"
-
-#: midebuggerplugin.cpp:227
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Sledovanie: %1"
-
-#: midebuggerplugin.cpp:229
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Sledovať výraz</b><p>Pridá výraz pod kurzorom do zoznamu Premenných/"
-"Sledovaných.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Zvoliť súbor core, ktorý sa preskúma..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-"Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
-"pokračovať so spustením?"
-
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Vybrať proces na pripojenie sa...."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Žiadne pripojenie k procesu %1: nemožno pripojiť ladiaci program k sebe "
 "samému."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "Debugger"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' nie je program"
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Ladiť súbor core"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "Proces ladenia %1"
 
-#: midebugsession.cpp:202
+#: midebuglauncher.cpp:61
+#, fuzzy, kde-format
+#| msgid ""
+#| "A program is already being debugged. Do you want to abort the currently "
+#| "running debug session and continue?"
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
+"pokračovať so spustením?"
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "Spúšťam program"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Pripojenie k procesu %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Nepodarilo sa pripojiť ladiaci program:</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Skúmanie súboru core %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Ladenie zastavené"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "Aplikácia beží"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "Aplikácia je pozastavená"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -353,32 +329,32 @@ msgid ""
 msgstr ""
 "<b>Príkaz gdb odoslaný, keď ladiaci program nebeží</b><br>Príkaz bol:<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Neplatný príkaz ladenia</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Ukončené s návratovým kódom: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "Ukončené normálne"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Ukončené na signáli %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Program obdržal signál %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -386,7 +362,7 @@ msgstr[0] "1 príkaz vo fronte\n"
 msgstr[1] "%1 príkazy vo fronte\n"
 msgstr[2] "%1 príkazov vo fronte\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -395,12 +371,12 @@ msgstr[0] "1 príkaz jel spracovaný s gdb\n"
 msgstr[1] "%1 príkazy sú spracovávané s gdb\n"
 msgstr[2] "%1 príkazov je spracovávaných s gdb\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Stav ladiaceho programu: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -411,7 +387,7 @@ msgstr ""
 "Text aktuálneho príkazu: '%2'\n"
 "Pôvodný text aktuálneho príkazu: '%3'\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -748,6 +724,28 @@ msgstr "Vybrať adresu, ktorej okolie sa disassembluje"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Adresa, ktorej okolie sa disassembluje"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Vyhodnotiť: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr "<b>Vyhodnotiť výraz</b><p>Ukazuje hodnotu výrazu pod kurzorom.</p>"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Sledovanie: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Sledovať výraz</b><p>Pridá výraz pod kurzorom do zoznamu Premenných/"
+#~ "Sledovaných.</p>"
 
 #~ msgid "toolBar"
 #~ msgstr "Panel nástrojov"

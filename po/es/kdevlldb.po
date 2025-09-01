@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2025-05-17 02:04+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -24,34 +24,34 @@ msgstr ""
 msgid "(running)"
 msgstr "(en ejecución)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:48
+#: debuggerplugin.cpp:30 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:93
+#: debuggerplugin.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "Consola de LLDB"
 
-#: debugsession.cpp:136
+#: debugsession.cpp:138
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 "Intentando ejecutar orden del usuario con una versión de LLDB no contemplada"
 
-#: debugsession.cpp:335
+#: debugsession.cpp:337
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>No se puede iniciar el depurador:</b><br />"
 
-#: debugsession.cpp:346
+#: debugsession.cpp:348
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Ha ocurrido un error al conectar al destino remoto:</b><br />"
 
-#: debugsession.cpp:359
+#: debugsession.cpp:361
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -60,7 +60,7 @@ msgstr ""
 "<b>La carga del archivo de volcado ha fallado.</b><p>El depurador ha "
 "informado del siguiente error:<p><tt>%1"
 
-#: debugsession.cpp:390
+#: debugsession.cpp:392
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -73,12 +73,12 @@ msgstr ""
 "más información.<br/>La consola de depuración se desactivará para impedir un "
 "cuelgue del programa.<br/>¿Desea continuar?"
 
-#: debugsession.cpp:394
+#: debugsession.cpp:396
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Versión de LLDB no permitida"
 
-#: debugsession.cpp:440
+#: debugsession.cpp:442
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -91,25 +91,10 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Barra de herramientas del depurador"
 
-#: lldblauncher.cpp:53
+#: lldblauncher.cpp:32
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Depurar una aplicación nativa en LLDB"
-
-#: lldblauncher.cpp:78
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"Ya se está depurando un programa. ¿Desea interrumpir la sesión actual de "
-"depuración y continuar con el lanzamiento?"
-
-#: lldblauncher.cpp:80
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "Interrumpir la sesión actual"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -249,3 +234,14 @@ msgstr "Ruta de trabajo remota:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/ruta/a/un/directorio/con/permisos/de/escritura/en/el/dispositivo"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "Ya se está depurando un programa. ¿Desea interrumpir la sesión actual de "
+#~ "depuración y continuar con el lanzamiento?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "Interrumpir la sesión actual"

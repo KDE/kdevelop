@@ -28,8 +28,7 @@ void TestModels::cleanupTestCase()
 void TestModels::testVcsFileChangesModel()
 {
     const auto indexForUrl = [](const VcsFileChangesModel* model, const QUrl& url) {
-        return model->match(model->index(0, 0), VcsFileChangesModel::UrlRole,
-                            url, 1, Qt::MatchExactly).value(0);
+        return VcsFileChangesModel::statusIndexForUrl(*model, QModelIndex{}, url);
     };
     const auto statusInfo = [](const QModelIndex& idx) {
         return idx.data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();

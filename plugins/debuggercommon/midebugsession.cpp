@@ -68,10 +68,6 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     // FIXME: see if this still works
     //connect(statusBarIndicator, SIGNAL(doubleClicked()),
     //        controller, SLOT(explainDebuggerStatus()));
-
-    // FIXME: reimplement / re-enable
-    //connect(this, SIGNAL(addWatchVariable(QString)), controller->variables(), SLOT(slotAddWatchVariable(QString)));
-    //connect(this, SIGNAL(evaluateExpression(QString)), controller->variables(), SLOT(slotEvaluateExpression(QString)));
 }
 
 MIDebugSession::~MIDebugSession()
@@ -119,6 +115,16 @@ bool MIDebugSession::restartAvaliable() const
     } else {
         return true;
     }
+}
+
+void MIDebugSession::setToolViewToRaiseAtEnd(ToolView toolView)
+{
+    m_toolViewToRaiseAtEnd = toolView;
+}
+
+auto MIDebugSession::toolViewToRaiseAtEnd() const -> ToolView
+{
+    return m_toolViewToRaiseAtEnd;
 }
 
 bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
@@ -193,9 +199,37 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
 
 bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* iexec)
 {
-    qCDebug(DEBUGGERCOMMON) << "Starting new debug session";
     Q_ASSERT(cfg);
     Q_ASSERT(iexec);
+
+    // ExecutePlugin prints a descriptive warning when it detects an error. Do not show
+    // errorString in the UI, because this overload is called only from unit tests.
+    QString errorString;
+
+    auto executablePath = iexec->executable(cfg, errorString).toLocalFile();
+    if (!errorString.isEmpty()) {
+        return false;
+    }
+    if (!QFileInfo{executablePath}.isExecutable()) {
+        qCWarning(DEBUGGERCOMMON) << executablePath << "is not an executable";
+        return false;
+    }
+
+    auto arguments = iexec->arguments(cfg, errorString);
+    if (!errorString.isEmpty()) {
+        return false;
+    }
+
+    return startDebugging({iexec, cfg, std::move(executablePath), std::move(arguments)});
+}
+
+bool MIDebugSession::startDebugging(const InferiorStartupInfo& startupInfo)
+{
+    auto* const iexec = startupInfo.execute;
+    Q_ASSERT(iexec);
+    auto* const cfg = startupInfo.launchConfiguration;
+    Q_ASSERT(cfg);
+    qCDebug(DEBUGGERCOMMON) << "Starting new debug session";
 
     // Ensure debugger is started first
     if (debuggerStateIsOn(s_appNotStarted)) {
@@ -212,10 +246,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         return false;
     }
 
-    // Only dummy err here, actual errors have been checked already in the job and we don't get here if there were any
-    QString err;
-    QString executable = iexec->executable(cfg, err).toLocalFile();
-    configInferior(cfg, iexec, executable);
+    configInferior(cfg, iexec, startupInfo.executablePath);
 
     // Set up the tty for the inferior
     bool config_useExternalTerminal = iexec->useTerminal(cfg);
@@ -254,17 +285,17 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     // Change the working directory to the correct one
     QString dir = iexec->workingDirectory(cfg).toLocalFile();
     if (dir.isEmpty()) {
-        dir = QFileInfo(executable).absolutePath();
+        dir = QFileInfo{startupInfo.executablePath}.absolutePath();
     }
     addCommand(EnvironmentCd, QLatin1Char('"') + dir + QLatin1Char('"'));
 
     // Set the run arguments
-    QStringList arguments = iexec->arguments(cfg, err);
-    if (!arguments.isEmpty())
-        addCommand(ExecArguments, KShell::joinArgs(arguments));
+    if (!startupInfo.arguments.empty()) {
+        addCommand(ExecArguments, KShell::joinArgs(startupInfo.arguments));
+    }
 
     // Do other debugger specific config options and actually start the inferior program
-    if (!execInferior(cfg, iexec, executable)) {
+    if (!execInferior(cfg, iexec, startupInfo.executablePath)) {
         return false;
     }
 
@@ -399,7 +430,6 @@ void MIDebugSession::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateF
     if (newState & s_dbgNotStarted) {
         if (changedState & s_dbgNotStarted) {
             message = i18n("Debugger stopped");
-            emit finished();
         }
         if (oldSessionState != NotStartedState || newState & s_dbgFailedStart) {
             newSessionState = EndedState;

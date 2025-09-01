@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -110,7 +110,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Egyedi formátumú szöveg"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -123,23 +123,23 @@ msgstr ""
 "ellenőrizze a futási beállítást: „%1”. Az alapértelmezett környezetcsoport "
 "használata."
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""
 "<b>A gdb 7.0.0 vagy magasabb verziója szükséges.</b><br />Az ön verziója: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Nem sikerült elindítani a hibakeresőt:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
@@ -154,27 +154,14 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Nem sikerült megtalálni a hibakeresés parancsértelmezőt: „%1”."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB beállítás"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, fuzzy, kde-format
 #| msgid "Executes a Native application in GDB"
 msgid "Executes a native application in GDB"
@@ -405,14 +392,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "&GDB parancsfájl futtatása:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB kimenet"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -425,28 +412,28 @@ msgstr ""
 "<b>GDB kimenet</b><p>Megjelenít minden végrehajtott gdb parancsot. Kiadhat "
 "bármilyen más gdb parancsot is a hibakeresés során.</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB parancs:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Az alkalmazás végrehajtásának szüneteltetése gdb parancsok megadásához"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Belső parancsok megjelenítése"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -455,7 +442,7 @@ msgid ""
 "already issued commands from the view."
 msgstr ""
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:379
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

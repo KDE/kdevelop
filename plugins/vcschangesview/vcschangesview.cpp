@@ -30,10 +30,11 @@ using namespace KDevelop;
 
 VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* parent)
     : QTreeView(parent)
+    , m_model{ICore::self()->projectController()->makeChangesModel()}
 {
     setRootIsDecorated(false);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    setSelectionMode(ContiguousSelection);
+    setSelectionMode(ExtendedSelection);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setUniformRowHeights(true);
     setTextElideMode(Qt::ElideLeft);
@@ -49,6 +50,9 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     QAction* action = plugin->actionCollection()->action(QStringLiteral("locate_document"));
     connect(action, &QAction::triggered, this, &VcsChangesView::selectCurrentDocument);
     connect(this, &VcsChangesView::doubleClicked, this, &VcsChangesView::openSelected);
+
+    connect(m_model.get(), &QAbstractItemModel::rowsInserted, this, &VcsChangesView::expand);
+    setModel(m_model.get());
 }
 
 static void appendActions(QMenu* menu, const QList<QAction*>& actions)
@@ -124,9 +128,9 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
         QAction* res = menu->exec(viewport()->mapToGlobal(pos));
         if(res == refreshAction) {
             if(!urls.isEmpty())
-                emit reload(urls);
+                m_model->reload(urls);
             else
-                emit reload(projects);
+                m_model->reload(projects);
         }
     }
     delete menu;
@@ -139,22 +143,18 @@ void VcsChangesView::selectCurrentDocument()
         return;
     
     QUrl url = doc->url();
-    IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
-    QModelIndex idx = (p ?
-        model()->match(model()->index(0, 0), ProjectChangesModel::UrlRole,
-                       url, 1, Qt::MatchExactly).value(0) :
-        QModelIndex());
+    QModelIndex idx;
+    if (const auto* const project = ICore::self()->projectController()->findProjectForUrl(url)) {
+        if (const auto* const projectItem = m_model->projectItem(project)) {
+            idx = ProjectChangesModel::statusIndexForUrl(*m_model, projectItem->index(), url);
+        }
+    }
+
     if(idx.isValid()) {
         expand(idx.parent());
         setCurrentIndex(idx);
     } else
         collapseAll();
-}
-
-void VcsChangesView::setModel(QAbstractItemModel* model)
-{
-    connect(model, &QAbstractItemModel::rowsInserted, this, &VcsChangesView::expand);
-    QTreeView::setModel(model);
 }
 
 void VcsChangesView::openSelected(const QModelIndex& index)

@@ -96,7 +96,3 @@ msgid ""
 "JSON error during parsing compilation database file '%1': document is not an "
 "array."
 msgstr ""
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Test"

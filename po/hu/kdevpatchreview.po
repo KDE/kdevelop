@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-12 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2014-01-25 23:13+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -307,19 +307,19 @@ msgctxt "@action"
 msgid "Deselect All"
 msgstr "A kijelölés megszüntetése"
 
-#: patchreviewtoolview.cpp:559
+#: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Futó tesztek: %p%"
 
-#: patchreviewtoolview.cpp:587
+#: patchreviewtoolview.cpp:585
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Teszt megfelelt"
 msgstr[1] "Mind a(z) %1 teszt megfelelt"
 
-#: patchreviewtoolview.cpp:591
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Teszt eredmény: %1 megfelelt, %2 meghiúsult, %3 hibás"

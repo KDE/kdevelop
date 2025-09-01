@@ -55,12 +55,21 @@ class QSignalSpy;
         WAIT_FOR_PAUSED_STATE(session, sessionSpy);                                                                    \
     } while (false)
 
-#define CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                        \
+#define RUN_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy, runMode)                                                    \
     do {                                                                                                               \
-        KDevMI::Testing::resetAndRun(sessionSpy, session);                                                             \
+        KDevMI::Testing::resetAndRun(sessionSpy, session, runMode);                                                    \
         RETURN_IF_TEST_FAILED();                                                                                       \
         WAIT_FOR_PAUSED_STATE(session, sessionSpy);                                                                    \
     } while (false)
+
+#define CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                        \
+    RUN_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy, KDevMI::Testing::RunMode::Continue)
+
+#define STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                       \
+    RUN_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy, KDevMI::Testing::RunMode::StepInto)
+
+#define STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                        \
+    RUN_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy, KDevMI::Testing::RunMode::StepOut)
 
 #define WAIT_FOR_A_WHILE(session, ms)                                                                                  \
     do {                                                                                                               \
@@ -137,14 +146,20 @@ private:
     bool m_hasEnteredActiveState = false;
 };
 
+enum class RunMode {
+    Continue,
+    StepInto,
+    StepOut,
+};
+
 /**
- * Reset a given debug session spy and run (continue) a given debug session.
+ * Reset a given debug session spy and run (continue) in a specified mode a given debug session.
  *
  * @param session a non-null debug session
  *
  * @pre @p spy.hasEnteredActiveState() returns @c true
  */
-void resetAndRun(ActiveStateSessionSpy& spy, KDevelop::IDebugSession* session);
+void resetAndRun(ActiveStateSessionSpy& spy, KDevelop::IDebugSession* session, RunMode runMode);
 
 /**
  * Wait until a given debug session enters a given state and (optionally) becomes idle.

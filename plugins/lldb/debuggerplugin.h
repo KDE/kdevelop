@@ -9,9 +9,11 @@
 
 #include "midebuggerplugin.h"
 
-#include "debugsession.h"
 #include "widgets/debuggerconsoleview.h"
 #include "widgets/disassemblewidget.h"
+
+#include <QHash>
+#include <QVariantList>
 
 namespace KDevMI { namespace LLDB {
 
@@ -33,10 +35,7 @@ public:
 class LldbDebuggerPlugin : public MIDebuggerPlugin
 {
     Q_OBJECT
-
 public:
-    friend class KDevMI::LLDB::DebugSession;
-
     explicit LldbDebuggerPlugin(QObject* parent, const KPluginMetaData& metaData, const QVariantList& = QVariantList());
     ~LldbDebuggerPlugin() override;
 
@@ -48,7 +47,7 @@ public:
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);
 
-    [[nodiscard]] DebugSession* createSessionObject() override;
+    [[nodiscard]] MIDebugSession* createSessionObject() override;
 
     DebuggerToolFactory<NonInterruptDebuggerConsoleView> *m_consoleFactory;
     DebuggerToolFactory<DisassembleWidget> *m_disassembleFactory;

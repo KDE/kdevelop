@@ -3,6 +3,7 @@
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
     SPDX-FileCopyrightText: 2009 Andreas Pakulat <apaku@gmx.de>
     SPDX-FileCopyrightText: 2016 Aetf <aetf@unlimitedcodeworks.xyz>
+    SPDX-FileCopyrightText: 2025 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,17 +13,19 @@
 
 #include <outputview/outputjob.h>
 
-#include <QPointer>
+#include <QUrl>
+
+#include <memory>
 
 class IExecutePlugin;
 namespace KDevelop
 {
-class OutputModel;
 class ILaunchConfiguration;
 }
 
 namespace KDevMI {
 
+struct InferiorStartupInfo;
 class MIDebuggerPlugin;
 class MIDebugSession;
 
@@ -34,10 +37,23 @@ public:
     ~MIDebugJobBase() override;
 
 protected:
+    /**
+     * Finish this job without stopping the debug session.
+     *
+     * Call this function when the debug session finishes or fails to start.
+     */
     void done();
+
+    /**
+     * Cease tracking the state of the debug session and stop its debugger.
+     *
+     * The caller of this function must finish the job by means other than the usual debug session end.
+     */
+    void stopDebugger();
+
     bool doKill() override;
 
-    QPointer<MIDebugSession> m_session;
+    MIDebugSession* m_session;
 };
 
 class MIDebugJob : public MIDebugJobBase<KDevelop::OutputJob>
@@ -55,25 +71,28 @@ public:
              QObject* parent = nullptr);
     void start() override;
 
-private Q_SLOTS:
-    void stdoutReceived(const QStringList&);
-    void stderrReceived(const QStringList&);
-
 private:
-    void finishWithError(int errorCode, const QString& errorText);
-    KDevelop::OutputModel* model();
+    void initializeStartupInfo(IExecutePlugin* execute, KDevelop::ILaunchConfiguration* launchConfiguration);
 
-    KDevelop::ILaunchConfiguration* m_launchcfg;
-    IExecutePlugin* m_execute;
+    std::unique_ptr<InferiorStartupInfo> m_startupInfo;
 };
 
 class MIExamineCoreJob : public MIDebugJobBase<KJob>
 {
     Q_OBJECT
 public:
-    explicit MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent = nullptr);
+    struct CoreInfo
+    {
+        QUrl executableFile;
+        QUrl coreFile;
+    };
+
+    explicit MIExamineCoreJob(MIDebuggerPlugin* plugin, CoreInfo coreInfo, QObject* parent = nullptr);
 
     void start() override;
+
+private:
+    CoreInfo m_coreInfo;
 };
 
 class MIAttachProcessJob : public MIDebugJobBase<KJob>

@@ -35,6 +35,7 @@ target_link_libraries(debuggee_debugeeqt Qt::Core)
 add_debuggable_executable(debuggee_debugeeexception SRCS debugeeexception.cpp)
 kde_target_enable_exceptions(debuggee_debugeeexception PRIVATE)
 
+add_subdirectory(multifile)
 add_subdirectory("path with space")
 
 add_debuggable_executable(debuggee_qstring SRCS qstring.cpp)

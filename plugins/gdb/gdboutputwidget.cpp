@@ -18,6 +18,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include <KColorScheme>
+#include <KConfigGroup>
 #include <KHistoryComboBox>
 #include <KLocalizedString>
 
@@ -121,23 +122,17 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     if (!session)
         return;
 
-     connect(this, &GDBOutputWidget::userGDBCmd,
-             session, &DebugSession::addUserCommand);
-     connect(this, &GDBOutputWidget::breakInto,
-             session, &DebugSession::interruptDebugger);
+    connect(this, &GDBOutputWidget::userGDBCmd, session, &DebugSession::addUserCommand);
+    connect(this, &GDBOutputWidget::breakInto, session, &DebugSession::interruptDebugger);
 
-     connect(session, &DebugSession::debuggerInternalCommandOutput,
-             this, &GDBOutputWidget::slotInternalCommandStdout);
-     connect(session, &DebugSession::debuggerUserCommandOutput,
-             this, &GDBOutputWidget::slotUserCommandStdout);
-     // debugger internal output, treat it as an internal command output
-     connect(session, &DebugSession::debuggerInternalOutput,
-             this, &GDBOutputWidget::slotInternalCommandStdout);
+    connect(session, &DebugSession::debuggerInternalCommandOutput, this, &GDBOutputWidget::slotInternalCommandStdout);
+    connect(session, &DebugSession::debuggerUserCommandOutput, this, &GDBOutputWidget::slotUserCommandStdout);
+    // debugger internal output, treat it as an internal command output
+    connect(session, &DebugSession::debuggerInternalOutput, this, &GDBOutputWidget::slotInternalCommandStdout);
 
-     connect(session, &DebugSession::debuggerStateChanged,
-             this, &GDBOutputWidget::slotStateChanged);
+    connect(session, &DebugSession::debuggerStateChanged, this, &GDBOutputWidget::slotStateChanged);
 
-     slotStateChanged(s_none, session->debuggerState());
+    slotStateChanged(s_none, session->debuggerState());
 }
 
 

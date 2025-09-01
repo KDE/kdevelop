@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcppdebugger.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -99,29 +99,29 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Teaghrán saincheaptha formáidithe"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Níorbh fhéidir an dífhabhtóir a thosú:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -133,27 +133,14 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr ""
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Cumraíocht GDB"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr ""
@@ -384,14 +371,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Rith script &gdb:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "Aschur GDB"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -399,26 +386,26 @@ msgid ""
 "issue any other GDB command while debugging.</p>"
 msgstr ""
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "Ordú &GDB:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr ""
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr ""
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -427,7 +414,7 @@ msgid ""
 "already issued commands from the view."
 msgstr ""
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:379
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"

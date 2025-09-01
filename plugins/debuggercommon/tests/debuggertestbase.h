@@ -93,6 +93,8 @@ private Q_SLOTS:
     void testBreakpointErrors();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testChangeBreakpointWhileRunning();
+    void testBreakpointInSharedLibrary();
+
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();

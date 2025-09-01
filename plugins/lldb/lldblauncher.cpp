@@ -6,36 +6,15 @@
 
 #include "lldblauncher.h"
 
-#include "debuggerplugin.h"
-#include "debuglog.h"
-#include "midebugjobs.h"
 #include "widgets/lldbconfigpage.h"
 
-#include <execute/iexecutepluginhelpers.h>
-
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
-
 #include <KLocalizedString>
-#include <KMessageBox>
 
-#include <QApplication>
-
-using namespace KDevelop;
-using namespace KDevMI;
 using namespace KDevMI::LLDB;
 
-LldbLauncher::LldbLauncher(LldbDebuggerPlugin* plugin, IExecutePlugin* iexec)
-    : m_plugin(plugin)
-    , m_iexec(iexec)
+LldbLauncher::LldbLauncher(MIDebuggerPlugin* plugin, IExecutePlugin* execute)
+    : MIDebugLauncher(plugin, execute, std::make_unique<LldbConfigPageFactory>())
 {
-    m_factoryList << new LldbConfigPageFactory();
-}
-
-LldbLauncher::~LldbLauncher()
-{
-    qDeleteAll(m_factoryList);
 }
 
 QString LldbLauncher::id()
@@ -51,42 +30,4 @@ QString LldbLauncher::name() const
 QString LldbLauncher::description() const
 {
     return i18n("Debug a native application in LLDB");
-}
-
-QStringList LldbLauncher::supportedModes() const
-{
-    return {QStringLiteral("debug")};
-}
-
-QList< KDevelop::LaunchConfigurationPageFactory * > LldbLauncher::configPages() const
-{
-    return m_factoryList;
-}
-
-KJob *LldbLauncher::start(const QString &launchMode, KDevelop::ILaunchConfiguration *cfg)
-{
-    qCDebug(DEBUGGERLLDB) << "LldbLauncher: starting debugging";
-    if (!cfg) {
-        qCWarning(DEBUGGERLLDB) << "LldbLauncher: can't start with null configuration";
-        return nullptr;
-    }
-
-    if (launchMode == QLatin1String("debug")) {
-        if (ICore::self()->debugController()->currentSession()) {
-            auto ans = KMessageBox::warningTwoActions(
-                qApp->activeWindow(),
-                i18n("A program is already being debugged. Do you want to abort the "
-                     "currently running debug session and continue with the launch?"),
-                {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-                KStandardGuiItem::cancel());
-            if (ans == KMessageBox::SecondaryAction)
-                return nullptr;
-        }
-
-        auto* const debugJob = new MIDebugJob(m_plugin, cfg, m_iexec);
-        return makeJobWithDependency(debugJob, *m_iexec, cfg);
-    }
-
-    qCWarning(DEBUGGERLLDB) << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
-    return nullptr;
 }

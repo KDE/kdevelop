@@ -3,24 +3,25 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2010, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022.
-# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# SPDX-FileCopyrightText: 2010, 2025 Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>
 # Marcus Gama <marcus.gama@gmail.com>, 2010, 2011, 2012.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Aracele Torres <araceletorres@gmail.com>, 2010.
+# SPDX-FileCopyrightText: 2025 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-10 00:41+0000\n"
-"PO-Revision-Date: 2022-07-14 09:50-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
-"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"POT-Creation-Date: 2025-08-07 18:28+0000\n"
+"PO-Revision-Date: 2025-08-20 20:10-0300\n"
+"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -198,6 +199,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Não é possível adicionar um ponto de parada a um documento sem título. Salve "
+"o documento primeiro."
 
 #: debugger/breakpoint/breakpointwidget.cpp:59
 #, kde-format
@@ -282,30 +285,30 @@ msgstr "A&tivar tudo"
 msgid "&Remove All"
 msgstr "&Remover todos"
 
-#: debugger/framestack/framestackmodel.cpp:179
+#: debugger/framestack/framestackmodel.cpp:187
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
 msgstr "#%1 em %2 (falhou)"
 
-#: debugger/framestack/framestackmodel.cpp:181
+#: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2"
 msgstr "#%1 em %2"
 
-#: debugger/framestack/framestackmodel.cpp:282
+#: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
 msgstr "Profundidade"
 
-#: debugger/framestack/framestackmodel.cpp:284
+#: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
 msgstr "Função"
 
-#: debugger/framestack/framestackmodel.cpp:286
+#: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
 msgstr "Fonte"
@@ -414,7 +417,7 @@ msgstr "Variáveis do Depurador"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Redimensionar colunas automaticamente ao clicar"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -892,7 +895,7 @@ msgstr "enumerador "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[dependente-do-valor]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, kde-format
@@ -1630,13 +1633,13 @@ msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "Caminho"
 
-#: project/projectchangesmodel.cpp:308
+#: project/projectchangesmodel.cpp:317
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
 msgstr "sem ramificação"
 
-#: project/projectchangesmodel.cpp:309
+#: project/projectchangesmodel.cpp:318
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
@@ -1833,111 +1836,111 @@ msgstr ""
 "Build_from_source#Set_up_the_runtime_environment\">este artigo</a> para "
 "obter mais informações."
 
-#: shell/debugcontroller.cpp:112
+#: shell/debugcontroller.cpp:113
 #, kde-format
 msgid "Debugger"
 msgstr "Depurador"
 
-#: shell/debugcontroller.cpp:142
+#: shell/debugcontroller.cpp:143
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Pilha de chamadas"
 
-#: shell/debugcontroller.cpp:147
+#: shell/debugcontroller.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Pontos de parada"
 
-#: shell/debugcontroller.cpp:152
+#: shell/debugcontroller.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variáveis"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "&Restart"
 msgstr "&Reiniciar"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restart program"
 msgstr "Reiniciar o programa"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Reinicia os aplicativos desde o início."
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Interromper"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:228
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Interromper o aplicativo"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Interrompe o processo sob depuração ou o comando do depurador atual."
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Executar até o &cursor"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Executar até o cursor"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Continua com a execução até atingir a posição do cursor."
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Colocar a posição de e&xecução no cursor"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Saltar para o cursor"
 
-#: shell/debugcontroller.cpp:241
+#: shell/debugcontroller.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Continuar a execução a partir da posição atual do cursor."
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Avançar s&obre"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Avançar por cima da linha seguinte"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1949,37 +1952,37 @@ msgstr ""
 "chamada a uma função, esta é executada por inteiro e o aplicativo irá parar "
 "na linha após a chamada à função."
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Avançar sobre a ins&trução"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Avançar sobre a instrução"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Avança sobre a instrução de Assembly seguinte."
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:264
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Avançar &para"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Salta para a próxima instrução"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1989,37 +1992,37 @@ msgstr ""
 "Executa exatamente uma linha de código. Se a linha de código for uma chamada "
 "a uma função, então a execução irá parar a seguir à entrada na função."
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Avançar para a i&nstrução"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Avançar para a instrução"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Avança para dentro da instrução de Assembly seguinte."
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:280
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Sai&r"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Avança até sair da função atual"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:283
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2033,60 +2036,66 @@ msgstr ""
 "execução do programa for no nível superior das chamadas (p.ex., no main()), "
 "então esta operação não tem efeito."
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Alternar o ponto de parada"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Alternar o ponto de parada"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Ativa/desativa o ponto de parada na linha atual do editor."
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Mostrar linha atual"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Mostrar a posição de execução atual"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:300
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Pular para a linha de execução no editor."
 
-#: shell/debugcontroller.cpp:475 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:313
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Interromper a sessão atual"
+
+#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Depurar o lançamento"
 
-#: shell/debugcontroller.cpp:477 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Depura o lançamento atual"
 
-#: shell/debugcontroller.cpp:478 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2096,19 +2105,19 @@ msgstr ""
 "Executa o alvo ou o programa indicado na janela de configuração do módulo de "
 "lançamento ativo no momento, dentro de um depurador."
 
-#: shell/debugcontroller.cpp:481
+#: shell/debugcontroller.cpp:506
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Continuar"
 
-#: shell/debugcontroller.cpp:483
+#: shell/debugcontroller.cpp:508
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Continua com a execução do aplicativo"
 
-#: shell/debugcontroller.cpp:484
+#: shell/debugcontroller.cpp:509
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2362,26 +2371,29 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"As seguintes linguagens são mais bem suportados pelos plugins dedicados do "
+"KDevelop e, portanto, estão desabilitadas no plugin %1 para evitar "
+"conflitos: <var>%2</var>. Para comparar os níveis de suporte ou contornar "
+"erros graves, desabilite o(s) plugin(s) dedicado(s) do KDevelop e defina a "
+"variável de ambiente <var>%3</var> (<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "atualmente definida"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "atualmente não definida"
 
 #: shell/ktexteditorpluginintegration.cpp:492
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Mensagem"
+msgstr "Mensagens"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -2717,10 +2729,9 @@ msgid "Adds a new tool view to this window."
 msgstr "Adiciona uma nova janela de ferramentas a esta janela."
 
 #: shell/mainwindow_p.cpp:320
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Esquema de cores"
+msgstr "&Esquema de cores da janela"
 
 #: shell/mainwindow_p.cpp:354
 #, kde-format
@@ -2765,11 +2776,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Bloquear o painel de ocultar"
 
 #: shell/openprojectdialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "All Project Files (%1)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "Todos os arquivos de projeto (%1)"
+msgstr "Todos os arquivos de projeto"
 
 #: shell/openprojectdialog.cpp:141
 #, kde-format
@@ -3195,23 +3205,23 @@ msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Abrir o projeto para o arquivo atual"
 
-#: shell/projectcontroller.cpp:766
+#: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
 msgstr "O projeto já está aberto: %1"
 
-#: shell/projectcontroller.cpp:770
+#: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
 msgstr "Nenhum documento ativo"
 
-#: shell/projectcontroller.cpp:851
+#: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "O projeto já está aberto"
 
-#: shell/projectcontroller.cpp:854
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3220,24 +3230,24 @@ msgstr ""
 "O projeto que você está tentando abrir já está aberto em pelo menos uma "
 "outra sessão.<br>O que deseja fazer?"
 
-#: shell/projectcontroller.cpp:858
+#: shell/projectcontroller.cpp:856
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Adicionar o projeto à sessão atual"
 
-#: shell/projectcontroller.cpp:862
+#: shell/projectcontroller.cpp:860
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Abrir a sessão %1"
 
-#: shell/projectcontroller.cpp:923
+#: shell/projectcontroller.cpp:921
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Nenhum plugin habilitado suporta esta URL de repositório: %1"
 
-#: shell/projectcontroller.cpp:1227
+#: shell/projectcontroller.cpp:1225
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3630,12 +3640,10 @@ msgid "Delete Session"
 msgstr "Excluir a sessão"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "Iniciar uma nova sessão"
+msgstr "Iniciar nova sessão"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
@@ -3676,20 +3684,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Iniciar uma nova instância do KDevelop com uma sessão vazia"
 
 #: shell/sessioncontroller.cpp:281
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Iniciar uma nova sessão"
+msgstr "Iniciar nova sessão nomeada..."
 
 #: shell/sessioncontroller.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Iniciar uma nova instância do KDevelop com uma sessão vazia"
+msgstr "Inicia uma nova instância do KDevelop com uma sessão nomeada"
 
 #: shell/sessioncontroller.cpp:288
 #, kde-format
@@ -3921,13 +3925,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Alternar a visibilidade da prévia para este estilo.\n"
+"A prévia deve ser desativada para estilos cuja formatação depende do caminho "
+"do arquivo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Pré-visualização"
+msgstr "Mostrar prévia"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -3936,7 +3942,7 @@ msgstr "Pré-visualização"
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
-msgstr "Visualização:"
+msgstr "Prévia:"
 
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
@@ -4040,12 +4046,12 @@ msgid_plural " files"
 msgstr[0] " arquivo"
 msgstr[1] " arquivos"
 
-#: shell/settings/languagepreferences.cpp:77
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
 msgstr "Suporte à linguagem"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:87
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Configurar os realces de completação de código e semântica"
@@ -4184,6 +4190,13 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Por padrão, as cores globais para tipos, funções, espaços de nome e assim "
+"por diante são geradas automaticamente e se adaptarão ao tema do editor "
+"selecionado com base na intensidade da colorização global. Se desejar ter "
+"controle total sobre as cores, você pode usar o tema do editor como fonte de "
+"cores. Você pode então ajustar as cores nas configurações em Editor &gt; "
+"Temas de Cores &gt; Destacando Estilos de Texto &gt; KDevelop/Cores "
+"Semânticas.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
@@ -4375,14 +4388,14 @@ msgstr "Tamanho mínimo do projeto para o processamento simplificado:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Armazenamento e Uso de Memória"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Armazene preâmbulos pré-compilados em:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4400,20 +4413,32 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Os preâmbulos pré-compilados permanecem no diretório temporário após o "
+"KDevelop travar e são excluídos somente quando a mesma sessão é reiniciada."
+"<br>\n"
+"Quando os preâmbulos são armazenados na memória, é garantido que eles "
+"desaparecerão ao sair, mesmo se o KDevelop travar.<br>\n"
+"Escolher o armazenamento em Diretório Temporário da Sessão faz sentido em "
+"sistemas onde a RAM é limitada e o diretório temporário não usa tmpfs, pois "
+"os arquivos de preâmbulo podem ocupar gigabytes de espaço.<br>\n"
+"A alteração desta opção entra em vigor após reiniciar o KDevelop.<br>\n"
+"Esta opção só tem efeito se o KDevelop tiver sido compilado com o Clang "
+"versão 17 ou posterior.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Memória"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Pasta temporária de sessão"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4892,26 +4917,25 @@ msgid "Reformat Files..."
 msgstr "Reformatar arquivos..."
 
 #: shell/sourceformattercontroller.cpp:235
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Format file(s) using the current theme"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Formatar os arquivos com o tema atual"
+msgstr ""
+"Formata o(s) arquivo(s) usando o(s) formatador(es) de código configurado(s)"
 
 #: shell/sourceformattercontroller.cpp:237
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Formatting functionality using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr "Funcionalidade de formatação com a biblioteca <b>astyle</b>."
+msgstr ""
+"Funcionalidade de formatação usando o(s) formatador(es) de código "
+"configurado(s)."
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "Reformata seleção ou arquivo usando <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4920,32 +4944,30 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"Reformata o texto selecionado ou o arquivo inteiro se nada estiver "
+"selecionado, usando a ferramenta <i>%1</i> com o estilo <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:619
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr "Reformatar a linha atual usando o AStyle"
+msgstr "Reformata a linha atual usando <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:622
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
-"Reformatação de código da linha sob o cursor com a biblioteca <b>astyle</b>."
+"Reformatação da fonte da linha sob o cursor usando a ferramenta <i>%1</i> "
+"com o estilo <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
-msgstr ""
+msgstr "Reformata seleção ou arquivo usando o formatador de código configurado"
 
 #: shell/sourceformattercontroller.cpp:628
 #, kde-format
@@ -4954,26 +4976,24 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Reformata o texto selecionado ou o arquivo inteiro, caso nada esteja "
+"selecionado, usando o formatador de código configurado."
 
 #: shell/sourceformattercontroller.cpp:630
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr "Reformatar a linha atual usando o AStyle"
+msgstr "Reformata a linha atual usando o formatador de código configurado"
 
 #: shell/sourceformattercontroller.cpp:632
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
-"Reformatação de código da linha sob o cursor com a biblioteca <b>astyle</b>."
+"Reformatação do código da linha sob o cursor usando o formatador de código "
+"configurado."
 
 #: shell/sourceformattercontroller.cpp:867
 #, kde-format
@@ -5042,7 +5062,7 @@ msgstr "Linguagem:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Como configurar estilos de formatação"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5061,6 +5081,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Selecione as linguagens que você usa, uma por uma, na caixa de combinação "
+"<i>Linguagem</i> abaixo e escolha o formatador e o estilo desejados para "
+"cada uma. <i>Ctrl+Clique</i> em um estilo selecionado para desmarcá-lo.</p>\n"
+"<p>Configurar o formatador e o estilo corretos para cada linguagem usado é "
+"muito importante: não apenas as ações explícitas <i>Reformatar Código-Fonte</"
+"i>/<i>Linha</i>/<i>Arquivos...</i> são afetadas, mas também a formatação de "
+"código gerado, refatorado ou corrigido automaticamente (por exemplo, a ação "
+"do menu de contexto <i>Renomear</i>).</p>\n"
+"<p>Observe que o KDevelop formata todos os arquivos <i>*.h</i> com "
+"formatador e estilo configurados para a linguagem <i>C</i>, até mesmo "
+"cabeçalhos C++ que pertencem a um projeto C++ puro. Isso ocorre porque o "
+"formatador de código mapeia os tipos MIME para as linguagens.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5073,7 +5105,7 @@ msgstr "Formatação:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Descrição de um formatador selecionado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -5279,13 +5311,13 @@ msgctxt "@action:inmenu"
 msgid "Close All"
 msgstr "Fechar todos"
 
-#: sublime/idealbuttonbarwidget.cpp:45
+#: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
 msgstr "Ativar/desativar a área de ferramentas '%1'"
 
-#: sublime/idealbuttonbarwidget.cpp:304
+#: sublime/idealbuttonbarwidget.cpp:352
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
@@ -5509,7 +5541,7 @@ msgstr "Imprimir a cadeia de definições de uso se processado com sucesso"
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Imprimir contextos pais ao despejar contextos"
 
 #: util/duchainify/main.cpp:300
 #, kde-format
@@ -5644,7 +5676,7 @@ msgstr "O comando terminou com o valor %1."
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "erro: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -5917,13 +5949,13 @@ msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "?"
 
-#: vcs/models/vcsfilechangesmodel.cpp:131
+#: vcs/models/vcsfilechangesmodel.cpp:137
 #, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "Nome do arquivo"
 
-#: vcs/models/vcsfilechangesmodel.cpp:132
+#: vcs/models/vcsfilechangesmodel.cpp:138
 #, kde-format
 msgctxt "@title:column"
 msgid "Status"

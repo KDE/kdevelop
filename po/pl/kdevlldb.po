@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2022-09-23 11:17+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -22,33 +22,33 @@ msgstr ""
 msgid "(running)"
 msgstr "(uruchomiony)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:48
+#: debuggerplugin.cpp:30 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:93
+#: debuggerplugin.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "Konsola LLDB"
 
-#: debugsession.cpp:136
+#: debugsession.cpp:138
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Próba wykonania polecenia użytkownika na nieobsługiwanej wersji LLDB"
 
-#: debugsession.cpp:335
+#: debugsession.cpp:337
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Nie można uruchomić z diagnozowaniem:</b><br />"
 
-#: debugsession.cpp:346
+#: debugsession.cpp:348
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Błąd łączenia ze zdalnym celem:</b><br />"
 
-#: debugsession.cpp:359
+#: debugsession.cpp:361
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -57,7 +57,7 @@ msgstr ""
 "<b>Nie udało się wczytać pliku jądra</b><p>Program diagnostyczny zgłosił "
 "następujący błąd:<p><tt>%1"
 
-#: debugsession.cpp:390
+#: debugsession.cpp:392
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -70,12 +70,12 @@ msgstr ""
 "cgi?id=28026.<br/>Konsola programu diagnostycznego zostanie wyłączona, aby "
 "uniknąć usterki.<br/>Czy chcesz kontynuować?"
 
-#: debugsession.cpp:394
+#: debugsession.cpp:396
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Nieobsługiwana wersja LLDB"
 
-#: debugsession.cpp:440
+#: debugsession.cpp:442
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -87,25 +87,10 @@ msgstr "<b>Musisz mieć lldb-mi z  LLDB 3.8.1 lub wyższy.</b><br />Używasz: %1
 msgid "Debugger Toolbar"
 msgstr "Pasek narzędzi programu diagnostycznego"
 
-#: lldblauncher.cpp:53
+#: lldblauncher.cpp:32
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Diagnozuj macierzysty program w LLDB"
-
-#: lldblauncher.cpp:78
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"Program jest już diagnozowany. Czy chcesz przerwać obecnie uruchomioną sesję "
-"diagnostyczną i kontynuować uruchamianie?"
-
-#: lldblauncher.cpp:80
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "Przerwij bieżącą sesję"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -245,6 +230,17 @@ msgstr "Zdalna ścieżka pracy:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/ścieżka/do/zapisywalnego/katalogu/na/urządzeniu"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "Program jest już diagnozowany. Czy chcesz przerwać obecnie uruchomioną "
+#~ "sesję diagnostyczną i kontynuować uruchamianie?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "Przerwij bieżącą sesję"
 
 #~ msgid "Startup error"
 #~ msgstr "Błąd uruchamiania"

@@ -93,7 +93,7 @@ public:
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
-    ProjectChangesModel* m_changesModel = nullptr;
+    std::weak_ptr<ProjectChangesModel> m_changesModel;
     QHash<IProject*, KJob*> m_parseJobs; // parse jobs that add files from the project to the background parser.
 
     ProjectControllerPrivate(Core* core, ProjectController* p)
@@ -668,8 +668,6 @@ void ProjectController::initialize()
              d->buildset, &ProjectBuildSetModel::saveToProject );
     connect( this, &ProjectController::projectClosed,
              d->buildset, &ProjectBuildSetModel::projectClosed );
-
-    d->m_changesModel = new ProjectChangesModel(this);
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
@@ -1251,11 +1249,23 @@ ProjectBuildSetModel* ProjectController::buildSetModel()
     return d->buildset;
 }
 
-ProjectChangesModel* ProjectController::changesModel()
+std::shared_ptr<ProjectChangesModel> ProjectController::changesModel() const
+{
+    Q_D(const ProjectController);
+
+    return d->m_changesModel.lock();
+}
+
+std::shared_ptr<ProjectChangesModel> ProjectController::makeChangesModel()
 {
     Q_D(ProjectController);
 
-    return d->m_changesModel;
+    auto model = d->m_changesModel.lock();
+    if (!model) {
+        model = std::make_shared<ProjectChangesModel>();
+        d->m_changesModel = model;
+    }
+    return model;
 }
 
 void ProjectController::commitCurrentProject()

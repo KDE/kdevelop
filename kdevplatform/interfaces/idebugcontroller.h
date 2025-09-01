@@ -31,6 +31,14 @@ public:
     /** Each plugin using the debugger actions needs to call this function to setup the gui */
     virtual void initializeUi() = 0;
 
+    /**
+     * @return whether a new debug session can be added at this time
+     *
+     * @param replaceSessionQuestionText the text of the question to ask
+     *        the user if an existing debug session is currently running
+     */
+    [[nodiscard]] virtual bool canAddSession(const QString& replaceSessionQuestionText) const = 0;
+
     virtual void addSession(IDebugSession* session) = 0;
     
     /** Return the current debug session. At present, only

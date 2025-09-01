@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2024-12-15 15:59+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -22,40 +22,40 @@ msgstr ""
 msgid "(running)"
 msgstr ""
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:48
+#: debuggerplugin.cpp:30 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr ""
 
-#: debuggerplugin.cpp:93
+#: debuggerplugin.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr ""
 
-#: debugsession.cpp:136
+#: debugsession.cpp:138
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 
-#: debugsession.cpp:335
+#: debugsession.cpp:337
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr ""
 
-#: debugsession.cpp:346
+#: debugsession.cpp:348
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr ""
 
-#: debugsession.cpp:359
+#: debugsession.cpp:361
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 msgstr ""
 
-#: debugsession.cpp:390
+#: debugsession.cpp:392
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -64,12 +64,12 @@ msgid ""
 "continue?"
 msgstr ""
 
-#: debugsession.cpp:394
+#: debugsession.cpp:396
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr ""
 
-#: debugsession.cpp:440
+#: debugsession.cpp:442
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -81,22 +81,9 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr ""
 
-#: lldblauncher.cpp:53
+#: lldblauncher.cpp:32
 #, kde-format
 msgid "Debug a native application in LLDB"
-msgstr ""
-
-#: lldblauncher.cpp:78
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-
-#: lldblauncher.cpp:80
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
 msgstr ""
 
 #: widgets/lldbconfigpage.cpp:67

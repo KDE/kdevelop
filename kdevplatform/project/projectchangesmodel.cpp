@@ -25,6 +25,7 @@
 #include <util/path.h>
 
 #include <QDir>
+#include <QHash>
 #include <QIcon>
 
 #include <array>
@@ -54,7 +55,10 @@ ProjectChangesModel::ProjectChangesModel(QObject* parent)
 
 ProjectChangesModel::~ProjectChangesModel()
 {
-    // TODO (once ProjectController is no longer the parent of this): remove all open projects.
+    const auto projects = ICore::self()->projectController()->projects();
+    for (auto* const project : projects) {
+        removeProject(project);
+    }
 }
 
 void ProjectChangesModel::addProject(IProject* p)
@@ -116,9 +120,9 @@ QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int r
     return nullptr;
 }
 
-QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
+QStandardItem* ProjectChangesModel::projectItem(const IProject* project) const
 {
-    return findItemChild(invisibleRootItem(), p->name(), ProjectChangesModel::ProjectNameRole);
+    return findItemChild(invisibleRootItem(), project->name(), ProjectChangesModel::ProjectNameRole);
 }
 
 void ProjectChangesModel::updateState(IProject* p, const KDevelop::VcsStatusInfo& status)
@@ -179,7 +183,7 @@ void ProjectChangesModel::statusReady(KJob* job)
                 if((mode == IBasicVersionControl::NonRecursive && currentUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash))
                     || (mode == IBasicVersionControl::Recursive && url.isParentOf(currentUrl))
                 ) {
-                    removeUrl(currentUrl);
+                    removeUrl(itProject->index(), currentUrl);
                 }
             }
         }
@@ -251,13 +255,18 @@ void ProjectChangesModel::reload(const QList<IProject*>& projects)
 
 void ProjectChangesModel::reload(const QList<QUrl>& urls)
 {
+    QHash<IProject*, QList<QUrl>> groupedUrls;
+
     for (const QUrl& url : urls) {
         IProject* project=ICore::self()->projectController()->findProjectForUrl(url);
         
         if (project) {
-            // FIXME: merge multiple urls of the same project
-            changes(project, {url}, KDevelop::IBasicVersionControl::NonRecursive);
+            groupedUrls[project].push_back(url);
         }
+    }
+
+    for (const auto& [project, urls] : std::as_const(groupedUrls).asKeyValueRange()) {
+        changes(project, urls, IBasicVersionControl::NonRecursive);
     }
 }
 

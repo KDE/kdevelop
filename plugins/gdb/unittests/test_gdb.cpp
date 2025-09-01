@@ -100,7 +100,6 @@ public:
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
 
-    QUrl url() { return currentUrl(); }
     int line() { return currentLine(); }
 
     TestFrameStackModel* frameStackModel() const override
@@ -795,7 +794,6 @@ void GdbTest::testManualAttach()
 #ifdef Q_OS_FREEBSD
     QSKIP("The test freezes while waiting for the ended state, so skip it");
 #endif
-    WAIT_FOR_A_WHILE(session, 2000); // give the slow inferior some extra time to run
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 

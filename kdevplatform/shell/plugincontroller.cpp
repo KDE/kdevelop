@@ -183,16 +183,30 @@ public:
         }
         const auto interfaces = plugin.value(KEY_Interfaces(), QStringList());
         qCDebug(SHELL) << "checking dependencies:" << interfaces;
+        if (interfaces.empty()) {
+            // The loop below does not check dependencies on the plugin name
+            // alone without an interface, so return now to optimize.
+            return true;
+        }
+
         for (auto it = loadedPlugins.constBegin(), end = loadedPlugins.constEnd(); it != end; ++it) {
             const KPluginMetaData& info = it.key();
             if (info.pluginId() != plugin.pluginId()) {
+                // TODO: cannot an optional dependency of a loaded plugin be safely unloaded?
                 const auto dependencies =
-                    plugin.value(KEY_Required(), QStringList()) + plugin.value(KEY_Optional(), QStringList());
+                    info.value(KEY_Required(), QStringList()) + info.value(KEY_Optional(), QStringList());
                 for (const QString& dep : dependencies) {
                     Dependency dependency(dep);
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
                         continue;
                     }
+                    // TODO: if multiple loaded plugins implement an interface, cannot one of them be safely unloaded?
+                    // FIXME: canUnload(info) checks whether a dependent plugin can be unloaded. Either
+                    //        unloadPlugin() should unload the dependent plugins before unloading the plugin
+                    //        they depend on. Or the canUnload(info) check below should be removed to prevent
+                    //        unloading the plugin even if all plugins that depend on it can be unloaded. Either fix
+                    //        would ensure that whenever a plugin is loaded all its dependencies are loaded as well,
+                    //        and thus would address the TODO comment in Heaptrack::Plugin::launchHeaptrack().
                     if (interfaces.contains(dependency.interface) && !canUnload(info)) {
                         return false;
                     }
@@ -584,8 +598,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     // when we depend on e.g. A and B, but B cannot be found, then we
     // do not want to load A first and then fail on B and leave A loaded.
     // this would happen if we'd skip this step here and directly loadDependencies.
-    QStringList missingInterfaces;
-    if ( !hasUnresolvedDependencies( info, missingInterfaces ) ) {
+    if (const auto missingInterfaces = unresolvedDependencies(info); !missingInterfaces.empty()) {
         qCWarning(SHELL) << "Can't load plugin" << pluginId
                    << "some of its required dependencies could not be fulfilled:"
                    << missingInterfaces.join(QLatin1Char(','));
@@ -656,7 +669,7 @@ IPlugin* PluginController::plugin(const QString& pluginId) const
     return d->loadedPlugins.value( info );
 }
 
-bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, QStringList& missing ) const
+QStringList PluginController::unresolvedDependencies(const KPluginMetaData& info) const
 {
     Q_D(const PluginController);
 
@@ -673,11 +686,7 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
         });
     }
     // if we found all dependencies required should be empty now
-    if (!required.isEmpty()) {
-        missing = required.values();
-        return false;
-    }
-    return true;
+    return required.values();
 }
 
 void PluginController::loadOptionalDependencies( const KPluginMetaData& info )

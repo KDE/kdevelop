@@ -14,6 +14,8 @@
 
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KXMLGUIFactory>
 
@@ -23,7 +25,6 @@
 #include "../interfaces/contextmenuextension.h"
 #include "../interfaces/context.h"
 #include "../language/interfaces/editorcontext.h"
-#include "../sublime/view.h"
 #include "../sublime/mainwindow.h"
 #include "../sublime/area.h"
 #include "../debugger/breakpoint/breakpointmodel.h"
@@ -301,6 +302,19 @@ void DebugController::setupActions()
     ac->addAction(QStringLiteral("debug_showcurrentline"), action);
 }
 
+bool DebugController::canAddSession(const QString& replaceSessionQuestionText) const
+{
+    if (!m_currentSession) {
+        return true;
+    }
+
+    const auto answer = KMessageBox::warningTwoActions(
+        ICore::self()->uiController()->activeMainWindow(), replaceSessionQuestionText, {},
+        KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+        KStandardGuiItem::cancel());
+    return answer == KMessageBox::PrimaryAction;
+}
+
 void DebugController::addSession(IDebugSession* session)
 {
     qCDebug(SHELL) << session;
@@ -415,14 +429,25 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
             m_currentSession.clear();
             emit currentSessionChanged(nullptr);
             if (!Core::self()->shuttingDown()) {
-                Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
+                auto* const uiController = Core::self()->uiControllerInternal();
+                auto* const mainWindow = uiController->activeSublimeWindow();
                 if (mainWindow && mainWindow->area()->objectName() != QLatin1String("code")) {
                     auto oldArea = mainWindow->area();
                     QString workingSet = oldArea->workingSet();
-                    ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
+                    uiController->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
                     mainWindow->area()->setWorkingSet(workingSet, oldArea->workingSetPersistent(), oldArea);
                 }
-                ICore::self()->uiController()->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
+
+                switch (session->toolViewToRaiseAtEnd()) {
+                case IDebugSession::ToolView::None:
+                    break;
+                case IDebugSession::ToolView::Build:
+                    uiController->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Build"));
+                    break;
+                case IDebugSession::ToolView::Debug:
+                    uiController->raiseToolView(QStringLiteral("org.kdevelop.OutputView.Debug"));
+                    break;
+                }
             }
         }
         session->deleteLater();

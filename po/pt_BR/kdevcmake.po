@@ -5,21 +5,21 @@
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2009, 2010, 2019, 2020, 2022.
 # Luciano Pimentel <luciano.pimentel@kdemail.net>, 2009.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2012, 2013, 2014, 2015.
-# Marcus Gama <marcus.gama@gmail.com>, 2011, 2012.
+# SPDX-FileCopyrightText: 2011, 2012, 2025 Marcus Gama <marcus.gama@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2022-07-14 09:47-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
-"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"PO-Revision-Date: 2025-08-07 06:24-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -234,7 +234,7 @@ msgstr "<br /><em>Documentação em cache:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "Dados inválidos do projeto da API do arquivo CMake"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -242,15 +242,7 @@ msgid "CMake Content Page"
 msgstr "Página de Conteúdo CMake"
 
 #: cmakemanager.cpp:665
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to configure project '%1' (error message: %2). As a result, "
-#| "KDevelop's code understanding will likely be broken.\n"
-#| "\n"
-#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
-#| "are correct, and KDevelop is configured to use the correct CMake version "
-#| "and settings. Then right-click the project item in the projects tool view "
-#| "and click 'Reload'."
+#, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
 "code understanding may be wrong.\n"
@@ -258,13 +250,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
-"Falha ao configurar o projeto '%1' (mensagem de erro: %2). Como resultado o "
-"entendimento de código do KDevelop estará prejudicado.\n"
+"Projeto '%1' configurado com dados do CMake desatualizados. Como resultado, "
+"a interpretação do código pelo KDevelop pode estar incorreta.\n"
 "\n"
-"Para corrigir este problema, garanta que os arquivos CMakeLists.txt do "
-"projeto estão corretos, e que o KDevelop esteja configurado para usar a "
-"versão e configuração do CMake correta. Então clique com o botão direito no "
-"item do projeto na visão das ferramentas do projeto e clique em 'Recarregar'."
+"Para corrigir este problema, clique com o botão direito do mouse no item do "
+"projeto na visualização da ferramenta de projetos e clique em \"Recarregar\"."
 
 #: cmakemanager.cpp:676
 #, kde-format

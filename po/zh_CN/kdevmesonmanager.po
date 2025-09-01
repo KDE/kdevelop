@@ -173,7 +173,7 @@ msgstr "当前构建目录无效"
 #, kde-format
 msgctxt "%1 - test case name"
 msgid "Meson Test \"%1\""
-msgstr ""
+msgstr "Meson 测试 “%1”"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format

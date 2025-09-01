@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -46,7 +46,7 @@ msgstr ""
 "<p> لاحظ أن مطورك لا يشحن مترجم سي/سي++ على نظام ويندوز! </p> \n"
 "<p> تحتاج إلى تثبيت GCC عبر MinGW أو تثبيت إصدار حديث من Microsoft Visual "
 "Studio IDE والتأكد من إعداد البيئة بشكل صحيح <i> قبل </i> بدء مطورك. </p> \n"
-"<p> إذا كنت بحاجة إلى مزيد من المساعدة ، فيرجى مراجعة <a href=\"https://"
+"<p> إذا كنت بحاجة إلى مزيد من المساعدة، فيرجى مراجعة <a href=\"https://"
 "userbase.kde.org/KDevelop4/Manual/WindowsSetup\"> مطورك ضمن إرشادات ويندوز. "
 "</a> </p>"
 

@@ -13,22 +13,19 @@
 #include "midebugjobs.h"
 #include "midebugsession.h"
 #include "dialogs/processselection.h"
+#include "dialogs/selectcoredialog.h"
 
-#include <interfaces/context.h>
-#include <interfaces/contextmenuextension.h>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <language/interfaces/editorcontext.h>
 #include <sublime/message.h>
 #include <isession.h>
+#include <util/scopeddialog.h>
 
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KParts/MainWindow>
-#include <KStringHandler>
 
 #include <QAction>
 #include <QApplication>
@@ -36,11 +33,18 @@
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QDBusServiceWatcher>
-#include <QPointer>
-#include <QTimer>
 
 using namespace KDevelop;
 using namespace KDevMI;
+
+namespace {
+[[nodiscard]] const QString& replaceSessionQuestionText()
+{
+    static const QString text = i18n(
+        "A program is already being debugged. Do you want to abort the currently running debug session and continue?");
+    return text;
+}
+}
 
 class KDevMI::DBusProxy : public QObject
 {
@@ -196,47 +200,6 @@ void MIDebuggerPlugin::slotDebugExternalProcess(DBusProxy* proxy)
     }
 }
 
-ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QWidget* parent)
-{
-    ContextMenuExtension menuExt = IPlugin::contextMenuExtension(context, parent);
-
-    if (context->type() != KDevelop::Context::EditorContext)
-        return menuExt;
-
-    auto *econtext = dynamic_cast<EditorContext*>(context);
-    if (!econtext)
-        return menuExt;
-
-    QString contextIdent = econtext->currentWord();
-
-    if (!contextIdent.isEmpty())
-    {
-        QString squeezed = KStringHandler::csqueeze(contextIdent, 30);
-
-        auto* action = new QAction(parent);
-        action->setText(i18nc("@action:inmenu", "Evaluate: %1", squeezed));
-        action->setWhatsThis(i18nc("@info:whatsthis",
-                                  "<b>Evaluate expression</b>"
-                                  "<p>Shows the value of the expression under the cursor.</p>"));
-        connect(action, &QAction::triggered, this, [this, contextIdent](){
-            emit addWatchVariable(contextIdent);
-        });
-        menuExt.addAction(ContextMenuExtension::DebugGroup, action);
-
-        action = new QAction(parent);
-        action->setText(i18nc("@action:inmenu", "Watch: %1", squeezed));
-        action->setWhatsThis(i18nc("@info:whatsthis",
-                                  "<b>Watch expression</b>"
-                                  "<p>Adds the expression under the cursor to the Variables/Watch list.</p>"));
-        connect(action, &QAction::triggered, this, [this, contextIdent](){
-            emit evaluateExpression(contextIdent);
-        });
-        menuExt.addAction(ContextMenuExtension::DebugGroup, action);
-    }
-
-    return menuExt;
-}
-
 MIDebugSession* MIDebuggerPlugin::createSession()
 {
     auto* const session = createSessionObject();
@@ -251,18 +214,19 @@ void MIDebuggerPlugin::slotExamineCore()
 {
     showStatusMessage(i18n("Choose a core file to examine..."), 1000);
 
-    if (core()->debugController()->currentSession() != nullptr) {
-        KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
-            core()->uiController()->activeMainWindow(),
-            i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue?"),
-            {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-            KStandardGuiItem::cancel());
-        if (answer == KMessageBox::SecondaryAction)
-            return;
+    if (!core()->debugController()->canAddSession(replaceSessionQuestionText())) {
+        return;
     }
-    auto *job = new MIExamineCoreJob(this, core()->runController());
-    core()->runController()->registerJob(job);
+
+    const ScopedDialog<SelectCoreDialog> dialog(core()->uiController()->activeMainWindow());
+    if (dialog->exec() == QDialog::Rejected) {
+        return;
+    }
+
+    auto* const runController = core()->runController();
+    MIExamineCoreJob::CoreInfo coreInfo{dialog->executableFile(), dialog->core()};
+    auto* const job = new MIExamineCoreJob(this, std::move(coreInfo), runController);
+    runController->registerJob(job);
     // job->start() is called in registerJob
 }
 
@@ -271,15 +235,8 @@ void MIDebuggerPlugin::slotAttachProcess()
 {
     showStatusMessage(i18n("Choose a process to attach to..."), 1000);
 
-    if (core()->debugController()->currentSession() != nullptr) {
-        KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
-            core()->uiController()->activeMainWindow(),
-            i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue?"),
-            {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
-            KStandardGuiItem::cancel());
-        if (answer == KMessageBox::SecondaryAction)
-            return;
+    if (!core()->debugController()->canAddSession(replaceSessionQuestionText())) {
+        return;
     }
 
     const auto pid = askUserForProcessId(core()->uiController()->activeMainWindow());

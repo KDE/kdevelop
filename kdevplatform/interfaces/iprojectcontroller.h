@@ -14,6 +14,8 @@
 
 #include "interfacesexport.h"
 
+#include <memory>
+
 namespace KDevelop
 {
 
@@ -42,13 +44,18 @@ public:
      * @returns the model containing the projects and their items
      */
     virtual ProjectModel* projectModel() = 0;
-    
-    
+
     /**
-     * @returns an instance to the model that keeps track of the state 
-     * of the files per project.
+     * @return the model that keeps track of the VCS statuses of project files
+     *         or @c nullptr if the model is currently nonexistent
      */
-    virtual ProjectChangesModel* changesModel() = 0;
+    [[nodiscard]] virtual std::shared_ptr<ProjectChangesModel> changesModel() const = 0;
+    /**
+     * @return the model that keeps track of the VCS statuses of project files
+     *
+     * If the model does not currently exist, a new one is created and returned.
+     */
+    virtual std::shared_ptr<ProjectChangesModel> makeChangesModel() = 0;
 
     virtual ProjectBuildSetModel* buildSetModel() = 0;
 

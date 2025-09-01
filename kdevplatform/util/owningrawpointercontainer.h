@@ -24,6 +24,16 @@ class OwningRawPointerContainer
 public:
     OwningRawPointerContainer() = default;
 
+    explicit OwningRawPointerContainer(const C& c)
+        : m_c{c}
+    {
+    }
+
+    explicit OwningRawPointerContainer(C&& c)
+        : m_c{std::move(c)}
+    {
+    }
+
     OwningRawPointerContainer(OwningRawPointerContainer&& other)
         : m_c{std::move(other.m_c)}
     {

@@ -7,6 +7,7 @@
 #include "debuggerplugin.h"
 
 #include "debuglog.h"
+#include "debugsession.h"
 #include "lldblauncher.h"
 #include "widgets/debuggerconsoleview.h"
 
@@ -16,6 +17,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/launchconfigurationtype.h>
 
+#include <KLocalizedString>
 #include <KPluginFactory>
 
 using namespace KDevMI::LLDB;
@@ -115,7 +117,7 @@ LldbDebuggerPlugin::~LldbDebuggerPlugin()
 {
 }
 
-DebugSession* LldbDebuggerPlugin::createSessionObject()
+KDevMI::MIDebugSession* LldbDebuggerPlugin::createSessionObject()
 {
     return new DebugSession(this);
 }

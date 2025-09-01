@@ -87,7 +87,7 @@ public:
         bool isValid() const {return project;}
     };
 
-    explicit RepoStatusModel(QObject* parent);
+    explicit RepoStatusModel(QObject* parent = nullptr);
     ~RepoStatusModel() override;
 
     /**

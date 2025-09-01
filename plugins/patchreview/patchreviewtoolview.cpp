@@ -528,10 +528,8 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
     if ( !m_plugin->modelList() )
         return;
 
-    const auto matches = m_fileSortProxyModel->match(
-        m_fileSortProxyModel->index(0, 0), VcsFileChangesModel::UrlRole,
-        doc->url(), 1, Qt::MatchExactly);
-    m_editPatch.filesList->setCurrentIndex(matches.value(0));
+    const auto index = VcsFileChangesModel::statusIndexForUrl(*m_fileSortProxyModel, QModelIndex{}, doc->url());
+    m_editPatch.filesList->setCurrentIndex(index);
 }
 
 void PatchReviewToolView::runTests()

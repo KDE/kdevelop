@@ -48,6 +48,18 @@ public:
     enum Column { PathColumn = 0, StatusColumn = 1 };
 
     /**
+     * Search for an index whose data under UrlRole equals a given URL.
+     *
+     * @return the searched for child of a given parent index in the StatusColumn, or an invalid index if no such child
+     *
+     * @note When @p model represents a list rather than a tree (in other words, when all
+     *       items are children of invisibleRootItem()), @p parent is an invalid index and
+     *       @p parent.model() returns @c nullptr. So the @p model parameter is not redundant.
+     */
+    [[nodiscard]] static QModelIndex statusIndexForUrl(const QAbstractItemModel& model, const QModelIndex& parent,
+                                                       const QUrl& url);
+
+    /**
      * Constructor for class.
      * @param isCheckable if true, model will show checkboxes on items.
      */
@@ -92,7 +104,12 @@ public:
     void setIsCheckbable(bool checkable);
     bool isCheckable() const;
 
-    bool removeUrl(const QUrl& url);
+    /**
+     * Remove the row that corresponds to a given URL from the child items of a given parent index.
+     *
+     * @return whether the row was found and removed successfully
+     */
+    bool removeUrl(const QModelIndex& parent, const QUrl& url);
 
 public Q_SLOTS:
     /**

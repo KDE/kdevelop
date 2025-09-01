@@ -55,14 +55,14 @@ msgstr "CMake-ის გლობალური პარამეტრებ�
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Default CMake executable:"
-msgstr "CMake-ის ნაგულისხმები გამშვები ფაილი:"
+msgstr "CMake-ის ნაგულისხმევი გამშვები ფაილი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
-msgstr "ნაგულისხმები გენერატორი:"
+msgstr "ნაგულისხმევი გენერატორი:"
 
 #: cmakejob.cpp:38 prunejob.cpp:25
 #, kde-format

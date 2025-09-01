@@ -20,6 +20,7 @@
 
 #include <QMap>
 #include <QPointer>
+#include <QStringList>
 
 #include <memory>
 
@@ -39,6 +40,15 @@ class MIDebugger;
 class MIDebuggerPlugin;
 class MIVariable;
 class STTY;
+
+struct InferiorStartupInfo
+{
+    IExecutePlugin* execute = nullptr;
+    KDevelop::ILaunchConfiguration* launchConfiguration = nullptr;
+    QString executablePath;
+    QStringList arguments;
+};
+
 class MIDebugSession : public KDevelop::IDebugSession
 {
     Q_OBJECT
@@ -97,13 +107,35 @@ Q_SIGNALS:
     void reset();
 
 public:
+    /**
+     * Start the debugger and execute the inferior program specified by @p startupInfo.
+     *
+     * @return whether debugging started successfully
+     */
+    bool startDebugging(const InferiorStartupInfo& startupInfo);
+
     bool debuggerStateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
 
     bool hasCrashed() const;
 
+    /**
+     * Specify which tool view to raise in the Code area when this debug session ends.
+     *
+     * By default no output view is raised (ToolView::None).
+     *
+     * @sa IDebugSession::toolViewToRaiseAtEnd()
+     */
+    void setToolViewToRaiseAtEnd(ToolView toolView);
+
 // BEGIN IDebugSession overrides
 public:
+    /**
+     * @return the ID of a tool view that should be raised in the Code area when this debug session ends
+     *
+     * @sa setToolViewToRaiseAtEnd()
+     */
+    [[nodiscard]] ToolView toolViewToRaiseAtEnd() const override;
     DebuggerState state() const override;
     bool restartAvaliable() const override;
 
@@ -148,6 +180,12 @@ public Q_SLOTS:
 
     /**
      * Start the debugger, and execute the inferior program specified by \a cfg.
+     *
+     * Call the other overload of this function if more information is available.
+     *
+     * @warning This overload is called only from unit tests, and therefore does not report errors in the UI.
+     *
+     * @return whether debugging started successfully
      */
     bool startDebugging(KDevelop::ILaunchConfiguration *cfg, IExecutePlugin *iexec);
 
@@ -314,16 +352,18 @@ protected:
     // see m_debuggerState for debugger instance state
     DebuggerState m_sessionState = NotStartedState;
 
-    MIDebugger *m_debugger = nullptr;
     DBGStateFlags m_debuggerState;
+    MIDebugger* m_debugger = nullptr;
 
     bool m_stateReloadInProgress = false;
     bool m_stateReloadNeeded = false;
 
-    std::unique_ptr<STTY> m_tty;
-
     bool m_hasCrashed = false;
     bool m_sourceInitFile = true;
+
+    ToolView m_toolViewToRaiseAtEnd = ToolView::None;
+
+    std::unique_ptr<STTY> m_tty;
 
     // Map from GDB varobj name to MIVariable.
     QMap<QString, MIVariable*> m_allVariables;

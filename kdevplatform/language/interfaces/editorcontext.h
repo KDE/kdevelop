@@ -48,14 +48,6 @@ public:
     /**@return The cursor position.*/
     KTextEditor::Cursor position() const;
 
-    /**@return A QString with the content of the line which this context was
-        invoked for.*/
-    QString currentLine() const;
-
-    /**@return A QString containing the word near to the cursor when this
-        context object was created.*/
-    QString currentWord() const;
-
     /**
      * Returns the associated view.
      */

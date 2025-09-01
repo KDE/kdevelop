@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -155,7 +155,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern fejlsøger-fejl"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "Processen endte"
@@ -201,14 +201,21 @@ msgstr "Fejlsøger stoppet"
 msgid "Process crashed"
 msgstr "Processen endte"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+
+#: midebuggerplugin.cpp:118
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Undersøg kernefil..."
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:120
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -227,14 +234,14 @@ msgstr ""
 "Kernefilen indeholder et billede af applikationens hukommelse for det "
 "tidspunkt den gik ned, hvilket lader dig foretage en efter-døds analyse.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:132
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Knyt til proces"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -244,140 +251,96 @@ msgid ""
 msgstr ""
 "<b>Knyt til proces</b><p>Knytter fejlsøgeren til en kørende proces.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:147
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:217
-#, fuzzy, kde-format
-#| msgid "Evaluate: %1"
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "Evaluér: %1"
-
-#: midebuggerplugin.cpp:219
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
-#| "cursor.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr "<b>Evaluér udtryk</b><p>Viser værdien af udtrykket under markøren.</p>"
-
-#: midebuggerplugin.cpp:227
-#, fuzzy, kde-format
-#| msgid "Watch: %1"
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "Overvåg: %1"
-
-#: midebuggerplugin.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
-#| "Variables/Watch list.</p>"
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>Overvåg udtryk</b><p>Tilføjer et udtryk under markøren til variable-/"
-"overvågningslisten.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Vælg en kernefil der skal undersøges..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr ""
-
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Vælg til proces til at knytte til..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Knytter ikke til proces %1: kan ikke knytte fejlsøgeren til sig selv."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "Fejlsøger"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Fejlsøger kernefil"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "Fejlsøgnings process %1"
 
-#: midebugsession.cpp:202
+#: midebuglauncher.cpp:61
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "Kørende program"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Knytter ved proces %1"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Kunne ikke tilknytte fejlsøgeren:</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Undersøger kernefil %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Fejlsøger stoppet"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "Applikationen kører"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "Applikationen er på pause"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -386,39 +349,39 @@ msgstr ""
 "<b>GDB-kommando sendt mens fejlsøgeren ikke kører</b><br>Kommandoen var:<br> "
 "\"%1\""
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ugyldig fejlsøgerkommando</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Afsluttede med returkode: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "Afsluttede normalt"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Afsluttede med signal %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programmet modtog signal %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 kommando i køen\n"
 msgstr[1] "%1 kommandoer i køen\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -426,12 +389,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 kommando bliver behandlet af gdb\n"
 msgstr[1] "%1 kommandoer bliver behandlet af gdb\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Fejlsøgertilstand: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -442,7 +405,7 @@ msgstr ""
 "Aktuel kommandotekst: \"%2\"\n"
 "Originaltekst for aktuel kommando: \"%3\"\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -810,6 +773,41 @@ msgstr "Vælg den adresse der skal disassembles omkring"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Vælg adresse der skal disassembles omkring"
+
+#, fuzzy
+#~| msgid "Evaluate: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Evaluér: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~| "cursor.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Evaluér udtryk</b><p>Viser værdien af udtrykket under markøren.</p>"
+
+#, fuzzy
+#~| msgid "Watch: %1"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "Overvåg: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~| "Variables/Watch list.</p>"
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Overvåg udtryk</b><p>Tilføjer et udtryk under markøren til variable-/"
+#~ "overvågningslisten.</p>"
 
 #~ msgid "Could not start debugger"
 #~ msgstr "Kunne ikke starte fejlsøgeren"

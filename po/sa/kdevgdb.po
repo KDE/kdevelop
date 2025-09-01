@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-07-09 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:120
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "जीडीबी"
@@ -101,7 +101,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "कस्टम् प्रारूप स्ट्रिंग्"
 
-#: debugsession.cpp:170
+#: debugsession.cpp:173
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -110,22 +110,22 @@ msgstr ""
 "कोऽपि वातावरणप्रोफाइलः निर्दिष्टः नास्ति, भग्नविन्यासः इव दृश्यते, कृपया '%1' "
 "चालनविन्यासं परीक्ष्यताम् । पूर्वनिर्धारितपर्यावरणरूपरेखायाः उपयोगेन।"
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<unknown version>"
 msgstr "<अज्ञातसंस्करणम्>"
 
-#: debugsession.cpp:296
+#: debugsession.cpp:299
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>भवतः gdb 7.0.0 अथवा अधिकं आवश्यकम् ।</b><br /> भवान् उपयुज्यते: %1"
 
-#: debugsession.cpp:308
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>त्रुटिनिवारणं आरभ्यतुं न शक्तवान्:</b><br />"
 
-#: debugsession.cpp:322
+#: debugsession.cpp:325
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -139,28 +139,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "'%1' त्रुटिनिवारणशैल् स्थानं न ज्ञापयितुं शक्यते ।"
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:79
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB विन्यासः"
 
-#: gdbconfigpage.cpp:138
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue with the launch?"
-msgstr ""
-"पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
-"निरस्तं कृत्वा प्रक्षेपणं निरन्तरं कर्तुम् इच्छति?"
-
-#: gdbconfigpage.cpp:140
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "वर्तमान सत्रं निरस्तं कुर्वन्तु"
-
-#: gdbconfigpage.cpp:160
+#: gdbconfigpage.cpp:99
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "GDB मध्ये एकं देशी अनुप्रयोगं निष्पादयति"
@@ -407,13 +392,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "&gdb स्क्रिप्ट् चालयन्तु:"
 
-#: gdboutputwidget.cpp:48
+#: gdboutputwidget.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "जीडीबी आउटपुट"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -423,25 +408,25 @@ msgstr ""
 "<b>जीडीबी आउटपुट</b><p> सर्वाणि GDB आदेशानि निष्पादितानि दर्शयति । त्रुटिनिवारणं "
 "कुर्वन् अन्यं किमपि GDB आदेशं अपि निर्गन्तुं शक्नुवन्ति ।</p>"
 
-#: gdboutputwidget.cpp:59
+#: gdboutputwidget.cpp:60
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB आदेशः:"
 
-#: gdboutputwidget.cpp:64
+#: gdboutputwidget.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "GDB आदेशान् प्रविष्टुं एप्लिकेशनस्य निष्पादनं विरामयन्तु"
 
-#: gdboutputwidget.cpp:372 gdboutputwidget.cpp:420
+#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "आन्तरिक आदेशान् दर्शयतु"
 
-#: gdboutputwidget.cpp:379 gdboutputwidget.cpp:427
+#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -453,7 +438,7 @@ msgstr ""
 "नियन्त्रणानि ।<br> एषः विकल्पः केवलं भविष्यत् आदेशान् प्रभावितं करिष्यति, पूर्वमेव निर्गतान् "
 "आदेशान् दृश्यात् न योजयिष्यति न निष्कासयिष्यति वा ।"
 
-#: gdboutputwidget.cpp:384
+#: gdboutputwidget.cpp:379
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -603,3 +588,14 @@ msgstr "नवीन स्मृति दर्शक"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "नूतनं स्मृतिदर्शकं उद्घाटयन्तु"
+
+#~ msgid ""
+#~ "A program is already being debugged. Do you want to abort the currently "
+#~ "running debug session and continue with the launch?"
+#~ msgstr ""
+#~ "पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
+#~ "निरस्तं कृत्वा प्रक्षेपणं निरन्तरं कर्तुम् इच्छति?"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "वर्तमान सत्रं निरस्तं कुर्वन्तु"

@@ -15,16 +15,10 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 #include <interfaces/iuicontroller.h>
-#include <sublime/view.h>
 
 #include <QHash>
 
 class QDBusServiceWatcher;
-class QUrl;
-
-namespace KDevelop {
-class Context;
-}
 
 namespace KDevMI {
 class MIAttachProcessJob;
@@ -41,7 +35,6 @@ public:
     ~MIDebuggerPlugin() override;
 
     void unload() override;
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     MIDebugSession* createSession();
 
@@ -66,8 +59,6 @@ Q_SIGNALS:
 
 Q_SIGNALS:
     void reset();
-    void addWatchVariable(const QString& var);
-    void evaluateExpression(const QString& expr);
     void raiseDebuggerConsoleViews();
 
 protected Q_SLOTS:

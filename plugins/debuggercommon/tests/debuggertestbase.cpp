@@ -428,7 +428,6 @@ void DebuggerTestBase::testInsertAndRemoveBreakpointWhileRunning()
             });
     }
 
-    WAIT_FOR_A_WHILE(session, 2000); // give the slow debugee extra time to run
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
@@ -483,6 +482,26 @@ void DebuggerTestBase::testChangeBreakpointWhileRunning()
     QCOMPARE_EQ(outputProcessor.processedLineCount(), 3);
 }
 
+void DebuggerTestBase::testBreakpointInSharedLibrary()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("multifile/debuggee_debugeemultifile");
+    breakpoints()->addCodeBreakpoint("multifile_main.cpp:14"); // return 0;
+    breakpoints()->addCodeBreakpoint("multifile_shared.cpp:11"); // return n * n;
+
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(session->currentUrl().fileName(), "multifile_shared.cpp");
+    QCOMPARE(currentMiLine(session), 11);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(session->currentUrl().fileName(), "multifile_main.cpp");
+    QCOMPARE(currentMiLine(session), 14);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testVariablesLocalsStruct()
 {
     auto* const session = createTestDebugSession();
@@ -518,9 +537,7 @@ void DebuggerTestBase::testVariablesLocalsStruct()
     COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
     COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
 
-    session->stepInto();
-    WAIT_FOR_STATE(session, IDebugSession::PausedState);
-    WAIT_FOR_A_WHILE(session, 1000);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     COMPARE_DATA(variableCollection()->index(structIndex, 0, i), "ts");
     COMPARE_DATA(variableCollection()->index(structIndex, 1, i), "{...}");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
@@ -558,9 +575,7 @@ void DebuggerTestBase::testVariablesWatches()
     COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
     COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
 
-    session->stepInto();
-    WAIT_FOR_STATE(session, IDebugSession::PausedState);
-    WAIT_FOR_A_WHILE(session, 100);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
@@ -612,8 +627,7 @@ void DebuggerTestBase::testDebugInExternalTerminal()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(breakpoint->state(), Breakpoint::CleanState);
 
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);

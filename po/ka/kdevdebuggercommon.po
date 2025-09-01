@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-22 00:41+0000\n"
-"PO-Revision-Date: 2025-05-16 03:38+0200\n"
+"POT-Creation-Date: 2025-06-30 00:40+0000\n"
+"PO-Revision-Date: 2025-06-22 04:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -145,7 +145,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "გამმართველის შიდა შეცდომა"
 
-#: midebugger.cpp:335 midebugsession.cpp:416
+#: midebugger.cpp:335 midebugsession.cpp:446
 #, kde-format
 msgid "Process exited"
 msgstr "პროცესი დასრულდა"
@@ -187,13 +187,22 @@ msgstr "გამმართველი ავარიულად დას�
 msgid "Process crashed"
 msgstr "პროცესი ავარიულად დასრულდა"
 
-#: midebuggerplugin.cpp:114
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
+"გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
+
+#: midebuggerplugin.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Core ფაილის ანალიზი %1-ით"
 
-#: midebuggerplugin.cpp:116
+#: midebuggerplugin.cpp:120
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -207,13 +216,13 @@ msgstr ""
 "სეგმენტაციის ჩავარდნისას. core ფაილი შეიცავს პროგრამის მეხსიერების ასლს მისი "
 "ავარიულად დასრულების დროს, გარდაცვალების-შემდგომი ანალიზისთვის.</p>"
 
-#: midebuggerplugin.cpp:128
+#: midebuggerplugin.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "პროცესზე მიბმა %1-ით"
 
-#: midebuggerplugin.cpp:130
+#: midebuggerplugin.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -221,136 +230,98 @@ msgid ""
 msgstr ""
 "<b>პროცესზე მიმაგრება</b><p>მიამაგრებს გამმართველს გაშვებულ პროცესზე.</p>"
 
-#: midebuggerplugin.cpp:143
+#: midebuggerplugin.cpp:147
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:217
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Evaluate: %1"
-msgstr "შეფასება: %1"
-
-#: midebuggerplugin.cpp:219
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Evaluate expression</b><p>Shows the value of the expression under the "
-"cursor.</p>"
-msgstr ""
-"<b>გამოსახულების შეფასება<b><p>აჩვენებს კურსორის ქვეშ მყოფი გამოსახულების "
-"მნიშვნელობას.</p>"
-
-#: midebuggerplugin.cpp:227
-#, kde-format
-msgctxt "@action:inmenu"
-msgid "Watch: %1"
-msgstr "ყურება: %1"
-
-#: midebuggerplugin.cpp:229
-#, kde-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<b>Watch expression</b><p>Adds the expression under the cursor to the "
-"Variables/Watch list.</p>"
-msgstr ""
-"<b>გამოსახულების თვალყურის დევნება</b><p>დაამატებს კურსორის ქვეშ მყოფ "
-"გამოსახულებას ცვლადების/თვალყურის დევნების სიას.</p>"
-
-#: midebuggerplugin.cpp:252
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "აირჩიეთ Core ფაილის ანალიზისთვის..."
 
-#: midebuggerplugin.cpp:257 midebuggerplugin.cpp:277
-#, kde-format
-msgid ""
-"A program is already being debugged. Do you want to abort the currently "
-"running debug session and continue?"
-msgstr ""
-"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ გააუქმოთ უკვე გაშვებული "
-"გამმართველი და გააგრძელოთ, რასაც აკეთებდით?"
-
-#: midebuggerplugin.cpp:259 midebuggerplugin.cpp:279
-#, kde-format
-msgctxt "@action:button"
-msgid "Abort Current Session"
-msgstr "მიმდინარე სესიის გაუქმება"
-
-#: midebuggerplugin.cpp:272
+#: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "აირჩიეთ მისამაგრებელი პროცესი..."
 
-#: midebuggerplugin.cpp:293
+#: midebuggerplugin.cpp:250
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "პროცესზე %1 მიმაგრება შეუძლებელია: გამმართველს თავის თავს ვერ მიამაგრებთ."
 
-#: midebuggerplugin.cpp:313
+#: midebuggerplugin.cpp:270
 #, kde-format
 msgid "Debugger"
 msgstr "გამმართველი"
 
-#: midebugjobs.cpp:86
+#: midebugjobs.cpp:104
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:107
+#: midebugjobs.cpp:170
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' გამშვები ფაილი არაა"
 
-#: midebugjobs.cpp:171
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug core file"
 msgstr "Core ფაილის გამართვა"
 
-#: midebugjobs.cpp:194
+#: midebugjobs.cpp:204
 #, kde-format
 msgid "Debug process %1"
 msgstr "პროცესის გამართვა %1"
 
-#: midebugsession.cpp:202
+#: midebuglauncher.cpp:61
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ, შეწყვიტოთ უკვე გაშვებული "
+"გამმართველის სესია და გააგრძელოთ გაშვება?"
+
+#: midebugsession.cpp:236
 #, kde-format
 msgid "Running program"
 msgstr "პროგრამის გაშვება"
 
-#: midebugsession.cpp:288
+#: midebugsession.cpp:319
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "პროცესზე (%1) მიმაგრება"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:350
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>გამმართველის მიმაგრების შეცდომა:</b><br />"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:360
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Core ფაილის ანალიზი %1"
 
-#: midebugsession.cpp:401
+#: midebugsession.cpp:432
 #, kde-format
 msgid "Debugger stopped"
 msgstr "გამმართველი შეჩერდა"
 
-#: midebugsession.cpp:421
+#: midebugsession.cpp:451
 #, kde-format
 msgid "Application is running"
 msgstr "აპლიკაცია გაშვებულია"
 
-#: midebugsession.cpp:426
+#: midebugsession.cpp:456
 #, kde-format
 msgid "Application is paused"
 msgstr "აპლიკაცია შეჩერებულია"
 
-#: midebugsession.cpp:741
+#: midebugsession.cpp:771
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -359,39 +330,39 @@ msgstr ""
 "<b>Gdb-ის ბრძანება გაიგზავნა მაშინ, როცა გამმართველი გაშვებული არ იყო.</"
 "b><br>ბრძანება იყო:<br> %1"
 
-#: midebugsession.cpp:853
+#: midebugsession.cpp:883
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>გამმართველის ბრძანების შეცდომა</b><br>%1"
 
-#: midebugsession.cpp:989
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "დასრულდა შეცდომის კოდით: %1"
 
-#: midebugsession.cpp:991
+#: midebugsession.cpp:1021
 #, kde-format
 msgid "Exited normally"
 msgstr "ნორმალური დასასრული"
 
-#: midebugsession.cpp:998
+#: midebugsession.cpp:1028
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "დასრულდა სიგნალით %1"
 
-#: midebugsession.cpp:1033
+#: midebugsession.cpp:1063
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "პროგრამამ მიიღო სიგნალი %1 (%2)"
 
-#: midebugsession.cpp:1165
+#: midebugsession.cpp:1195
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "რიგში 1 ბრძანებაა\n"
 msgstr[1] "რიგში %1 ბრძანებაა\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1196
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -399,12 +370,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "მიმდინარეობს 1 ბრძანების დაუშავება gdb-ის მიერ\n"
 msgstr[1] "მიმდინარეობს %1 ბრძანების დაუშავება gdb-ის მიერ\n"
 
-#: midebugsession.cpp:1167
+#: midebugsession.cpp:1197
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "გამმართველის მდგომარეობა: %1\n"
 
-#: midebugsession.cpp:1170
+#: midebugsession.cpp:1200
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -415,7 +386,7 @@ msgstr ""
 "მიმდინარე ბრძანების ტექსტი: '%2'\n"
 "მიმდინარე ბრძანების საწყისი ტექსტი: '%3'\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1227
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -754,3 +725,31 @@ msgstr "აირჩიეთ მისამართი დიზასემ�
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "მისამართი დიზასემბლერისთვის:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Abort Current Session"
+#~ msgstr "მიმდინარე სესიის გაუქმება"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Evaluate: %1"
+#~ msgstr "შეფასება: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>გამოსახულების შეფასება<b><p>აჩვენებს კურსორის ქვეშ მყოფი გამოსახულების "
+#~ "მნიშვნელობას.</p>"
+
+#~ msgctxt "@action:inmenu"
+#~ msgid "Watch: %1"
+#~ msgstr "ყურება: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>გამოსახულების თვალყურის დევნება</b><p>დაამატებს კურსორის ქვეშ მყოფ "
+#~ "გამოსახულებას ცვლადების/თვალყურის დევნების სიას.</p>"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-12 00:41+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2020-01-18 10:46+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -308,19 +308,19 @@ msgctxt "@action"
 msgid "Deselect All"
 msgstr "Tühista kõigi valimine"
 
-#: patchreviewtoolview.cpp:559
+#: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Testid töös: %p%"
 
-#: patchreviewtoolview.cpp:587
+#: patchreviewtoolview.cpp:585
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Test õnnestus"
 msgstr[1] "Kõik %1 testi õnnestusid"
 
-#: patchreviewtoolview.cpp:591
+#: patchreviewtoolview.cpp:589
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Testitulemused: %1 õnnestus, %2 nurjus, %3 viga"

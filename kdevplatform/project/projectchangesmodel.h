@@ -22,13 +22,18 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectChangesModel : public VcsFileChangesMode
     Q_OBJECT
     public:
         enum Role { ProjectNameRole = LastItemRole+1 };
-        explicit ProjectChangesModel(QObject* parent);
+        explicit ProjectChangesModel(QObject* parent = nullptr);
         ~ProjectChangesModel() override;
         
         void updateState(KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);
 
         void changes(KDevelop::IProject* project, const QList<QUrl>& urls, KDevelop::IBasicVersionControl::RecursionMode mode);
-        
+
+        /**
+         * @return the top-level item for a given project or @c nullptr if no such item
+         */
+        [[nodiscard]] QStandardItem* projectItem(const KDevelop::IProject* project) const;
+
     public Q_SLOTS:
         void reloadAll();
         void reload(const QList<KDevelop::IProject*>& p);
@@ -43,9 +48,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectChangesModel : public VcsFileChangesMode
         void jobUnregistered(KJob*);
         void repositoryBranchChanged(const QUrl& url);
         void branchNameReady(KDevelop::VcsJob* job);
-
-    private:
-        QStandardItem* projectItem(KDevelop::IProject* p) const;
 };
 
 }

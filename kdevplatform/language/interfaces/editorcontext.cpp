@@ -19,22 +19,12 @@ public:
     EditorContextPrivate(KTextEditor::View* view, const KTextEditor::Cursor& position)
         : m_url(view->document()->url())
         , m_position(position)
-        , m_currentLine(view->document()->line(m_position.line()))
         , m_view(view)
     {
-        int wordStart = m_position.column();
-        int wordEnd = m_position.column();
-        while (wordStart > 0 && wordStart < m_currentLine.length() &&
-               (m_currentLine[wordStart - 1].isLetterOrNumber() || m_currentLine[wordStart - 1] == QLatin1Char('_')))
-            --wordStart;
-        while (wordEnd >= 0 && wordEnd < m_currentLine.length() &&
-               (m_currentLine[wordEnd].isLetterOrNumber() || m_currentLine[wordEnd] == QLatin1Char('_')))
-            ++wordEnd;
     }
 
     QUrl m_url;
     KTextEditor::Cursor m_position;
-    QString m_currentLine, m_currentWord;
     KTextEditor::View* m_view;
 };
 
@@ -71,20 +61,6 @@ KTextEditor::Cursor EditorContext::position() const
     Q_D(const EditorContext);
 
     return d->m_position;
-}
-
-QString EditorContext::currentLine() const
-{
-    Q_D(const EditorContext);
-
-    return d->m_currentLine;
-}
-
-QString EditorContext::currentWord() const
-{
-    Q_D(const EditorContext);
-
-    return d->m_currentWord;
 }
 
 KTextEditor::View* EditorContext::view() const

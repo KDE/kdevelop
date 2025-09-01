@@ -23,6 +23,7 @@
   <name xml:lang="fi">KDevelop</name>
   <name xml:lang="fr">KDevelop</name>
   <name xml:lang="gl">KDevelop</name>
+  <name xml:lang="he">KDevelop</name>
   <name xml:lang="hu">KDevelop</name>
   <name xml:lang="id">KDevelop</name>
   <name xml:lang="it">KDevelop</name>
@@ -55,6 +56,7 @@
   <summary xml:lang="fi">Monipuolinen, liitännäisin laajennettavissa oleva kehitysympäristö (IDE) C/C++:lle ja muille ohjelmointikielille</summary>
   <summary xml:lang="fr">Environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
   <summary xml:lang="gl">Potente ambiente de desenvolvemento integrado para C, C++ e outras linguaxes de programación. As súas funcionalidades poden estenderse mediante complementos</summary>
+  <summary xml:lang="he">סביבת פיתוח משולבת עתירת יכולות, זמינה להרחבה עם תוספים ל־C/C++‎ ושפות פיתוח נוספות</summary>
   <summary xml:lang="hu">Funkciógazdag, bővítményekkel bővíthető integrált fejlesztői környezet C/C++ és más programozási nyelvekhez</summary>
   <summary xml:lang="id">Penuh fitur, IDE plugin yang dapat diekstensi C/C++ dan bahasa pemrograman lain</summary>
   <summary xml:lang="it">IDE per C/C++ e altri linguaggi di programmazione completo ed estensibile</summary>
@@ -88,6 +90,7 @@
     <p xml:lang="fi">KDevelop on vapaan ja avoimen lähdekoodin eheytetty kehitysympäristö (IDE).</p>
     <p xml:lang="fr">KDevelop est un environnement de développement intégré (IDE) libre et en open source.</p>
     <p xml:lang="gl">KDevelop é un ambiente integrado de desenvolvemento (IDE) libre e de código aberto.</p>
+    <p xml:lang="he">KDevelop היא סביבת פיתוח משולבת (IDE) חופשית ובקוד פתוח.</p>
     <p xml:lang="hu">A KDevelop egy szabad és nyílt forráskódú integrált fejlesztői környezet (IDE).</p>
     <p xml:lang="id">KDevelop adalah sebuah IDE (integrated development environment) lingkungan pengembangan terintegrasi yang Gratis dan Bebas Terbuka.</p>
     <p xml:lang="it">KDevelop è un ambiente di sviluppo integrato (IDE) libero e open source.</p>
@@ -120,6 +123,7 @@
     <p xml:lang="fi">Se tarjoaa useille ohjelmointikielille muokkaus, selaus- ja virheenpaikannusominaisuudet samoin kuin eheytyksen eri koostamis- ja versionhallintajärjestelmiin liitännäisarkkitehtuurin avulla.</p>
     <p xml:lang="fr">Il fournit des fonctionnalités d'édition, navigation et débogage pour plusieurs langages de programmation, ainsi que l'intégration de multiples systèmes de compilation et de gestion de révision, en utilisant une architecture extensible.</p>
     <p xml:lang="gl">Fornece funcionalidades de edición, navegación e depuración para varias linguaxes de programación, así como integración con varios sistemas de construción e sistemas de control de versións, usando unha arquitectura baseada en complementos.</p>
+    <p xml:lang="he">הוא מספק יכולות עריכה, ניווט וניפוי שגיאות במגוון שפות תכנות, לרבות שילוב מול מגוון מערכות בנייה ובקרת גרסאות באמצעות ארכיטקטורה מבוססת תוספים.</p>
     <p xml:lang="hu">Szerkesztési, navigációs és hibakeresési funkciókat biztosít számos programozási nyelvhez, valamint integrációt biztosít több összeállító rendszerrel és verziókezelő rendszerekkel, egy bővítmény-alapú architektúra segítségével.</p>
     <p xml:lang="id">Ini menyediakan fitur pengeditan, navigasi dan debugging untuk beberapa bahasa pemrograman, serta integrasi dengan sistem build multipel dan sistem kontrol versi, menggunakan arsitektur berbasis plugin.</p>
     <p xml:lang="it">Fornisce funzionalità di modifica, navigazione debug per vari linguaggi di programmazione, così come l'integrazione con vari sistemi di compilazione e di controllo versione, tramite l'uso di architettura basata sulle estensioni.</p>
@@ -152,6 +156,7 @@
     <p xml:lang="fi">KDevelopilla on jäsennintaustajärjestelmä C:lle, C++:lle ja JavaScriptille/QML:lle, ja ulkoisten liitännäisten avulla tuetaan esim. PHP:tä ja Pythonia.</p>
     <p xml:lang="fr">KDevelop intègre des moteurs d'analyse pour le C, le C++ et Javascript/QML, avec, en plus, des modules externes pour prendre en charge PHP, Python, etc.</p>
     <p xml:lang="gl">KDevelop ten infraestruturas de análise para C, C++ e JavaScript/QML, con complementos externos adicionais que fornecen compatibilidade, por exemplo, con PHP e Python.</p>
+    <p xml:lang="he">ל־KDevelop יש מנגנוני פענוח ל־C,‏ C++‎,‏ JavaScript/QML, עם תוספים חיצוניים נוספים שתומכים למשל ב־PHP או ב־Python.</p>
     <p xml:lang="hu">A KDevelop rendelkezik C, C++ és Javascript/QML feldolgozóval, és további külső bővítményekkel, amelyek támogatják például a PHP-t vagy a Pythont.</p>
     <p xml:lang="id">KDevelop memiliki pengurai backend untuk C, C++ dan Javascript/QML, dengan mendukung plugin eksternal lebih lanjut misal PHP atau Python.</p>
     <p xml:lang="it">KDevelop ha dei motori di analisi per C, C++ e JavaScript/QML, come ulteriori estensioni esterne che supportano, ad esempio, PHP o Python.</p>
@@ -189,6 +194,7 @@
       <caption xml:lang="fi">Pääikkuna, jossa koodimuokkain, pääte-eheytys ja projektitiedostot</caption>
       <caption xml:lang="fr">Fenêtre principale avec l'éditeur de code, l'intégration du terminal et des fichiers de projet</caption>
       <caption xml:lang="gl">Xanela principal con editor de código, integración co terminal e ficheiros de proxectos.</caption>
+      <caption xml:lang="he">חלון ראשי עם עורך קוד, שילוב מסוף וקובצי מיזם</caption>
       <caption xml:lang="hu">A főablak a kódszerkesztővel, terminálintegrációval és projektfájlokkal</caption>
       <caption xml:lang="id">Jendela utama dengan editor kode, integrasi terminal dan file proyek</caption>
       <caption xml:lang="it">La finestra principale con editor di codice, integrazione del terminale e file di progetto</caption>
@@ -196,6 +202,7 @@
       <caption xml:lang="ko">코드 편집기, 터미널 통합, 프로젝트 파일이 표시된 주 창</caption>
       <caption xml:lang="nl">Hoofdvenster met bewerker van code, terminalintegratie en projectbestanden</caption>
       <caption xml:lang="pl">Główne okno z edytorem kodu, wbudowanym terminalem i plikami projektu</caption>
+      <caption xml:lang="pt-BR">Janela principal com editor de código, integração de terminal e arquivos de projeto</caption>
       <caption xml:lang="sa">कोड सम्पादकः, टर्मिनल् एकीकरणं, परियोजनासञ्चिकाः च सह मुख्यविण्डो</caption>
       <caption xml:lang="sl">Glavno okno z urejevalnikom kode, integracijo terminala in projektnimi datotekami</caption>
       <caption xml:lang="sv">Huvudfönster med kodeditor, terminalintegrering och projektfiler</caption>
@@ -215,6 +222,8 @@
     <category>IDE</category>
   </categories>
   <releases>
+    <release version="6.3.250800" date="2025-08-14"/>
+    <release version="6.2.250403" date="2025-07-03"/>
     <release version="6.2.250402" date="2025-06-05"/>
     <release version="6.2.250401" date="2025-05-08"/>
     <release version="6.2.250400" date="2025-04-17"/>

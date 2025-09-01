@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevvcsprojectintegration\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"POT-Creation-Date: 2025-06-22 00:42+0000\n"
 "PO-Revision-Date: 2012-02-02 07:36+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -18,41 +18,41 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: vcschangesview.cpp:84
+#: vcschangesview.cpp:88
 #, fuzzy, kde-format
 #| msgid "Refresh"
 msgctxt "@action:inmenu"
 msgid "Refresh"
 msgstr "Opfrischen"
 
-#: vcschangesviewplugin.cpp:63
+#: vcschangesviewplugin.cpp:54
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr ""
 
-#: vcschangesviewplugin.cpp:66
+#: vcschangesviewplugin.cpp:57
 #, fuzzy, kde-format
 #| msgid "Locate Current Document"
 msgctxt "@action"
 msgid "Locate Current Document"
 msgstr "Aktuell Dokment finnen"
 
-#: vcschangesviewplugin.cpp:68
+#: vcschangesviewplugin.cpp:59
 #, fuzzy, kde-format
 #| msgid "Locates the current document and selects it."
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
 msgstr "Söcht un markeert dat aktuelle Dokment."
 
-#: vcschangesviewplugin.cpp:71
+#: vcschangesviewplugin.cpp:62
 #, fuzzy, kde-format
 #| msgid "Reload View"
 msgctxt "@action"
 msgid "Reload View"
 msgstr "Ansicht nieg laden"
 
-#: vcschangesviewplugin.cpp:73
+#: vcschangesviewplugin.cpp:64
 #, fuzzy, kde-format
 #| msgid "Refreshes the view for all projects, in case anything changed."
 msgctxt "@info:tooltip"

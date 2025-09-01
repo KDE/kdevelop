@@ -71,7 +71,8 @@ public:
 
     ProjectBuildSetModel* buildSetModel() override;
     ProjectModel* projectModel() override;
-    ProjectChangesModel* changesModel() override;
+    [[nodiscard]] std::shared_ptr<ProjectChangesModel> changesModel() const override;
+    std::shared_ptr<ProjectChangesModel> makeChangesModel() override;
     IProject* findProjectByName( const QString& name ) override;
     IProject* findProjectForUrl( const QUrl& ) const override;
 

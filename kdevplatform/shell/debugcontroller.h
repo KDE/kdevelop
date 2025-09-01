@@ -44,6 +44,8 @@ public:
     /// Must be called by debugger plugin that needs debugger actions and tool views.
     void initializeUi() override;
 
+    [[nodiscard]] bool canAddSession(const QString& replaceSessionQuestionText) const override;
+
     void addSession(IDebugSession* session) override;
     IDebugSession* currentSession() override;
 

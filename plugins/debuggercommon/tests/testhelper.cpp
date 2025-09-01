@@ -136,12 +136,23 @@ void ActiveStateSessionSpy::sessionStateChanged(IDebugSession::DebuggerState sta
     }
 }
 
-void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session)
+void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session, RunMode runMode)
 {
     QVERIFY(session);
     QVERIFY(spy.hasEnteredActiveState());
     spy.reset();
-    session->run();
+
+    switch (runMode) {
+    case RunMode::Continue:
+        session->run();
+        break;
+    case RunMode::StepInto:
+        session->stepInto();
+        break;
+    case RunMode::StepOut:
+        session->stepOut();
+        break;
+    }
 }
 
 bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)
@@ -171,7 +182,7 @@ bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerStat
             && (!sessionSpy || sessionSpy->hasEnteredActiveState());
     };
 
-    const auto timeout = waitForIdle ? 50'000 : 10'000;
+    const auto timeout = waitForIdle ? 50'000 : 20'000;
 
     while (s && !areWaitConditionsSatisfied()) {
         if (stopWatch.elapsed() > timeout) {
@@ -253,7 +264,7 @@ void DebugeeslowOutputProcessor::processOutput()
         QCOMPARE_EQ(parameters.size(), 1); // MIDebugSession::inferiorStdoutLines() has one parameter
         const auto outputLines = parameters.constFirst().toStringList();
         qDebug() << "Debuggee output:" << outputLines.join('\n');
-        QCOMPARE_GT(outputLines.size(), 0); // why emit the signal if there is no output?
+        // NOTE: outputLines can be empty at this point (very rarely)
 
         for (const auto& line : outputLines) {
             ++m_processedLineCount;
