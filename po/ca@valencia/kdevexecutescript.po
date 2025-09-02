@@ -106,7 +106,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Type or select an interpreter..."
-msgstr "Escriviu o seleccioneu un intèrpret…"
+msgstr "Escriviu o trieu un intèrpret…"
 
 #: scriptappconfig.cpp:116
 #, kde-format
@@ -213,7 +213,7 @@ msgstr "Directori de treball:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr "Seleccioneu un directori de treball per a l'executable"
+msgstr "Trieu un directori de treball per a l'executable"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
@@ -227,7 +227,7 @@ msgstr "Entorn:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr "Seleccioneu un entorn que s'haja d'utilitzar"
+msgstr "Trieu un entorn que s'haja d'utilitzar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
@@ -243,8 +243,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the filter to applied to the output. E.g. to mark errors with red text"
 msgstr ""
-"Seleccioneu el filtre que s'aplicarà a l'eixida. P. ex., per a marcar els "
-"errors amb text roig"
+"Trieu el filtre que s'aplicarà a l'eixida. P. ex., per a marcar els errors "
+"amb text roig"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:235

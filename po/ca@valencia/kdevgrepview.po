@@ -50,7 +50,7 @@ msgstr "Busca…"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
-msgstr "Seleccioneu el directori a on s'ha de buscar"
+msgstr "Trieu el directori a on s'ha de buscar"
 
 #: grepdialog.cpp:609
 #, kde-format
@@ -504,7 +504,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr "Seleccioneu ràpidament la ubicació des d'un conjunt de directoris"
+msgstr "Trieu ràpidament la ubicació des d'un conjunt de directoris"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
@@ -672,12 +672,12 @@ msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
-"Seleccioneu la ubicació a on voleu buscar. Pot ser un directori, un fitxer, "
-"o una llista de directoris/fitxers separats (sense espais) per punt i coma."
+"Trieu la ubicació a on voleu buscar. Pot ser un directori, un fitxer, o una "
+"llista de directoris/fitxers separats (sense espais) per punt i coma."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:417
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr "Seleccioneu un directori on buscar"
+msgstr "Trieu un directori on buscar"

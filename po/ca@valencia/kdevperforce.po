@@ -36,7 +36,7 @@ msgstr "Perforce"
 #: perforceplugin.cpp:232 perforceplugin.cpp:249
 #, kde-format
 msgid "Please select only one item for this operation"
-msgstr "Seleccioneu només un element per a esta operació"
+msgstr "Trieu només un element per a esta operació"
 
 #: perforceplugin.cpp:282
 #, kde-format
@@ -46,7 +46,7 @@ msgstr "No s'ha especificat cap fitxer o missatge"
 #: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
-msgstr "Seleccioneu un fitxer per a esta operació"
+msgstr "Trieu un fitxer per a esta operació"
 
 #: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format

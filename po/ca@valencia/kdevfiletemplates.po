@@ -202,8 +202,7 @@ msgstr "Funció abstracta"
 msgid ""
 "Choose one target to add the file or cancel if you do not want to do so."
 msgstr ""
-"Seleccioneu un objectiu per a afegir-hi el fitxer o cancel·leu si no voleu "
-"fer açò."
+"Trieu un objectiu per a afegir-hi el fitxer o cancel·leu si no voleu fer açò."
 
 #: templateclassassistant.cpp:280 templateclassassistant.cpp:527
 #, kde-kuit-format
@@ -454,7 +453,7 @@ msgstr "&Herència:"
 #: ui/outputlocation.ui:29
 #, kde-format
 msgid "Choose where to save the generated content."
-msgstr "Seleccioneu a on s'ha de guardar el contingut generat."
+msgstr "Trieu a on s'ha de guardar el contingut generat."
 
 #. i18n: ectx: property (text), widget (QCheckBox, lowerFilenameCheckBox)
 #: ui/outputlocation.ui:59
@@ -467,8 +466,7 @@ msgstr "Noms de fitxer en minúscules"
 #: ui/overridevirtuals.ui:20
 #, kde-format
 msgid "Select any methods you would like to override in the new class."
-msgstr ""
-"Seleccioneu qualsevol mètode que voldríeu substituir en la classe nova."
+msgstr "Trieu qualsevol mètode que voldríeu substituir en la classe nova."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:42
@@ -496,7 +494,7 @@ msgstr "Propietats"
 #, kde-format
 msgctxt "@action:button"
 msgid "Select &All"
-msgstr "Selecciona-ho &tot"
+msgstr "Tria-ho &tot"
 
 #. i18n: ectx: property (text), widget (QPushButton, deselectAllPushButton)
 #: ui/overridevirtuals.ui:69

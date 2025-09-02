@@ -165,7 +165,7 @@ msgstr "No s'ha pogut obrir el projecte «%1»: %2"
 #: main.cpp:277
 #, kde-format
 msgid "Select the session to open the document in"
-msgstr "Seleccioneu la sessió on obrir el document"
+msgstr "Trieu la sessió on obrir el document"
 
 # skip-rule: rst-link0italic,rst-italic2
 #: main.cpp:304
@@ -861,7 +861,7 @@ msgstr "[en execució]"
 #: main.cpp:624
 #, kde-format
 msgid "Select the session you would like to use"
-msgstr "Seleccioneu la sessió que voleu utilitzar"
+msgstr "Trieu la sessió que voleu utilitzar"
 
 #: main.cpp:632
 #, kde-format

@@ -188,7 +188,7 @@ msgstr "&Directori de treball:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr "Seleccioneu un directori de treball per a l'executable"
+msgstr "Trieu un directori de treball per a l'executable"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
@@ -202,7 +202,7 @@ msgstr "E&ntorn:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr "Seleccioneu un entorn que s'haja d'utilitzar"
+msgstr "Trieu un entorn que s'haja d'utilitzar"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206

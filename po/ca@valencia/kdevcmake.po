@@ -333,7 +333,7 @@ msgstr "Configureu l'entorn:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr "Seleccioneu un entorn que s'haja d'utilitzar"
+msgstr "Trieu un entorn que s'haja d'utilitzar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225

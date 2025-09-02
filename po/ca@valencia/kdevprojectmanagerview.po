@@ -182,19 +182,19 @@ msgstr "Ubica el document actual"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
-msgstr "Ubica el document actual en l'arbre de projecte i selecciona'l."
+msgstr "Ubica el document actual en l'arbre de projecte i tria'l."
 
 #: projectmanagerview.cpp:100
 #, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
-msgstr "Selecciona automàticament el document actual"
+msgstr "Tria automàticament el document actual"
 
 #: projectmanagerview.cpp:101
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
-msgstr "Selecciona automàticament el document actual en l'arbre de projecte."
+msgstr "Tria automàticament el document actual en l'arbre de projecte."
 
 #: projectmanagerview.cpp:123
 #, kde-format

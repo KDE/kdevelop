@@ -1653,18 +1653,18 @@ msgstr "Introduïu el camí cap a un element de l'arbre de projectes…"
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
-msgstr "Selecciona…"
+msgstr "Tria…"
 
 #: project/projectitemlineedit.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr "Seleccioneu un element"
+msgstr "Trieu un element"
 
 #: project/projectitemlineedit.cpp:192
 #, kde-format
 msgid "Select the item you want to get the path from."
-msgstr "Seleccioneu l'element del qual voleu obtindre el camí."
+msgstr "Trieu l'element del qual voleu obtindre el camí."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
@@ -2459,8 +2459,8 @@ msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
 "button to add a new one.</i>"
 msgstr ""
-"<i>Seleccioneu una configuració de l'esquerra per a editar-la,<br>o cliqueu "
-"damunt del botó «Afig» per a afegir-ne una de nova.</i>"
+"<i>Trieu una configuració de l'esquerra per a editar-la,<br>o cliqueu damunt "
+"del botó «Afig» per a afegir-ne una de nova.</i>"
 
 #: shell/launchconfigurationdialog.cpp:437
 #, kde-format
@@ -2786,7 +2786,7 @@ msgstr "Tots els fitxers de projecte"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
-msgstr "Seleccioneu l'origen"
+msgstr "Trieu l'origen"
 
 #: shell/openprojectdialog.cpp:149
 #, kde-format
@@ -2794,9 +2794,8 @@ msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
-"Seleccioneu un fitxer de configuració del sistema de construcció, un "
-"projecte de KDevelop existent o qualsevol carpeta per a obrir-lo/a com a "
-"projecte"
+"Trieu un fitxer de configuració del sistema de construcció, un projecte de "
+"KDevelop existent o qualsevol carpeta per a obrir-lo/a com a projecte"
 
 #: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, kde-format
@@ -3266,7 +3265,7 @@ msgstr "Torna a analitzar el projecte sencer"
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
 msgstr ""
-"Seleccioneu un connector de gestió que s'haja d'utilitzar per a este projecte"
+"Trieu un connector de gestió que s'haja d'utilitzar per a este projecte"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
@@ -3352,7 +3351,7 @@ msgstr "Directori:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr "Seleccioneu el directori que s'ha d'utilitzar…"
+msgstr "Tria el directori que s'ha d'utilitzar…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3517,8 +3516,7 @@ msgstr "Configuració de llançament actual"
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
-"Seleccioneu quina configuració de llançament s'ha d'executar en invocar "
-"l'execució."
+"Trieu quina configuració de llançament s'ha d'executar en invocar l'execució."
 
 #: shell/runcontroller.cpp:623
 #, kde-format
@@ -3590,7 +3588,7 @@ msgstr "Suprimix la sessió"
 #, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
-msgstr "Seleccioneu una sessió"
+msgstr "Trieu una sessió"
 
 #: shell/sessionchooserdialog.cpp:62
 #, kde-format
@@ -3811,8 +3809,8 @@ msgid ""
 "<p>Please, close the offending application instance or choose another "
 "session to launch.</p>"
 msgstr ""
-"<p>Tanqueu la instància de l'aplicació no desitjada o seleccioneu una altra "
-"sessió a iniciar.</p>"
+"<p>Tanqueu la instància de l'aplicació no desitjada o trieu una altra sessió "
+"a iniciar.</p>"
 
 #: shell/sessionlock.cpp:188
 #, kde-format
@@ -3824,7 +3822,7 @@ msgstr "Torna a intentar l'inici"
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
-msgstr "Seleccioneu una altra sessió"
+msgstr "Trieu una altra sessió"
 
 #: shell/sessionlock.cpp:195
 #, kde-format
@@ -3907,7 +3905,7 @@ msgid ""
 "unsure, select 1 or 2."
 msgstr ""
 "El nombre màxim d'instàncies paral·leles que utilitza l'analitzador en segon "
-"pla. Si no esteu segur, seleccioneu 1 o 2."
+"pla. Si no esteu segur, trieu 1 o 2."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/bgpreferences.ui:64
@@ -4099,8 +4097,8 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "codecompletion item."
 msgstr ""
-"Seleccioneu si mostrar la informació addicional per a l'element de compleció "
-"de codi actualment seleccionat."
+"Trieu si mostrar la informació addicional per a l'element de compleció de "
+"codi actualment seleccionat."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:61
@@ -4117,8 +4115,8 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "code completion item."
 msgstr ""
-"Seleccioneu si mostrar la informació addicional per a l'element de compleció "
-"de codi actualment seleccionat."
+"Trieu si mostrar la informació addicional per a l'element de compleció de "
+"codi actualment seleccionat."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
@@ -4129,9 +4127,8 @@ msgid ""
 "<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
 "in what cases full code completion will be displayed.</p>"
 msgstr ""
-"<p>La IU de compleció de codi té un mode mínim i un mode detallat."
-"<br>Seleccioneu els casos en què es mostrarà la compleció de codi completa.</"
-"p>"
+"<p>La IU de compleció de codi té un mode mínim i un mode detallat.<br>Trieu "
+"els casos en què es mostrarà la compleció de codi completa.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
@@ -4557,7 +4554,7 @@ msgstr ""
 #: shell/settings/projectconfig.kcfg:19
 #, kde-format
 msgid "Chooses the base directory where new projects are created."
-msgstr "Seleccioneu el directori base on es crearan els projectes nous."
+msgstr "Trieu el directori base on es crearan els projectes nous."
 
 #. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:23
@@ -4592,7 +4589,7 @@ msgstr "Configura els projectes"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the base directory where new projects are to be created"
-msgstr "Seleccioneu el directori base on es crearan els projectes nous"
+msgstr "Trieu el directori base on es crearan els projectes nous"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
@@ -5097,7 +5094,7 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
-"<p>Seleccioneu els llenguatges que utilitzeu un a un des del quadro combinat "
+"<p>Trieu els llenguatges que utilitzeu un a un des del quadro combinat "
 "<i>Llenguatge</i> de davall, trieu el formatador i l'estil desitjats per a "
 "cadascuna. Feu <i>Ctrl+clic</i> en un estil seleccionat per a desseleccionar-"
 "lo.</p>\n"
@@ -5201,7 +5198,7 @@ msgstr "Revisió"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
-msgstr "Seleccioneu la vista d'eina que s'ha d'afegir"
+msgstr "Trieu la vista d'eina que s'ha d'afegir"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:75
 #, kde-format
@@ -5743,7 +5740,7 @@ msgid ""
 "Please, choose another name."
 msgstr ""
 "La branca «%1» ja existix.\n"
-"Seleccioneu un altre nom."
+"Trieu un altre nom."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
 #, kde-format
@@ -5771,7 +5768,7 @@ msgid ""
 "Please, choose another name."
 msgstr ""
 "La branca «%1» no existix.\n"
-"Seleccioneu un altre nom."
+"Trieu un altre nom."
 
 #: vcs/dvcs/ui/branchmanager.cpp:196
 #, kde-format
@@ -6202,7 +6199,7 @@ msgstr "Per: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
-msgstr "Seleccioneu els fitxers a cometre"
+msgstr "Trieu els fitxers que s'han de cometre"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
