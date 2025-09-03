@@ -33,7 +33,12 @@ public:
     QString findExecutable(const QString& executableName) const override;
     QByteArray getenv(const QByteArray &varname) const override;
 
-    static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file, const QString &arch);
+    enum class CreationMode {
+        DisableUpdates,
+        Update,
+    };
+    static KJob* createBuildDirectory(const KDevelop::Path& path, const KDevelop::Path& file, const QString& arch,
+                                      CreationMode creationMode);
 
     KJob* rebuild();
 
