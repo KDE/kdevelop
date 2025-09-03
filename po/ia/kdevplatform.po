@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-07 18:28+0000\n"
-"PO-Revision-Date: 2025-03-04 15:02+0100\n"
+"PO-Revision-Date: 2025-09-02 18:02+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2002,12 +2002,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Initia nove session"
+msgstr "Aborta nove session"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
