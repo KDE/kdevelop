@@ -91,7 +91,8 @@ OutputExecuteJob* createExecuteJob(const QStringList& program, const QString& jo
 
 } // unnamed namespace
 
-KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
+KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path& buildDirectory, const KDevelop::Path& file,
+                                           const QString& arch, Creation fetch)
 {
     const auto sourceDirectory = file.parent();
 
@@ -106,11 +107,19 @@ KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory,
             identifyingName.chop(standardExtension.size());
         }
     }
+    QStringList args = {QStringLiteral("flatpak-builder"),
+                        QLatin1String("--arch=") + arch,
+                        QStringLiteral("--build-only"),
+                        QStringLiteral("--force-clean"),
+                        QStringLiteral("--ccache"),
+                        buildDirectory.toLocalFile(),
+                        file.toLocalFile()};
+    if (fetch != Creation::Update) {
+        args << QStringLiteral("--disable-updates");
+    }
 
-    auto* const job = createExecuteJob({QStringLiteral("flatpak-builder"), QLatin1String("--arch=") + arch,
-                                        QStringLiteral("--build-only"), QStringLiteral("--force-clean"),
-                                        QStringLiteral("--ccache"), buildDirectory.toLocalFile(), file.toLocalFile()},
-                                       i18nc("%1 - application ID or name", "Flatpak Create %1", identifyingName));
+    auto* const job =
+        createExecuteJob(args, i18nc("%1 - application ID or name", "Flatpak Create %1", identifyingName));
     job->setWorkingDirectory(sourceDirectory.toUrl());
     return job;
 }
@@ -162,6 +171,7 @@ static QStringList envVarsForProcess(const QProcess* process)
             env_args << QLatin1String("--env=") + env_var;
         }
     }
+    env_args << QStringLiteral("--env=WAYLAND_DISPLAY=wayland-0");
     return env_args;
 }
 
@@ -192,7 +202,7 @@ void FlatpakRuntime::startProcess(KProcess* process) const
 KJob* FlatpakRuntime::rebuild()
 {
     QDir(m_buildDirectory.toLocalFile()).removeRecursively();
-    auto job = createBuildDirectory(m_buildDirectory, m_file, m_arch);
+    auto job = createBuildDirectory(m_buildDirectory, m_file, m_arch, Creation::Update);
     refreshJson();
     return job;
 }
@@ -204,6 +214,7 @@ auto FlatpakRuntime::exportBundle(const QString& path) const -> ExportBundle
     auto* dir = new QTemporaryDir(QDir::tempPath()+QLatin1String("/flatpak-tmp-repo"));
     if (!dir->isValid() || doc.isEmpty()) {
         qCWarning(FLATPAK) << "Couldn't export:" << path << dir->isValid() << dir->path() << doc.isEmpty();
+        delete dir;
         return {};
     }
 
