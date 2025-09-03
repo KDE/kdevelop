@@ -146,7 +146,7 @@ void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arc
         return;
     }
 
-    auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);
+    auto process = FlatpakRuntime::createBuildDirectory(path, file, arch, FlatpakRuntime::Creation::DisableUpdates);
     connect(process, &KJob::finished, this, [this, path, file, arch](KJob* job) {
         if (job->error() != 0) {
             QDir(path.toLocalFile()).removeRecursively();
