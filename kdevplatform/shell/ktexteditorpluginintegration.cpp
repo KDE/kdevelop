@@ -517,7 +517,7 @@ public:
     }
 };
 
-void MainWindow::showMessage(const QVariantMap& message)
+bool MainWindow::showMessage(const QVariantMap& message)
 {
     if (!m_showMessageOutputJob) {
         m_showMessageOutputJob = std::make_unique<ShowMessagesJob>();
@@ -528,6 +528,7 @@ void MainWindow::showMessage(const QVariantMap& message)
         m_showMessageOutputJob->start();
     }
     m_showMessageOutputJob->postMessage(message);
+    return true;
 }
 
 QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &identifier,
