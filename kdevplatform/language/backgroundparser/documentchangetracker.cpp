@@ -84,14 +84,6 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     reset();
 }
 
-QList<QPair<KTextEditor::Range, QString>> DocumentChangeTracker::completions() const
-{
-    VERIFY_FOREGROUND_LOCKED
-
-    QList<QPair<KTextEditor::Range, QString>> ret;
-    return ret;
-}
-
 void DocumentChangeTracker::reset()
 {
     VERIFY_FOREGROUND_LOCKED
@@ -101,13 +93,6 @@ void DocumentChangeTracker::reset()
 
     m_revisionAtLastReset = acquireRevision(m_document->revision());
     Q_ASSERT(m_revisionAtLastReset);
-}
-
-RevisionReference DocumentChangeTracker::currentRevision()
-{
-    VERIFY_FOREGROUND_LOCKED
-
-    return acquireRevision(m_document->revision());
 }
 
 RevisionReference DocumentChangeTracker::revisionAtLastReset() const
@@ -177,11 +162,6 @@ void DocumentChangeTracker::textInserted(Document* document, const Cursor& curso
     /// TODO: get this data from KTextEditor directly, make its signal public
     KTextEditor::Range range(cursor, cursorAdd(cursor, text));
 
-    if (!m_lastInsertionPosition.isValid() || m_lastInsertionPosition == cursor) {
-        m_currentCleanedInsertion.append(text);
-        m_lastInsertionPosition = range.end();
-    }
-
     auto delay = recommendedDelay(document, range, text, false);
     m_needUpdate = delay != ILanguageSupport::NoUpdateRequired;
     updateChangedRange(delay);
@@ -189,9 +169,6 @@ void DocumentChangeTracker::textInserted(Document* document, const Cursor& curso
 
 void DocumentChangeTracker::textRemoved(Document* document, const KTextEditor::Range& oldRange, const QString& oldText)
 {
-    m_currentCleanedInsertion.clear();
-    m_lastInsertionPosition = KTextEditor::Cursor::invalid();
-
     auto delay = recommendedDelay(document, oldRange, oldText, true);
     m_needUpdate = delay != ILanguageSupport::NoUpdateRequired;
     updateChangedRange(delay);

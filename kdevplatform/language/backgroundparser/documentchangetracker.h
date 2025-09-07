@@ -15,7 +15,6 @@
 
 #include <QExplicitlySharedDataPointer>
 #include <QObject>
-#include <QPair>
 
 namespace KTextEditor {
 class Document;
@@ -125,12 +124,6 @@ public:
     ~DocumentChangeTracker() override;
 
     /**
-     * Completions of the users current edits that are supposed to complete
-     * not-yet-finished statements, like for example for-loops for parsing.
-     * */
-    virtual QList<QPair<KTextEditor::Range, QString>> completions() const;
-
-    /**
      * Resets the tracking to the current revision.
      * */
     virtual void reset();
@@ -145,11 +138,6 @@ public:
      * zero is returned if the revisions were invalidated after the last call.
      * */
     RevisionReference revisionAtLastReset() const;
-
-    /**
-     * Returns the current revision (which is not locked by the tracker)
-     * */
-    RevisionReference currentRevision();
 
     /**
      * Whether the changes that happened since the last reset are significant enough to require an update
@@ -204,8 +192,6 @@ public:
 protected:
     RevisionReference m_revisionAtLastReset;
     bool m_needUpdate;
-    QString m_currentCleanedInsertion;
-    KTextEditor::Cursor m_lastInsertionPosition;
 
     KTextEditor::Document* m_document;
     KDevelop::IndexedString m_url;
