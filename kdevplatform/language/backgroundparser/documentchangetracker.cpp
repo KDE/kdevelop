@@ -18,9 +18,6 @@
 
 #include <QCoreApplication>
 
-// Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.
-// #define ALWAYS_UPDATE
-
 using namespace KTextEditor;
 
 /**
@@ -64,8 +61,7 @@ private:
 };
 
 DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
-    : m_needUpdate(false)
-    , m_document(document)
+    : m_document{document}
     , m_url(IndexedString(document->url()))
 {
     Q_ASSERT(document);
@@ -88,9 +84,6 @@ void DocumentChangeTracker::reset()
 {
     VERIFY_FOREGROUND_LOCKED
 
-    // We don't reset the insertion here, as it may continue
-        m_needUpdate = false;
-
     m_revisionAtLastReset = acquireRevision(m_document->revision());
     Q_ASSERT(m_revisionAtLastReset);
 }
@@ -102,13 +95,6 @@ RevisionReference DocumentChangeTracker::revisionAtLastReset() const
     return m_revisionAtLastReset;
 }
 
-bool DocumentChangeTracker::needUpdate() const
-{
-    VERIFY_FOREGROUND_LOCKED
-
-    return m_needUpdate;
-}
-
 void DocumentChangeTracker::updateChangedRange(int delay)
 {
     // Q_ASSERT(m_document->revision() != m_revisionAtLastReset->revision()); // May happen after reload
@@ -117,7 +103,8 @@ void DocumentChangeTracker::updateChangedRange(int delay)
 
     ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
 
-    if (needUpdate()) {
+    if (delay != ILanguageSupport::NoUpdateRequired) {
+        // the changes are significant enough to require an update
         ICore::self()->languageController()->backgroundParser()->addDocument(m_url,
                                                                              TopDUContext::AllDeclarationsContextsAndUses,
                                                                              0, nullptr,
@@ -163,14 +150,12 @@ void DocumentChangeTracker::textInserted(Document* document, const Cursor& curso
     KTextEditor::Range range(cursor, cursorAdd(cursor, text));
 
     auto delay = recommendedDelay(document, range, text, false);
-    m_needUpdate = delay != ILanguageSupport::NoUpdateRequired;
     updateChangedRange(delay);
 }
 
 void DocumentChangeTracker::textRemoved(Document* document, const KTextEditor::Range& oldRange, const QString& oldText)
 {
     auto delay = recommendedDelay(document, oldRange, oldText, true);
-    m_needUpdate = delay != ILanguageSupport::NoUpdateRequired;
     updateChangedRange(delay);
 }
 

@@ -140,11 +140,6 @@ public:
     RevisionReference revisionAtLastReset() const;
 
     /**
-     * Whether the changes that happened since the last reset are significant enough to require an update
-     * */
-    virtual bool needUpdate() const;
-
-    /**
      * Returns the tracked document
      **/
     KTextEditor::Document* document() const;
@@ -191,7 +186,6 @@ public:
 
 protected:
     RevisionReference m_revisionAtLastReset;
-    bool m_needUpdate;
 
     KTextEditor::Document* m_document;
     KDevelop::IndexedString m_url;
@@ -210,8 +204,6 @@ public Q_SLOTS:
     void documentSavedOrUploaded(KTextEditor::Document*, bool);
 
 private:
-    bool checkMergeTokens(const KTextEditor::Range& range);
-
     friend class RevisionLockerAndClearerPrivate;
     void lockRevision(qint64 revision);
     void unlockRevision(qint64 revision);
