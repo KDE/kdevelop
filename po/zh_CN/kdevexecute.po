@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,86 +17,81 @@ msgstr ""
 "X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevexecute.pot\n"
 "X-Crowdin-File-ID: 54576\n"
 
-#: executeplugin.cpp:66
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr "在启动配置“%1”的参数中有一处引用错误。停止启动。"
+#: executeplugin.cpp:62
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Ar&guments:"
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "参数(&G)："
 
-#: executeplugin.cpp:70
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"在启动配置“%1”的参数中包含了一个 shell 元字符，现在尚未支持，停止启动。"
-
-#: executeplugin.cpp:97
+#: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "无法满足依赖：%1"
 
-#: executeplugin.cpp:152
-#, kde-format
-msgid "No valid executable specified"
-msgstr "未指定有效的可执行文件"
+#: executeplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Executable"
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "可执行文件"
 
-#: executeplugin.cpp:162
-#, kde-format
-msgid ""
-"There is a quoting error in the executable for the launch configuration "
-"'%1'. Aborting start."
-msgstr "在启动配置“%1”的可执行文件中有一处引用错误。停止启动。"
+#: executeplugin.cpp:194
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Use external terminal:"
+msgid "external terminal command"
+msgstr "使用外部终端："
 
-#: executeplugin.cpp:167
-#, kde-format
-msgid ""
-"A shell meta character was included in the executable for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"在启动配置“%1”的可执行文件中包含了一个 shell 元字符，现在尚未支持，停止启动。"
-
-#: nativeappconfig.cpp:103
+#: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "如果正在运行则询问"
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "终止所有实例"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "启动另一个"
 
-#: nativeappconfig.cpp:155
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+
+#: nativeappconfig.cpp:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "配置原生应用程序"
 
-#: nativeappconfig.cpp:165
+#: nativeappconfig.cpp:192
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "执行本机应用程序"
 
-#: nativeappconfig.cpp:175
+#: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
 msgstr "原生应用程序"
 
-#: nativeappconfig.cpp:233
+#: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
 msgstr "编译后的二进制文件"
 
-#: nativeappconfig.cpp:314
+#: nativeappconfig.cpp:338
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -212,52 +207,38 @@ msgid "Use external terminal:"
 msgstr "使用外部终端："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
-#: nativeappconfig.ui:234
-#, no-c-format, kde-format
+#: nativeappconfig.ui:228
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"<p>Defines the command to execute the external terminal emulator. Use the "
-"following placeholders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>The path to the executable selected above.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>The path to the working directory selected above.</dd>\n"
-"</dl>\n"
-"<p>The arguments defined above will get appended to this command.</p>"
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
 msgstr ""
-"<p>定义外部终端模拟器要执行的命令。使用如下占位符：</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>上方选定的可执行文件。</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>上方选定的工作目录。</dd>\n"
-"</dl>\n"
-"<p>上方定义的参数将会附加到此命令后。</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: nativeappconfig.ui:259
+#: nativeappconfig.ui:238
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
 msgstr "重复启动"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: nativeappconfig.ui:272
+#: nativeappconfig.ui:251
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "依赖"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: nativeappconfig.ui:278
+#: nativeappconfig.ui:257
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
 msgstr "操作(&I)："
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:288
+#: nativeappconfig.ui:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -266,7 +247,7 @@ msgid ""
 msgstr "指定在启动可执行文件前对依赖要执行的操作。"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:291
+#: nativeappconfig.ui:270
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -278,65 +259,112 @@ msgstr ""
 "部分在程序运行之前构建和/或安装。"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:298
+#: nativeappconfig.ui:277
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "无操作"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:303
+#: nativeappconfig.ui:282
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
 msgstr "构建"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:308
+#: nativeappconfig.ui:287
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
 msgstr "构建并安装"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: nativeappconfig.ui:316
+#: nativeappconfig.ui:295
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "目标："
 
-#: nativeappjob.cpp:40
+#: nativeappjob.cpp:39
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr "没有指定环境组，似乎配置损坏，请检查运行配置“%1”。使用默认的环境组。"
 
-#: nativeappjob.cpp:152
+#: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "任务已在运行"
 
-#: nativeappjob.cpp:153
+#: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "“%1”已在执行。"
 
-#: nativeappjob.cpp:155
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "终止所有实例"
 
-#: nativeappjob.cpp:156
+#: nativeappjob.cpp:157
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "启动另一个"
 
-#: nativeappjob.cpp:159
+#: nativeappjob.cpp:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "记住选择"
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr "在启动配置“%1”的参数中有一处引用错误。停止启动。"
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "在启动配置“%1”的参数中包含了一个 shell 元字符，现在尚未支持，停止启动。"
+
+#~ msgid "No valid executable specified"
+#~ msgstr "未指定有效的可执行文件"
+
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr "在启动配置“%1”的可执行文件中有一处引用错误。停止启动。"
+
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "在启动配置“%1”的可执行文件中包含了一个 shell 元字符，现在尚未支持，停止启"
+#~ "动。"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>Defines the command to execute the external terminal emulator. Use the "
+#~ "following placeholders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>The path to the executable selected above.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>The path to the working directory selected above.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgstr ""
+#~ "<p>定义外部终端模拟器要执行的命令。使用如下占位符：</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>上方选定的可执行文件。</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>上方选定的工作目录。</dd>\n"
+#~ "</dl>\n"
+#~ "<p>上方定义的参数将会附加到此命令后。</p>"

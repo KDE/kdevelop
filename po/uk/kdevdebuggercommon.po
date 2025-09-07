@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-30 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 10:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -148,7 +148,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Внутрішня помилка засобу діагностики"
 
-#: midebugger.cpp:335 midebugsession.cpp:446
+#: midebugger.cpp:335 midebugsession.cpp:445
 #, kde-format
 msgid "Process exited"
 msgstr "Процес завершився"
@@ -271,12 +271,12 @@ msgstr "%1: %2"
 msgid "'%1' is not an executable"
 msgstr "«%1» не є виконуваним файлом"
 
-#: midebugjobs.cpp:188
+#: midebugjobs.cpp:196
 #, kde-format
 msgid "Debug core file"
 msgstr "Налагоджування за файлом core"
 
-#: midebugjobs.cpp:204
+#: midebugjobs.cpp:212
 #, kde-format
 msgid "Debug process %1"
 msgstr "Налагоджування процесу %1"
@@ -290,42 +290,42 @@ msgstr ""
 "Діагностика програми вже виконується. Хочете перервати поточний сеанс "
 "діагностики і продовжити запуск?"
 
-#: midebugsession.cpp:236
+#: midebugsession.cpp:244
 #, kde-format
 msgid "Running program"
 msgstr "Виконання програми"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:318
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Приєднання до процесу %1"
 
-#: midebugsession.cpp:350
+#: midebugsession.cpp:349
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Не вдалося приєднати зневадник:</b><br />"
 
-#: midebugsession.cpp:360
+#: midebugsession.cpp:359
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Досліджується файл core %1"
 
-#: midebugsession.cpp:432
+#: midebugsession.cpp:431
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Зневадник зупинено"
 
-#: midebugsession.cpp:451
+#: midebugsession.cpp:450
 #, kde-format
 msgid "Application is running"
 msgstr "Програма виконується"
 
-#: midebugsession.cpp:456
+#: midebugsession.cpp:455
 #, kde-format
 msgid "Application is paused"
 msgstr "Виконання програми призупинено"
 
-#: midebugsession.cpp:771
+#: midebugsession.cpp:770
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -334,32 +334,32 @@ msgstr ""
 "<b>Було надіслано команду gdb у той час коли зневадник не було запущено</"
 "b><br>Ця команда:<br> %1"
 
-#: midebugsession.cpp:883
+#: midebugsession.cpp:882
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Некоректна команда зневаднику</b><br>%1"
 
-#: midebugsession.cpp:1019
+#: midebugsession.cpp:1018
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Завершення з повернутим кодом: %1"
 
-#: midebugsession.cpp:1021
+#: midebugsession.cpp:1020
 #, kde-format
 msgid "Exited normally"
 msgstr "Нормальне завершення"
 
-#: midebugsession.cpp:1028
+#: midebugsession.cpp:1027
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Вихід за сигналом %1"
 
-#: midebugsession.cpp:1063
+#: midebugsession.cpp:1062
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Програма отримала сигнал %1 (%2)"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1194
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -368,7 +368,7 @@ msgstr[1] "У черзі %1 команди\n"
 msgstr[2] "У черзі %1 команд\n"
 msgstr[3] "У черзі %1 команда\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1195
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -378,12 +378,12 @@ msgstr[1] "%1 команди обробляється у gdb\n"
 msgstr[2] "%1 команд обробляється у gdb\n"
 msgstr[3] "%1 команда обробляється у gdb\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1196
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Стан зневадника: %1\n"
 
-#: midebugsession.cpp:1200
+#: midebugsession.cpp:1199
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -394,7 +394,7 @@ msgstr ""
 "Текст поточної команди: '%2'\n"
 "Початковий текст поточної команди: '%3'\n"
 
-#: midebugsession.cpp:1227
+#: midebugsession.cpp:1226
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -495,7 +495,7 @@ msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Оновити"
 
-#: stty.cpp:252
+#: stty.cpp:269
 #, kde-format
 msgid ""
 "Cannot use the tty* or pty* devices.\n"
@@ -509,22 +509,25 @@ msgstr ""
 "і pty* і додати свого користувача до групи tty за допомогою команди «usermod "
 "-aG tty _користувач_»."
 
-#: stty.cpp:304
+#: stty.cpp:322
 #, kde-format
 msgid "%1 is incorrect terminal name"
 msgstr "%1 є некоректною назвою термінала"
 
-#: stty.cpp:310
+#: stty.cpp:328
 #, kde-format
 msgid "Can't create a temporary file"
 msgstr "Не вдалося створити тимчасовий файл"
 
-#: stty.cpp:357
-#, kde-format
+#: stty.cpp:366
+#, fuzzy, kde-format
+#| msgid ""
+#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
+#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
+#| "do sleep 3600;done\""
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
-"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
-"sleep 3600;done\""
+"accepts these arguments: %2"
 msgstr ""
 "Не вдалося отримати %1 tty/pty. Перевірте, чи є %1 терміналом і чи приймає "
 "термінал такі аргументи: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "

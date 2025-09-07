@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bosnianuniversetranslation\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2014-02-10 00:13+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -20,88 +20,32 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: executescriptplugin.cpp:59
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Ispravan izvršni program nije naveden"
+#: executescriptplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Script Application"
+msgctxt "path to a script"
+msgid "script path"
+msgstr "Skriptna aplikacija"
 
-#: executescriptplugin.cpp:69
-#, kde-format
-msgid ""
-"There is a quoting error in the script for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Postoji citirajuća pogreška u skripti za pokretačku konfiguraciju '%1'. "
-"Prekinut start."
-
-#: executescriptplugin.cpp:74
-#, kde-format
-msgid ""
-"A shell meta character was included in the script for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Metaznak školjke bio je uključen u skripti za pokretačku konfiguraciju '%1', "
-"to trenutno nije podržano. Prekinut start."
-
-#: executescriptplugin.cpp:91
+#: executescriptplugin.cpp:78
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Nema postavljenog udaljenog hosta za pokretačku konfiguraciju i '%1'. "
 "Prekinut start."
 
-#: executescriptplugin.cpp:114
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Ima greška s navodniima u argumentima za pokretačku konfiguraciju '%1'. "
-"Prekidam start."
-
-#: executescriptplugin.cpp:118
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Meta-znak školjke je bio uključen u argumentima za pokretačku konfiguraciju "
-"'%1', Ovo nije podržano trenutno. Prekidam start."
-
-#: executescriptplugin.cpp:168
-#, kde-format
-msgid "No valid interpreter specified"
-msgstr "Nema važećeg navedenog interpretera"
-
-#: executescriptplugin.cpp:180
-#, kde-format
-msgid ""
-"There is a quoting error in the interpreter for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Postoji citirajuća pogreška u interpreteru  za pokretačku konfiguraciju "
-"'%1'. Prekinut start."
-
-#: executescriptplugin.cpp:185
-#, kde-format
-msgid ""
-"A shell meta character was included in the interpreter for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Metaznak školjke bio je uključen u interpreteru za pokretačku konfiguraciju "
-"'%1', to trenutno nije podržano. Prekinut start."
-
-#: executescriptplugin.cpp:195
+#: executescriptplugin.cpp:97
 #, fuzzy, kde-format
-#| msgid ""
-#| "There is a quoting error in the interpreter for the launch configuration "
-#| "'%1'. Aborting start."
-msgid ""
-"Splitting the interpreter command for the launch configuration '%1' yields "
-"an empty list. Aborting start."
-msgstr ""
-"Postoji citirajuća pogreška u interpreteru  za pokretačku konfiguraciju "
-"'%1'. Prekinut start."
+#| msgid "Arguments:"
+msgctxt "command line arguments to a script"
+msgid "arguments"
+msgstr "Argumenti:"
+
+#: executescriptplugin.cpp:140
+#, fuzzy, kde-format
+#| msgid "Interpreter Command:"
+msgid "interpreter command"
+msgstr "Interpreterska komanda:"
 
 #: scriptappconfig.cpp:83
 #, fuzzy, kde-format
@@ -394,6 +338,65 @@ msgstr ""
 "*** Ne mogu pokrenuti program '%1'. Osigurajte se da je put pravilno naveden "
 "***"
 
+#~ msgid "No valid executable specified"
+#~ msgstr "Ispravan izvršni program nije naveden"
+
+#~ msgid ""
+#~ "There is a quoting error in the script for the launch configuration '%1'. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "Postoji citirajuća pogreška u skripti za pokretačku konfiguraciju '%1'. "
+#~ "Prekinut start."
+
+#~ msgid ""
+#~ "A shell meta character was included in the script for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Metaznak školjke bio je uključen u skripti za pokretačku konfiguraciju "
+#~ "'%1', to trenutno nije podržano. Prekinut start."
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Ima greška s navodniima u argumentima za pokretačku konfiguraciju '%1'. "
+#~ "Prekidam start."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Meta-znak školjke je bio uključen u argumentima za pokretačku "
+#~ "konfiguraciju '%1', Ovo nije podržano trenutno. Prekidam start."
+
+#~ msgid "No valid interpreter specified"
+#~ msgstr "Nema važećeg navedenog interpretera"
+
+#~ msgid ""
+#~ "There is a quoting error in the interpreter for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Postoji citirajuća pogreška u interpreteru  za pokretačku konfiguraciju "
+#~ "'%1'. Prekinut start."
+
+#~ msgid ""
+#~ "A shell meta character was included in the interpreter for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Metaznak školjke bio je uključen u interpreteru za pokretačku "
+#~ "konfiguraciju '%1', to trenutno nije podržano. Prekinut start."
+
+#, fuzzy
+#~| msgid ""
+#~| "There is a quoting error in the interpreter for the launch configuration "
+#~| "'%1'. Aborting start."
+#~ msgid ""
+#~ "Splitting the interpreter command for the launch configuration '%1' "
+#~ "yields an empty list. Aborting start."
+#~ msgstr ""
+#~ "Postoji citirajuća pogreška u interpreteru  za pokretačku konfiguraciju "
+#~ "'%1'. Prekinut start."
+
 #~ msgid "python"
 #~ msgstr "python"
 
@@ -428,9 +431,6 @@ msgstr ""
 
 #~ msgid "Script"
 #~ msgstr "Pismo"
-
-#~ msgid "Interpreter Command:"
-#~ msgstr "Interpreterska komanda:"
 
 #~ msgid "Script File:"
 #~ msgstr "Datoteka skripte:"

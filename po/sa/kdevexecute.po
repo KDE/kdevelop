@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,89 +19,81 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: executeplugin.cpp:66
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
+#: executeplugin.cpp:62
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Ar&guments:"
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "तर्काः :"
 
-#: executeplugin.cpp:70
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः एकः शेल् मेटा वर्णः समाविष्टः आसीत्, एतत् सम्प्रति "
-"समर्थितं नास्ति । गर्भपातस्य आरम्भः।"
-
-#: executeplugin.cpp:97
+#: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "आश्रयस्य समाधानं कर्तुं न शक्तवान्: %1"
 
-#: executeplugin.cpp:152
-#, kde-format
-msgid "No valid executable specified"
-msgstr "वैधः कार्यान्वयनीयः निर्दिष्टः नास्ति"
+#: executeplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Executable"
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "निष्पादनीयम्"
 
-#: executeplugin.cpp:162
-#, kde-format
-msgid ""
-"There is a quoting error in the executable for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"'%1' इत्यस्य प्रक्षेपणविन्यासस्य कार्यान्वयनयोग्ये उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
+#: executeplugin.cpp:194
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Use external terminal:"
+msgid "external terminal command"
+msgstr "बाह्यटर्मिनलस्य उपयोगं कुर्वन्तु :"
 
-#: executeplugin.cpp:167
-#, kde-format
-msgid ""
-"A shell meta character was included in the executable for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"'%1' इत्यस्य प्रक्षेपणविन्यासस्य कृते कार्यान्वयनीयमध्ये एकः शेल् मेटा वर्णः समाविष्टः आसीत्, "
-"एतत् सम्प्रति समर्थितं नास्ति । गर्भपातस्य आरम्भः।"
-
-#: nativeappconfig.cpp:103
+#: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "Ask If Running इति"
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "सर्वाणि उदाहरणानि मारयतु"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "अन्यत् आरभत"
 
-#: nativeappconfig.cpp:155
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+
+#: nativeappconfig.cpp:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "देशी अनुप्रयोग विन्यस्तं कुर्वन्तु"
 
-#: nativeappconfig.cpp:165
+#: nativeappconfig.cpp:192
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "देशी अनुप्रयोगाः निष्पादयति"
 
-#: nativeappconfig.cpp:175
+#: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
 msgstr "देशी अनुप्रयोग"
 
-#: nativeappconfig.cpp:233
+#: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
 msgstr "संकलित द्विचक्री"
 
-#: nativeappconfig.cpp:314
+#: nativeappconfig.cpp:338
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -220,48 +212,38 @@ msgid "Use external terminal:"
 msgstr "बाह्यटर्मिनलस्य उपयोगं कुर्वन्तु :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
-#: nativeappconfig.ui:234
-#, no-c-format, kde-format
+#: nativeappconfig.ui:228
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"<p>Defines the command to execute the external terminal emulator. Use the "
-"following placeholders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>The path to the executable selected above.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>The path to the working directory selected above.</dd>\n"
-"</dl>\n"
-"<p>The arguments defined above will get appended to this command.</p>"
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
 msgstr ""
-"<p>बाह्य टर्मिनल् एमुलेटर् निष्पादयितुं आदेशं परिभाषयति । निम्नलिखितस्थानधारकाणां उपयोगं "
-"कुर्वन्तु ।</p><dl><dt> <code>%exe</code></dt><dd> उपरि चयनितस्य कार्यान्वयनीयस्य "
-"मार्गः ।</dd><dt> <code>%workdir</code></dt><dd> उपरि चयनितस्य कार्यनिर्देशिकायाः "
-"मार्गः ।</dd></dl><p> उपरि परिभाषिताः तर्काः अस्मिन् आदेशे संलग्नाः भविष्यन्ति ।</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: nativeappconfig.ui:259
+#: nativeappconfig.ui:238
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
 msgstr "पुनः आरभत"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: nativeappconfig.ui:272
+#: nativeappconfig.ui:251
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "आश्रयाः"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: nativeappconfig.ui:278
+#: nativeappconfig.ui:257
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
 msgstr "नामपत्र:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:288
+#: nativeappconfig.ui:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -270,7 +252,7 @@ msgid ""
 msgstr "कार्यान्वयनीयं आरभ्यतुं पूर्वं आश्रयाणां कृते कर्तव्यं कार्यं निर्दिशति ।"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:291
+#: nativeappconfig.ui:270
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -283,34 +265,34 @@ msgstr ""
 "स्थापनाः वा भवितुम् अर्हन्ति ।"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:298
+#: nativeappconfig.ui:277
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "किमपि न कुरु"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:303
+#: nativeappconfig.ui:282
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
 msgstr "निर्मिमीते"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:308
+#: nativeappconfig.ui:287
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
 msgstr "निर्माणं संस्थापनं च"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: nativeappconfig.ui:316
+#: nativeappconfig.ui:295
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "लक्ष्याणि :"
 
-#: nativeappjob.cpp:40
+#: nativeappjob.cpp:39
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -319,31 +301,77 @@ msgstr ""
 "कोऽपि वातावरणरूपरेखा निर्दिष्टा, भग्नविन्यासः इव दृश्यते, कृपया '%1' चालनविन्यासं "
 "परीक्ष्यताम् । पूर्वनिर्धारितपर्यावरणरूपरेखायाः उपयोगेन।"
 
-#: nativeappjob.cpp:152
+#: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Job Already Running इति कार्यम्"
 
-#: nativeappjob.cpp:153
+#: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "'%1' पूर्वमेव निष्पाद्यते ।"
 
-#: nativeappjob.cpp:155
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "सर्वाणि उदाहरणानि मारयतु"
 
-#: nativeappjob.cpp:156
+#: nativeappjob.cpp:157
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "अन्यत् आरभत"
 
-#: nativeappjob.cpp:159
+#: nativeappjob.cpp:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "विकल्पं स्मर्यताम्"
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "'%1' इत्यस्य प्रक्षेपणविन्यासस्य तर्कयोः एकः शेल् मेटा वर्णः समाविष्टः आसीत्, एतत् "
+#~ "सम्प्रति समर्थितं नास्ति । गर्भपातस्य आरम्भः।"
+
+#~ msgid "No valid executable specified"
+#~ msgstr "वैधः कार्यान्वयनीयः निर्दिष्टः नास्ति"
+
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "'%1' इत्यस्य प्रक्षेपणविन्यासस्य कार्यान्वयनयोग्ये उद्धरणदोषः अस्ति । गर्भपातस्य आरम्भः।"
+
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "'%1' इत्यस्य प्रक्षेपणविन्यासस्य कृते कार्यान्वयनीयमध्ये एकः शेल् मेटा वर्णः समाविष्टः "
+#~ "आसीत्, एतत् सम्प्रति समर्थितं नास्ति । गर्भपातस्य आरम्भः।"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>Defines the command to execute the external terminal emulator. Use the "
+#~ "following placeholders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>The path to the executable selected above.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>The path to the working directory selected above.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgstr ""
+#~ "<p>बाह्य टर्मिनल् एमुलेटर् निष्पादयितुं आदेशं परिभाषयति । निम्नलिखितस्थानधारकाणां उपयोगं "
+#~ "कुर्वन्तु ।</p><dl><dt> <code>%exe</code></dt><dd> उपरि चयनितस्य कार्यान्वयनीयस्य "
+#~ "मार्गः ।</dd><dt> <code>%workdir</code></dt><dd> उपरि चयनितस्य "
+#~ "कार्यनिर्देशिकायाः मार्गः ।</dd></dl><p> उपरि परिभाषिताः तर्काः अस्मिन् आदेशे "
+#~ "संलग्नाः भविष्यन्ति ।</p>"

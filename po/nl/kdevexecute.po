@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2020-07-21 11:58+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -18,92 +18,81 @@ msgstr ""
 "X-Generator: Lokalize 20.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: executeplugin.cpp:66
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Er is een fout met quotes in de argumenten voor de opstartconfiguratie '%1'. "
-"Afbreken is gestart."
+#: executeplugin.cpp:62
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Ar&guments:"
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "Ar&gumenten:"
 
-#: executeplugin.cpp:70
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Er is een shell-meta-teken ingevoegd in de argumenten voor de "
-"opstartconfiguratie '%1', dit wordt nu niet ondersteund. Afbreken is gestart."
-
-#: executeplugin.cpp:97
+#: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Afhankelijkheden oplossen lukte niet: %1"
 
-#: executeplugin.cpp:152
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Geen geldig programma gespecificeerd"
+#: executeplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Executable"
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "Uitvoerbaar programma"
 
-#: executeplugin.cpp:162
-#, kde-format
-msgid ""
-"There is a quoting error in the executable for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Er is een fout met quotes in het programma voor de opstartconfiguratie '%1'. "
-"Afbreken is gestart."
+#: executeplugin.cpp:194
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Use external terminal:"
+msgid "external terminal command"
+msgstr "Externe terminal gebruiken:"
 
-#: executeplugin.cpp:167
-#, kde-format
-msgid ""
-"A shell meta character was included in the executable for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Er is een shell-meta-teken ingevoegd in het programma voor de "
-"opstartconfiguratie '%1', dit wordt nu niet ondersteund. Afbreken is gestart."
-
-#: nativeappconfig.cpp:103
+#: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "Vragen indien actief"
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Alle exemplaren afbreken"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Een andere starten"
 
-#: nativeappconfig.cpp:155
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+
+#: nativeappconfig.cpp:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Natuurlijke applicatie instellen"
 
-#: nativeappconfig.cpp:165
+#: nativeappconfig.cpp:192
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "Voert eigen applicaties uit"
 
-#: nativeappconfig.cpp:175
+#: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
 msgstr "Natuurlijke applicatie"
 
-#: nativeappconfig.cpp:233
+#: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Gecompileerd binair bestand"
 
-#: nativeappconfig.cpp:314
+#: nativeappconfig.cpp:338
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -224,54 +213,38 @@ msgid "Use external terminal:"
 msgstr "Externe terminal gebruiken:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
-#: nativeappconfig.ui:234
-#, no-c-format, kde-format
+#: nativeappconfig.ui:228
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"<p>Defines the command to execute the external terminal emulator. Use the "
-"following placeholders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>The path to the executable selected above.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>The path to the working directory selected above.</dd>\n"
-"</dl>\n"
-"<p>The arguments defined above will get appended to this command.</p>"
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
 msgstr ""
-"<p>Definieert het commando om de externe terminalemulator te starten. "
-"Gebruik de volgende plaatshouders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>Het pad naar het uitvoerbare programma dat boven is geselecteerd.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>Het pad naar de werkmap die boven is geselecteerd.</dd>\n"
-"</dl>\n"
-"<p>De argumenten zoals boven gedefinieerd zullen achter dit commando worden "
-"gevoegd.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: nativeappconfig.ui:259
+#: nativeappconfig.ui:238
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
 msgstr "Herstarten"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: nativeappconfig.ui:272
+#: nativeappconfig.ui:251
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "Afhankelijkheden"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: nativeappconfig.ui:278
+#: nativeappconfig.ui:257
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
 msgstr "Act&ie:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:288
+#: nativeappconfig.ui:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -282,7 +255,7 @@ msgstr ""
 "het programma."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:291
+#: nativeappconfig.ui:270
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -296,34 +269,34 @@ msgstr ""
 "geïnstalleerd voor het uitvoeren van het programma."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:298
+#: nativeappconfig.ui:277
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "Niets doen"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:303
+#: nativeappconfig.ui:282
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
 msgstr "Bouwen"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:308
+#: nativeappconfig.ui:287
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
 msgstr "Bouwen en installeren"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: nativeappconfig.ui:316
+#: nativeappconfig.ui:295
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Doelen:"
 
-#: nativeappjob.cpp:40
+#: nativeappjob.cpp:39
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -333,34 +306,91 @@ msgstr ""
 "controleer de uitvoeringsconfiguratie '%1'. Met gebruik van het standaard "
 "omgevingsprofiel."
 
-#: nativeappjob.cpp:152
+#: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Job is al actief"
 
-#: nativeappjob.cpp:153
+#: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "'%1' is al uitgevoerd."
 
-#: nativeappjob.cpp:155
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Alle exemplaren afbreken"
 
-#: nativeappjob.cpp:156
+#: nativeappjob.cpp:157
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Een andere starten"
 
-#: nativeappjob.cpp:159
+#: nativeappjob.cpp:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "Keuze onthouden"
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Er is een fout met quotes in de argumenten voor de opstartconfiguratie "
+#~ "'%1'. Afbreken is gestart."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Er is een shell-meta-teken ingevoegd in de argumenten voor de "
+#~ "opstartconfiguratie '%1', dit wordt nu niet ondersteund. Afbreken is "
+#~ "gestart."
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Geen geldig programma gespecificeerd"
+
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Er is een fout met quotes in het programma voor de opstartconfiguratie "
+#~ "'%1'. Afbreken is gestart."
+
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Er is een shell-meta-teken ingevoegd in het programma voor de "
+#~ "opstartconfiguratie '%1', dit wordt nu niet ondersteund. Afbreken is "
+#~ "gestart."
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>Defines the command to execute the external terminal emulator. Use the "
+#~ "following placeholders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>The path to the executable selected above.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>The path to the working directory selected above.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgstr ""
+#~ "<p>Definieert het commando om de externe terminalemulator te starten. "
+#~ "Gebruik de volgende plaatshouders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>Het pad naar het uitvoerbare programma dat boven is geselecteerd.</"
+#~ "dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>Het pad naar de werkmap die boven is geselecteerd.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>De argumenten zoals boven gedefinieerd zullen achter dit commando "
+#~ "worden gevoegd.</p>"
 
 #~ msgid "Enter arguments to give to the executable"
 #~ msgstr "Voer de argumenten in om door te geven aan het programma"

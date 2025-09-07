@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2020-07-20 08:26+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -20,93 +20,81 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: executeplugin.cpp:66
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Під час спроби виконання файла було виявлено помилку у використанні лапок у "
-"параметрах налаштуваннях запуску «%1». Запуск перервано."
+#: executeplugin.cpp:62
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Ar&guments:"
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "&Параметри:"
 
-#: executeplugin.cpp:70
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"У параметрах налаштуваннях запуску було використано метасимвол оболонки "
-"«%1», підтримку таких символів ще не реалізовано. Запуск перервано."
-
-#: executeplugin.cpp:97
+#: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Не вдалося розв’язати залежності: %1"
 
-#: executeplugin.cpp:152
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Не вказано коректного виконуваного файла"
+#: executeplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Executable"
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "Виконуваний файл"
 
-#: executeplugin.cpp:162
-#, kde-format
-msgid ""
-"There is a quoting error in the executable for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Під час визначення виконуваного файла у налаштуваннях запуску виявлено "
-"помилку у використанні лапок «%1». Запуск перервано."
+#: executeplugin.cpp:194
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Use external terminal:"
+msgid "external terminal command"
+msgstr "Використовувати зовнішній термінал:"
 
-#: executeplugin.cpp:167
-#, kde-format
-msgid ""
-"A shell meta character was included in the executable for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"У визначенні виконуваного файла налаштувань запуску було використано "
-"метасимвол оболонки «%1», підтримку таких символів ще не реалізовано. Запуск "
-"перервано."
-
-#: nativeappconfig.cpp:103
+#: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr "Запитати, якщо запущено"
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr "Вбити усі екземпляри"
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr "Запустити ще один"
 
-#: nativeappconfig.cpp:155
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+
+#: nativeappconfig.cpp:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Налаштувати рідну програму"
 
-#: nativeappconfig.cpp:165
+#: nativeappconfig.cpp:192
 #, kde-format
 msgid "Executes Native Applications"
 msgstr "Виконує рідні програми"
 
-#: nativeappconfig.cpp:175
+#: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
 msgstr "Рідна програма"
 
-#: nativeappconfig.cpp:233
+#: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Зібраний виконуваний файл"
 
-#: nativeappconfig.cpp:314
+#: nativeappconfig.cpp:338
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
@@ -225,53 +213,38 @@ msgid "Use external terminal:"
 msgstr "Використовувати зовнішній термінал:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
-#: nativeappconfig.ui:234
-#, no-c-format, kde-format
+#: nativeappconfig.ui:228
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"<p>Defines the command to execute the external terminal emulator. Use the "
-"following placeholders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>The path to the executable selected above.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>The path to the working directory selected above.</dd>\n"
-"</dl>\n"
-"<p>The arguments defined above will get appended to this command.</p>"
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
 msgstr ""
-"<p>Визначає команду, яку слід виконати у зовнішньому емуляторі термінала. "
-"Можна використовувати такі позначення:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>Адреса виконуваного файла, вибраний вище.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>Адреса робочого каталогу, вибрана вище.</dd>\n"
-"</dl>\n"
-"<p>Визначені вище аргументи буде додано до цієї команди.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: nativeappconfig.ui:259
+#: nativeappconfig.ui:238
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
 msgstr "Перезапустити"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: nativeappconfig.ui:272
+#: nativeappconfig.ui:251
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "Залежності"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: nativeappconfig.ui:278
+#: nativeappconfig.ui:257
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
 msgstr "&Дія:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:288
+#: nativeappconfig.ui:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -282,7 +255,7 @@ msgstr ""
 "файла."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:291
+#: nativeappconfig.ui:270
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -295,34 +268,34 @@ msgstr ""
 "певні частини проєкту, які є непрямими залежностями."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:298
+#: nativeappconfig.ui:277
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "Нічого не робити"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:303
+#: nativeappconfig.ui:282
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
 msgstr "Зібрати"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:308
+#: nativeappconfig.ui:287
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
 msgstr "Зібрати і встановити"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: nativeappconfig.ui:316
+#: nativeappconfig.ui:295
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Цілі:"
 
-#: nativeappjob.cpp:40
+#: nativeappjob.cpp:39
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -332,34 +305,88 @@ msgstr ""
 "налаштування, будь ласка, перевірте налаштування запуску «%1». Буде "
 "використано типовий профіль середовища."
 
-#: nativeappjob.cpp:152
+#: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr "Завдання вже виконується"
 
-#: nativeappjob.cpp:153
+#: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
 msgstr "«%1» вже виконується."
 
-#: nativeappjob.cpp:155
+#: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
 msgstr "Вбити усі екземпляри"
 
-#: nativeappjob.cpp:156
+#: nativeappjob.cpp:157
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
 msgstr "Запустити ще один"
 
-#: nativeappjob.cpp:159
+#: nativeappjob.cpp:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "Запам'ятати вибір"
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Під час спроби виконання файла було виявлено помилку у використанні лапок "
+#~ "у параметрах налаштуваннях запуску «%1». Запуск перервано."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "У параметрах налаштуваннях запуску було використано метасимвол оболонки "
+#~ "«%1», підтримку таких символів ще не реалізовано. Запуск перервано."
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Не вказано коректного виконуваного файла"
+
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Під час визначення виконуваного файла у налаштуваннях запуску виявлено "
+#~ "помилку у використанні лапок «%1». Запуск перервано."
+
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "У визначенні виконуваного файла налаштувань запуску було використано "
+#~ "метасимвол оболонки «%1», підтримку таких символів ще не реалізовано. "
+#~ "Запуск перервано."
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>Defines the command to execute the external terminal emulator. Use the "
+#~ "following placeholders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>The path to the executable selected above.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>The path to the working directory selected above.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgstr ""
+#~ "<p>Визначає команду, яку слід виконати у зовнішньому емуляторі термінала. "
+#~ "Можна використовувати такі позначення:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>Адреса виконуваного файла, вибраний вище.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>Адреса робочого каталогу, вибрана вище.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>Визначені вище аргументи буде додано до цієї команди.</p>"
 
 #~ msgid "Enter arguments to give to the executable"
 #~ msgstr "Введіть параметри, які буде передано виконуваному файлу"

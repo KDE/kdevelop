@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2020-07-20 12:27+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -18,90 +18,34 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-POFile-SpellExtra: Sams Niko php ruby bash\n"
 
-#: executescriptplugin.cpp:59
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Não foi indicado nenhum executável"
+#: executescriptplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Script Application"
+msgctxt "path to a script"
+msgid "script path"
+msgstr "Aplicação de Programa"
 
-#: executescriptplugin.cpp:69
-#, kde-format
-msgid ""
-"There is a quoting error in the script for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Existe um erro de aspas no programa para a configuração de lançamento '%1'. "
-"A interromper o início."
-
-#: executescriptplugin.cpp:74
-#, kde-format
-msgid ""
-"A shell meta character was included in the script for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Foi incluído um meta-carácter no programa para a configuração de lançamento "
-"'%1', o qual não é suportado de momento. A interromper o início."
-
-#: executescriptplugin.cpp:91
+#: executescriptplugin.cpp:78
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Não foi definida nenhuma máquina remota para a configuração de lançamento "
 "'%1'. A interromper o início."
 
-#: executescriptplugin.cpp:114
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Existe um erro de aspas nos argumentos para a configuração de lançamento "
-"'%1'. A interromper o início."
-
-#: executescriptplugin.cpp:118
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Foi incluído um meta-carácter da linha de comandos nos argumentos para a "
-"configuração de lançamento '%1'; esta não é suportada de momento. A "
-"interromper o início."
-
-#: executescriptplugin.cpp:168
-#, kde-format
-msgid "No valid interpreter specified"
-msgstr "Não foi indicado nenhum interpretador válido"
-
-#: executescriptplugin.cpp:180
-#, kde-format
-msgid ""
-"There is a quoting error in the interpreter for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Existe um erro de aspas no interpretador para a configuração de lançamento "
-"'%1'. A interromper o início."
-
-#: executescriptplugin.cpp:185
-#, kde-format
-msgid ""
-"A shell meta character was included in the interpreter for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Foi incluído um meta-carácter da linha de comandos no interpretador para a "
-"configuração de lançamento '%1'; esta não é suportada de momento. A "
-"interromper o início."
-
-#: executescriptplugin.cpp:195
+#: executescriptplugin.cpp:97
 #, fuzzy, kde-format
-#| msgid ""
-#| "There is a quoting error in the interpreter for the launch configuration "
-#| "'%1'. Aborting start."
-msgid ""
-"Splitting the interpreter command for the launch configuration '%1' yields "
-"an empty list. Aborting start."
-msgstr ""
-"Existe um erro de aspas no interpretador para a configuração de lançamento "
-"'%1'. A interromper o início."
+#| msgctxt "@label:textbox"
+#| msgid "Arguments:"
+msgctxt "command line arguments to a script"
+msgid "arguments"
+msgstr "Argumentos:"
+
+#: executescriptplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Interpreter"
+msgid "interpreter command"
+msgstr "Interpretador"
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -363,3 +307,65 @@ msgid ""
 msgstr ""
 "*** Não foi possível iniciar o programa '%1'. Certifique-se que a "
 "localização está indicada correctamente. ***"
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Não foi indicado nenhum executável"
+
+#~ msgid ""
+#~ "There is a quoting error in the script for the launch configuration '%1'. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "Existe um erro de aspas no programa para a configuração de lançamento "
+#~ "'%1'. A interromper o início."
+
+#~ msgid ""
+#~ "A shell meta character was included in the script for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Foi incluído um meta-carácter no programa para a configuração de "
+#~ "lançamento '%1', o qual não é suportado de momento. A interromper o "
+#~ "início."
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Existe um erro de aspas nos argumentos para a configuração de lançamento "
+#~ "'%1'. A interromper o início."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Foi incluído um meta-carácter da linha de comandos nos argumentos para a "
+#~ "configuração de lançamento '%1'; esta não é suportada de momento. A "
+#~ "interromper o início."
+
+#~ msgid "No valid interpreter specified"
+#~ msgstr "Não foi indicado nenhum interpretador válido"
+
+#~ msgid ""
+#~ "There is a quoting error in the interpreter for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Existe um erro de aspas no interpretador para a configuração de "
+#~ "lançamento '%1'. A interromper o início."
+
+#~ msgid ""
+#~ "A shell meta character was included in the interpreter for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Foi incluído um meta-carácter da linha de comandos no interpretador para "
+#~ "a configuração de lançamento '%1'; esta não é suportada de momento. A "
+#~ "interromper o início."
+
+#, fuzzy
+#~| msgid ""
+#~| "There is a quoting error in the interpreter for the launch configuration "
+#~| "'%1'. Aborting start."
+#~ msgid ""
+#~ "Splitting the interpreter command for the launch configuration '%1' "
+#~ "yields an empty list. Aborting start."
+#~ msgstr ""
+#~ "Existe um erro de aspas no interpretador para a configuração de "
+#~ "lançamento '%1'. A interromper o início."

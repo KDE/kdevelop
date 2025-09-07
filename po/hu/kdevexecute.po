@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2014-09-13 10:52+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18,94 +18,80 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: executeplugin.cpp:66
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Hivatkozási hiba van az indítási beállítás paramétereiben: „%1”. Indítás "
-"megszakítása."
+#: executeplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "Paraméterek:"
 
-#: executeplugin.cpp:70
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Egy héj meta karaktert tartalmaznak a paraméterek az indítási beállításhoz: "
-"„%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
-
-#: executeplugin.cpp:97
+#: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Nem sikerült feloldani a függőséget: %1"
 
-#: executeplugin.cpp:152
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Nincs érvényes végrehajtható megadva"
+#: executeplugin.cpp:140
+#, fuzzy, kde-format
+#| msgid "Executable"
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "Végrehajtható"
 
-#: executeplugin.cpp:162
-#, kde-format
-msgid ""
-"There is a quoting error in the executable for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Hivatkozási hiba van az indítási beállítás végrehajthatójában: „%1”. Indítás "
-"megszakítása."
+#: executeplugin.cpp:194
+#, fuzzy, kde-format
+#| msgid "Use External Terminal:"
+msgid "external terminal command"
+msgstr "Külső terminál használata:"
 
-#: executeplugin.cpp:167
-#, kde-format
-msgid ""
-"A shell meta character was included in the executable for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Egy héj meta karaktert tartalmaz a végrehajtható az indítási beállításhoz: "
-"„%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
-
-#: nativeappconfig.cpp:103
+#: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappconfig.cpp:155
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+
+#: nativeappconfig.cpp:182
 #, fuzzy, kde-format
 #| msgid "Configure Native Application"
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Natív alkalmazás beállítása"
 
-#: nativeappconfig.cpp:165
+#: nativeappconfig.cpp:192
 #, fuzzy, kde-format
 #| msgid "Native Application"
 msgid "Executes Native Applications"
 msgstr "Natív alkalmazás"
 
-#: nativeappconfig.cpp:175
+#: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
 msgstr "Natív alkalmazás"
 
-#: nativeappconfig.cpp:233
+#: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Lefordított bináris"
 
-#: nativeappconfig.cpp:314
+#: nativeappconfig.cpp:338
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"
@@ -250,49 +236,24 @@ msgid "Use external terminal:"
 msgstr "Külső terminál használata:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
-#: nativeappconfig.ui:234
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<p>Defines the command to execute the external terminal emulator. Use the "
-#| "following placeholders:</p>\n"
-#| "<dl>\n"
-#| "<dt><code>%exe</code></dt>\n"
-#| "<dd>The path to the executable selected above.</dd>\n"
-#| "<dt><code>%workdir</code></dt>\n"
-#| "<dd>The path to the working directory selected above.</dd>\n"
-#| "</dl>\n"
-#| "<p>The arguments defined above will get appended to this command.</p>"
+#: nativeappconfig.ui:228
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"<p>Defines the command to execute the external terminal emulator. Use the "
-"following placeholders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>The path to the executable selected above.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>The path to the working directory selected above.</dd>\n"
-"</dl>\n"
-"<p>The arguments defined above will get appended to this command.</p>"
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
 msgstr ""
-"<p>Megadja a külső terminálemulátor végrehajtására szolgáló parancsot. "
-"Használja a következő helykitöltőket:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>A fentebb kijelölt végrehajtható állomány elérési útja.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>A fentebb kijelölt munkakönyvtár elérési útja.</dd>\n"
-"</dl>\n"
-"<p>A fent definiált argumentumok hozzáfűződnek ehhez a parancshoz.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: nativeappconfig.ui:259
+#: nativeappconfig.ui:238
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: nativeappconfig.ui:272
+#: nativeappconfig.ui:251
 #, fuzzy, kde-format
 #| msgid "Dependencies"
 msgctxt "@title:group"
@@ -300,7 +261,7 @@ msgid "Dependencies"
 msgstr "Függőségek"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: nativeappconfig.ui:278
+#: nativeappconfig.ui:257
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgctxt "@label:listbox"
@@ -308,7 +269,7 @@ msgid "Act&ion:"
 msgstr "Művelet:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:288
+#: nativeappconfig.ui:267
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specifies the action to take for the dependencies before starting the "
@@ -322,7 +283,7 @@ msgstr ""
 "végrehajtandó műveletet."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:291
+#: nativeappconfig.ui:270
 #, fuzzy, kde-format
 #| msgid ""
 #| "The selected action will be run before the executable is started.  This "
@@ -340,7 +301,7 @@ msgstr ""
 "futtatása előtt, melyektől közvetlenül nem függ a végrehajtható állomány."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:298
+#: nativeappconfig.ui:277
 #, fuzzy, kde-format
 #| msgid "Do Nothing"
 msgctxt "@item:inlistbox dependency action"
@@ -348,7 +309,7 @@ msgid "Do Nothing"
 msgstr "Ne tegyen semmit"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:303
+#: nativeappconfig.ui:282
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Build"
@@ -357,7 +318,7 @@ msgid "Build"
 msgstr "Fordítás"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:308
+#: nativeappconfig.ui:287
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Build and Install"
@@ -366,14 +327,14 @@ msgid "Build and Install"
 msgstr "Fordítás és telepítés"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: nativeappconfig.ui:316
+#: nativeappconfig.ui:295
 #, fuzzy, kde-format
 #| msgid "Targets:"
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Célok:"
 
-#: nativeappjob.cpp:40
+#: nativeappjob.cpp:39
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -386,34 +347,98 @@ msgstr ""
 "ellenőrizze a futási beállítást: „%1”. Az alapértelmezett környezetcsoport "
 "használata."
 
-#: nativeappjob.cpp:152
+#: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr ""
 
-#: nativeappjob.cpp:153
+#: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
-msgstr ""
-
-#: nativeappjob.cpp:155
-#, kde-format
-msgctxt "@action:button"
-msgid "Kill All Instances"
 msgstr ""
 
 #: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr ""
+
+#: nativeappjob.cpp:157
+#, kde-format
+msgctxt "@action:button"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappjob.cpp:159
+#: nativeappjob.cpp:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr ""
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Hivatkozási hiba van az indítási beállítás paramétereiben: „%1”. Indítás "
+#~ "megszakítása."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Egy héj meta karaktert tartalmaznak a paraméterek az indítási "
+#~ "beállításhoz: „%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Nincs érvényes végrehajtható megadva"
+
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Hivatkozási hiba van az indítási beállítás végrehajthatójában: „%1”. "
+#~ "Indítás megszakítása."
+
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Egy héj meta karaktert tartalmaz a végrehajtható az indítási "
+#~ "beállításhoz: „%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
+
+#, fuzzy
+#~| msgid ""
+#~| "<p>Defines the command to execute the external terminal emulator. Use "
+#~| "the following placeholders:</p>\n"
+#~| "<dl>\n"
+#~| "<dt><code>%exe</code></dt>\n"
+#~| "<dd>The path to the executable selected above.</dd>\n"
+#~| "<dt><code>%workdir</code></dt>\n"
+#~| "<dd>The path to the working directory selected above.</dd>\n"
+#~| "</dl>\n"
+#~| "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>Defines the command to execute the external terminal emulator. Use the "
+#~ "following placeholders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>The path to the executable selected above.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>The path to the working directory selected above.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgstr ""
+#~ "<p>Megadja a külső terminálemulátor végrehajtására szolgáló parancsot. "
+#~ "Használja a következő helykitöltőket:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>A fentebb kijelölt végrehajtható állomány elérési útja.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>A fentebb kijelölt munkakönyvtár elérési útja.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>A fent definiált argumentumok hozzáfűződnek ehhez a parancshoz.</p>"
 
 #~ msgid "Enter arguments to give to the executable"
 #~ msgstr "Adja meg a végrehajthatónak átadandó paramétereket"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2025-05-17 13:07+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -19,87 +19,34 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 25.04.1\n"
 
-#: executescriptplugin.cpp:59
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Non se indicou un executábel válido."
+#: executescriptplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Script Application"
+msgctxt "path to a script"
+msgid "script path"
+msgstr "Aplicación de guión"
 
-#: executescriptplugin.cpp:69
-#, kde-format
-msgid ""
-"There is a quoting error in the script for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Hai un erro de comiñas no guión da configuración de iniciar «%1». "
-"Interrómpese o inicio."
-
-#: executescriptplugin.cpp:74
-#, kde-format
-msgid ""
-"A shell meta character was included in the script for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Incluíuse un carácter meta de intérprete de ordes no guión da configuración "
-"de iniciar «%1», o que non se admite de momento. Interrómpese o inicio."
-
-#: executescriptplugin.cpp:91
+#: executescriptplugin.cpp:78
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Non se definiu un servidor remoto para a configuración de iniciar «%1». "
 "Interrómpese o inicio."
 
-#: executescriptplugin.cpp:114
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Hai un erro de comiñas nos argumentos da configuración de iniciar «%1». "
-"Interrómpese o inicio."
+#: executescriptplugin.cpp:97
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Arguments:"
+msgctxt "command line arguments to a script"
+msgid "arguments"
+msgstr "Argumentos:"
 
-#: executescriptplugin.cpp:118
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Incluíuse un carácter meta de intérprete de ordes nos argumentos da "
-"configuración de iniciar «%1», o que non se admite de momento. Interrómpese "
-"o inicio."
-
-#: executescriptplugin.cpp:168
-#, kde-format
-msgid "No valid interpreter specified"
-msgstr "Non se indicou ningún intérprete válido"
-
-#: executescriptplugin.cpp:180
-#, kde-format
-msgid ""
-"There is a quoting error in the interpreter for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Hai un erro de comiñas no intérprete da configuración de iniciar «%1». "
-"Interrómpese o inicio."
-
-#: executescriptplugin.cpp:185
-#, kde-format
-msgid ""
-"A shell meta character was included in the interpreter for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Incluíuse un carácter meta de intérprete de ordes no intérprete da "
-"configuración de iniciar «%1», o que non se admite de momento. Interrómpese "
-"o inicio."
-
-#: executescriptplugin.cpp:195
-#, kde-format
-msgid ""
-"Splitting the interpreter command for the launch configuration '%1' yields "
-"an empty list. Aborting start."
-msgstr ""
-"Dividir a orde do intérprete para a configuración de inicio «%1» resulta "
-"nunha lista baleira. Interromperase o inicio."
+#: executescriptplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Interpreter"
+msgid "interpreter command"
+msgstr "Intérprete"
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -361,6 +308,64 @@ msgid ""
 msgstr ""
 "*** Non se puido iniciar o programa «%1». Asegúrese de que se indicase "
 "correctamente a ruta. ***"
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Non se indicou un executábel válido."
+
+#~ msgid ""
+#~ "There is a quoting error in the script for the launch configuration '%1'. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "Hai un erro de comiñas no guión da configuración de iniciar «%1». "
+#~ "Interrómpese o inicio."
+
+#~ msgid ""
+#~ "A shell meta character was included in the script for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Incluíuse un carácter meta de intérprete de ordes no guión da "
+#~ "configuración de iniciar «%1», o que non se admite de momento. "
+#~ "Interrómpese o inicio."
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Hai un erro de comiñas nos argumentos da configuración de iniciar «%1». "
+#~ "Interrómpese o inicio."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Incluíuse un carácter meta de intérprete de ordes nos argumentos da "
+#~ "configuración de iniciar «%1», o que non se admite de momento. "
+#~ "Interrómpese o inicio."
+
+#~ msgid "No valid interpreter specified"
+#~ msgstr "Non se indicou ningún intérprete válido"
+
+#~ msgid ""
+#~ "There is a quoting error in the interpreter for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Hai un erro de comiñas no intérprete da configuración de iniciar «%1». "
+#~ "Interrómpese o inicio."
+
+#~ msgid ""
+#~ "A shell meta character was included in the interpreter for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Incluíuse un carácter meta de intérprete de ordes no intérprete da "
+#~ "configuración de iniciar «%1», o que non se admite de momento. "
+#~ "Interrómpese o inicio."
+
+#~ msgid ""
+#~ "Splitting the interpreter command for the launch configuration '%1' "
+#~ "yields an empty list. Aborting start."
+#~ msgstr ""
+#~ "Dividir a orde do intérprete para a configuración de inicio «%1» resulta "
+#~ "nunha lista baleira. Interromperase o inicio."
 
 #~ msgid "python"
 #~ msgstr "python"

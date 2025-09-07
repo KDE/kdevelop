@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-30 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 04:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -145,7 +145,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "გამმართველის შიდა შეცდომა"
 
-#: midebugger.cpp:335 midebugsession.cpp:446
+#: midebugger.cpp:335 midebugsession.cpp:445
 #, kde-format
 msgid "Process exited"
 msgstr "პროცესი დასრულდა"
@@ -267,12 +267,12 @@ msgstr "%1: %2"
 msgid "'%1' is not an executable"
 msgstr "'%1' გამშვები ფაილი არაა"
 
-#: midebugjobs.cpp:188
+#: midebugjobs.cpp:196
 #, kde-format
 msgid "Debug core file"
 msgstr "Core ფაილის გამართვა"
 
-#: midebugjobs.cpp:204
+#: midebugjobs.cpp:212
 #, kde-format
 msgid "Debug process %1"
 msgstr "პროცესის გამართვა %1"
@@ -286,42 +286,42 @@ msgstr ""
 "პროგრამის გამართვა უკვე მიმდინარეობს. გნებავთ, შეწყვიტოთ უკვე გაშვებული "
 "გამმართველის სესია და გააგრძელოთ გაშვება?"
 
-#: midebugsession.cpp:236
+#: midebugsession.cpp:244
 #, kde-format
 msgid "Running program"
 msgstr "პროგრამის გაშვება"
 
-#: midebugsession.cpp:319
+#: midebugsession.cpp:318
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "პროცესზე (%1) მიმაგრება"
 
-#: midebugsession.cpp:350
+#: midebugsession.cpp:349
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>გამმართველის მიმაგრების შეცდომა:</b><br />"
 
-#: midebugsession.cpp:360
+#: midebugsession.cpp:359
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Core ფაილის ანალიზი %1"
 
-#: midebugsession.cpp:432
+#: midebugsession.cpp:431
 #, kde-format
 msgid "Debugger stopped"
 msgstr "გამმართველი შეჩერდა"
 
-#: midebugsession.cpp:451
+#: midebugsession.cpp:450
 #, kde-format
 msgid "Application is running"
 msgstr "აპლიკაცია გაშვებულია"
 
-#: midebugsession.cpp:456
+#: midebugsession.cpp:455
 #, kde-format
 msgid "Application is paused"
 msgstr "აპლიკაცია შეჩერებულია"
 
-#: midebugsession.cpp:771
+#: midebugsession.cpp:770
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -330,39 +330,39 @@ msgstr ""
 "<b>Gdb-ის ბრძანება გაიგზავნა მაშინ, როცა გამმართველი გაშვებული არ იყო.</"
 "b><br>ბრძანება იყო:<br> %1"
 
-#: midebugsession.cpp:883
+#: midebugsession.cpp:882
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>გამმართველის ბრძანების შეცდომა</b><br>%1"
 
-#: midebugsession.cpp:1019
+#: midebugsession.cpp:1018
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "დასრულდა შეცდომის კოდით: %1"
 
-#: midebugsession.cpp:1021
+#: midebugsession.cpp:1020
 #, kde-format
 msgid "Exited normally"
 msgstr "ნორმალური დასასრული"
 
-#: midebugsession.cpp:1028
+#: midebugsession.cpp:1027
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "დასრულდა სიგნალით %1"
 
-#: midebugsession.cpp:1063
+#: midebugsession.cpp:1062
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "პროგრამამ მიიღო სიგნალი %1 (%2)"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1194
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "რიგში 1 ბრძანებაა\n"
 msgstr[1] "რიგში %1 ბრძანებაა\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1195
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -370,12 +370,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "მიმდინარეობს 1 ბრძანების დაუშავება gdb-ის მიერ\n"
 msgstr[1] "მიმდინარეობს %1 ბრძანების დაუშავება gdb-ის მიერ\n"
 
-#: midebugsession.cpp:1197
+#: midebugsession.cpp:1196
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "გამმართველის მდგომარეობა: %1\n"
 
-#: midebugsession.cpp:1200
+#: midebugsession.cpp:1199
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -386,7 +386,7 @@ msgstr ""
 "მიმდინარე ბრძანების ტექსტი: '%2'\n"
 "მიმდინარე ბრძანების საწყისი ტექსტი: '%3'\n"
 
-#: midebugsession.cpp:1227
+#: midebugsession.cpp:1226
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
@@ -487,7 +487,7 @@ msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "განახლება"
 
-#: stty.cpp:252
+#: stty.cpp:269
 #, kde-format
 msgid ""
 "Cannot use the tty* or pty* devices.\n"
@@ -501,22 +501,25 @@ msgstr ""
 "მოწყობილობებზე ან/და დაამატეთ მომხმარებელი tty ჯგუფში ბრძანებით \"usermod -"
 "aG tty მომხმარებლისსახელი\"."
 
-#: stty.cpp:304
+#: stty.cpp:322
 #, kde-format
 msgid "%1 is incorrect terminal name"
 msgstr "%1 არასწორი ტერმინალის სახელია"
 
-#: stty.cpp:310
+#: stty.cpp:328
 #, kde-format
 msgid "Can't create a temporary file"
 msgstr "დროებითი ფაილების შექმნის შეცდომა"
 
-#: stty.cpp:357
-#, kde-format
+#: stty.cpp:366
+#, fuzzy, kde-format
+#| msgid ""
+#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
+#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
+#| "do sleep 3600;done\""
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
-"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
-"sleep 3600;done\""
+"accepts these arguments: %2"
 msgstr ""
 "%1 tty/pty ვერ მივიღე. შეამოწმეთ, არის თუ არა %1 ტერმინალი და რომ ის იღებს "
 "არგუმენტებს: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\""

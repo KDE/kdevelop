@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2013-09-16 12:36+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19,88 +19,30 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: executescriptplugin.cpp:59
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Det er ikke oppgitt noe gyldig program"
+#: executescriptplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Script Application"
+msgctxt "path to a script"
+msgid "script path"
+msgstr "Skriptprogram"
 
-#: executescriptplugin.cpp:69
-#, kde-format
-msgid ""
-"There is a quoting error in the script for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Det er en hermetegnsfeil i skriptet for startoppsettet «%1». Avbryter "
-"oppstart."
-
-#: executescriptplugin.cpp:74
-#, kde-format
-msgid ""
-"A shell meta character was included in the script for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Det er tatt med et skall-metategn i skriptet for startoppsettet «%1», det er "
-"ikke støtte for dette nå. Avbryter oppstart."
-
-#: executescriptplugin.cpp:91
+#: executescriptplugin.cpp:78
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "Det er ikke oppgitt en nettverksvert for startoppsettet «%1». Avbryter "
 "oppstart."
 
-#: executescriptplugin.cpp:114
+#: executescriptplugin.cpp:97
 #, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
+msgctxt "command line arguments to a script"
+msgid "arguments"
 msgstr ""
-"Det er en hermetegnsfeil i argumentene for startoppsettet «%1». Avbryter "
-"oppstart."
 
-#: executescriptplugin.cpp:118
+#: executescriptplugin.cpp:140
 #, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
+msgid "interpreter command"
 msgstr ""
-"Det er tatt med et skall-metategn i argumentene for startoppsettet «%1», det "
-"er ikke støtte for dette nå. Avbryter oppstart."
-
-#: executescriptplugin.cpp:168
-#, kde-format
-msgid "No valid interpreter specified"
-msgstr "Det er ikke oppgitt noen gyldig tolker"
-
-#: executescriptplugin.cpp:180
-#, kde-format
-msgid ""
-"There is a quoting error in the interpreter for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Det er en hermetegnsfeil i tolkeren for startoppsettet «%1». Avbryter "
-"oppstart."
-
-#: executescriptplugin.cpp:185
-#, kde-format
-msgid ""
-"A shell meta character was included in the interpreter for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Det er tatt med et skall-metategn i tolkeren for startoppsettet «%1», det er "
-"ikke støtte for dette nå. Avbryter oppstart."
-
-#: executescriptplugin.cpp:195
-#, fuzzy, kde-format
-#| msgid ""
-#| "There is a quoting error in the interpreter for the launch configuration "
-#| "'%1'. Aborting start."
-msgid ""
-"Splitting the interpreter command for the launch configuration '%1' yields "
-"an empty list. Aborting start."
-msgstr ""
-"Det er en hermetegnsfeil i tolkeren for startoppsettet «%1». Avbryter "
-"oppstart."
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -357,3 +299,62 @@ msgid ""
 msgstr ""
 "*** Klarte ikke starte programmet «%1». Kontroller at stien er riktig "
 "oppgitt ***"
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Det er ikke oppgitt noe gyldig program"
+
+#~ msgid ""
+#~ "There is a quoting error in the script for the launch configuration '%1'. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "Det er en hermetegnsfeil i skriptet for startoppsettet «%1». Avbryter "
+#~ "oppstart."
+
+#~ msgid ""
+#~ "A shell meta character was included in the script for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Det er tatt med et skall-metategn i skriptet for startoppsettet «%1», det "
+#~ "er ikke støtte for dette nå. Avbryter oppstart."
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Det er en hermetegnsfeil i argumentene for startoppsettet «%1». Avbryter "
+#~ "oppstart."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Det er tatt med et skall-metategn i argumentene for startoppsettet «%1», "
+#~ "det er ikke støtte for dette nå. Avbryter oppstart."
+
+#~ msgid "No valid interpreter specified"
+#~ msgstr "Det er ikke oppgitt noen gyldig tolker"
+
+#~ msgid ""
+#~ "There is a quoting error in the interpreter for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Det er en hermetegnsfeil i tolkeren for startoppsettet «%1». Avbryter "
+#~ "oppstart."
+
+#~ msgid ""
+#~ "A shell meta character was included in the interpreter for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Det er tatt med et skall-metategn i tolkeren for startoppsettet «%1», det "
+#~ "er ikke støtte for dette nå. Avbryter oppstart."
+
+#, fuzzy
+#~| msgid ""
+#~| "There is a quoting error in the interpreter for the launch configuration "
+#~| "'%1'. Aborting start."
+#~ msgid ""
+#~ "Splitting the interpreter command for the launch configuration '%1' "
+#~ "yields an empty list. Aborting start."
+#~ msgstr ""
+#~ "Det er en hermetegnsfeil i tolkeren for startoppsettet «%1». Avbryter "
+#~ "oppstart."

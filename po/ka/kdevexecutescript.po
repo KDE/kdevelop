@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2025-05-16 03:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,84 +18,34 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.6\n"
 
-#: executescriptplugin.cpp:59
-#, kde-format
-msgid "No valid executable specified"
-msgstr "მითითებული გამშვები ფაილი არასწორია"
+#: executescriptplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Script Application"
+msgctxt "path to a script"
+msgid "script path"
+msgstr "სკრიპტული ალიკაცია"
 
-#: executescriptplugin.cpp:69
-#, kde-format
-msgid ""
-"There is a quoting error in the script for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"ბრჭყალების შეცდომა %1-ის გაშვების კონფიგურაციის სკრიპტში. გაშვება "
-"გაუქმებულია."
-
-#: executescriptplugin.cpp:74
-#, kde-format
-msgid ""
-"A shell meta character was included in the script for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის სკრიპტშია, "
-"მხარდაუჭერელია. გაშვება გაუქმებულია."
-
-#: executescriptplugin.cpp:91
+#: executescriptplugin.cpp:78
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 "%1-ის კონფიგურაციის გასაშვებად დაშორებული ჰოსტი მითითებული არაა. გაშვება "
 "გაუქმებულია."
 
-#: executescriptplugin.cpp:114
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"ბრჭყალების შეცდომა %1-ის კონფიგურაციის გაშვებისას. გაშვება გაუქმებულია."
+#: executescriptplugin.cpp:97
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Arguments:"
+msgctxt "command line arguments to a script"
+msgid "arguments"
+msgstr "არგუმენტები:"
 
-#: executescriptplugin.cpp:118
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის არგუმენტებშია, "
-"მხარდაუჭერელია. გაშვება გაუქმებულია."
-
-#: executescriptplugin.cpp:168
-#, kde-format
-msgid "No valid interpreter specified"
-msgstr "მიუთითეთ სწორი ინტერპრეტატორი"
-
-#: executescriptplugin.cpp:180
-#, kde-format
-msgid ""
-"There is a quoting error in the interpreter for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"ბრჭყალების შეცდომა ხელით მითითებული ინტერპრეტატორით %1-ის კონფიგურაციის "
-"გაშვებისას. გაშვება გაუქმებულია."
-
-#: executescriptplugin.cpp:185
-#, kde-format
-msgid ""
-"A shell meta character was included in the interpreter for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის გარსშია, "
-"მხარდაუჭერელია. გაშვება გაუქმებულია."
-
-#: executescriptplugin.cpp:195
-#, kde-format
-msgid ""
-"Splitting the interpreter command for the launch configuration '%1' yields "
-"an empty list. Aborting start."
-msgstr ""
-"გამშვების კონფიგურაციისთვის '%1' ინტერპრეტატორის ბრძანების გაყოფა ცარიელ "
-"სიას აბრუნებს. გაშვება შეწყდება."
+#: executescriptplugin.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Interpreter"
+msgid "interpreter command"
+msgstr "ინტერპრეტატორი"
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -353,3 +303,57 @@ msgid ""
 "correctly ***"
 msgstr ""
 "*** %1-ის გაშვების შეცდომა. დარწმუნდით რომ ბილიკი სწორადაა მითითებული ***"
+
+#~ msgid "No valid executable specified"
+#~ msgstr "მითითებული გამშვები ფაილი არასწორია"
+
+#~ msgid ""
+#~ "There is a quoting error in the script for the launch configuration '%1'. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "ბრჭყალების შეცდომა %1-ის გაშვების კონფიგურაციის სკრიპტში. გაშვება "
+#~ "გაუქმებულია."
+
+#~ msgid ""
+#~ "A shell meta character was included in the script for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის სკრიპტშია, "
+#~ "მხარდაუჭერელია. გაშვება გაუქმებულია."
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "ბრჭყალების შეცდომა %1-ის კონფიგურაციის გაშვებისას. გაშვება გაუქმებულია."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის არგუმენტებშია, "
+#~ "მხარდაუჭერელია. გაშვება გაუქმებულია."
+
+#~ msgid "No valid interpreter specified"
+#~ msgstr "მიუთითეთ სწორი ინტერპრეტატორი"
+
+#~ msgid ""
+#~ "There is a quoting error in the interpreter for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "ბრჭყალების შეცდომა ხელით მითითებული ინტერპრეტატორით %1-ის კონფიგურაციის "
+#~ "გაშვებისას. გაშვება გაუქმებულია."
+
+#~ msgid ""
+#~ "A shell meta character was included in the interpreter for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის გარსშია, "
+#~ "მხარდაუჭერელია. გაშვება გაუქმებულია."
+
+#~ msgid ""
+#~ "Splitting the interpreter command for the launch configuration '%1' "
+#~ "yields an empty list. Aborting start."
+#~ msgstr ""
+#~ "გამშვების კონფიგურაციისთვის '%1' ინტერპრეტატორის ბრძანების გაყოფა ცარიელ "
+#~ "სიას აბრუნებს. გაშვება შეწყდება."

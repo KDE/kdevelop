@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2014-02-10 00:28+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -20,94 +20,80 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: executeplugin.cpp:66
-#, kde-format
-msgid ""
-"There is a quoting error in the arguments for the launch configuration '%1'. "
-"Aborting start."
-msgstr ""
-"Ima greška s navodniima u argumentima za pokretačku konfiguraciju '%1'. "
-"Prekidam start."
+#: executeplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "Argumenti:"
 
-#: executeplugin.cpp:70
-#, kde-format
-msgid ""
-"A shell meta character was included in the arguments for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Meta-znak školjke je bio uključen u argumentima za pokretačku konfiguraciju "
-"'%1', Ovo nije podržano trenutno. Prekidam start."
-
-#: executeplugin.cpp:97
+#: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
 msgstr "Ne mogu razriješiti zavisnost: %1"
 
-#: executeplugin.cpp:152
-#, kde-format
-msgid "No valid executable specified"
-msgstr "Ispravan izvršni program nije naveden"
+#: executeplugin.cpp:140
+#, fuzzy, kde-format
+#| msgid "Executable"
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "Izvršni"
 
-#: executeplugin.cpp:162
-#, kde-format
-msgid ""
-"There is a quoting error in the executable for the launch configuration "
-"'%1'. Aborting start."
-msgstr ""
-"Ima greška u navodnicima izvršnog programa za pokretačku konfiguraciju '%1'. "
-"Prekidam start."
+#: executeplugin.cpp:194
+#, fuzzy, kde-format
+#| msgid "Use External Terminal:"
+msgid "external terminal command"
+msgstr "Koristi eksterni Terminal:"
 
-#: executeplugin.cpp:167
-#, kde-format
-msgid ""
-"A shell meta character was included in the executable for the launch "
-"configuration '%1', this is not supported currently. Aborting start."
-msgstr ""
-"Meta-znak školjke je bio uključen u izvršnom programu za pokretačku "
-"konfiguraciju '%1', Ovo nije podržano trenutno. Prekidam start."
-
-#: nativeappconfig.cpp:103
+#: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
 msgstr ""
 
-#: nativeappconfig.cpp:104
+#: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
 msgstr ""
 
-#: nativeappconfig.cpp:105
+#: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappconfig.cpp:155
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+
+#: nativeappconfig.cpp:182
 #, fuzzy, kde-format
 #| msgid "Configure Native Application"
 msgctxt "@title:tab"
 msgid "Configure Native Application"
 msgstr "Konfiguriši prirodni program"
 
-#: nativeappconfig.cpp:165
+#: nativeappconfig.cpp:192
 #, fuzzy, kde-format
 #| msgid "Native Application"
 msgid "Executes Native Applications"
 msgstr "Prirodni program"
 
-#: nativeappconfig.cpp:175
+#: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
 msgstr "Prirodni program"
 
-#: nativeappconfig.cpp:233
+#: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
 msgstr "Kompajlirani binarni program"
 
-#: nativeappconfig.cpp:314
+#: nativeappconfig.cpp:338
 #, fuzzy, kde-format
 #| msgid "Project Executables"
 msgctxt "@title:menu"
@@ -253,49 +239,24 @@ msgid "Use external terminal:"
 msgstr "Koristi eksterni Terminal:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
-#: nativeappconfig.ui:234
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<p>Defines the command to execute the external terminal emulator. Use the "
-#| "following placeholders:</p>\n"
-#| "<dl>\n"
-#| "<dt><code>%exe</code></dt>\n"
-#| "<dd>The path to the executable selected above.</dd>\n"
-#| "<dt><code>%workdir</code></dt>\n"
-#| "<dd>The path to the working directory selected above.</dd>\n"
-#| "</dl>\n"
-#| "<p>The arguments defined above will get appended to this command.</p>"
+#: nativeappconfig.ui:228
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"<p>Defines the command to execute the external terminal emulator. Use the "
-"following placeholders:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>The path to the executable selected above.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>The path to the working directory selected above.</dd>\n"
-"</dl>\n"
-"<p>The arguments defined above will get appended to this command.</p>"
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
 msgstr ""
-"<p>Definiše komande koje izvršavaju emulator eksternog terminala. Koristite "
-"sljedeće zamjenske simbole:</p>\n"
-"<dl>\n"
-"<dt><code>%exe</code></dt>\n"
-"<dd>Staza do gore izabranog izvršnog programa.</dd>\n"
-"<dt><code>%workdir</code></dt>\n"
-"<dd>Staza do gore izabranog radnog direktorija.</dd>\n"
-"</dl>\n"
-"<p>Gore definisani argumenti će biti dodani na ovu komandu.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: nativeappconfig.ui:259
+#: nativeappconfig.ui:238
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: nativeappconfig.ui:272
+#: nativeappconfig.ui:251
 #, fuzzy, kde-format
 #| msgid "Dependencies"
 msgctxt "@title:group"
@@ -303,7 +264,7 @@ msgid "Dependencies"
 msgstr "Zavisnosti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: nativeappconfig.ui:278
+#: nativeappconfig.ui:257
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgctxt "@label:listbox"
@@ -311,7 +272,7 @@ msgid "Act&ion:"
 msgstr "Akcija:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:288
+#: nativeappconfig.ui:267
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specifies the action to take for the dependencies before starting the "
@@ -325,7 +286,7 @@ msgstr ""
 "izvršnog programa"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:291
+#: nativeappconfig.ui:270
 #, fuzzy, kde-format
 #| msgid ""
 #| "The selected action will be run before the executable is started.  This "
@@ -343,7 +304,7 @@ msgstr ""
 "da se gradi i / ili instalira prije nego što pokrenete aplikaciju."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:298
+#: nativeappconfig.ui:277
 #, fuzzy, kde-format
 #| msgid "Do Nothing"
 msgctxt "@item:inlistbox dependency action"
@@ -351,7 +312,7 @@ msgid "Do Nothing"
 msgstr "Ne radi ništa"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:303
+#: nativeappconfig.ui:282
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Build"
@@ -360,7 +321,7 @@ msgid "Build"
 msgstr "Izgradi"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
-#: nativeappconfig.ui:308
+#: nativeappconfig.ui:287
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Build and Install"
@@ -369,14 +330,14 @@ msgid "Build and Install"
 msgstr "Gradi i instaliraj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: nativeappconfig.ui:316
+#: nativeappconfig.ui:295
 #, fuzzy, kde-format
 #| msgid "Targets:"
 msgctxt "@label:chooser"
 msgid "Targets:"
 msgstr "Odredišta:"
 
-#: nativeappjob.cpp:40
+#: nativeappjob.cpp:39
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -388,34 +349,98 @@ msgstr ""
 "Nema grupe okruženja, izgleda kao slomljena konfiguracija, molimo provjerite "
 "aktivnu konfiguraciju \"%1\". Koristi se podrazumijevana grupa okruženja."
 
-#: nativeappjob.cpp:152
+#: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
 msgstr ""
 
-#: nativeappjob.cpp:153
+#: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
-msgstr ""
-
-#: nativeappjob.cpp:155
-#, kde-format
-msgctxt "@action:button"
-msgid "Kill All Instances"
 msgstr ""
 
 #: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr ""
+
+#: nativeappjob.cpp:157
+#, kde-format
+msgctxt "@action:button"
 msgid "Start Another"
 msgstr ""
 
-#: nativeappjob.cpp:159
+#: nativeappjob.cpp:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr ""
+
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Ima greška s navodniima u argumentima za pokretačku konfiguraciju '%1'. "
+#~ "Prekidam start."
+
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Meta-znak školjke je bio uključen u argumentima za pokretačku "
+#~ "konfiguraciju '%1', Ovo nije podržano trenutno. Prekidam start."
+
+#~ msgid "No valid executable specified"
+#~ msgstr "Ispravan izvršni program nije naveden"
+
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr ""
+#~ "Ima greška u navodnicima izvršnog programa za pokretačku konfiguraciju "
+#~ "'%1'. Prekidam start."
+
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Meta-znak školjke je bio uključen u izvršnom programu za pokretačku "
+#~ "konfiguraciju '%1', Ovo nije podržano trenutno. Prekidam start."
+
+#, fuzzy
+#~| msgid ""
+#~| "<p>Defines the command to execute the external terminal emulator. Use "
+#~| "the following placeholders:</p>\n"
+#~| "<dl>\n"
+#~| "<dt><code>%exe</code></dt>\n"
+#~| "<dd>The path to the executable selected above.</dd>\n"
+#~| "<dt><code>%workdir</code></dt>\n"
+#~| "<dd>The path to the working directory selected above.</dd>\n"
+#~| "</dl>\n"
+#~| "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>Defines the command to execute the external terminal emulator. Use the "
+#~ "following placeholders:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>The path to the executable selected above.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>The path to the working directory selected above.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>The arguments defined above will get appended to this command.</p>"
+#~ msgstr ""
+#~ "<p>Definiše komande koje izvršavaju emulator eksternog terminala. "
+#~ "Koristite sljedeće zamjenske simbole:</p>\n"
+#~ "<dl>\n"
+#~ "<dt><code>%exe</code></dt>\n"
+#~ "<dd>Staza do gore izabranog izvršnog programa.</dd>\n"
+#~ "<dt><code>%workdir</code></dt>\n"
+#~ "<dd>Staza do gore izabranog radnog direktorija.</dd>\n"
+#~ "</dl>\n"
+#~ "<p>Gore definisani argumenti će biti dodani na ovu komandu.</p>"
 
 #~ msgid "Enter arguments to give to the executable"
 #~ msgstr "Unesi argumente koji se prosljeđuju izvršnom programu"

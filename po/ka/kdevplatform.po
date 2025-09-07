@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-07 18:28+0000\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 04:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -5569,7 +5569,7 @@ msgstr "ამოცანა შეწყვეტლია"
 msgid "Run all tests in %1"
 msgstr "%1-ში ყველა ტესტის გაშვება"
 
-#: util/shellutils.cpp:171
+#: util/shellutils.cpp:174
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5578,34 +5578,91 @@ msgstr ""
 "არ გაქვთ ჩაწერის უფლება შემდეგი ფაილებისთვის. დავამატო ჩაწერის უფლება "
 "მფლობელისთვის ჩაწერის მცდელობამდე?"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "ზოგიერთი ფაილი ჩაწერისგან დაცულია"
 
-#: util/shellutils.cpp:175
+#: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "ჩაწერის წვდომის დაყენება"
 
-#: util/shellutils.cpp:176
+#: util/shellutils.cpp:179
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "იგნორი"
 
-#: util/shellutils.cpp:188
+#: util/shellutils.cpp:191
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "ჩავარდა ჩაწერის წვდომის დამატება ზოგიერთი ფაილისთვის."
 
-#: util/shellutils.cpp:189
+#: util/shellutils.cpp:192
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "წვდომების დაყენება შეუძლებელია"
+
+#: util/shellutils.cpp:222
+#, kde-format
+msgctxt ""
+"%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
+"configuration name"
+msgid ""
+"There is a quoting error in the %1 for the launch configuration '%2'. "
+"Aborting start."
+msgstr ""
+
+#: util/shellutils.cpp:228
+#, kde-format
+msgctxt ""
+"%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
+"configuration name"
+msgid ""
+"A shell meta character was included in the %1 for the launch configuration "
+"'%2', this is not supported currently. Aborting start."
+msgstr ""
+
+#: util/shellutils.cpp:237
+#, kde-format
+msgctxt ""
+"%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; %3 "
+"- launch configuration name"
+msgid ""
+"KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
+"configuration '%3'. Aborting start."
+msgstr ""
+
+#: util/shellutils.cpp:264
+#, kde-format
+msgctxt ""
+"%1 - entry name, e.g. 'executable path' or 'external terminal command'; %2 - "
+"launch configuration name"
+msgid ""
+"Splitting the %1 for the launch configuration '%2' yields an empty list. "
+"Aborting start."
+msgstr ""
+
+#: util/shellutils.cpp:281
+#, kde-format
+msgctxt ""
+"%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
+"%2 - launch configuration name"
+msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
+msgstr ""
+
+#: util/shellutils.cpp:296
+#, kde-format
+msgctxt ""
+"%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "
+"configuration name"
+msgid ""
+"No valid %1 specified for the launch configuration '%2'. Aborting start."
+msgstr ""
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
