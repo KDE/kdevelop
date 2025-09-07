@@ -16,7 +16,6 @@
 #include <QExplicitlySharedDataPointer>
 #include <QObject>
 #include <QPair>
-#include <QPointer>
 
 namespace KTextEditor {
 class Document;
