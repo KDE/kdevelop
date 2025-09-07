@@ -194,9 +194,12 @@ private:
      * Store the current revision of the document in the cache of ModificationRevision.
      *
      * This function must be called whenever the current revision of the document
-     * changes, before asking the background parser to reparse the URL.
+     * may have changed, before asking the background parser to reparse the URL.
+     *
+     * @return whether the current value of Document::revision() differs from
+     *         the value last stored in the revision cache of ModificationRevision
      */
-    void updateEditorRevision() const;
+    bool updateEditorRevision();
 
     void updateChangedRange(int delay);
     int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text,
@@ -206,6 +209,7 @@ private:
     void textRemoved(KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText);
     void lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position);
     void lineUnwrapped(KTextEditor::Document* document, int line);
+    void textChanged();
 
     void aboutToInvalidateMovingInterfaceContent (KTextEditor::Document* document);
     void documentSavedOrUploaded(KTextEditor::Document*, bool);
@@ -214,6 +218,7 @@ private:
     void lockRevision(qint64 revision);
     void unlockRevision(qint64 revision);
 
+    qint64 m_currentRevision = -1; ///< Document::revision() last stored in the revision cache of ModificationRevision
     QMap<qint64, int> m_revisionLocks;
 };
 }

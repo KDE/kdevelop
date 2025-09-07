@@ -71,6 +71,7 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     connect(document, &Document::lineWrapped, this, &DocumentChangeTracker::lineWrapped);
     connect(document, &Document::lineUnwrapped, this, &DocumentChangeTracker::lineUnwrapped);
     connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
+    connect(document, &Document::textChanged, this, &DocumentChangeTracker::textChanged);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
     connect(document, &Document::aboutToInvalidateMovingInterfaceContent, this,
             &DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent);
@@ -95,9 +96,23 @@ RevisionReference DocumentChangeTracker::revisionAtLastReset() const
     return m_revisionAtLastReset;
 }
 
-void DocumentChangeTracker::updateEditorRevision() const
+bool DocumentChangeTracker::updateEditorRevision()
 {
-    ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
+    const auto revision = m_document->revision();
+    if (revision == m_currentRevision) {
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(6, 12, 0)
+        // The document revision only increases and cannot become 0 again (in KTextEditor version 6.12 or later).
+        Q_ASSERT(revision != 0);
+#else
+        // Older KTextEditor versions reset the document's revision to 0 on reload => do not skip the update then.
+        if (revision != 0)
+#endif
+        return false; // nothing to do
+    }
+
+    m_currentRevision = revision;
+    ModificationRevision::setEditorRevisionForFile(m_url, revision);
+    return true;
 }
 
 void DocumentChangeTracker::updateChangedRange(int delay)
@@ -106,7 +121,8 @@ void DocumentChangeTracker::updateChangedRange(int delay)
 
     // When reloading, textRemoved is called with an invalid m_document->url(). For that reason, we use m_url instead.
 
-    updateEditorRevision();
+    const auto revisionChanged = updateEditorRevision();
+    Q_ASSERT(revisionChanged);
 
     if (delay != ILanguageSupport::NoUpdateRequired) {
         // the changes are significant enough to require an update
@@ -164,6 +180,20 @@ void DocumentChangeTracker::textRemoved(Document* document, const KTextEditor::R
     updateChangedRange(delay);
 }
 
+void DocumentChangeTracker::textChanged()
+{
+    if (!updateEditorRevision()) {
+        return; // nothing to do, probably textInserted() or textRemoved() already handled the change
+    }
+
+    // This is a text change other than insertion or removal.
+    // Probably the text was cleared or replaced, or the document was reloaded.
+    qCDebug(LANGUAGE) << "forcing reparsing due to a possibly drastic change of" << m_url;
+    ICore::self()->languageController()->backgroundParser()->addDocument(
+        m_url, TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate,
+        BackgroundParser::BestPriority);
+}
+
 void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc, bool)
 {
     ModificationRevision::clearModificationCache(IndexedString(doc->url()));
@@ -185,7 +215,6 @@ void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent(Document*)
     qCDebug(LANGUAGE) << "clearing all revisions";
     m_revisionLocks.clear();
     m_revisionAtLastReset = RevisionReference();
-    ModificationRevision::setEditorRevisionForFile(m_url, 0);
 }
 
 KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::RangeInRevision range,
