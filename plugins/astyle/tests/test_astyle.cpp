@@ -80,7 +80,7 @@ void TestAstyle::testTabMatching()
 		QStringLiteral("class A;"), QStringLiteral("class C {\n	"), QStringLiteral("\n}\n"), 2 );
     QCOMPARE( extracted, QString("class A;") );
 	
-	// Two tabs are inserted insead of 1
+	// Two tabs are inserted instead of 1
 	extracted = KDevelop::extractFormattedTextFromContext(
 		QStringLiteral("class C {\n		class A;\n}\n"),
 		QStringLiteral("class A;"), QStringLiteral("class C {\n	"), QStringLiteral("\n}\n"), 2 );

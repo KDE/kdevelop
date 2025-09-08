@@ -295,7 +295,7 @@ void MesonRewriterPage::reset()
 
     QList<KJob*> jobs = { introspectJob, rewriterJob };
 
-    // Don't automatically delete jobs beause they are used in the lambda below
+    // Don't automatically delete jobs because they are used in the lambda below
     for (KJob* i : jobs) {
         i->setAutoDelete(false);
     }

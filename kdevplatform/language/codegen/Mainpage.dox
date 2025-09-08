@@ -45,7 +45,7 @@
  *
  * Preconditions are basic conditions which must be met for the refactoring to be possible.
  * They usually include that the project does not have any parsing errors, and that the
- * location where it is to be initiated is a location which can accomodate the refactoring
+ * location where it is to be initiated is a location which can accommodate the refactoring
  * (eg. extract method should have a portion of a method selected in the editor).
  *
  * These conditions may be run often to present the state to the user, so they should be

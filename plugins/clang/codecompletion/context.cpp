@@ -1048,7 +1048,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
             const bool isParseIssue = (qstrcmp(str.c_str(), "Parse Issue") == 0);
             clang_disposeDiagnostic(diagnostic);
 
-            // Do not perform subsitution if we get a parsing issue with the ->
+            // Do not perform substitution if we get a parsing issue with the ->
             if (isParseIssue) {
                 return;
             }

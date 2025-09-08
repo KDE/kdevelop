@@ -92,7 +92,7 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
         painter.setPen(QColor(currentColor));
         painter.setBrush(QBrush(currentColor));
         painter.drawRect(rect);
-        // draw a slight set-in shadow for the square -- it's barely recognizeable,
+        // draw a slight set-in shadow for the square -- it's barely recognizable,
         // but it looks way better than without
         painter.setBrush(Qt::NoBrush);
         painter.setPen(QColor(0, 0, 0, 50));

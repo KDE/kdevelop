@@ -344,7 +344,7 @@ void ColorCache::updateDefaultColorsFromSource()
 void ColorCache::update()
 {
     if (!m_self) {
-        ifDebug(qCDebug(LANGUAGE) << "not updating - still initializating"; )
+        ifDebug(qCDebug(LANGUAGE) << "not updating - still initializing"; )
         // don't update on startup, updateInternal is called directly there
         return;
     }

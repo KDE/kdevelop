@@ -284,7 +284,7 @@ public:
 
     QVector<DUContext*> importers() const override;
 
-    ///Returns all currently loade importers
+    ///Returns all currently loaded importers
     virtual QList<DUContext*> loadedImporters() const;
 
     CursorInRevision importPosition(const DUContext* target) const override;

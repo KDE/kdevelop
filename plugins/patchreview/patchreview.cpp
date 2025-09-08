@@ -355,7 +355,7 @@ void PatchReviewPlugin::closeReview()
         m_depth = 0;
 
         if (!qobject_cast<LocalPatchSource*>(m_patch.data())) {
-            // make sure "show" button still openes the file dialog to open a custom patch file
+            // make sure "show" button still opens the file dialog to open a custom patch file
             setPatch( new LocalPatchSource );
         } else
             emit patchChanged();

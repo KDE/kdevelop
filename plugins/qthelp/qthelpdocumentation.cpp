@@ -484,7 +484,7 @@ IDocumentationProvider* HomeDocumentation::provider() const
 bool HomeDocumentation::eventFilter(QObject* obj, QEvent* event)
 {
     if(event->type() == QEvent::MouseButtonPress) {
-        // Here we need to set accpeted to false to let it propagate up
+        // Here we need to set accepted to false to let it propagate up
         event->setAccepted(false);
     }
     return QObject::eventFilter(obj, event);

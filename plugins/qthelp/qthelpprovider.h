@@ -44,7 +44,7 @@ public:
         return m_documentationFileInfo.filePath;
     }
     /**
-     * @return the namespace name of both the .qch documention file and the .qhc collection file
+     * @return the namespace name of both the .qch documentation file and the .qhc collection file
      */
     [[nodiscard]] const QString& namespaceName() const
     {

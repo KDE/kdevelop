@@ -82,11 +82,11 @@ module core {
         Event              createEvent(in DOMString eventType)
             raises(DOMException);
 
-        // DOM Level 2 Tranversal and Range (DocumentRange interface)
+        // DOM Level 2 Traversal and Range (DocumentRange interface)
 
         Range              createRange();
 
-        // DOM Level 2 Tranversal and Range (DocumentTraversal interface)
+        // DOM Level 2 Traversal and Range (DocumentTraversal interface)
 
         [OldStyleObjC] NodeIterator createNodeIterator(in Node root,
                                                        in unsigned long whatToShow,

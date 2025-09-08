@@ -80,7 +80,7 @@ predefined set of steps:
 
 
 Note that all commands are executed in the order they were queued, so if you
-add several commands at the same time, they are executed "automically". Each
+add several commands at the same time, they are executed "atomically". Each
 one sees the gdb state that the previous one has left it in.
 
 The MI protocol is stateful, that is there are things like current thread

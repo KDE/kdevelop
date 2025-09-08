@@ -81,7 +81,7 @@ void RepoStatusModel::addProject(const IProject* p)
                           i18nc("Files in a vcs which have changes not yet staged for commit", "Unstaged changes"));
     const auto conflictIt =
         new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-red")),
-                          i18nc("Files in a vcs which have unresolved (merge) conflits", "Conflicts"));
+                          i18nc("Files in a vcs which have unresolved (merge) conflicts", "Conflicts"));
     const auto untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
                                                i18nc("Files which are not tracked by a vcs", "Untracked files"));
     const auto pluginInfo = ICore::self()->pluginController()->pluginInfo(plugin);
@@ -106,7 +106,7 @@ void RepoStatusModel::addProject(const IProject* p)
     worktreeIt->setData(pathUrl, RepoStatusModel::ProjectUrlRole);
     worktreeIt->setSelectable(false);
 
-    conflictIt->setData(i18nc("Files in git which have unresolved (merge) conflits", "Conflicts"),
+    conflictIt->setData(i18nc("Files in git which have unresolved (merge) conflicts", "Conflicts"),
                         RepoStatusModel::NameRole);
     conflictIt->setToolTip(i18n("Files with unresolved (merge) conflicts"));
     conflictIt->setData(ConflictRoot, AreaRole);

@@ -1353,7 +1353,7 @@ void TestDUChain::testHeaderParsingOrder1()
     // this declaration could be resolved, because it was created with an
     // indirect DeclarationId that is resolved from the perspective of 'top'
     Declaration* decl = idType->declaration(top);
-    // NOTE: the decl. doesn't know (yet) about the template insantiation <int>
+    // NOTE: the decl. doesn't know (yet) about the template instantiation <int>
     QVERIFY(decl);
     QCOMPARE(decl, top->localDeclarations()[0]);
 
@@ -1391,7 +1391,7 @@ void TestDUChain::testHeaderParsingOrder2()
     auto *idType = dynamic_cast<IdentifiedType*>(targetType.data());
     QVERIFY(idType);
     Declaration* decl = idType->declaration(top);
-    // NOTE: the decl. doesn't know (yet) about the template insantiation <int>
+    // NOTE: the decl. doesn't know (yet) about the template instantiation <int>
     QVERIFY(decl);
 
     // now ensure that a use was build for 'A' in header2
@@ -2054,7 +2054,7 @@ static void verifyNoErrors(TopDUContext* top, QSet<TopDUContext*>& checked)
         const auto url = top->url().str();
         if (url.endsWith(QLatin1String("xmmintrin.h"))
             && expectedError(problems, QLatin1String("Cannot initialize a parameter of type"))) {
-            QEXPECT_FAIL("", "there are still some errors in xmmintrin.h b/c some clang provided intrinsincs are more strict than the GCC ones.", Continue);
+            QEXPECT_FAIL("", "there are still some errors in xmmintrin.h b/c some clang provided intrinsics are more strict than the GCC ones.", Continue);
             QVERIFY(false);
         } else if (url.endsWith(QLatin1String("c++config.h"))
                    && expectedError(problems, QLatin1String("Invalid suffix 'bf16' on floating constant"))) {

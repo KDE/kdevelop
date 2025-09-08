@@ -562,7 +562,7 @@ class BasicMapFormatter(HiddenMemberProvider):
             ret += pvoid_size
 
             # but because of data alignment the value can be higher
-            # so guess it's aliged by sizeof(void*)
+            # so guess it's aligned by sizeof(void*)
             # TODO: find a real solution for this problem
             ret += ret % pvoid_size
 

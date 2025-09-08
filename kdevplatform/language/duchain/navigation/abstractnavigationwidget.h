@@ -56,7 +56,7 @@ public Q_SLOTS:
     void back() override;
     void resetNavigationState() override;
 
-    ///These are temporarily for gettings these events directly from kate
+    ///These are temporarily for getting these events directly from kate
     ///@todo Do this through a public interface post 4.2
     void embeddedWidgetRight();
     ///Keyboard-action "previous"

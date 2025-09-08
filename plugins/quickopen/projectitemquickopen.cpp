@@ -182,7 +182,7 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
                 int result;
                 //if the current search item is contained on the current identifier
                 if ((result = cache[b].containedIn(currentId.at(last_pos))) >= 0) {
-                    //when we find a hit, whe add the distance to the searched word.
+                    //when we find a hit, we add the distance to the searched word.
                     //so the closest item will be displayed first
                     current_height += result;
 

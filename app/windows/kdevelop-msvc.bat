@@ -3,7 +3,7 @@
 setlocal enabledelayedexpansion
 setlocal enableextensions
 
-REM load Visual Studio 2017 developer command prompt if VS150COMNTOOLS isn't set. Read Windows registry in case VS is not istalled on C:\  
+REM load Visual Studio 2017 developer command prompt if VS150COMNTOOLS isn't set. Read Windows registry in case VS is not installed on C:\  
 for /f "usebackq tokens=3*" %%a in (`reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7" /s`) do (
      set vs15_path=%%a %%b
      if exist "!vs15_path!Common7\Tools\VsDevCmd.bat" (

@@ -17,7 +17,7 @@
 
 namespace KDevelop {
 /**
- * This string does "disk reference-counting", which means that reference-counts are maintainted,
+ * This string does "disk reference-counting", which means that reference-counts are maintained,
  * but only when the string is in a disk-stored location. The file referencecounting.h is used
  * to manage this condition.
  *

@@ -118,7 +118,7 @@ void BzrAnnotateJob::prepareCommitInfo(std::size_t revision)
 
 /*
  * This is slightly different from BazaarUtils::parseBzrLogPart(...).
- * This function parses only commit general info. It does not parse signle
+ * This function parses only commit general info. It does not parse single
  * actions. In fact output parsed by this function is slightly different
  * from output parsed by BazaarUtils. As a result parsing this output using
  * BazaarUtils would yield different results.

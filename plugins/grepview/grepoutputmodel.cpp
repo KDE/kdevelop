@@ -92,7 +92,7 @@ void GrepOutputItem::refreshState()
     {
         int checked   = 0;
         int unchecked = 0;
-        int enabled   = 0; //only enabled items are relevants
+        int enabled   = 0; //only enabled items are relevant
         
         for(int i = 0; i < rowCount(); i++)
         {

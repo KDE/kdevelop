@@ -122,7 +122,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     /**
-     * Emmitted when the user presses the commit button
+     * Emitted when the user presses the commit button
      */
     void committed();
 

@@ -339,7 +339,7 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     auto languages = d->mimeTypeCache.languagesForFileName(url.fileName());
 
     //Never use findByUrl from within a background thread, and never load a language support
-    //from within the backgruond thread. Both is unsafe, and can lead to crashes
+    //from within the background thread. Both are unsafe, and can lead to crashes.
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 

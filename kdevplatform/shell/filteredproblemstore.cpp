@@ -50,7 +50,7 @@ public:
     /// Add a problem to the appropriate group
     virtual void addProblem(const IProblem::Ptr &problem) = 0;
 
-    /// Find the specified noe
+    /// Find the specified node
     const ProblemStoreNode* findNode(int row, ProblemStoreNode *parent = nullptr) const
     {
         if (parent == nullptr)

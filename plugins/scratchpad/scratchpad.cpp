@@ -287,7 +287,7 @@ void Scratchpad::createActionsForMainWindow(Sublime::MainWindow* window, QString
 
     xmlFile = QStringLiteral("kdevscratchpad.rc");
 
-    // add to gui action collection, so that the shorcut is easily configurable
+    // add to gui action collection, so that the shortcut is easily configurable
     // action setup done in ScratchpadView
     actions.addAction(QStringLiteral("run_scratch"), m_runAction);
 }

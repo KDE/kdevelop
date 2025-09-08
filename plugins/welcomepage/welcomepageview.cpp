@@ -63,7 +63,7 @@ WelcomePageWidget::WelcomePageWidget(QWidget* parent)
 
     connect(m_ui->sessionsListView, &QAbstractItemView::clicked, this, &WelcomePageWidget::onSessionClicked);
 
-    // track mouse entereing indexes and the viewport to control the mouse cursor shape over items
+    // track mouse entering indexes and the viewport to control the mouse cursor shape over items
     connect(m_ui->sessionsListView, &QAbstractItemView::entered, this, &WelcomePageWidget::onSessionEntered);
     connect(m_ui->sessionsListView, &QAbstractItemView::viewportEntered, this,
             &WelcomePageWidget::onSessionsViewportEntered);

@@ -163,7 +163,7 @@ void MIDebugger::processLine(const QByteArray& line)
         // sometimes produces invalid messages that can be safely ignored.
         qCDebug(DEBUGGERCOMMON) << "Invalid MI message:" << line;
         // We don't consider the current command done.
-        // So, if a command results in unparseable reply,
+        // So, if a command results in unparsable reply,
         // we'll just wait for the "right" reply, which might
         // never come.  However, marking the command as
         // done in this case is even more risky.

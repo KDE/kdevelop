@@ -261,7 +261,7 @@ SourceFormatterStyle clangFormat()
     result.setContent(QStringLiteral("clang-format -assume-filename=\"$FILE\""));
     result.setUsePreview(false);
     result.setDescription(i18n("Description:<br /><br />"
-                               "<b>clang-format</b> is an automatic source formater by the LLVM "
+                               "<b>clang-format</b> is an automatic source formatter by the LLVM "
                                "project. It supports a variety of formatting style options via "
                                "a <b>.clang-format</b> configuration file, usually located in "
                                "the project root directory."));

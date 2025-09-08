@@ -64,7 +64,7 @@ class GrepJob : public KJob, public KDevelop::IStatus
     friend class FindReplaceTest;
 
 private:
-    ///Job can only be instanciated by plugin
+    ///Job can only be instantiated by plugin
     explicit GrepJob( QObject *parent = nullptr );
 
 public:

@@ -56,8 +56,8 @@ namespace KDevelop {
  * Above these lists a lineedit and a textedit may be used to prepare a
  * commit message. The commit button will commit the staged changes to the
  * repo. If several projects are listed, the one which is expanded will be
- * used (only one project is allowed to be expaned to show the lists at a time,
- * an expaned project is automatically collapsed when a different one is expanded).
+ * used (only one project is allowed to be expanded to show the lists at a time,
+ * an expanded project is automatically collapsed when a different one is expanded).
  *
  * @author Jonathan L. Verner <jonathan.verner@matfyz.cz>
  */
@@ -170,7 +170,7 @@ public Q_SLOTS:
     void unstageSelectedFiles(const QList<QUrl>& urls);
 
     /**
-     * Reverts the uncommited changes in the given files.
+     * Reverts the uncommitted changes in the given files.
      *
      * @param urls the list of files whose changes to revert
      *

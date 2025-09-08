@@ -1091,7 +1091,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
     // Let' still get some basic support for this and parse on our own, it's not that difficult
 
     // Macro definition strings get '\n' replaced with "<br/>", then are rendered as HTML, which ignores whitespace.
-    // Newline characters are escaped in macro definiton C++ code. ClangUtils::getRawContents() preserves the escape
+    // Newline characters are escaped in macro definition C++ code. ClangUtils::getRawContents() preserves the escape
     // characters: its return value contains "\\\n". ClangUtils::getRawContents() removes whitespace, including the
     // escaped newline characters, at the end of the definition string.
     // Trim definition string views before passing them to MacroDefinition::setDefinition() to facilitate testing.

@@ -628,7 +628,7 @@ protected:
             type == DUContext::Enum);
     }
 
-    /// @returns the current url/path ot the document we are parsing
+    /// @returns the current url/path to the document we are parsing
     IndexedString document() const
     {
         return m_url;

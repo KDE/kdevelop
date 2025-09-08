@@ -77,8 +77,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
         return res;
     int lineno = 0;
 
-
-    // detect encoding (unicode files can be feed forever, stops when confidence reachs 99%
+    // detect encoding (unicode files can be fed forever, so stop when confidence reaches 99%)
     KEncodingProber prober;
     while(!file.atEnd() && prober.state() == KEncodingProber::Probing && prober.confidence() < 0.99) {
         prober.feed(file.read(0xFF));
@@ -198,7 +197,7 @@ void GrepJob::slotFindFinished()
     if(pattern == QRegExp::escape(pattern))
     {
         // enable wildcard mode when possible
-        // if pattern has already been escaped (raw text serch) a second escape will result in a different string anyway
+        // if pattern has already been escaped (raw text search) a second escape will result in a different string anyway
         m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
 

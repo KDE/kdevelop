@@ -260,7 +260,7 @@ public:
                 if (ICore::self()->uiController()->activeArea()->objectName() != QLatin1String("code")) {
                     return nullptr;
                 }
-                // enfore text mime type in order to create a kate part editor which then can be used to create the file
+                // enforce text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
                 mimeType = QMimeDatabase().mimeTypeForName(QStringLiteral("text/plain"));
             }

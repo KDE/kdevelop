@@ -306,7 +306,7 @@ void MultiLevelListView::setLevels(int levels)
         } else {
             auto* subTreeProxy = new SubTreeProxyModel(previousView->selectionModel(), this);
             if (i + 1 < d->levels) {
-                // middel views only shows children of selection
+                // middle views only show children of selection
                 subTreeProxy->setFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
             } else {
                 // right-most view shows the rest
