@@ -126,7 +126,7 @@ public:
     /**
      * Resets the tracking to the current revision.
      * */
-    virtual void reset();
+    void reset();
 
     /**
      * Returns the document revision at which reset() was called last.
@@ -184,7 +184,7 @@ public:
                                          KTextEditor::MovingCursor::InsertBehavior behavior =
                                              KTextEditor::MovingCursor::StayOnInsert) const;
 
-protected:
+private:
     RevisionReference m_revisionAtLastReset;
 
     KTextEditor::Document* m_document;
@@ -194,7 +194,6 @@ protected:
     int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text,
                          bool removal);
 
-public Q_SLOTS:
     void textInserted(KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted);
     void textRemoved(KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText);
     void lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position);
@@ -203,7 +202,6 @@ public Q_SLOTS:
     void aboutToInvalidateMovingInterfaceContent (KTextEditor::Document* document);
     void documentSavedOrUploaded(KTextEditor::Document*, bool);
 
-private:
     friend class RevisionLockerAndClearerPrivate;
     void lockRevision(qint64 revision);
     void unlockRevision(qint64 revision);
