@@ -29,7 +29,6 @@ Name[sl]=Program QtQuick 2
 Name[sv]=QtQuick 2-program
 Name[tr]=QtQuick 2 Uygulaması
 Name[uk]=Програма QtQuick 2
-Name[x-test]=xxQtQuick 2 Applicationxx
 Name[zh_CN]=QtQuick 2 应用程序
 Name[zh_TW]=QtQuick 2 應用程式
 
@@ -62,7 +61,6 @@ Comment[sl]=Osnovni program Qt5 in QML2 z uporabo QMake
 Comment[sv]=Ett Qt5 och QML2-baserat program som använder QMake
 Comment[tr]=QMake kullanan basit Qt5 ve QML2 uygulaması
 Comment[uk]=Базова програма мовою QML2 для Qt5 з використанням QMake
-Comment[x-test]=xxA Qt5 and QML2 basic application using QMakexx
 Comment[zh_CN]=使用 QMake 的 Qt5 和 QML2 基本应用程序
 Comment[zh_TW]=使用 QMake 的基本 Qt5 / QML2 應用程式專案
 
