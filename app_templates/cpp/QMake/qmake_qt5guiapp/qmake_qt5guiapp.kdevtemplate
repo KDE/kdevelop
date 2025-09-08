@@ -28,7 +28,6 @@ Name[sl]=Grafični program QMake Qt5 QWidgets
 Name[sv]=QMake Qt5 QWidgets-program med grafiskt användargränssnitt
 Name[tr]=QMake Qt5 QWidgets Grafik Uygulaması
 Name[uk]=Програма з графічним інтерфейсом на основі QMake, Qt5 та QWidgets
-Name[x-test]=xxQMake Qt5 QWidgets GUI Applicationxx
 Name[zh_CN]=QMake Qt5 QWidgets 图形应用程序
 Name[zh_TW]=QMake Qt5 QWidgets 使用者介面應用程式
 Comment=Generate a QMake/Qt5 based GUI application (crossplatform compatible)
@@ -60,7 +59,6 @@ Comment[sl]=Ustvari program z grafičnim uporabniškim vmesnikom temelječ na QM
 Comment[sv]=Skapa ett QMake/Qt5-baserat program med grafiskt användargränssnitt (kompatibelt mellan plattformar)
 Comment[tr]=QMake/Qt5 tabanlı bir arayüz uygulaması üret (çapraz platform uyumlu)
 Comment[uk]=Створити програму з графічним інтерфейсом, засновану на QMake/Qt5 (сумісну з декількома платформами)
-Comment[x-test]=xxGenerate a QMake/Qt5 based GUI application (crossplatform compatible)xx
 Comment[zh_CN]=生成基于 QMake/Qt5 的图形应用程序 (跨平台兼容)
 Comment[zh_TW]=產生一個 CMake/Qt5 為基礎的圖形介面應用程式（跨平台相容）
 
