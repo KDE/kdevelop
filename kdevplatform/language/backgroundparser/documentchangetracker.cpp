@@ -75,7 +75,7 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     connect(document, &Document::aboutToInvalidateMovingInterfaceContent, this,
             &DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent);
 
-    ModificationRevision::setEditorRevisionForFile(m_url, document->revision());
+    updateEditorRevision();
 
     reset();
 }
@@ -95,13 +95,18 @@ RevisionReference DocumentChangeTracker::revisionAtLastReset() const
     return m_revisionAtLastReset;
 }
 
+void DocumentChangeTracker::updateEditorRevision() const
+{
+    ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
+}
+
 void DocumentChangeTracker::updateChangedRange(int delay)
 {
     // Q_ASSERT(m_document->revision() != m_revisionAtLastReset->revision()); // May happen after reload
 
     // When reloading, textRemoved is called with an invalid m_document->url(). For that reason, we use m_url instead.
 
-    ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
+    updateEditorRevision();
 
     if (delay != ILanguageSupport::NoUpdateRequired) {
         // the changes are significant enough to require an update

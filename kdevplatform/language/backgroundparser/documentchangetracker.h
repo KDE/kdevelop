@@ -190,6 +190,14 @@ private:
     KTextEditor::Document* m_document;
     KDevelop::IndexedString m_url;
 
+    /**
+     * Store the current revision of the document in the cache of ModificationRevision.
+     *
+     * This function must be called whenever the current revision of the document
+     * changes, before asking the background parser to reparse the URL.
+     */
+    void updateEditorRevision() const;
+
     void updateChangedRange(int delay);
     int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text,
                          bool removal);
