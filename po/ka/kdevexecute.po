@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2024-07-20 05:22+0200\n"
+"PO-Revision-Date: 2025-09-07 04:18+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,15 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.7\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "&არგუმენტები:"
+msgstr "არგუმენტები"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -32,19 +30,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "%1-ის დამოკიდებულებების გადაწყვეტის შეცდომა"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "გამშვები ფაილები"
+msgstr "გამშვები ფაილის ბილიკი"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "გარე ტერმინალის გამოყენება:"
+msgstr "გარე ტერმინალის ბრძანება"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -70,6 +64,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>შენიშვნა: <code>gnome-terminal</code> მხოლოდ ნაწილობრივაა მხარდაჭერილი "
+"მისი შეზღუდვის გამო.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -219,6 +215,9 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"აღწერეთ ბრძანება, რომელიც გარე ტერმინალის ემულატორში შესრულდება.<br>\n"
+"გამშვები ფაილის ბილიკი და მისი არგუმენტები ამ ბრძანების ბოლოში იქნება "
+"მიწერილი."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238

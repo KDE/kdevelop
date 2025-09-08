@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-06-22 04:55+0200\n"
+"PO-Revision-Date: 2025-09-07 04:21+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5616,6 +5616,7 @@ msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
 msgstr ""
+"%1-ში ციტირების შეცდომაა გაშვების კონფიგურაციისთვის '%2'. გაშვება შეწყდება."
 
 #: util/shellutils.cpp:228
 #, kde-format
@@ -5626,6 +5627,8 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
+"%1-ში ჩასმულია გარსის მეტასიმბოლო გაშვების კონფიგურაციისთვის '%2'. ეს "
+"ამჟამად მხარდაჭერილი არაა. გაშვება შეწყდება."
 
 #: util/shellutils.cpp:237
 #, kde-format
@@ -5636,6 +5639,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"KShell::splitArgs(<%1>)-მა გადმოგვცა უცნობი შეცდომის კოდი %2 გაშვების "
+"კონფიგურაციისთვის '%3'. გაშვება შეწყდება."
 
 #: util/shellutils.cpp:264
 #, kde-format
@@ -5646,6 +5651,8 @@ msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
 msgstr ""
+"%1-ის გაყოფას გაშვების კონფიგურაციისთვის '%2' ცარიელ სიამდე მივყავართ. "
+"გაშვება შეწყდება."
 
 #: util/shellutils.cpp:281
 #, kde-format
@@ -5654,6 +5661,7 @@ msgctxt ""
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"მითითებულია ცარიელი %1 გაშვების კონფიგურაციისთვის '%2'. გაშვება შეწყდება."
 
 #: util/shellutils.cpp:296
 #, kde-format
@@ -5663,6 +5671,7 @@ msgctxt ""
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"მითითებულია არასწორი %1 გაშვების კონფიგურაციისთვის '%2'. გაშვება შეწყდება."
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format

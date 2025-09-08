@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-05-16 09:20+0300\n"
+"PO-Revision-Date: 2025-09-07 15:13+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -21,11 +21,10 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: executescriptplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Script Application"
+#, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr "Скриптова програма"
+msgstr "шлях до скрипту"
 
 #: executescriptplugin.cpp:78
 #, kde-format
@@ -35,19 +34,15 @@ msgstr ""
 "перервано."
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "Аргументи:"
+msgstr "аргументи"
 
 #: executescriptplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Interpreter"
+#, kde-format
 msgid "interpreter command"
-msgstr "Інтерпретатор"
+msgstr "команда інтерпретатора"
 
 #: scriptappconfig.cpp:83
 #, kde-format

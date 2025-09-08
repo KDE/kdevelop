@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-06-22 09:23+0300\n"
+"PO-Revision-Date: 2025-09-07 21:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -514,18 +514,13 @@ msgid "Can't create a temporary file"
 msgstr "Geçici dosya oluşturulamadı"
 
 #: stty.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#| "do sleep 3600;done\""
+#, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
 "accepts these arguments: %2"
 msgstr ""
 "%1 tty/pty alınamadı. %1 ögesinin bir uçbirim olduğundan ve şu argümanları "
-"kabul ettiğinden emin olun: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
-"sleep 3600;done\""
+"kabul ettiğinden emin olun: %2"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14

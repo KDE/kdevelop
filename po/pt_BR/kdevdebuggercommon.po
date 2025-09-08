@@ -5,20 +5,21 @@
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2009, 2010, 2012, 2019, 2020, 2022, 2023.
 # SPDX-FileCopyrightText: 2010, 2025 Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2020.
+# SPDX-FileCopyrightText: 2025 Geraldo Simiao <geraldosimiao@fedoraproject.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-08-07 06:39-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"PO-Revision-Date: 2025-09-07 01:06-0300\n"
+"Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -515,18 +516,13 @@ msgid "Can't create a temporary file"
 msgstr "Não foi possível criar um arquivo temporário"
 
 #: stty.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#| "do sleep 3600;done\""
+#, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
 "accepts these arguments: %2"
 msgstr ""
 "Não foi possível receber o tty/pty %1. Verifique se %1 é no momento um "
-"terminal e se aceita estes argumentos: -e sh -c \"tty> %2 ;exec<&-;exec>&-;"
-"while :;do sleep 3600;done\""
+"terminal e se aceita estes argumentos: %2"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-05-16 03:40+0200\n"
+"PO-Revision-Date: 2025-09-07 04:19+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,14 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: executescriptplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Script Application"
+#, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr "სკრიპტული ალიკაცია"
+msgstr "სკრიპტის ბილიკი"
 
 #: executescriptplugin.cpp:78
 #, kde-format
@@ -33,19 +32,15 @@ msgstr ""
 "გაუქმებულია."
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "არგუმენტები:"
+msgstr "არგუმენტები"
 
 #: executescriptplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Interpreter"
+#, kde-format
 msgid "interpreter command"
-msgstr "ინტერპრეტატორი"
+msgstr "ინტერპრეტატორის ბრძანება"
 
 #: scriptappconfig.cpp:83
 #, kde-format

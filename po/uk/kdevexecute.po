@@ -3,30 +3,28 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2012, 2013, 2015, 2017, 2020.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2012, 2013, 2015, 2017, 2020, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2020-07-20 08:26+0300\n"
+"PO-Revision-Date: 2025-09-07 15:12+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.07.70\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "&Параметри:"
+msgstr "аргументи"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -34,19 +32,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "Не вдалося розв’язати залежності: %1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "Виконуваний файл"
+msgstr "шлях до виконуваного файла"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "Використовувати зовнішній термінал:"
+msgstr "команда зовнішнього термінала"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -72,6 +66,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Зауваження: підтримку <code>gnome-terminal</code> реалізовано лише "
+"частково через обмеження цієї програми.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -221,6 +217,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Визначте команду, якою буде запущено зовнішній емулятор термінала.<br>\n"
+"Шлях до виконуваного файла та аргументи буде дописано до цієї команди."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238

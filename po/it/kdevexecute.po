@@ -1,19 +1,19 @@
 # translation of kdevexecute.po to Italian
 #
+# SPDX-FileCopyrightText: 2007, 2016, 2017, 2020, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 # Matteo Merli <merlim@libero.it>, 2001.
 # Daniele Medri <madrid@linuxmeeting.net>, 2003.
 # Giovanni Venturi <jumpyj@libero.it>, 2003, 2004.
 # Luciano Montanaro <mikelima@cirulla.net>, 2003.
 # Giovanni Venturi <jumpyj@tiscali.it>, 2003, 2004, 2005, 2006, 2007, 2008.
 # Nicola Ruggero <nicola@nxnt.org>, 2007.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2007, 2016, 2017, 2020.
 # Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2020-07-25 16:53+0200\n"
+"PO-Revision-Date: 2025-09-07 23:42+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -21,15 +21,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "Ar&gomenti:"
+msgstr "argomenti"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -37,19 +35,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "Impossibile determinare la dipendenza: %1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "Eseguibile"
+msgstr "percorso dell'eseguibile"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "Usa terminale esterno:"
+msgstr "comando del terminale esterno"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -75,6 +69,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Nota: <code>gnome-terminale</code> è supportato solo parzialmente per "
+"delle sue limitazioni.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -226,6 +222,9 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Definisce il comando per eseguire l'emulatore di terminale esterno.<br> Il "
+"percorso per l'eseguibile e relativi argomenti saranno aggiunti in fondo a "
+"questo comando."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238

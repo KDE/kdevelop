@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-06-22 19:36+0200\n"
+"PO-Revision-Date: 2025-09-07 23:51+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -5676,6 +5676,8 @@ msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
 msgstr ""
+"Si è verificato un'errore di interpretazione in %1 per la configurazione di "
+"lancio «%2». Avvio interrotto."
 
 #: util/shellutils.cpp:228
 #, kde-format
@@ -5686,6 +5688,8 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
+"È stato incluso un metacarattere della shell in %1 per la  configurazione di "
+"lancio «%2», attualmente ciò non è supportato. Avvio interrotto."
 
 #: util/shellutils.cpp:237
 #, kde-format
@@ -5696,6 +5700,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"KShell::splitArgs(<%1>) ha segnalato un codice di errore %2 sconosciuto per "
+"la configurazione di lancio «%3». Avvio interrotto."
 
 #: util/shellutils.cpp:264
 #, kde-format
@@ -5706,6 +5712,8 @@ msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
 msgstr ""
+"Lo spezzettamento di %1 per la configurazione di lancio «%2» ha generato una "
+"lista vuota. Avvio interrotto."
 
 #: util/shellutils.cpp:281
 #, kde-format
@@ -5714,6 +5722,8 @@ msgctxt ""
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"Specificato un valore vuoto del campo %1 per la configurazione di lancio "
+"«%2».Avvio interrotto."
 
 #: util/shellutils.cpp:296
 #, kde-format
@@ -5723,6 +5733,8 @@ msgctxt ""
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"Specificato un valore non valido del campo %1 per la configurazione di "
+"lancio «%2».Avvio interrotto."
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-07-23 22:53+0200\n"
+"PO-Revision-Date: 2025-09-07 10:34+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5671,6 +5671,8 @@ msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
 msgstr ""
+"Hi ha un error de cometes a la %1 de la configuració del llançament «%2». "
+"S'interromp l'inici."
 
 #: util/shellutils.cpp:228
 #, kde-format
@@ -5681,6 +5683,8 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
+"S'ha inclòs un metacaràcter de l'intèrpret d'ordres a %1 a la configuració "
+"de llançament «%2», que actualment no s'admet. S'interromp l'inici."
 
 #: util/shellutils.cpp:237
 #, kde-format
@@ -5691,6 +5695,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"KShell::splitArgs(<the %1>) ha informat d'un codi d'error desconegut %2 a la "
+"configuració de llançament «%3». S'interromp l'inici."
 
 #: util/shellutils.cpp:264
 #, kde-format
@@ -5701,6 +5707,8 @@ msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
 msgstr ""
+"En dividir el %1 a la configuració de llançament «%2» s'obté una llista "
+"buida. S'interromp l'inici."
 
 #: util/shellutils.cpp:281
 #, kde-format
@@ -5709,6 +5717,8 @@ msgctxt ""
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"S'ha especificat un %1 buit a la configuració de llançament «%2». "
+"S'interromp l'inici."
 
 #: util/shellutils.cpp:296
 #, kde-format
@@ -5718,6 +5728,8 @@ msgctxt ""
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"S'ha especificat un %1 no vàlid a la configuració de llançament «%2». "
+"S'interromp l'inici."
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format

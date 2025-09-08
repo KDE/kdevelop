@@ -1,34 +1,32 @@
 # Translation of kdevexecute.po to Catalan (Valencian)
-# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# Copyright (C) 2009-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2020, 2021, 2022, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2012, 2013, 2014, 2015, 2017, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2022-05-08 17:42+0200\n"
+"PO-Revision-Date: 2025-09-07 10:08+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 25.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "Ar&guments:"
+msgstr "arguments"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -36,19 +34,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "No s'ha pogut resoldre la dependència: %1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "Executable"
+msgstr "camí cap a l'executable"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "Utilitza un terminal extern:"
+msgstr "ordre de terminal extern"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -74,6 +68,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Nota: el <code>gnome-terminal</code> només s'admet parcialment degut a "
+"les seues limitacions.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -225,6 +221,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Establix l'ordre per a executar a l'emulador de terminal extern.<br>\n"
+"A esta ordre s'afegiran el camí cap a l'executable i els seus arguments."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
@@ -338,56 +336,3 @@ msgstr "Inicia'n una altra"
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "Recorda la tria"
-
-#~ msgid ""
-#~ "There is a quoting error in the arguments for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr ""
-#~ "S'ha produït un error de citació en els arguments de la configuració del "
-#~ "llançament «%1». S'interromp."
-
-#~ msgid ""
-#~ "A shell meta character was included in the arguments for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "S'ha inclòs un metacaràcter en els arguments de la configuració de "
-#~ "llançament «%1», actualment açò no està admés. S'interromp."
-
-#~ msgid "No valid executable specified"
-#~ msgstr "No s'ha especificat un executable vàlid"
-
-#~ msgid ""
-#~ "There is a quoting error in the executable for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr ""
-#~ "S'ha produït un error de citació en l'executable de la configuració del "
-#~ "llançament «%1». S'interromp."
-
-#~ msgid ""
-#~ "A shell meta character was included in the executable for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "S'ha inclòs un metacaràcter en l'executable de la configuració de "
-#~ "llançament «%1», actualment açò no està admés. S'interromp."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "<p>Defines the command to execute the external terminal emulator. Use the "
-#~ "following placeholders:</p>\n"
-#~ "<dl>\n"
-#~ "<dt><code>%exe</code></dt>\n"
-#~ "<dd>The path to the executable selected above.</dd>\n"
-#~ "<dt><code>%workdir</code></dt>\n"
-#~ "<dd>The path to the working directory selected above.</dd>\n"
-#~ "</dl>\n"
-#~ "<p>The arguments defined above will get appended to this command.</p>"
-#~ msgstr ""
-#~ "<p>Establix l'ordre per a executar l'emulador de terminal extern. "
-#~ "Utilitzeu les variables de substitució següents:</p>\n"
-#~ "<dl>\n"
-#~ "<dt><code>%exe</code></dt>\n"
-#~ "<dd>El camí cap a l'executable seleccionat més amunt.</dd>\n"
-#~ "<dt><code>%workdir</code></dt>\n"
-#~ "<dd>El camí cap al directori de treball seleccionat més amunt.</dd>\n"
-#~ "</dl>\n"
-#~ "<p>Els arguments definits més amunt s'afegiran a esta ordre.</p>"
