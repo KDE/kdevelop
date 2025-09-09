@@ -231,7 +231,8 @@ void TestBreakpointModel::verifyTwoModelBreakpoints(Breakpoint* b1, Breakpoint* 
     QCOMPARE(breakpointModel()->breakpoint(1), b2);
 }
 
-void TestBreakpointModel::applyReloadModeAndReload(const QUrl& url, IDocument* doc, Breakpoint* b1)
+TestBreakpointModel::ReloadMode TestBreakpointModel::applyReloadModeAndReload(const QUrl& url, IDocument* doc,
+                                                                              Breakpoint* b1)
 {
     QFETCH(const ReloadMode, reloadMode);
     if (reloadMode != ReloadMode::Clean) {
@@ -249,10 +250,11 @@ void TestBreakpointModel::applyReloadModeAndReload(const QUrl& url, IDocument* d
         }
 
         overwriteExistingFile(url, text);
-        RETURN_IF_TEST_FAILED();
+        RETURN_IF_TEST_FAILED(reloadMode);
     }
 
     doc->reload();
+    return reloadMode;
 }
 
 TestBreakpointModel::TestBreakpointModel(QObject* parent)
@@ -759,7 +761,7 @@ void TestBreakpointModel::testModifiedDocumentReload()
     //    end => none of the breakpoint lines is changed by the reloading => KTextEditor restores both breakpoint marks.
     // 3) DirtyBreakpointLine: applyReloadModeAndReload() saves the edited version of the document but also modifies
     //    b1's line => b1's line is and b2's is not changed by the reloading => KTextEditor restores b2, but not b1.
-    applyReloadModeAndReload(url, doc, b1);
+    const auto reloadMode = applyReloadModeAndReload(url, doc, b1);
     RETURN_IF_TEST_FAILED();
 
     // Wait needed for BreakpointModel::save() to complete.
@@ -768,7 +770,18 @@ void TestBreakpointModel::testModifiedDocumentReload()
     verifyTwoModelBreakpoints(b1, b2);
     RETURN_IF_TEST_FAILED();
 
-    QCOMPARE(doc->state(), userChoice == UserChoice::Cancel ? IDocument::Modified : IDocument::Clean);
+    if (userChoice == UserChoice::Cancel) {
+        if (reloadMode == ReloadMode::Clean) {
+            QCOMPARE(doc->state(), IDocument::Modified);
+        } else {
+            // The document state can be either Modified or DirtyAndModified here, depending
+            // on whether KTextEditor has detected the external modification. So ignore
+            // the Dirty bit and verify only that the Modified bit is set to support both.
+            QCOMPARE(doc->state() & ~IDocument::Dirty, IDocument::Modified);
+        }
+    } else {
+        QCOMPARE(doc->state(), IDocument::Clean);
+    }
 
     struct
     {

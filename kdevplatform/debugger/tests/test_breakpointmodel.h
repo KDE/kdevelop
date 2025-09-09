@@ -66,7 +66,7 @@ private:
     static void verifyUntrackedBreakpoint(KDevelop::Breakpoint* breakpoint, int expectedLine);
 
     static void verifyTwoModelBreakpoints(KDevelop::Breakpoint* b1, KDevelop::Breakpoint* b2);
-    static void applyReloadModeAndReload(const QUrl& url, KDevelop::IDocument* doc, KDevelop::Breakpoint* b1);
+    static ReloadMode applyReloadModeAndReload(const QUrl& url, KDevelop::IDocument* doc, KDevelop::Breakpoint* b1);
 
     QUrl testFileUrl(const QString& fileName) const;
 
