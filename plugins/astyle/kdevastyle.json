@@ -32,7 +32,6 @@
                 "Name[sv]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
                 "Name[tr]": "Cedric Pasteur, Matthias Hölzer–Klüpfel",
                 "Name[uk]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
-                "Name[x-test]": "xxCedric Pasteur, Matthias Hölzer-Klüpfelxx",
                 "Name[zh_CN]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
                 "Name[zh_TW]": "Cedric Pasteur, Matthias Hölzer-Klüpfel"
             }
@@ -67,7 +66,6 @@
         "Description[sv]": "Ett insticksprogram för formatering av källkod enligt en angiven uppsättning regler",
         "Description[tr]": "Belirli kurallara göre kaynak kodları biçimlendirmeye yarayan bir eklenti",
         "Description[uk]": "Додаток для форматування коду у відповідності до вказаного набору правил",
-        "Description[x-test]": "xxA plugin for formatting of sourcecode according to a specified set of rulesxx",
         "Description[zh_CN]": "一个根据指定规则设定格式化源代码的插件",
         "Description[zh_TW]": "一個依照指定規則來格式化原始碼的外掛程式",
         "Icon": "text-field",
@@ -101,7 +99,6 @@
         "Name[sv]": "Astyle-formateringsgränssnitt",
         "Name[tr]": "Astyle Biçimlendiricisi Arka Ucu",
         "Name[uk]": "Сервер форматування AStyle",
-        "Name[x-test]": "xxAStyle Formatter Backendxx",
         "Name[zh_CN]": "AStyle 格式化器后端",
         "Name[zh_TW]": "AStyle 格式化工具後端"
     },

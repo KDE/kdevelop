@@ -33,7 +33,6 @@
                 "Name[sv]": "David Nolden",
                 "Name[tr]": "David Nolden",
                 "Name[uk]": "David Nolden",
-                "Name[x-test]": "xxDavid Noldenxx",
                 "Name[zh_CN]": "David Nolden",
                 "Name[zh_TW]": "David Nolden"
             }
@@ -68,7 +67,6 @@
         "Description[sv]": "Insticksprogrammet visar information om nuvarande språksammanhang i en sidovy, och markerar relevanta deklarationer och användningar.",
         "Description[tr]": "Bu eklenti yan görünümde geçerli dil bağlamıyla ilgili bilgi gösterir ve ilgili tanımlamaları ve kullanımları vurgular.",
         "Description[uk]": "За допомогою цього додатка можна переглянути у перегляді на бічній панелі відомості про поточний контекст мови, а також підсвітити пов’язані оголошення і випадки використання.",
-        "Description[x-test]": "xxThis plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.xx",
         "Description[zh_CN]": "此插件在侧边视图中显示关于当前语言上下文的信息，并高亮显示相关的声明和调用。",
         "Description[zh_TW]": "此外掛程式顯示關於目前語言的資訊，並將相關的宣告與使用突顯出來。",
         "Icon": "code-context",
@@ -112,7 +110,6 @@
         "Name[tr]": "Kod Tarayıcısı",
         "Name[ug]": "كود كۆرگۈ",
         "Name[uk]": "Переглядач коду",
-        "Name[x-test]": "xxCode Browserxx",
         "Name[zh_CN]": "代码浏览器",
         "Name[zh_TW]": "源碼瀏覽器"
     },

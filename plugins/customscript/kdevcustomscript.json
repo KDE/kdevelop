@@ -33,7 +33,6 @@
                 "Name[sv]": "David Nolden",
                 "Name[tr]": "David Nolden",
                 "Name[uk]": "David Nolden",
-                "Name[x-test]": "xxDavid Noldenxx",
                 "Name[zh_CN]": "David Nolden",
                 "Name[zh_TW]": "David Nolden"
             }
@@ -68,7 +67,6 @@
         "Description[sv]": "Ett insticksprogram för att formatera C-filer med egna skript",
         "Description[tr]": "C dosyalarını özel betikler kullanarak biçimlendirmek için bir eklenti",
         "Description[uk]": "Додаток для форматування файлів мовою C за допомогою нетипових скриптів",
-        "Description[x-test]": "xxA plugin for formatting C files using custom scriptsxx",
         "Description[zh_CN]": "使用自定义脚本格式化 C 文件的插件",
         "Description[zh_TW]": "一個利用自訂文稿來格式化 C 檔案的外掛程式",
         "Icon": "text-field",
@@ -102,7 +100,6 @@
         "Name[sv]": "Formateringsgränssnitt för eget skript",
         "Name[tr]": "Özel Betik Biçimlendiricisi Arka Ucu",
         "Name[uk]": "Сервер скриптів нетипового форматування",
-        "Name[x-test]": "xxCustom Script Formatter Backendxx",
         "Name[zh_CN]": "自定义脚本格式化器后端",
         "Name[zh_TW]": "自訂文稿格式化工具後端"
     },

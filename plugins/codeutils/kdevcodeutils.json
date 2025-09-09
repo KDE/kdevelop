@@ -31,7 +31,6 @@
         "Description[sv]": "Samling av diverse verktyg för att öka produktiviteten vid programmering.",
         "Description[tr]": "Programlama sırasında verimliliği artıran çeşitli izlenceler koleksiyonu.",
         "Description[uk]": "Збірка різноманітних допоміжних програм, яка підвищує продуктивність програмування.",
-        "Description[x-test]": "xxCollection of various utilities that increase productivity while programming.xx",
         "Description[zh_CN]": "多种提升编程生产力的工具集合。",
         "Description[zh_TW]": "各種可以增加寫程式效率的工具的收藏。",
         "Icon": "help-hint",
@@ -71,7 +70,6 @@
         "Name[tr]": "Kod İzlenceleri",
         "Name[ug]": "كود قوراللىرى",
         "Name[uk]": "Допоміжні засоби",
-        "Name[x-test]": "xxCode Utilitiesxx",
         "Name[zh_CN]": "代码工具",
         "Name[zh_TW]": "寫程式實用工具"
     },

@@ -33,7 +33,6 @@
                 "Name[sv]": "Andreas Pakulat",
                 "Name[tr]": "Andreas Pakulat",
                 "Name[uk]": "Andreas Pakulat",
-                "Name[x-test]": "xxAndreas Pakulatxx",
                 "Name[zh_CN]": "Andreas Pakulat",
                 "Name[zh_TW]": "Andreas Pakulat"
             }
@@ -68,7 +67,6 @@
         "Description[sv]": "Byte till senast använda dokument för KDevelop-plattformen.",
         "Description[tr]": "KDevPlatform için son kullanılan belgeleri seçici bir eklenti.",
         "Description[uk]": "Перемикач останніх використаних документів для KDevPlatform.",
-        "Description[x-test]": "xxA most-recently-used document switcher for KDevPlatform.xx",
         "Description[zh_CN]": "KDevPlatform 的最近经常使用文档的切换器。",
         "Description[zh_TW]": "KDevPlatform 上切換最近使用的文件的切換器",
         "Icon": "document-open-recent",
@@ -110,7 +108,6 @@
         "Name[sv]": "Byte till senast använda dokument",
         "Name[tr]": "Son Kullanılan Belgeleri Seçici",
         "Name[uk]": "Перемикач нещодавно використаних документів",
-        "Name[x-test]": "xxMost-Recently-Used Document Switcherxx",
         "Name[zh_CN]": "最近经常使用文档切换器",
         "Name[zh_TW]": "最近使用的文件切換器",
         "Version": "0.1"

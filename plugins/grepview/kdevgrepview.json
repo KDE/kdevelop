@@ -31,7 +31,6 @@
         "Description[sv]": "Tillåter snabb sökning i flera filer med mönster eller reguljära uttryck, och tillåter dessutom ersättning.",
         "Description[tr]": "Dizgiler veya düzenli ifadeler kullanarak birden çok dosyada tez aramaya izin verir. Başka ögelerle değiştirme de olanaklıdır.",
         "Description[uk]": "Надає можливості швидкого пошуку та заміни у декількох файлів на основі шаблонів або формальних виразів.",
-        "Description[x-test]": "xxAllows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.xx",
         "Description[zh_CN]": "可以用模式或正则表达式快速搜索多个文件，还可以替换。",
         "Description[zh_TW]": "允許使用樣式或正規表示式來快速搜尋與取代多個檔案。",
         "Icon": "kfind",
@@ -73,7 +72,6 @@
         "Name[tr]": "Dosyalarda Bul ve Değiştir",
         "Name[ug]": "ھۆججەت ئىچىدىن ئىزدەش/ئالماشتۇرۇش",
         "Name[uk]": "Пошук або заміна у файлах",
-        "Name[x-test]": "xxFind/Replace In Filesxx",
         "Name[zh_CN]": "在文件中查找/替换",
         "Name[zh_TW]": "在檔案中尋找/取代"
     },

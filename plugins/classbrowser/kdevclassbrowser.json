@@ -34,7 +34,6 @@
                 "Name[sv]": "Hamish Rodda",
                 "Name[tr]": "Hamish Rodda",
                 "Name[uk]": "Hamish Rodda",
-                "Name[x-test]": "xxHamish Roddaxx",
                 "Name[zh_CN]": "Hamish Rodda",
                 "Name[zh_TW]": "Hamish Rodda"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller en bläddringsbar modell av klasser och andra objekt som för närvarande har tolkats.",
         "Description[tr]": "Bu eklenti, geçerli ayrıştırılmış sınıfların ve diğer ögelerin taranabilir bir modelini sağlar.",
         "Description[uk]": "За допомогою цього додатка можна створити придатну для перегляду модель класів та інших елементів, над якими ви працюєте.",
-        "Description[x-test]": "xxThis plugin provides a browsable model of the currently parsed classes and other items.xx",
         "Description[zh_CN]": "此插件提供了一个当前已分析类和其他项目的可浏览化窗口模型。",
         "Description[zh_TW]": "此外掛程式提供一個可瀏覽目前已分析的類別與其他項目的模組。",
         "Icon": "code-class",
@@ -112,7 +110,6 @@
         "Name[tr]": "Sınıf Tarayıcısı",
         "Name[ug]": "تىپ كۆرگۈ",
         "Name[uk]": "Переглядач класів",
-        "Name[x-test]": "xxClass Browserxx",
         "Name[zh_CN]": "类浏览器",
         "Name[zh_TW]": "類別瀏覽器"
     },

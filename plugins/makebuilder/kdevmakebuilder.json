@@ -30,7 +30,6 @@
         "Description[sv]": "KDevelop byggverktyg för Make",
         "Description[tr]": "K Geliştir Make Yapıcısı",
         "Description[uk]": "Збирач Make для KDevelop",
-        "Description[x-test]": "xxKDevelop Make Builderxx",
         "Description[zh_CN]": "KDevelop Make 构建器",
         "Description[zh_TW]": "KDevelop Make 編譯工具",
         "Icon": "kdevelop",
@@ -64,7 +63,6 @@
         "Name[sv]": "Make-projektbyggverktyg",
         "Name[tr]": "Make Projesi Yapıcısı",
         "Name[uk]": "Інструмент збирання проєктів Make",
-        "Name[x-test]": "xxMake Project Builderxx",
         "Name[zh_CN]": "Make 工程构建器",
         "Name[zh_TW]": "Make 專案編譯工具"
     },

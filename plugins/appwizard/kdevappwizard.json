@@ -33,7 +33,6 @@
                 "Name[sv]": "Alexander Dymo",
                 "Name[tr]": "Alexander Dymo",
                 "Name[uk]": "Олександр Димо",
-                "Name[x-test]": "xxAlexander Dymoxx",
                 "Name[zh_CN]": "Alexander Dymo",
                 "Name[zh_TW]": "Alexander Dymo"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Programguide",
         "Description[tr]": "Uygulama Sihirbazı",
         "Description[uk]": "Майстер створення програм",
-        "Description[x-test]": "xxApplication Wizardxx",
         "Description[zh_CN]": "应用程序向导",
         "Description[zh_TW]": "應用程式精靈",
         "Icon": "project-development-new-template",
@@ -111,7 +109,6 @@
         "Name[tr]": "Yeni Proje Sihirbazı",
         "Name[ug]": "يېڭى قۇرۇلۇش يېتەكچىسى",
         "Name[uk]": "Майстер створення проєкту",
-        "Name[x-test]": "xxNew Project Wizardxx",
         "Name[zh_CN]": "新工程向导",
         "Name[zh_TW]": "新增專案精靈",
         "Version": "0.1"

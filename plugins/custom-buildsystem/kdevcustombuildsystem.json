@@ -29,7 +29,6 @@
         "Description[sv]": "Gör det möjligt att använda egna byggsystem för projekt i KDevelop",
         "Description[tr]": "K Geliştir projeleri için özel yapı sistemlerinin kullanılmasına izin verir",
         "Description[uk]": "Надає змогу використовувати нетипові системи збирання у проєктах KDevelop",
-        "Description[x-test]": "xxAllows to use custom buildsystems for KDevelop projectsxx",
         "Description[zh_CN]": "允许对 KDevelop 工程使用自定义构建系统",
         "Description[zh_TW]": "讓 KDevelop 專案可以使用自訂編譯系統",
         "Icon": "kdevelop",
@@ -62,7 +61,6 @@
         "Name[sv]": "Eget byggsystem",
         "Name[tr]": "Özel Yapı Sistemi",
         "Name[uk]": "Нетипова система збирання",
-        "Name[x-test]": "xxCustom Build Systemxx",
         "Name[zh_CN]": "自定义构建系统",
         "Name[zh_TW]": "自訂編譯系統"
     },

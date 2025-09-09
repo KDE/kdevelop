@@ -27,7 +27,6 @@
                 "Name[sv]": "Eike Hein",
                 "Name[tr]": "Eike Hein",
                 "Name[uk]": "Eike Hein",
-                "Name[x-test]": "xxEike Heinxx",
                 "Name[zh_CN]": "Eike Hein",
                 "Name[zh_TW]": "Eike Hein"
             }
@@ -56,7 +55,6 @@
         "Description[sv]": "Lista och starta KDevelop-sessioner",
         "Description[tr]": "K Geliştir oturumlarını listeleyin ve başlatın",
         "Description[uk]": "Показ списку і запуск сеансів KDevelop",
-        "Description[x-test]": "xxList and launch KDevelop sessionsxx",
         "Description[zh_CN]": "列出并启动 KDevelop 会话",
         "Description[zh_TW]": "列出並啟動 KDevelop 工作階段",
         "FormFactors": [
@@ -87,7 +85,6 @@
         "Name[sv]": "KDevelop-sessioner",
         "Name[tr]": "K Geliştir Oturumları",
         "Name[uk]": "Сеанси KDevelop",
-        "Name[x-test]": "xxKDevelop Sessionsxx",
         "Name[zh_CN]": "KDevelop 会话",
         "Name[zh_TW]": "KDevelop 工作階段",
         "Version": "0.1",

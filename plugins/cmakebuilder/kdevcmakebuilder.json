@@ -31,7 +31,6 @@
         "Description[sv]": "Bygger CMake-projekt",
         "Description[tr]": "CMake Projelerini Yapar",
         "Description[uk]": "Збирає проєкти CMake",
-        "Description[x-test]": "xxBuilds CMake Projectsxx",
         "Description[zh_CN]": "构建 CMake 工程",
         "Description[zh_TW]": "編譯 CMake 專案",
         "Icon": "cmake",
@@ -65,7 +64,6 @@
         "Name[sv]": "CMake-projektbyggverktyg",
         "Name[tr]": "CMake Projesi Yapıcısı",
         "Name[uk]": "Інструмент збирання проєктів CMake",
-        "Name[x-test]": "xxCMake Project Builderxx",
         "Name[zh_CN]": "CMake 工程构建器",
         "Name[zh_TW]": "CMake 專案編譯工具"
     },

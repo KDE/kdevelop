@@ -31,7 +31,6 @@
         "Description[sv]": "Importerar och redigerar egna projekt som använder Make",
         "Description[tr]": "Özel make projelerini içe aktarır ve düzenler",
         "Description[uk]": "Імпортує і змінює проєкти нетипових make",
-        "Description[x-test]": "xxImports and edits custom make projectsxx",
         "Description[zh_CN]": "导入并编辑定制 make 工程",
         "Description[zh_TW]": "匯入並編輯自訂 make 專案",
         "Icon": "kdevelop",
@@ -64,7 +63,6 @@
         "Name[sv]": "Projekthantering av egna Make-filer",
         "Name[tr]": "Özel Makefile Proje Yöneticisi",
         "Name[uk]": "Керування проєктами з власним Makefile",
-        "Name[x-test]": "xxCustom Makefile Project Managerxx",
         "Name[zh_CN]": "自定义 Makefile 工程管理器",
         "Name[zh_TW]": "自訂 Makefile 專案專案管理員"
     },

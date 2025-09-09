@@ -33,7 +33,6 @@
                 "Name[sv]": "Alexander Dymo",
                 "Name[tr]": "Alexander Dymo",
                 "Name[uk]": "Олександр Димо",
-                "Name[x-test]": "xxAlexander Dymoxx",
                 "Name[zh_CN]": "Alexander Dymo",
                 "Name[zh_TW]": "Alexander Dymo"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Hanterar mallar för källkodsfiler",
         "Description[tr]": "Kaynak dosyaları için şablonları yönetir",
         "Description[uk]": "Керування шаблонами для початкових файлів коду",
-        "Description[x-test]": "xxManages templates for source filesxx",
         "Description[zh_CN]": "管理源文件的模板",
         "Description[zh_TW]": "管理源碼檔的樣本",
         "Icon": "code-class",
@@ -109,7 +107,6 @@
         "Name[sv]": "Inställning av filmallar",
         "Name[tr]": "Dosya Şablon Yapılandırması",
         "Name[uk]": "Налаштовування шаблонів файлів",
-        "Name[x-test]": "xxFile Templates Configurationxx",
         "Name[zh_CN]": "文件模板配置",
         "Name[zh_TW]": "檔案樣本設定",
         "Version": "0.1"

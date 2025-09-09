@@ -34,7 +34,6 @@
                 "Name[sv]": "Hamish Rodda",
                 "Name[tr]": "Hamish Rodda",
                 "Name[uk]": "Hamish Rodda",
-                "Name[x-test]": "xxHamish Roddaxx",
                 "Name[zh_CN]": "Hamish Rodda",
                 "Name[zh_TW]": "Hamish Rodda"
             }
@@ -70,7 +69,6 @@
         "Description[sv]": "Insticksprogrammet visar fel i källkod.",
         "Description[tr]": "Bu eklenti, kaynak kodundaki hataları gösterir.",
         "Description[uk]": "За допомогою цього додатка можна переглянути повідомлення про помилки у коді.",
-        "Description[x-test]": "xxThis plugin shows errors in source code.xx",
         "Description[zh_CN]": "此插件显示源代码中的错误。",
         "Description[zh_TW]": "此外掛程式顯示源碼中的錯誤。",
         "Icon": "emblem-important",
@@ -113,7 +111,6 @@
         "Name[tr]": "Sorun Bildirici Görünümü",
         "Name[ug]": "مەسىلە مەلۇم قىلغۇچ كۆرۈنۈشى",
         "Name[uk]": "Перегляд інструмента звітування про проблеми",
-        "Name[x-test]": "xxProblem Reporter Viewxx",
         "Name[zh_CN]": "问题报告程序视图",
         "Name[zh_TW]": "問題回報器檢視"
     },

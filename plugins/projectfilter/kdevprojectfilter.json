@@ -34,7 +34,6 @@
                 "Name[sv]": "Milian Wolff",
                 "Name[tr]": "Milian Wolff",
                 "Name[uk]": "Milian Wolff",
-                "Name[x-test]": "xxMilian Wolffxx",
                 "Name[zh_CN]": "Milian Wolff",
                 "Name[zh_TW]": "Milian Wolff"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Anpassa vilka filer och kataloger inne i projektkatalogen som ska inkluderas eller exkluderas.",
         "Description[tr]": "Proje klasörü içindeki hangi dosya ve klasörlerin içerileceğini veya dışlanacağını yapılandırın.",
         "Description[uk]": "За допомогою цього модуля можна визначити, які файли і теки у теці проєкту має бути включено або виключено з його складу.",
-        "Description[x-test]": "xxConfigure which files and folders inside the project folder should be included or excluded.xx",
         "Description[zh_CN]": "配置工程文件中哪些文件被加入或排除。",
         "Description[zh_TW]": "設定專案資料夾中要包含或排除哪些檔案與資料夾。",
         "Icon": "view-filter",
@@ -107,7 +105,6 @@
         "Name[sv]": "Projektfilter",
         "Name[tr]": "Proje Süzgeci",
         "Name[uk]": "Фільтр проєкту",
-        "Name[x-test]": "xxProject Filterxx",
         "Name[zh_CN]": "工程过滤器",
         "Name[zh_TW]": "專案過濾器"
     },

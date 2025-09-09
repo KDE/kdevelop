@@ -34,7 +34,6 @@
                 "Name[sv]": "Milian Wolff",
                 "Name[tr]": "Milian Wolff",
                 "Name[uk]": "Milian Wolff",
-                "Name[x-test]": "xxMilian Wolffxx",
                 "Name[zh_CN]": "Milian Wolff",
                 "Name[zh_TW]": "Milian Wolff"
             }
@@ -70,7 +69,6 @@
         "Description[sv]": "Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.",
         "Description[tr]": "Düzenleyici içeriğini değiştirmek veya diğer keyfi eylemler için dış betikler veya uygulamalar çalıştır.",
         "Description[uk]": "Запускає зовнішні скрипти або програми для обробки текстових даних редактора або виконання інших потрібних дій.",
-        "Description[x-test]": "xxRun external scripts or applications to manipulate the editor contents or do other arbitrary actions.xx",
         "Description[zh_CN]": "运行外部脚本或应用程序来处理编辑器内容或者执行其他任意操作。",
         "Description[zh_TW]": "執行外部文稿或應用程式來運用編輯器內的內容，或是做各種動作。",
         "Icon": "system-run",
@@ -113,7 +111,6 @@
         "Name[tr]": "Dış Betikler",
         "Name[ug]": "سىرتقى قوليازما پروگرامما",
         "Name[uk]": "Зовнішні скрипти",
-        "Name[x-test]": "xxExternal Scriptsxx",
         "Name[zh_CN]": "外部脚本",
         "Name[zh_TW]": "外部文稿"
     },
