@@ -32,7 +32,6 @@
     <comment xml:lang="sv">KDevelop-projektfil</comment>
     <comment xml:lang="tr">K Geliştir Proje Dosyası</comment>
     <comment xml:lang="uk">файл проєкту KDevelop</comment>
-    <comment xml:lang="x_test">xxKDevelop Project Filexx</comment>
     <comment xml:lang="zh_CN">KDevelop 工程文件</comment>
     <comment xml:lang="zh_TW">KDevelop 專案檔</comment>
     <glob pattern="*.kdev4"/>

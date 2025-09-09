@@ -40,7 +40,6 @@
   <name xml:lang="sv">KDevelop</name>
   <name xml:lang="tr">K Geliştir</name>
   <name xml:lang="uk">KDevelop</name>
-  <name xml:lang="x-test">xxKDevelopxx</name>
   <name xml:lang="zh-CN">KDevelop</name>
   <name xml:lang="zh-TW">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
@@ -73,7 +72,6 @@
   <summary xml:lang="sv">Funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk</summary>
   <summary xml:lang="tr">Tam özellikli, eklenti ile geliştirilebilir, C/C++ ve diğer programlama dilleri için tümleşik geliştirme ortamı</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
-  <summary xml:lang="x-test">xxFeatureful, plugin-extensible IDE for C/C++ and other programming languagesxx</summary>
   <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <summary xml:lang="zh-TW">C/C++ 與其他程式語言用的多功能可擴充 IDE</summary>
   <description>
@@ -107,7 +105,6 @@
     <p xml:lang="sv">KDevelop är en fri integrerad utvecklingsmiljö (IDE) med öppen källkod för olika programvaruprojekt.</p>
     <p xml:lang="tr">K Geliştir, Özgür ve Açık Kaynaklı bir tümleşik geliştirme ortamıdır (IDE).</p>
     <p xml:lang="uk">KDevelop є вільним комплексним середовищем розробки (IDE) з відкритим кодом.</p>
-    <p xml:lang="x-test">xxKDevelop is a Free and Open Source integrated development environment (IDE).xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
     <p xml:lang="zh-TW">KDevelop 是一個自由且開源的整合開發環境 (IDE)。</p>
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
@@ -140,7 +137,6 @@
     <p xml:lang="sv">Den tillhandahåller redigerings-, navigerings- och avlusningsfunktioner för flera olika programspråk, samt integrering med ett flertal byggsystem och versionskontrollsystem, med användning av en insticksbaserad arkitektur.</p>
     <p xml:lang="tr">Birçok programlama dili için düzenleme, dolaşım ve hata ayıklama özellikleri sağlar; ayrıca eklenti tabanlı bir mimari kullanarak birçok yapı ve sürüm denetim sistemi ile tümleşir.</p>
     <p xml:lang="uk">У програмі передбачено можливості з редагування, навігації та діагностики коду декількома мовами програмування, а також інтеграцію із декількома системами збирання коду та керування версіями. Використовується архітектура з додатками.</p>
-    <p xml:lang="x-test">xxIt provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.xx</p>
     <p xml:lang="zh-CN">它提供了多种编程语言的编辑、导航和调试功能，以及与多种构建系统和版本控制系统的集成，使用基于插件的体系结构。</p>
     <p xml:lang="zh-TW">它提供支援多個程式語言的編輯、瀏覽與除錯功能，並與多個建置系統與版控系統整合。KDevelop 使用基於外掛程式的架構。</p>
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
@@ -173,7 +169,6 @@
     <p xml:lang="sv">KDevelop har gränssnitt för tolkning av C, C++ och Javascript/QML, med ytterligare externa insticksprogram som stöder t.ex. PHP eller Python.</p>
     <p xml:lang="tr">K Geliştir’in C, C++ ve Javascript/QML ayrıştırma arka uçları vardır; dış eklentilerle örn. PHP veya Python da desteklenir.</p>
     <p xml:lang="uk">У KDevelop передбачено модулі обробки коду мовами C, C++ та Javascript/QML та додатки для розширення підтримки коду іншими мовами програмування, зокрема PHP і Python.</p>
-    <p xml:lang="x-test">xxKDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.xx</p>
     <p xml:lang="zh-CN">KDevelop 提供了 C、C++ 和 JavaScript/QML 的解析器后端，并通过插件提供 PHP 和 Python 等语言的支持。</p>
     <p xml:lang="zh-TW">KDevelop 有 C、C++ 與 Javascript/QML 的剖析器後端，並有其他外部外掛程式支援 PHP 或 Python 等等。</p>
   </description>
@@ -208,7 +203,6 @@
       <caption xml:lang="sv">Huvudfönster med kodeditor, terminalintegrering och projektfiler</caption>
       <caption xml:lang="tr">Kod düzenleyicisi, uçbirim tümleştirmesi ve proje dosyalarını içeren ana pencere</caption>
       <caption xml:lang="uk">Головне вікно з редактором коду, інтегрованим терміналом та файлами проєкту</caption>
-      <caption xml:lang="x-test">xxMain window with code editor, terminal integration and project filesxx</caption>
       <caption xml:lang="zh-TW">主視窗，其中顯示程式碼編輯器、終端機整合、專案檔案</caption>
     </screenshot>
   </screenshots>
