@@ -9,23 +9,21 @@ msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-05-17 02:00+0100\n"
+"PO-Revision-Date: 2025-09-07 12:35+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.07.80\n"
+"X-Generator: Lokalize 25.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "Ar&gumentos:"
+msgstr "argumentos"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -33,19 +31,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "No se puede resolver la dependencia: %1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "Ejecutable"
+msgstr "ruta del ejecutable"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "Usar terminal externa:"
+msgstr "orden del terminal externo"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -71,6 +65,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Nota: <code>gnome-terminal</code> es parcialmente compatible debido a sus "
+"limitaciones.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -222,6 +218,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Definir la orden para ejecutar el emulador de terminal externo.<br>\n"
+"La ruta del ejecutable y sus argumentos se añadirán a esta orden."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
@@ -335,58 +333,3 @@ msgstr "Iniciar otra"
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "Recordar la elección"
-
-#~ msgid ""
-#~ "There is a quoting error in the arguments for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr ""
-#~ "Existe un error de comillas en los argumentos para la configuración de "
-#~ "lanzamiento «%1». Cancelando el inicio."
-
-#~ msgid ""
-#~ "A shell meta character was included in the arguments for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "Se ha incluido un metacarácter de la shell en los argumentos para la "
-#~ "configuración de lanzamiento «%1»; esto es algo que no está permitido en "
-#~ "la actualidad. Cancelando el inicio."
-
-#~ msgid "No valid executable specified"
-#~ msgstr "No se ha especificado un ejecutable válido"
-
-#~ msgid ""
-#~ "There is a quoting error in the executable for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr ""
-#~ "Existe un error de comillas en el ejecutable para la configuración de "
-#~ "lanzamiento «%1». Cancelando el inicio."
-
-#~ msgid ""
-#~ "A shell meta character was included in the executable for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "Se ha incluido un metacarácter de la shell en el ejecutable para la "
-#~ "configuración de lanzamiento «%1»; esto es algo que no está permitido en "
-#~ "la actualidad. Cancelando el inicio."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "<p>Defines the command to execute the external terminal emulator. Use the "
-#~ "following placeholders:</p>\n"
-#~ "<dl>\n"
-#~ "<dt><code>%exe</code></dt>\n"
-#~ "<dd>The path to the executable selected above.</dd>\n"
-#~ "<dt><code>%workdir</code></dt>\n"
-#~ "<dd>The path to the working directory selected above.</dd>\n"
-#~ "</dl>\n"
-#~ "<p>The arguments defined above will get appended to this command.</p>"
-#~ msgstr ""
-#~ "<p>Define la orden para ejecutar el emulador de terminal externo. Use los "
-#~ "siguientes parámetros de sustitución:</p>\n"
-#~ "<dl>\n"
-#~ "<dt><code>%exe</code></dt>\n"
-#~ "<dd>La ruta al ejecutable seleccionado más arriba.</dd>\n"
-#~ "<dt><code>%workdir</code></dt>\n"
-#~ "<dd>La ruta al directorio de trabajo seleccionado más arriba.</dd>\n"
-#~ "</dl>\n"
-#~ "<p>Los argumentos definidos más arriba se añadirán a esta orden.</p>"

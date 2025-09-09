@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-06-22 04:06+0100\n"
+"PO-Revision-Date: 2025-09-07 12:41+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -5668,6 +5668,8 @@ msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
 msgstr ""
+"Existe un error de comillas en %1 para la configuración de lanzamiento «%2». "
+"Se interrumpe el inicio."
 
 #: util/shellutils.cpp:228
 #, kde-format
@@ -5678,6 +5680,9 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
+"Se ha incluido un metacarácter del intérprete en %1 para la configuración de "
+"lanzamiento «%2»; esto es algo que no está permitido en la actualidad. Se "
+"interrumpe el inicio."
 
 #: util/shellutils.cpp:237
 #, kde-format
@@ -5688,6 +5693,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"KShell::splitArgs(<%1>) ha notificado un código de error desconocido %2 para "
+"la configuración de lanzamiento «%3». Se interrumpe el inicio."
 
 #: util/shellutils.cpp:264
 #, kde-format
@@ -5698,6 +5705,8 @@ msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
 msgstr ""
+"La división de %1 para la configuración de lanzamiento «%2» ha generado una "
+"lista vacía. Se interrumpe el inicio."
 
 #: util/shellutils.cpp:281
 #, kde-format
@@ -5706,6 +5715,8 @@ msgctxt ""
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"Se ha indicado un %1 vacío para la configuración de lanzamiento «%2». Se "
+"interrumpe el inicio."
 
 #: util/shellutils.cpp:296
 #, kde-format
@@ -5715,6 +5726,8 @@ msgctxt ""
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"No se ha indicado un %1 válido para la configuración de lanzamiento «%2». Se "
+"interrumpe el inicio."
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
