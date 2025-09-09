@@ -29,7 +29,6 @@
         "Description[sv]": "Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.",
         "Description[tr]": "Uygulama ve başlık dosyası gibi ilişkili belgeler arasında geçişe izin verir.",
         "Description[uk]": "Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.",
-        "Description[x-test]": "xxAllows switching between buddy documents like implementation and header file.xx",
         "Description[zh_CN]": "允许在伙伴文件中切换，如实现与头文件",
         "Description[zh_TW]": "允許在相關文件，如實作與標頭檔間切換。",
         "Icon": "document-multiple",
@@ -66,7 +65,6 @@
         "Name[sv]": "Byt till samhörande",
         "Name[tr]": "Dosta Geçiş Yap",
         "Name[uk]": "Перемикання на споріднений",
-        "Name[x-test]": "xxSwitch to Buddyxx",
         "Name[zh_CN]": "切换至伙伴文件",
         "Name[zh_TW]": "切換到相關文件"
     },

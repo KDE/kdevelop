@@ -34,7 +34,6 @@
                 "Name[sv]": "Milian Wolff",
                 "Name[tr]": "Milian Wolff",
                 "Name[uk]": "Milian Wolff",
-                "Name[x-test]": "xxMilian Wolffxx",
                 "Name[zh_CN]": "Milian Wolff",
                 "Name[zh_TW]": "Milian Wolff"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Tillåter att KDevelop hanterar generella projekt",
         "Description[tr]": "K Geliştir uygulamasının genel projeleri yönetmesine izin ver",
         "Description[uk]": "За допомогою цього додатка можна увімкнути керування загальними проєктами у KDevelop",
-        "Description[x-test]": "xxAllow KDevelop to manage generic projectsxx",
         "Description[zh_CN]": "允许 KDevelop 管理常规工程",
         "Description[zh_TW]": "讓 KDevelop 管理一般的專案",
         "Icon": "kdevelop",
@@ -110,7 +108,6 @@
         "Name[tr]": "Genel Proje Yöneticisi",
         "Name[ug]": "ئادەتتىكى قۇرۇلۇش باشقۇرغۇچ",
         "Name[uk]": "Звичайний засіб керування проєктом",
-        "Name[x-test]": "xxGeneric Project Managerxx",
         "Name[zh_CN]": "常规工程管理器",
         "Name[zh_TW]": "一般專案管理員"
     },

@@ -35,7 +35,6 @@
                 "Name[sv]": "Friedrich W. H. Kossebau",
                 "Name[tr]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
-                "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
                 "Name[zh_CN]": "Friedrich W. H. Kossebau",
                 "Name[zh_TW]": "Friedrich W. H. Kossebau"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Möjliggör granskning och redigering av rådata i filer (baserad på Okteta)",
         "Description[tr]": "Dosyaların ham verisini okuma ve düzenlemeyi sağlar (Oktet tabanlı)",
         "Description[uk]": "Уможливлює перегляд і редагування необроблених даних у файлах (на основі Okteta)",
-        "Description[x-test]": "xxEnables viewing and editing of the raw data of files (Okteta-based)xx",
         "Description[zh_CN]": "允许查看和编辑文件的原始数据 (基于 Okteta)",
         "Description[zh_TW]": "提供檔案原始資料的檢視和編輯（基於 Okteta）",
         "Icon": "okteta",
@@ -105,7 +103,6 @@
         "Name[sv]": "Hexadecimaleditor",
         "Name[tr]": "Hex Düzenleyicisi",
         "Name[uk]": "Шістнадцятковий редактор",
-        "Name[x-test]": "xxHex Editorxx",
         "Name[zh_CN]": "十六进制编辑器",
         "Name[zh_TW]": "十六進位資料編輯器",
         "Version": "0.1.0"

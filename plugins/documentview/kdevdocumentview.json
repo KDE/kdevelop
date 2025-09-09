@@ -34,7 +34,6 @@
                 "Name[sv]": "Adam Treat",
                 "Name[tr]": "Adam Treat",
                 "Name[uk]": "Adam Treat",
-                "Name[x-test]": "xxAdam Treatxx",
                 "Name[zh_CN]": "Adam Treat",
                 "Name[zh_TW]": "Adam Treat"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Insticksprogrammet visar en grafisk vy av alla dokument som för närvarande har laddats och delar upp dem enligt Mime-typ.",
         "Description[tr]": "Bu eklenti, şu anda yüklenmiş olan tüm belgeleri grafiksel bir görünümde gösterir ve MIME türlerine göre ayırır.",
         "Description[uk]": "Цей додаток відображає у графічному вигляді всі відкриті документи і впорядковує їх за типом MIME.",
-        "Description[x-test]": "xxThis plugin displays a graphical view of all documents currently loaded and separates them by mimetype.xx",
         "Description[zh_CN]": "此插件显示当前已加载文档的图形视图并按照 mime 类型分类。",
         "Description[zh_TW]": "這個外掛程式顯示目前載入並依 MIME 型態分類的文件的圖形檢視。",
         "Icon": "document-preview",
@@ -111,7 +109,6 @@
         "Name[tr]": "Belge Görünümü",
         "Name[ug]": "پۈتۈك كۆرۈنۈشى",
         "Name[uk]": "Перегляд документів",
-        "Name[x-test]": "xxDocument Viewxx",
         "Name[zh_CN]": "文档视图",
         "Name[zh_TW]": "文件檢視",
         "Version": "0.1"

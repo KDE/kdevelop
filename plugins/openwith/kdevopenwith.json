@@ -33,7 +33,6 @@
                 "Name[sv]": "Andreas Pakulat",
                 "Name[tr]": "Andreas Pakulat",
                 "Name[uk]": "Andreas Pakulat",
-                "Name[x-test]": "xxAndreas Pakulatxx",
                 "Name[zh_CN]": "Andreas Pakulat",
                 "Name[zh_TW]": "Andreas Pakulat"
             }
@@ -68,7 +67,6 @@
         "Description[sv]": "Insticksprogrammet tillåter att öppna filer med tillhörande externa program.",
         "Description[tr]": "Bu eklenti, ilişkilendirilmiş dış uygulamalar ile dosyalar açmayı sağlar.",
         "Description[uk]": "За допомогою цього додатка ви зможете відкривати файли у пов’язаній з ними зовнішній програмі.",
-        "Description[x-test]": "xxThis plugin allows one to open files with associated external applications.xx",
         "Description[zh_CN]": "此插件允许使用关联的外部应用程序打开文件。",
         "Description[zh_TW]": "此外掛程式讓您可以使用外部應用程式開啟檔案。",
         "Icon": "document-open",
@@ -113,7 +111,6 @@
         "Name[tr]": "Birlikte Aç",
         "Name[ug]": "بۇنىڭدا ئېچىش",
         "Name[uk]": "Відкриття у зовнішніх програмах",
-        "Name[x-test]": "xxOpen Withxx",
         "Name[zh_CN]": "打开方式",
         "Name[zh_TW]": "開啟方式"
     },

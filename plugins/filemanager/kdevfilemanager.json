@@ -33,7 +33,6 @@
                 "Name[sv]": "Alexander Dymo",
                 "Name[tr]": "Alexander Dymo",
                 "Name[uk]": "Олександр Димо",
-                "Name[x-test]": "xxAlexander Dymoxx",
                 "Name[zh_CN]": "Alexander Dymo",
                 "Name[zh_TW]": "Alexander Dymo"
             }
@@ -69,7 +68,6 @@
         "Description[sv]": "Insticksprogrammet integrerar en filhanterare i KDevelop.",
         "Description[tr]": "Bu eklenti K Geliştir için bir dosya yöneticisi sağlar.",
         "Description[uk]": "За допомогою цього додатка можна отримати доступ до менеджера файлів у KDevelop.",
-        "Description[x-test]": "xxThis plugin brings a filemanager to KDevelop.xx",
         "Description[zh_CN]": "此插件为 KDevelop 提供了一个文件管理器。",
         "Description[zh_TW]": "此外掛程式讓 KDevelop 可使用檔案管理員。",
         "Icon": "system-file-manager",
@@ -112,7 +110,6 @@
         "Name[tr]": "KDE Dosya Yöneticisi Tümleştirmesi",
         "Name[ug]": "KDE ھۆججەت باشقۇرغۇنىڭ يۈرۈشلەشتۈرۈلۇشى",
         "Name[uk]": "Інтеграція засобу керування файлами KDE",
-        "Name[x-test]": "xxKDE File Manager Integrationxx",
         "Name[zh_CN]": "KDE 文件管理器整合",
         "Name[zh_TW]": "KDE 檔案管理員整合",
         "Version": "0.1"

@@ -35,7 +35,6 @@
                 "Name[sv]": "Matt Rogers",
                 "Name[tr]": "Matt Rogers",
                 "Name[uk]": "Matt Rogers",
-                "Name[x-test]": "xxMatt Rogersxx",
                 "Name[zh_CN]": "Matt Rogers",
                 "Name[zh_TW]": "Matt Rogers"
             }
@@ -71,7 +70,6 @@
         "Description[sv]": "Låter KDevelop hantera CMake-baserade projekt",
         "Description[tr]": "K Geliştir uygulamasının CMake temelli projeleri yönetmesine izin verir",
         "Description[uk]": "Надає змогу KDevelop керувати заснованими на CMake проєктами",
-        "Description[x-test]": "xxAllows KDevelop to manage CMake-based projectsxx",
         "Description[zh_CN]": "允许 KDevelop 管理基于 CMake 的工程",
         "Description[zh_TW]": "讓 KDevelop 能夠管理利用 CMake 的專案",
         "Icon": "cmake",
@@ -106,7 +104,6 @@
         "Name[sv]": "CMake projekthanterare",
         "Name[tr]": "CMake Proje Yöneticisi",
         "Name[uk]": "Керування проєктами CMake",
-        "Name[x-test]": "xxCMake Project Managerxx",
         "Name[zh_CN]": "CMake 工程管理器",
         "Name[zh_TW]": "CMake 專案管理員"
     },

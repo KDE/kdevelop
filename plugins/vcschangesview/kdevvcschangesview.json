@@ -35,7 +35,6 @@
                 "Name[sv]": "Aleix Pol",
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
-                "Name[x-test]": "xxAleix Polxx",
                 "Name[zh_CN]": "Aleix Pol",
                 "Name[zh_TW]": "Aleix Pol"
             }
@@ -70,7 +69,6 @@
         "Description[sv]": "Det här insticksprogrammet tillhandahåller integrering mellan projekten och deras VCS infrastruktur",
         "Description[tr]": "Bu eklenti, projeler ile VCS altyapıları arasında tümleştirme sağlar",
         "Description[uk]": "За допомогою цього додатка забезпечується інтеграція між проєктами та інфраструктурою системи керування версіями (VCS)",
-        "Description[x-test]": "xxThis plugin provides integration between the projects and their VCS infrastructurexx",
         "Description[zh_CN]": "此插件提供工程和它们的代码管理系统的集成",
         "Description[zh_TW]": "此外掛程式提供專案與它們之間版本控制系統基礎間的整合",
         "Icon": "kdevelop",
@@ -113,7 +111,6 @@
         "Name[tr]": "Sürüm Denetimi Sistemi Tümleştirmesi",
         "Name[ug]": "VCS يۈرۈشلەشتۈرۈلۈشى",
         "Name[uk]": "Інтеграція з системами керування версіями",
-        "Name[x-test]": "xxVCS Integrationxx",
         "Name[zh_CN]": "VCS 工程集成",
         "Name[zh_TW]": "版本控制系統整合"
     },

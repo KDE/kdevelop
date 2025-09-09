@@ -34,7 +34,6 @@
                 "Name[sv]": "Aleix Pol Gonzalez",
                 "Name[tr]": "Aleix Pol Gonzalez",
                 "Name[uk]": "Aleix Pol Gonzalez",
-                "Name[x-test]": "xxAleix Pol Gonzalezxx",
                 "Name[zh_CN]": "Aleix Pol Gonzalez",
                 "Name[zh_TW]": "Aleix Pol Gonzalez"
             }
@@ -68,7 +67,6 @@
         "Description[sv]": "Låter dig visa en Plasmoid",
         "Description[tr]": "Bir Plasmoid görüntülemenize izin verir",
         "Description[uk]": "Надає вам змогу переглядати роботу плазмоїдів",
-        "Description[x-test]": "xxLets you view a plasmoidxx",
         "Description[zh_CN]": "让您查看一个 plasmoid",
         "Description[zh_TW]": "讓您檢視一個 Plasmoid",
         "Icon": "system-run",
@@ -105,7 +103,6 @@
         "Name[sv]": " Plasmoid-startprogram",
         "Name[tr]": "Plasmoid Başlatıcısı",
         "Name[uk]": "Засіб запуску плазмоїдів",
-        "Name[x-test]": "xxPlasmoid Launcherxx",
         "Name[zh_CN]": "部件启动器",
         "Name[zh_TW]": "Plasma 啟動器"
     },

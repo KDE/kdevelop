@@ -34,7 +34,6 @@
                 "Name[sv]": "Evgeniy Ivanov",
                 "Name[tr]": "Evgeniy Ivanov",
                 "Name[uk]": "Evgeniy Ivanov",
-                "Name[x-test]": "xxEvgeniy Ivanovxx",
                 "Name[zh_CN]": "Evgeniy Ivanov",
                 "Name[zh_TW]": "Evgeniy Ivanov"
             }
@@ -70,7 +69,6 @@
         "Description[sv]": "Insticksprogrammet integrerar Git i KDevelop",
         "Description[tr]": "Bu eklenti, Git uygulamasını K Geliştir ile tümleştirir",
         "Description[uk]": "Цей додаток інтегрує Git із KDevelop",
-        "Description[x-test]": "xxThis plugin integrates Git to KDevelopxx",
         "Description[zh_CN]": "此插件对 KDevelop 整合 Git",
         "Description[zh_TW]": "此外掛程式將 Git 整合進 KDevelop 內",
         "Icon": "git",
@@ -112,7 +110,6 @@
         "Name[tr]": "Git Desteği",
         "Name[ug]": "Git قوللىشى",
         "Name[uk]": "Підтримка Git",
-        "Name[x-test]": "xxGit Supportxx",
         "Name[zh_CN]": "Git 支持",
         "Name[zh_TW]": "Git 支援",
         "Version": "0.9"

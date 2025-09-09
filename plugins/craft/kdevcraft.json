@@ -27,7 +27,6 @@
                 "Name[sv]": "Gleb Popov",
                 "Name[tr]": "Gleb Popov",
                 "Name[uk]": "Gleb Popov",
-                "Name[x-test]": "xxGleb Popovxx",
                 "Name[zh_TW]": "Gleb Popov"
             }
         ],
@@ -56,7 +55,6 @@
         "Description[sv]": "Exponerar KDE Craft-miljön som körtidsprogram",
         "Description[tr]": "KDE Craft ortamını bir çalışma zamanı olarak açığa çıkarır",
         "Description[uk]": "Розкриває середовище KDE Craft, як середовище виконання",
-        "Description[x-test]": "xxExposes KDE Craft environment as a runtimexx",
         "Description[zh_TW]": "將 KDE Craft 環境作為執行環境提供存取",
         "Icon": "kdevelop",
         "License": "BSD3",
@@ -84,7 +82,6 @@
         "Name[sv]": "Craft körtidsprogram",
         "Name[tr]": "Craft çalıştırma ortamı",
         "Name[uk]": "Середовище виконання Craft",
-        "Name[x-test]": "xxCraft runtimexx",
         "Name[zh_TW]": "Craft 執行階段",
         "Version": "0.1"
     },

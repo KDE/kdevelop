@@ -31,7 +31,6 @@
         "Description[sv]": "Insticksprogrammet ger KDevelop en inbyggd terminal för snabb och enkel åtkomst av kommandoraden.",
         "Description[tr]": "Bu eklenti, tez ve kolay komut satırı erişimi için K Geliştir’e gömülü bir uçbirim sağlar.",
         "Description[uk]": "За допомогою цього додатка у KDevelop можна буде скористатися вбудованою konsole, яка пришвидшить і полегшить доступ до командного рядка.",
-        "Description[x-test]": "xxThis plugin provides KDevelop with an embedded konsole for quick and easy command line access.xx",
         "Description[zh_CN]": "此插件为 KDevelop 提供了一个快速方便地访问命令行的嵌入式控制台。",
         "Description[zh_TW]": "此外掛程式提供 KDevelop 一個嵌入式的 konsole，能快速地使用命令列。",
         "Icon": "utilities-terminal",
@@ -73,7 +72,6 @@
         "Name[tr]": "Konsole Tümleştirmesi",
         "Name[ug]": "Konsole يۈرۈشلەشتۈرۈلۈشى",
         "Name[uk]": "Інтеграція з Konsole",
-        "Name[x-test]": "xxKonsole Integrationxx",
         "Name[zh_CN]": "Konsole 整合",
         "Name[zh_TW]": "Konsole 整合"
     },

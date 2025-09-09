@@ -29,7 +29,6 @@
         "Description[sv]": "C/C++ språkstöd (Clang-baserat)",
         "Description[tr]": "C/C++ Dil Desteği (Clang tabanlı)",
         "Description[uk]": "Підтримка мови C/C++ на основі Clang",
-        "Description[x-test]": "xxC/C++ Language Support (Clang-based)xx",
         "Description[zh_CN]": "C/C++ 语言支持 (基于 Clang)",
         "Description[zh_TW]": "C/C++ 語言支援（基於 Clang）",
         "Icon": "text-x-c++src",
@@ -64,7 +63,6 @@
         "Name[sv]": "C++ stöd",
         "Name[tr]": "C++ Desteği",
         "Name[uk]": "Підтримка C++",
-        "Name[x-test]": "xxC++ Supportxx",
         "Name[zh_CN]": "C++ 支持",
         "Name[zh_TW]": "C++ 支援"
     },

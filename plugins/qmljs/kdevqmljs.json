@@ -29,7 +29,6 @@
         "Description[sv]": "QML/JS språkstöd (baserat på qmljs från QtCreator)",
         "Description[tr]": "QML/JS dil desteği (QtCreator’dan qmljs tabanlı)",
         "Description[uk]": "Підтримка мови QML/JS (на основі qmljs з QtCreator)",
-        "Description[x-test]": "xxQML/JS language support (based on qmljs from QtCreator)xx",
         "Description[zh_CN]": "QML/JS 语言支持 (基于 QtCreator 的 qmljs)",
         "Description[zh_TW]": "QML/JS 語言支援（基於來自 QtCreator 的 qmljs）",
         "Icon": "text-x-qml",
@@ -65,7 +64,6 @@
         "Name[sv]": "QML-stöd",
         "Name[tr]": "QML Desteği",
         "Name[uk]": "Підтримка QML",
-        "Name[x-test]": "xxQML Supportxx",
         "Name[zh_CN]": "QML 支持",
         "Name[zh_TW]": "QML 支援"
     },

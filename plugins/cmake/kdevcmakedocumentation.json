@@ -35,7 +35,6 @@
                 "Name[sv]": "Aleix Pol",
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
-                "Name[x-test]": "xxAleix Polxx",
                 "Name[zh_CN]": "Aleix Pol",
                 "Name[zh_TW]": "Aleix Pol"
             }
@@ -71,7 +70,6 @@
         "Description[sv]": "Låter KDevelop tillhandahålla CMake-dokumentation",
         "Description[tr]": "K Geliştir uygulamasının CMake belgelendirmesi sağlamasına izin verir",
         "Description[uk]": "Надає змогу KDevelop показувати документацію CMake",
-        "Description[x-test]": "xxAllows KDevelop to provide CMake documentationxx",
         "Description[zh_CN]": "允许 KDevelop 提供 CMake 文档",
         "Description[zh_TW]": "讓 KDevelop 可以提供 CMake 說明文件",
         "Icon": "cmake",
@@ -106,7 +104,6 @@
         "Name[sv]": "CMake-dokumentation",
         "Name[tr]": "CMake Belgelendirmesi",
         "Name[uk]": "Документація з CMake",
-        "Name[x-test]": "xxCMake Documentationxx",
         "Name[zh_CN]": "CMake 文档",
         "Name[zh_TW]": "CMake 說明文件"
     },
