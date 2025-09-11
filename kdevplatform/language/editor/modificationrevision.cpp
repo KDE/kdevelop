@@ -6,6 +6,7 @@
 
 #include "modificationrevision.h"
 
+#include <QDebug>
 #include <QString>
 #include <QFileInfo>
 #include <QMutex>
@@ -151,4 +152,9 @@ QString ModificationRevision::toString() const
     return QStringLiteral("%1 (rev %2)")
         .arg(QDateTime::fromSecsSinceEpoch(modificationTime, QTimeZone::LocalTime).time().toString())
         .arg(revision);
+}
+
+QDebug KDevelop::operator<<(QDebug debug, const ModificationRevision& revision)
+{
+    return debug << revision.toString();
 }

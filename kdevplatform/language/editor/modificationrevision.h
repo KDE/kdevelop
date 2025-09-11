@@ -11,6 +11,7 @@
 #include <language/languageexport.h>
 #include "../backgroundparser/documentchangetracker.h"
 
+class QDebug;
 class QString;
 
 namespace KDevelop {
@@ -60,6 +61,8 @@ private:
     static void setEditorRevisionForFile(const IndexedString& filename, int revision);
     static void clearEditorRevisionForFile(const IndexedString& filename);
 };
+
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug debug, const ModificationRevision& revision);
 }
 
 #endif
