@@ -98,6 +98,7 @@ private Q_SLOTS:
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesStopDebugger();
+    void testVariablesChanged();
 
     void testDebugInExternalTerminal_data();
     void testDebugInExternalTerminal();

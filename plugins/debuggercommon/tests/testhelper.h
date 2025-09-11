@@ -71,6 +71,9 @@ class QSignalSpy;
 #define STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                        \
     RUN_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy, KDevMI::Testing::RunMode::StepOut)
 
+#define STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy)                                                       \
+    RUN_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy, KDevMI::Testing::RunMode::StepOver)
+
 #define WAIT_FOR_A_WHILE(session, ms)                                                                                  \
     do {                                                                                                               \
         if (!KDevMI::Testing::waitForAWhile((session), (ms), __FILE__, __LINE__))                                      \
@@ -150,6 +153,7 @@ enum class RunMode {
     Continue,
     StepInto,
     StepOut,
+    StepOver
 };
 
 /**

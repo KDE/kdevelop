@@ -152,6 +152,9 @@ void resetAndRun(ActiveStateSessionSpy& spy, IDebugSession* session, RunMode run
     case RunMode::StepOut:
         session->stepOut();
         break;
+    case RunMode::StepOver:
+        session->stepOver();
+        break;
     }
 }
 

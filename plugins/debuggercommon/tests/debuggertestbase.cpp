@@ -600,6 +600,90 @@ void DebuggerTestBase::testVariablesStopDebugger()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void DebuggerTestBase::testVariablesChanged()
+{
+    // kdevlldb xfails the test because of a workaround in LLDB::DebugSession::updateAllVariables()
+    // that updates all variables manually and never marks variables as changed.
+
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    auto* const collection = variableCollection();
+    collection->variableWidgetShown();
+
+    auto* const breakpoint = addDebugeeBreakpoint(23);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23);
+
+    // Prepare "static int i = 0;"
+    // In LLDB, "i" doesn't exist in Locals, so we have to do this via a watch.
+    const auto* const iVariable = collection->watches()->add("i");
+    QVERIFY(iVariable);
+    // Expand the "Auto" collection.
+    const auto watchesIndex = collection->index(0, 0);
+    COMPARE_DATA(watchesIndex, "Auto");
+    collection->expanded(watchesIndex);
+    // Expand the Locals collection.
+    const auto localsIndex = collection->index(1, 0);
+    COMPARE_DATA(localsIndex, "Locals");
+    collection->expanded(localsIndex);
+
+    // Wait for the watch to be added and the collections to be expanded.
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QCOMPARE(collection->rowCount(watchesIndex), 1);
+
+    QCOMPARE(iVariable->value(), "0");
+    // Top-level variables are initialized as unchanged.
+    QCOMPARE(iVariable->isChanged(), false);
+
+    STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 24);
+
+    QCOMPARE(iVariable->value(), "1");
+    if (isLldb()) {
+        QEXPECT_FAIL("", "kdevlldb does not properly support reporting isChanged()", Continue);
+    }
+    QCOMPARE(iVariable->isChanged(), true);
+
+    STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    QCOMPARE(iVariable->value(), "1");
+    QCOMPARE(iVariable->isChanged(), false);
+
+    // The row of a local variable "j" is different in LLDB (0) vs. GDB (1).
+    const auto jLocalsRow = isLldb() ? 0 : 1;
+    QCOMPARE_GT(collection->rowCount(localsIndex), jLocalsRow);
+    const auto jIndex = collection->index(jLocalsRow, 0, localsIndex);
+    COMPARE_DATA(jIndex, "j");
+    const auto* const jVariable = qobject_cast<KDevelop::Variable*>(collection->itemForIndex(jIndex));
+    QVERIFY(jVariable);
+
+    QCOMPARE(jVariable->value(), "1");
+    QCOMPARE(jVariable->isChanged(), false);
+
+    // Return and enter the debugee function foo() a second time, stopping at the first "noop();" line.
+    breakpoint->setLine(breakpoint->line() + 1);
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 24);
+
+    QCOMPARE(jVariable->value(), "2");
+    if (isLldb()) {
+        QEXPECT_FAIL("", "kdevlldb does not properly support reporting isChanged()", Continue);
+    }
+    QCOMPARE(jVariable->isChanged(), true);
+
+    STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 25);
+
+    QCOMPARE(jVariable->value(), "2");
+    QCOMPARE(jVariable->isChanged(), false);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testDebugInExternalTerminal_data()
 {
     QTest::addColumn<QString>("terminalExecutable");

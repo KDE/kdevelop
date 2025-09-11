@@ -80,6 +80,9 @@ void IVariableController::updateIfFrameOrThreadChanged()
 
     IFrameStackModel *sm = session()->frameStackModel();
     if (sm->currentThread() != d->activeThread || sm->currentFrame() != d->activeFrame) {
+        qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << sm->currentThread() << ';'
+                          << "frame" << d->activeFrame << "=>" << sm->currentFrame();
+
         variableCollection()->root()->resetChanged();
         update();
     }
@@ -93,6 +96,16 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
 
     switch (event) {
     case IDebugSession::thread_or_frame_changed:
+        if (session()->frameStackModel()->currentThread() < 0 || session()->frameStackModel()->currentFrame() < 0) {
+            // Update only when both the current thread and the current frame become valid.
+            // Redundant updating breaks highlighting changed variables, slows down
+            // debugging by issuing unneeded MI commands, and may cause other bugs.
+            qCDebug(DEBUGGER).nospace() << "not handling a change to invalid thread ("
+                                        << session()->frameStackModel()->currentThread() << ") or frame ("
+                                        << session()->frameStackModel()->currentFrame() << ')';
+            return;
+        }
+
         qCDebug(DEBUGGER) << d->autoUpdate;
         if (!(d->autoUpdate & UpdateLocals)) {
             const auto locals = variableCollection()->allLocals();
@@ -125,6 +138,13 @@ void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
     d->autoUpdate = autoUpdate;
     qCDebug(DEBUGGER) << d->autoUpdate;
     if (d->autoUpdate != UpdateNone && state == IDebugSession::PausedState) {
+        if (d->activeThread < 0 || d->activeFrame < 0) {
+            // Cannot update variables for an invalid thread or frame. Our handler of the event
+            // thread_or_frame_changed will update variables once the current thread and frame become valid.
+            qCDebug(DEBUGGER).nospace() << "skipping initial update of variables because the current thread ("
+                                        << d->activeThread << ") or frame (" << d->activeFrame << ") is invalid";
+            return;
+        }
         update();
     }
 }
