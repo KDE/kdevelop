@@ -168,7 +168,7 @@ void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 
     qint64 revision = context->parsingEnvironmentFile()->modificationRevision().revision;
 
-    qCDebug(LANGUAGE) << "highlighting du chain" << url.toUrl();
+    qCDebug(LANGUAGE) << "highlighting du chain" << url.toUrl() << revision;
 
     if (!m_localColorization && !m_globalColorization) {
         qCDebug(LANGUAGE) << "highlighting disabled";
