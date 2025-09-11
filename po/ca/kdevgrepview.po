@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2024-02-16 11:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -71,17 +71,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Cerca «%1» a %2 (a l'hora %3)"
 
-#: grepjob.cpp:156
+#: grepjob.cpp:155
 #, kde-format
 msgid "Find in Files"
 msgstr "Cerca a fitxers"
 
-#: grepjob.cpp:175
+#: grepjob.cpp:174
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "No s'ha trobat cap fitxer que coincideixi amb els patrons de comodins"
 
-#: grepjob.cpp:189
+#: grepjob.cpp:188
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -89,34 +89,34 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "No es permeten captures en la cadena de patrons"
 
-#: grepjob.cpp:210
+#: grepjob.cpp:209
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "S'està cercant <b>%2</b> en un fitxer"
 msgstr[1] "S'està cercant <b>%2</b> en %1 fitxers"
 
-#: grepjob.cpp:236
+#: grepjob.cpp:235
 #, kde-format
 msgid "Collecting files..."
 msgstr "S'estan col·leccionant els fitxers..."
 
-#: grepjob.cpp:280
+#: grepjob.cpp:279
 #, kde-format
 msgid "Search aborted"
 msgstr "Cerca interrompuda"
 
-#: grepjob.cpp:326
+#: grepjob.cpp:325
 #, kde-format
 msgid "Failed: %1"
 msgstr "Ha fallat: %1"
 
-#: grepjob.cpp:329
+#: grepjob.cpp:328
 #, kde-format
 msgid "No results found"
 msgstr "No s'ha trobat cap resultat"
 
-#: grepjob.cpp:348
+#: grepjob.cpp:347
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"

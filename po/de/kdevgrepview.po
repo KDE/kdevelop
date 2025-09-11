@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2022-07-23 22:29+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -66,17 +66,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Suche nach „%1“ in „%2“ (um %3 Uhr)"
 
-#: grepjob.cpp:156
+#: grepjob.cpp:155
 #, kde-format
 msgid "Find in Files"
 msgstr "In Dateien suchen"
 
-#: grepjob.cpp:175
+#: grepjob.cpp:174
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Keine Dateien gefunden, die mit dem Suchmuster übereinstimmen"
 
-#: grepjob.cpp:189
+#: grepjob.cpp:188
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -85,34 +85,34 @@ msgid "Captures are not allowed in pattern string"
 msgstr ""
 "Gespeicherte Übereinstimmungen (captures) sind im Suchmuster nicht erlaubt"
 
-#: grepjob.cpp:210
+#: grepjob.cpp:209
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Es wird in einer Datei nach <b>%2</b> gesucht"
 msgstr[1] "Es wird in %1 Dateien nach <b>%2</b> gesucht"
 
-#: grepjob.cpp:236
+#: grepjob.cpp:235
 #, kde-format
 msgid "Collecting files..."
 msgstr "Dateien werden zusammengestellt ..."
 
-#: grepjob.cpp:280
+#: grepjob.cpp:279
 #, kde-format
 msgid "Search aborted"
 msgstr "Suche abgebrochen"
 
-#: grepjob.cpp:326
+#: grepjob.cpp:325
 #, kde-format
 msgid "Failed: %1"
 msgstr "Fehlgeschlagen: %1"
 
-#: grepjob.cpp:329
+#: grepjob.cpp:328
 #, kde-format
 msgid "No results found"
 msgstr "Keine Ergebnisse gefunden"
 
-#: grepjob.cpp:348
+#: grepjob.cpp:347
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2022-11-25 21:57+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -362,8 +362,10 @@ msgid "Unstaged changes"
 msgstr "Niedobrane zmiany"
 
 #: repostatusmodel.cpp:84
-#, kde-format
-msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Sprzeczności"
 
@@ -396,8 +398,10 @@ msgid "Files with changes"
 msgstr "Pliki ze zmianami"
 
 #: repostatusmodel.cpp:109
-#, kde-format
-msgctxt "Files in git which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Sprzeczności"
 
@@ -713,6 +717,10 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Gałąź"
+
+#~ msgctxt "Files in git which have unresolved (merge) conflits"
+#~ msgid "Conflicts"
+#~ msgstr "Sprzeczności"
 
 #~ msgid "error: %1"
 #~ msgstr "błąd: %1"

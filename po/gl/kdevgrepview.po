@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2024-03-02 17:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -71,17 +71,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Buscar «%1» en %2 (na hora %3)"
 
-#: grepjob.cpp:156
+#: grepjob.cpp:155
 #, kde-format
 msgid "Find in Files"
 msgstr "Atopar en ficheiros"
 
-#: grepjob.cpp:175
+#: grepjob.cpp:174
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Non se atopou ningún ficheiro que coincidise cos padróns de comodíns"
 
-#: grepjob.cpp:189
+#: grepjob.cpp:188
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -89,34 +89,34 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Non se permiten capturas na cadea dos padróns"
 
-#: grepjob.cpp:210
+#: grepjob.cpp:209
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Buscando <b>%2</b> nun ficheiro"
 msgstr[1] "Buscando <b>%2</b> en %1 ficheiros"
 
-#: grepjob.cpp:236
+#: grepjob.cpp:235
 #, kde-format
 msgid "Collecting files..."
 msgstr "Recollendo os ficheiros…"
 
-#: grepjob.cpp:280
+#: grepjob.cpp:279
 #, kde-format
 msgid "Search aborted"
 msgstr "Interrompeuse a busca"
 
-#: grepjob.cpp:326
+#: grepjob.cpp:325
 #, kde-format
 msgid "Failed: %1"
 msgstr "Fallou: %1"
 
-#: grepjob.cpp:329
+#: grepjob.cpp:328
 #, kde-format
 msgid "No results found"
 msgstr "Non se achou ningún resultado"
 
-#: grepjob.cpp:348
+#: grepjob.cpp:347
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"

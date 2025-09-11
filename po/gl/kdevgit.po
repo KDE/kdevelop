@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2023-10-16 06:07+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -360,8 +360,10 @@ msgid "Unstaged changes"
 msgstr "Cambios non preseleccionados"
 
 #: repostatusmodel.cpp:84
-#, kde-format
-msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Conflitos"
 
@@ -394,8 +396,10 @@ msgid "Files with changes"
 msgstr "Ficheiros con cambios"
 
 #: repostatusmodel.cpp:109
-#, kde-format
-msgctxt "Files in git which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Conflitos"
 
@@ -710,6 +714,10 @@ msgstr "Crear unha nova rama, aplicar a reserva nela, e eliminar a reserva."
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Rama"
+
+#~ msgctxt "Files in git which have unresolved (merge) conflits"
+#~ msgid "Conflicts"
+#~ msgstr "Conflitos"
 
 #~ msgid "error: %1"
 #~ msgstr "erro: %1"

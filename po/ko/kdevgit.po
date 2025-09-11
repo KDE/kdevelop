@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2023-07-23 20:37+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -345,8 +345,10 @@ msgid "Unstaged changes"
 msgstr "스테이지되지 않은 변경 사항"
 
 #: repostatusmodel.cpp:84
-#, kde-format
-msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "충돌"
 
@@ -379,8 +381,10 @@ msgid "Files with changes"
 msgstr "변경 사항이 있는 파일"
 
 #: repostatusmodel.cpp:109
-#, kde-format
-msgctxt "Files in git which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "충돌"
 
@@ -695,6 +699,10 @@ msgstr "새 브랜치를 만들고 스태시를 적용한 다음 스태시 삭�
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "브랜치"
+
+#~ msgctxt "Files in git which have unresolved (merge) conflits"
+#~ msgid "Conflicts"
+#~ msgstr "충돌"
 
 #~ msgid "error: %1"
 #~ msgstr "오류: %1"

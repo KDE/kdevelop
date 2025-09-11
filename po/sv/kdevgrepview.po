@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2024-05-02 15:03+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -68,17 +68,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Sök efter \"%1\" i %2 (med tid %3)"
 
-#: grepjob.cpp:156
+#: grepjob.cpp:155
 #, kde-format
 msgid "Find in Files"
 msgstr "Sök i filer"
 
-#: grepjob.cpp:175
+#: grepjob.cpp:174
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Inga filer hittades som motsvarar mönstren med jokertecken"
 
-#: grepjob.cpp:189
+#: grepjob.cpp:188
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -86,34 +86,34 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Infångningar tillåts inte i mönstersträng"
 
-#: grepjob.cpp:210
+#: grepjob.cpp:209
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Söker efter <b>%2</b> i en fil"
 msgstr[1] "Söker efter <b>%2</b> i %1 filer"
 
-#: grepjob.cpp:236
+#: grepjob.cpp:235
 #, kde-format
 msgid "Collecting files..."
 msgstr "Samlar filer..."
 
-#: grepjob.cpp:280
+#: grepjob.cpp:279
 #, kde-format
 msgid "Search aborted"
 msgstr "Sökning avbruten"
 
-#: grepjob.cpp:326
+#: grepjob.cpp:325
 #, kde-format
 msgid "Failed: %1"
 msgstr "Misslyckades: %1"
 
-#: grepjob.cpp:329
+#: grepjob.cpp:328
 #, kde-format
 msgid "No results found"
 msgstr "Inga resultat hittades"
 
-#: grepjob.cpp:348
+#: grepjob.cpp:347
 #, kde-format
 msgid "Grep: %1"
 msgstr "Flerfilsökning: %1"

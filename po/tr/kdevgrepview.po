@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2024-11-10 19:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -70,17 +70,17 @@ msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "%2 içinde “%1” ara (zamanı: %3)"
 
-#: grepjob.cpp:156
+#: grepjob.cpp:155
 #, kde-format
 msgid "Find in Files"
 msgstr "Dosyalarda Bul"
 
-#: grepjob.cpp:175
+#: grepjob.cpp:174
 #, kde-format
 msgid "No files found matching the wildcard patterns"
 msgstr "Joker dizgileri ile eşleşen dosya bulunamadı"
 
-#: grepjob.cpp:189
+#: grepjob.cpp:188
 #, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
@@ -88,34 +88,34 @@ msgctxt ""
 msgid "Captures are not allowed in pattern string"
 msgstr "Dizgi dizisinde yakalamalara izin verilmiyor"
 
-#: grepjob.cpp:210
+#: grepjob.cpp:209
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] "Bir dosya içinde <b>%2</b> aranıyor"
 msgstr[1] "%1 dosya içinde <b>%2</b> aranıyor"
 
-#: grepjob.cpp:236
+#: grepjob.cpp:235
 #, kde-format
 msgid "Collecting files..."
 msgstr "Dosyalar toplanıyor…"
 
-#: grepjob.cpp:280
+#: grepjob.cpp:279
 #, kde-format
 msgid "Search aborted"
 msgstr "Arama iptal edildi"
 
-#: grepjob.cpp:326
+#: grepjob.cpp:325
 #, kde-format
 msgid "Failed: %1"
 msgstr "Başarısız: %1"
 
-#: grepjob.cpp:329
+#: grepjob.cpp:328
 #, kde-format
 msgid "No results found"
 msgstr "Sonuç yok"
 
-#: grepjob.cpp:348
+#: grepjob.cpp:347
 #, kde-format
 msgid "Grep: %1"
 msgstr "Grep: %1"

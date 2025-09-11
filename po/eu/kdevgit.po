@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
 "PO-Revision-Date: 2022-12-06 20:29+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -345,8 +345,10 @@ msgid "Unstaged changes"
 msgstr ""
 
 #: repostatusmodel.cpp:84
-#, kde-format
-msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Gatazkak"
 
@@ -379,8 +381,10 @@ msgid "Files with changes"
 msgstr "Aldaketak dituzten fitxategiak"
 
 #: repostatusmodel.cpp:109
-#, kde-format
-msgctxt "Files in git which have unresolved (merge) conflits"
+#, fuzzy, kde-format
+#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
+#| msgid "Conflicts"
+msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Gatazkak"
 
@@ -695,6 +699,10 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Adarra"
+
+#~ msgctxt "Files in git which have unresolved (merge) conflits"
+#~ msgid "Conflicts"
+#~ msgstr "Gatazkak"
 
 #~ msgid "error: %1"
 #~ msgstr "errorea: %1"
