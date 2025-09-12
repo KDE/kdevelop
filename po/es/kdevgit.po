@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 00:40+0000\n"
-"PO-Revision-Date: 2025-05-17 02:03+0100\n"
+"PO-Revision-Date: 2025-09-11 12:15+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 25.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: committoolview.cpp:197 committoolview.cpp:198
@@ -354,9 +354,7 @@ msgid "Unstaged changes"
 msgstr "Cambios no añadidos"
 
 #: repostatusmodel.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Conflictos"
@@ -390,9 +388,7 @@ msgid "Files with changes"
 msgstr "Archivos con cambios"
 
 #: repostatusmodel.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Conflictos"
@@ -709,7 +705,3 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Rama"
-
-#~ msgctxt "Files in git which have unresolved (merge) conflits"
-#~ msgid "Conflicts"
-#~ msgstr "Conflictos"

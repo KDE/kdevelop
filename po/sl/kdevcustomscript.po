@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 00:40+0000\n"
-"PO-Revision-Date: 2022-01-07 10:18+0100\n"
+"PO-Revision-Date: 2025-09-11 06:56+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.7\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -68,12 +68,7 @@ msgid "Clang Format"
 msgstr "Oblika Clang"
 
 #: customscript_plugin.cpp:263
-#, fuzzy, kde-format
-#| msgid ""
-#| "Description:<br /><br /><b>clang-format</b> is an automatic source "
-#| "formater by the LLVM project. It supports a variety of formatting style "
-#| "options via a <b>.clang-format</b> configuration file, usually located in "
-#| "the project root directory."
+#, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formatter "
 "by the LLVM project. It supports a variety of formatting style options via a "

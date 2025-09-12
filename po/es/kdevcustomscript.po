@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 00:40+0000\n"
-"PO-Revision-Date: 2025-05-17 01:57+0100\n"
+"PO-Revision-Date: 2025-09-11 12:14+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -69,12 +69,7 @@ msgid "Clang Format"
 msgstr "Formato de Clang"
 
 #: customscript_plugin.cpp:263
-#, fuzzy, kde-format
-#| msgid ""
-#| "Description:<br /><br /><b>clang-format</b> is an automatic source "
-#| "formater by the LLVM project. It supports a variety of formatting style "
-#| "options via a <b>.clang-format</b> configuration file, usually located in "
-#| "the project root directory."
+#, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formatter "
 "by the LLVM project. It supports a variety of formatting style options via a "
