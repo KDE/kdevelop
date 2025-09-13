@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-06-23 08:59+0200\n"
+"PO-Revision-Date: 2025-09-08 09:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.08.0\n"
 "X-Text-Markup: kde4\n"
 
 #: dialogs/processselection.cpp:148
@@ -527,18 +527,13 @@ msgid "Can't create a temporary file"
 msgstr "Impossible de créer un fichier temporaire"
 
 #: stty.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#| "do sleep 3600;done\""
+#, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
 "accepts these arguments: %2"
 msgstr ""
-"Impossible d'obtenir le tty / pty %1. Vérifiez que %1 est bien un terminal "
-"et qu'il accepte ces arguments : -e sh -c \"tty> %2 ; exec <&- ; exec >&- ; "
-"while :  ; do sleep 3600 ; done\""
+"Impossible d'obtenir le tty / pty %1. Veuillez vérifier que %1 est bien un "
+"terminal et qu'il accepte ces arguments : %2"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
