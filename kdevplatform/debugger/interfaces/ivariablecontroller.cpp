@@ -74,60 +74,50 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
     }
 }
 
-void IVariableController::updateIfFrameOrThreadChanged()
-{
-    Q_D(IVariableController);
-
-    IFrameStackModel *sm = session()->frameStackModel();
-    if (sm->currentThread() != d->activeThread || sm->currentFrame() != d->activeFrame) {
-        qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << sm->currentThread() << ';'
-                          << "frame" << d->activeFrame << "=>" << sm->currentFrame();
-
-        variableCollection()->root()->resetChanged();
-        update();
-    }
-}
-
 void IVariableController::handleEvent(IDebugSession::event_t event)
 {
     Q_D(IVariableController);
 
     if (!variableCollection()) return;
 
-    switch (event) {
-    case IDebugSession::thread_or_frame_changed:
-        if (session()->frameStackModel()->currentThread() < 0 || session()->frameStackModel()->currentFrame() < 0) {
-            // Update only when both the current thread and the current frame become valid.
-            // Redundant updating breaks highlighting changed variables, slows down
-            // debugging by issuing unneeded MI commands, and may cause other bugs.
-            qCDebug(DEBUGGER).nospace() << "not handling a change to invalid thread ("
-                                        << session()->frameStackModel()->currentThread() << ") or frame ("
-                                        << session()->frameStackModel()->currentFrame() << ')';
-            return;
-        }
+    if (event != IDebugSession::thread_or_frame_changed) {
+        return;
+    }
 
-        qCDebug(DEBUGGER) << d->autoUpdate;
-        if (!(d->autoUpdate & UpdateLocals)) {
-            const auto locals = variableCollection()->allLocals();
-            for (Locals* l : locals) {
-                if (!l->isExpanded() && !l->childCount()) {
-                    l->setHasMore(true);
-                }
+    const auto thread = session()->frameStackModel()->currentThread();
+    const auto frame = session()->frameStackModel()->currentFrame();
+    if (thread < 0 || frame < 0) {
+        // Update only when both the current thread and the current frame become valid.
+        // Redundant updating breaks highlighting changed variables, slows down
+        // debugging by issuing unneeded MI commands, and may cause other bugs.
+        qCDebug(DEBUGGER).nospace() << "not handling a change to invalid thread (" << thread << ") or frame (" << frame
+                                    << ')';
+        return;
+    }
+
+    qCDebug(DEBUGGER) << d->autoUpdate;
+    if (!(d->autoUpdate & UpdateLocals)) {
+        const auto locals = variableCollection()->allLocals();
+        for (Locals* l : locals) {
+            if (!l->isExpanded() && !l->childCount()) {
+                l->setHasMore(true);
             }
         }
-        if (d->autoUpdate != UpdateNone) {
-            updateIfFrameOrThreadChanged();
-        }
-
-        // update our cache of active thread/frame regardless of d->autoUpdate
-        // to keep them synced when user currently hides the variable list
-        d->activeThread = session()->frameStackModel()->currentThread();
-        d->activeFrame = session()->frameStackModel()->currentFrame();
-        break;
-
-    default:
-        break;
     }
+    if (d->autoUpdate != UpdateNone) {
+        if (thread != d->activeThread || frame != d->activeFrame) {
+            qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << thread << ';' << "frame"
+                              << d->activeFrame << "=>" << frame;
+
+            variableCollection()->root()->resetChanged();
+            update();
+        }
+    }
+
+    // update our cache of active thread/frame regardless of d->autoUpdate
+    // to keep them synced when user currently hides the variable list
+    d->activeThread = thread;
+    d->activeFrame = frame;
 }
 
 void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)

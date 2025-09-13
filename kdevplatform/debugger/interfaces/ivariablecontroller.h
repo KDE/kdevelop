@@ -74,9 +74,6 @@ private Q_SLOTS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState);
 
 private:
-    void updateIfFrameOrThreadChanged();
-
-private:
     const QScopedPointer<class IVariableControllerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(IVariableController)
 };
