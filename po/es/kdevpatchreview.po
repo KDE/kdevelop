@@ -287,7 +287,7 @@ msgstr "Deseleccionar todo"
 #: patchreviewtoolview.cpp:557
 #, kde-format
 msgid "Running tests: %p%"
-msgstr "Ejecutando pruebas: %p%"
+msgstr "Ejecutando pruebas: %p %"
 
 #: patchreviewtoolview.cpp:585
 #, kde-format
