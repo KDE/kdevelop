@@ -2,7 +2,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Joëlle Cornavin <jcorn@free.fr>, 2008, 2009, 2010, 2011, 2012, 2013.
-# SPDX-FileCopyrightText: 2013, 2021, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2013, 2021, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
 #
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 00:40+0000\n"
-"PO-Revision-Date: 2024-08-13 18:05+0200\n"
+"PO-Revision-Date: 2025-09-12 13:51+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -75,12 +75,7 @@ msgid "Clang Format"
 msgstr "Clang Format"
 
 #: customscript_plugin.cpp:263
-#, fuzzy, kde-format
-#| msgid ""
-#| "Description:<br /><br /><b>clang-format</b> is an automatic source "
-#| "formater by the LLVM project. It supports a variety of formatting style "
-#| "options via a <b>.clang-format</b> configuration file, usually located in "
-#| "the project root directory."
+#, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formatter "
 "by the LLVM project. It supports a variety of formatting style options via a "
