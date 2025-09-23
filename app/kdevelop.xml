@@ -2,6 +2,7 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-kdevelop">
     <comment>KDevelop Project File</comment>
+    <comment xml:lang="ar">ملف مشاريع مطوّرك</comment>
     <comment xml:lang="ca">Fitxer de projecte del KDevelop</comment>
     <comment xml:lang="ca@valencia">Fitxer de projecte de KDevelop</comment>
     <comment xml:lang="cs">Soubor projektu KDevelop</comment>

@@ -3,6 +3,7 @@
     <!-- Not yet registered, mimetype based on proposal in https://bugs.freedesktop.org/show_bug.cgi?id=23700 -->
     <mime-type type="text/vnd.nvidia.cuda.csrc">
         <comment>NVIDIA CUDA C source code</comment>
+        <comment xml:lang="ar">شفرة مصدر NVIDIA CUDA C</comment>
         <comment xml:lang="ca">Codi font en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="ca@valencia">Codi font en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="cs">Zdrojový kód NVIDIA CUDA C</comment>
@@ -40,6 +41,7 @@
 
     <mime-type type="text/vnd.nvidia.cuda.chdr">
         <comment>NVIDIA CUDA C header</comment>
+        <comment xml:lang="ar">رأس NVIDIA CUDA C</comment>
         <comment xml:lang="ca">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="ca@valencia">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="cs">Hlavičkový soubor NVIDIA CUDA C</comment>
