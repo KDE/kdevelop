@@ -180,6 +180,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/kdevelop/kdevelop.png</image>
       <caption>Main window with code editor, terminal integration and project files</caption>
+      <caption xml:lang="ar">النافذة الرئيسة مع محرر الشفرة، وتكامل المحطة الطرفية وملفات المشروع</caption>
       <caption xml:lang="ca">Finestra principal amb l'editor de codi, integració del terminal i fitxers de projecte</caption>
       <caption xml:lang="ca-valencia">Finestra principal amb l'editor de codi, integració del terminal i fitxers de projecte</caption>
       <caption xml:lang="en-GB">Main window with code editor, terminal integration and project files</caption>
