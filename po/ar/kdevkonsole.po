@@ -1,15 +1,15 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2014.
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2015.
-# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2022, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-19 00:38+0000\n"
-"PO-Revision-Date: 2022-01-20 18:52+0400\n"
+"PO-Revision-Date: 2025-09-22 20:23+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
@@ -31,10 +32,9 @@ msgid "Terminal"
 msgstr "الطّرفيّة"
 
 #: kdevkonsoleviewplugin.cpp:48
-#, fuzzy, kde-format
-#| msgid "Failed to load 'konsolepart' plugin"
+#, kde-format
 msgid "Failed to load 'konsolepart' plugin: %1"
-msgstr "فشل تحميل ملحقة 'konsolepart'"
+msgstr "فشل تحميل ملحقة 'konsolepart': %1"
 
 #~ msgid "Konsole"
 #~ msgstr "كونسول"

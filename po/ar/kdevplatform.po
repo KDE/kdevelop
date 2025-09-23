@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-08-03 23:25+0400\n"
+"PO-Revision-Date: 2025-09-22 21:34+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -48,16 +48,16 @@ msgid "Pending"
 msgstr "ينتظر"
 
 #: debugger/breakpoint/breakpoint.cpp:205
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr "نظيف"
+msgstr "نظّف"
 
 #: debugger/breakpoint/breakpoint.cpp:238
 #, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: debugger/breakpoint/breakpointdetails.cpp:48
 #: debugger/breakpoint/breakpointdetails.cpp:127
@@ -139,9 +139,9 @@ msgid "Couldn't find breakpoint at %1:%2"
 msgstr "تعذّر العثور على نقطة توقّف عند %1:%2"
 
 #: debugger/breakpoint/breakpointmodel.cpp:384
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Breakpoint"
-msgstr "نقطة التّوقّف"
+msgstr "&نقطة التّوقّف"
 
 #: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
@@ -285,18 +285,18 @@ msgid "#%1 at %2"
 msgstr "أي تي 4"
 
 #: debugger/framestack/framestackmodel.cpp:290
-#, fuzzy, kde-format
+#, kde-format
 msgid "Depth"
-msgstr "عمق"
+msgstr "العمق"
 
 #: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
-#, fuzzy, kde-format
+#, kde-format
 msgid "Function"
 msgstr "الدالة"
 
 #: debugger/framestack/framestackmodel.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "Source"
 msgstr "المصدر"
 
@@ -310,9 +310,9 @@ msgid ""
 msgstr ""
 
 #: debugger/framestack/framestackwidget.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Threads:"
-msgstr "الخطوط"
+msgstr "الخطوط:"
 
 #: debugger/framestack/framestackwidget.cpp:225
 #, kde-format
@@ -327,24 +327,24 @@ msgid "#%1 %2() at %3:%4\n"
 msgstr ""
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Breakpoint hit: %1"
-msgstr "تصادم بنقطة توقّف"
+msgstr "تصادم بنقطة توقّف: %1"
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Watchpoint hit: %1"
-msgstr "تصادم بنقطة مشاهدة"
+msgstr "تصادم بنقطة مشاهدة: %1"
 
 #: debugger/util/pathmappings.cpp:86
 #, kde-format
 msgid "Remote Path"
-msgstr ""
+msgstr "مسار بعيد"
 
 #: debugger/util/pathmappings.cpp:88
 #, kde-format
 msgid "Local Path"
-msgstr ""
+msgstr "مسار محلي"
 
 #: debugger/util/pathmappings.cpp:217
 #, kde-format
@@ -379,7 +379,7 @@ msgstr "القيمة"
 #: debugger/variable/variablecollection.cpp:500
 #, kde-format
 msgid "Locals"
-msgstr ""
+msgstr "المحليات"
 
 #: debugger/variable/variabletooltip.cpp:115
 #, kde-format
@@ -535,7 +535,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr ""
+msgstr "ابحث في نص صفحة التوثيق الحالية"
 
 #: interfaces/contextmenuextension.cpp:133
 #, kde-format
@@ -569,9 +569,9 @@ msgid ""
 msgstr ""
 
 #: language/assistant/renameaction.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename \"%1\" to \"%2\""
-msgstr "أعد تسمية %1 إلى:"
+msgstr "أعد تسمية \"%1 إلى \"%2\""
 
 #: language/assistant/renameaction.cpp:109
 #: language/assistant/renamefileaction.cpp:77
@@ -593,9 +593,9 @@ msgid "Rename file from \"%1\" to \"%2\"."
 msgstr ""
 
 #: language/backgroundparser/backgroundparser.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parsing: %1"
-msgstr "تجزئة"
+msgstr "تحليل: %1"
 
 #: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
@@ -616,7 +616,7 @@ msgid "The file is %1 and exceeds the limit of %2."
 msgstr ""
 
 #: language/backgroundparser/parsejob.cpp:327
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not open file '%1'"
 msgstr "تعذّر فتح الملف ”%1“"
 
@@ -667,15 +667,15 @@ msgid "Classes in project %1"
 msgstr ""
 
 #: language/codecompletion/codecompletionitem.cpp:126
-#, fuzzy, kde-format
+#, kde-format
 msgid "not implemented"
-msgstr "لم يُجهَز"
+msgstr "لم تُنجز"
 
 #: language/codegen/basicrefactoring.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr "غيّر الاسم"
+msgstr "غيّر الاسم \"%1\"..."
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
@@ -688,10 +688,10 @@ msgid "Declaration is located in non-writable file %1."
 msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:296
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr "غيّر الاسم"
+msgstr "غيّر الاسم \"%1\""
 
 #: language/codegen/basicrefactoring.cpp:300
 #, kde-format
@@ -712,17 +712,17 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename"
-msgstr "اسم الملف"
+msgstr "غيّر الاسم"
 
 #. i18n: ectx: property (text), widget (QLabel, newNameLabel)
 #: language/codegen/basicrefactoring.ui:22
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&New name:"
-msgstr "الاسم الجديد:"
+msgstr "الا&سم الجديد:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
@@ -734,14 +734,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
 msgstr "&غيّر الاسم"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
 msgstr "أل&غِ"
@@ -799,7 +799,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, abortButton)
 #: language/codegen/progressdialogs/refactoringdialog.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "&Abort"
 msgstr "أ&جهض"
@@ -825,9 +825,9 @@ msgid "(unknown direct declaration)"
 msgstr ""
 
 #: language/duchain/declarationid.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "(missing)"
-msgstr "مفقود"
+msgstr "(مفقود)"
 
 #: language/duchain/forwarddeclaration.cpp:50
 #, kde-format
@@ -840,9 +840,9 @@ msgid "Import %1 as %2"
 msgstr ""
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import %1"
-msgstr "استورد"
+msgstr "استورد %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
 #, kde-format
@@ -852,7 +852,7 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
 msgid "Back to %1<br />"
-msgstr ""
+msgstr "العودة إلى %1<br />"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:116
 #, fuzzy, kde-format
@@ -865,14 +865,14 @@ msgid " :[value-dependent]"
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgid "namespace %1 "
-msgstr "نطاق الأسماء:"
+msgstr "نطاق الأسماء %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
-#, fuzzy, kde-format
+#, kde-format
 msgid "enumeration %1 "
-msgstr "enumeration"
+msgstr "عناصر مجموعة %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
 #, kde-format
@@ -900,54 +900,54 @@ msgid "Returns: "
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "Type: "
-msgstr "النّوع"
+msgstr "النّوع: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:235
 #, kde-format
 msgid "Enum: "
-msgstr ""
+msgstr "عناصر مجموعة: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:237
-#, fuzzy, kde-format
+#, kde-format
 msgid "Container: "
-msgstr "وعاء"
+msgstr "الحاوية: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:245
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scope: %1 "
-msgstr "<br><b>النّطاق:</b> %1"
+msgstr "النطاق: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Access: %1 "
-msgstr "النّفاذ:"
+msgstr "الوصول: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:282
-#, fuzzy, kde-format
+#, kde-format
 msgid "Kind: %1 %2 "
-msgstr "النّوع:"
+msgstr "النّوع: %1 %2 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Kind: %1 "
-msgstr "النّوع:"
+msgstr "النّوع: %1  "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, kde-format
 msgid "Deprecated"
-msgstr ""
+msgstr "مهمل"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "Status: %1 "
-msgstr "الحالة"
+msgstr "الحالة: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
 #, kde-format
 msgid "Def.: "
-msgstr ""
+msgstr "Def.: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:300
 #, kde-format
@@ -957,7 +957,7 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:310
 #, kde-format
 msgid " Def.: "
-msgstr ""
+msgstr " Def.: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:320
 #, kde-format
@@ -965,7 +965,7 @@ msgid " Decl.: "
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:328
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show uses"
 msgstr "أظهر الاستخدامات"
 
@@ -993,9 +993,9 @@ msgstr "function"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:493
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:521
-#, fuzzy, kde-format
+#, kde-format
 msgid " from "
-msgstr "من"
+msgstr " من "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:517
 #, kde-format
@@ -1057,21 +1057,21 @@ msgid "constant"
 msgstr "ثابت"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] "بايت"
-msgstr[1] "بايت"
-msgstr[2] "بايت"
-msgstr[3] "بايت"
-msgstr[4] "بايت"
-msgstr[5] "بايت"
+msgstr[1] "%1 بايت"
+msgstr[2] "%1 بايت"
+msgstr[3] "%1 بايت"
+msgstr[4] "%1 بايت"
+msgstr[5] "%1 بايت"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
-msgstr[0] "بت"
+msgstr[0] "1 بت"
 msgstr[1] "بت واحد"
 msgstr[2] "بتان"
 msgstr[3] "%1 بتات"
@@ -1092,7 +1092,7 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
 msgid "size: %1 Bytes"
-msgstr ""
+msgstr "حجم: %1 بايت"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
@@ -1113,7 +1113,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files included into this file"
 msgid "Includes"
-msgstr ""
+msgstr "يشمل"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
 #, kde-format
@@ -1122,24 +1122,24 @@ msgid "Included by"
 msgstr ""
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "Typedef"
-msgstr "typedef"
+msgstr "Typedef"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:507
-#, fuzzy, kde-format
+#, kde-format
 msgid "Class"
 msgstr "الفئة"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:509
-#, fuzzy, kde-format
+#, kde-format
 msgid "Variable"
 msgstr "متغير"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:511
-#, fuzzy, kde-format
+#, kde-format
 msgid "Namespace"
-msgstr "نطاق الأسماء:"
+msgstr "نطاق الأسماء"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:516
 #, kde-format
@@ -1169,7 +1169,7 @@ msgid "(Hold <em>Alt</em> to show this tooltip)"
 msgstr ""
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Problem"
 msgstr "المشكلة"
 
@@ -1185,19 +1185,19 @@ msgstr "المكان: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:156
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgid "<br>See: "
-msgstr "انظر"
+msgstr "<br>انظر: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgid " in "
-msgstr "‎%2‎ في ‎%1"
+msgstr " في "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Solution (%1)"
-msgstr "محلول"
+msgstr "الحل (%1)"
 
 #: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
@@ -1215,17 +1215,17 @@ msgid "Uses of %1"
 msgstr ""
 
 #: language/duchain/navigation/useswidget.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr "السّطر"
+msgstr "السّطر <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:211
 #: language/duchain/navigation/useswidget.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr "السّطر"
+msgstr "السّطر <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:413
 #, kde-format
@@ -1234,15 +1234,15 @@ msgstr ""
 
 #: language/duchain/navigation/useswidget.cpp:420
 #: shell/launchconfigurationdialog.cpp:481
-#, fuzzy, kde-format
+#, kde-format
 msgid "Global"
-msgstr "عموميّ"
+msgstr "عام"
 
 #: language/duchain/navigation/useswidget.cpp:444
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "%1: source file"
 msgid "In %1"
-msgstr "‎%2‎ في ‎%1"
+msgstr "في %1"
 
 #: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
@@ -1252,7 +1252,7 @@ msgstr "تعريف"
 #: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
 msgid "Declaration"
-msgstr ""
+msgstr "الإعلان"
 
 #: language/duchain/navigation/useswidget.cpp:512
 #, fuzzy, kde-format
@@ -1301,7 +1301,7 @@ msgid "Collapse all"
 msgstr "اطوِ الكلّ"
 
 #: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "Warning"
 msgstr "تحذير"
 
@@ -1311,7 +1311,7 @@ msgid "Hint"
 msgstr "تلميح"
 
 #: language/duchain/problem.cpp:203 shell/problem.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "Disk"
 msgstr "القرص"
 
@@ -1326,9 +1326,9 @@ msgid "Lexer"
 msgstr ""
 
 #: language/duchain/problem.cpp:209 shell/problem.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parser"
-msgstr "المحلّل %1"
+msgstr "المحلّل "
 
 #: language/duchain/problem.cpp:211
 #, kde-format
@@ -1341,12 +1341,12 @@ msgid "Semantic analysis"
 msgstr ""
 
 #: language/duchain/problem.cpp:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "To-do"
-msgstr "المهمة"
+msgstr "مهمّة"
 
 #: language/duchain/problem.cpp:218 shell/problem.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown"
 msgstr "مجهول"
 
@@ -1364,20 +1364,20 @@ msgid "<no explanation>"
 msgstr ""
 
 #: language/duchain/types/containertypes.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 of %2"
-msgstr "%1 من %2"
+msgstr "%1 من أصل %2"
 
 #: language/duchain/types/containertypes.cpp:84
 #: language/duchain/types/containertypes.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "unknown"
 msgstr "مجهول"
 
 #: language/duchain/types/containertypes.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 of %2 : %3"
-msgstr "%1 من %2"
+msgstr "%1 من أصل %2 : %3"
 
 #: language/util/debuglanguageparserhelper.h:179
 #, kde-format
@@ -1489,12 +1489,12 @@ msgstr ""
 #: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
-msgstr ""
+msgstr "رمز الخروج: %1"
 
 #: outputview/outputexecutejob.cpp:362
-#, fuzzy, kde-format
+#, kde-format
 msgid "*** Failure: %1 ***"
-msgstr "فشل"
+msgstr "*** فشل: %1 ***"
 
 #: outputview/outputexecutejob.cpp:380
 #, kde-format
@@ -1536,22 +1536,22 @@ msgid "clean"
 msgstr "المسح"
 
 #: project/builderjob.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "اضبط"
 
 #: project/builderjob.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "ثبّت"
 
 #: project/builderjob.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status"
 msgid "prune"
-msgstr "برقوق مجفف"
+msgstr "قلِّم"
 
 #: project/builderjob.cpp:232
 #, kde-format
@@ -1567,22 +1567,22 @@ msgstr ""
 #: project/helper.cpp:68
 #, kde-format
 msgid "Cannot remove file <i>%1</i>."
-msgstr ""
+msgstr "لا يمكن إزالة الملف <i>%1</i>."
 
 #: project/helper.cpp:86
 #, kde-format
 msgid "The file <i>%1</i> already exists."
-msgstr ""
+msgstr "الملف <i>%1</i> موجود فعلًا."
 
 #: project/helper.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot create file <i>%1</i>."
-msgstr "تعذّر إنشاء الملف %1: %2"
+msgstr "تعذّر إنشاء الملف<i>%1</i>."
 
 #: project/helper.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot create folder <i>%1</i>."
-msgstr "تعذّر إنشاء المجلّد %1"
+msgstr "تعذّر إنشاء المجلّد <i>%1</i>."
 
 #: project/importprojectjob.cpp:55
 #, kde-format
@@ -1595,13 +1595,13 @@ msgid "Project import canceled."
 msgstr ""
 
 #: project/projectbuildsetmodel.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column buildset item name"
 msgid "Name"
 msgstr "الاسم"
 
 #: project/projectbuildsetmodel.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column buildset item path"
 msgid "Path"
 msgstr "المسار"
@@ -1717,10 +1717,10 @@ msgstr[4] ""
 msgstr[5] ""
 
 #: serialization/itemrepositoryregistry.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "tty action"
 msgid "Clear cache"
-msgstr "امحُ ال&خبيئة"
+msgstr "امحُ الخبيئة"
 
 #: serialization/itemrepositoryregistry.cpp:78
 #, kde-format
@@ -1738,10 +1738,10 @@ msgid ""
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Clear Cache"
-msgstr "امحُ ال&خبيئة"
+msgstr "امحُ الخبيئة"
 
 #: serialization/itemrepositoryregistry.cpp:82
 #, kde-format
@@ -1764,19 +1764,19 @@ msgid "Back to Code"
 msgstr "عُد إلى الكود"
 
 #: shell/configdialog.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "اضبط"
 
 #: shell/configdialog.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The settings of the current module have changed.\n"
 "Do you want to apply the changes or discard them?"
 msgstr ""
-"تغيّرت إعدادات الوحدة الحاليّة.\n"
-"أتريد تطبيق الإعدادات أو رفضها؟"
+"تغيّرت إعدادات الوحدة الحالية.\n"
+"أتريد تطبيقها أو إهمالها؟"
 
 #: shell/configdialog.cpp:86
 #, kde-format
@@ -1788,7 +1788,7 @@ msgstr "طبّق الإعدادات"
 #, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr ""
+msgstr "لا يوجد ملحقات"
 
 #: shell/core.cpp:184
 #, kde-format
@@ -1800,7 +1800,7 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Debugger"
 msgstr "المنقّح"
 
@@ -1811,14 +1811,13 @@ msgid "Frame Stack"
 msgstr ""
 
 #: shell/debugcontroller.cpp:148
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
-msgstr "نقطة التّوقّف"
+msgstr "نقاط التّوقّف"
 
 #: shell/debugcontroller.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "المتغيّرات"
@@ -1857,13 +1856,13 @@ msgid "Interrupts the debugged process or current debugger command."
 msgstr ""
 
 #: shell/debugcontroller.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "شغّل حتّى المؤشّر"
 
 #: shell/debugcontroller.cpp:234
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "شغّل حتّى المؤشّر"
@@ -1893,10 +1892,10 @@ msgid "Continue execution from the current cursor position."
 msgstr ""
 
 #: shell/debugcontroller.cpp:246
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Step &Over"
-msgstr "تخطّ"
+msgstr "&تخطّ"
 
 #: shell/debugcontroller.cpp:248
 #, kde-format
@@ -1932,10 +1931,10 @@ msgid "Steps over the next assembly instruction."
 msgstr ""
 
 #: shell/debugcontroller.cpp:264
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Step &Into"
-msgstr "أدخل"
+msgstr "أُ&دخل في"
 
 #: shell/debugcontroller.cpp:266
 #, kde-format
@@ -1970,10 +1969,10 @@ msgid "Steps into the next assembly instruction."
 msgstr ""
 
 #: shell/debugcontroller.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
-msgstr "اخرج"
+msgstr "ا&خرج"
 
 #: shell/debugcontroller.cpp:282
 #, kde-format
@@ -2037,12 +2036,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "ابدأ جلسة جديدة"
+msgstr "عن الجلسة الحاليّة"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
 #, kde-format
@@ -2065,10 +2062,10 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:506
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "&Continue"
-msgstr "تابع"
+msgstr "&تابع"
 
 #: shell/debugcontroller.cpp:508
 #, kde-format
@@ -2099,19 +2096,18 @@ msgid "Show Documentation"
 msgstr "المكان"
 
 #: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:window"
 msgid "Documentation"
 msgstr "التّوثيق"
 
 #: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Untitled"
 msgstr "غير معنون"
 
 #: shell/documentcontroller.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "افتح الملف"
@@ -2147,13 +2143,13 @@ msgid "Do Not Open"
 msgstr ""
 
 #: shell/documentcontroller.cpp:609
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "ا&فتح..."
 
 #: shell/documentcontroller.cpp:612
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "افتح ملفًا"
@@ -2165,17 +2161,15 @@ msgid "Opens a file for editing."
 msgstr ""
 
 #: shell/documentcontroller.cpp:617
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This lists files which you have opened recently, and allows you to easily "
 "open them again."
-msgstr ""
-"يسرد هذا الملفات التي قمت بفتحها مؤخراً، ويسمح لك بفتحها بسهولة مرة أخرى."
+msgstr "يسرد هذا الملفّات التي فتحتها حديثًا، ويسمح لك بفتحها مجدّدًا بسهولة."
 
 #: shell/documentcontroller.cpp:622
-#, fuzzy, kde-format
-#| msgid "&Remove All"
+#, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "احفظ ال&كلّ"
@@ -2194,11 +2188,10 @@ msgid ""
 msgstr ""
 
 #: shell/documentcontroller.cpp:631
-#, fuzzy, kde-format
-#| msgid "&Remove All"
+#, kde-format
 msgctxt "@action"
 msgid "Reload All"
-msgstr "أ&عد تحميل الكلّ"
+msgstr "أعد تحميل الكلّ"
 
 #: shell/documentcontroller.cpp:633
 #, kde-format
@@ -2213,7 +2206,7 @@ msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 
 #: shell/documentcontroller.cpp:640
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "أ&غلق"
@@ -2222,7 +2215,7 @@ msgstr "أ&غلق"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
-msgstr ""
+msgstr "أ&غلق الملف"
 
 #: shell/documentcontroller.cpp:643
 #, kde-format
@@ -2237,7 +2230,7 @@ msgid "Clos&e All"
 msgstr "أ&غلق الكلّ"
 
 #: shell/documentcontroller.cpp:650
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "أغلق كلّ المستندات المفتوحة."
@@ -2290,7 +2283,7 @@ msgid ""
 msgstr ""
 
 #: shell/editorconfigpage.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "المحرّر"
@@ -2333,12 +2326,10 @@ msgid "currently unset"
 msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:492
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "الرّسالة"
+msgstr "الرسائل"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -2402,19 +2393,18 @@ msgid ""
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:437
-#, fuzzy, kde-format
+#, kde-format
 msgid "Editing %2: <b>%1</b>"
-msgstr "التّحرير"
+msgstr "التّحرير %2: <b>%1</b>"
 
 #: shell/launchconfigurationdialog.cpp:710
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "الاسم"
 
 #: shell/launchconfigurationdialog.cpp:713
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
@@ -2423,25 +2413,24 @@ msgstr "النّوع"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: shell/launchconfigurationdialog.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr "أضِف"
+msgstr "أضف"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "&Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "أزل"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
-msgstr "المنقّح"
+msgstr "المنقّح:"
 
 #: shell/loadedpluginsdialog.cpp:279
 #, kde-format
@@ -2455,9 +2444,9 @@ msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
 
 #: shell/mainwindow.cpp:476
-#, fuzzy, kde-format
+#, kde-format
 msgid " (read only)"
-msgstr "للقراءة فقط"
+msgstr " (للقراءة فقط)"
 
 #: shell/mainwindow_p.cpp:224
 #, kde-format
@@ -2472,16 +2461,16 @@ msgid "Lets you customize %1."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:228
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr "اضبط الإِشعارات..."
+msgstr "اضبط الإشعارات..."
 
 #: shell/mainwindow_p.cpp:229
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
-msgstr "اضبط الإخطارات"
+msgstr "اضبط الإشعارات"
 
 #: shell/mainwindow_p.cpp:230
 #, kde-format
@@ -2511,13 +2500,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "&Next Window"
-msgstr ""
+msgstr "النافذة ال&تالية"
 
 #: shell/mainwindow_p.cpp:242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next window"
-msgstr ""
+msgstr "النافذة التالية"
 
 #: shell/mainwindow_p.cpp:243
 #, kde-format
@@ -2529,13 +2518,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
-msgstr ""
+msgstr "&النافذة السابقة"
 
 #: shell/mainwindow_p.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous window"
-msgstr ""
+msgstr "النافذة السابقة"
 
 #: shell/mainwindow_p.cpp:251
 #, kde-format
@@ -2562,10 +2551,10 @@ msgid "Split View &Top/Bottom"
 msgstr "افصل العرض أ&على/أسفل"
 
 #: shell/mainwindow_p.cpp:271
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
-msgstr "اقسم أف&قياً"
+msgstr "اقسم أفقياً"
 
 #: shell/mainwindow_p.cpp:272
 #, kde-format
@@ -2580,10 +2569,10 @@ msgid "Split View &Left/Right"
 msgstr "افصل العرض إلى &يمين/يسار"
 
 #: shell/mainwindow_p.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
-msgstr "اقسم رأ&سيًّا"
+msgstr "اقسم رأسيًّا"
 
 #: shell/mainwindow_p.cpp:280
 #, kde-format
@@ -2592,13 +2581,13 @@ msgid "Splits the current view vertically."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr "المنظور المقسوم التّالي"
+msgstr "ال&منظور المقسوم التّالي"
 
 #: shell/mainwindow_p.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
 msgstr "المنظور المقسوم التّالي"
@@ -2610,13 +2599,13 @@ msgid "Switches to the next split view."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:291
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
-msgstr "المنظور المقسوم السّابق"
+msgstr "المنظور المقسوم ال&سّابق"
 
 #: shell/mainwindow_p.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
 msgstr "المنظور المقسوم السّابق"
@@ -2628,17 +2617,13 @@ msgid "Switches to the previous split view."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:303
-#, fuzzy, kde-format
-#| msgctxt "New breakpoint"
-#| msgid "&New"
+#, kde-format
 msgctxt "@action new file"
 msgid "&New"
 msgstr "&جديد"
 
 #: shell/mainwindow_p.cpp:304
-#, fuzzy, kde-format
-#| msgctxt "New breakpoint"
-#| msgid "&New"
+#, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "جديد"
@@ -2674,10 +2659,9 @@ msgid "Adds a new tool view to this window."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:320
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&مخطّط الألوان"
+msgstr "&مخطّط ألوان النافذة"
 
 #: shell/mainwindow_p.cpp:354
 #, kde-format
@@ -2732,7 +2716,7 @@ msgstr "المشاريع"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
-msgstr ""
+msgstr "حدّد المصدر"
 
 #: shell/openprojectdialog.cpp:149
 #, kde-format
@@ -2947,9 +2931,9 @@ msgid ""
 msgstr ""
 
 #: shell/project.cpp:402
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not open project."
-msgstr "تعذّر فتح المشروع ’%1‘: ‏%2"
+msgstr "تعذّر فتح المشروع."
 
 #: shell/project.cpp:560
 #, kde-format
@@ -2959,15 +2943,15 @@ msgid ""
 msgstr ""
 
 #: shell/projectcontroller.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
-msgstr "اضبط المشروع..."
+msgstr "اضبط المشروع %1"
 
 #: shell/projectcontroller.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid Location: %1"
-msgstr "المكان غير صالح"
+msgstr "المكان غير صالح: %1"
 
 #: shell/projectcontroller.cpp:310
 #, kde-format
@@ -2978,7 +2962,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
-msgstr ""
+msgstr "استبدال"
 
 #: shell/projectcontroller.cpp:468
 #, kde-format
@@ -3032,7 +3016,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "أعد فتح"
 
 #: shell/projectcontroller.cpp:552
 #, kde-format
@@ -3058,13 +3042,13 @@ msgid ""
 msgstr ""
 
 #: shell/projectcontroller.cpp:565
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
-msgstr "اجلب مشروعًا"
+msgstr "اجلب مشروعًا..."
 
 #: shell/projectcontroller.cpp:567
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "اجلب مشروعًا"
@@ -3102,13 +3086,13 @@ msgid "Commit Current Project..."
 msgstr ""
 
 #: shell/projectcontroller.cpp:598
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "أوْدِعْ"
+msgstr "أوْدِعْ..."
 
 #: shell/projectcontroller.cpp:609
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "افتح مشروعًا حديثًا"
@@ -3126,9 +3110,9 @@ msgid "Open Project for Current File"
 msgstr ""
 
 #: shell/projectcontroller.cpp:764
-#, fuzzy, kde-format
+#, kde-format
 msgid "Project already open: %1"
-msgstr "المشروع مفتوح فعلًا"
+msgstr "المشروع مفتوح فعلًا: %1"
 
 #: shell/projectcontroller.cpp:768
 #, kde-format
@@ -3158,7 +3142,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr ""
+msgstr "افتح جلسة %1"
 
 #: shell/projectcontroller.cpp:921
 #, kde-format
@@ -3184,7 +3168,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Project manager:"
-msgstr ""
+msgstr "مدير المشروع:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
@@ -3213,10 +3197,10 @@ msgid "Could not create the directory: %1"
 msgstr ""
 
 #: shell/projectsourcepage.cpp:208
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
-msgstr "P"
+msgstr "%1 : %p٪"
 
 #: shell/projectsourcepage.cpp:249
 #, kde-format
@@ -3243,17 +3227,17 @@ msgstr "المصدر:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Destination"
 msgstr "المقصد"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
-msgstr "الدّليل"
+msgstr "الدّليل:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
@@ -3264,32 +3248,32 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Source"
 msgstr "المصدر"
 
 #. i18n: ectx: property (text), widget (QPushButton, get)
 #: shell/projectsourcepage.ui:105
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Get"
-msgstr "احصل على %1…"
+msgstr "إحضار"
 
 #: shell/runcontroller.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "التنقيح"
 
 #: shell/runcontroller.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "launch mode"
 msgid "Profile"
-msgstr "اللاحة"
+msgstr "التشكيلة"
 
 #: shell/runcontroller.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "نفّذ"
@@ -3326,7 +3310,7 @@ msgid "Execute Launch"
 msgstr ""
 
 #: shell/runcontroller.cpp:466
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "نفّذ"
@@ -3346,7 +3330,7 @@ msgid ""
 msgstr ""
 
 #: shell/runcontroller.cpp:475
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
 msgstr "التنقيح"
@@ -3381,13 +3365,13 @@ msgid "Requests that all running jobs are stopped."
 msgstr ""
 
 #: shell/runcontroller.cpp:500
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "أوقف"
 
 #: shell/runcontroller.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "أوقف"
@@ -3437,7 +3421,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
-msgstr ""
+msgstr "%1 كـ..."
 
 #: shell/runtimecontroller.cpp:27
 #, kde-format
@@ -3450,9 +3434,9 @@ msgid "Allows to select a runtime"
 msgstr ""
 
 #: shell/runtimecontroller.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Runtime: %1"
-msgstr "وقت التشغيل"
+msgstr "وقت التشغيل: %1"
 
 #: shell/savedialog.cpp:47
 #, kde-format
@@ -3495,7 +3479,7 @@ msgid "Pick a Session"
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Run"
 msgstr "شغّل"
@@ -3509,7 +3493,7 @@ msgid ""
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Running"
 msgstr "يعمل"
 
@@ -3540,15 +3524,13 @@ msgid ""
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:204
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
 msgstr "احذف الجلسة"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "ابدأ جلسة جديدة"
@@ -3567,7 +3549,7 @@ msgid ""
 msgstr ""
 
 #: shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
 msgstr "أعد تسمية الجلسة"
@@ -3616,18 +3598,18 @@ msgid "Delete Current Session..."
 msgstr ""
 
 #: shell/sessioncontroller.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Quit"
 msgstr "أنهِ"
 
 #: shell/sessioncontroller.cpp:518
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy of %1"
 msgstr "نسخة عن %1"
 
 #: shell/sessioncontroller.cpp:608
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "الهويّة"
@@ -3639,20 +3621,19 @@ msgid "Contents"
 msgstr "المحتويات"
 
 #: shell/sessioncontroller.cpp:610
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "الحالة"
 
 #: shell/sessioncontroller.cpp:611
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "الاسم"
 
 #: shell/sessioncontroller.cpp:617
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "المرشّح:"
@@ -3771,14 +3752,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
-msgstr "التأخير:"
+msgstr "التّأخير:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
 msgstr " مث"
@@ -3802,10 +3783,10 @@ msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
-msgstr "الخطوط"
+msgstr " الخطوط"
 
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
@@ -3823,21 +3804,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Preview"
-msgstr "معاينة:"
+msgstr "أظهر معاينة"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
 #: shell/settings/editstyledialog.ui:69
 #: shell/sourceformatterselectionedit.ui:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Preview:"
 msgstr "معاينة:"
 
 #: shell/settings/environmentpreferences.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Environment"
 msgstr "البيئة"
 
@@ -3847,18 +3828,18 @@ msgid "Configure Environment Variables"
 msgstr ""
 
 #: shell/settings/environmentprofilelistmodel.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 (default profile)"
-msgstr "التشكيلة الافتراضية"
+msgstr "%1 (التشكيلة المبدئية)"
 
 #: shell/settings/environmentprofilemodel.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Variable"
-msgstr "متغير"
+msgstr "المتغير"
 
 #: shell/settings/environmentprofilemodel.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "القيمة"
@@ -3867,7 +3848,7 @@ msgstr "القيمة"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr ""
+msgstr "أدخل متغير…"
 
 #: shell/settings/environmentwidget.cpp:169
 #, kde-format
@@ -3890,10 +3871,10 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "اضف منظومة"
+msgstr "أضف ملف شخصي..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
@@ -3918,8 +3899,7 @@ msgstr "اجعله المبدئي"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
-#, fuzzy, kde-format
-#| msgid "&Remove All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
 msgstr "أزل المتغيّر"
@@ -3932,16 +3912,16 @@ msgid "Batch edit mode"
 msgstr ""
 
 #: shell/settings/languagepreferences.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
-msgstr[0] "&ملف"
-msgstr[1] "ملفّ واحد"
-msgstr[2] "ملفّان"
-msgstr[3] "%1 ملفّات"
-msgstr[4] "%1 ملفًّا"
-msgstr[5] "%1 ملفّ"
+msgstr[0] " ملف"
+msgstr[1] " ملفّ واحد"
+msgstr[2] " ملفّان"
+msgstr[3] " ملفّات"
+msgstr[4] " ملفًّا"
+msgstr[5] " ملفّ"
 
 #: shell/settings/languagepreferences.cpp:82
 #, kde-format
@@ -4020,10 +4000,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
-msgstr "أبدًا"
+msgstr "البتة"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:106
@@ -4034,10 +4014,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr "دائما"
+msgstr "دائمًا"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
@@ -4170,10 +4150,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr "بلا"
+msgstr "لا شيء"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
@@ -4280,7 +4260,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "الذاكرة"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
@@ -4523,7 +4503,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr ""
+msgstr "أنماط التنسيق"
 
 #: shell/settings/templateconfig.cpp:39
 #, kde-format
@@ -4539,7 +4519,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr ""
+msgstr "أحضر المزيد من القوالب"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
@@ -4957,24 +4937,22 @@ msgid " Line: %1 Col: %2 "
 msgstr " السّطر: %1 العمود: %2 "
 
 #: shell/uicontroller.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Code breakpoint"
-#| msgid "&Code"
+#, kde-format
 msgctxt "area"
 msgid "Code"
-msgstr "كود"
+msgstr "شفرة"
 
 #: shell/uicontroller.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "التنقيح"
 
 #: shell/uicontroller.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "area"
 msgid "Review"
-msgstr "مراجعة"
+msgstr "المراجعة"
 
 #: shell/uicontroller.cpp:500
 #, kde-format
@@ -5019,8 +4997,7 @@ msgid ""
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
-#, fuzzy, kde-format
-#| msgid "&Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
 msgstr "أزل الكل"
@@ -5052,21 +5029,21 @@ msgid "Add this file to the current working set"
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:314
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "خزن مؤقتا"
+msgstr "التخزين المؤقت"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:320
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Load"
 msgstr "حمّل"
 
 #: sublime/container.cpp:345
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line: 00000 Col: 000"
-msgstr "السّطر: %1 العمود: %2"
+msgstr "السّطر: 00000 العمود:  000"
 
 #: sublime/container.cpp:379
 #, kde-format
@@ -5084,26 +5061,25 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
-msgstr ""
+msgstr "انسخ اسم الملفّ"
 
 #: sublime/container.cpp:775
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
-msgstr "أغلق"
+msgstr "أغلق اللسان"
 
 #: sublime/container.cpp:777
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr ""
+msgstr "أغلق كلّ الأخرى"
 
 #: sublime/container.cpp:779
-#, fuzzy, kde-format
-#| msgid "&Enable All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr "أغلق الكلّ"
+msgstr "أغلق الكل"
 
 #: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
@@ -5118,10 +5094,10 @@ msgid "Right click to add new tool views."
 msgstr ""
 
 #: sublime/idealcontroller.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
-msgstr "شريط الأدوات"
+msgstr "شريط الأدوات %1"
 
 #: sublime/idealcontroller.cpp:381
 #, kde-format
@@ -5145,22 +5121,22 @@ msgid "Tool View Position"
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
-msgstr "اليسار"
+msgstr "يسار"
 
 #: sublime/idealdockwidget.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "الأسفل"
 
 #: sublime/idealdockwidget.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
-msgstr "اليمين"
+msgstr "يمين"
 
 #: sublime/idealdockwidget.cpp:130
 #, kde-format
@@ -5169,10 +5145,10 @@ msgid "Detached"
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:152
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr "ا&ضبط اختصارًا..."
+msgstr "اضبط اختصارًا..."
 
 #: sublime/idealdockwidget.cpp:153
 #, kde-format
@@ -5247,13 +5223,13 @@ msgid "Previous Tool View"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr "منا&ظير الأدوات"
+msgstr "مناظير الأدوات"
 
 #: sublime/mainwindow_p.cpp:644
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "أغلق"
@@ -5361,10 +5337,10 @@ msgid "Recursively dump errors from imported contexts."
 msgstr ""
 
 #: util/environmentselectionmodel.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Profile"
-msgstr "اللاحة"
+msgstr "التشكيلة"
 
 #: util/environmentselectionmodel.cpp:51
 #, kde-format
@@ -5373,10 +5349,10 @@ msgid "Use default profile (currently: %1)"
 msgstr ""
 
 #: util/environmentselectionmodel.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
-msgstr "%1 غير موجود"
+msgstr "%1 (غير موجود)"
 
 #: util/jobstatus.cpp:29
 #, kde-format
@@ -5410,8 +5386,7 @@ msgid "Set Write Permissions"
 msgstr "ابدأ جلسة جديدة"
 
 #: util/shellutils.cpp:179
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "تجاهل"
@@ -5514,7 +5489,7 @@ msgstr ""
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "خطأ: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, fuzzy, kde-format
@@ -5613,9 +5588,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
-#, fuzzy, kde-format
-#| msgctxt "New breakpoint"
-#| msgid "&New"
+#, kde-format
 msgctxt "@action:button new branch"
 msgid "New"
 msgstr "جديد"
@@ -5629,7 +5602,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Rename"
 msgstr "غيّر الاسم"
@@ -5659,10 +5632,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr "&سحب..."
+msgstr "اسحب"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
@@ -5676,7 +5649,7 @@ msgstr "ادمج"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr ""
+msgstr "الدليل المصدر:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
@@ -5811,7 +5784,7 @@ msgstr "معدّل"
 #, kde-format
 msgctxt "@item"
 msgid "Copied"
-msgstr ""
+msgstr "نُسخ"
 
 #: vcs/models/vcsitemeventmodel.cpp:54
 #, kde-format
@@ -5826,15 +5799,13 @@ msgid ", "
 msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:85
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Location"
 msgstr "المكان"
 
 #: vcs/models/vcsitemeventmodel.cpp:86
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Actions"
 msgstr "الإجراءات"
@@ -5898,7 +5869,7 @@ msgstr "الشرح..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
-msgstr ""
+msgstr "أظهر الفرق..."
 
 #: vcs/vcspluginhelper.cpp:91
 #, kde-format
@@ -5930,10 +5901,10 @@ msgid "Unable to Get Differences"
 msgstr ""
 
 #: vcs/vcspluginhelper.cpp:356
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
-msgstr "التاريخ"
+msgstr "%2 التاريخ (%1)"
 
 #: vcs/vcspluginhelper.cpp:420
 #, kde-format
@@ -5964,7 +5935,7 @@ msgid "Enter the repository URL..."
 msgstr "أدخل الشّرط..."
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item age"
 msgid "%1 year"
 msgid_plural "%1 years"
@@ -5976,26 +5947,26 @@ msgstr[4] "%1 سنة"
 msgstr[5] "%1 سنة"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item age"
 msgid "%1 month"
 msgid_plural "%1 months"
-msgstr[0] "أقل من شهر"
+msgstr[0] "شهر واحِد"
 msgstr[1] "شهر واحد"
 msgstr[2] "شهران"
 msgstr[3] "%1 أشهر"
 msgstr[4] "%1 شهرًا"
-msgstr[5] "%1 شهر"
+msgstr[5] "%1 أشهر"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item age"
 msgid "%1 day"
 msgid_plural "%1 days"
-msgstr[0] "أقل من يوم"
+msgstr[0] "%1 يوم"
 msgstr[1] "يوم واحد"
 msgstr[2] "يومان"
-msgstr[3] "%1 أيّام"
+msgstr[3] "%1 أيام"
 msgstr[4] "%1 يومًا"
 msgstr[5] "%1 يوم"
 
@@ -6006,10 +5977,10 @@ msgid "Today"
 msgstr "اليوم"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:285
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
-msgstr "بواسطة %1"
+msgstr "بواسطة: %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17

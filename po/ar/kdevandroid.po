@@ -1,0 +1,68 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-11-05 12:28+0000\n"
+"PO-Revision-Date: 2025-09-22 20:42+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, label)
+#: androidpreferences.ui:29
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Android KDE extra-cmake-modules toolchain file"
+msgstr "ملف سلسلة أدوات Android KDE extra-cmake-modules"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: androidpreferences.ui:32
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Android toolchain:"
+msgstr "سلسلة أدوات أندرويد:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: androidpreferences.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Android NDK:"
+msgstr "أندرويد NDK:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: androidpreferences.ui:60
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Android SDK:"
+msgstr "حزمة تطوير البرمجيات Android:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: androidpreferences.ui:74
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Architecture:"
+msgstr "المعمارية:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: androidpreferences.ui:84
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Toolchain:"
+msgstr "سلسلة أدوات:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: androidpreferences.ui:94
+#, kde-format
+msgctxt "@label:textbox"
+msgid "ABI:"
+msgstr "ABI:"
