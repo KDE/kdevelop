@@ -136,7 +136,7 @@ private:
         int startPos = 0;
         while (true) {
             const auto remainingPartOfThePage = QStringView{htmlPage}.sliced(startPos, endPos - startPos);
-            const auto linkElementMatch = linkElement.match(remainingPartOfThePage);
+            const auto linkElementMatch = linkElement.matchView(remainingPartOfThePage);
             if (!linkElementMatch.hasMatch()) {
                 break; // no more links to expand
             }
@@ -144,7 +144,7 @@ private:
 
             static const QRegularExpression hrefAttribute(QStringLiteral(R"|(\shref="([^"]*)")|"),
                                                           QRegularExpression::CaseInsensitiveOption);
-            const auto hrefAttributeMatch = hrefAttribute.match(linkElementMatch.capturedView());
+            const auto hrefAttributeMatch = hrefAttribute.matchView(linkElementMatch.capturedView());
             if (!hrefAttributeMatch.hasMatch()) {
                 qCWarning(MANPAGE) << "missing href attribute in a stylesheet <link> element.";
                 continue;

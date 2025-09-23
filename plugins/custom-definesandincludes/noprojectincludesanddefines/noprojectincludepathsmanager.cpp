@@ -90,7 +90,7 @@ std::pair<Path::List, QHash<QString, QString>> includesAndDefines(const QString&
             // Though such whitespace usually still works in practice, because KDevelop joins the macro
             // identifier and replacement-list into a #define directive line and feeds it to libclang.
             static const QRegularExpression defineRegex(QStringLiteral("^#define\\s+(\\S+)(?:\\s+(.*))?$"));
-            if (const auto match = defineRegex.match(line); match.hasMatch()) {
+            if (const auto match = defineRegex.matchView(line); match.hasMatch()) {
                 if (gatherDefines) {
                     defines.insert(match.captured(1), match.capturedView(2).trimmed().toString());
                 }
