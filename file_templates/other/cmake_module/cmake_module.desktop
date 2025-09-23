@@ -71,6 +71,7 @@ Comment[zh_CN]=使用 pkg-config 查找库的 CMake 模块
 Comment[zh_TW]=CMake 模組，可用 pkg-config 尋找函式庫
 Category=CMake/Module
 Language=CMake
+Language[ar]=سي ميك
 Language[az]=CMake
 Language[bs]=CMake
 Language[ca]=CMake
@@ -119,6 +120,7 @@ OptionsFile=options.kcfg
 
 [Module]
 Name=Module
+Name[ar]=الوحدات
 Name[az]=Modul
 Name[bs]=Modul
 Name[ca]=Mòdul

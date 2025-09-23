@@ -60,6 +60,7 @@ Comment[zh_CN]=配置 flatpak 如何构建项目的文件
 Comment[zh_TW]=設定 Flatpak 如何編譯某專案的檔案
 Category=Flatpak/Builder Manifest
 Language=JSON
+Language[ar]=جسون
 Language[az]=JSON
 Language[ca]=JSON
 Language[ca@valencia]=JSON
@@ -100,6 +101,7 @@ OptionsFile=options.kcfg
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació

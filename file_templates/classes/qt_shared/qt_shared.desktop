@@ -71,6 +71,7 @@ Comment[zh_CN]=带有一个私有 QSharedData 成员的类
 Comment[zh_TW]=含私密的 QSharedData 成員的類別
 Category=C++/Qt
 Language=C++
+Language[ar]=سي++
 Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
@@ -158,6 +159,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació

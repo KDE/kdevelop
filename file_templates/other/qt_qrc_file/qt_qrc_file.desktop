@@ -48,6 +48,7 @@ Comment[uk]=Проста версія з одним префіксом і одн
 Comment[zh_CN]=一个带有单一前缀和单一文件的简单版本。
 Category=C++/Qt
 Language=C++
+Language[ar]=سي++
 Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++

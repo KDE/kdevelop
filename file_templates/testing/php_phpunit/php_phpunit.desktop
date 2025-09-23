@@ -74,6 +74,7 @@ Comment[zh_CN]=一个使用 PHPUnit 框架的单元测试
 Comment[zh_TW]=使用 PHPUnit 框架的單元測試
 Category=PHP/Basic
 Language=Php
+Language[ar]=بي إتش بي
 Language[az]=Php
 Language[bs]=Php
 Language[ca]=PHP
@@ -118,6 +119,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació

@@ -1,5 +1,6 @@
 [General]
 Name=Basic
+Name[ar]=أساسيّ
 Name[az]=Əsas
 Name[bs]=Basic
 Name[ca]=Bàsica
@@ -77,6 +78,7 @@ Comment[zh_CN]=基本 Python 类
 Comment[zh_TW]=基本 Python 類別
 Category=Python/Basic
 Language=Python
+Language[ar]=بيثون
 Language[az]=Python
 Language[bs]=Python
 Language[ca]=Python
@@ -125,6 +127,7 @@ Files=Definition
 
 [Definition]
 Name=Definition
+Name[ar]=التعريف
 Name[az]=Təyinat
 Name[bs]=Definicija
 Name[ca]=Definició
