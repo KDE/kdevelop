@@ -62,6 +62,7 @@ Comment[zh_CN]=带属性的 QAbstractItemModel 子类
 Comment[zh_TW]=QAbstractItemModel 子類別，含屬性
 Category=C++/Qt
 Language=C++
+Language[ar]=سي++
 Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
@@ -151,6 +152,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació

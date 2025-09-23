@@ -71,6 +71,7 @@ Comment[zh_CN]=一个使用带有 KDevPlatform 测试助手的 QTest 库的单�
 Comment[zh_TW]=單元測試套件，用 QTest 函式庫，含 KDevPlatform 測試器
 Category=C++/KDevelop
 Language=C++
+Language[ar]=سي++
 Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
@@ -120,6 +121,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Header
+Name[ar]=الترويسة
 Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
@@ -163,6 +165,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació

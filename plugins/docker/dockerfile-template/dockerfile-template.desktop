@@ -62,6 +62,7 @@ Comment[uk]=Dockerfile — текстовий документ, який міс�
 Comment[zh_CN]=Dockerfile 是一个包含构建镜像时用户可以在命令行调用的所有命令的文本文档
 Category=Docker/Dockerfile
 Language=JSON
+Language[ar]=جسون
 Language[az]=JSON
 Language[ca]=JSON
 Language[ca@valencia]=JSON
@@ -102,6 +103,7 @@ OptionsFile=options.kcfg
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació

@@ -4,6 +4,7 @@
             {
                 "Email": "sebas@kde.org",
                 "Name": "Sebastian Kügler",
+                "Name[ar]": "سيباستيان كوغلر",
                 "Name[ca@valencia]": "Sebastian Kügler",
                 "Name[ca]": "Sebastian Kügler",
                 "Name[cs]": "Sebastian Kügler",
@@ -57,6 +58,7 @@
         "Icon": "kdevelop",
         "License": "LGPL",
         "Name": "KDevelop Sessions",
+        "Name[ar]": "جلسات مطوّرك",
         "Name[ca@valencia]": "Sessions de KDevelop",
         "Name[ca]": "Sessions del KDevelop",
         "Name[cs]": "Sezení KDevelop",

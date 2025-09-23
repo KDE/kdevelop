@@ -71,6 +71,7 @@ Comment[zh_CN]=带有一个单独的 Qt 设计师文件的 QWidget 子类
 Comment[zh_TW]=QWidget 子類別，含個別的 Qt 設計師檔
 Category=C++/Qt
 Language=C++
+Language[ar]=سي++
 Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
@@ -159,6 +160,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
@@ -202,6 +204,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[ar]=واجهة المستخدم
 Name[az]=İstifaddəçi İnterfeysi
 Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs

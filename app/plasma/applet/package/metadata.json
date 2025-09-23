@@ -5,6 +5,7 @@
             {
                 "Email": "hein@kde.org",
                 "Name": "Eike Hein",
+                "Name[ar]": "إيكي هين",
                 "Name[ca@valencia]": "Eike Hein",
                 "Name[ca]": "Eike Hein",
                 "Name[cs]": "Eike Hein",
@@ -64,6 +65,7 @@
         "Id": "org.kde.kdevelopsessions",
         "License": "GPL-2.0+",
         "Name": "KDevelop Sessions",
+        "Name[ar]": "جلسات مطوّرك",
         "Name[ca@valencia]": "Sessions de KDevelop",
         "Name[ca]": "Sessions del KDevelop",
         "Name[cs]": "Sezení KDevelop",

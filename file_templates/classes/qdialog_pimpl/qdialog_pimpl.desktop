@@ -61,6 +61,7 @@ Comment[zh_CN]=包含一个独立的 Qt Designer 文件和私有实现的 QDialo
 Comment[zh_TW]=QDialog 子類別，含個別的 Qt 設計師檔與私人實作
 Category=C++/Qt
 Language=C++
+Language[ar]=سي++
 Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
@@ -189,6 +190,7 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[ar]=التنفيذ
 Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
@@ -232,6 +234,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[ar]=واجهة المستخدم
 Name[az]=İstifaddəçi İnterfeysi
 Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs
