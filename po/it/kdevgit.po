@@ -1,7 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevgit package.
 # Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2011, 2013, 2014.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2019, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2016, 2017, 2019, 2020, 2021, 2022, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
