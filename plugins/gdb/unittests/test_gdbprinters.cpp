@@ -306,18 +306,29 @@ void QtPrintersTest::testQListContainer()
     }
     { // <QPair<int, int> >
         runToLine(51);
-        QByteArray out = gdb.execute("print pairList");
 
-        // For libc++ we get std::__1::pair instead of the shortened std::pair.
-        // Allow the test to pass with either form.
-        const auto versionedPair = "std::__1::pair";
-        const auto unversionedPair = "std::pair";
-        const auto printedPairTypeName = out.contains(versionedPair) ? versionedPair : unversionedPair;
+        const auto printPairList = [&gdb] {
+            return QString::fromUtf8(printedValue(gdb, "pairList"));
+        };
+        auto out = printPairList();
 
-        QVERIFY(out.contains(QString("%1<%2<int, int>> (size = 0)").arg(container, printedPairTypeName).toLocal8Bit()));
+        /// containerOfPairsToString.arg(SIZE) returns ContainerPrinter(<container of SIZE pair elements>).to_string()
+        const auto containerOfPairsToString = [&out, &container] {
+            // For libc++ we get std::__1::pair instead of the shortened std::pair.
+            // Allow the test to pass with either form.
+            const auto versionedPair = "std::__1::pair";
+            const auto unversionedPair = "std::pair";
+            const auto printedPairTypeName = out.contains(versionedPair) ? versionedPair : unversionedPair;
+
+            return QLatin1String{"%1<%2<int, int>> (size = %3)"}.arg(container, printedPairTypeName);
+        }();
+
+        QVERIFY(out.startsWith(containerOfPairsToString.arg(0)));
+
         gdb.execute("next");
-        out = gdb.execute("print pairList");
-        QVERIFY(out.contains(QString("%1<%2<int, int>> (size = 2)").arg(container, printedPairTypeName).toLocal8Bit()));
+        out = printPairList();
+        QVERIFY(out.startsWith(containerOfPairsToString.arg(2)));
+
         if (container != QLatin1String("QSet")) {
             QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
             QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
@@ -326,9 +337,11 @@ void QtPrintersTest::testQListContainer()
             QVERIFY(out.contains("] = {\n    first = 2,\n    second = 3\n  }"));
         }
         QVERIFY(!out.contains("[2] = "));
+
         gdb.execute("next");
-        out = gdb.execute("print pairList");
-        QVERIFY(out.contains(QString("%1<%2<int, int>> (size = 3)").arg(container, printedPairTypeName).toLocal8Bit()));
+        out = printPairList();
+        QVERIFY(out.startsWith(containerOfPairsToString.arg(3)));
+
         if (container != QLatin1String("QSet")) {
             QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
             QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
