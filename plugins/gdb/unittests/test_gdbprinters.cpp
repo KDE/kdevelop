@@ -329,7 +329,12 @@ void QtPrintersTest::testQListContainer()
         out = printPairList();
         QVERIFY(out.startsWith(containerOfPairsToString.arg(2)));
 
-        if (container != QLatin1String("QSet")) {
+        const auto missingStdPairPrettyPrinter = out.contains("{<No data fields>}");
+
+        if (missingStdPairPrettyPrinter) {
+            qWarning() << "not verifying std::pair elements, because the requisite pretty printer for std::pair is "
+                          "unavailable";
+        } else if (container != "QSet") {
             QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
             QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
         } else { // order is undefined in QSet
@@ -342,7 +347,9 @@ void QtPrintersTest::testQListContainer()
         out = printPairList();
         QVERIFY(out.startsWith(containerOfPairsToString.arg(3)));
 
-        if (container != QLatin1String("QSet")) {
+        if (missingStdPairPrettyPrinter) {
+            // already printed a warning above, do not repeat it here
+        } else if (container != "QSet") {
             QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
             QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
             QVERIFY(out.contains("[2] = {\n    first = 4,\n    second = 5\n  }"));
