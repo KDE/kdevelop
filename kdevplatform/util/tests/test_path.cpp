@@ -11,6 +11,7 @@
 
 #include <KIO/Global>
 
+#include <QRegularExpression>
 #include <QTest>
 #include <QStandardPaths>
 
@@ -97,6 +98,29 @@ void runBenchmark()
         const T base = stringToUrl<T>("/tmp/foo/bar");
         generateData(base, 0);
     }
+}
+
+/**
+ * Remove a duplicate slash (if any) from the beginning of the path of a given URL.
+ *
+ * This is needed because since Qt 6.8.1 (see QTBUG-133403), QUrl::adjusted(NormalizePathSegments)
+ * can return a URL whose path starts with "//" (or "/C://" on Windows). The class Path always
+ * removes duplicate slashes as documented in a \@note within the documentation for Path.
+ */
+void removeDuplicateSlashAfterRoot(QUrl& url)
+{
+#ifdef Q_OS_WIN
+    if (url.path().contains(QRegularExpression{"^/[A-Za-z]://"})) {
+        qDebug() << "removing a duplicate slash after the Windows drive letter in the path of an expected URL"
+                 << url.toString();
+        url.setPath(url.path().remove(4, 1));
+    }
+#else
+    if (url.path().startsWith("//")) {
+        qDebug() << "removing a duplicate slash from the beginning of the path of an expected URL" << url.toString();
+        url.setPath(url.path().sliced(1));
+    }
+#endif
 }
 
 } // unnamed namespace
@@ -221,6 +245,7 @@ void TestPath::testPath()
 
     QUrl url = QUrl::fromUserInput(input);
     url = url.adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments);
+    removeDuplicateSlashAfterRoot(url);
 
     Path optUrl(input);
 
@@ -331,14 +356,16 @@ void TestPath::testPath_data()
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
     QTest::newRow("root") << "/";
-    QTest::newRow("clean-path") << "/tmp/..///asdf/";
+    QTest::newRow("unclean-path-cd-up") << "/tmp/kdevelop/..///asdf/";
+    QTest::newRow("unclean-path-cd-up-out-of-root-dir") << "/tmp/..///asdf/";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
 #else
     QTest::newRow("path") << "C:/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "C:/tmp/foo/asdf/";
     QTest::newRow("root") << "C:/";
-    QTest::newRow("clean-path") << "C:/tmp/..///asdf/";
+    QTest::newRow("unclean-path-cd-up") << "C:/tmp/kdevelop/..///asdf/";
+    QTest::newRow("unclean-path-cd-up-out-of-root-dir") << "C:/tmp/..///asdf/";
     QTest::newRow("file") << "file:///C:/tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///C:/tmp/foo/bar/";
 #endif
