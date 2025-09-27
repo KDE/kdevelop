@@ -255,7 +255,7 @@ public:
      * For instance, ftp://host/dir/ is a parent of ftp://host/dir/subdir/blub,
      * or /foo is a parent of /foo/bar.
      *
-     * NOTE: Contrary to QUrl::isParentOf this returns false if the path equals this one.
+     * @note This function returns @c false if @p path equals @c *this, just like QUrl::isParentOf().
      */
     bool isParentOf(const Path& path) const;
 
