@@ -24,6 +24,8 @@ using namespace KDevelop;
 static_assert(std::is_nothrow_move_assignable<Path>(), "Why would a move assignment operator throw?");
 static_assert(std::is_nothrow_move_constructible<Path>(), "Why would a move constructor throw?");
 
+namespace {
+
 static const int FILES_PER_FOLDER = 10;
 static const int FOLDERS_PER_FOLDER = 5;
 static const int TREE_DEPTH = 5;
@@ -97,6 +99,8 @@ void runBenchmark()
     }
 }
 
+} // unnamed namespace
+
 void TestPath::initTestCase()
 {
     QStandardPaths::setTestModeEnabled(true);
@@ -169,6 +173,8 @@ void TestPath::bench_hash()
     }
 }
 
+namespace {
+
 /// Invoke @p op on URL @p base, but preserve drive letter if @p op removes it
 template<typename Func>
 QUrl preserveWindowsDriveLetter(const QUrl& base, Func op)
@@ -206,6 +212,8 @@ QUrl comparableUpUrl(const QUrl& url)
     });
     return ret.adjusted(QUrl::StripTrailingSlash);
 }
+
+} // unnamed namespace
 
 void TestPath::testPath()
 {
