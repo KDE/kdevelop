@@ -12,16 +12,16 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <property name="leftMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <item>
     <widget class="QGroupBox" name="pathBox">
@@ -42,7 +42,7 @@
          <string comment="@info:tooltip">Path to clazy-standalone executable.</string>
         </property>
         <property name="mode">
-         <set>KFile::ExistingOnly|KFile::File|KFile::LocalOnly</set>
+         <set>KFile::Mode::ExistingOnly|KFile::Mode::File|KFile::Mode::LocalOnly</set>
         </property>
        </widget>
       </item>
@@ -59,7 +59,7 @@
          <string comment="@info:tooltip">Path to clazy documentation directory.</string>
         </property>
         <property name="mode">
-         <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
+         <set>KFile::Mode::Directory|KFile::Mode::ExistingOnly|KFile::Mode::LocalOnly</set>
         </property>
        </widget>
       </item>
@@ -98,7 +98,7 @@
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -162,30 +162,31 @@
       <bool>false</bool>
      </property>
      <property name="messageType">
-      <enum>KMessageWidget::Error</enum>
+      <enum>KMessageWidget::MessageType::Error</enum>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="Clazy::CheckSetManageWidget" name="checksets"/>
+    <widget class="Clazy::CheckSetManageWidget" name="checksets" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Clazy::CheckSetManageWidget</class>
+   <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>config/checksetmanagewidget.h</header>
+   <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header>KMessageWidget</header>
+   <header>kmessagewidget.h</header>
   </customwidget>
   <customwidget>
-   <class>KUrlRequester</class>
+   <class>Clazy::CheckSetManageWidget</class>
    <extends>QWidget</extends>
-   <header>KUrlRequester</header>
+   <header>config/checksetmanagewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

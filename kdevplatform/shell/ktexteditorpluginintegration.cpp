@@ -341,6 +341,7 @@ void adjustPluginPageAdapter(const KPluginMetaData& pluginInfo, KTextEditorConfi
         auto* const noteLabel = new QLabel(noteText, &adapter);
         // the Configure KDevelop dialog becomes much wider if the word wrap is not enabled
         noteLabel->setWordWrap(true);
+        noteLabel->setMargin(12);
         // separate the note visually from the base LSP Client page
         noteLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 

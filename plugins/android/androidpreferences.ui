@@ -7,96 +7,130 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>431</height>
    </rect>
   </property>
-  <layout class="QFormLayout" name="formLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="leftMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>9</number>
    </property>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label">
-     <property name="whatsThis">
-      <string comment="@info:whatsthis">Android KDE extra-cmake-modules toolchain file</string>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Toolchain Settings</string>
      </property>
-     <property name="text">
-      <string comment="@label:textbox">Android toolchain:</string>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>12</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>12</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="whatsThis">
+         <string comment="@info:whatsthis">Android KDE extra-cmake-modules toolchain file</string>
+        </property>
+        <property name="text">
+         <string comment="@label:textbox">Android toolchain:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="KUrlRequester" name="kcfg_cmakeToolchain">
+        <property name="mode">
+         <set>KFile::Mode::ExistingOnly|KFile::Mode::File|KFile::Mode::LocalOnly</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string comment="@label:textbox">Android NDK:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="KUrlRequester" name="kcfg_ndk">
+        <property name="mode">
+         <set>KFile::Mode::Directory|KFile::Mode::ExistingOnly|KFile::Mode::LocalOnly</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string comment="@label:textbox">Android SDK:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="KUrlRequester" name="kcfg_sdk">
+        <property name="mode">
+         <set>KFile::Mode::Directory|KFile::Mode::ExistingOnly|KFile::Mode::LocalOnly</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string comment="@label:textbox">Architecture:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLineEdit" name="kcfg_arch"/>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string comment="@label:textbox">Toolchain:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLineEdit" name="kcfg_toolchain"/>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string comment="@label:textbox">ABI:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLineEdit" name="kcfg_abi"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="KUrlRequester" name="kcfg_cmakeToolchain">
-    <property name="mode">
-    <set>KFile::File|KFile::ExistingOnly|KFile::LocalOnly</set>
-    </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string comment="@label:textbox">Android NDK:</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="KUrlRequester" name="kcfg_ndk">
-    <property name="mode">
-     <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-    </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string comment="@label:textbox">Android SDK:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="KUrlRequester" name="kcfg_sdk">
-    <property name="mode">
-     <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-    </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string comment="@label:textbox">Architecture:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLineEdit" name="kcfg_arch"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string comment="@label:textbox">Toolchain:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QLineEdit" name="kcfg_toolchain"/>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string comment="@label:textbox">ABI:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QLineEdit" name="kcfg_abi"/>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -104,7 +138,8 @@
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>KUrlRequester</header>
+   <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
