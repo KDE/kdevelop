@@ -52,6 +52,11 @@ namespace KDevelop {
  *
  * @note This class automatically normalizes path segments. In contrast to QUrl::NormalizePathSegments,
  *       redundant slashes are always removed, even from non-local paths.
+ *
+ * @note Since Qt 6.8.1 (see QTBUG-133402), QUrl::resolved() can return a URL
+ *       whose path starts with "/.." (i.e. cd up out of the root directory) (or
+ *       "/C:/.." (i.e. cd up out of the root directory of a drive) on Windows).
+ *       This class always removes such meaningless cd up path components.
  */
 class KDEVPLATFORMUTIL_EXPORT Path
 {

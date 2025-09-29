@@ -123,6 +123,40 @@ void removeDuplicateSlashAfterRoot(QUrl& url)
 #endif
 }
 
+/**
+ * Remove meaningless path components "/.." (if any) right after the root from the path of a given URL.
+ *
+ * This is needed due to a difference in behavior of QUrl::resolved() and
+ * the class Path documented in a \@note within the documentation for Path.
+ */
+void removeCdUpOutOfRootDirectory(QUrl& url)
+{
+    const auto originalUrl = url;
+
+    constexpr QLatin1String cdUpOutOfRoot("/..");
+#ifdef Q_OS_WIN
+    while (url.path().contains(QRegularExpression{"^/[A-Za-z]:" + QRegularExpression::escape(cdUpOutOfRoot)})) {
+        url.setPath(url.path().remove(3, cdUpOutOfRoot.size()));
+    }
+#else
+    while (url.path().startsWith(cdUpOutOfRoot)) {
+        url.setPath(url.path().sliced(cdUpOutOfRoot.size()));
+    }
+#endif
+
+    if (originalUrl != url) {
+#ifdef Q_OS_WIN
+        qDebug() << "removing <cd up out of the root directory of a drive> from the path of an expected URL:"
+#else
+        if (url.path().isEmpty()) {
+            url.setPath("/");
+        }
+        qDebug() << "removing <cd up out of the root directory> from the path of an expected URL:"
+#endif
+                 << originalUrl.toString() << "=>" << url.toString();
+    }
+}
+
 } // unnamed namespace
 
 void TestPath::initTestCase()
@@ -539,6 +573,7 @@ void TestPath::testPathAddData()
             baseUrl.setPath(path);
         }
         baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
+        removeCdUpOutOfRootDirectory(baseUrl);
 
         Path basePath(base);
         basePath.addPath(pathToAdd);
