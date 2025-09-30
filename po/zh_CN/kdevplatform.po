@@ -5437,7 +5437,7 @@ msgctxt ""
 msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
-msgstr ""
+msgstr "启动配置 '%2' 的 %1 引号错误，中止启动。"
 
 #: util/shellutils.cpp:228
 #, kde-format
@@ -5447,7 +5447,7 @@ msgctxt ""
 msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
-msgstr ""
+msgstr "启动配置 '%2' 的 %1 包含 shell 元字符，当前不支持。启动已中止。  "
 
 #: util/shellutils.cpp:237
 #, kde-format
@@ -5458,6 +5458,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"KShell::splitArgs(<the %1>) 处理启动配置 '%3' 时返回未知错误码 %2，启动已中"
+"止。  "
 
 #: util/shellutils.cpp:264
 #, kde-format

@@ -63,12 +63,7 @@ msgid "Clang Format"
 msgstr "Clang 格式化"
 
 #: customscript_plugin.cpp:263
-#, fuzzy, kde-format
-#| msgid ""
-#| "Description:<br /><br /><b>clang-format</b> is an automatic source "
-#| "formater by the LLVM project. It supports a variety of formatting style "
-#| "options via a <b>.clang-format</b> configuration file, usually located in "
-#| "the project root directory."
+#, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formatter "
 "by the LLVM project. It supports a variety of formatting style options via a "

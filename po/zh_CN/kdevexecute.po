@@ -18,12 +18,10 @@ msgstr ""
 "X-Crowdin-File-ID: 54576\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "参数(&G)："
+msgstr "参数"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -31,19 +29,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "无法满足依赖：%1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "可执行文件"
+msgstr "可执行文件位置"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "使用外部终端："
+msgstr "外部终端命令"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -68,7 +62,7 @@ msgstr "启动另一个"
 msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
-msgstr ""
+msgstr "<p>注：<code>gnome-terminal</code> 仅被部分支持，因其存在限制。</p>  "
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -215,6 +209,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"定义执行外部终端模拟器的命令。<br>可执行文件的路径及其参数将被追加到该命令"
+"后。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
@@ -321,50 +317,3 @@ msgstr "启动另一个"
 msgctxt "@option:check"
 msgid "Remember choice"
 msgstr "记住选择"
-
-#~ msgid ""
-#~ "There is a quoting error in the arguments for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr "在启动配置“%1”的参数中有一处引用错误。停止启动。"
-
-#~ msgid ""
-#~ "A shell meta character was included in the arguments for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "在启动配置“%1”的参数中包含了一个 shell 元字符，现在尚未支持，停止启动。"
-
-#~ msgid "No valid executable specified"
-#~ msgstr "未指定有效的可执行文件"
-
-#~ msgid ""
-#~ "There is a quoting error in the executable for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr "在启动配置“%1”的可执行文件中有一处引用错误。停止启动。"
-
-#~ msgid ""
-#~ "A shell meta character was included in the executable for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "在启动配置“%1”的可执行文件中包含了一个 shell 元字符，现在尚未支持，停止启"
-#~ "动。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "<p>Defines the command to execute the external terminal emulator. Use the "
-#~ "following placeholders:</p>\n"
-#~ "<dl>\n"
-#~ "<dt><code>%exe</code></dt>\n"
-#~ "<dd>The path to the executable selected above.</dd>\n"
-#~ "<dt><code>%workdir</code></dt>\n"
-#~ "<dd>The path to the working directory selected above.</dd>\n"
-#~ "</dl>\n"
-#~ "<p>The arguments defined above will get appended to this command.</p>"
-#~ msgstr ""
-#~ "<p>定义外部终端模拟器要执行的命令。使用如下占位符：</p>\n"
-#~ "<dl>\n"
-#~ "<dt><code>%exe</code></dt>\n"
-#~ "<dd>上方选定的可执行文件。</dd>\n"
-#~ "<dt><code>%workdir</code></dt>\n"
-#~ "<dd>上方选定的工作目录。</dd>\n"
-#~ "</dl>\n"
-#~ "<p>上方定义的参数将会附加到此命令后。</p>"

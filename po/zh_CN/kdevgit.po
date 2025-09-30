@@ -341,9 +341,7 @@ msgid "Unstaged changes"
 msgstr "未暂存的修改"
 
 #: repostatusmodel.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "冲突"
@@ -377,9 +375,7 @@ msgid "Files with changes"
 msgstr "已修改的文件"
 
 #: repostatusmodel.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "冲突"
@@ -695,7 +691,3 @@ msgstr "创建新分支并在新分支上应用暂存，然后删除暂存"
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "分支"
-
-#~ msgctxt "Files in git which have unresolved (merge) conflits"
-#~ msgid "Conflicts"
-#~ msgstr "冲突"

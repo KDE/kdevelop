@@ -18,11 +18,10 @@ msgstr ""
 "X-Crowdin-File-ID: 54644\n"
 
 #: executescriptplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Script Application"
+#, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr "脚本应用程序"
+msgstr "脚本路径"
 
 #: executescriptplugin.cpp:78
 #, kde-format
@@ -30,19 +29,15 @@ msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr "在启动配置“%1”中未设置远程主机。停止启动。"
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "参数："
+msgstr "参数"
 
 #: executescriptplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Interpreter"
+#, kde-format
 msgid "interpreter command"
-msgstr "解释器"
+msgstr "解释器命令"
 
 #: scriptappconfig.cpp:83
 #, kde-format
@@ -297,47 +292,3 @@ msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
 msgstr "***无法启动程序“%1”。请确保正确指定了路径。***"
-
-#~ msgid "No valid executable specified"
-#~ msgstr "未指定有效的可执行文件"
-
-#~ msgid ""
-#~ "There is a quoting error in the script for the launch configuration '%1'. "
-#~ "Aborting start."
-#~ msgstr "在启动配置“%1”的脚本中有一处引用错误。停止启动。"
-
-#~ msgid ""
-#~ "A shell meta character was included in the script for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "在启动配置“%1”的脚本中包含了一个 shell 元字符，现在尚未支持，停止启动。"
-
-#~ msgid ""
-#~ "There is a quoting error in the arguments for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr "在启动配置“%1”的参数中有一处引用错误。停止启动。"
-
-#~ msgid ""
-#~ "A shell meta character was included in the arguments for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "在启动配置“%1”的参数中包含了一个 shell 元字符，现在尚未支持，停止启动。"
-
-#~ msgid "No valid interpreter specified"
-#~ msgstr "未指派有效的解释器"
-
-#~ msgid ""
-#~ "There is a quoting error in the interpreter for the launch configuration "
-#~ "'%1'. Aborting start."
-#~ msgstr "在启动配置“%1”的解释器中有一处引用错误。停止启动。"
-
-#~ msgid ""
-#~ "A shell meta character was included in the interpreter for the launch "
-#~ "configuration '%1', this is not supported currently. Aborting start."
-#~ msgstr ""
-#~ "在启动配置“%1”的解释器中包含了一个 shell 元字符，现在尚未支持，停止启动。"
-
-#~ msgid ""
-#~ "Splitting the interpreter command for the launch configuration '%1' "
-#~ "yields an empty list. Aborting start."
-#~ msgstr "拆分启动配置“%1”的解释器命令得到空列表。中止启动。"
