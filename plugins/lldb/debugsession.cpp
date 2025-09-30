@@ -45,24 +45,19 @@ struct ExecRunHandler : public MICommandHandler
     explicit ExecRunHandler(DebugSession *session, int maxRetry = 5)
         : m_session(session)
         , m_remainRetry(maxRetry)
-        , m_activeCommands(1)
     {
     }
 
     void handle(const ResultRecord& r) override
     {
-        --m_activeCommands;
         if (r.isReasonError()) {
             if (r.hasField(QStringLiteral("msg"))
                 && r.errorMessage().contains(QLatin1String("Invalid process during debug session"))) {
                 // for some unknown reason, lldb-mi sometimes fails to start process
                 if (m_remainRetry && m_session) {
                     qCDebug(DEBUGGERLLDB) << "Retry starting";
-                    --m_remainRetry;
                     // resend the command again.
-                    ++m_activeCommands;
-                    m_session->addCommand(ExecRun, QString(),
-                                          this, // use *this as handler, so we can track error times
+                    m_session->addCommand(ExecRun, QString(), new ExecRunHandler(m_session, m_remainRetry - 1),
                                           CmdMaybeStartsRunning | CmdHandlesError);
                     return;
                 }
@@ -71,16 +66,12 @@ struct ExecRunHandler : public MICommandHandler
                                   << "exceeded retry times or session become invalid";
             m_session->stopDebugger();
         }
-        if (m_activeCommands == 0)
-            delete this;
     }
 
     bool handlesError() override { return true; }
-    bool autoDelete() override { return false; }
 
     QPointer<DebugSession> m_session;
     int m_remainRetry;
-    int m_activeCommands;
 };
 
 DebugSession::DebugSession()
