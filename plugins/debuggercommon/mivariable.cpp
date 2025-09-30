@@ -171,18 +171,19 @@ class FetchMoreChildrenHandler : public MICommandHandler
 {
 public:
     FetchMoreChildrenHandler(MIVariable *variable, MIDebugSession *session)
-        : m_variable(variable), m_session(session), m_activeCommands(1)
+        : m_variable(variable)
+        , m_session(session)
     {}
 
     void handle(const ResultRecord &r) override
     {
-        if (!m_variable) return;
-        --m_activeCommands;
-
         MIVariable* variable = m_variable.data();
+        if (!variable)
+            return;
 
         if (r.hasField(QStringLiteral("children")))
         {
+            auto* lastHandler = this;
             const Value& children = r[QStringLiteral("children")];
             for (int i = 0; i < children.size(); ++i) {
                 const Value& child = children[i];
@@ -195,10 +196,14 @@ public:
                 if (!child.hasField(QStringLiteral("type"))
                     && (exp == QLatin1String("public") || exp == QLatin1String("protected")
                         || exp == QLatin1String("private"))) {
-                    ++m_activeCommands;
-                    m_session->addCommand(VarListChildren,
-                                          QStringLiteral("--all-values \"%1\"").arg(child[QStringLiteral("name")].literal()),
-                                          this/*use again as handler*/);
+                    // A pseudo child cannot have pseudo children of its own, so the maximum recursion depth here is 1.
+                    // lastHandler always points to the last created handler. Only the *very* last created
+                    // (and therefore the last to be invoked) handler ends up with m_isLastHandler = true.
+                    lastHandler->m_isLastHandler = false;
+                    lastHandler = new FetchMoreChildrenHandler(variable, m_session);
+                    m_session->addCommand(
+                        VarListChildren,
+                        QLatin1String("--all-values \"%1\"").arg(child[QStringLiteral("name")].literal()), lastHandler);
                 } else {
                     variable->createChild(child);
                     // it's automatically appended to variable's children list
@@ -215,24 +220,19 @@ public:
             hasMore = r[QStringLiteral("has_more")].toInt();
 
         variable->setHasMore(hasMore);
-        if (m_activeCommands == 0) {
+        if (m_isLastHandler) {
             variable->emitAllChildrenFetched();
-            delete this;
         }
     }
     bool handlesError() override {
         // FIXME: handle error?
         return false;
     }
-    bool autoDelete() override {
-        // we delete ourselves
-        return false;
-    }
 
 private:
     QPointer<MIVariable> m_variable;
     MIDebugSession *m_session;
-    int m_activeCommands;
+    bool m_isLastHandler = true;
 };
 
 void MIVariable::fetchMoreChildren()
