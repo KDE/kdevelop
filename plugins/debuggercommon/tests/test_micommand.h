@@ -16,7 +16,6 @@ class TestMICommand : public QObject
 private Q_SLOTS:
     void initTestCase();
     void testUserCommand();
-    void testMICommandHandler_data();
     void testMICommandHandler();
     void testQObjectCommandHandler();
 };

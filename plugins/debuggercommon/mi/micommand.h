@@ -17,6 +17,7 @@
 #include <QStringList>
 
 #include <functional>
+#include <memory>
 
 namespace KDevMI {
 
@@ -64,11 +65,6 @@ public:
     virtual ~MICommandHandler() {}
     virtual void handle(const ResultRecord&) = 0;
     virtual bool handlesError() { return false; }
-
-    /**
-     * If the handler object should be deleted after the handle() call.
-     */
-    virtual bool autoDelete() { return true; }
 };
 
 class FunctionCommandHandler : public MICommandHandler {
@@ -233,7 +229,7 @@ protected:
     CommandFlags flags_;
     uint32_t token_ = 0;
     QString command_;
-    MICommandHandler *commandHandler_;
+    std::unique_ptr<MICommandHandler> m_commandHandler;
     QStringList lines;
     bool m_storeLogStreamOutput = false;
     bool stateReloading_;

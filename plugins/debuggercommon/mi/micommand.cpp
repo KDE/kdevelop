@@ -25,25 +25,17 @@ void FunctionCommandHandler::handle(const ResultRecord& r)
     _callback(r);
 }
 
-
 MICommand::MICommand(CommandType type, const QString& command, CommandFlags flags)
     : type_(type)
     , flags_(flags)
     , command_(command)
-    , commandHandler_(nullptr)
     , stateReloading_(false)
     , m_thread(-1)
     , m_frame(-1)
 {
 }
 
-MICommand::~MICommand()
-{
-    if (commandHandler_ && commandHandler_->autoDelete()) {
-        delete commandHandler_;
-    }
-    commandHandler_ = nullptr;
-}
+MICommand::~MICommand() = default;
 
 QString MICommand::cmdToSend()
 {
@@ -79,11 +71,9 @@ bool MICommand::isUserCommand() const
 
 void MICommand::setHandler(MICommandHandler* handler)
 {
-    if (commandHandler_ && commandHandler_->autoDelete())
-        delete commandHandler_;
-    commandHandler_ = handler;
+    m_commandHandler.reset(handler);
 
-    if (!commandHandler_) {
+    if (!m_commandHandler) {
         flags_ = flags_ & ~CmdHandlesError;
     }
 }
@@ -95,15 +85,9 @@ void MICommand::setHandler(const FunctionCommandHandler::Function& callback)
 
 bool MICommand::invokeHandler(const ResultRecord& r)
 {
-    if (commandHandler_) {
-        //ask before calling handler as it might deleted itself in handler
-        bool autoDelete = commandHandler_->autoDelete();
-
-        commandHandler_->handle(r);
-        if (autoDelete) {
-            delete commandHandler_;
-        }
-        commandHandler_ = nullptr;
+    if (m_commandHandler) {
+        m_commandHandler->handle(r);
+        m_commandHandler.reset();
         return true;
     } else {
         return false;
@@ -134,7 +118,7 @@ const QStringList& MICommand::allStreamOutput() const
 
 bool MICommand::handlesError() const
 {
-    return commandHandler_ ? commandHandler_->handlesError() : false;
+    return m_commandHandler ? m_commandHandler->handlesError() : false;
 }
 
 UserCommand::UserCommand(CommandType type, const QString& s)

@@ -16,26 +16,24 @@ class TestCommandHandler : public QObject, public KDevMI::MI::MICommandHandler
 {
     Q_OBJECT
 public:
-    explicit TestCommandHandler(bool autodelete, int expectedRecordsHandled = -1);
+    explicit TestCommandHandler(int expectedRecordsHandled = -1);
     ~TestCommandHandler() override;
-    int recordsHandled() const { return m_recordsHandled; }
+
 public: // MICommandHandler API
     void handle(const KDevMI::MI::ResultRecord& record) override;
-    bool autoDelete() override { return m_autodelete; }
+
 private:
-    bool m_autodelete;
-    int m_expectedRecordsHandled = 0;
+    const int m_expectedRecordsHandled;
     int m_recordsHandled = 0;
 };
 
-TestCommandHandler::TestCommandHandler(bool autodelete, int expectedRecordsHandled)
-    : m_autodelete(autodelete)
-    , m_expectedRecordsHandled(expectedRecordsHandled)
+TestCommandHandler::TestCommandHandler(int expectedRecordsHandled)
+    : m_expectedRecordsHandled(expectedRecordsHandled)
 {}
 
 TestCommandHandler::~TestCommandHandler()
 {
-    QCOMPARE(m_expectedRecordsHandled, m_recordsHandled);
+    QCOMPARE(m_recordsHandled, m_expectedRecordsHandled);
 }
 
 void TestCommandHandler::handle(const KDevMI::MI::ResultRecord& record)
@@ -86,23 +84,13 @@ void TestMICommand::testUserCommand()
     QCOMPARE(command.cmdToSend(), QStringLiteral("1command\n"));
 }
 
-void TestMICommand::testMICommandHandler_data()
-{
-    QTest::addColumn<bool>("autodelete");
-
-    QTest::newRow("reusable") << false;
-    QTest::newRow("burnafterusing") << true;
-}
-
 void TestMICommand::testMICommandHandler()
 {
-    QFETCH(bool, autodelete);
-
     KDevMI::MI::UserCommand command(KDevMI::MI::NonMI, "command");
     command.setToken(1);
 
     // set handle and invoke
-    QPointer<TestCommandHandler> commandHandler = new TestCommandHandler(autodelete, 1);
+    QPointer<TestCommandHandler> commandHandler = new TestCommandHandler(1);
     command.setHandler(commandHandler);
 
     KDevMI::MI::ResultRecord resultRecord1("reason");
@@ -110,17 +98,10 @@ void TestMICommand::testMICommandHandler()
 
     // check
     QVERIFY(success);
-    QCOMPARE(commandHandler.isNull(), autodelete);
-    if (!autodelete) {
-        QCOMPARE(commandHandler->recordsHandled(), 1);
-    }
+    QCOMPARE(commandHandler, nullptr);
 
     // try to invoke again without handler
     // ensure handler no longer exists
-    if (!autodelete) {
-        delete commandHandler;
-    }
-
     KDevMI::MI::ResultRecord resultRecord2("reason");
     success = command.invokeHandler(resultRecord2);
 
