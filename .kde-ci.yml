@@ -26,5 +26,8 @@ Dependencies:
 Options:
   per-test-timeout: 200 # the 60-second default is not enough for test_gdb
   use-ccache: True
+  # Verifying that benchmarks can be built is useful, but running them is wasteful and timeout-prone.
+  # So tell ctest not to run benchmarks (whose names conveniently start with "bench_").
+  ctest-arguments: '-E "^bench_"'
   allow-failing-tests-on: ['@all']
   gcovr-arguments: '--gcov-ignore-parse-errors=negative_hits.warn --gcov-ignore-parse-errors=suspicious_hits.warn'
