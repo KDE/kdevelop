@@ -10,11 +10,6 @@
 #include "miframestackmodel.h"
 
 namespace KDevMI {
-
-namespace MI {
-struct AsyncRecord;
-}
-
 namespace LLDB {
 
 class DebugSession;
@@ -29,13 +24,8 @@ public:
 protected:
     void fetchThreads() override;
 
-private Q_SLOTS:
-    void inferiorStopped(const MI::AsyncRecord& r);
-
 private:
     void handleThreadInfo(const MI::ResultRecord& r);
-
-    int stoppedAtThread;
 };
 
 } // end of namespace LLDB

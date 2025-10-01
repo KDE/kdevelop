@@ -30,23 +30,12 @@ using namespace KDevMI;
 
 LldbFrameStackModel::LldbFrameStackModel(DebugSession *session)
     : MIFrameStackModel(session)
-    , stoppedAtThread(-1)
 {
-    connect(session, &DebugSession::inferiorStopped, this, &LldbFrameStackModel::inferiorStopped);
 }
 
 DebugSession* LldbFrameStackModel::session()
 {
     return static_cast<DebugSession *>(FrameStackModel::session());
-}
-
-void LldbFrameStackModel::inferiorStopped(const MI::AsyncRecord& r)
-{
-    if (session()->debuggerStateIsOn(s_shuttingDown)) return;
-
-    if (r.hasField(QStringLiteral("thread-id"))) {
-        stoppedAtThread = r[QStringLiteral("thread-id")].toInt();
-    }
 }
 
 void LldbFrameStackModel::fetchThreads()
@@ -108,11 +97,6 @@ void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
             setCrashedThreadIndex(currentThreadId);
         }
     }
-    // lldb-mi doesn't have current-thread-id field. Use the thread-id field when inferiorStopped
-    if (stoppedAtThread != -1) {
-        setCurrentThread(stoppedAtThread);
-    }
-    stoppedAtThread = -1;
 }
 
 #include "moc_framestackmodel.cpp"

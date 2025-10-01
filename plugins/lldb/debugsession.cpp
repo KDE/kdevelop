@@ -365,12 +365,12 @@ void DebugSession::handleVersion(const QStringList& s)
 
 #ifdef Q_OS_OSX
     static const QRegularExpression versionPrefix(QStringLiteral("^lldb-\\d"), QRegularExpression::MultilineOption);
-    // lldb 3.8.1 reports version 350.99.0 on OS X
-    const QVersionNumber minimumVersion{350, 99, 0};
+    // lldb 3.9.0 reports version 360.99.0 on macOS (see https://bugs.kde.org/show_bug.cgi?id=368603#c4)
+    const QVersionNumber minimumVersion{360, 99, 0};
 #else
     static const QRegularExpression versionPrefix(QStringLiteral("^lldb version \\d"),
                                                   QRegularExpression::MultilineOption);
-    const QVersionNumber minimumVersion{3, 8, 1};
+    const QVersionNumber minimumVersion{3, 9, 0};
 #endif
 
     const auto reportErrorAndStopDebugger = [this](const QString& messageText) {
