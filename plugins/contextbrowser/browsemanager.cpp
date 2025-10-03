@@ -263,8 +263,12 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
 
     if (mouseEvent) {
         QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
-
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(6, 20, 0)
+        const auto textCursor =
+            view->coordinatesToCursor(coordinatesInView, KTextEditor::View::InvalidCursorOutsideText);
+#else
         KTextEditor::Cursor textCursor = view->coordinatesToCursor(coordinatesInView);
+#endif
         if (textCursor.isValid()) {
             JumpLocation jumpTo = determineJumpLoc(textCursor, view->document()->url());
             if (jumpTo.isValid()) {
