@@ -340,12 +340,10 @@ msgid "Unstaged changes"
 msgstr ""
 
 #: repostatusmodel.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr "Konflikty"
+msgstr ""
 
 #: repostatusmodel.cpp:86
 #, kde-format
@@ -376,12 +374,10 @@ msgid "Files with changes"
 msgstr "Soubory se změnami"
 
 #: repostatusmodel.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr "Konflikty"
+msgstr ""
 
 #: repostatusmodel.cpp:111
 #, kde-format
@@ -694,7 +690,3 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Větev"
-
-#~ msgctxt "Files in git which have unresolved (merge) conflits"
-#~ msgid "Conflicts"
-#~ msgstr "Konflikty"

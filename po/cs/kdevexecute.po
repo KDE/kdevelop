@@ -18,12 +18,10 @@ msgstr ""
 "X-Generator: Lokalize 20.08.1\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "Ar&gumenty:"
+msgstr ""
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -31,19 +29,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr ""
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "Program"
+msgstr ""
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "Použít externí terminál"
+msgstr ""
 
 #: nativeappconfig.cpp:125
 #, kde-format

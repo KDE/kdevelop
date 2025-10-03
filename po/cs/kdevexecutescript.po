@@ -29,19 +29,15 @@ msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "Argumenty:"
+msgstr ""
 
 #: executescriptplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Interpreter"
+#, kde-format
 msgid "interpreter command"
-msgstr "Interpretr:"
+msgstr ""
 
 #: scriptappconfig.cpp:83
 #, kde-format
