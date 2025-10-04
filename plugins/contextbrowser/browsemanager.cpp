@@ -108,11 +108,6 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
     m_delayedBrowsingTimer->setInterval(300);
 
     connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
-
-    const auto views = m_watcher.allViews();
-    for (KTextEditor::View* view : views) {
-        viewAdded(view);
-    }
 }
 
 KTextEditor::View* viewFromWidget(QWidget* widget)
@@ -384,7 +379,7 @@ Watcher::Watcher(BrowseManager* manager)
 {
     const auto views = allViews();
     for (KTextEditor::View* view : views) {
-        m_manager->applyEventFilter(view, true);
+        viewAdded(view);
     }
 }
 
