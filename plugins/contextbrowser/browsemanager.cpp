@@ -323,23 +323,21 @@ void BrowseManager::avoidMenuAltFocus()
     QApplication::sendEvent(mainWindow->menuBar(), &event2);
 }
 
-void BrowseManager::applyEventFilter(QWidget* object, bool install)
+void BrowseManager::applyEventFilter(QWidget* object)
 {
-    if (install)
-        object->installEventFilter(this);
-    else
-        object->removeEventFilter(this);
+    object->installEventFilter(this);
 
     const auto children = object->children();
     for (QObject* child : children) {
-        if (qobject_cast<QWidget*>(child))
-            applyEventFilter(qobject_cast<QWidget*>(child), install);
+        if (auto* const widgetChild = qobject_cast<QWidget*>(child)) {
+            applyEventFilter(widgetChild);
+        }
     }
 }
 
 void BrowseManager::viewAdded(KTextEditor::View* view)
 {
-    applyEventFilter(view, true);
+    applyEventFilter(view);
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
 
