@@ -110,17 +110,6 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
     connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
 }
 
-KTextEditor::View* viewFromWidget(QWidget* widget)
-{
-    if (!widget)
-        return nullptr;
-    auto* view = qobject_cast<KTextEditor::View*>(widget);
-    if (view)
-        return view;
-    else
-        return viewFromWidget(widget->parentWidget());
-}
-
 BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const
 {
     // @todo find out why this is needed, fix the code in kate
@@ -193,7 +182,14 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
     const int browseKey = Qt::Key_Control;
     const int magicModifier = Qt::Key_Alt;
 
-    KTextEditor::View* view = viewFromWidget(widget);
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(6, 20, 0)
+    auto* const view = KTextEditor::View::fromEditorWidget(widget);
+#else
+    auto* const view = qobject_cast<KTextEditor::View*>(widget->parent());
+#endif
+    if (!view) {
+        qCCritical(PLUGIN_CONTEXTBROWSER) << "the view of the editor widget" << widget << "is null";
+    }
 
     //Eventually start key-browsing
     if (keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey &&
@@ -323,21 +319,18 @@ void BrowseManager::avoidMenuAltFocus()
     QApplication::sendEvent(mainWindow->menuBar(), &event2);
 }
 
-void BrowseManager::applyEventFilter(QWidget* object)
-{
-    object->installEventFilter(this);
-
-    const auto children = object->children();
-    for (QObject* child : children) {
-        if (auto* const widgetChild = qobject_cast<QWidget*>(child)) {
-            applyEventFilter(widgetChild);
-        }
-    }
-}
-
 void BrowseManager::viewAdded(KTextEditor::View* view)
 {
-    applyEventFilter(view);
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(6, 20, 0)
+    if (auto* const editorWidget = view->editorWidget()) {
+#else
+    if (auto* const editorWidget = view->focusProxy()) {
+#endif
+        editorWidget->installEventFilter(this);
+    } else {
+        qCCritical(PLUGIN_CONTEXTBROWSER) << "the editor widget of" << view << "is null";
+    }
+
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
 

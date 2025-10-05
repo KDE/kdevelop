@@ -78,11 +78,6 @@ public:
 
     void viewAdded(KTextEditor::View* view);
 
-    /**
-     * Install @c this as an event filter on a given widget and all its descendant widgets.
-     */
-    void applyEventFilter(QWidget* object);
-
 Q_SIGNALS:
     ///Emitted when browsing was started using the magic-modifier
     void startDelayedBrowsing(KTextEditor::View* view);
