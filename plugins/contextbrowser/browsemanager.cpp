@@ -7,6 +7,7 @@
 #include "browsemanager.h"
 
 #include <QApplication>
+#include <QCursor>
 #include <QMouseEvent>
 #include <QTimer>
 #include <QMenuBar>
@@ -32,6 +33,8 @@
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+
+#include <algorithm>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -288,19 +291,39 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
 
 void BrowseManager::resetChangedCursor()
 {
-    QMap<QPointer<QWidget>, QCursor> cursors = m_oldCursors;
-    m_oldCursors.clear();
+    // Swap the data member with a local variable in order to prevent bugs if this function is invoked recursively.
+    std::vector<QPointer<QWidget>> widgets;
+    m_widgetsWithReplacedCursors.swap(widgets);
 
-    for (QMap<QPointer<QWidget>, QCursor>::iterator it = cursors.begin(); it != cursors.end(); ++it)
-        if (it.key())
-            it.key()->setCursor(QCursor(Qt::IBeamCursor));
+    // Deliberately declare the loop variable as a raw pointer
+    // rather than a QPointer to avoid repeated weak pointer access.
+    for (QWidget* const widget : std::as_const(widgets)) {
+        if (widget) {
+            widget->setCursor(Qt::IBeamCursor);
+        }
+    }
 }
 
 void BrowseManager::setHandCursor(QWidget* widget)
 {
-    if (m_oldCursors.contains(widget))
-        return; //Nothing to do
-    m_oldCursors[widget] = widget->cursor();
+    if (const auto begin = m_widgetsWithReplacedCursors.cbegin(), end = m_widgetsWithReplacedCursors.cend();
+        std::find(begin, end, widget) != end) {
+        return; // already replaced the cursor of this widget => nothing to do
+    }
+
+    if (const auto cursorShape = widget->cursor().shape(); cursorShape != Qt::IBeamCursor) {
+        // The shape of the cursor of an editor widget sometimes equals Qt::BlankCursor for some reason.
+        // Worse, when the mouse pointer is over selected text, the shape of the cursor is Qt::ArrowCursor.
+        // So if the eventual reset "back" to Qt::IBeamCursor occurs while the mouse pointer is over
+        // selected text, the cursor is "restored" to a wrong value. Still, displaying a Qt::IBeamCursor
+        // in place of a Qt::ArrowCursor is not so bad as the other way around, and not nearly so bad as not
+        // displaying any cursor at all (in case the temporary Qt::BlankCursor is restored), which would happen
+        // had we remembered and restored the previous cursor instead of always resetting to Qt::IBeamCursor.
+        qCDebug(PLUGIN_CONTEXTBROWSER) << "replacing non-I-beam cursor" << cursorShape << "of" << widget
+                                       << "with the pointing hand cursor, so the eventual reset "
+                                          "\"back\" to the I-beam cursor may wrongly change it";
+    }
+    m_widgetsWithReplacedCursors.emplace_back(widget);
     widget->setCursor(QCursor(Qt::PointingHandCursor));
 }
 

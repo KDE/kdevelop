@@ -7,13 +7,14 @@
 #ifndef KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
 #define KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
 
-#include <QCursor>
-#include <QMap>
 #include <QObject>
 #include <QPointer>
 #include <QUrl>
 #include <KTextEditor/Cursor>
 
+#include <vector>
+
+class QTimer;
 class QWidget;
 
 namespace KTextEditor {
@@ -109,8 +110,10 @@ private:
     bool m_browsing;
     int m_browsingByKey;     //Whether the browsing was started because of a key
     Watcher m_watcher;
-    //Maps widgets to their previously set cursors
-    QMap<QPointer<QWidget>, QCursor> m_oldCursors;
+    /**
+     * Contains widgets whose cursors @c *this temporarily replaced with Qt::PointingHandCursor.
+     */
+    std::vector<QPointer<QWidget>> m_widgetsWithReplacedCursors;
     QTimer* m_delayedBrowsingTimer;
     QPointer<KTextEditor::View> m_browsingStartedInView;
     KTextEditor::Cursor m_buttonPressPosition;
