@@ -1,0 +1,187 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-05-16 00:41+0000\n"
+"PO-Revision-Date: 2025-10-05 15:55+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: outputwidget.cpp:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "أدخل تعبيرًا نمطيًا غير حساس لحالة الأحرف لفلترة عرض المخرجات"
+
+#: outputwidget.cpp:63
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "عرض المخرجات"
+
+#: outputwidget.cpp:74
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "أغلق عرض المخرجات النشط حاليًا"
+
+#: outputwidget.cpp:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "أغلق كل عروض المخرجات الأخرى"
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "المخرج السابق"
+
+#: outputwidget.cpp:94
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "المخرج التالي"
+
+#: outputwidget.cpp:99
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "اختر العنصر المنشط"
+
+#: outputwidget.cpp:101
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "ركّز عند اختيار عنصر"
+
+#: outputwidget.cpp:110
+#, kde-format
+msgctxt "@action"
+msgid "Word Wrap"
+msgstr "التفاف الكلمات"
+
+#: outputwidget.cpp:119
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "العنصر الأول"
+
+#: outputwidget.cpp:123
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "العنصر السابق"
+
+#: outputwidget.cpp:127
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "العنصر التالي"
+
+#: outputwidget.cpp:131
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "العنصر الأخير"
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "امحُ"
+
+#: outputwidget.cpp:161
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "ابحث..."
+
+#: outputwidget.cpp:197
+#, kde-format
+msgctxt "@action %1: output type, e.g. Build or Run"
+msgid "Configure %1 Output"
+msgstr "اضبط مخرج %1"
+
+#: outputwidget.cpp:818
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr "خطأ في نمط التعبير النمطي للفلترة عند الإزاحة %1: %2"
+
+#: outputwidgetconfig.cpp:64
+#, kde-format
+msgctxt "@title:window %1: output type, e.g. Build or Run"
+msgid "Configure %1 Output"
+msgstr "اضبط مخرج %1"
+
+#: outputwidgetconfig.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Limit the number of output views"
+msgstr "حدّد عدد عروض المخرجات"
+
+#: outputwidgetconfig.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically close oldest output views"
+msgstr "أغلق آليًا أقدم عروض المخرجات"
+
+#: outputwidgetconfig.cpp:81
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum output view count"
+msgstr "العدد الأقصى لعرض المخرجات"
+
+#: outputwidgetconfig.cpp:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The oldest output view is closed when\n"
+"the number of views exceeds this value"
+msgstr ""
+"يغلق أقدم عرض مخرجات عندما\n"
+"يتجاوز عدد العروض هذه القيمة"
+
+#: standardoutputview.cpp:80
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "ابنِ"
+
+#: standardoutputview.cpp:83
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "شغّل"
+
+#: standardoutputview.cpp:86
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "صحّح"
+
+#: standardoutputview.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Analyze"
+msgstr "حلّل"
+
+#: standardoutputview.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "تحكم بالإصدار"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2025-09-22 20:54+0400\n"
+"PO-Revision-Date: 2025-10-05 16:32+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18,26 +18,32 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: manpagedocumentation.cpp:261
+#: outlinenode.cpp:169
 #, kde-format
-msgid "Man Content Page"
-msgstr "صفحة محتوى الدليل"
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anonymous>"
 
-#: manpagedocumentationwidget.cpp:32
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
 #, kde-format
-msgid "Loading man pages..."
-msgstr "تحميل صفحات الدليل..."
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "المخطط"
 
-#: manpagedocumentationwidget.cpp:86
+#: outlinewidget.cpp:47
 #, kde-format
-msgid ""
-"Error while loading man pages:\n"
-"%1"
-msgstr ""
-"خطأ أثناء تحميل صفحات الدليل:\n"
-"%1"
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "افرز أبجديًا"
 
-#: manpageplugin.cpp:53
+#: outlinewidget.cpp:48
 #, kde-format
-msgid "Man Page"
-msgstr "صفحة الدليل"
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "افرز العناصر أبجديًا"
+
+#: outlinewidget.cpp:60
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "رشّح..."

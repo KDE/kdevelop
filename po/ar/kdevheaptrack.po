@@ -1,0 +1,111 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-10-05 16:22+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgctxt "@title:tab"
+msgid "Heaptrack"
+msgstr "Heaptrack"
+
+#: config/globalconfigpage.cpp:34
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Heaptrack Settings"
+msgstr "اضبط إعدادات Heaptrack"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Executables"
+msgstr "الملفات التنفيذية"
+
+#. i18n: ectx: property (text), widget (QLabel, heaptrackExecutableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Heaptrack:"
+msgstr "Heaptrack:"
+
+#. i18n: ectx: property (text), widget (QLabel, heaptrackGuiExecutableLabel)
+#: config/globalconfigpage.ui:51
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Visualizer:"
+msgstr "المُصوِّر البصري:"
+
+#: job.cpp:92
+#, kde-format
+msgctxt "%1 - process ID"
+msgid "PID: %1"
+msgstr "مُعرّف العملية: %1"
+
+#: job.cpp:97
+#, kde-format
+msgid "Heaptrack Analysis (%1)"
+msgstr "تحليل Heaptrack (%1)"
+
+#: job.cpp:99
+#, kde-format
+msgctxt "%1 - the name of the target of a Heaptrack analysis"
+msgid "Heaptrack (%1)"
+msgstr "Heaptrack (%1)"
+
+#: plugin.cpp:59
+#, kde-format
+msgctxt "@action"
+msgid "Run Heaptrack Analysis"
+msgstr "شغِّل تحليل Heaptrack"
+
+#: plugin.cpp:68
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with Heaptrack"
+msgstr "أرفِق بالعملية باستعمال Heaptrack"
+
+#: plugin.cpp:95
+#, kde-format
+msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
+msgstr "غير قادر على بدء تحليل Heaptrack - لم يُحمّل الملحق \"%1\"."
+
+#: plugin.cpp:105
+#, kde-format
+msgid "Configure a native application launch to perform Heaptrack analysis on."
+msgstr "اضبط إطلاق تطبيق أصيل لتنفيذ تحليل Heaptrack عليه."
+
+#: plugin.cpp:111
+#, kde-format
+msgid "Heaptrack analysis can be started only for native applications."
+msgstr "يمكن بدء تحليل Heaptrack للتطبيقات الأصيلة فقط."
+
+#: visualizer.cpp:33
+#, kde-format
+msgid "Failed to start Heaptrack visualizer from \"%1\"."
+msgstr "فشِل بدء المُصوِّر البصري لـ Heaptrack من \"%1\"."
+
+#: visualizer.cpp:35
+#, kde-format
+msgid "Check your settings and install the visualizer if necessary."
+msgstr "افحص إعداداتك وثبِّت المُصوِّر البصري إن لزِم الأمر."
+
+#: visualizer.cpp:37
+#, kde-format
+msgid "Error during Heaptrack visualizer execution:"
+msgstr "خطأ أثناء تنفيذ المُصوِّر البصري لـ Heaptrack:"

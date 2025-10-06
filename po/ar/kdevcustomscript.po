@@ -1,0 +1,163 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-09-11 00:40+0000\n"
+"PO-Revision-Date: 2025-10-05 16:25+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: customscript_plugin.cpp:87
+#, kde-format
+msgid ""
+"<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
+"external formatting tools that can be invoked through the command-line.<br /"
+">For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b> "
+"formatters can be used.<br />The advantage of command-line formatters is "
+"that formatting configurations can be easily shared by all team members, "
+"independent of their preferred IDE."
+msgstr ""
+"<b>إزاحة الشّفرة المصدرية وتنسيقها.</b><br />تسمح هذه الإضافة باستعمال أدوات "
+"تنسيق خارجية قوية، يمكن استدعاؤها عبر سطر الأوامر.<br />يمكن استعمال "
+"المنسّقات <b>uncrustify</b> أو <b>astyle</b> أو <b>indent</b>، على سبيل "
+"المثال.<br />ميزة منسّقات سطر الأوامر هي إمكانية مشاركة إعدادات التنسيق "
+"بسهولة بين جميع أعضاء الفريق، بصرف النّظر عن بيئة التّطوير المفضّلة لديهم."
+
+#: customscript_plugin.cpp:99
+#, kde-format
+msgctxt "@info formatter usage hint"
+msgid ""
+"Note: each custom script style requires a certain tool executable to be "
+"installed. Otherwise, code will not be formatted."
+msgstr ""
+"ملاحظة: يتطلب كل نمط سكريبت مخصص تثبيت أداة تنفيذية معينة. وإلّا، فلن تُنسَّق "
+"الشفرة."
+
+#: customscript_plugin.cpp:227
+#, kde-format
+msgid "Gnu Indent: GNU"
+msgstr "إزاحة گنو: گنو"
+
+#: customscript_plugin.cpp:238
+#, kde-format
+msgid "Gnu Indent: Kernighan & Ritchie"
+msgstr "إزاحة گنو: كرنيغان ورِتْشي"
+
+#: customscript_plugin.cpp:249
+#, kde-format
+msgid "Gnu Indent: Original Berkeley indent style"
+msgstr "إزاحة گنو: نمط إزاحة بركلي الأصلي"
+
+#: customscript_plugin.cpp:260
+#, kde-format
+msgid "Clang Format"
+msgstr "منسّق كلاڭ"
+
+#: customscript_plugin.cpp:263
+#, kde-format
+msgid ""
+"Description:<br /><br /><b>clang-format</b> is an automatic source formatter "
+"by the LLVM project. It supports a variety of formatting style options via a "
+"<b>.clang-format</b> configuration file, usually located in the project root "
+"directory."
+msgstr ""
+"الوصف:<br /><br /><b>clang-format</b> هو منسّق شفرة مصدرية آلي من مشروع LLVM. "
+"وهو يدعم مجموعة متنوعة من خيارات نمط التنسيق عبر ملف إعدادات <b>.clang-"
+"format</b>، الموجود عادةً في دليل جذر المشروع."
+
+#: customscript_plugin.cpp:279
+#, kde-format
+msgid ""
+"Description:<br /><b>kdev_format_source</b> is a script bundled with "
+"KDevelop which allows using fine-grained formatting rules by placing meta-"
+"files called <b>format_sources</b> into the file-system.<br /><br />Each "
+"line of the <b>format_sources</b> files defines a list of wildcards followed "
+"by a colon and the used formatting-command.<br /><br />The formatting-"
+"command should use <b>$TMPFILE</b> to reference the temporary file to "
+"reformat.<br /><br />Example:<br /><b>*.cpp *.h : myformatter $TMPFILE</"
+"b><br />This will reformat all files ending with <b>.cpp</b> or <b>.h</b> "
+"using the custom formatting script <b>myformatter</b>.<br /><br />Example: "
+"<br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
+"$TMPFILE</b> <br />This will reformat all files in subdirectory <b>subdir</"
+"b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
+"config</b>."
+msgstr ""
+"الوصف:<br /><b>kdev_format_source</b> هو سكريبت مرفق مع KDevelop مطورك يسمح "
+"باستخدام قواعد تنسيق دقيقة بوضع ملفات وصفية تسمى <b>format_sources</b> في "
+"نظام الملفات.<br /><br />يعرّف كل سطر في ملفات <b>format_sources</b> قائمة من "
+"الأحرف البديلة متبوعة بنقطتين عموديتين وأمر التنسيق المستعمل.<br /><br />يجب "
+"أن يستخدم أمر التنسيق <b>$TMPFILE</b> للإشارة إلى الملف المؤقت المراد إعادة "
+"تنسيقه.<br /><br />مثال:<br /><b>*.cpp *.h : myformatter $TMPFILE</b><br /"
+">سيعيد هذا تنسيق جميع الملفات التي تنتهي بـ <b>.cpp</b> أو <b>.h</b> "
+"باستخدام السكريبت المخصص للتنسيق <b>myformatter</b>.<br /><br />مثال: <br /"
+"><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
+"$TMPFILE</b> <br />سيعيد هذا تنسيق جميع الملفات في الدليل الفرعي <b>subdir</"
+"b> باستخدام الأداة <b>uncrustify</b> مع ملف الإعدادات <b>uncrustify.config</"
+"b>."
+
+#: customscript_plugin.cpp:539
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Command:"
+msgstr "الأمر:"
+
+#: customscript_plugin.cpp:548
+#, kde-format
+msgid ""
+"<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
+"code is reached to the command <br />through the standard input, and the "
+"<br />formatted result is read from the standard output.<br /><br />If you "
+"add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
+"for transferring the code."
+msgstr ""
+"<i>يمكنك إدخال أمر صدَفة تعسفي.</i><br />تصل الشّفرة المصدرية غير المنسّقة إلى "
+"الأمر <br />عبر المدخل القياسي، ويُقرأ <br />الناتج المنسّق من المخرج القياسي."
+"<br /><br />إذا أضفت <b>$TMPFILE</b> إلى الأمر، فسيُستخدَم <br />ملف مؤقت لنقل "
+"الشّفرة."
+
+#: customscript_plugin.cpp:560
+#, kde-format
+msgctxt "@action:button"
+msgid "More Variables"
+msgstr "المزيد من المتغيرات"
+
+#: customscript_plugin.cpp:570
+#, kde-format
+msgid "Style: %1"
+msgstr "النّمط: %1"
+
+#: customscript_plugin.cpp:583
+#, kde-format
+msgid ""
+"<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+">The code will be written into the file, the temporary <br />file will be "
+"substituted into that position, and the result <br />will be read out of "
+"that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+"original file. <br />The contents of the file must not be modified, changes "
+"are allowed <br />only in $TMPFILE.<br /><br /><b>${&lt;project name&gt;}</"
+"b> will be replaced by the path of <br />a currently open project whose name "
+"is &lt;project name&gt;."
+msgstr ""
+"سَيُستبدَل <b>$TMPFILE</b> بمسار ملف مؤقت. <br />سَتُكتَب الشّفرة في الملف، "
+"وسَيُستبدَل <br />الملف المؤقت في ذلك الموضع، وسَيُقرَأ النّاتج <br />من ذلك الملف. "
+"<br /><br />سَيُستبدَل <b>$FILE</b> بمسار الملف الأصلي. <br />يجب ألّا تُعدَّل "
+"محتويات الملف، يُسمَح بالتّعديلات <br />فقط في $TMPFILE.<br /><br />سَيُستبدَل <b>"
+"${&lt;project name&gt;}</b> بمسار <br />مشروع مفتوح حاليًا اسمه &lt;project "
+"name&gt;."
+
+#: customscript_plugin.cpp:595
+#, kde-format
+msgctxt "@title:window"
+msgid "Variable Replacements"
+msgstr "استبدالات المتغيرات"

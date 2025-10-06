@@ -1,0 +1,717 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"PO-Revision-Date: 2025-10-05 14:58+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: dialogs/processselection.cpp:148
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "أرفق"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ProcessSelection)
+#: dialogs/processselection.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr "إرفاق بعمليّة"
+
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, filterEdit)
+#: dialogs/processselection.ui:25
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search"
+msgstr "ابحث"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
+#: dialogs/processselection.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display as List"
+msgstr "اعرض كقائمة"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
+#: dialogs/processselection.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display as Tree"
+msgstr "اعرض كشجرة"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:80
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Own Processes"
+msgstr "العمليّات الخاصّة"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:88
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User Processes"
+msgstr "عمليّات المستخدم"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:96
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "System Processes"
+msgstr "عمليّات النظام"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
+#: dialogs/processselection.ui:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Processes"
+msgstr "كافّة العمليّات"
+
+#: dialogs/selectcoredialog.cpp:18
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr "اختر ملفًّا لبيانات النظام"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "الملفّ القابل للتنفيذ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr "ملفّ بيانات النظام:"
+
+#: mibreakpointcontroller.cpp:809
+#, kde-format
+msgid ""
+"\n"
+"Old value: %1"
+msgstr ""
+"\n"
+"القيمة القديمة: %1"
+
+#: mibreakpointcontroller.cpp:812
+#, kde-format
+msgid ""
+"\n"
+"New value: %1"
+msgstr ""
+"\n"
+"القيمة الجديدة: %1"
+
+#: midebugger.cpp:317
+#, kde-format
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+"<p>صادفت مكوّنة مصحّح الأخطاء خطأً داخليًّا أثناء معالجة الردّ من مصحّح الأخطاء. من "
+"فضلك، قدّم تقرير خطأ. جلسة التصحيح ستُنهَى الآن لمنع ارتطام محتمل."
+
+#: midebugger.cpp:320
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"الاستثناء هو: %1\n"
+"استجابة MI هي: %2"
+
+#: midebugger.cpp:323
+#, kde-format
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr "خطأ داخليّ في مصحّح الأخطاء"
+
+#: midebugger.cpp:335 midebugsession.cpp:445
+#, kde-format
+msgid "Process exited"
+msgstr "العمليّة خرجت"
+
+#: midebugger.cpp:344
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr ""
+"<b>لا أستطيع بدء مصحّح الأخطاء.</b><p>لا أستطيع تشغيل «%1». تأكّد من تعيين اسم "
+"المسار بشكل صحيح."
+
+#: midebugger.cpp:352
+#, kde-format
+msgid "Process failed to start"
+msgstr "العمليّة فشلت في البدء"
+
+#: midebugger.cpp:357
+#, kde-format
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>مصحّح الأخطاء ارتطم.</b><p>عمليّة مصحّح الأخطاء «%1» ارتطمت.<br>بسبب هذا، "
+"يجب إنهاء جلسة التصحيح.<br>حاول تكرار الارتطام دون KDevelop وقدّم تقريرًا عن "
+"خطأ.<br>"
+
+#: midebugger.cpp:362
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr "مصحّح الأخطاء ارتطم"
+
+#: midebugger.cpp:365
+#, kde-format
+msgid "Process crashed"
+msgstr "العمليّة ارتطمت"
+
+#: midebuggerplugin.cpp:44
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr "برنامج يُصحَّح أخطاؤه بالفعل. أتريد إجهاض جلسة التصحيح الجارية ومتابعة؟"
+
+#: midebuggerplugin.cpp:118
+#, kde-format
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr "افحص ملفّ بيانات النظام باستعمال %1"
+
+#: midebuggerplugin.cpp:120
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+"<b>افحص ملفّ بيانات النظام</b><p>هذا يحمّل ملفّ بيانات نظام، الذي يُنشَأ عادةً بعد "
+"ارتطام التطبيق، على سبيل المثال مع خطأ تجزئة. ملفّ بيانات النظام يحتوي على "
+"صورة لذاكرة البرنامج في وقت الارتطام، يسمح لك بعمل تحليل ما بعد الوفاة.</p>"
+
+#: midebuggerplugin.cpp:132
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr "أرفق بعمليّة باستعمال %1"
+
+#: midebuggerplugin.cpp:134
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr "<b>أرفق بعمليّة</b><p>يرفق مصحّح الأخطاء بعمليّة جارية.</p>"
+
+#: midebuggerplugin.cpp:147
+#, kde-format
+msgid "KDevelop (%1) - %2"
+msgstr "مطورك (%1) - %2"
+
+#: midebuggerplugin.cpp:215
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "اختر ملفّ بيانات نظام لفحصه..."
+
+#: midebuggerplugin.cpp:236
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "اختر عمليّة لترفق بها..."
+
+#: midebuggerplugin.cpp:250
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr "لا أُرفق بالعمليّة %1: لا أستطيع إرفاق مصحّح الأخطاء بنفسه."
+
+#: midebuggerplugin.cpp:270
+#, kde-format
+msgid "Debugger"
+msgstr "مصحّح الأخطاء"
+
+#: midebugjobs.cpp:104
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: midebugjobs.cpp:170
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr "«%1» ليس ملفًّا قابلاً للتنفيذ"
+
+#: midebugjobs.cpp:196
+#, kde-format
+msgid "Debug core file"
+msgstr "صحّح ملفّ بيانات النظام"
+
+#: midebugjobs.cpp:212
+#, kde-format
+msgid "Debug process %1"
+msgstr "صحّح العمليّة %1"
+
+#: midebuglauncher.cpp:61
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"برنامج يُصحَّح أخطاؤه بالفعل. أتريد إجهاض جلسة التصحيح الجارية ومتابعة بالتشغيل؟"
+
+#: midebugsession.cpp:244
+#, kde-format
+msgid "Running program"
+msgstr "تشغيل البرنامج"
+
+#: midebugsession.cpp:318
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "إرفاق بالعمليّة %1"
+
+#: midebugsession.cpp:349
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>لا أستطيع إرفاق مصحّح الأخطاء:</b><br />"
+
+#: midebugsession.cpp:359
+#, kde-format
+msgid "Examining core file %1"
+msgstr "فحص ملفّ بيانات النظام %1"
+
+#: midebugsession.cpp:431
+#, kde-format
+msgid "Debugger stopped"
+msgstr "مصحّح الأخطاء توقّف"
+
+#: midebugsession.cpp:450
+#, kde-format
+msgid "Application is running"
+msgstr "التطبيق جارٍ"
+
+#: midebugsession.cpp:455
+#, kde-format
+msgid "Application is paused"
+msgstr "التطبيق موقوف مؤقّتًا"
+
+#: midebugsession.cpp:770
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr "<b>أُرسِل أمر Gdb عندما لا يشغّل مصحّح الأخطاء</b><br>الأمر كان:<br> %1"
+
+#: midebugsession.cpp:882
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>أمر مصحّح أخطاء غير صالح</b><br>%1"
+
+#: midebugsession.cpp:1018
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "خرج برمز إرجاع: %1"
+
+#: midebugsession.cpp:1020
+#, kde-format
+msgid "Exited normally"
+msgstr "خرج بشكل طبيعيّ"
+
+#: midebugsession.cpp:1027
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "خرج بالإشارة %1"
+
+#: midebugsession.cpp:1062
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "البرنامج استلم إشارة %1 (%2)"
+
+#: midebugsession.cpp:1194
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] "0 أمر في الطابور\n"
+msgstr[1] "أمر واحد في الطابور\n"
+msgstr[2] "أمران في الطابور\n"
+msgstr[3] "%1 أوامر في الطابور\n"
+msgstr[4] "%1 أمرًا في الطابور\n"
+msgstr[5] "%1 أمر في الطابور\n"
+
+#: midebugsession.cpp:1195
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] "0 أمر يعالجه gdb\n"
+msgstr[1] "أمر واحد يعالجه gdb\n"
+msgstr[2] "أمران يعالجهما gdb\n"
+msgstr[3] "%1 أوامر يعالجها gdb\n"
+msgstr[4] "%1 أمرًا يعالجها gdb\n"
+msgstr[5] "%1 أمر يعالجه gdb\n"
+
+#: midebugsession.cpp:1196
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "حالة مصحّح الأخطاء: %1\n"
+
+#: midebugsession.cpp:1199
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"صنف الأمر الحاليّ: «%1»\n"
+"نصّ الأمر الحاليّ: «%2»\n"
+"نصّ الأمر الأصليّ الحاليّ: «%3»\n"
+
+#: midebugsession.cpp:1226
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr "<b>خطأ مصحّح أخطاء</b><p>مصحّح الأخطاء أبلغ عن الخطأ التالي:<p><tt>%1"
+
+#: miframestackmodel.cpp:71
+#, kde-format
+msgid "(running)"
+msgstr "(جارٍ)"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "ثنائيّ"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "ثمانيّ"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "عشريّ"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "سداسيّ عشريّ"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "خام"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "غير مُوقَّع"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "عامّ"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "الأعلام"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP كلمة واحدة"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP كلمة مزدوجة"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP كلمة رباعيّة"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "جزء"
+
+#: registers/registersview.cpp:51
+#, kde-format
+msgctxt "@title:menu"
+msgid "Format"
+msgstr "صيغة"
+
+#: registers/registersview.cpp:60
+#, kde-format
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr "نمط"
+
+#: registers/registersview.cpp:195
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "حدّث"
+
+#: stty.cpp:269
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"لا أستطيع استخدام أجهزة tty* أو pty*.\n"
+"افحص الإعدادات على /dev/tty* و/dev/pty*\n"
+"كمستخدم جذر، قد تحتاج إلى «chmod ug+rw» لأجهزة tty* و pty* و/أو أضف المستخدم "
+"إلى مجموعة tty باستخدام «usermod -aG tty username»."
+
+#: stty.cpp:322
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "%1 هو اسم طرفيّة غير صحيح"
+
+#: stty.cpp:328
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "لا أستطيع إنشاء ملفّ مؤقّت"
+
+#: stty.cpp:366
+#, kde-format
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: %2"
+msgstr ""
+"لا أستطيع استلام %1 tty/pty. افحص أنّ %1 هو طرفيّة بالفعل وأنّه يقبل هذه "
+"الوسائط: %2"
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr "صالة مصحّح الأخطاء"
+
+#: widgets/debuggerconsoleview.cpp:50
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+"<b>صالة مصحّح الأخطاء</b><p>اعرض كافّة أوامر مصحّح الأخطاء التي تُنفَّذ. يمكنك "
+"أيضًا إصدار أيّ أمر آخر لمصحّح الأخطاء أثناء التصحيح.</p>"
+
+#: widgets/debuggerconsoleview.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr "كرّر الأمر الأخير عند ضغط 'إرجاع'"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:68 widgets/debuggerconsoleview.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr "أوقف تنفيذ التطبيق مؤقّتًا لإدخال أوامر مصحّح الأخطاء"
+
+#: widgets/debuggerconsoleview.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr "اعرض الأوامر الداخليّة"
+
+#: widgets/debuggerconsoleview.cpp:77
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"اضبط هل ستُعرَض الأوامر الصادرة داخليًّا بواسطة مطورك أم لا.<br>هذا الخيار سيؤثّر "
+"على الأوامر المستقبليّة فقط، لن يُضِف أو يُزِل الأوامر الصادرة بالفعل من العرض."
+
+#: widgets/debuggerconsoleview.cpp:139
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr "الأ&مر:"
+
+#: widgets/debuggerconsoleview.cpp:161
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr "شريط أوامر %1"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "قاطع"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, kde-format
+msgctxt "@action"
+msgid "Repeat"
+msgstr "كرّر"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr "كرّر آخر أمر أُرسِل عند ضغط <إرجاع>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr "محدّد العنوان"
+
+#: widgets/disassemblewidget.cpp:88
+#, kde-format
+msgctxt "@action"
+msgid "Change &Address"
+msgstr "غيّر الع&نوان"
+
+#: widgets/disassemblewidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr "ا&قفز إلى المؤشّر"
+
+#: widgets/disassemblewidget.cpp:93
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr "اضبط مؤشّر التنفيذ على موقع المؤشّر الحاليّ."
+
+#: widgets/disassemblewidget.cpp:96
+#, kde-format
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr "ش&غّل إلى المؤشّر"
+
+#: widgets/disassemblewidget.cpp:97
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "تابع التنفيذ حتى يُبلَغ موقع المؤشّر."
+
+#: widgets/disassemblewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr "ن&م&ط AT&T"
+
+#: widgets/disassemblewidget.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr "GDB سيستعمل نمط فكّ التجميع AT&T (مثال: mov 0xc(%ebp),%eax)."
+
+#: widgets/disassemblewidget.cpp:105
+#, kde-format
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr "ن&م&ط Intel"
+
+#: widgets/disassemblewidget.cpp:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr "GDB سيستعمل نمط فكّ التجميع Intel (مثال: mov eax, DWORD PTR [ebp+0xc])."
+
+#: widgets/disassemblewidget.cpp:143
+#, kde-format
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr "نمط فكّ التجميع"
+
+#: widgets/disassemblewidget.cpp:174
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+"<b>عرض شيفرة الآلة</b><p>عرض شيفرة آلة داخل ملفّك القابل للتنفيذ الجاري مع "
+"تسليط الضوء على الأمر الحاليّ. يمكنك تخطّي أمر بأمر باستخدام أزرار شريط أدوات "
+"مصحّح الأخطاء لـ «تخطَّ أمرًا» و «اخطُ داخل أمر»."
+
+#: widgets/disassemblewidget.cpp:190
+#, kde-format
+msgctxt "@title:column"
+msgid "Address"
+msgstr "العنوان"
+
+#: widgets/disassemblewidget.cpp:191
+#, kde-format
+msgctxt "@title:column"
+msgid "Function"
+msgstr "الدالّة"
+
+#: widgets/disassemblewidget.cpp:192
+#, kde-format
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr "الأمر"
+
+#: widgets/disassemblewidget.cpp:212
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr "عرض فكّ التجميع/السجلاّت"
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr "اختر العنوان لفكّ التجميع حوله"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr "العنوان لفكّ التجميع حوله:"

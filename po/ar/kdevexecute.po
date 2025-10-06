@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-09-22 20:58+0400\n"
+"PO-Revision-Date: 2025-10-05 15:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: executeplugin.cpp:62
@@ -27,7 +27,7 @@ msgstr "المعاملات"
 #: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
-msgstr ""
+msgstr "تعذّر حل الاعتمادية: %1"
 
 #: executeplugin.cpp:140
 #, kde-format
@@ -38,59 +38,59 @@ msgstr "مسار الملف التنفيذي"
 #: executeplugin.cpp:194
 #, kde-format
 msgid "external terminal command"
-msgstr ""
+msgstr "أمر طرفية خارجية"
 
 #: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
-msgstr ""
+msgstr "اسأل إن شغلته"
 
 #: nativeappconfig.cpp:126
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
-msgstr ""
+msgstr "اقتل كل النّسخ"
 
 #: nativeappconfig.cpp:127
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
-msgstr ""
+msgstr "ابدأ آخر"
 
 #: nativeappconfig.cpp:132
 #, kde-format
 msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
-msgstr ""
+msgstr "<p>ملاحظة: <code>gnome-terminal</code> مدعوم جزئياً فقط بسبب قيوده.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
-msgstr ""
+msgstr "اضبط التطبيق الأصيل"
 
 #: nativeappconfig.cpp:192
 #, kde-format
 msgid "Executes Native Applications"
-msgstr ""
+msgstr "يشغّل تطبيقات أصيلة"
 
 #: nativeappconfig.cpp:202
 #, kde-format
 msgid "Native Application"
-msgstr ""
+msgstr "تطبيق أصيل"
 
 #: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
-msgstr ""
+msgstr "ثنائي مجمّع"
 
 #: nativeappconfig.cpp:338
 #, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
-msgstr ""
+msgstr "الملفات التنفيذية للمشروع"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: nativeappconfig.ui:35
@@ -104,7 +104,7 @@ msgstr "تنفيذي"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Project &target:"
-msgstr ""
+msgstr "&هدف المشروع:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: nativeappconfig.ui:81
@@ -118,14 +118,14 @@ msgstr "&تنفيذي:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "executable or /path/to/executable"
-msgstr ""
+msgstr "ملف تنفيذي أو ‎/مسار/إلى/ملف/تنفيذي"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:109
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the executable name or the absolute path to the executable file"
-msgstr ""
+msgstr "أدخل اسم الملف التنفيذي أو المسار المطلق لملف الملف التنفيذي"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: nativeappconfig.ui:121
@@ -150,6 +150,9 @@ msgid ""
 "pass arguments containing space characters by putting them in double-quotes."
 "</p></body></html>"
 msgstr ""
+"<html><head/><body><p>أدخل المعاملات التي ستقدّمها للملف التنفيذي.<br/>يمكنك "
+"تمرير المعاملات التي تحتوي على مسافات بوضعها بين علامتي اقتباس مزدوجتين.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: nativeappconfig.ui:144
@@ -163,7 +166,7 @@ msgstr "&دليل العمل:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr ""
+msgstr "اختر دليل عمل للملف التنفيذي"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
@@ -177,7 +180,7 @@ msgstr "ال&بيئة"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "اختر بيئة للاستخدام"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206
@@ -189,13 +192,16 @@ msgid ""
 "interact with applications requiring user input from a terminal emulator. To "
 "run such applications, you should use an external terminal.</p>"
 msgstr ""
+"<p>مبدئياً، شغّل التطبيقات في الخلفية واعرض ناتجها فقط في عرض أداة. هذا يجعل "
+"التفاعل مع التطبيقات التي تتطلب إدخال المستخدم من محاكي طرفية مستحيلاً. "
+"لتشغيل مثل هذه التطبيقات، استخدم طرفية خارجية.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:209
 #, kde-format
 msgctxt "@option:check"
 msgid "Use external terminal:"
-msgstr ""
+msgstr "استخدم طرفية خارجية:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
 #: nativeappconfig.ui:228
@@ -206,6 +212,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"عرّف الأمر لتنفيذ محاكي الطرفية الخارجي.<br>\n"
+"مسار الملف التنفيذي ومعاملاته يلحقان بهذا الأمر."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
@@ -235,7 +243,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Specifies the action to take for the dependencies before starting the "
 "executable."
-msgstr ""
+msgstr "يحدّد الإجراء الذي نفّذه للاعتماديّات قبل بدء الملف التنفيذي."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:270
@@ -246,6 +254,8 @@ msgid ""
 "allows there to be parts of a project, upon which the executable does not "
 "directly depend, to be built and/or installed before running the application."
 msgstr ""
+"شغّل الإجراء المختار قبل بدء الملف التنفيذي. هذا يسمح ببناء و/أو تثبيت أجزاء "
+"من مشروع، لا يعتمد عليها الملف التنفيذي مباشرةً، قبل تشغيل التطبيق."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:277
@@ -266,7 +276,7 @@ msgstr "البناء"
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
-msgstr ""
+msgstr "ابنِ وثبّت"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: nativeappconfig.ui:295
@@ -281,29 +291,31 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
+"لم يحدد تشكيلة بيئة، يبدو أن الضبط مكسور، يرجى فحص ضبط التشغيل '%1'. استخدم "
+"تشكيلة البيئة المبدئية."
 
 #: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
-msgstr ""
+msgstr "المهمّة قيد التشغيل بالفعل"
 
 #: nativeappjob.cpp:154
 #, kde-format
 msgid "'%1' is already being executed."
-msgstr ""
+msgstr "ينفّذ '%1' بالفعل."
 
 #: nativeappjob.cpp:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
-msgstr ""
+msgstr "اقتل كل النّسخ"
 
 #: nativeappjob.cpp:157
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
-msgstr ""
+msgstr "ابدأ آخر"
 
 #: nativeappjob.cpp:160
 #, kde-format

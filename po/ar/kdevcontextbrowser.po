@@ -1,0 +1,144 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-10-19 00:39+0000\n"
+"PO-Revision-Date: 2025-10-05 15:59+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: contextbrowser.cpp:161
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "ارجِع إلى السجل السياقي"
+
+#: contextbrowser.cpp:173
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "تقدَّم في السجل السياقي"
+
+#: contextbrowser.cpp:189
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "مخطط"
+
+#: contextbrowser.cpp:190
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "مخطط"
+
+#: contextbrowser.cpp:191
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "استعرِض مخطط المستند النشط، انقُر للتصفح"
+
+#: contextbrowser.cpp:232
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "وضع تصفُّح المصدَر (&B)"
+
+#: contextbrowser.cpp:238
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "السياق المُزار السّابق (&P)"
+
+#: contextbrowser.cpp:244
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "السياق المُزار التالي (&N)"
+
+#: contextbrowser.cpp:250
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "الاستعمال السّابق (&P)"
+
+#: contextbrowser.cpp:256
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "الاستعمال التالي (&N)"
+
+#: contextbrowser.cpp:262
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "متصفح السياق"
+
+#: contextbrowser.cpp:293 contextbrowser.cpp:372 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "متصفح الشيفرة"
+
+#: contextbrowser.cpp:309
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "اعثُر على الاستعمالات"
+
+#: contextbrowser.cpp:1558
+#, kde-format
+msgid "(changed)"
+msgstr "(مُغير)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "أظهِر قائمة التّصريح"
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "قائمة التّصريح"
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "أقفِل العرض الحالي"
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "أقفِل العرض الحالي"
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "افتح العرض الحالي"
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "افتح العرض الحالي"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "شريط أدوات متصفح الشيفرة"

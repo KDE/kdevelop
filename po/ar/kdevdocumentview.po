@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2025-09-22 20:54+0400\n"
+"PO-Revision-Date: 2025-10-05 16:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18,26 +18,31 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: manpagedocumentation.cpp:261
+#: kdevdocumentview.cpp:64
 #, kde-format
-msgid "Man Content Page"
-msgstr "صفحة محتوى الدليل"
+msgid "Documents"
+msgstr "المستندات"
 
-#: manpagedocumentationwidget.cpp:32
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
 #, kde-format
-msgid "Loading man pages..."
-msgstr "تحميل صفحات الدليل..."
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "المستندات"
 
-#: manpagedocumentationwidget.cpp:86
+#: kdevdocumentview.cpp:211
 #, kde-format
-msgid ""
-"Error while loading man pages:\n"
-"%1"
-msgstr ""
-"خطأ أثناء تحميل صفحات الدليل:\n"
-"%1"
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "أعد التحميل"
 
-#: manpageplugin.cpp:53
+#: kdevdocumentview.cpp:217
 #, kde-format
-msgid "Man Page"
-msgstr "صفحة الدليل"
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "أغلق"
+
+#: kdevdocumentview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "أغلق كلّ الأخرى"
