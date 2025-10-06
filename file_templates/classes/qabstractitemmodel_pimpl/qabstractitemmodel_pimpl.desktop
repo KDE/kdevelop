@@ -1,5 +1,6 @@
 [General]
 Name=QAbstractItemModel pimpl subclass
+Name[ar]=صنف فرعي لـ QAbstractItemModel (pimpl)
 Name[az]=QAbstractItemModel pimpl alt sinifi
 Name[ca]=Subclasse QAbstractItemModel «pimpl»
 Name[ca@valencia]=Subclasse QAbstractItemModel «pimpl»
@@ -31,6 +32,7 @@ Name[uk]=Підклас pimpl QAbstractItemModel
 Name[zh_CN]=QAbstractItemModel pimpl 子类
 Name[zh_TW]=QAbstractItemModel pimpl 子類別
 Comment=QAbstractItemModel subclass with private implementation
+Comment[ar]=صنف فرعي لـ QAbstractItemModel مع تنفيذ خاصّ
 Comment[az]=Gizli tətbiqetmə ilə QAbstractItemModel alt sinifi
 Comment[ca]=Una subclasse QAbstractItemModel amb implementació privada
 Comment[ca@valencia]=Una subclasse QAbstractItemModel amb implementació privada
@@ -157,6 +159,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[ar]=ترويسة خاصّة
 Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada

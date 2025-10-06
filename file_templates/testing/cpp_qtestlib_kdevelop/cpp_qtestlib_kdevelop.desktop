@@ -1,5 +1,6 @@
 [General]
 Name=A test for KDevPlatform
+Name[ar]=اختبار لمنصّة مطوّرك
 Name[az]=KDevPlatform üçün test
 Name[bs]=Test za KDevPlatform
 Name[ca]=Una prova per a la KDevPlatform
@@ -35,6 +36,7 @@ Name[uk]=Перевірка для KDevPlatform
 Name[zh_CN]=一个 KDevPlatform 的测试
 Name[zh_TW]=KDevPlatform 的測試
 Comment=A unit test using the QTest library with KDevPlatform test helpers
+Comment[ar]=اختبار وحدة باستعمال مكتبة QTest مع مساعدات اختبار منصّة مطوّرك
 Comment[az]=KDevPlatform test köməkçiləri olmadan QTest kitabxanasına əsaslanan modul testi
 Comment[bs]=Test jedinica koji koristi QTest biblioteku s KDevPlatform pomoćnicima testa
 Comment[ca]=Una prova unitària utilitzant la biblioteca QTest amb els auxiliars de proves del KDevPlatform

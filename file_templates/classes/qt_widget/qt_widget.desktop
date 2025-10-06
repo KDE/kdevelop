@@ -1,5 +1,6 @@
 [General]
 Name=Widget with a UI File
+Name[ar]=ويدجت مع ملفّ واجهة مستخدم
 Name[az]=Bir İİ faylı ilə vidjet
 Name[bs]=Grafička kontrola s UI datotekom
 Name[ca]=Giny amb un fitxer IU
@@ -35,6 +36,7 @@ Name[uk]=Віджет з файлом інтерфейсу користувач�
 Name[zh_CN]=带有一个 UI 文件的部件
 Name[zh_TW]=有 UI 檔的元件
 Comment=QWidget subclass with a separate Qt Designer file
+Comment[ar]=صنف فرعي لـ QWidget مع ملفّ Qt Designer منفصل
 Comment[az]=Ayrı bir Qt Designer faylı ilə QWidget alt sinifi
 Comment[bs]=QWidget podklasa s odvojenom Qt Designer datotekom
 Comment[ca]=Subclasse QWidget amb un fitxer separat del Qt Designer
@@ -121,6 +123,7 @@ Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública

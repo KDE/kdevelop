@@ -1,5 +1,6 @@
 [General]
 Name=QAbstractItemModel subclass
+Name[ar]=صنف فرعي لـ QAbstractItemModel
 Name[az]=QAbstractItemModel alt sinifi
 Name[ca]=Subclasse QAbstractItemModel
 Name[ca@valencia]=Subclasse QAbstractItemModel
@@ -31,6 +32,7 @@ Name[uk]=Підклас QAbstractItemModel
 Name[zh_CN]=QAbstractItemModel 子类
 Name[zh_TW]=QAbstractItemModel 子類別
 Comment=QAbstractItemModel subclass with properties
+Comment[ar]=صنف فرعي لـ QAbstractItemModel مع خصائص
 Comment[az]=Gizli xüsusiyyətləri ilə QAbstractItemModel alt sinifi
 Comment[ca]=Subclasse QAbstractItemModel amb propietats
 Comment[ca@valencia]=Subclasse QAbstractItemModel amb propietats
@@ -113,6 +115,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública

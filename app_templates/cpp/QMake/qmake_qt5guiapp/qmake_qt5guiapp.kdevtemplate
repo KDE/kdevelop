@@ -1,5 +1,6 @@
 [General]
 Name=QMake Qt5 QWidgets GUI Application
+Name[ar]=تطبيق واجهة مستخدم رسوميّة Qt5 و QWidgets مع QMake
 Name[az]=QMake Qt5 QWidgets qrafik tətbiqi
 Name[ca]=Una aplicació IGU del QMake Qt5 QWidgets
 Name[ca@valencia]=Una aplicació IGU de QMake Qt5 QWidgets
@@ -31,6 +32,7 @@ Name[uk]=Програма з графічним інтерфейсом на ос
 Name[zh_CN]=QMake Qt5 QWidgets 图形应用程序
 Name[zh_TW]=QMake Qt5 QWidgets 使用者介面應用程式
 Comment=Generate a QMake/Qt5 based GUI application (crossplatform compatible)
+Comment[ar]=ولِّد تطبيق واجهة مستخدم رسوميّة مبنيّ على QMake و Qt5 (متوافقًا بين المنصّات)
 Comment[az]=QMake/Qt5 əsaslı çoxplatformalı qrafik tətbiq hazırlayır.
 Comment[ca]=Genera una aplicació IGU basada en QMake/Qt5 (compatible amb multiplataforma)
 Comment[ca@valencia]=Genera una aplicació IGU basada en QMake/Qt5 (compatible amb multiplataforma)

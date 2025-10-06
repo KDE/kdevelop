@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake C++
+Name[ar]=سي++ مع سي ميك
 Name[az]=CMake C++
 Name[bs]=CMake C++
 Name[ca]=CMake C++
@@ -39,6 +40,7 @@ Name[uk]=CMake C++
 Name[zh_CN]=CMake C++
 Name[zh_TW]=CMake C++
 Comment=Simple CMake-based C++ application
+Comment[ar]=تطبيق سي++ مبنيّ على سي ميك بسيط
 Comment[az]=Sadə CMake əsaslı C++ tətbiqi
 Comment[bs]=Jednostavna na CMake bazirana C++ aplikacija
 Comment[ca]=Aplicació senzilla en C++ basada en CMake

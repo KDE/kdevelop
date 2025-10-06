@@ -1,5 +1,6 @@
 [General]
 Name=Dialog with a UI File
+Name[ar]=حوار مع ملفّ واجهة مستخدم
 Name[az]=İİ faylı ilə dialoq
 Name[ca]=Diàleg amb un fitxer IU
 Name[ca@valencia]=Diàleg amb un fitxer IU
@@ -30,6 +31,7 @@ Name[uk]=Діалогове вікно із файлом UI
 Name[zh_CN]=带 UI 文件的对话框
 Name[zh_TW]=有 UI 檔的對話框
 Comment=QDialog subclass with a separate Qt Designer file
+Comment[ar]=صنف فرعي لـ QDialog مع ملفّ Qt Designer منفصل
 Comment[az]=Ayrıca t Designer faylı ilə QDialog alt sinifi
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer
 Comment[ca@valencia]=Subclasse QDialog amb un fitxer separat de Qt Designer
@@ -112,6 +114,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública

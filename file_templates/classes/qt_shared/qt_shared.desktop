@@ -1,5 +1,6 @@
 [General]
 Name=Implicitly shared class
+Name[ar]=صنف مشترك ضمنيًّا
 Name[az]=Dolayısı ilə paylaşılan sinif
 Name[bs]=Implicitno dijeljena klasa
 Name[ca]=Classe compartida implícita
@@ -35,6 +36,7 @@ Name[uk]=Клас з неявним спільним використанням
 Name[zh_CN]=隐式共享类
 Name[zh_TW]=隱性分享類別
 Comment=Class with a private QSharedData member
+Comment[ar]=صنف مع عضو QSharedData خاصّ
 Comment[az]=Xüsusi QSharedData üzvü ilə sinif
 Comment[bs]=Klasa s privatnim QSharedData članom
 Comment[ca]=Classe amb un membre QSharedData privat
@@ -120,6 +122,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública

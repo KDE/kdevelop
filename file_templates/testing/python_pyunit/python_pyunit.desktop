@@ -1,5 +1,6 @@
 [General]
 Name=PyUnit
+Name[ar]=PyUnit
 Name[az]=PyUnit
 Name[bs]=PyUnit
 Name[ca]=PyUnit
@@ -39,6 +40,7 @@ Name[uk]=PyUnit
 Name[zh_CN]=PyUnit
 Name[zh_TW]=PyUnit
 Comment=A unit test using the PyUnit framework
+Comment[ar]=اختبار وحدة باستعمال إطار عمل PyUnit
 Comment[az]=PyUnit paltformasına əsaslanan modul testi
 Comment[bs]=Test jedinica koristeći PyUnit okruženje
 Comment[ca]=Una prova unitària utilitzant el marc de treball PyUnit

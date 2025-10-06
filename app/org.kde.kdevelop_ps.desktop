@@ -5,6 +5,7 @@ MimeType=
 Icon=kdevelop
 Terminal=false
 Name=KDevelop (Pick Session)
+Name[ar]=مطوّرك (انتقِ جلسةً)
 Name[az]=KDevelop (Sessiyanı seçin)
 Name[ca]=KDevelop (Selecció de sessió)
 Name[ca@valencia]=KDevelop (Trieu la sessió)

@@ -1,5 +1,6 @@
 [General]
 Name=QObject pimpl subclass
+Name[ar]=صنف فرعي لـ QObject (pimpl)
 Name[az]=QObject pimpl alt sinifi
 Name[ca]=Subclasse QObject «pimpl»
 Name[ca@valencia]=Subclasse QObject «pimpl»
@@ -32,6 +33,7 @@ Name[uk]=Підклас pimpl QObject
 Name[zh_CN]=QObject pimpl 子类
 Name[zh_TW]=QObject pimpl 子類別
 Comment=QObject subclass with private implementation
+Comment[ar]=صنف فرعي لـ QObject مع تنفيذ خاصّ
 Comment[az]=Xüsusi tətbiqetmə ilə QObject alt sinifi
 Comment[ca]=Una subclasse QObject amb implementació privada
 Comment[ca@valencia]=Una subclasse QObject amb implementació privada
@@ -157,6 +159,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[ar]=ترويسة خاصّة
 Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada

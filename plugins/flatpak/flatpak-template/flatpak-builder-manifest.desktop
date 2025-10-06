@@ -1,5 +1,6 @@
 [General]
 Name=Flatpak Builder Manifest
+Name[ar]=بيان بانٍ لـ Flatpak
 Name[az]=Flatpak qurucusu manifesti
 Name[ca]=Manifest del constructor Flatpak
 Name[ca@valencia]=Manifest del constructor Flatpak
@@ -29,6 +30,7 @@ Name[uk]=Маніфест збирання Flatpak
 Name[zh_CN]=Flatpak 构建器清单文件
 Name[zh_TW]=Flatpak 編譯工具 Manifest
 Comment=A file to configure how a project is built by flatpak
+Comment[ar]=ملفّ لاضَبْط كيف يبني Flatpak مشروعًا
 Comment[az]=Flatpak tərəfindən bir layihənin necə yıığılacağını tənzimləmək üçün bir fayl
 Comment[ca]=Un fitxer per a configurar com serà construït un projecte per a Flatpak
 Comment[ca@valencia]=Un fitxer per a configurar com serà construït un projecte per a Flatpak

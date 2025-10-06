@@ -1,5 +1,6 @@
 [General]
 Name=CppUTest
+Name[ar]=CppUTest
 Name[az]=CppUTest
 Name[ca]=CppUTest
 Name[ca@valencia]=CppUTest
@@ -31,6 +32,7 @@ Name[uk]=CppUTest
 Name[zh_CN]=CppUTest
 Name[zh_TW]=CppUTest
 Comment=A unit test using the CppUTest library
+Comment[ar]=اختبار وحدة باستعمال مكتبة CppUTest
 Comment[az]=CppUTest kitabxanasına əsaslanan modul testi
 Comment[ca]=Una prova unitària utilitzant la biblioteca CppUTest
 Comment[ca@valencia]=Una prova unitària utilitzant la biblioteca CppUTest

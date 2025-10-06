@@ -1,5 +1,6 @@
 [General]
 Name=CMake Module with pkg-config
+Name[ar]=وحدة سي ميك مع pkg-config
 Name[az]=pkg-config ilə CMake modulu
 Name[bs]=CMake Modul s pkg-config
 Name[ca]=Mòdul CMake amb pkg-config
@@ -35,6 +36,7 @@ Name[uk]=Модуль CMake з pkg-config
 Name[zh_CN]=带有 pkg-config 的 CMake 模块
 Name[zh_TW]=CMake 模組，含 pkg-config
 Comment=CMake module for finding a library using pkg-config
+Comment[ar]=وحدة سي ميك لإيجاد مكتبة باستعمال pkg-config
 Comment[az]=pkg-config istifadə edərək kitabxananın tapılması üçün CMake modulu
 Comment[bs]=CMake modul za traženje biblioteke koristeći pkg-config
 Comment[ca]=Mòdul CMake per a cercar una biblioteca usant pkg-config

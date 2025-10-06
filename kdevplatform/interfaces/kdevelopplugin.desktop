@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 X-KDE-Derived=KPluginInfo
 Name=KDevelop Plugin
+Name[ar]=ملحق مطوّرك
 Name[az]=KDevelop qoşması
 Name[bg]=KDevelop приставка
 Name[ca]=Connector del KDevelop

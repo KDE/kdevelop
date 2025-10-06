@@ -1,5 +1,6 @@
 [General]
 Name=Google Test
+Name[ar]=اختبار غوغل
 Name[az]=Google Test
 Name[ca]=Google Test
 Name[ca@valencia]=Google Test
@@ -31,6 +32,7 @@ Name[uk]=Google Test
 Name[zh_CN]=Google Test
 Name[zh_TW]=Google Test
 Comment=A unit test using the Google Test library
+Comment[ar]=اختبار وحدة باستعمال مكتبة اختبار غوغل
 Comment[az]=Google Test kitabxanasına əsaslanan modul testi
 Comment[ca]=Una prova unitària utilitzant la biblioteca Test de Google
 Comment[ca@valencia]=Una prova unitària utilitzant la biblioteca Test de Google
