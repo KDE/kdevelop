@@ -115,11 +115,6 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
 
 BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const
 {
-    // @todo find out why this is needed, fix the code in kate
-    if (textCursor.column() > 0) {
-        textCursor.setColumn(textCursor.column() - 1);
-    }
-
     // Step 1: Look for a special language object(Macro, included header, etc.)
     const auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
     for (const auto& language : languages) {
