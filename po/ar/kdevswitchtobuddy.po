@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2025-09-22 20:54+0400\n"
+"PO-Revision-Date: 2025-10-05 16:30+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18,26 +18,20 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: manpagedocumentation.cpp:261
+#: switchtobuddyplugin.cpp:114
 #, kde-format
-msgid "Man Content Page"
-msgstr "صفحة محتوى الدليل"
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "بدل إلى '%1'"
 
-#: manpagedocumentationwidget.cpp:32
+#: switchtobuddyplugin.cpp:128
 #, kde-format
-msgid "Loading man pages..."
-msgstr "تحميل صفحات الدليل..."
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr "ب&دّل بين التعريف/الإعلان"
 
-#: manpagedocumentationwidget.cpp:86
+#: switchtobuddyplugin.cpp:133
 #, kde-format
-msgid ""
-"Error while loading man pages:\n"
-"%1"
-msgstr ""
-"خطأ أثناء تحميل صفحات الدليل:\n"
-"%1"
-
-#: manpageplugin.cpp:53
-#, kde-format
-msgid "Man Page"
-msgstr "صفحة الدليل"
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr "بدّل بين المصدر/الرأس"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
-"PO-Revision-Date: 2025-09-22 21:01+0400\n"
+"PO-Revision-Date: 2025-10-05 15:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: configwidget.cpp:25
@@ -63,13 +63,15 @@ msgid ""
 "Select the directory where the tools are being executed in.\n"
 "If this is the same as the source directory you can leave it empty."
 msgstr ""
+"اختر الدليل الذي تنفّذ فيه الأدوات.\n"
+"اتركه فارغاً إن كان هو نفسه دليل المصدر."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
 #: configwidget.ui:30
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "The directory where the tools are executed in"
-msgstr ""
+msgstr "الدليل الذي تنفّذ فيه الأدوات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: configwidget.ui:42
@@ -107,6 +109,7 @@ msgid ""
 "This is the executable that should be executed when selecting the action "
 "from the Project menu"
 msgstr ""
+"هذا هو الملف التنفيذي الذي يجب تشغيله عند اختيار الإجراء من قائمة المشروع"
 
 #. i18n: ectx: property (text), widget (QLabel, argLabel)
 #: configwidget.ui:95
@@ -120,7 +123,7 @@ msgstr "المعاملات:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The arguments that the tool needs to execute properly."
-msgstr ""
+msgstr "المعاملات التي تحتاجها الأداة لتنفيذها بشكل صحيح."
 
 #. i18n: ectx: property (text), widget (QLabel, envLabel)
 #: configwidget.ui:115
@@ -134,7 +137,7 @@ msgstr "البيئة:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
-msgstr ""
+msgstr "اختر بيئة مضبوطة مسبقاً لأداتك"
 
 #: custombuildjob.cpp:67
 #, kde-format
@@ -175,38 +178,38 @@ msgstr "تقليم: %1 %2"
 #: custombuildjob.cpp:95
 #, kde-format
 msgid "Undefined Build type"
-msgstr ""
+msgstr "نوع بناء غير معرّف"
 
 #: custombuildjob.cpp:99
 #, kde-format
 msgid "No command given for custom %1 tool in project \"%2\"."
-msgstr ""
+msgstr "لم يعط أمر للأداة %1 المخصصة في المشروع «%2»."
 
 #: custombuildjob.cpp:104
 #, kde-format
 msgid "The custom %1 tool in project \"%2\" is disabled"
-msgstr ""
+msgstr "الأداة %1 المخصصة في المشروع «%2» معطّلة"
 
 #: custombuildjob.cpp:116
 #, kde-format
 msgid ""
 "The given arguments would need a real shell, this is not supported currently."
-msgstr ""
+msgstr "المعاملات المعطاة تحتاج إلى صدفة حقيقية، وهذا غير مدعوم حالياً."
 
 #: custombuildjob.cpp:166
 #, kde-format
 msgid "Failed to start command."
-msgstr ""
+msgstr "فشل بدء الأمر."
 
 #: custombuildjob.cpp:169
 #, kde-format
 msgid "Command crashed."
-msgstr ""
+msgstr "تعطل الأمر."
 
 #: custombuildjob.cpp:172
 #, kde-format
 msgid "Unknown error executing command."
-msgstr ""
+msgstr "خطأ مجهول أثناء تنفيذ الأمر."
 
 #: custombuildjob.cpp:189
 #, kde-format
@@ -279,11 +282,11 @@ msgstr "أزل"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Custom Build System"
-msgstr ""
+msgstr "نظام البناء المخصص"
 
 #: kcm_custombuildsystem.cpp:58
 #, kde-format
 msgid ""
 "Configure a projects custom build tool and includes/defines for the language "
 "support."
-msgstr ""
+msgstr "اضبط أداة البناء المخصصة للمشروع والتضمينات/التعريفات لدعم اللغة."

@@ -1,0 +1,54 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-05-16 00:40+0000\n"
+"PO-Revision-Date: 2025-10-05 16:32+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:55
+#, kde-format
+msgctxt "@title:window"
+msgid "File System"
+msgstr "نظام الملفات"
+
+#: filemanager.cpp:126
+#, kde-format
+msgctxt "@title:menu"
+msgid "Bookmarks"
+msgstr "العلامات"
+
+#: filemanager.cpp:133
+#, kde-format
+msgctxt "@action switch to directory of current document"
+msgid "Current Document Directory"
+msgstr "الدليل الحالي"
+
+#: filemanager.cpp:150
+#, kde-format
+msgctxt "@action"
+msgid "New File..."
+msgstr "ملفّ جديد..."
+
+#: filemanager.cpp:157
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New File"
+msgstr "أنشئ ملفا جديدا"
+
+#: filemanager.cpp:173
+#, kde-format
+msgid "Unable to create file '%1'"
+msgstr "تعذّر إنشاء ملف  ‏'%1'"

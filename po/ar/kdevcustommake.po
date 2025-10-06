@@ -1,0 +1,88 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-07-13 01:44+0000\n"
+"PO-Revision-Date: 2025-10-05 16:26+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr "حاول إيجاد مسار التضمين بينما عملية إيجاد أخرى ما تزال قيد التشغيل"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "ملف make مفقود في المجلد ”%1“"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "مشكلة أثناء محاولة إيجاد مسارات التضمين لـ %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "الخبيئة: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "اسم الملف %1 يبدو مشوّهًا"
+
+#: makefileresolver/makefileresolver.cpp:472
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "فشل استخراج دليل العمل الجديد"
+
+#: makefileresolver/makefileresolver.cpp:472
+#: makefileresolver/makefileresolver.cpp:501
+#, kde-format
+msgid "Output was: %1"
+msgstr "كان الخرج: %1"
+
+#: makefileresolver/makefileresolver.cpp:494
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "فشل استدعاء make التكراري"
+
+#: makefileresolver/makefileresolver.cpp:494
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "سلسلة المعاملات ”%1“ لا تبدو صالحة. كان الخرج: %2."
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "الدليل ”%1“ غير موجود. كان الخرج: %2."
+
+#: makefileresolver/makefileresolver.cpp:501
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "استدعاء make تكراري مشوّه"
+
+#: makefileresolver/makefileresolver.cpp:513
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "لم نستطع استخراج مسارات التضمين من خرج make"
+
+#: makefileresolver/makefileresolver.cpp:514
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "المجلد: ”%1“  الأمر: ”%2“  الخرج: ”%3“"

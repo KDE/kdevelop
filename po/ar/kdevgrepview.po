@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 00:39+0000\n"
-"PO-Revision-Date: 2025-09-22 21:03+0400\n"
+"PO-Revision-Date: 2025-10-05 14:55+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,20 +15,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: grepdialog.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
-msgstr ""
+msgstr "كل الملفّات المفتوحة"
 
 #: grepdialog.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
-msgstr ""
+msgstr "كل المشاريع المفتوحة"
 
 #: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
 #, kde-format
@@ -46,14 +46,18 @@ msgstr "ابحث..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
-msgstr ""
+msgstr "اختر دليلاً للبحث فيه"
 
 #: grepdialog.cpp:609
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2، وعنصر إضافي واحد"
+msgstr[1] "%2، وعنصران إضافيان"
+msgstr[2] "%2، و%1 عناصر إضافيّة"
+msgstr[3] "%2، و%1 عناصر إضافيّة"
+msgstr[4] "%2، و%1 عنصراً إضافيًّا"
+msgstr[5] "%2، و%1 عنصر إضافي"
 
 #: grepdialog.cpp:625
 #, kde-format
@@ -65,7 +69,7 @@ msgstr "ابحث \"%1\" في %2"
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
-msgstr ""
+msgstr "ابحث \"%1\" في %2 (في الوقت %3)"
 
 #: grepjob.cpp:156
 #, kde-format
@@ -75,7 +79,7 @@ msgstr "البحث في الملفّات"
 #: grepjob.cpp:175
 #, kde-format
 msgid "No files found matching the wildcard patterns"
-msgstr ""
+msgstr "لا ملفّات تطابق أنماط الرموز البديلة"
 
 #: grepjob.cpp:189
 #, kde-format
@@ -83,24 +87,28 @@ msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
 "https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
 msgid "Captures are not allowed in pattern string"
-msgstr ""
+msgstr "لا يسمح بضم المجموعات في سلسلة النمط"
 
 #: grepjob.cpp:210
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "أبحث عن <b>%2</b> في ملفّ واحد"
+msgstr[1] "أبحث عن <b>%2</b> في ملفّين"
+msgstr[2] "أبحث عن <b>%2</b> في %1 ملفّات"
+msgstr[3] "أبحث عن <b>%2</b> في %1 ملفّات"
+msgstr[4] "أبحث عن <b>%2</b> في %1 ملفًّا"
+msgstr[5] "أبحث عن <b>%2</b> في %1 ملفّ"
 
 #: grepjob.cpp:236
 #, kde-format
 msgid "Collecting files..."
-msgstr ""
+msgstr "أجمع الملفّات..."
 
 #: grepjob.cpp:280
 #, kde-format
 msgid "Search aborted"
-msgstr ""
+msgstr "البحث ألغي"
 
 #: grepjob.cpp:326
 #, kde-format
@@ -126,15 +134,23 @@ msgstr "السّطر %1: "
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<b>مطابقة واحدة</b>"
+msgstr[1] "<b>مطابقة</b>"
+msgstr[2] "<b>مطابقتين</b>"
+msgstr[3] "<b>%1 مطابقات</b>"
+msgstr[4] "<b>%1 مطابقة</b>"
+msgstr[5] "<b>%1 مطابقة</b>"
 
 #: grepoutputmodel.cpp:401
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<b>لا شيء</b>"
+msgstr[1] "<b>ملفّ واحد</b>"
+msgstr[2] "<b>ملفّان</b>"
+msgstr[3] "<b>%1 ملفّات</b>"
+msgstr[4] "<b>%1 ملفًّا</b>"
+msgstr[5] "<b>%1 ملفّ</b>"
 
 #: grepoutputmodel.cpp:403
 #, kde-format
@@ -146,8 +162,12 @@ msgstr "<b>%1 في %2</b>"
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2: %1 مطابقة"
+msgstr[1] "%2: مطابقة واحدة"
+msgstr[2] "%2: مطابقتان"
+msgstr[3] "%2: %1 مطابقات"
+msgstr[4] "%2: %1 مطابقة"
+msgstr[5] "%2: %1 مطابقة"
 
 #: grepoutputmodel.cpp:475
 #, kde-format
@@ -155,13 +175,13 @@ msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
 "its row and column"
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
-msgstr ""
+msgstr "فشل استبدال <b>%1</b> بـ <b>%2</b> في %3:%4:%5"
 
 #: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
-msgstr ""
+msgstr "عرض خرج البحث/الاستبدال"
 
 #: grepoutputview.cpp:74
 #, kde-format
@@ -208,13 +228,13 @@ msgstr "امحُ تأريخ البحث"
 #: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
-msgstr ""
+msgstr "هل تريد الاستبدال بسلسلة فارغة؟"
 
 #: grepoutputview.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
-msgstr ""
+msgstr "ابدأ الاستبدال"
 
 #: grepoutputview.cpp:326
 #, kde-format
@@ -234,14 +254,14 @@ msgstr "النص ال&بديل:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr ""
+msgstr "أدخل نمط الاستبدال"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr ""
+msgstr "طبّق الاستبدال على العناصر المختارة"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
@@ -260,7 +280,7 @@ msgstr "اعثر واستبدل في الملفّات..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr ""
+msgstr "ابحث عن تعابير في عدّة ملفّات"
 
 #: grepviewplugin.cpp:84
 #, kde-format
@@ -271,12 +291,15 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
+"يفتح هذا الأمر حوار 'اعثر واستبدل في الملفّات'. هناك، أدخل تعبيراً نمطيًّا سيبحث "
+"فيه ضمن جميع الملفّات في الأدلة التي تحدّدها. ستعرض المطابقات، ويمكنك التبديل "
+"إلى مطابقة مباشرة. يمكنك إجراء استبدال أيضاً."
 
 #: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr ""
+msgstr "اعثر واستبدل في هذا المجلّد..."
 
 #: grepviewplugin.cpp:143
 #, kde-format
@@ -289,7 +312,7 @@ msgstr "ا&عثر واستبدل في الملفّات..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr ""
+msgstr "أدخل التعبير النمطي الذي تريد البحث عنه"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
@@ -379,6 +402,85 @@ msgid ""
 "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
 "style:italic;\">man pcresyntax.</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">أدخل التعبير النمطي الذي "
+"تريد البحث عنه هنا.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">إن لم تشر على \"تعبير نمطي"
+"\" أدناه، سيعتبر سلسلة خام. هذا يعني، أن كل الأحرف الوصفية ستهرب.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">الأحرف الوصفية المحتملة هي:"
+"</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - يطابق أي حرف</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - يطابق بداية السطر</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - يطابق نهاية السطر</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - يطابق حدّ كلمة</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - يطابق أي حرف مسافة بيضاء</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">توجد عوامل التكرار التالية:"
+"</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - العنصر السابق "
+"يطابق مرة واحدة على الأكثر</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - العنصر السابق يطابق صفر أو أكثر من المرات</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - العنصر السابق يطابق مرة واحدة أو أكثر</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - العنصر السابق يطابق "
+"بالضبط <span style=\" font-style:italic;\">n</span> من المرات</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - العنصر السابق يطابق "
+"<span style=\" font-style:italic;\">n</span> أو أكثر من المرات</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - العنصر السابق يطابق "
+"<span style=\" font-style:italic;\">n</span> من المرات على الأكثر</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - العنصر السابق يطابق <span style=\" font-style:italic;\">n</span> "
+"من المرات على الأقل، و <span style=\" font-style:italic;\">m</span> من "
+"المرات على الأكثر.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">علاوة على ذلك، مراجع خلفية "
+"للتعبيرات الفرعية الموضوعة بين قوسين متوفرة عبر الترميز \\<span style=\" "
+"font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">للمزيد من المراجع، انظر <a "
+"href=\"https://www.pcre.org/\"><span style=\" text-decoration: underline; "
+"color:#0057ae;\">www.pcre.org</span></a> أو <span style=\" font-style:italic;"
+"\">man pcresyntax.</span></p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
@@ -392,7 +494,7 @@ msgstr "القالب:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
-msgstr ""
+msgstr "هذا هو قالب التعبير النمطي."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
 #: grepwidget.ui:85
@@ -402,20 +504,22 @@ msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
+"هذا هو قالب التعبير النمطي. <i>%s</i> سيستبدل بالنمط، بينما <i>%%</i> "
+"سيستبدل بـ <i>%</i>."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr ""
+msgstr "اختر موقعاً بسرعة من مجموعة من الأدلّة"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
 #, kde-format
 msgctxt "@action:button"
 msgid "Quick Select"
-msgstr ""
+msgstr "اختيار سريع"
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
@@ -428,7 +532,7 @@ msgstr "العمق:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "المستوى الأقصى لتداخل الأدلة الفرعية"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -438,6 +542,9 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"لكل موقع بحث، انزل إلى عمق على الأكثر من مستويات الأدلة. العمق=0 يعني البحث "
+"فقط في الملفّات مباشرة داخل مواقع البحث المختارة. عمق كامل يعني لا حدود "
+"للتداخل."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
@@ -473,21 +580,21 @@ msgstr "حسّاس لحالة الأحرف:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
-msgstr ""
+msgstr "البحث الحسّاس لحالة الأحرف."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: grepwidget.ui:192
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr ""
+msgstr "الموقع (المواقع):"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
-msgstr ""
+msgstr "مرشّح الملفّات"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
 #: grepwidget.ui:208
@@ -497,6 +604,8 @@ msgid ""
 "Enter the file name pattern of the files to search here. You may give "
 "several patterns separated by commas or spaces."
 msgstr ""
+"أدخل نمط أسماء الملفّات التي تريد البحث فيها هنا. يمكنك إعطاء عدّة أنماط "
+"مفصولة بفواصل أو مسافات."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:221
@@ -510,7 +619,7 @@ msgstr "استثنِ:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr ""
+msgstr "نمط الملفّات المراد استثناؤها"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:237
@@ -522,6 +631,9 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
+"أدخل نمط أسماء الملفّات التي تريد استثناءها من البحث هنا. يمكنك إعطاء عدّة "
+"أنماط مفصولة بفواصل أو مسافات.<p>كل نمط محاط داخلياً بعلامات نجميّة، بحيث يمكن "
+"لكل نمط أن يطابق أجزاء من مسارات الملفّات.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:317
@@ -535,28 +647,28 @@ msgstr "تعبير نمطي:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr ""
+msgstr "فعّل أو عطّل التعبير النمطي."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr ""
+msgstr "حدّد لملفّات المشروع:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr ""
+msgstr "أدخل قالب الاستبدال"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:379
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
-msgstr ""
+msgstr "قالب الاستبدال:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
 #: grepwidget.ui:392
@@ -566,10 +678,12 @@ msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
+"اختر الموقع الذي تريد البحث فيه. يمكن أن يكون دليلاً، أو ملفّاً، أو قائمة "
+"مفصولة بفاصلة منقوطة (بدون مسافات) من الأدلة/الملفات."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:417
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr ""
+msgstr "اختر دليلاً للبحث فيه"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2025-09-22 20:49+0400\n"
+"PO-Revision-Date: 2025-10-05 15:20+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: filtermodel.cpp:76
@@ -48,6 +48,13 @@ msgid ""
 "code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
 "thus match any item with a relative path ending on the given pattern."
 msgstr ""
+"يحدّد نمط حرف البدل ما إذا كان الملفّ أو المجلّد مضمَّنًا في مشروع أم لا.<br /"
+">يُطابَق النمط على مسار العنصر النسبي إلى جذر المشروع، مع حساسية لحالة الأحرف. "
+"يبدأ المسار النسبي بـ '/'، وتُزال الشّرطات الخلفيّة للمجلّدات.<br />تُعتَبر "
+"الأنماط المنتهية بـ <code>\"/\"</code> ضمنًا أنّها تُطابَق على المجلّدات فقط.<br /"
+">الأنماط التي لا تبدأ صراحة بـ <code>\"/\"</code> ولا بـ <code>\"*\"</code>، "
+"تُضاف إليها ضمنًا <code>\"*/\"</code> في البداية، ولذا تُطابَق على أيّ عنصر بمسار "
+"نسبي ينتهي بالنمط المُعطى."
 
 #: filtermodel.cpp:121
 #, kde-format
@@ -55,12 +62,14 @@ msgid ""
 "The target defines what type of item the filter is matched against.<br /"
 ">Filters either apply only to files, only to folders or to both."
 msgstr ""
+"يحدّد الهدف نوع العنصر الذي يُطابَق عليه المرشّح.<br />تُطبَّق المرشّحات إمّا على "
+"الملفّات فقط، أو على المجلّدات فقط، أو على كليهما."
 
 #: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
-msgstr ""
+msgstr "الملفات والمجلدات"
 
 #: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, kde-format
@@ -83,6 +92,10 @@ msgid ""
 "project, you could exclude all files via <code>\"*\"</code> and then apply "
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
+"تستثني المرشّحات العناصر من المشروع مبدئيًا. يمكن استخدام الأنماط التضمينية "
+"لتضمين العناصر التي طابَقتها أنماط استثنائية سابقة.<br />مثال: لتضمين الملفّات "
+"المنتهية بـ <code>\".cpp\"</code> في مشروعك فقط، يمكنك استثناء كلّ الملفّات "
+"عبر <code>\"*\"</code> ثمّ تطبيق نمط تضميني <code>\"*.cpp\"</code>."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
@@ -102,17 +115,18 @@ msgid ""
 "A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
 "to make this explicit."
 msgstr ""
+"سَيُطابِق مرشّح بنمط فارغ كلّ العناصر. استخدم <code>\"*\"</code> لجعل هذا صريحًا."
 
 #: projectfilterconfigpage.cpp:175
 #, kde-format
 msgid "A filter ending on <code>\"/\"</code> can never match a file."
-msgstr ""
+msgstr "لا يمكن لمرشّح ينتهي بـ <code>\"/\"</code> أن يُطابِق ملفًا أبدًا."
 
 #: projectfilterconfigpage.cpp:198
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Project Filter"
-msgstr ""
+msgstr "اضبط مرشّح المشروع"
 
 #: projectfilterconfigpage.cpp:208
 #, kde-format
@@ -125,8 +139,12 @@ msgstr "مرشّح المشروع"
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "استثنِ العنصر من المشروع"
+msgstr[1] "استثنِ العنصرين من المشروع"
+msgstr[2] "استثنِ العناصر الثلاثة من المشروع"
+msgstr[3] "استثنِ العناصر من المشروع"
+msgstr[4] "استثنِ العناصر من المشروع"
+msgstr[5] "استثنِ العناصر من المشروع"
 
 #: projectfilterprovider.cpp:116
 #, kde-format
@@ -134,14 +152,18 @@ msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
 msgid_plural ""
 "A filter for the items was added. To undo, use the project filter settings."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "أُضيف مرشّح للعنصر. للإلغاء، استخدم إعدادات مرشّح المشروع."
+msgstr[1] "أُضيف مرشّح للعنصرين. للإلغاء، استخدم إعدادات مرشّح المشروع."
+msgstr[2] "أُضيف مرشّح للعناصر الثلاثة. للإلغاء، استخدم إعدادات مرشّح المشروع."
+msgstr[3] "أُضيف مرشّح للعناصر. للإلغاء، استخدم إعدادات مرشّح المشروع."
+msgstr[4] "أُضيف مرشّح للعناصر. للإلغاء، استخدم إعدادات مرشّح المشروع."
+msgstr[5] "أُضيف مرشّح للعناصر. للإلغاء، استخدم إعدادات مرشّح المشروع."
 
 #: projectfilterprovider.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"
-msgstr ""
+msgstr "أُضيف مرشّح المشروع"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectfiltersettings.ui:20

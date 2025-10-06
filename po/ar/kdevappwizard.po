@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:39+0000\n"
-"PO-Revision-Date: 2025-09-22 20:46+0400\n"
+"PO-Revision-Date: 2025-10-05 15:20+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: appwizarddialog.cpp:23
@@ -46,7 +46,7 @@ msgstr "جديد من القالب..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
-msgstr ""
+msgstr "ولّد مشروعًا جديدًا من قالب"
 
 #: appwizardplugin.cpp:72
 #, kde-format
@@ -55,62 +55,64 @@ msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
+"يشغّل هذا معالج تطبيقات مطوّرك. يساعدك في توليد هيكل لتطبيقك من مجموعة من "
+"القوالب."
 
 #: appwizardplugin.cpp:106
 #, kde-format
 msgid "Could not create project from template."
-msgstr ""
+msgstr "تعذّر إنشاء المشروع من القالب."
 
 #: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
-msgstr ""
+msgstr "اطلع على عرض أداة التحكّم بالإصدارات."
 
 #: appwizardplugin.cpp:136
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr ""
+msgstr "خطأ في نظام التحكّم بالإصدارات"
 
 #: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
-msgstr ""
+msgstr "تعذّر تهيئة مستودع نظام التحكّم بالإصدارات الموزَّع (DVCS)"
 
 #: appwizardplugin.cpp:161
 #, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr ""
+msgstr "تعذّر فحص حالة مستودع نظام التحكّم بالإصدارات الموزَّع (DVCS)"
 
 #: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
-msgstr ""
+msgstr "تعذّر إضافة الملفّات إلى مستودع نظام التحكّم بالإصدارات الموزَّع (DVCS)"
 
 #: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
-msgstr ""
+msgstr "تعذّر استيراد المشروع إلى %1."
 
 #: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
-msgstr ""
+msgstr "تعذّر استيراد المشروع"
 
 #: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
-msgstr ""
+msgstr "تعذّر سحب المشروع المستورد"
 
 #: appwizardplugin.cpp:332
 #, kde-format
 msgid "Could not create new project"
-msgstr ""
+msgstr "تعذّر إنشاء مشروع جديد"
 
 #: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
-msgstr ""
+msgstr "لا يمكن إنشاء الملف %1."
 
 #: appwizardplugin.cpp:568
 #, kde-format
@@ -139,7 +141,7 @@ msgstr "أحضر المزيد من القوالب"
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
-msgstr ""
+msgstr "حمّل القالب من ملفّ"
 
 #: projectselectionpage.cpp:173
 #, kde-format
@@ -149,40 +151,40 @@ msgstr "المكان غير صالح"
 #: projectselectionpage.cpp:180
 #, kde-format
 msgid "Empty project name"
-msgstr ""
+msgstr "اسم مشروع فارغ"
 
 #: projectselectionpage.cpp:200
 #, kde-format
 msgid "Invalid project name"
-msgstr ""
+msgstr "اسم مشروع غير صالح"
 
 #: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
-msgstr ""
+msgstr "تعذّر إنشاء مجلّدات فرعية، إذن الوصول مفقود على: %1"
 
 #: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
-msgstr ""
+msgstr "قالب مشروع غير صالح، اختر عنصرًا طرفيًّا"
 
 #: projectselectionpage.cpp:247
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr ""
+msgstr "المسار موجود مسبقًا ويحوي ملفّات. افتحه كمشروع."
 
 #: projectselectionpage.cpp:294
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
-msgstr ""
+msgstr "المسار المحدّد موجود مسبقًا ويحوي ملفّات. هل أنت متأكّد من المتابعة؟"
 
 #: projectselectionpage.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
-msgstr ""
+msgstr "حمّل القالب من ملفّ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38

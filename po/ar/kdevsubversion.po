@@ -1,0 +1,482 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-04-17 00:40+0000\n"
+"PO-Revision-Date: 2025-10-05 15:01+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
+
+#: kdevsvnplugin.cpp:334
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "انسخ..."
+
+#: kdevsvnplugin.cpp:341
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "انقل..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "الرجاء اختيار عنصر واحد فقط لهذه العملية"
+
+#: kdevsvnplugin.cpp:370
+#, kde-format
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "ملف/دليل الوجهة"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "النسخ يعمل فقط على الملفات المحلية"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "ملف/دليل الوجهة"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "النقل يعمل فقط على الملفات/الأدلة المحلية"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "إضافة Subversion"
+
+#: svnaddjob.cpp:84
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "لا تتوفر معلومات كافية لإضافة الملف"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "إضافة ملاحظات Subversion"
+
+#: svnblamejob.cpp:143
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "لا تتوفر معلومات كافية لتحديد المسؤول عن الموقع"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "سحب Subversion"
+
+#: svncheckoutjob.cpp:95
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "لا تتوفر معلومات كافية للسحب"
+
+#: svncommitjob.cpp:108
+#, kde-format
+msgid "Subversion Commit"
+msgstr "تثبيت Subversion"
+
+#: svncommitjob.cpp:119
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "لا تتوفر معلومات كافية لتنفيذ التثبيت"
+
+#: svncommitjob.cpp:121
+#, kde-format
+msgid "Committing..."
+msgstr "جاري التثبيت..."
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "نسخ Subversion"
+
+#: svncopyjob.cpp:82
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "لا تتوفر معلومات كافية لنسخ الملف"
+
+#: svndiffjob.cpp:255
+#, kde-format
+msgid "Subversion Diff"
+msgstr "مقارنة Subversion"
+
+#: svndiffjob.cpp:271
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "لا تتوفر معلومات كافية لتنفيذ المقارنة"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "استيراد Subversion"
+
+#: svnimportjob.cpp:98
+#, kde-format
+msgid "Not enough information to import"
+msgstr "لا تتوفر معلومات كافية للاستيراد"
+
+#: svninfojob.cpp:82
+#, kde-format
+msgid "Subversion Info"
+msgstr "معلومات Subversion"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "لا تتوفر معلومات كافية لتنفيذ مهمة المعلومات"
+
+#: svninternaljobbase.cpp:87
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "أضِف %1"
+
+#: svninternaljobbase.cpp:90
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "احذِف %1"
+
+#: svninternaljobbase.cpp:94
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "احذِف %1"
+
+#: svninternaljobbase.cpp:97
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "أضِف %1"
+
+#: svninternaljobbase.cpp:137
+#, kde-format
+msgid "Revision %1"
+msgstr "المراجعة %1"
+
+#: svninternaljobbase.cpp:140
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "جاري تحديث الخارجية: %1"
+
+#: svninternaljobbase.cpp:148
+#, kde-format
+msgid "Sending %1"
+msgstr "جاري إرسال %1"
+
+#: svninternaljobbase.cpp:152
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "جاري إضافة %1 باستخدام نوع الوسائط المتعددة %2."
+
+#: svninternaljobbase.cpp:154
+#, kde-format
+msgid "Adding %1."
+msgstr "جاري إضافة %1."
+
+#: svninternaljobbase.cpp:158
+#, kde-format
+msgid "Deleting %1."
+msgstr "جاري حذف %1."
+
+#: svninternaljobbase.cpp:161
+#, kde-format
+msgid "Replacing %1."
+msgstr "جاري استبدال %1."
+
+#: svninternaljobbase.cpp:166
+#, kde-format
+msgid "Transmitting file data "
+msgstr "جاري إرسال بيانات الملف"
+
+#: svninternaljobbase.cpp:172
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "انتهاء تحديد المسؤولية للمراجعة %1، المسار %2"
+
+#: svninternaljobbase.cpp:175
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "أُعِدَ نسخة العمل %1"
+
+#: svninternaljobbase.cpp:178
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "فشل الإعادة على نسخة العمل %1"
+
+#: svninternaljobbase.cpp:181
+#, kde-format
+msgid "Copied %1"
+msgstr "انسخ %1"
+
+#: svninternaljobbase.cpp:236
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "الشهادة ليست صالحة بعد."
+
+#: svninternaljobbase.cpp:240
+#, kde-format
+msgid "Certificate has expired."
+msgstr "انتهت صلاحية الشهادة."
+
+#: svninternaljobbase.cpp:244
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr "الاسم الشائع للشهادة (اسم المضيف) لا يطابق اسم المضيف البعيد."
+
+#: svninternaljobbase.cpp:248
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "سلطة الشهادة غير معروفة."
+
+#: svninternaljobbase.cpp:252
+#, kde-format
+msgid "Other unknown error."
+msgstr "خطأ آخر غير معروف."
+
+#: svnjobbase.cpp:114
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "أدخِل اسم المستخدم من أجل: %1"
+
+#: svnjobbase.cpp:188
+#, kde-format
+msgid "Completed"
+msgstr "اكتمال"
+
+#: svnjobbase.cpp:203
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"خطأ أثناء تنفيذ المهمة:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "سجل Subversion"
+
+#: svnlogjob.cpp:119
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "لا تتوفر معلومات كافية لتسجيل الموقع"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "نقل Subversion"
+
+#: svnmovejob.cpp:94
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "لا تتوفر معلومات كافية لنقل الملف"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "إزالة Subversion"
+
+#: svnremovejob.cpp:87
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "لا تتوفر معلومات كافية لتنفيذ مهمة الإزالة"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "إعادة Subversion"
+
+#: svnrevertjob.cpp:85
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "لا تتوفر معلومات كافية لتنفيذ الإعادة"
+
+#: svnssldialog.cpp:28
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "شهادة ملقم SSL"
+
+#: svnssldialog.cpp:30
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "ثق بصفة دائمة"
+
+#: svnssldialog.cpp:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "ثق بصفة مؤقتة"
+
+#: svnssldialog.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "شهادة ملقم SSL: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "حالة Subversion"
+
+#: svnstatusjob.cpp:130
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "لا تتوفر معلومات كافية لتنفيذ مهمة الحالة"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "تحديث Subversion"
+
+#: svnupdatejob.cpp:119
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "لا تتوفر معلومات كافية لتنفيذ التحديث"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "دليل المصدر:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "المستودع:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "موقع المستودع"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "اختر المستودع الذي يستورد دليل المصدر إليه"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "رسالة التثبيت:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"حدثت أخطاء أثناء التحقق من صحة شهادة الملقم.\n"
+"هل تريد الثقة بهذه الشهادة؟"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "أسباب فشل التحقق"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "معلومات الشهادة"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "اسم المضيف:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "ملقم ما"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "المُصدِر:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "مُصدِر ما"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "صالح من:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "صالح من"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "صالح حتى:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "صالح حتى"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "البصمة:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "البصمة"

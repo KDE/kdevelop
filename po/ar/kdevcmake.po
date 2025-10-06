@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-16 00:40+0000\n"
-"PO-Revision-Date: 2025-09-22 20:45+0400\n"
+"PO-Revision-Date: 2025-10-05 15:19+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,62 +15,62 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr ""
+msgstr "اضبط دليل بناء - %1"
 
 #: cmakebuilddirchooser.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr ""
+msgstr "اضبط دليل بناء لـ %1"
 
 #: cmakebuilddirchooser.cpp:196
 #, kde-format
 msgid "You need to specify a build directory."
-msgstr ""
+msgstr "تحتاج أن تحدّد دليل بناء."
 
 #: cmakebuilddirchooser.cpp:203
 #, kde-format
 msgid "Using an already created build directory."
-msgstr ""
+msgstr "استخدم دليل بناء منشأ مسبقًا."
 
 #: cmakebuilddirchooser.cpp:214
 #, kde-format
 msgid "Creating a new build directory."
-msgstr ""
+msgstr "أنشئ دليل بناء جديد."
 
 #: cmakebuilddirchooser.cpp:220
 #, kde-format
 msgid "Build directory already configured."
-msgstr ""
+msgstr "دليل البناء مضبوط مسبقًا."
 
 #: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
-msgstr ""
+msgstr "دليل البناء هذا هو لـ %1، لكن دليل المشروع هو %2."
 
 #: cmakebuilddirchooser.cpp:225
 #, kde-format
 msgid "You may not select a relative build directory."
-msgstr ""
+msgstr "لا يجوز أن تختار دليل بناء نسبي."
 
 #: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "The selected build directory is not empty."
-msgstr ""
+msgstr "دليل البناء المختار ليس فارغًا."
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr ""
+msgstr "أدلّة البناء المتاحة:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
@@ -101,13 +101,15 @@ msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
 "will let CMake use its default install prefix."
 msgstr ""
+"البادئة التي سيُثبَّت المشروع تحتها. اترك هذا فارغًا لدع سي ميك يستخدم بادئة "
+"التثبيت المبدئية خاصته."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr ""
+msgstr "بادئة التثبيت المبدئية لـ سي ميك"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
@@ -122,14 +124,14 @@ msgstr "&نوع البناء:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "وسائط إضافية:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: cmakebuilddirchooser.ui:182
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake &executable:"
-msgstr ""
+msgstr "تنفيذيّ &سي ميك:"
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
@@ -204,33 +206,33 @@ msgstr "السّياسات"
 #: cmakecommandscontents.cpp:102
 #, kde-format
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
-msgstr ""
+msgstr "<p>لتقديم أفضل لتوثيق سي ميك، ثبّت rst2html.</p>"
 
 #: cmakedocumentation.cpp:46 cmakemanager.cpp:76
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
-msgstr ""
+msgstr "تعذّر إيجاد تنفيذيّ لـ سي ميك. هل واحد مثبَّت على الحاسوب؟"
 
 #: cmakedocumentation.cpp:81
 #, kde-format
 msgid "<br /><em>Cache Value:</em> %1\n"
-msgstr ""
+msgstr "<br /><em>قيمة الخبيئة:</em> %1\n"
 
 #: cmakedocumentation.cpp:84
 #, kde-format
 msgid "<br /><em>Cache Documentation:</em> %1\n"
-msgstr ""
+msgstr "<br /><em>توثيق الخبيئة:</em> %1\n"
 
 #: cmakefileapiimportjob.cpp:41
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "بيانات مشروع واجهة برمجة ملفات سي ميك غير صالحة"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
 msgid "CMake Content Page"
-msgstr ""
+msgstr "صفحة محتوى سي ميك"
 
 #: cmakemanager.cpp:665
 #, kde-format
@@ -241,6 +243,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
+"اضبط المشروع '%1' ببيانات سي ميك متقادمة. نتيجة لذلك، قد يكون فهم مطوّرك "
+"للشيفرة خاطئًا.\n"
+"\n"
+"لتصحيح هذه المشكلة، انقر زر الفأرة الأيمن على عنصر المشروع في عرض أدوات "
+"المشاريع وانقر 'أعد التحميل'."
 
 #: cmakemanager.cpp:676
 #, kde-format
@@ -253,6 +260,12 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
+"أخفق في ضبط المشروع '%1' (رسالة الخطأ: %2). نتيجة لذلك، سيُكسَر فهم مطوّرك "
+"للشيفرة على الأرجح.\n"
+"\n"
+"لتصحيح هذه المشكلة، تأكّد أن ملفّات CMakeLists.txt الخاصّة بالمشروع صحيحة، وأن "
+"مطوّرك مضبوط لاستخدام إصدار وإعدادات سي ميك الصحيحة. ثمّ انقر زر الفأرة الأيمن "
+"على عنصر المشروع في عرض أدوات المشاريع وانقر 'أعد التحميل'."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -301,21 +314,21 @@ msgstr "نوع البناء:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
-msgstr ""
+msgstr "اضبط البيئة:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "اختر بيئة للاستخدام"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
 #, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
-msgstr ""
+msgstr "أظهر القيم المتقدّمة"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: settings/cmakebuildsettings.ui:235
@@ -366,6 +379,8 @@ msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
+"سيُزال دليل %1 من قائمة مطوّرك.\n"
+"هل تريد من مطوّرك أن يحذفه من نظام الملفّات أيضًا؟"
 
 #: settings/cmakepreferences.cpp:347
 #, kde-format
@@ -376,7 +391,7 @@ msgstr "لا تحذف"
 #: settings/cmakepreferences.cpp:352
 #, kde-format
 msgid "Could not remove: %1"
-msgstr ""
+msgstr "تعذّر إزالة: %1"
 
 #: settings/cmakepreferences.cpp:398
 #, kde-format
@@ -388,12 +403,12 @@ msgstr "سي ميك"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"
-msgstr ""
+msgstr "اضبط إعدادات سي ميك"
 
 #: testing/ctestfindjob.cpp:23
 #, kde-format
 msgid "Parse test suite %1"
-msgstr ""
+msgstr "حلّل حزمة الاختبار %1"
 
 #: testing/ctestrunjob.cpp:77
 #, kde-format
@@ -404,12 +419,16 @@ msgstr "سي تست"
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
-msgstr ""
+msgstr "سي تست %1: %2"
 
 #: testing/ctestrunjob.cpp:129
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "سي تست %2 (%1)"
+msgstr[1] "سي تست %2 (%1)"
+msgstr[2] "سي تست %2 (%1)"
+msgstr[3] "سي تست %2 (%1)"
+msgstr[4] "سي تست %2 (%1)"
+msgstr[5] "سي تست %2 (%1)"
