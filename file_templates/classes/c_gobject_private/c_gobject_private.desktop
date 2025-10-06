@@ -1,5 +1,6 @@
 [General]
 Name=GObject with private pointer
+Name[ar]=GObject مع مؤشّر خاصّ
 Name[az]=Gizli göstərici ilə GObject
 Name[bs]=GObject s privatnim pokazivačem
 Name[ca]=GObject amb punter privat
@@ -35,6 +36,7 @@ Name[uk]=GObject із закритим (private) вказівником
 Name[zh_CN]=带有私有指针的 GObject
 Name[zh_TW]=GObject 含私密指標
 Comment=A GObject subclass with a private pointer
+Comment[ar]=صنف فرعي لـ GObject مع مؤشّر خاصّ
 Comment[az]=Gizli gösətrici ilə bir GObject alt sinifi
 Comment[bs]=Podklasa GObject s privatnim pokazivačem
 Comment[ca]=Una subclasse GObject amb un punter privat

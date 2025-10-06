@@ -1,5 +1,6 @@
 [General]
 Name=Dialog (pimpl) with a UI File
+Name[ar]=حوار (pimpl) مع ملفّ واجهة مستخدم
 Name[az]=İstifadəçi interfeysi faylı ilə dialoq (pimpl)
 Name[ca]=Diàleg (pimpl) amb un fitxer IU
 Name[ca@valencia]=Diàleg (pimpl) amb un fitxer IU
@@ -30,6 +31,7 @@ Name[uk]=Діалогове вікно (pimpl) із файлом інтерфе�
 Name[zh_CN]=使用 UI 文件的对话框 (pimpl)
 Name[zh_TW]=有 UI 檔的對話框 (pimpl)
 Comment=QDialog subclass with a separate Qt Designer file and private implementation
+Comment[ar]=صنف فرعي لـ QDialog مع ملفّ Qt Designer منفصل وتنفيذ خاصّ
 Comment[az]=Ayrıca Qt Designer faylı və xüsusi tətbiqetmə ilə QDialog alt sinifi
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer i una implementació privada
 Comment[ca@valencia]=Subclasse QDialog amb un fitxer separat de Qt Designer i una implementació privada
@@ -112,6 +114,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
@@ -151,6 +154,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[ar]=ترويسة خاصّة
 Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada

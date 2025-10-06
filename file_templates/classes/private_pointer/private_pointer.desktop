@@ -1,5 +1,6 @@
 [General]
 Name=Private Pointer
+Name[ar]=مؤشّر خاصّ
 Name[az]=Gizli göstərici
 Name[bs]=Privatni pokazivač
 Name[ca]=Punter privat
@@ -35,6 +36,7 @@ Name[uk]=Закритий (private) вказівник
 Name[zh_CN]=私有指针
 Name[zh_TW]=私密指標
 Comment=C++ Class with a private D-pointer
+Comment[ar]=صنف سي++ مع مؤشّر D خاصّ
 Comment[az]=Bir gizli D-göstəricisi ilə C++ Class
 Comment[bs]=C++ klasa s privatnim D-pokazivačem
 Comment[ca]=Classe C++ amb un punter-D privat
@@ -121,6 +123,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
@@ -160,6 +163,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[ar]=ترويسة خاصّة
 Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada

@@ -1,5 +1,6 @@
 [General]
 Name=GObject with properties
+Name[ar]=GObject مع خصائص
 Name[az]=Xüsusiyyətləri ilə GObject
 Name[bs]=GObject s svojstvima
 Name[ca]=GObject amb propietats
@@ -35,6 +36,7 @@ Name[uk]=GObject із властивостями
 Name[zh_CN]=带有属性的 GObject
 Name[zh_TW]=GObject 含屬性
 Comment=A GObject subclass with a private pointer and properties
+Comment[ar]=صنف فرعي لـ GObject مع مؤشّر خاصّ وخصائص
 Comment[az]=Gizli göstəricisi və xüsusiyyətləri ilə bir GObject alt sinifi
 Comment[bs]=Podklasa GObject s privatnim pokazivačem i svojstvima
 Comment[ca]=Una subclasse GObject amb un punter privat i propietats

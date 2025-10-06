@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple KDevelop Plugin
+Name[ar]=ملحق مطوّرك بسيط
 Name[az]=Sadə KDevelop qoşması
 Name[ca]=Connector senzill del KDevelop
 Name[ca@valencia]=Connector senzill de KDevelop
@@ -33,6 +34,7 @@ Name[uk]=Простий додаток до KDevelop
 Name[zh_CN]=简单的 KDevelop 插件
 Name[zh_TW]=簡單的 KDevelop 外掛程式
 Comment=Generate a general KDevelop plugin, using CMake and C++
+Comment[ar]=ولِّد ملحق مطوّرك عامًّا، باستعمال سي ميك وسي++
 Comment[az]=CMake və C++ istifadə edərək bir əsas KDevelop qoşması yaradın
 Comment[ca]=Genera un connector del KDevelop general, usant CMake i C++
 Comment[ca@valencia]=Genera un connector de KDevelop general, utilitzant CMake i C++

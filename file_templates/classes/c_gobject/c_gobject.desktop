@@ -1,5 +1,6 @@
 [General]
 Name=GObject
+Name[ar]=غوبجكت
 Name[az]=GObject
 Name[bs]=GObject
 Name[ca]=GObject
@@ -38,6 +39,7 @@ Name[uk]=GObject
 Name[zh_CN]=GObject
 Name[zh_TW]=GObject
 Comment=A simple GObject subclass
+Comment[ar]=صنف فرعي لـ GObject بسيط
 Comment[az]=Sadə GObject alt sinifi
 Comment[bs]=Prosta GObject podklasa
 Comment[ca]=Una subclasse GObject senzilla

@@ -1,5 +1,6 @@
 [General]
 Name=QObject subclass
+Name[ar]=صنف فرعي لـ QObject
 Name[az]=QObject alt sinifi
 Name[bs]=QObject podklasa
 Name[ca]=Subclasse QObject
@@ -37,6 +38,7 @@ Name[uk]=Підклас QObject
 Name[zh_CN]=QObject 子类
 Name[zh_TW]=QObject 子類別
 Comment=QObject subclass with properties
+Comment[ar]=صنف فرعي لـ QObject مع خصائص
 Comment[az]=Xüsusiyətləri ilə QObject alt sinifi
 Comment[bs]=QObject podklasa s svojstvima
 Comment[ca]=Subclasse QObject amb propietats
@@ -124,6 +126,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[ar]=ترويسة عامّة
 Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública

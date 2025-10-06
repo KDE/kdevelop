@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Meson C++
+Name[ar]=سي++ مع ميسون
 Name[ca]=Meson C++
 Name[ca@valencia]=Meson C++
 Name[cs]=Meson C++
@@ -28,6 +29,7 @@ Name[tr]=Meson C++
 Name[uk]=Meson C++
 Name[zh_TW]=Meson C++
 Comment=Simple Meson-based C++ application
+Comment[ar]=تطبيق سي++ مبنيّ على ميسون بسيط
 Comment[ca]=Aplicació senzilla en C++ basada en el Meson
 Comment[ca@valencia]=Aplicació senzilla en C++ basada en Meson
 Comment[cs]=Jednoduchá aplikace C++ založená na Meson

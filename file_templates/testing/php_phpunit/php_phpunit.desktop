@@ -1,5 +1,6 @@
 [General]
 Name=PHPUnit
+Name[ar]=PHPUnit
 Name[az]=PHPUnit
 Name[bs]=PHPUnit
 Name[ca]=PHPUnit
@@ -38,6 +39,7 @@ Name[uk]=PHPUnit
 Name[zh_CN]=PHPUnit
 Name[zh_TW]=PHPUnit
 Comment=A unit test using the PHPUnit framework
+Comment[ar]=اختبار وحدة باستعمال إطار عمل PHPUnit
 Comment[az]=PHPUnit platformasına əsaslanan modul testi
 Comment[bs]=Test jedinica koristeći PHPUnit okruženje
 Comment[ca]=Una prova unitària utilitzant el marc de treball PHPUnit
