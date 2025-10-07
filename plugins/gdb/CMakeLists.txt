@@ -7,6 +7,14 @@ set_package_properties(OktetaGui PROPERTIES
     PURPOSE "Required for building MemoryViewer Widget."
     URL "https://kde.org/"
     TYPE OPTIONAL)
+
+if (NOT OktetaGui_FOUND)
+find_package(QHexEdit)
+set_package_properties(QHexEdit PROPERTIES
+    PURPOSE "Required for building MemoryViewer Widget."
+    TYPE OPTIONAL)
+endif()
+
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
 
 set(kdevgdb_SRCS
@@ -22,6 +30,11 @@ set(kdevgdb_SRCS
 
 if (OktetaGui_FOUND)
     set(KDEV_WITH_MEMVIEW true)
+    list(APPEND kdevgdb_SRCS
+        memviewdlg.cpp)
+elseif(QHexEdit_FOUND)
+    set(KDEV_WITH_MEMVIEW true)
+    set(KDEV_WITH_QHEXEDIT true)
     list(APPEND kdevgdb_SRCS
         memviewdlg.cpp)
 endif()
@@ -57,6 +70,8 @@ target_link_libraries(kdevgdb_static
 )
 if(OktetaGui_FOUND)
     target_link_libraries(kdevgdb_static OktetaCore OktetaGui)
+elseif(QHexEdit_FOUND)
+    target_link_libraries(kdevgdb_static QHexEdit)
 endif()
 
 # The actual plugin

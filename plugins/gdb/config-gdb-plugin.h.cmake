@@ -7,3 +7,4 @@
 */
 
 #cmakedefine KDEV_WITH_MEMVIEW
+#cmakedefine01 KDEV_WITH_QHEXEDIT

@@ -5,8 +5,17 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+// Workaround: the QHexEdit library is still using "slots" and "signals" terms in public API.
+// So ensure we do not have the QT_NO_SIGNALS_SLOTS_KEYWORDS macro flag set in this compilation unit
+// See https://github.com/Simsys/qhexedit2/issues/189
+#include "config-gdb-plugin.h"
+#if KDEV_WITH_QHEXEDIT
+#undef QT_NO_SIGNALS_SLOTS_KEYWORDS
+#endif
+
 #include "memviewdlg.h"
 
+#include "debuglog.h"
 #include "dbgglobal.h"
 #include "debugsession.h"
 #include "mi/micommand.h"
@@ -17,8 +26,12 @@
 
 #include <KLocalizedString>
 
+#if KDEV_WITH_QHEXEDIT
+#include <qhexedit.h>
+#else
 #include <Okteta/ByteArrayColumnView>
 #include <Okteta/ByteArrayModel>
+#endif
 
 #include <QAction>
 #include <QActionGroup>
@@ -125,6 +138,14 @@ void MemoryView::initWidget()
     auto *l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
 
+#if KDEV_WITH_QHEXEDIT
+    m_memViewView = new QHexEdit(this);
+
+    m_memViewView->setReadOnly(false);
+    m_memViewView->setOverwriteMode(true);
+
+    m_memViewView->setDynamicBytesPerLine(true);
+#else
     m_memViewModel = new Okteta::ByteArrayModel(0, -1, this);
     m_memViewView = new Okteta::ByteArrayColumnView(this);
     m_memViewView->setByteArrayModel(m_memViewModel);
@@ -144,6 +165,7 @@ void MemoryView::initWidget()
 
     m_memViewView->setShowsNonprinting(false);
     m_memViewView->setSubstituteChar(QLatin1Char('*'));
+#endif
 
     m_memViewView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_memViewView, &QWidget::customContextMenuRequested, this, &MemoryView::memoryViewContextMenuRequested);
@@ -201,12 +223,15 @@ void MemoryView::memoryRead(const MI::ResultRecord& r)
     const MI::Value& content = r[QStringLiteral("memory")][0][QStringLiteral("data")];
     bool startStringConverted;
     m_memStart = r[QStringLiteral("addr")].literal().toULongLong(&startStringConverted, 16);
+#if KDEV_WITH_QHEXEDIT
+    QByteArray m_memData;
+#endif
     m_memData.resize(content.size());
 
     m_memStartStr = m_rangeSelector->startAddressLineEdit->text();
     m_memAmountStr = m_rangeSelector->amountLineEdit->text();
 
-    setWindowTitle(i18np("%2 (1 byte)","%2 (%1 bytes)",m_memData.size(),m_memStartStr));
+    setWindowTitle(i18np("%2 (1 byte)","%2 (%1 bytes)",memorySize(),m_memStartStr));
     emit captionChanged(windowTitle());
 
     for(int i = 0; i < content.size(); ++i)
@@ -214,7 +239,12 @@ void MemoryView::memoryRead(const MI::ResultRecord& r)
         m_memData[i] = content[i].literal().toInt(nullptr, 16);
     }
 
+#if KDEV_WITH_QHEXEDIT
+    m_memViewView->setData(m_memData);
+    m_memSize = m_memData.size();
+#else
     m_memViewModel->setData(reinterpret_cast<Okteta::Byte*>(m_memData.data()), m_memData.size());
+#endif
 
     hideRangeDialog();
 }
@@ -225,6 +255,15 @@ void MemoryView::memoryEdited(int start, int end)
     auto *session = qobject_cast<DebugSession*>(
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
+
+#if KDEV_WITH_QHEXEDIT
+    const QByteArray m_memData = m_memViewView->data();
+    if (m_memData.size() != m_memSize) {
+        // Should not happen, but better check
+        qCWarning(DEBUGGERGDB) << "Size of hex editor memory unexpectedly different:" << m_memData.size() << m_memSize;;
+        return;
+    }
+#endif
 
     for (auto i = start; i < end; ++i) {
         session->addCommand(MI::GdbSet,
@@ -239,7 +278,11 @@ void MemoryView::memoryViewContextMenuRequested(const QPoint& viewportPosition)
 {
     // Add our actions also to the context menu of m_memViewView because MemoryView's
     // own context menu is difficult to trigger when the range selector is hidden.
+#if KDEV_WITH_QHEXEDIT
+    QMenu* menu = nullptr;
+#else
     auto* menu = m_memViewView->createStandardContextMenu(viewportPosition);
+#endif
     KDevelop::prepareStandardContextMenuToAddingCustomActions(menu, m_memViewView);
     addActionsAndShowContextMenu(menu, m_memViewView->viewport()->mapToGlobal(viewportPosition));
 }
@@ -253,8 +296,9 @@ void MemoryView::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalP
 {
     auto* const reload = menu->addAction(i18nc("@action::inmenu", "&Reload"));
     reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
-    reload->setEnabled(m_appHasStarted && !m_memData.isEmpty());
+    reload->setEnabled(m_appHasStarted && !isMemoryEmpty());
 
+#if !KDEV_WITH_QHEXEDIT
     QActionGroup* formatGroup = nullptr;
     QActionGroup* groupingGroup = nullptr;
     {
@@ -331,6 +375,7 @@ void MemoryView::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalP
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         }
     }
+#endif
 
     auto* const write = menu->addAction(i18nc("@action:inmenu", "Write Changes"));
     write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
@@ -352,19 +397,27 @@ void MemoryView::addActionsAndShowContextMenu(QMenu* menu, const QPoint& globalP
         // not textual m_memStartStr and m_memAmountStr,
         // because program position might have changes and expressions
         // are no longer valid.
-        addReadMemoryCommand(QStringLiteral("%1 x 1 1 %2").arg(m_memStart).arg(m_memData.size()));
+        addReadMemoryCommand(QStringLiteral("%1 x 1 1 %2").arg(m_memStart).arg(memorySize()));
     }
 
+#if !KDEV_WITH_QHEXEDIT
     if (result && formatGroup && formatGroup == result->actionGroup())
         m_memViewView->setValueCoding( (Okteta::ByteArrayColumnView::ValueCoding)result->data().toInt());
 
     if (result && groupingGroup && groupingGroup == result->actionGroup())
         m_memViewView->setNoOfGroupedBytes(result->data().toInt());
+#endif
 
     if (result == write)
     {
-        memoryEdited(0, m_memData.size());
+        memoryEdited(0, memorySize());
+#if KDEV_WITH_QHEXEDIT
+        // TODO: cannot reset modified state of QHexEdit
+        // state currently used to enable "write" option in menu, so not that critical
+        // See https://github.com/Simsys/qhexedit2/issues/192
+#else
         m_memViewView->setModified(false);
+#endif
     }
 
     if (result == range)
