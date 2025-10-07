@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Builds QMake Projects",
+        "Description[ar]": "ابنِ مشاريع QMake",
         "Description[az]": "QMake layihələrini qurur",
         "Description[ca@valencia]": "Construïx projectes QMake",
         "Description[ca]": "Construeix projectes QMake",
@@ -34,6 +35,7 @@
         "Description[zh_TW]": "編譯 QMake 專案",
         "Icon": "qtlogo",
         "Name": "QMake Project Builder",
+        "Name[ar]": "بانٍ مشاريع QMake",
         "Name[az]": "QMake layihə qurucusu",
         "Name[ca@valencia]": "Constructor de projecte QMake",
         "Name[ca]": "Constructor de projecte QMake",

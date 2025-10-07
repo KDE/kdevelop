@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
+                "Name[ar]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
                 "Name[az]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
                 "Name[ca@valencia]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
                 "Name[ca]": "Cedric Pasteur, Matthias Hölzer-Klüpfel",
@@ -38,6 +39,7 @@
         ],
         "Category": "Utilities",
         "Description": "A plugin for formatting of sourcecode according to a specified set of rules",
+        "Description[ar]": "ملحقة لتنسيق الشِّفرة المصدريّة وفق مجموعة قواعد محدّدة",
         "Description[az]": "Verilmiş qaydalara uyğun mənbə kodunun formatlanması üçün qoşma",
         "Description[bs]": "Dodatak za formatiranje izvornog koda prema određenom nizu pravila",
         "Description[ca@valencia]": "Un connector per a donar format al codi font d'acord amb un conjunt especificat de regles",
@@ -71,6 +73,7 @@
         "Icon": "text-field",
         "License": "LGPL",
         "Name": "AStyle Formatter Backend",
+        "Name[ar]": "طرفيّة AStyle الخلفيّة للمنسّق",
         "Name[az]": "AStyle formatlama modulu",
         "Name[bs]": "AStyle formater pozadine",
         "Name[ca@valencia]": "Dorsal del formatador AStyle",

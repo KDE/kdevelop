@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Scratchpad lets you quickly run and experiment with code without a full project, and even store todos.",
+        "Description[ar]": "المفكّرة تسمح لك بتشغيل الشِّفرة وتجربتها سريعًا دون مشروع كامل، وحتّى تخزين ما يجب فعله.",
         "Description[az]": "Scratchpad, tam bir layihə olmadan, kodu sürətlə işə salmanıza və təcrübə etmənizə və hətta tapşırıqları saxlamanıza imkan yaradır.",
         "Description[ca@valencia]": "Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",
         "Description[ca]": "L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",

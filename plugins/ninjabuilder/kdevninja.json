@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "KDevelop Ninja Builder",
+        "Description[ar]": "بانٍ Ninja لمطوّرك",
         "Description[az]": "KDEvelop Ninja qurucusu",
         "Description[ca@valencia]": "Constructor Ninja de KDevelop",
         "Description[ca]": "Constructor Ninja del KDevelop",
@@ -33,6 +34,7 @@
         "Description[zh_TW]": "KDevelop Ninja 編譯工具",
         "Icon": "kdevelop",
         "Name": "Ninja Project Builder",
+        "Name[ar]": "بانٍ مشاريع Ninja",
         "Name[az]": "Ninja layihəsi qurucusu",
         "Name[ca@valencia]": "Constructor de projectes Ninja",
         "Name[ca]": "Constructor de projectes Ninja",

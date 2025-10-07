@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Imports and edits custom make projects",
+        "Description[ar]": "استورد وعدّل مشاريع make مخصّصة",
         "Description[az]": "Özəl make layihələrini idxal edir və onlara düzəliş edir",
         "Description[bs]": "Uvozi i uređuje korisnički prilagođene projekte",
         "Description[ca@valencia]": "Importa i edita projectes personalitzats de Make",
@@ -35,6 +36,7 @@
         "Description[zh_TW]": "匯入並編輯自訂 make 專案",
         "Icon": "kdevelop",
         "Name": "Custom Makefile Project Manager",
+        "Name[ar]": "مدير مشاريع ملفّ make مخصّص",
         "Name[az]": "Fərdi Makefile layihə meneceri",
         "Name[bs]": "Korisnički Makefile menadžer projekta",
         "Name[ca@valencia]": "Gestor de projecte personalitzat Makefile",

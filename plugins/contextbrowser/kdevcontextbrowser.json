@@ -39,6 +39,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.",
+        "Description[ar]": "تعرض هذه الملحقة معلومات عن سياق اللغة الحالي في عرض جانبي، وتسلّط الضوء على الإعلانات والاستخدامات ذات الصلة.",
         "Description[az]": "Bu qoşma panelin yan tərəfindəki cari dil məzmunu haqqında məlumatları göstərir və müvafiq bildiri.ləri və istifadə üsullarını vurğulayır.",
         "Description[ca@valencia]": "Este connector mostra informació quant al context del llenguatge actual en una vista lateral i ressalta les declaracions i els usos apropiats.",
         "Description[ca]": "Aquest connector mostra informació quant al context del llenguatge actual en una vista lateral i ressalta les declaracions i els usos apropiats.",

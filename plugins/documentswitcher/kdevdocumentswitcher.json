@@ -39,6 +39,7 @@
         ],
         "Category": "Utilities",
         "Description": "A most-recently-used document switcher for KDevPlatform.",
+        "Description[ar]": "مبدّل مستندات مستخدمة-حديثًا لمنصّة مطوّرك.",
         "Description[az]": "KDevPlatform üçün ən-son-istifadə-olunan sənədlərin dəyişdiricisi",
         "Description[ca@valencia]": "Un commutador del document utilitzat més recentment per la KDevPlatform.",
         "Description[ca]": "Un commutador del document usat més recentment per la KDevPlatform.",

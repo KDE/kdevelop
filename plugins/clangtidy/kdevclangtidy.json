@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Carlos Nihelton",
+                "Name[ar]": "Carlos Nihelton",
                 "Name[az]": "Carlos Nihelton",
                 "Name[ca@valencia]": "Carlos Nihelton",
                 "Name[ca]": "Carlos Nihelton",
@@ -73,6 +74,7 @@
         ],
         "Category": "Analyzers",
         "Description": "clang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[ar]": "يوفّر clang-tidy إطارًا قابلاً للتوسيع لتشخيص أخطاء البرمجة النمطية وإصلاحها، مثل انتهاكات الأسلوب أو إساءة استخدام الواجهة أو الأخطاء التي اِستُنتجت عبر التحليل الساكن. https://clang.llvm.org/extra/clang-tidy/",
         "Description[az]": "clang-tidy üslub pozuntuları, interfeysdən sui-istifadə və ya statik analiz köməyi ilə aşkar edilə bilən səhvlər kimi tipik proqramlaşdırma səhvlərinin diaqnozu və həmin səhvlərin aradan qaldırılması üçün genişləndiriləbilən struktur təqdim edir. https://clang.llvm.org/extra/clang-tidy/",
         "Description[ca@valencia]": "clang-tidy proporciona un marc de treball extensible per al diagnòstic i esmena d'errors de programació típics, com ara infraccions de l'estil, mal ús de la interfície o errors que es poden deduir mitjançant anàlisi estàtica. https://clang.llvm.org/extra/clang-tidy/",
         "Description[ca]": "El clang-tidy proporciona un marc de treball extensible per al diagnòstic i esmena d'errors de programació típics, com ara infraccions de l'estil, mal ús de la interfície o errors que es poden deduir mitjançant anàlisi estàtica. https://clang.llvm.org/extra/clang-tidy/",
@@ -104,6 +106,7 @@
         "Icon": "dialog-ok",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
+        "Name[ar]": "دعم Clang-Tidy",
         "Name[az]": "Clang-Tidy dəstəyi",
         "Name[ca@valencia]": "Implementació de Clang-Tidy",
         "Name[ca]": "Implementació de Clang-Tidy",

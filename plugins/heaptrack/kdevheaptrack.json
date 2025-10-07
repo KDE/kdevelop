@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Anton Anikin",
+                "Name[ar]": "Anton Anikin",
                 "Name[az]": "Anton Anikin",
                 "Name[ca@valencia]": "Anton Anikin",
                 "Name[ca]": "Anton Anikin",
@@ -38,6 +39,7 @@
         ],
         "Category": "Analyzers",
         "Description": "This plugin integrates Heaptrack to KDevelop",
+        "Description[ar]": "تكامل هذه الملحقة Heaptrack بمطوّرك",
         "Description[az]": "Bu qoşma, Heaptrack'ı KDevelop'a inteqrasiya edir",
         "Description[ca@valencia]": "Este connector integra Heaptrack a KDevelop",
         "Description[ca]": "Aquest connector integra el Heaptrack al KDevelop",
@@ -71,6 +73,7 @@
         "Icon": "office-chart-area",
         "License": "GPL",
         "Name": "Heaptrack Support",
+        "Name[ar]": "دعم Heaptrack",
         "Name[az]": "Heaptrack dəstəyi",
         "Name[ca@valencia]": "Implementació de Heaptrack",
         "Name[ca]": "Implementació del Heaptrack",

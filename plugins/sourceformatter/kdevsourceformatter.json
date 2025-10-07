@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Utilities",
         "Description": "Configure which style should be used for formatting of the sourcecode in a project.",
+        "Description[ar]": "اضبط أيّ نمط يجب استخدامه لتنسيق الشِّفرة المصدريّة في المشروع.",
         "Description[az]": "Layihədəki qaynaq kodunun formatlanması üçün hansı üslubdan istifadə edilməli olduğunu tənzimləyin.",
         "Description[ca@valencia]": "Configura quin estil s'ha d'utilitzar per a donar format al codi font d'un projecte.",
         "Description[ca]": "Configura quin estil s'ha d'usar per a donar format al codi font d'un projecte.",
@@ -33,6 +34,7 @@
         "Description[zh_TW]": "設定格式化專案原始碼時要使用的風格。",
         "Icon": "text-field",
         "Name": "Source Formatter",
+        "Name[ar]": "منسّق المصادر",
         "Name[az]": "Mənbə formatlayıcı",
         "Name[bg]": "Форматиращ модул за програмен текст",
         "Name[ca@valencia]": "Formatador del codi font",
