@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Core",
         "Description": "Provides a text output tool view for other plugins to use, to show things like compiler messages.",
+        "Description[ar]": "توفّر عرض أداة خرج نصيّ لملحقات أخرى لاستخدامه، لإظهار أشياء مثل رسائل المصرّف.",
         "Description[az]": "Tərtibçi ismarıclarına bənzər şeylərin göstərilməsi üçün istifadə ediləcək digər qoşmalar üçün mətn çıxışını göstərən vasitəni təqdim edir.",
         "Description[ca@valencia]": "Proporciona una vista d'eina d'eixida de text per a utilitzar en altres connectors, per a visualitzar missatges del compilador, per exemple.",
         "Description[ca]": "Proporciona una vista d'eina de sortida de text per a usar en altres connectors, per a visualitzar missatges del compilador, per exemple.",

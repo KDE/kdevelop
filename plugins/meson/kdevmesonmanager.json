@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Imports and edits Meson projects",
+        "Description[ar]": "استورد وعدّل مشاريع Meson",
         "Description[az]": "Meson layihələrini idxal edir və onlara düzəliş edir",
         "Description[ca@valencia]": "Importa i edita projectes de Meson",
         "Description[ca]": "Importa i edita projectes del Meson",
@@ -34,6 +35,7 @@
         "Description[zh_TW]": "匯入並編輯 Meson 專案",
         "Icon": "run-build",
         "Name": "Meson Project Manager",
+        "Name[ar]": "مدير مشاريع Meson",
         "Name[az]": "Meson layihəsi meneceri",
         "Name[ca@valencia]": "Gestor de projectes Meson",
         "Name[ca]": "Gestor de projectes Meson",

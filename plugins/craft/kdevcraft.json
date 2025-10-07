@@ -4,6 +4,7 @@
             {
                 "Email": "arrowd@FreeBSD.org",
                 "Name": "Gleb Popov",
+                "Name[ar]": "Gleb Popov",
                 "Name[ca@valencia]": "Gleb Popov",
                 "Name[ca]": "Gleb Popov",
                 "Name[de]": "Gleb Popov",
@@ -32,6 +33,7 @@
         ],
         "Category": "Runtimes",
         "Description": "Exposes KDE Craft environment as a runtime",
+        "Description[ar]": "اكشف بيئة KDE Craft كزمن تشغيل",
         "Description[ca@valencia]": "Exposa l'entorn Craft de KDE com a entorn d'execució",
         "Description[ca]": "Exposa l'entorn Craft de KDE com a entorn d'execució",
         "Description[de]": "Stellt die Craft-Umgebung als Laufzeitumgebung bereit",
@@ -59,6 +61,7 @@
         "Icon": "kdevelop",
         "License": "BSD3",
         "Name": "Craft runtime",
+        "Name[ar]": "زمن تشغيل Craft",
         "Name[ca@valencia]": "Entorn d'execució Craft",
         "Name[ca]": "Entorn d'execució Craft",
         "Name[de]": "Craft-Laufzeitumgebung",

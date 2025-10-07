@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Debugging",
         "Description": "This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.",
+        "Description[ar]": "توفّر هذه الملحقة طرفيّة أمامية لـ GDB، مصحّح على مستوى المصدر للغة C و C++ و أكثر.",
         "Description[az]": "Bu qoşma, C, C++ və s. üçün mənbə kodu səviyyəsindəki xəta sazlayıcı olan GDB üçün interfeysi təmin edir.",
         "Description[bs]": "Ovaj dodatak pruža link za GDB, ispravljač grešaka izvornog nivoa za C, C++ i druge.",
         "Description[ca@valencia]": "Este connector proveïx d'un frontal per a GDB, un depurador quant a codi per a C, C++ i més llenguatges.",
@@ -35,6 +36,7 @@
         "Icon": "kdevelop",
         "License": "GPL",
         "Name": "GDB Support",
+        "Name[ar]": "دعم GDB",
         "Name[az]": "GDB dəstəyi",
         "Name[bs]": "GDB podrška",
         "Name[ca@valencia]": "Implementació de GDB",

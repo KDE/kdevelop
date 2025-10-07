@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Language Support",
         "Description": "QML/JS language support (based on qmljs from QtCreator)",
+        "Description[ar]": "دعم لغة QML/JS (المستند إلى qmljs من QtCreator)",
         "Description[az]": "QML/JS dil dəstəyi (r-Creator'dan qmljs əsasında)",
         "Description[ca@valencia]": "Implementació dels llenguatges QML/JS (basats en «qmljs» del QtCreator)",
         "Description[ca]": "Implementació dels llenguatges QML/JS (basats en el «qmljs» del QtCreator)",
@@ -35,6 +36,7 @@
         "Id": "kdevqmljs",
         "License": "GPL",
         "Name": "QML Support",
+        "Name[ar]": "دعم QML",
         "Name[az]": "QML dəstəyi",
         "Name[ca@valencia]": "Implementació de QML",
         "Name[ca]": "Implementació del QML",

@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "KDevelop Make Builder",
+        "Description[ar]": "بانٍ Make لمطوّرك",
         "Description[az]": "KDevelop Make qurucusu",
         "Description[bs]": "KDevelop Make izgraditelj",
         "Description[ca@valencia]": "Constructor Make de KDevelop",
@@ -34,6 +35,7 @@
         "Description[zh_TW]": "KDevelop Make 編譯工具",
         "Icon": "kdevelop",
         "Name": "Make Project Builder",
+        "Name[ar]": "بانٍ مشاريع Make",
         "Name[az]": "Make layihəsi qurucusu",
         "Name[bs]": "Napravi graditelja projekta",
         "Name[ca@valencia]": "Constructor de projecte Make",

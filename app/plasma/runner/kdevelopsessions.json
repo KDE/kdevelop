@@ -32,6 +32,7 @@
             }
         ],
         "Description": "Matches KDevelop Sessions",
+        "Description[ar]": "طابِق جلسات مطوّرك",
         "Description[ca@valencia]": "Coincidix amb sessions de KDevelop",
         "Description[ca]": "Concorda amb sessions del KDevelop",
         "Description[en_GB]": "Matches KDevelop Sessions",

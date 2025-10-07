@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Allows to use custom buildsystems for KDevelop projects",
+        "Description[ar]": "اسمح باستخدام أنظمة بناء مخصّصة لمشاريع مطوّرك",
         "Description[az]": "Fərdi inşaetmə sistemlərini (buildsistems) KDevelop layihələri üçün istifadə etməyə imkan verir",
         "Description[bs]": "DOpušta korištene vlastitih sistema za gradnju KDevelop projekata",
         "Description[ca@valencia]": "Permet utilitzar sistemes de construcció personalitzats per a projectes de KDevelop",
@@ -33,6 +34,7 @@
         "Description[zh_TW]": "讓 KDevelop 專案可以使用自訂編譯系統",
         "Icon": "kdevelop",
         "Name": "Custom Build System",
+        "Name[ar]": "نظام بناء مخصّص",
         "Name[az]": "Fərdi qurma sistemi",
         "Name[ca@valencia]": "Sistema de construcció personalitzat",
         "Name[ca]": "Sistema de construcció personalitzat",

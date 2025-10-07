@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Morten Danielsen Volden",
+                "Name[ar]": "Morten Danielsen Volden",
                 "Name[az]": "Morten Danielsen Volden",
                 "Name[ca@valencia]": "Morten Danielsen Volden",
                 "Name[ca]": "Morten Danielsen Volden",
@@ -38,6 +39,7 @@
         ],
         "Category": "Version Control",
         "Description": "Provides Integration with Perforce Version Control System",
+        "Description[ar]": "وفّر التّكامل مع نظام تحكّم في الإصدارات Perforce",
         "Description[az]": "Perforce ilə Versiyaya Nəzarət Sisteminin inteqrasiyasını təmin edir",
         "Description[ca@valencia]": "Proporciona integració amb el sistema de control de versions Perforce",
         "Description[ca]": "Proporciona integració amb el sistema de control de versions Perforce",
@@ -71,6 +73,7 @@
         "Icon": "kdevelop",
         "License": "GPL",
         "Name": "Perforce Support",
+        "Name[ar]": "دعم Perforce",
         "Name[az]": "Perforce dəstəyi",
         "Name[ca@valencia]": "Implementació de Perforce",
         "Name[ca]": "Implementació del Perforce",

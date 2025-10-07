@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Miquel Sabaté",
+                "Name[ar]": "Miquel Sabaté",
                 "Name[az]": "Miquel Sabaté",
                 "Name[ca@valencia]": "Miquel Sabaté",
                 "Name[ca]": "Miquel Sabaté",
@@ -38,6 +39,7 @@
         ],
         "Category": "Utilities",
         "Description": "This plugin helps to obtain projects from GitHub",
+        "Description[ar]": "تساعد هذه الملحقة في الحصول على مشاريع من GitHub",
         "Description[az]": "Bu qoşma, GitHub'dan layihələri almağa kömək edir",
         "Description[ca@valencia]": "Este connector ajuda a obtindre els projectes des de GitHub",
         "Description[ca]": "Aquest connector ajuda a obtenir els projectes des de GitHub",
@@ -70,6 +72,7 @@
         "Icon": "kdevgh",
         "License": "GPL",
         "Name": "GitHub Provider",
+        "Name[ar]": "موفّر GitHub",
         "Name[az]": "GitHub təminatçısı",
         "Name[ca@valencia]": "Proveïdor de GitHub",
         "Name[ca]": "Proveïdor de GitHub",

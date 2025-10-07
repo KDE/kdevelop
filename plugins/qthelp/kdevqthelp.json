@@ -3,7 +3,7 @@
         "Authors": [
             {
                 "Name": "Aleix Pol",
-                "Name[ar]": "Aleix Pol",
+                "Name[ar]": "ألكس بول",
                 "Name[az]": "Aleix Pol",
                 "Name[ca@valencia]": "Aleix Pol",
                 "Name[ca]": "Aleix Pol",
@@ -40,6 +40,7 @@
         ],
         "Category": "Documentation",
         "Description": "This plugin provides QtHelp integration",
+        "Description[ar]": "توفّر هذه الملحقة تكامل QtHelp",
         "Description[az]": "Bu qoşma, QtHelp inteqrasiyasını təmin edir",
         "Description[ca@valencia]": "Este connector proveïx la integració amb QtHelp",
         "Description[ca]": "Aquest connector proveeix la integració amb QtHelp",

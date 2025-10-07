@@ -41,6 +41,7 @@
         ],
         "Category": "Utilities",
         "Description": "Enables viewing and editing of the raw data of files (Okteta-based)",
+        "Description[ar]": "اِسمح بعرض وتحرير البيانات الخام للملفّات (المستند إلى Okteta)",
         "Description[az]": "Faylların xam məlumatlarınının oxunmasını və onlara düzəliş edilməsini aktiv edir (Okteta-əsaslı)",
         "Description[ca@valencia]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en Okteta)",
         "Description[ca]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en l'Okteta)",

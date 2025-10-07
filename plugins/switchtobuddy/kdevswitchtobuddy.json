@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Utilities",
         "Description": "Allows switching between buddy documents like implementation and header file.",
+        "Description[ar]": "اسمح بالتبديل بين مستندات رفيقة مثل ملفّ التنفيذ وملفّ الرأس.",
         "Description[az]": "Tətbiqetmə və başlıq faylları kimi əlaqələnmiş sənədlər arasında keçid etməyə imkan verir. ",
         "Description[ca@valencia]": "Permet canviar entre documents associats com fitxers d'implementacions i de capçaleres.",
         "Description[ca]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.",
@@ -33,6 +34,7 @@
         "Description[zh_TW]": "允許在相關文件，如實作與標頭檔間切換。",
         "Icon": "document-multiple",
         "Name": "Switch to Buddy",
+        "Name[ar]": "بدّل إلى رفيق",
         "Name[az]": "Əlaqəli olana keçin",
         "Name[bs]": "Pređi na prijatelja",
         "Name[ca@valencia]": "Canvia a associat",

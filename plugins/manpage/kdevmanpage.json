@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Documentation",
         "Description": "This plugin provides Manual Pages integration",
+        "Description[ar]": "توفّر هذه الملحقة تكامل صفحات الدليل",
         "Description[az]": "Bu qoşma, Təlimat Səhifələrinin inteqrasiyasını təmin edir",
         "Description[bs]": "Ovaj dodatak omogućava integraciju sa stranicama uputstava",
         "Description[ca@valencia]": "Este connector proporciona la integració de les pàgines del manual",
@@ -36,6 +37,7 @@
         "Icon": "x-office-address-book",
         "License": "GPL",
         "Name": "Man Pages",
+        "Name[ar]": "صفحات man",
         "Name[az]": "Təlimat səhifələri",
         "Name[bs]": "Man stgranice",
         "Name[ca@valencia]": "Pàgines «man»",

@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Builds CMake Projects",
+        "Description[ar]": "ابنِ مشاريع CMake",
         "Description[az]": "CMake layihələrini qurur",
         "Description[bs]": "Gradi CMake projekte",
         "Description[ca@valencia]": "Construïx projectes CMake",
@@ -35,6 +36,7 @@
         "Description[zh_TW]": "編譯 CMake 專案",
         "Icon": "cmake",
         "Name": "CMake Project Builder",
+        "Name[ar]": "بانٍ مشاريع CMake",
         "Name[az]": "CMake layihə qurucusu",
         "Name[bs]": "CMake graditelj projekta",
         "Name[ca@valencia]": "Constructor de projecte CMake",

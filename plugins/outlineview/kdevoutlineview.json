@@ -4,6 +4,7 @@
             {
                 "Email": "arichardson.kde@gmail.com",
                 "Name": "Alex Richardson",
+                "Name[ar]": "Alex Richardson",
                 "Name[az]": "Alex Richardson",
                 "Name[ca@valencia]": "Alex Richardson",
                 "Name[ca]": "Alex Richardson",
@@ -39,6 +40,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin provides a view to show the outline of the currently open document.",
+        "Description[ar]": "توفّر هذه الملحقة عرضًا لإظهار محيط المستند المفتوح حاليًّا.",
         "Description[az]": "Bu qoşma, cari açıq sənədin çərçivələrinin görünməsini təmin edir.",
         "Description[ca@valencia]": "Este connector proporciona una visualització que mostra un esquema del document obert actualment.",
         "Description[ca]": "Aquest connector proporciona una visualització que mostra un esquema del document obert actualment.",

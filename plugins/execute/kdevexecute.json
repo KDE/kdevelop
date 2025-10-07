@@ -40,6 +40,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin allows running of programs with no instrumentor, ie. natively by the current host.",
+        "Description[ar]": "تسمح هذه الملحقة بتشغيل البرامج بلا معدّات، أي أصيلًا بواسطة المضيف الحالي.",
         "Description[az]": "Bu qoşma, heç bir alət olmadan proqramların işə düşməsinə imkan verir, yəni, cari hostdan alınaraq.",
         "Description[ca@valencia]": "Este connector permet executar programes sense instrumentador, és a dir, nativament per l'amfitrió actual.",
         "Description[ca]": "Aquest connector permet executar programes sense instrumentador, és a dir, nativament per la màquina actual.",

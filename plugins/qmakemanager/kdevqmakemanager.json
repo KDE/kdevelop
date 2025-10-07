@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Imports and edits QMake projects",
+        "Description[ar]": "استورد وعدّل مشاريع QMake",
         "Description[az]": "QMake layihələrini idxal edir və onlara düzəliş edir",
         "Description[ca@valencia]": "Importa i edita projectes de QMake",
         "Description[ca]": "Importa i edita projectes del QMake",
@@ -34,6 +35,7 @@
         "Description[zh_TW]": "匯入並編輯 QMake 專案",
         "Icon": "qtlogo",
         "Name": "QMake Project Manager",
+        "Name[ar]": "مدير مشاريع QMake",
         "Name[az]": "QMake layihə meneceri",
         "Name[ca@valencia]": "Gestor de projectes QMake",
         "Name[ca]": "Gestor de projectes QMake",
