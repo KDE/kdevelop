@@ -465,7 +465,7 @@ double bar ()
       = triangulation.begin_active();
    cell != triangulation.end();
    ++cell)</programlisting
-> Вираз доволі незграбний, але використовується майже у такій формі кожного разу, коли вам потрібен цикл, — чудовий кандидат на включення до списку фрагментів.</para>
+>Вираз доволі незграбний, але використовується майже у такій формі кожного разу, коли вам потрібен цикл, — чудовий кандидат на включення до списку фрагментів.</para>
 <itemizedlist>
 <listitem
 ><para
@@ -3233,7 +3233,6 @@ void foo()
 >Переклад українською: Юрій Чорноіван <email
 >yurchor@ukr.net</email
 ></para
-> 
-&underFDL; </chapter>
+> &underFDL; </chapter>
 &documentation.index;
 </book>
