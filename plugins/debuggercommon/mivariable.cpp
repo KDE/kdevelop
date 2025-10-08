@@ -187,7 +187,14 @@ public:
             for (int i = 0; i < children.size(); ++i) {
                 const Value& child = children[i];
                 const QString& exp = child[QStringLiteral("exp")].literal();
-                if (exp == QLatin1String("public") || exp == QLatin1String("protected") || exp == QLatin1String("private")) {
+                // Detect pseudo children of a C++ struct or class that designate access specifiers,
+                // and expand their children (the actual data members of the variable) directly into the variable.
+                // This way the access specifiers are simply omitted from the KDevelop UI.
+                // Unlike an actual child variable named e.g. "public" of a C struct or of a dynamic varobj (provided
+                // by a Python-based pretty-printer), the record of a pseudo child does not contain the "type" field.
+                if (!child.hasField(QStringLiteral("type"))
+                    && (exp == QLatin1String("public") || exp == QLatin1String("protected")
+                        || exp == QLatin1String("private"))) {
                     ++m_activeCommands;
                     m_session->addCommand(VarListChildren,
                                           QStringLiteral("--all-values \"%1\"").arg(child[QStringLiteral("name")].literal()),
