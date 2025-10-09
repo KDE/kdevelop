@@ -1,26 +1,24 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2019, 2020.
+# SPDX-FileCopyrightText: 2014, 2019, 2020, 2025 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2020-10-04 20:05+0200\n"
+"PO-Revision-Date: 2025-10-09 00:47+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "인자(&G):"
+msgstr "인자"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -28,19 +26,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "의존성을 해결할 수 없음: %1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "실행 파일"
+msgstr "실행 파일 경로"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "외부 터미널 사용:"
+msgstr "외부 터미널 명령"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -66,6 +60,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>메모: <code>gnome-terminal</code>은 자체적인 제한 사항 때문에 부분적으로"
+"만 지원됩니다.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -214,6 +210,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"외부 터미널 에뮬레이터를 실행할 명령을 지정하십시오.<br>\n"
+"실행 파일과 인자는 이 명령 뒤에 추가됩니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238

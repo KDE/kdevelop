@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2025-10-05 15:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -391,13 +391,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "شَغِّل س&كربت gdb:"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "مُخرجات GDB"
 
-#: gdboutputwidget.cpp:50
+#: gdboutputwidget.cpp:51
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -407,25 +407,25 @@ msgstr ""
 "<b>مُخرجات GDB</b><p>يعرض كل أوامر GDB الجاري تنفيذها. يُمكِنك أيضًا إصدار أي "
 "أمر GDB آخر أثناء التنقيح.</p>"
 
-#: gdboutputwidget.cpp:60
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "أمر &GDB:"
 
-#: gdboutputwidget.cpp:65
+#: gdboutputwidget.cpp:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "أوقِف تنفيذ التطبيق لِإدخال أوامر GDB"
 
-#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
+#: gdboutputwidget.cpp:383
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "اعرض الأوامر الداخلية"
 
-#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
+#: gdboutputwidget.cpp:389
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -437,7 +437,7 @@ msgstr ""
 "الخيار فقط في الأوامر المستقبلية، لا يُضيف أوامر صدرت بالفعل إلى العرض ولا "
 "يُزيلها منه."
 
-#: gdboutputwidget.cpp:379
+#: gdboutputwidget.cpp:394
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -449,25 +449,25 @@ msgstr "انسخ الكل"
 msgid "Debugger Toolbar"
 msgstr "شريط أدوات المنقّح"
 
-#: memviewdlg.cpp:66
+#: memviewdlg.cpp:69
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "البداية:"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:72
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "الكمية:"
 
-#: memviewdlg.cpp:96
+#: memviewdlg.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "عرض الذاكرة"
 
-#: memviewdlg.cpp:223
+#: memviewdlg.cpp:209
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
@@ -478,115 +478,115 @@ msgstr[3] "%2 (%1 بايتات)"
 msgstr[4] "%2 (%1 بايتًا)"
 msgstr[5] "%2 (%1 بايت)"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:254
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "أ&عِد التحميل"
 
-#: memviewdlg.cpp:271
+#: memviewdlg.cpp:262
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "ال&تنسيق"
 
-#: memviewdlg.cpp:274
+#: memviewdlg.cpp:265
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&ثنائي"
 
-#: memviewdlg.cpp:279
+#: memviewdlg.cpp:270
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&ثماني"
 
-#: memviewdlg.cpp:284
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&عشري"
 
-#: memviewdlg.cpp:289
+#: memviewdlg.cpp:280
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "&سداسي عشري"
 
-#: memviewdlg.cpp:303
+#: memviewdlg.cpp:294
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "ال&تجميع"
 
-#: memviewdlg.cpp:306
+#: memviewdlg.cpp:297
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:311
+#: memviewdlg.cpp:302
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:316
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:321
+#: memviewdlg.cpp:312
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:326
+#: memviewdlg.cpp:317
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:331
+#: memviewdlg.cpp:322
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
-#: memviewdlg.cpp:344
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "اكتُب التغييرات"
 
-#: memviewdlg.cpp:348
+#: memviewdlg.cpp:339
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "غيِّر نطاق الذاكرة"
 
-#: memviewdlg.cpp:352
+#: memviewdlg.cpp:343
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "أغلِق العرض"
 
-#: memviewdlg.cpp:419
+#: memviewdlg.cpp:394
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "عارض الذاكرة"
 
-#: memviewdlg.cpp:423
+#: memviewdlg.cpp:398
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "عارض ذاكرة جديد"
 
-#: memviewdlg.cpp:424
+#: memviewdlg.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"

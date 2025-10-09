@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2023-08-03 21:39+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -396,13 +396,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Lanĉi &gdb-skripton:"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB-eligo"
 
-#: gdboutputwidget.cpp:50
+#: gdboutputwidget.cpp:51
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -412,25 +412,25 @@ msgstr ""
 "<b>GDB-eligo</b><p>Montras ĉiujn GDB-komandojn efektivigitajn. Vi ankaŭ "
 "povas elsendi ajnan alian GDB-komandon dum senararigado.</p>"
 
-#: gdboutputwidget.cpp:60
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB komando:"
 
-#: gdboutputwidget.cpp:65
+#: gdboutputwidget.cpp:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Paŭzi la ruladon de la aplikaĵo por enigi GDB-komandojn"
 
-#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
+#: gdboutputwidget.cpp:383
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Montri Internajn Komandojn"
 
-#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
+#: gdboutputwidget.cpp:389
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -442,7 +442,7 @@ msgstr ""
 "<br>Ĉi tiu opcio influos nur estontajn komandojn, ĝi ne aldonos aŭ forigos "
 "jam eldonitajn komandojn de la vido."
 
-#: gdboutputwidget.cpp:379
+#: gdboutputwidget.cpp:394
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -454,140 +454,140 @@ msgstr "Kopii Ĉiujn"
 msgid "Debugger Toolbar"
 msgstr "Sencimigila Ilobreto"
 
-#: memviewdlg.cpp:66
+#: memviewdlg.cpp:69
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Starto:"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:72
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Kvanto:"
 
-#: memviewdlg.cpp:96
+#: memviewdlg.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Memorrigardo"
 
-#: memviewdlg.cpp:223
+#: memviewdlg.cpp:209
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (1 bajto)"
 msgstr[1] "%2 (%1 bajtoj)"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:254
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "&Reŝargi"
 
-#: memviewdlg.cpp:271
+#: memviewdlg.cpp:262
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "&Formato"
 
-#: memviewdlg.cpp:274
+#: memviewdlg.cpp:265
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&Binara"
 
-#: memviewdlg.cpp:279
+#: memviewdlg.cpp:270
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&Oktala"
 
-#: memviewdlg.cpp:284
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&Decimala"
 
-#: memviewdlg.cpp:289
+#: memviewdlg.cpp:280
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "Dekses&uma:"
 
-#: memviewdlg.cpp:303
+#: memviewdlg.cpp:294
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "&Grupigo"
 
-#: memviewdlg.cpp:306
+#: memviewdlg.cpp:297
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:311
+#: memviewdlg.cpp:302
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:316
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:321
+#: memviewdlg.cpp:312
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:326
+#: memviewdlg.cpp:317
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:331
+#: memviewdlg.cpp:322
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
-#: memviewdlg.cpp:344
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "Skribi Ŝanĝojn"
 
-#: memviewdlg.cpp:348
+#: memviewdlg.cpp:339
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Ŝanĝi Memorgamon"
 
-#: memviewdlg.cpp:352
+#: memviewdlg.cpp:343
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Fermi Rigardon"
 
-#: memviewdlg.cpp:419
+#: memviewdlg.cpp:394
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Memorrigardilo"
 
-#: memviewdlg.cpp:423
+#: memviewdlg.cpp:398
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Nova Memorrigardilo"
 
-#: memviewdlg.cpp:424
+#: memviewdlg.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"

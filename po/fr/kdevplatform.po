@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform-old\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2025-09-09 12:10+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -1657,7 +1657,7 @@ msgctxt "project name (branch name)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: project/projectitemlineedit.cpp:156
+#: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
@@ -1665,19 +1665,19 @@ msgstr ""
 "Saisissez l'emplacement d'un autre élément à partir de l'arborescence de "
 "projets…"
 
-#: project/projectitemlineedit.cpp:158
+#: project/projectitemlineedit.cpp:160
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "Sélectionner…"
 
-#: project/projectitemlineedit.cpp:182
+#: project/projectitemlineedit.cpp:187
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
 msgstr "Sélectionner un élément…"
 
-#: project/projectitemlineedit.cpp:192
+#: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
 msgstr "Sélectionnez l'élément dont vous voulez obtenir l'emplacement."
@@ -5408,56 +5408,56 @@ msgstr "Barre du bouton droit"
 msgid "Bottom Button Bar"
 msgstr "Barre du bouton du bas"
 
-#: sublime/idealdockwidget.cpp:123
+#: sublime/idealdockwidget.cpp:121
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Position de la vue des outils"
 
-#: sublime/idealdockwidget.cpp:127
+#: sublime/idealdockwidget.cpp:125
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Gauche"
 
-#: sublime/idealdockwidget.cpp:128
+#: sublime/idealdockwidget.cpp:126
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Bas"
 
-#: sublime/idealdockwidget.cpp:129
+#: sublime/idealdockwidget.cpp:127
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Droite"
 
-#: sublime/idealdockwidget.cpp:130
+#: sublime/idealdockwidget.cpp:128
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Détaché"
 
-#: sublime/idealdockwidget.cpp:152
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Affecter un raccourci…"
 
-#: sublime/idealdockwidget.cpp:153
+#: sublime/idealdockwidget.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr ""
 "Utilisez ce raccourci pour déclencher la visibilité de la vue des outils."
 
-#: sublime/idealdockwidget.cpp:156
+#: sublime/idealdockwidget.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Supprimer la vue des outils"
 
-#: sublime/idealdockwidget.cpp:167
+#: sublime/idealdockwidget.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
@@ -5674,7 +5674,7 @@ msgstr "Tâche avortée"
 msgid "Run all tests in %1"
 msgstr "Effectuer tous les tests dans %1"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:175
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5683,36 +5683,36 @@ msgstr ""
 "Vous n'avez pas les permissions d'écriture pour les fichiers suivants ; "
 "ajouter les permissions d'écriture au propriétaire avant d'enregistrer ?"
 
-#: util/shellutils.cpp:177
+#: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Certains fichiers sont protégés en écriture"
 
-#: util/shellutils.cpp:178
+#: util/shellutils.cpp:179
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Définir les permissions en écriture"
 
-#: util/shellutils.cpp:179
+#: util/shellutils.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: util/shellutils.cpp:191
+#: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Échec de l'ajout des droits d'écriture pour certains fichiers."
 
-#: util/shellutils.cpp:192
+#: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Échec lors du réglage des permissions"
 
-#: util/shellutils.cpp:222
+#: util/shellutils.cpp:232
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5724,7 +5724,7 @@ msgstr ""
 "Il y a une erreur de guillemets dans « %1 » pour la configuration de "
 "lancement « %2 ». Le démarrage est interrompu."
 
-#: util/shellutils.cpp:228
+#: util/shellutils.cpp:238
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5737,7 +5737,7 @@ msgstr ""
 "lancement « %2 ». Cette fonction n'est actuellement pas prise en charge. Le "
 "démarrage est interrompu."
 
-#: util/shellutils.cpp:237
+#: util/shellutils.cpp:247
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; %3 "
@@ -5749,7 +5749,7 @@ msgstr ""
 "KShell : : splitArgs(<Le %1>) a signalé un code d'erreur inconnu %2 pour la "
 "configuration de lancement « %3 ». Le démarrage est interrompu."
 
-#: util/shellutils.cpp:264
+#: util/shellutils.cpp:274
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'external terminal command'; %2 - "
@@ -5761,7 +5761,7 @@ msgstr ""
 "La division de %1 pour la configuration de lancement « %2 » conduit à une "
 "liste vide. Le démarrage est interrompu."
 
-#: util/shellutils.cpp:281
+#: util/shellutils.cpp:291
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
@@ -5771,7 +5771,7 @@ msgstr ""
 "%1 vide est spécifié pour la configuration de lancement « %2 ». Le démarrage "
 "est interrompu."
 
-#: util/shellutils.cpp:296
+#: util/shellutils.cpp:306
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "

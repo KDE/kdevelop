@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -392,13 +392,13 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "&gdb स्क्रिप्ट् चालयन्तु:"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "जीडीबी आउटपुट"
 
-#: gdboutputwidget.cpp:50
+#: gdboutputwidget.cpp:51
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -408,25 +408,25 @@ msgstr ""
 "<b>जीडीबी आउटपुट</b><p> सर्वाणि GDB आदेशानि निष्पादितानि दर्शयति । त्रुटिनिवारणं "
 "कुर्वन् अन्यं किमपि GDB आदेशं अपि निर्गन्तुं शक्नुवन्ति ।</p>"
 
-#: gdboutputwidget.cpp:60
+#: gdboutputwidget.cpp:64
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB आदेशः:"
 
-#: gdboutputwidget.cpp:65
+#: gdboutputwidget.cpp:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "GDB आदेशान् प्रविष्टुं एप्लिकेशनस्य निष्पादनं विरामयन्तु"
 
-#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
+#: gdboutputwidget.cpp:383
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "आन्तरिक आदेशान् दर्शयतु"
 
-#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
+#: gdboutputwidget.cpp:389
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -438,7 +438,7 @@ msgstr ""
 "नियन्त्रणानि ।<br> एषः विकल्पः केवलं भविष्यत् आदेशान् प्रभावितं करिष्यति, पूर्वमेव निर्गतान् "
 "आदेशान् दृश्यात् न योजयिष्यति न निष्कासयिष्यति वा ।"
 
-#: gdboutputwidget.cpp:379
+#: gdboutputwidget.cpp:394
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
@@ -450,140 +450,140 @@ msgstr "सर्वाणि प्रतिलिख्यताम्"
 msgid "Debugger Toolbar"
 msgstr "डिबगर टूलबार"
 
-#: memviewdlg.cpp:66
+#: memviewdlg.cpp:69
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "प्रारंभः:"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:72
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "राशिः:"
 
-#: memviewdlg.cpp:96
+#: memviewdlg.cpp:95
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "स्मृतिदृश्यम्"
 
-#: memviewdlg.cpp:223
+#: memviewdlg.cpp:209
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (१ बाइट्)"
 msgstr[1] "%2 (%1 बाइट्)"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:254
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "&पुनः भार"
 
-#: memviewdlg.cpp:271
+#: memviewdlg.cpp:262
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "&स्वरूप"
 
-#: memviewdlg.cpp:274
+#: memviewdlg.cpp:265
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&द्विचक्रीय"
 
-#: memviewdlg.cpp:279
+#: memviewdlg.cpp:270
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&अष्टकम्"
 
-#: memviewdlg.cpp:284
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&दशमलव"
 
-#: memviewdlg.cpp:289
+#: memviewdlg.cpp:280
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "&षट्दशमलव"
 
-#: memviewdlg.cpp:303
+#: memviewdlg.cpp:294
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "&समूहीकरणम्"
 
-#: memviewdlg.cpp:306
+#: memviewdlg.cpp:297
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:311
+#: memviewdlg.cpp:302
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:316
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:321
+#: memviewdlg.cpp:312
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:326
+#: memviewdlg.cpp:317
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:331
+#: memviewdlg.cpp:322
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "१&६"
 
-#: memviewdlg.cpp:344
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "परिवर्तनं लिखत"
 
-#: memviewdlg.cpp:348
+#: memviewdlg.cpp:339
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "स्मृतिपरिधिं परिवर्तयन्तु"
 
-#: memviewdlg.cpp:352
+#: memviewdlg.cpp:343
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Close View इति"
 
-#: memviewdlg.cpp:419
+#: memviewdlg.cpp:394
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "स्मृति दर्शक"
 
-#: memviewdlg.cpp:423
+#: memviewdlg.cpp:398
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "नवीन स्मृति दर्शक"
 
-#: memviewdlg.cpp:424
+#: memviewdlg.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"

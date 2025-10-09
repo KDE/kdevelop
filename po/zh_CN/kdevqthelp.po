@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-01 00:40+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -201,12 +201,12 @@ msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
 msgstr "选择 Qt Help 文件..."
 
-#: qthelpdocumentation.cpp:382
+#: qthelpdocumentation.cpp:384
 #, kde-format
 msgid "Could not find any documentation for '%1'"
 msgstr "无法找到任何“%1”的文档"
 
-#: qthelpdocumentation.cpp:476
+#: qthelpdocumentation.cpp:478
 #, kde-format
 msgid "%1 Home Page"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2025-09-07 15:04+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1649,25 +1649,25 @@ msgctxt "project name (branch name)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: project/projectitemlineedit.cpp:156
+#: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
 msgstr "Введіть шлях до елемента з дерева проєкту…"
 
-#: project/projectitemlineedit.cpp:158
+#: project/projectitemlineedit.cpp:160
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "Вибрати…"
 
-#: project/projectitemlineedit.cpp:182
+#: project/projectitemlineedit.cpp:187
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
 msgstr "Виберіть пункт"
 
-#: project/projectitemlineedit.cpp:192
+#: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
 msgstr "Позначити об’єкт, шлях до якого ви хочете отримати."
@@ -5354,43 +5354,43 @@ msgstr "Панель кнопок праворуч"
 msgid "Bottom Button Bar"
 msgstr "Панель кнопок внизу"
 
-#: sublime/idealdockwidget.cpp:123
+#: sublime/idealdockwidget.cpp:121
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Розташування панелі інструментів"
 
-#: sublime/idealdockwidget.cpp:127
+#: sublime/idealdockwidget.cpp:125
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Ліворуч"
 
-#: sublime/idealdockwidget.cpp:128
+#: sublime/idealdockwidget.cpp:126
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Внизу"
 
-#: sublime/idealdockwidget.cpp:129
+#: sublime/idealdockwidget.cpp:127
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Праворуч"
 
-#: sublime/idealdockwidget.cpp:130
+#: sublime/idealdockwidget.cpp:128
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Від’єднано"
 
-#: sublime/idealdockwidget.cpp:152
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Призначити скорочення…"
 
-#: sublime/idealdockwidget.cpp:153
+#: sublime/idealdockwidget.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
@@ -5398,13 +5398,13 @@ msgstr ""
 "Це клавіатурне скорочення призначено для вмикання або вимикання видимості "
 "панелі інструментів."
 
-#: sublime/idealdockwidget.cpp:156
+#: sublime/idealdockwidget.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Вилучити панель інструментів"
 
-#: sublime/idealdockwidget.cpp:167
+#: sublime/idealdockwidget.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
@@ -5621,7 +5621,7 @@ msgstr "Виконання завдання перервано"
 msgid "Run all tests in %1"
 msgstr "Виконати всі перевірки у %1"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:175
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5630,36 +5630,36 @@ msgstr ""
 "У вас немає прав на запис до вказаних нижче файлів. Додати права на запис "
 "для власника перед збереженням?"
 
-#: util/shellutils.cpp:177
+#: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Деякі з файлів захищено від запису"
 
-#: util/shellutils.cpp:178
+#: util/shellutils.cpp:179
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Встановити права доступу до запису"
 
-#: util/shellutils.cpp:179
+#: util/shellutils.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ігнорувати"
 
-#: util/shellutils.cpp:191
+#: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Не вдалося додати права на запис до деяких файлів."
 
-#: util/shellutils.cpp:192
+#: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Не вдалося встановити права доступу"
 
-#: util/shellutils.cpp:222
+#: util/shellutils.cpp:232
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5671,7 +5671,7 @@ msgstr ""
 "Під час спроби виконання файла було виявлено помилку у використанні лапок у "
 "%1 для налаштовування запуску «%2». Запуск перервано."
 
-#: util/shellutils.cpp:228
+#: util/shellutils.cpp:238
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5683,7 +5683,7 @@ msgstr ""
 "У %1 для налаштовування запуску було використано метасимвол оболонки «%2», "
 "підтримку таких символів ще не реалізовано. Запуск перервано."
 
-#: util/shellutils.cpp:237
+#: util/shellutils.cpp:247
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; %3 "
@@ -5695,7 +5695,7 @@ msgstr ""
 "KShell::splitArgs(<%1>) повідомлено про невідомий код помилки %2 для "
 "налаштовування запуску «%3». Запуск перервано."
 
-#: util/shellutils.cpp:264
+#: util/shellutils.cpp:274
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'external terminal command'; %2 - "
@@ -5707,7 +5707,7 @@ msgstr ""
 "Під час спроби поділу %1 для запуску конфігурації «%2» отримано порожній "
 "список. Запуск перервано."
 
-#: util/shellutils.cpp:281
+#: util/shellutils.cpp:291
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
@@ -5715,7 +5715,7 @@ msgctxt ""
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr "Задано порожній %1 для налаштовування запуску «%2». Запуск перервано."
 
-#: util/shellutils.cpp:296
+#: util/shellutils.cpp:306
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "

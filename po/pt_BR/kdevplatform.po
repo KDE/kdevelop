@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2025-09-07 01:20-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1647,25 +1647,25 @@ msgctxt "project name (branch name)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: project/projectitemlineedit.cpp:156
+#: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
 msgstr "Indique a localização de um item na árvore de projetos..."
 
-#: project/projectitemlineedit.cpp:158
+#: project/projectitemlineedit.cpp:160
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "Selecionar..."
 
-#: project/projectitemlineedit.cpp:182
+#: project/projectitemlineedit.cpp:187
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
 msgstr "Selecionar um item"
 
-#: project/projectitemlineedit.cpp:192
+#: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
 msgstr "Selecione o item que você deseja obter o caminho."
@@ -5346,55 +5346,55 @@ msgstr "Barra de botões direita"
 msgid "Bottom Button Bar"
 msgstr "Barra de botões inferior"
 
-#: sublime/idealdockwidget.cpp:123
+#: sublime/idealdockwidget.cpp:121
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Posição da área de ferramentas"
 
-#: sublime/idealdockwidget.cpp:127
+#: sublime/idealdockwidget.cpp:125
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Esquerda"
 
-#: sublime/idealdockwidget.cpp:128
+#: sublime/idealdockwidget.cpp:126
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Inferior"
 
-#: sublime/idealdockwidget.cpp:129
+#: sublime/idealdockwidget.cpp:127
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Direita"
 
-#: sublime/idealdockwidget.cpp:130
+#: sublime/idealdockwidget.cpp:128
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Destacada"
 
-#: sublime/idealdockwidget.cpp:152
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Associar atalho..."
 
-#: sublime/idealdockwidget.cpp:153
+#: sublime/idealdockwidget.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr "Usar este atalho para acionar a visibilidade da área de ferramentas."
 
-#: sublime/idealdockwidget.cpp:156
+#: sublime/idealdockwidget.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Remover a área de ferramentas"
 
-#: sublime/idealdockwidget.cpp:167
+#: sublime/idealdockwidget.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
@@ -5608,7 +5608,7 @@ msgstr "Tarefa cancelada"
 msgid "Run all tests in %1"
 msgstr "Executar todos os testes em %1"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:175
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5617,36 +5617,36 @@ msgstr ""
 "Você não tem permissões de gravação para os seguintes arquivos; adicionar "
 "permissões de gravação para o proprietário antes de salvar?"
 
-#: util/shellutils.cpp:177
+#: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Alguns arquivos estão protegidos contra gravação"
 
-#: util/shellutils.cpp:178
+#: util/shellutils.cpp:179
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Definir permissões de escrita"
 
-#: util/shellutils.cpp:179
+#: util/shellutils.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: util/shellutils.cpp:191
+#: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Falha ao adicionar as permissões de gravação para alguns arquivos."
 
-#: util/shellutils.cpp:192
+#: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Falha ao definir permissões"
 
-#: util/shellutils.cpp:222
+#: util/shellutils.cpp:232
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5658,7 +5658,7 @@ msgstr ""
 "Há um erro de citação em %1 para a configuração de inicialização '%2'. "
 "Abortando a inicialização."
 
-#: util/shellutils.cpp:228
+#: util/shellutils.cpp:238
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5670,7 +5670,7 @@ msgstr ""
 "Foi incluído um meta-caractere em %1 para a configuração de inicialização "
 "'%2'. Isso não é suportado atualmente. Abortando a inicialização."
 
-#: util/shellutils.cpp:237
+#: util/shellutils.cpp:247
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; %3 "
@@ -5682,7 +5682,7 @@ msgstr ""
 "KShell::splitArgs(<the %1>) relatou um código de erro desconhecido %2 para a "
 "configuração de inicialização '%3'. Abortando a inicialização."
 
-#: util/shellutils.cpp:264
+#: util/shellutils.cpp:274
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'external terminal command'; %2 - "
@@ -5694,7 +5694,7 @@ msgstr ""
 "Dividir %1 para a configuração de inicialização '%2' resulta em uma lista "
 "vazia. Abortando a inicialização."
 
-#: util/shellutils.cpp:281
+#: util/shellutils.cpp:291
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
@@ -5704,7 +5704,7 @@ msgstr ""
 "%1 vazio especificado para a configuração de inicialização '%2'. Abortando a "
 "inicialização."
 
-#: util/shellutils.cpp:296
+#: util/shellutils.cpp:306
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "

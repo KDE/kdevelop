@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2025-06-22 11:37+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -1645,25 +1645,25 @@ msgctxt "project name (branch name)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: project/projectitemlineedit.cpp:156
+#: project/projectitemlineedit.cpp:158
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
 msgstr "Escriba a ruta a un elemento da árbore de proxectos…"
 
-#: project/projectitemlineedit.cpp:158
+#: project/projectitemlineedit.cpp:160
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "Seleccionar…"
 
-#: project/projectitemlineedit.cpp:182
+#: project/projectitemlineedit.cpp:187
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
 msgstr "Seleccionar un elemento"
 
-#: project/projectitemlineedit.cpp:192
+#: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
 msgstr "Escolla o elemento do que quere obter a ruta."
@@ -5342,55 +5342,55 @@ msgstr "Barra botón dereito"
 msgid "Bottom Button Bar"
 msgstr "Barra botón fondo"
 
-#: sublime/idealdockwidget.cpp:123
+#: sublime/idealdockwidget.cpp:121
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Posición da vista de ferramenta"
 
-#: sublime/idealdockwidget.cpp:127
+#: sublime/idealdockwidget.cpp:125
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Esquerda"
 
-#: sublime/idealdockwidget.cpp:128
+#: sublime/idealdockwidget.cpp:126
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Inferior"
 
-#: sublime/idealdockwidget.cpp:129
+#: sublime/idealdockwidget.cpp:127
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Dereita"
 
-#: sublime/idealdockwidget.cpp:130
+#: sublime/idealdockwidget.cpp:128
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Desconectada"
 
-#: sublime/idealdockwidget.cpp:152
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Asignar un atallo…"
 
-#: sublime/idealdockwidget.cpp:153
+#: sublime/idealdockwidget.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr "Use este atallo para conmutar a visibilidade da vista de ferramenta."
 
-#: sublime/idealdockwidget.cpp:156
+#: sublime/idealdockwidget.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Retirar a vista de ferramenta"
 
-#: sublime/idealdockwidget.cpp:167
+#: sublime/idealdockwidget.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
@@ -5610,7 +5610,7 @@ msgstr "Interrompeuse a tarefa"
 msgid "Run all tests in %1"
 msgstr "Executar todas as probas en %1"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:175
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5619,36 +5619,36 @@ msgstr ""
 "Non ten permisos de escritura para os seguintes ficheiros; quere engadir "
 "permisos de escritura para o dono antes de gardar?"
 
-#: util/shellutils.cpp:177
+#: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr "Algúns ficheiros están protexidos contra escritura"
 
-#: util/shellutils.cpp:178
+#: util/shellutils.cpp:179
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Definir os permisos de escritura"
 
-#: util/shellutils.cpp:179
+#: util/shellutils.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: util/shellutils.cpp:191
+#: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "O engadido dos permisos de escritura a algúns ficheiros fallou."
 
-#: util/shellutils.cpp:192
+#: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr "Non foi posíbel estabelecer os permisos"
 
-#: util/shellutils.cpp:222
+#: util/shellutils.cpp:232
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5658,7 +5658,7 @@ msgid ""
 "Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:228
+#: util/shellutils.cpp:238
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -5668,7 +5668,7 @@ msgid ""
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:237
+#: util/shellutils.cpp:247
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; %3 "
@@ -5678,7 +5678,7 @@ msgid ""
 "configuration '%3'. Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:264
+#: util/shellutils.cpp:274
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'external terminal command'; %2 - "
@@ -5688,7 +5688,7 @@ msgid ""
 "Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:281
+#: util/shellutils.cpp:291
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
@@ -5696,7 +5696,7 @@ msgctxt ""
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:296
+#: util/shellutils.cpp:306
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "

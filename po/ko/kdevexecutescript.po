@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-07 00:41+0000\n"
-"PO-Revision-Date: 2025-06-10 23:26+0200\n"
+"PO-Revision-Date: 2025-10-09 00:47+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,11 +15,10 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: executescriptplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Script Application"
+#, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr "스크립트 앱"
+msgstr "스크립트 경로"
 
 #: executescriptplugin.cpp:78
 #, kde-format
@@ -27,19 +26,15 @@ msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr "실행 설정 '%1'에 원격 호스트가 지정되지 않았습니다. 중단합니다."
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "인자:"
+msgstr "인자"
 
 #: executescriptplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Interpreter"
+#, kde-format
 msgid "interpreter command"
-msgstr "인터프리터"
+msgstr "인터프리터 명령"
 
 #: scriptappconfig.cpp:83
 #, kde-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2014-02-12 23:48+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -1701,28 +1701,28 @@ msgctxt "project name (branch name)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: project/projectitemlineedit.cpp:156
+#: project/projectitemlineedit.cpp:158
 #, fuzzy, kde-format
 #| msgid "Enter the path to an item from the projects tree"
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
 msgstr "Unesite stazu do stavke iz stabla projekta"
 
-#: project/projectitemlineedit.cpp:158
+#: project/projectitemlineedit.cpp:160
 #, fuzzy, kde-format
 #| msgid "Select..."
 msgctxt "@action"
 msgid "Select..."
 msgstr "Izaberi..."
 
-#: project/projectitemlineedit.cpp:182
+#: project/projectitemlineedit.cpp:187
 #, fuzzy, kde-format
 #| msgid "Select an item..."
 msgctxt "@title:window"
 msgid "Select an Item"
 msgstr "Odaberite stavku..."
 
-#: project/projectitemlineedit.cpp:192
+#: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
 msgstr "Odaberite stavku od koje želite dobaviti stazu"
@@ -5763,14 +5763,14 @@ msgstr "Desna traka s dugmetima"
 msgid "Bottom Button Bar"
 msgstr "Donja traka s dugmetima"
 
-#: sublime/idealdockwidget.cpp:123
+#: sublime/idealdockwidget.cpp:121
 #, fuzzy, kde-format
 #| msgid "Toolview Position"
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Pozivija alatnog pogleda"
 
-#: sublime/idealdockwidget.cpp:127
+#: sublime/idealdockwidget.cpp:125
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Left"
@@ -5778,7 +5778,7 @@ msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Lijevo"
 
-#: sublime/idealdockwidget.cpp:128
+#: sublime/idealdockwidget.cpp:126
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Bottom"
@@ -5786,7 +5786,7 @@ msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Dno"
 
-#: sublime/idealdockwidget.cpp:129
+#: sublime/idealdockwidget.cpp:127
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Right"
@@ -5794,7 +5794,7 @@ msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Desno"
 
-#: sublime/idealdockwidget.cpp:130
+#: sublime/idealdockwidget.cpp:128
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Detached"
@@ -5802,28 +5802,28 @@ msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Odvojeno"
 
-#: sublime/idealdockwidget.cpp:152
+#: sublime/idealdockwidget.cpp:150
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut..."
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Dodijeli kraticu..."
 
-#: sublime/idealdockwidget.cpp:153
+#: sublime/idealdockwidget.cpp:151
 #, fuzzy, kde-format
 #| msgid "Use this shortcut to trigger visibility of the toolview."
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr "Koristi ovu kraticu za preklapanje vidljivosti pogleda alata."
 
-#: sublime/idealdockwidget.cpp:156
+#: sublime/idealdockwidget.cpp:154
 #, fuzzy, kde-format
 #| msgid "Remove Toolview"
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Ukloni pogled alata"
 
-#: sublime/idealdockwidget.cpp:167
+#: sublime/idealdockwidget.cpp:166
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut For '%1' Tool View"
 msgctxt "@title:window"
@@ -6045,20 +6045,20 @@ msgstr ""
 msgid "Run all tests in %1"
 msgstr "Pokreni sve testove u %1"
 
-#: util/shellutils.cpp:174
+#: util/shellutils.cpp:175
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
 
-#: util/shellutils.cpp:177
+#: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
 msgstr ""
 
-#: util/shellutils.cpp:178
+#: util/shellutils.cpp:179
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Start New Session"
@@ -6066,25 +6066,25 @@ msgctxt "@action:button"
 msgid "Set Write Permissions"
 msgstr "Pokreni novu sesiju"
 
-#: util/shellutils.cpp:179
+#: util/shellutils.cpp:180
 #, fuzzy, kde-format
 #| msgid "Ignore"
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ignoriši"
 
-#: util/shellutils.cpp:191
+#: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr ""
 
-#: util/shellutils.cpp:192
+#: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
 msgstr ""
 
-#: util/shellutils.cpp:222
+#: util/shellutils.cpp:232
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -6094,7 +6094,7 @@ msgid ""
 "Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:228
+#: util/shellutils.cpp:238
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
@@ -6104,7 +6104,7 @@ msgid ""
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:237
+#: util/shellutils.cpp:247
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; %3 "
@@ -6114,7 +6114,7 @@ msgid ""
 "configuration '%3'. Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:264
+#: util/shellutils.cpp:274
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'external terminal command'; %2 - "
@@ -6124,7 +6124,7 @@ msgid ""
 "Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:281
+#: util/shellutils.cpp:291
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
@@ -6132,7 +6132,7 @@ msgctxt ""
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
 
-#: util/shellutils.cpp:296
+#: util/shellutils.cpp:306
 #, kde-format
 msgctxt ""
 "%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "

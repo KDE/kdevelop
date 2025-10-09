@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -486,14 +486,14 @@ msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Utföhrskript för \"&gdb\":"
 
-#: gdboutputwidget.cpp:49
+#: gdboutputwidget.cpp:50
 #, fuzzy, kde-format
 #| msgid "GDB Output"
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB-Utgaav"
 
-#: gdboutputwidget.cpp:50
+#: gdboutputwidget.cpp:51
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
@@ -506,28 +506,28 @@ msgstr ""
 "<b>GDB-Utgaav</b><p>Wiest all utföhrte gdb-Befehlen. Du kannst bi de "
 "Fehlersöök ok egen gdb-Befehlen utföhren.</p>"
 
-#: gdboutputwidget.cpp:60
+#: gdboutputwidget.cpp:64
 #, fuzzy, kde-format
 #| msgid "&GDB cmd:"
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&gdb-Befehl:"
 
-#: gdboutputwidget.cpp:65
+#: gdboutputwidget.cpp:69
 #, fuzzy, kde-format
 #| msgid "Pause execution of the app to enter gdb commands"
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
 msgstr "Programm för't Ingeven vun gdb-Befehlen anhollen"
 
-#: gdboutputwidget.cpp:367 gdboutputwidget.cpp:415
+#: gdboutputwidget.cpp:383
 #, fuzzy, kde-format
 #| msgid "Show Internal Commands"
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Intern Befehlen wiesen"
 
-#: gdboutputwidget.cpp:374 gdboutputwidget.cpp:422
+#: gdboutputwidget.cpp:389
 #, fuzzy, kde-format
 #| msgid ""
 #| "Controls if commands issued internally by KDevelop will be shown or not."
@@ -543,7 +543,7 @@ msgstr ""
 "Optschoon gellt bloots för tokamen Befehlen, al geven Befehlen warrt de "
 "Ansicht nich toföögt oder ut ehr wegmaakt."
 
-#: gdboutputwidget.cpp:379
+#: gdboutputwidget.cpp:394
 #, fuzzy, kde-format
 #| msgid "Copy All"
 msgctxt "@action:inmenu"
@@ -556,152 +556,152 @@ msgstr "All koperen"
 msgid "Debugger Toolbar"
 msgstr "Fehlersöök-Warktüüchbalken"
 
-#: memviewdlg.cpp:66
+#: memviewdlg.cpp:69
 #, fuzzy, kde-format
 #| msgid "Start"
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Start"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:72
 #, fuzzy, kde-format
 #| msgid "Amount"
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Mengde"
 
-#: memviewdlg.cpp:96
+#: memviewdlg.cpp:95
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Spiekeransicht"
 
-#: memviewdlg.cpp:223
+#: memviewdlg.cpp:209
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (1 Byte)"
 msgstr[1] "%2 (%1 Bytes)"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:254
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "Nieg laden"
 
-#: memviewdlg.cpp:271
+#: memviewdlg.cpp:262
 #, fuzzy, kde-format
 #| msgid "Format"
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "Formaat"
 
-#: memviewdlg.cpp:274
+#: memviewdlg.cpp:265
 #, fuzzy, kde-format
 #| msgid "Binary"
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "Bineer"
 
-#: memviewdlg.cpp:279
+#: memviewdlg.cpp:270
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr ""
 
-#: memviewdlg.cpp:284
+#: memviewdlg.cpp:275
 #, fuzzy, kde-format
 #| msgid "Decimal"
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "Dezimaal"
 
-#: memviewdlg.cpp:289
+#: memviewdlg.cpp:280
 #, fuzzy, kde-format
 #| msgid "Hexadecimal"
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "Hexadezimaal"
 
-#: memviewdlg.cpp:303
+#: memviewdlg.cpp:294
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr ""
 
-#: memviewdlg.cpp:306
+#: memviewdlg.cpp:297
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr ""
 
-#: memviewdlg.cpp:311
+#: memviewdlg.cpp:302
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr ""
 
-#: memviewdlg.cpp:316
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr ""
 
-#: memviewdlg.cpp:321
+#: memviewdlg.cpp:312
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr ""
 
-#: memviewdlg.cpp:326
+#: memviewdlg.cpp:317
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr ""
 
-#: memviewdlg.cpp:331
+#: memviewdlg.cpp:322
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr ""
 
-#: memviewdlg.cpp:344
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr ""
 
-#: memviewdlg.cpp:348
+#: memviewdlg.cpp:339
 #, fuzzy, kde-format
 #| msgid "Change memory range"
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Spiekerrebeet ännern"
 
-#: memviewdlg.cpp:352
+#: memviewdlg.cpp:343
 #, fuzzy, kde-format
 #| msgid "Close this view"
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Disse Ansicht tomaken"
 
-#: memviewdlg.cpp:419
+#: memviewdlg.cpp:394
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Spiekeransicht"
 
-#: memviewdlg.cpp:423
+#: memviewdlg.cpp:398
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Spiekeransicht"
 
-#: memviewdlg.cpp:424
+#: memviewdlg.cpp:399
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@info:tooltip"
