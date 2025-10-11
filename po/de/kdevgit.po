@@ -1,7 +1,7 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2013, 2014, 2017, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020, 2023.
-# Gerhard Stengel <gstengel@gmx.net>, 2011.
-# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
+# SPDX-FileCopyrightText: 2009, 2013, 2014, 2017, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2016, 2020, 2023 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2011 Gerhard Stengel <gstengel@gmx.net>
+# SPDX-FileCopyrightText: 2023 Frank Steinmetzger <dev-kde@felsenfleischer.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"

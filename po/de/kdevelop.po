@@ -1,12 +1,12 @@
-# Stephan Johach <hunsum@gmx.de>, 2003, 2004, 2005, 2006.
-# Thomas Diehl <thd@kde.org>, 2003, 2004.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2005, 2006, 2007.
-# Burkhard Lück <lueck@hube-lueck.de>, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2008, 2009, 2010, 2011, 2013, 2015, 2016, 2017.
-# Arndt Braun <arndtbraun@googlemail.com>, 2009.
-# Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
-# Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
-# Rolf Eike Beer <kde@opensource.sf-tec.de>, 2013.
+# SPDX-FileCopyrightText: 2003, 2004, 2005, 2006 Stephan Johach <hunsum@gmx.de>
+# SPDX-FileCopyrightText: 2003, 2004 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2013, 2015, 2016, 2017 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2009 Arndt Braun <arndtbraun@googlemail.com>
+# SPDX-FileCopyrightText: 2010 Panagiotis Papadopoulos <pano_90@gmx.net>
+# SPDX-FileCopyrightText: 2010, 2011, 2012 Gerhard Stengel <gstengel@gmx.net>
+# SPDX-FileCopyrightText: 2013 Rolf Eike Beer <kde@opensource.sf-tec.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"

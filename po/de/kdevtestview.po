@@ -1,5 +1,5 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2013.
-# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2020.
+# SPDX-FileCopyrightText: 2013 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2014, 2020 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevtestview\n"

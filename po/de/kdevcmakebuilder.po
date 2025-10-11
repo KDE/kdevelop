@@ -1,7 +1,7 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2012, 2013, 2014, 2015, 2016, 2017.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2009.
-# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2013, 2015, 2016, 2020.
-# Gerhard Stengel <gstengel@gmx.net>, 2010, 2011.
+# SPDX-FileCopyrightText: 2008, 2012, 2013, 2014, 2015, 2016, 2017 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2009 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2013, 2015, 2016, 2020 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2010, 2011 Gerhard Stengel <gstengel@gmx.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"

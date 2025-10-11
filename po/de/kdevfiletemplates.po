@@ -1,5 +1,5 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2013, 2014, 2015, 2017.
-# Frederik Schwarzer <schwarzer@kde.org>, 2013, 2014, 2020.
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2017 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2013, 2014, 2020 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevfiletemplates\n"
