@@ -1,5 +1,5 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2013, 2015, 2016, 2017, 2018.
-# Frederik Schwarzer <schwarzer@kde.org>, 2015, 2016, 2020, 2023.
+# SPDX-FileCopyrightText: 2013, 2015, 2016, 2017, 2018 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2015, 2016, 2020, 2023 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppcheck\n"

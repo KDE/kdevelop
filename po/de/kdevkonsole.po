@@ -1,6 +1,6 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2013, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2014, 2020.
-# Gerhard Stengel <gstengel@gmx.net>, 2010.
+# SPDX-FileCopyrightText: 2009, 2013, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2009, 2010, 2014, 2020 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2010 Gerhard Stengel <gstengel@gmx.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevkonsole\n"

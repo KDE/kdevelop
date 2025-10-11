@@ -1,5 +1,5 @@
-# Gerhard Stengel <gstengel@gmx.net>, 2011.
-# Burkhard Lück <lueck@hube-lueck.de>, 2016.
+# SPDX-FileCopyrightText: 2011 Gerhard Stengel <gstengel@gmx.net>
+# SPDX-FileCopyrightText: 2016 Burkhard Lück <lueck@hube-lueck.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevmanpage\n"
