@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-07 01:20-0300\n"
-"Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
+"PO-Revision-Date: 2025-10-12 15:56-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4676,15 +4676,15 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
 msgstr ""
-"Adicionar uma linha de modo do Kate aos documentos formatados, de acordo com "
-"o estilo de formatação."
+"Adiciona um modeline do Kate aos documentos formatados, de acordo com o "
+"estilo de formatação."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
-msgstr "Adicionar a linha de modo do Kate"
+msgstr "Adicionar modeline do Kate"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
@@ -4734,7 +4734,7 @@ msgstr "Interface do usuário"
 #, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr "Comportamento da janela acoplável"
+msgstr "Comportamento do painel acoplável"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4777,7 +4777,7 @@ msgstr "Canto inferior direito ocupado por:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr "Acoplagem esquerda"
+msgstr "Painel esquerdo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4785,14 +4785,14 @@ msgstr "Acoplagem esquerda"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr "Acoplagem inferior"
+msgstr "Painel inferior"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr "Acoplagem direita"
+msgstr "Painel direito"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
@@ -5418,19 +5418,19 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr "Mostrar a acoplagem esquerda"
+msgstr "Mostrar painel esquerdo"
 
 #: sublime/mainwindow_p.cpp:64
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr "Mostrar a acoplagem direita"
+msgstr "Mostrar painel direito"
 
 #: sublime/mainwindow_p.cpp:68
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr "Mostrar a acoplagem inferior"
+msgstr "Mostrar painel inferior"
 
 #: sublime/mainwindow_p.cpp:72
 #, kde-format
@@ -5442,7 +5442,7 @@ msgstr "Selecionar o editor"
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
-msgstr "Esconder/restaurar as acoplagens"
+msgstr "Ocultar/Restaurar painéis"
 
 #: sublime/mainwindow_p.cpp:82
 #, kde-format
