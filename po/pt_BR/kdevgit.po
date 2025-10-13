@@ -5,12 +5,13 @@
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2013, 2014, 2016, 2018, 2020.
 # SPDX-FileCopyrightText: 2011, 2012, 2025 Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2020, 2022.
+# SPDX-FileCopyrightText: 2025 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kkdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-22 00:42+0000\n"
-"PO-Revision-Date: 2025-08-07 07:48-0300\n"
+"PO-Revision-Date: 2025-10-12 16:26-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
@@ -704,6 +705,10 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Branch"
+
+#~ msgctxt "Files in git which have unresolved (merge) conflicts"
+#~ msgid "Conflicts"
+#~ msgstr "Conflitos"
 
 #~ msgid "error: %1"
 #~ msgstr "erro: %1"

@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-07 20:24+0000\n"
-"PO-Revision-Date: 2025-09-07 01:11-0300\n"
-"Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
+"PO-Revision-Date: 2025-10-12 15:56-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4676,15 +4676,15 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
 msgstr ""
-"Adicionar uma linha de modo do Kate aos documentos formatados, de acordo com "
-"o estilo de formatação."
+"Adiciona um modeline do Kate aos documentos formatados, de acordo com o "
+"estilo de formatação."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
-msgstr "Adicionar a linha de modo do Kate"
+msgstr "Adicionar modeline do Kate"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
@@ -4734,7 +4734,7 @@ msgstr "Interface do usuário"
 #, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr "Comportamento da janela acoplável"
+msgstr "Comportamento do painel acoplável"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4777,7 +4777,7 @@ msgstr "Canto inferior direito ocupado por:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr "Acoplagem esquerda"
+msgstr "Painel esquerdo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4785,14 +4785,14 @@ msgstr "Acoplagem esquerda"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr "Acoplagem inferior"
+msgstr "Painel inferior"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr "Acoplagem direita"
+msgstr "Painel direito"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
@@ -5418,19 +5418,19 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr "Mostrar a acoplagem esquerda"
+msgstr "Mostrar painel esquerdo"
 
 #: sublime/mainwindow_p.cpp:64
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr "Mostrar a acoplagem direita"
+msgstr "Mostrar painel direito"
 
 #: sublime/mainwindow_p.cpp:68
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr "Mostrar a acoplagem inferior"
+msgstr "Mostrar painel inferior"
 
 #: sublime/mainwindow_p.cpp:72
 #, kde-format
@@ -5442,7 +5442,7 @@ msgstr "Selecionar o editor"
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
-msgstr "Esconder/restaurar as acoplagens"
+msgstr "Ocultar/Restaurar painéis"
 
 #: sublime/mainwindow_p.cpp:82
 #, kde-format
@@ -6272,6 +6272,64 @@ msgstr "Diferença para a anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferença entre as versões"
+
+#~ msgctxt ""
+#~ "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
+#~ "configuration name"
+#~ msgid ""
+#~ "There is a quoting error in the %1 for the launch configuration '%2'. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "Há um erro de citação em %1 para a configuração de inicialização '%2'. "
+#~ "Abortando a inicialização."
+
+#~ msgctxt ""
+#~ "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - launch "
+#~ "configuration name"
+#~ msgid ""
+#~ "A shell meta character was included in the %1 for the launch "
+#~ "configuration '%2', this is not supported currently. Aborting start."
+#~ msgstr ""
+#~ "Foi incluído um meta-caractere em %1 para a configuração de inicialização "
+#~ "'%2'. Isso não é suportado atualmente. Abortando a inicialização."
+
+#~ msgctxt ""
+#~ "%1 - entry name, e.g. 'arguments' or 'executable path'; %2 - error code; "
+#~ "%3 - launch configuration name"
+#~ msgid ""
+#~ "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the "
+#~ "launch configuration '%3'. Aborting start."
+#~ msgstr ""
+#~ "KShell::splitArgs(<the %1>) relatou um código de erro desconhecido %2 "
+#~ "para a configuração de inicialização '%3'. Abortando a inicialização."
+
+#~ msgctxt ""
+#~ "%1 - entry name, e.g. 'executable path' or 'external terminal command'; "
+#~ "%2 - launch configuration name"
+#~ msgid ""
+#~ "Splitting the %1 for the launch configuration '%2' yields an empty list. "
+#~ "Aborting start."
+#~ msgstr ""
+#~ "Dividir %1 para a configuração de inicialização '%2' resulta em uma lista "
+#~ "vazia. Abortando a inicialização."
+
+#~ msgctxt ""
+#~ "%1 - entry name, e.g. 'external terminal command' or 'interpreter "
+#~ "command'; %2 - launch configuration name"
+#~ msgid ""
+#~ "Empty %1 specified for the launch configuration '%2'. Aborting start."
+#~ msgstr ""
+#~ "%1 vazio especificado para a configuração de inicialização '%2'. "
+#~ "Abortando a inicialização."
+
+#~ msgctxt ""
+#~ "%1 - entry name, e.g. 'executable path' or 'script path'; %2 - launch "
+#~ "configuration name"
+#~ msgid ""
+#~ "No valid %1 specified for the launch configuration '%2'. Aborting start."
+#~ msgstr ""
+#~ "Nenhum %1 válido especificado para a configuração de inicialização '%2'. "
+#~ "Abortando a inicialização."
 
 #~ msgctxt "@title:window"
 #~ msgid "Debug"
