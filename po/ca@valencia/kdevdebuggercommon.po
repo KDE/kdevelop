@@ -3,7 +3,7 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
+# SPDX-FileCopyrightText: 2009, 2010 Manuel Tortosa Moreno <manutortosa@gmail.com>
 # SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2021, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
@@ -246,7 +246,7 @@ msgstr "Tria un fitxer de nucli que s'haja d'examinar…"
 #: midebuggerplugin.cpp:236
 #, kde-format
 msgid "Choose a process to attach to..."
-msgstr "Trieu un procés al qual adjuntar…"
+msgstr "Tria un procés al qual adjuntar…"
 
 #: midebuggerplugin.cpp:250
 #, kde-format

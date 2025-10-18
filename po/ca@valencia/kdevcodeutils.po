@@ -3,9 +3,9 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Manuel Tortosa <manutortosa@chakra-project.org>, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2011, 2017, 2020.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013.
+# SPDX-FileCopyrightText: 2010 Manuel Tortosa <manutortosa@chakra-project.org>
+# SPDX-FileCopyrightText: 2011, 2017, 2020 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2013 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
