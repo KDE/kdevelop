@@ -38,6 +38,7 @@ Comment[ar]=ولِّد ملحق مطوّرك عامًّا، باستعمال س�
 Comment[az]=CMake və C++ istifadə edərək bir əsas KDevelop qoşması yaradın
 Comment[ca]=Genera un connector del KDevelop general, usant CMake i C++
 Comment[ca@valencia]=Genera un connector de KDevelop general, utilitzant CMake i C++
+Comment[cs]=Vygenerujte obecný plugin pro KDevelop pomocí CMake a C++
 Comment[de]=erstellt ein allgemeines KDevelop-Modul mit CMake und C++
 Comment[el]=Δημιουργία ενός γενικού πρόσθετου KDevelop, με χρήση CMake και C++
 Comment[en_GB]=Generate a general KDevelop plugin, using CMake and C++
