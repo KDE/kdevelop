@@ -35,6 +35,7 @@ Comment[ar]=الإعداد لقالب ملف مطوّرك الذي يغلَّف 
 Comment[az]=CMake istifadə edilərək paketlənmiş KDevelop fayl şablonları üçün ayarlar
 Comment[ca]=Configuració per a la plantilla de fitxers del KDevelop que empaqueta usant CMake
 Comment[ca@valencia]=Configuració per a la plantilla de fitxers de KDevelop que empaqueta utilitzant CMake
+Comment[cs]=Nastavení pro šablonu souboru KDevelop, která je zabalena pomocí CMake
 Comment[de]=Einstellungen für KDevelop-Dateivorlage, die mit CMake als Paket gebaut sind
 Comment[el]=Ρύθμιση για το πρότυπο αρχείου KDevelop το οποίο συσκευάζεται χρησιμοποιώντας το CMake
 Comment[en_GB]=Setup for KDevelop File Template which is packaged using CMake
