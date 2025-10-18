@@ -3,9 +3,9 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2023.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021.
+# SPDX-FileCopyrightText: 2009, 2010 Manuel Tortosa Moreno <manutortosa@gmail.com>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022, 2023 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
@@ -602,14 +602,3 @@ msgstr "Visor de la memòria nou"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Obri un visor nou de la memòria"
-
-#~ msgid ""
-#~ "A program is already being debugged. Do you want to abort the currently "
-#~ "running debug session and continue with the launch?"
-#~ msgstr ""
-#~ "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
-#~ "actualment en execució i continuar amb el llançament?"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Interromp la sessió actual"

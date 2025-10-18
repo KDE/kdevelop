@@ -3,8 +3,8 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2016, 2017, 2020, 2022.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2016, 2017, 2020.
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2016, 2017, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
@@ -237,14 +237,3 @@ msgstr "Camí de treball remot:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/camí/a/un/dispositiu/gravable/directori"
-
-#~ msgid ""
-#~ "A program is already being debugged. Do you want to abort the currently "
-#~ "running debug session and continue with the launch?"
-#~ msgstr ""
-#~ "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
-#~ "actualment en execució i continuar amb el llançament?"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Interromp la sessió actual"
