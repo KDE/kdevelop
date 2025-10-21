@@ -15,8 +15,7 @@ set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 include(KDevPlatformMacros)
 include(KDevPlatformMacrosInternal)
 
-set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
-find_package(Boost 1.35.0)
+find_package(Boost 1.70.0 CONFIG)
 set_package_properties(Boost PROPERTIES
     PURPOSE "Boost libraries for enabling the classbrowser"
     URL "https://www.boost.org/"
