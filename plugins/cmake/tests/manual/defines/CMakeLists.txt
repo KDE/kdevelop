@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-
 project(defines)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DASDF=asdf -DXYZ")

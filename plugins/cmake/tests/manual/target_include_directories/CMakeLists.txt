@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-
 project(target_include_directories)
 
 add_library(mylib a.c)

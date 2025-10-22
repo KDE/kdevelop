@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.16)
-
 project(kf6_app)
 
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
