@@ -95,7 +95,7 @@ void VcsLocation::setRepositoryServer( const QString& location )
     d->m_localUrl = QUrl();
 }
 
-bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs )
+bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs ) const
 {
     return( type() == rhs.type()
             && repositoryServer() == rhs.repositoryServer()

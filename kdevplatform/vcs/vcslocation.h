@@ -116,7 +116,7 @@ public:
      */
     QVariant userData() const;
 
-    bool operator==( const KDevelop::VcsLocation& );
+    bool operator==( const KDevelop::VcsLocation& ) const;
 
     bool isValid() const;
 
@@ -133,13 +133,6 @@ inline size_t qHash(const KDevelop::VcsLocation& loc)
     {
         return qHash(loc.repositoryServer());
     }
-}
-
-inline bool operator==( const KDevelop::VcsLocation& lhs, const KDevelop::VcsLocation& rhs )
-{
-    return( lhs.type() == rhs.type()
-            && lhs.repositoryServer() == rhs.repositoryServer()
-            && lhs.localUrl() == rhs.localUrl() );
 }
 
 }
