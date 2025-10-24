@@ -292,7 +292,9 @@ void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
         TransactionItem* ti = *itemIt;
         mTransactionsToListviewItems.erase(itemIt);
         ti->setItemComplete();
-        QTimer::singleShot( 3000, mScrollView, [=] { mScrollView->slotItemCompleted(ti); } );
+        QTimer::singleShot(3000, mScrollView, [this, ti] {
+            mScrollView->slotItemCompleted(ti);
+        });
     }
     // This was the last item, hide.
     if ( mTransactionsToListviewItems.empty() ) {

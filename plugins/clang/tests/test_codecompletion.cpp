@@ -775,7 +775,7 @@ void TestCodeCompletion::testOverrideExecute()
     TestFile file(code, QStringLiteral("cpp"), &testProject, directory.path());
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
 
-    auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
+    auto executeItem = [this, itemToExecute, expectedItems, expectedCode](const ClangCodeCompletionItemTester& tester) {
         auto item = tester.findItem(itemToExecute);
         QVERIFY(item);
         auto view = createView(tester.completionContext->duContext()->url().toUrl());
@@ -1615,7 +1615,7 @@ void TestCodeCompletion::testCompleteFunction()
     QFETCH(QString, itemToExecute);
     QFETCH(QString, expectedCode);
 
-    auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
+    auto executeItem = [this, itemToExecute, expectedItems, expectedCode](const ClangCodeCompletionItemTester& tester) {
         auto item = tester.findItem(itemToExecute);
         QVERIFY(item);
         auto view = createView(tester.completionContext->duContext()->url().toUrl());

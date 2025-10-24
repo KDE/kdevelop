@@ -324,7 +324,7 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
     auto *modifyBtn = new QToolButton(item->treeWidget());
     modifyBtn->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
     modifyBtn->setToolTip(i18nc("@info:tooltip", "Modify"));
-    connect(modifyBtn, &QPushButton::clicked, this, [=](){
+    connect(modifyBtn, &QPushButton::clicked, this, [this, item]() {
         modify(item);
     });
     auto *removeBtn = new QToolButton(item->treeWidget());
@@ -337,7 +337,7 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
         removeBtn->setEnabled(false);
         removeBtn->setToolTip(i18nc("@info:tooltip", "Please uninstall this via GHNS."));
     } else {
-        connect(removeBtn, &QPushButton::clicked, this, [=](){
+        connect(removeBtn, &QPushButton::clicked, this, [this, item]() {
             remove(item);
         });
     }

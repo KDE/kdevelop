@@ -302,7 +302,7 @@ void MesonRewriterPage::reset()
 
     KJob* job = new ExecuteCompositeJob(this, jobs);
 
-    connect(job, &KJob::result, this, [=]() -> void {
+    connect(job, &KJob::result, this, [this, jobs, introspectJob, projectInfo]() -> void {
         JobDeleter deleter(jobs); // Make sure to free all jobs with RAII
 
         auto prInfo = introspectJob->projectInfo();

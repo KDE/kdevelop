@@ -69,8 +69,12 @@ DiffViewsCtrl::DiffViewsCtrl(QObject* parent)
     }
 
     // Connect the diff windows actions
-    connect(m_stageSelectedAct, &QAction::triggered, this, [=] { applySelected(Stage); });
-    connect(m_unstageSelectedAct, &QAction::triggered, this, [=] { applySelected(Unstage); });
+    connect(m_stageSelectedAct, &QAction::triggered, this, [this] {
+        applySelected(Stage);
+    });
+    connect(m_unstageSelectedAct, &QAction::triggered, this, [this] {
+        applySelected(Unstage);
+    });
     connect(m_revertSelectedAct, &QAction::triggered, this, &DiffViewsCtrl::revertSelected);
     connect(m_gotoSrcLineAct, &QAction::triggered, this, &DiffViewsCtrl::gotoSrcLine);
 }
@@ -102,7 +106,7 @@ void DiffViewsCtrl::setupDiffActions(KTextEditor::View* view, const RepoStatusMo
 
     // Set the text of the actions based on whether some lines
     // are selected or not
-    connect(view, &KTextEditor::View::contextMenuAboutToShow, this, [=] {
+    connect(view, &KTextEditor::View::contextMenuAboutToShow, this, [this, view] {
         auto haveSelection = !view->selectionRange().isEmpty();
         if (haveSelection) {
             m_unstageSelectedAct->setText(i18n("Unstage selected lines"));
@@ -183,19 +187,22 @@ const DiffViewsCtrl::ViewData DiffViewsCtrl::createView(const QUrl& url, RepoSta
         data.doc->setPrettyName(i18n("%1 (unstaged)", url.fileName()));
 
     // Connect cleanup handlers on document/project closure and kdevelop shutdown
-    connect(ICore::self()->projectController(), &IProjectController::projectClosed, this, [=] (KDevelop::IProject* proj) {
-        if (proj == data.project) {
-            auto dataIt = m_views.find(key);
-            if (dataIt != m_views.end())
-                dataIt->second.doc->close();
-        }
-    });
-    connect(ICore::self(), &ICore::aboutToShutdown, this, [=] {
+    connect(ICore::self()->projectController(), &IProjectController::projectClosed, this,
+            [this, data, key](KDevelop::IProject* proj) {
+                if (proj == data.project) {
+                    auto dataIt = m_views.find(key);
+                    if (dataIt != m_views.end())
+                        dataIt->second.doc->close();
+                }
+            });
+    connect(ICore::self(), &ICore::aboutToShutdown, this, [this, key] {
         auto dataIt = m_views.find(key);
         if (dataIt != m_views.end())
             dataIt->second.doc->close();
     });
-    connect(data.ktDoc, &KTextEditor::Document::aboutToClose, this, [=]() { m_views.erase(key); });
+    connect(data.ktDoc, &KTextEditor::Document::aboutToClose, this, [this, key]() {
+        m_views.erase(key);
+    });
 
     // Set the context menu for the document & add the appropriate actions to it
     const auto& views = data.ktDoc->views();
@@ -380,7 +387,7 @@ void DiffViewsCtrl::applySelected(DiffViewsCtrl::ApplyAction act)
 
         // Run the apply job
         VcsJob* indexJob = vData.vcs->apply(selectedDiff, params);
-        connect(indexJob, &VcsJob::resultsReady, this, [=] {
+        connect(indexJob, &VcsJob::resultsReady, this, [this, indexJob, vData] {
             if (indexJob->status() == VcsJob::JobSucceeded) {
                 updateUrlDiffs(vData.url);
             }

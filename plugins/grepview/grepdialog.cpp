@@ -541,7 +541,9 @@ bool GrepDialog::checkProjectsOpened()
 
     // do the grep jobs one by one
     connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepDialog::nextHistory);
-    QTimer::singleShot(0, this, [=]() {nextHistory(true);});
+    QTimer::singleShot(0, this, [this]() {
+        nextHistory(true);
+    });
 
     return true;
 }

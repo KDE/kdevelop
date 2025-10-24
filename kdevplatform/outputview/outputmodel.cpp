@@ -204,8 +204,9 @@ OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const QUrl& builddi
     qRegisterMetaType<KDevelop::IFilterStrategy::Progress>();
 
     s_parsingThread->addWorker(worker);
-    model->connect(worker, &ParseWorker::parsedBatch,
-                   model, [=] (const QVector<KDevelop::FilteredItem>& items) { linesParsed(items); });
+    model->connect(worker, &ParseWorker::parsedBatch, model, [this](const QVector<KDevelop::FilteredItem>& items) {
+        linesParsed(items);
+    });
     model->connect(worker, &ParseWorker::allDone,
                    model, &OutputModel::allDone);
     model->connect(worker, &ParseWorker::progress,

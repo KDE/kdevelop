@@ -78,7 +78,7 @@ SimpleCommitForm::SimpleCommitForm(QWidget* parent)
 
     summaryLen->setIcon(textIcon(QString::number(0), colors.foreground(KColorScheme::NormalText).color(),
                                  colors.background(KColorScheme::NormalBackground).color()));
-    connect(m_summaryEdit, &QLineEdit::textChanged, this, [=] {
+    connect(m_summaryEdit, &QLineEdit::textChanged, this, [this, colors, summaryLen] {
         int sz = m_summaryEdit->text().size();
 
         // Disable the commit button if the message is empty
@@ -99,8 +99,8 @@ SimpleCommitForm::SimpleCommitForm(QWidget* parent)
             bg = colors.background(KColorScheme::NormalBackground);
             fg = colors.foreground(KColorScheme::NormalText);
         } else if (sz < 73) {
-           bg = colors.background(KColorScheme::NormalBackground);
-           fg = colors.foreground(KColorScheme::NormalText);
+            bg = colors.background(KColorScheme::NormalBackground);
+            fg = colors.foreground(KColorScheme::NormalText);
         } else if (sz < 79) {
             bg = colors.background(KColorScheme::NeutralBackground);
             fg = colors.foreground(KColorScheme::NeutralText);

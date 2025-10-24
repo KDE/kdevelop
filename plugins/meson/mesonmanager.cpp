@@ -308,8 +308,12 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         watcher = m_projectWatchers[project] = make_shared<KDirWatch>(nullptr);
         QString projectName = project->name();
 
-        connect(watcher.get(), &KDirWatch::dirty, this, [=](QString p) { onMesonInfoChanged(p, projectName); });
-        connect(watcher.get(), &KDirWatch::created, this, [=](QString p) { onMesonInfoChanged(p, projectName); });
+        connect(watcher.get(), &KDirWatch::dirty, this, [this, projectName](QString p) {
+            onMesonInfoChanged(p, projectName);
+        });
+        connect(watcher.get(), &KDirWatch::created, this, [this, projectName](QString p) {
+            onMesonInfoChanged(p, projectName);
+        });
     }
 
     Path watchFile = buildDir.buildDir;

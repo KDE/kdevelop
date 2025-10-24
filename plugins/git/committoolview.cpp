@@ -54,16 +54,19 @@ QWidget* CommitToolViewFactory::create(QWidget* parent)
     }
 
     auto* const tool = new CommitToolView(std::move(statusModel), parent);
-    tool->connect(tool, &CommitToolView::updateDiff, m_diffViewsCtrl, [=](const QUrl& url, const RepoStatusModel::Areas area){
-        m_diffViewsCtrl->updateDiff(url, area, DiffViewsCtrl::NoActivate);
-    });
+    tool->connect(tool, &CommitToolView::updateDiff, m_diffViewsCtrl,
+                  [this](const QUrl& url, const RepoStatusModel::Areas area) {
+                      m_diffViewsCtrl->updateDiff(url, area, DiffViewsCtrl::NoActivate);
+                  });
     tool->connect(tool, &CommitToolView::updateUrlDiffs, m_diffViewsCtrl, &DiffViewsCtrl::updateUrlDiffs);
     tool->connect(tool, &CommitToolView::updateProjectDiffs, m_diffViewsCtrl, &DiffViewsCtrl::updateProjectDiffs);
-    tool->connect(tool, &CommitToolView::showDiff, m_diffViewsCtrl, [=](const QUrl& url, const RepoStatusModel::Areas area){
-        m_diffViewsCtrl->updateDiff(url, area, DiffViewsCtrl::Activate);
-    });
-    tool->connect(tool, &CommitToolView::showSource, m_diffViewsCtrl, [=](const QUrl& url) {
-        if (url.fileName().isEmpty()) return;
+    tool->connect(tool, &CommitToolView::showDiff, m_diffViewsCtrl,
+                  [this](const QUrl& url, const RepoStatusModel::Areas area) {
+                      m_diffViewsCtrl->updateDiff(url, area, DiffViewsCtrl::Activate);
+                  });
+    tool->connect(tool, &CommitToolView::showSource, m_diffViewsCtrl, [this](const QUrl& url) {
+        if (url.fileName().isEmpty())
+            return;
         auto* docCtrl = ICore::self()->documentController();
         if (auto* srcDoc = docCtrl->openDocument(url)) {
             docCtrl->activateDocument(srcDoc);
@@ -223,11 +226,9 @@ CommitToolView::CommitToolView(std::shared_ptr<RepoStatusModel> statusModel, QWi
 
     // Refresh diffs when documents are saved
     connect(ICore::self()->documentController(), &IDocumentController::documentSaved, this,
-            [=](KDevelop::IDocument* doc) {
+            [this](KDevelop::IDocument* doc) {
                 emit updateUrlDiffs(doc->url());
-    });
-
-
+            });
 
     // Connect the commit form
     connect(m_commitForm, &SimpleCommitForm::committed, this, &CommitToolView::commitActiveProject);
@@ -411,7 +412,7 @@ void CommitToolView::revertSelectedFiles ( const QList<QUrl>& urls )
         job->setProperty("urls", QVariant::fromValue<QList<QUrl>>(urls));
         job->setProperty("project", QVariant::fromValue(project));
         ICore::self()->runController()->registerJob(job);
-        connect(job, &VcsJob::resultsReady, this, [=]() {
+        connect(job, &VcsJob::resultsReady, this, [this, urls]() {
             // Close the document tabs showing diffs for the urls
             for (const auto& url : urls) {
                 emit updateUrlDiffs(url);
@@ -428,7 +429,7 @@ void CommitToolView::stageSelectedFiles ( const QList<QUrl>& urls )
         VcsJob* job = vcs->add(urls, IBasicVersionControl::NonRecursive);
         job->setProperty("urls", QVariant::fromValue<QList<QUrl>>(urls));
         job->setProperty("project", QVariant::fromValue(project));
-        connect(job, &VcsJob::resultsReady, this, [=]() {
+        connect(job, &VcsJob::resultsReady, this, [this, urls]() {
             // Close the document tabs showing diffs for the urls
             for (const auto& url : urls) {
                 emit updateUrlDiffs(url);
@@ -445,7 +446,7 @@ void CommitToolView::unstageSelectedFiles(const QList<QUrl>& urls)
         VcsJob* job = git->reset(urls, IBasicVersionControl::NonRecursive);
         job->setProperty("urls", QVariant::fromValue<QList<QUrl>>(urls));
         job->setProperty("project", QVariant::fromValue(project));
-        connect(job, &VcsJob::resultsReady, this, [=]() {
+        connect(job, &VcsJob::resultsReady, this, [this, urls]() {
             for (const auto& url : urls) {
                 emit updateUrlDiffs(url);
             }
@@ -465,7 +466,7 @@ void CommitToolView::commitActiveProject()
             VcsJob* job = vcs->commitStaged(msg, proj->projectItem()->path().toUrl());
             m_commitForm->clearError();
             m_commitForm->disable();
-            connect(job, &VcsJob::finished, m_commitForm, [=]{
+            connect(job, &VcsJob::finished, m_commitForm, [this, job, proj] {
                 if (job->status() == VcsJob::JobSucceeded){
                     m_commitForm->clear();
                     emit updateProjectDiffs(proj);
