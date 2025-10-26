@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 00:38+0000\n"
-"PO-Revision-Date: 2025-10-22 11:58+0300\n"
+"PO-Revision-Date: 2025-10-23 13:58+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -85,6 +85,10 @@ msgid ""
 "project, you could exclude all files via <code>\"*\"</code> and then apply "
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
+"מסננים כברירת מחדל מחריגים פריטים מהמיזם. אפשר להשתמש בתבניות מכלילות כדי "
+"לכלול פריטים שנלכדו על ידי תבניות מחריגות. <br />כלומר לכלול רק קבצים "
+"שמסתיימים ב־<code>„‎.cpp”</code> במיזם שלך, אפשר לכלול את כל הקבצים עם "
+"<code>„*”</code> ואז להחיל תבנית <code>„‎*.cpp”</code> מכלילה."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
@@ -104,11 +108,13 @@ msgid ""
 "A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
 "to make this explicit."
 msgstr ""
+"מסנן עם תבנית ריקה ילכוד את כל הפריטים. יש להשתמש ב־<code>\"*\"</code> כדי "
+"להפוך את זה למפורש."
 
 #: projectfilterconfigpage.cpp:175
 #, kde-format
 msgid "A filter ending on <code>\"/\"</code> can never match a file."
-msgstr ""
+msgstr "מסנן שמסתיים ב־<code>„/”</code> לעולם לא יוכל ללכוד קובץ."
 
 #: projectfilterconfigpage.cpp:198
 #, kde-format
@@ -127,8 +133,10 @@ msgstr "מסנן מיזמים"
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "החרגת פריט ממיזם"
+msgstr[1] "החרגת פריטים ממיזם"
+msgstr[2] "החרגת פריטים ממיזם"
+msgstr[3] "החרגת פריטים ממיזם"
 
 #: projectfilterprovider.cpp:116
 #, kde-format
@@ -136,8 +144,10 @@ msgid ""
 "A filter for the item was added. To undo, use the project filter settings."
 msgid_plural ""
 "A filter for the items was added. To undo, use the project filter settings."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "נוסף מסנן לפריט. כדי להסיג, יש להשתמש בהגדרות הסינון של המיזם."
+msgstr[1] "נוסף מסנן לפריטים. כדי להסיג, יש להשתמש בהגדרות הסינון של המיזם."
+msgstr[2] "נוסף מסנן לפריטים. כדי להסיג, יש להשתמש בהגדרות הסינון של המיזם."
+msgstr[3] "נוסף מסנן לפריטים. כדי להסיג, יש להשתמש בהגדרות הסינון של המיזם."
 
 #: projectfilterprovider.cpp:118
 #, kde-format
@@ -151,7 +161,7 @@ msgstr "נוסף מסנן מיזמים"
 msgid ""
 "Configure which files and folders inside the project folder should be "
 "included or excluded:"
-msgstr ""
+msgstr "הגדרת אילו קבצים ותיקיות בתוך תיקיית המיזם יוכללו או יוחרגו:"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
