@@ -1,0 +1,325 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"PO-Revision-Date: 2025-10-26 11:34+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.08.1\n"
+
+#: executeplugin.cpp:62
+#, kde-format
+msgctxt "command line arguments to an executable"
+msgid "arguments"
+msgstr "ארגומנטים"
+
+#: executeplugin.cpp:82
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "לא ניתן לפתור את התלות: %1"
+
+#: executeplugin.cpp:140
+#, kde-format
+msgctxt "path to an executable"
+msgid "executable path"
+msgstr "נתיב לקובץ ההפעלה"
+
+#: executeplugin.cpp:194
+#, kde-format
+msgid "external terminal command"
+msgstr "פקודת מסוף חיצוני"
+
+#: nativeappconfig.cpp:125
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr "לשאול אם רץ"
+
+#: nativeappconfig.cpp:126
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "לחסל את כל המופעים"
+
+#: nativeappconfig.cpp:127
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "להתחיל חדש"
+
+#: nativeappconfig.cpp:132
+#, kde-format
+msgid ""
+"<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
+"limitations.</p>"
+msgstr ""
+"<p>לתשומת ליבך: <code>gnome-terminal</code> נתמך באופן חלקי בלבד עקב "
+"מגבלותיו.</p>"
+
+#: nativeappconfig.cpp:182
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "הגדרת יישום טבעי"
+
+#: nativeappconfig.cpp:192
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "הפעלת יישומים טבעיים"
+
+#: nativeappconfig.cpp:202
+#, kde-format
+msgid "Native Application"
+msgstr "יישום טבעי"
+
+#: nativeappconfig.cpp:257
+#, kde-format
+msgid "Compiled Binary"
+msgstr "בינרי מהודר"
+
+#: nativeappconfig.cpp:338
+#, kde-format
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "קובצי הפעלה של המיזם"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, kde-format
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "קובץ הפעלה"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "י&עד מיזם:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "קובץ ה&פעלה:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "קובץ הפעלה או /נתיב/לקובץ/הפעלה"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr "נא למלא את שם קובץ ההפעלה או את הנתיב המלא לקובץ הפעלה"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "התנהגות"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "&ארגומנטים:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>נא למלא ארגומנטים שיועברו לקובץ ההפעלה.<br/>אפשר "
+"להעביר ארגומנטים שמכילים רווח על ידי תחימתם במירכאות כפולות.</p></body></"
+"html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "תיקיית &עבודה:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "נא לבחור תיקיית עבודה לקובץ ההפעלה"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "&סביבה:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "נא לבחור סביבה לשימוש"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>כברירת מחדל יישומים ירוצו ברקע ורק הפלט שלהם יוצג בתצוגת כלי. המצב הזה לא "
+"מאפשר תפעול יישומים שדורשים קלט משתמש במדמה מסוף. כדי להריץ יישומים כאלה, יש "
+"להשתמש במסוף חיצוני.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, kde-format
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "להשתמש במסוף חיצוני:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:228
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Define the command to execute the external terminal emulator.<br>\n"
+"The path to the executable and its arguments will be appended to this "
+"command."
+msgstr ""
+"הגדרת הפקודה להרצת מדמה המסוף החיצוני.<br>\n"
+"הנתיב לקובץ ההפעלה והארגומנטים שלו יתווספו לפקודה הזאת."
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:238
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr "הפעלה מחדש"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:251
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "תלויות"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:257
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "&פעולה:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:267
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr "ציון הפעולה שתינקט עבור התלויות בטרם הרצת קובץ ההפעלה."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:270
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"הפעולה הבאה תרוץ לפני הרצת קובץ ההפעלה. כך מתאפשרים כמה חלקים של מיזם, שקובץ "
+"ההפעלה לא תלוי בהם ישירות, לבנייה ו/או להתקנה בטרם הרצת היישום."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:277
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "לא לעשות כלום"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:282
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "לבנות"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:287
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "לבנות ולהתקין"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:295
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "יעדים:"
+
+#: nativeappjob.cpp:39
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"לא צוין פרופיל סביבה, זה נראה כמו הגדרות פגומות, נא להריץ בדיקה על ההגדרות "
+"‚%1’. עוברים להשתמש בפרופיל סביבה כברירת מחדל."
+
+#: nativeappjob.cpp:153
+#, kde-format
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "המשימה כבר פעילה"
+
+#: nativeappjob.cpp:154
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "הפקודה ‚%1’ כבר רצה."
+
+#: nativeappjob.cpp:156
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "לחסל את כל המופעים"
+
+#: nativeappjob.cpp:157
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "להתחיל חדש"
+
+#: nativeappjob.cpp:160
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr "לזכור את הבחירה"
