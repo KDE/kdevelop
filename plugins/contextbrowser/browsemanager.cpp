@@ -58,7 +58,6 @@ void EditorViewWatcher::documentCreated(KDevelop::IDocument* document)
         connect(textDocument, &Document::viewCreated, this, &EditorViewWatcher::viewCreated);
         const auto views = textDocument->views();
         for (KTextEditor::View* view : views) {
-            Q_ASSERT(view->parentWidget());
             addViewInternal(view);
         }
     }
@@ -82,7 +81,6 @@ void EditorViewWatcher::viewDestroyed(QObject* view)
 
 void EditorViewWatcher::viewCreated(KTextEditor::Document* /*doc*/, KTextEditor::View* view)
 {
-    Q_ASSERT(view->parentWidget());
     addViewInternal(view);
 }
 
