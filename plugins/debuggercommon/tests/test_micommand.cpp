@@ -12,6 +12,8 @@
 #include <QTest>
 #include <QStandardPaths>
 
+#include <memory>
+
 class TestCommandHandler : public QObject, public KDevMI::MI::MICommandHandler
 {
     Q_OBJECT
@@ -49,10 +51,15 @@ class TestCommandResultHandler : public QObject
 {
     Q_OBJECT
 public:
+    explicit TestCommandResultHandler(int& recordsHandled)
+        : m_recordsHandled(recordsHandled)
+    {
+    }
+
     void handleResult(const KDevMI::MI::ResultRecord& record);
-    int recordsHandled() const { return m_recordsHandled; }
+
 private:
-    int m_recordsHandled = 0;
+    int& m_recordsHandled;
 };
 
 void TestCommandResultHandler::handleResult(const KDevMI::MI::ResultRecord& record)
@@ -114,25 +121,36 @@ void TestMICommand::testQObjectCommandHandler()
     KDevMI::MI::UserCommand command(KDevMI::MI::NonMI, "command");
     command.setToken(1);
 
-    // set handle and invoke
-    auto* resultHandler = new TestCommandResultHandler;
-    command.setHandler(resultHandler, &TestCommandResultHandler::handleResult);
+    // set the handler and invoke
+    auto recordsHandled = 0;
+    auto resultHandler = std::make_unique<TestCommandResultHandler>(recordsHandled);
+    command.setHandler(resultHandler.get(), &TestCommandResultHandler::handleResult);
 
     KDevMI::MI::ResultRecord resultRecord1("reason");
     bool success = command.invokeHandler(resultRecord1);
 
     // check
     QVERIFY(success);
-    QCOMPARE(resultHandler->recordsHandled(), 1);
+    QCOMPARE(recordsHandled, 1);
 
-    // delete handler and try to invoke again
-    delete resultHandler;
+    // set the same resultHandler again, delete it, and verify that invoking does not crash
+    command.setHandler(resultHandler.get(), &TestCommandResultHandler::handleResult);
+    resultHandler.reset();
 
-    KDevMI::MI::ResultRecord resultRecord2("reason");
+    const KDevMI::MI::ResultRecord resultRecord2("reason");
     success = command.invokeHandler(resultRecord2);
 
-    // check
+    // setHandler() created an internal handler wrapper that still exists, hence the invocation succeeds
+    QVERIFY(success);
+    // the TestCommandResultHandler instance was destroyed before the invocation, so recordsHandled is unchanged
+    QCOMPARE(recordsHandled, 1);
+
+    // invoke once more, this time without a handler (each invocation resets the command's handler to nullptr)
+    success = command.invokeHandler(resultRecord2);
+
+    // invoking a null handler fails
     QVERIFY(!success);
+    QCOMPARE(recordsHandled, 1);
 }
 
 
