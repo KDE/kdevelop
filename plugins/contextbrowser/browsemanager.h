@@ -19,51 +19,12 @@ class QWidget;
 
 namespace KTextEditor {
 class View;
-class Document;
 }
 
 namespace KDevelop {
 class IDocument;
 }
-
-class EditorViewWatcher
-    : public QObject
-{
-    Q_OBJECT
-
-public:
-    explicit EditorViewWatcher(QObject* parent = nullptr);
-    QList<KTextEditor::View*> allViews();
-
-private:
-    ///Called for every added view. Reimplement this to catch them.
-    virtual void viewAdded(KTextEditor::View*);
-
-private Q_SLOTS:
-    void viewDestroyed(QObject* view);
-    void viewCreated(KTextEditor::Document*, KTextEditor::View*);
-    void documentCreated(KDevelop::IDocument* document);
-
-private:
-    void addViewInternal(KTextEditor::View* view);
-    QList<KTextEditor::View*> m_views;
-};
-
 class ContextBrowserPlugin;
-class BrowseManager;
-
-class Watcher
-    : public EditorViewWatcher
-{
-    Q_OBJECT
-
-public:
-    explicit Watcher(BrowseManager* manager);
-    void viewAdded(KTextEditor::View*) override;
-
-private:
-    BrowseManager* m_manager;
-};
 
 /**
  * Integrates the context-browser with the editor views, by listening for navigation events, and implementing html-like source browsing
@@ -76,8 +37,6 @@ class BrowseManager
 
 public:
     explicit BrowseManager(ContextBrowserPlugin* controller);
-
-    void viewAdded(KTextEditor::View* view);
 
 Q_SIGNALS:
     ///Emitted when browsing was started using the magic-modifier
@@ -106,10 +65,13 @@ private:
     void setHandCursor(QWidget* widget);
     void avoidMenuAltFocus();
     bool eventFilter(QObject* watched, QEvent* event) override;
+
+    void documentAdded(KDevelop::IDocument* document);
+    void viewAdded(KTextEditor::View* view);
+
     ContextBrowserPlugin* m_plugin;
     bool m_browsing;
     int m_browsingByKey;     //Whether the browsing was started because of a key
-    Watcher m_watcher;
     /**
      * Contains widgets whose cursors @c *this temporarily replaced with Qt::PointingHandCursor.
      */
