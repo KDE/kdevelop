@@ -39,54 +39,19 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-EditorViewWatcher::EditorViewWatcher(QObject* parent)
-    : QObject(parent)
-{
-    connect(
-        ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this,
-        &EditorViewWatcher::documentCreated);
-    const auto documents = ICore::self()->documentController()->openDocuments();
-    for (KDevelop::IDocument* document : documents) {
-        documentCreated(document);
-    }
-}
-
-void EditorViewWatcher::documentCreated(KDevelop::IDocument* document)
+void BrowseManager::documentAdded(IDocument* document)
 {
     KTextEditor::Document* textDocument = document->textDocument();
     if (textDocument) {
-        connect(textDocument, &Document::viewCreated, this, &EditorViewWatcher::viewCreated);
+        connect(textDocument, &Document::viewCreated, this, [this](KTextEditor::Document*, KTextEditor::View* view) {
+            viewAdded(view);
+        });
+
         const auto views = textDocument->views();
         for (KTextEditor::View* view : views) {
-            addViewInternal(view);
+            viewAdded(view);
         }
     }
-}
-
-void EditorViewWatcher::addViewInternal(KTextEditor::View* view)
-{
-    m_views << view;
-    viewAdded(view);
-    connect(view, &View::destroyed, this, &EditorViewWatcher::viewDestroyed);
-}
-
-void EditorViewWatcher::viewAdded(KTextEditor::View*)
-{
-}
-
-void EditorViewWatcher::viewDestroyed(QObject* view)
-{
-    m_views.removeAll(static_cast<KTextEditor::View*>(view));
-}
-
-void EditorViewWatcher::viewCreated(KTextEditor::Document* /*doc*/, KTextEditor::View* view)
-{
-    addViewInternal(view);
-}
-
-QList<KTextEditor::View*> EditorViewWatcher::allViews()
-{
-    return m_views;
 }
 
 void BrowseManager::eventuallyStartDelayedBrowsing()
@@ -102,13 +67,19 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
     , m_plugin(controller)
     , m_browsing(false)
     , m_browsingByKey(0)
-    , m_watcher(this)
 {
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
     m_delayedBrowsingTimer->setInterval(300);
 
     connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
+
+    const auto* const documentController = ICore::self()->documentController();
+    connect(documentController, &IDocumentController::textDocumentCreated, this, &BrowseManager::documentAdded);
+    const auto documents = documentController->openDocuments();
+    for (auto* const document : documents) {
+        documentAdded(document);
+    }
 }
 
 BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const
@@ -360,11 +331,6 @@ void BrowseManager::viewAdded(KTextEditor::View* view)
     connect(view, SIGNAL(navigateBack()), m_plugin, SLOT(navigateBack()));
 }
 
-void Watcher::viewAdded(KTextEditor::View* view)
-{
-    m_manager->viewAdded(view);
-}
-
 void BrowseManager::setBrowsing(bool enabled)
 {
     if (enabled == m_browsing)
@@ -377,16 +343,6 @@ void BrowseManager::setBrowsing(bool enabled)
     } else {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "Disabled browsing-mode";
         resetChangedCursor();
-    }
-}
-
-Watcher::Watcher(BrowseManager* manager)
-    : EditorViewWatcher(manager)
-    , m_manager(manager)
-{
-    const auto views = allViews();
-    for (KTextEditor::View* view : views) {
-        viewAdded(view);
     }
 }
 
