@@ -1187,6 +1187,12 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     if (r.hasField(QStringLiteral("frame"))) {
         setCurrentPositionToFrameFieldOf(r);
         reloadProgramState();
+    } else {
+        qCDebug(DEBUGGERCOMMON) << "a non-exited *stopped MI output record does not have a field \"frame\"";
+        // Ask about selected frame after reloading the program state so that correct values
+        // of the --thread and --frame arguments are added to the command -stack-info-frame.
+        reloadProgramState();
+        askDebuggerAboutSelectedFrame();
     }
 
     setDebuggerStateOff(s_interruptSent);
