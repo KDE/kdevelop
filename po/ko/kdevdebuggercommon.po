@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2025-10-09 00:46+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -76,11 +76,60 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr "모든 프로세스"
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "코어 파일 선택"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, kde-format
+msgid "Executable file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Empty core file name"
+msgstr "코어 파일 시험"
+
+#: dialogs/selectcoredialog.cpp:74
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Invalid core file name"
+msgstr "코어 파일 시험"
+
+#: dialogs/selectcoredialog.cpp:80
+#, kde-format
+msgid "Core file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgctxt "@label:chooser"
+#| msgid "Core file:"
+msgid "Core is not a file"
+msgstr "코어 파일:"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -96,7 +145,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "코어 파일:"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, kde-format
 msgid ""
 "\n"
@@ -105,7 +154,7 @@ msgstr ""
 "\n"
 "이전 값: %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, kde-format
 msgid ""
 "\n"
@@ -114,7 +163,7 @@ msgstr ""
 "\n"
 "새 값: %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -126,7 +175,7 @@ msgstr ""
 "다. 버그를 보고해 주십시오. 더 이상의 충돌을 막으려고 디버그 세션을 종료합니"
 "다."
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -135,18 +184,18 @@ msgstr ""
 "예외: %1\n"
 "MI 응답: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "디버거 내부 오류"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "프로세스 종료됨"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -155,12 +204,12 @@ msgstr ""
 "<b>디버거를 시작할 수 없습니다.</b><p>'%1'을(를) 실행할 수 없습니다. 경로가 "
 "올바른지 확인하십시오."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "프로세스를 시작할 수 없음"
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -171,18 +220,18 @@ msgstr ""
 "따라서 디버그 세션이 종료되었습니다.<br>KDevelop 밖에서도 충돌하는지 확인한 "
 "다음 버그를 보고해 주십시오.<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "디버거 충돌함"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "프로세스 충돌함"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -191,13 +240,13 @@ msgstr ""
 "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
 "진행하시겠습니까?"
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "%1(으)로 코어 파일 시험"
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -210,40 +259,40 @@ msgstr ""
 "코어 파일을 분석합니다. 코어 파일은 앱이 충돌했을 당시의 앱 메모리 이미지가 "
 "들어 있으며 사후 분석을 할 수 있습니다.</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "%1(으)로 프로세스에 부착"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>프로세스에 연결</b><p>디버거를 실행 중인 프로세스에 부착합니다.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "시험할 코어 파일 선택..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "부착할 프로세스 선택..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "프로세스 %1에 부착하지 않음: 디버거 자기 자신에게 부착할 수 없습니다."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "디버거"
@@ -278,92 +327,103 @@ msgstr ""
 "프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
 "실행을 진행하시겠습니까?"
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "프로그램 실행 중"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "%1 프로세스에 부착하는 중"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>디버거를 부착할 수 없음:</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, fuzzy, kde-format
+#| msgid "<b>Could not attach debugger:</b><br />"
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>디버거를 부착할 수 없음:</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "코어 파일 %1 시험 중"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "디버거 중지됨"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "앱이 실행 중"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "앱이 일시 정지됨"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>디버거가 실행 중이 아닐 때 GDB 명령을 보냄</b><br>명령:<br>%1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>잘못된 디버거 명령</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, kde-format
+msgid "<b>Failed to load core file:</b><br />"
+msgstr ""
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "종료됨, 반환 코드: %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "정상적으로 종료됨"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "시그널 %1와(과) 함께 종료됨"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "프로그램에서 시그널 %1(%2)을(를) 받음"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "대기열에 명령 %1개 있음\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "GDB에서 명령 %1개 이미 저리 중\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "디버거 상태: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -374,10 +434,11 @@ msgstr ""
 "현재 명령 텍스트: '%2'\n"
 "현재 명령 원래 텍스트: '%3'\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr "<b>디버거 오류</b><p>디버거에서 다음 오류를 보고했습니다:<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "Debugger Toolbar"
+msgid "<b>Debugger error:</b><br />"
+msgstr "디버거 도구 막대"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -414,61 +475,61 @@ msgstr "원본"
 msgid "Unsigned"
 msgstr "부호 없음"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "일반"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "플래그"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "VFP 싱글워드"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "VFP 더블워드(DWORD)"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "VFP 쿼드워드(QWORD)"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "세그먼트"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "형식"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "모드"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -588,61 +649,61 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr "<Return> 키를 눌렀을 때 마지막 명령 반복"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "주소 선택기"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "주소 변경(&A)"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "커서 위치로 이동(&J)"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "실행 포인터를 현재 커서 위치로 이동합니다."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "커서 위치까지 실행(&R)"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "AT&&T(&A)"
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr "GDB에서 AT&T 디스어셈블리 형식을 사용합니다(예: mov 0xc(%ebp),%eax)."
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "인텔(&I)"
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -652,13 +713,13 @@ msgstr ""
 "GDB에서 인텔 디스어셈블리 형식을 사용합니다(예: mov eax, DWORD PTR [ebp"
 "+0xc])."
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "디스어셈블리 형식"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -671,25 +732,25 @@ msgstr ""
 "합니다. 디버거 도구 모음의 \"넘어가기\" 및 \"한 단계 명령어 이동\" 명령 단추"
 "를 사용하여 단계별로 명령을 실행할 수 있습니다."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr "주소"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "함수"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "명령어"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
@@ -708,6 +769,10 @@ msgstr "디스어셈블할 주소 선택"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "디스어셈블할 주소 선택:"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr "<b>디버거 오류</b><p>디버거에서 다음 오류를 보고했습니다:<p><tt>%1"
 
 #~ msgctxt "@action:button"
 #~ msgid "Abort Current Session"
@@ -755,17 +820,9 @@ msgstr "디스어셈블할 주소 선택:"
 #~ msgstr "디버거 중지"
 
 #, fuzzy
-#~| msgid "Debugger Toolbar"
-#~ msgid "Debugger error"
-#~ msgstr "디버거 도구 막대"
-
-#, fuzzy
 #~| msgid "Address"
 #~ msgid "Address selector"
 #~ msgstr "주소"
-
-#~ msgid "Examine core file"
-#~ msgstr "코어 파일 시험"
 
 #, fuzzy
 #~| msgid "Attach to Process"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2025-09-07 10:18+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -329,13 +329,13 @@ msgstr ""
 msgid "Threads:"
 msgstr "Niti:"
 
-#: debugger/framestack/framestackwidget.cpp:225
+#: debugger/framestack/framestackwidget.cpp:233
 #, kde-format
 msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
 msgstr "#%1 %2() v/na %3\n"
 
-#: debugger/framestack/framestackwidget.cpp:228
+#: debugger/framestack/framestackwidget.cpp:236
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
@@ -1842,111 +1842,111 @@ msgstr ""
 "si oglejte <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">ta članek</a>."
 
-#: shell/debugcontroller.cpp:113
+#: shell/debugcontroller.cpp:74
 #, kde-format
 msgid "Debugger"
 msgstr "Razhroščevalnik"
 
-#: shell/debugcontroller.cpp:143
+#: shell/debugcontroller.cpp:104
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Sklad okvirov"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:109
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Prekinitvene točke"
 
-#: shell/debugcontroller.cpp:153
+#: shell/debugcontroller.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Spremenljivke"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:182
 #, kde-format
 msgid "&Restart"
 msgstr "&Znova zaženi"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:183
 #, kde-format
 msgid "Restart program"
 msgstr "Znova zažene program"
 
-#: shell/debugcontroller.cpp:221
+#: shell/debugcontroller.cpp:184
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Znova zažene program od začetka."
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:190
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Prekini"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Prekini program"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:192
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Prekini razhroščevano opravilo ali trenutni ukaz razhroščevalnika."
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:196
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Zaženi do kazalke"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:197
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Zaženi do kazalke"
 
-#: shell/debugcontroller.cpp:235
+#: shell/debugcontroller.cpp:198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Nadaljuj izvajanje dokler ne doseže položaja kazalke."
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:203
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Nastavi položaj izvajanja na kazalko"
 
-#: shell/debugcontroller.cpp:241
+#: shell/debugcontroller.cpp:204
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Pojdi do kazalke"
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:205
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Nadaljuj izvajanje od trenutnega položaja kazalke."
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:209
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Prest&opi"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:211
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Prestopi čez naslednjo vrstico"
 
-#: shell/debugcontroller.cpp:249
+#: shell/debugcontroller.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1958,37 +1958,37 @@ msgstr ""
 "funkcije, se izvede celotna funkcija, program pa se zaustavi v vrstici, ki "
 "sledi klicu funkcije."
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Prestopi čez ukaz"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Prestopi čez ukaz"
 
-#: shell/debugcontroller.cpp:259
+#: shell/debugcontroller.cpp:222
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Prestopi čez naslednji ukaz v zbirniku."
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Vstop&i v"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Vstopi v naslednjo izjavo"
 
-#: shell/debugcontroller.cpp:267
+#: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1998,37 +1998,37 @@ msgstr ""
 "Izvede točno eno vrstico izvorne kode. Če je vrstica klic funkcije, se bo "
 "izvajanje ustavilo po vstopu v funkcijo."
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:237
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Vstopi v navodilo"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Vstopi v navodilo"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Vstopi v naslednje navodilo v zbirniku."
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:243
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Izstopi"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Izstopi iz trenutne funkcije"
 
-#: shell/debugcontroller.cpp:283
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2042,66 +2042,66 @@ msgstr ""
 "izvajanje programa v povsem zunanjem okviru (npr. v main()), to dejanje nima "
 "učinka."
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Preklopi prekinitveno točko"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:255
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:256
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Preklopi prekinitveno točko"
 
-#: shell/debugcontroller.cpp:294
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Preklopi prekinitveno točko v trenutni vrstici urejevalnika."
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:261
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Prikaži trenutno vrstico"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Prikaži trenutno pozicijo izvajanja"
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Pojdi na izvajano vrstico v urejevalniku."
 
-#: shell/debugcontroller.cpp:313
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "O trenutni seji"
 
-#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Zagon razhroščevanja"
 
-#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Razhrošči trenutni zagon"
 
-#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2111,19 +2111,19 @@ msgstr ""
 "Izvede cilj ali program, ki je določen v trenutno dejavni nastavitvi zagona, "
 "znotraj razhroščevalnika."
 
-#: shell/debugcontroller.cpp:506
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "Nadaljuj"
 
-#: shell/debugcontroller.cpp:508
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Nadaljuje izvajanje programa"
 
-#: shell/debugcontroller.cpp:509
+#: shell/debugcontroller.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

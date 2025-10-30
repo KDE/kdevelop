@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -22,40 +22,22 @@ msgstr ""
 msgid "(running)"
 msgstr "(正在运行)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:95
-#, kde-format
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "LLDB 控制台"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "试图在不受支持的 LLDB 版本上执行用户命令"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>无法启动调试器。</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>链接远程目标时出错：</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr "<b>调试器错误</b><p>调试器报告了以下错误：<p><tt>%1"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -67,12 +49,12 @@ msgstr ""
 "llvm.org/bugs/show_bug.cgi?id=28026 了解更多信息。<br/>调试器控制台将被禁用以"
 "避免崩溃。<br/>您想要继续吗？"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB 版本不受支持"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -88,6 +70,12 @@ msgstr "调试器工具栏"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "在 LLDB 中调试本地应用程序"
+
+#: toolviewfactoryholder.cpp:41
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB 控制台"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -227,3 +215,11 @@ msgstr "远程工作路径："
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/path/to/a/on-device/writable/directory"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>无法启动调试器。</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr "<b>调试器错误</b><p>调试器报告了以下错误：<p><tt>%1"

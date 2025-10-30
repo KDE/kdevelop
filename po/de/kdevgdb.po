@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2022-07-23 22:31+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -16,28 +16,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.07.70\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr "Disassemblieren/Register"
-
-#: debuggerplugin.cpp:117
-#, kde-format
-msgctxt "@title:window"
-msgid "GDB"
-msgstr "GDB"
-
-#: debuggerplugin.cpp:126
-#, kde-format
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "Speicher"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -102,7 +84,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Eigener Formatierungs-String"
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -112,29 +94,15 @@ msgstr ""
 "die Startkonfiguration „%1“, weil sie anscheinend defekt ist. Das "
 "Standardprofil von Umgebungsvariablen wird verwendet."
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Sie benötigen GDB 7.0.0 oder neuer.</b><br />Sie verwenden: %1"
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Debugger kann nicht gestartet werden:</b><br />"
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Fehler beim Laden der Core-Datei</b><p>Der Debugger hat folgenden Fehler "
-"gemeldet:<p><tt>%1"
 
 #: gdb.cpp:68
 #, kde-format
@@ -460,144 +428,172 @@ msgstr "Alle kopieren"
 msgid "Debugger Toolbar"
 msgstr "Debugger-Werkzeugleiste"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Start:"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Anzahl:"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Speicher-Ansicht"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (1 Byte)"
 msgstr[1] "%2 (%1 Bytes)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "&Neu laden"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "&Format"
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&Programmdatei"
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&Oktal"
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&Dezimal"
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "&Hexadezimal"
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "&Gruppierung"
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "Änderungen schreiben"
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Speicherbereich ändern"
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Ansicht schließen"
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Speicher-Ansicht"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Neue Speicher-Ansicht"
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Eine neue Speicher-Ansicht öffnen"
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Disassemblieren/Register"
+
+#: toolviewfactoryholder.cpp:38
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: toolviewfactoryholder.cpp:43
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Speicher"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Debugger kann nicht gestartet werden:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Fehler beim Laden der Core-Datei</b><p>Der Debugger hat folgenden "
+#~ "Fehler gemeldet:<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

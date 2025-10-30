@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2025-10-05 15:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -18,28 +18,10 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "منقّح غنو GDB"
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr "فك التجميع/السجلات"
-
-#: debuggerplugin.cpp:117
-#, kde-format
-msgctxt "@title:window"
-msgid "GDB"
-msgstr "GDB"
-
-#: debuggerplugin.cpp:126
-#, kde-format
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "الذاكرة"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -103,7 +85,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "سلسلة تنسيق مخصصة"
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -112,27 +94,15 @@ msgstr ""
 "لَم تُحدّد تشكيلة بيئة، يبدو أنّ التشكيل معطّل، الرجاء التحقق من تشكيلة التشغيل "
 "'%1'. استخدام تشكيلة البيئة المبدئية."
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr "<إصدار مجهول>"
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>تحتاج GDB 7.0.0 أو أعلى.</b><br />أنت تستخدم: %1"
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>لا يُمكِن بدء المنقّح:</b><br />"
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr "<b>فشل تحميل ملف اللُب</b><p>أبلغ المنقّح عن الخطأ التالي:<p><tt>%1"
 
 #: gdb.cpp:68
 #, kde-format
@@ -449,25 +419,25 @@ msgstr "انسخ الكل"
 msgid "Debugger Toolbar"
 msgstr "شريط أدوات المنقّح"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "البداية:"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "الكمية:"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "عرض الذاكرة"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
@@ -478,116 +448,142 @@ msgstr[3] "%2 (%1 بايتات)"
 msgstr[4] "%2 (%1 بايتًا)"
 msgstr[5] "%2 (%1 بايت)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "أ&عِد التحميل"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "ال&تنسيق"
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&ثنائي"
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&ثماني"
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&عشري"
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "&سداسي عشري"
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "ال&تجميع"
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "اكتُب التغييرات"
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "غيِّر نطاق الذاكرة"
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "أغلِق العرض"
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "عارض الذاكرة"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "عارض ذاكرة جديد"
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "افتح عارض ذاكرة جديدًا"
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "فك التجميع/السجلات"
+
+#: toolviewfactoryholder.cpp:38
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: toolviewfactoryholder.cpp:43
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "الذاكرة"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>لا يُمكِن بدء المنقّح:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr "<b>فشل تحميل ملف اللُب</b><p>أبلغ المنقّح عن الخطأ التالي:<p><tt>%1"

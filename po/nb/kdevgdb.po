@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2013-09-16 12:41+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19,28 +19,10 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr ""
-
-#: debuggerplugin.cpp:117
-#, kde-format
-msgctxt "@title:window"
-msgid "GDB"
-msgstr ""
-
-#: debuggerplugin.cpp:126
-#, kde-format
-msgctxt "@title:window"
-msgid "Memory"
-msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -94,34 +76,22 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr ""
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Du trenger gdb 7.0.0 eller høyere.</b><br />Du bruker: %1"
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Klarte ikke starte feilsøkeren:</b><br />"
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
 
 #: gdb.cpp:68
 #, kde-format
@@ -400,141 +370,162 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Verktøylinje for feilsøking"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr ""
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr ""
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr ""
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (1 byte)"
 msgstr[1] "%2 (%1 byte)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr ""
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr ""
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr ""
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr ""
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr ""
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr ""
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr ""
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr ""
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr ""
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr ""
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr ""
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr ""
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr ""
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr ""
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr ""
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr ""
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr ""
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr ""
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr ""
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr ""
+
+#: toolviewfactoryholder.cpp:38
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr ""
+
+#: toolviewfactoryholder.cpp:43
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr ""
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Klarte ikke starte feilsøkeren:</b><br />"

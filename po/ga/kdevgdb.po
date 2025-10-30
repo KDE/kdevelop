@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevcppdebugger.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,31 +17,10 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
-
-#: debuggerplugin.cpp:113
-#, fuzzy, kde-format
-#| msgid "Disassemble View"
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr "Amharc Dídhíolama"
-
-#: debuggerplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "GDB"
-msgctxt "@title:window"
-msgid "GDB"
-msgstr "GDB"
-
-#: debuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Memory view"
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "Amharc cuimhne"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -99,33 +78,21 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Teaghrán saincheaptha formáidithe"
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr ""
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Níorbh fhéidir an dífhabhtóir a thosú:</b><br />"
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
 msgstr ""
 
 #: gdb.cpp:68
@@ -427,28 +394,28 @@ msgstr "Cóipeáil Uile"
 msgid "Debugger Toolbar"
 msgstr "Barra Uirlisí an Dífhabhtóra"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, fuzzy, kde-format
 #| msgid "Start"
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Tosaigh"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, fuzzy, kde-format
 #| msgid "Amount"
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Méid"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Amharc cuimhne"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
@@ -458,129 +425,153 @@ msgstr[2] "%2 (%1 bheart)"
 msgstr[3] "%2 (%1 mbeart)"
 msgstr[4] "%2 (%1 beart)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "Athluchtaigh"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, fuzzy, kde-format
 #| msgid "Format"
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "Formáid"
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, fuzzy, kde-format
 #| msgid "Binary"
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "Dénártha"
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr ""
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, fuzzy, kde-format
 #| msgid "Decimal"
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "Deachúil"
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, fuzzy, kde-format
 #| msgid "Hexadecimal"
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "Heicsidheachúlach"
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr ""
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr ""
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr ""
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr ""
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr ""
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr ""
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr ""
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr ""
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, fuzzy, kde-format
 #| msgid "Change memory range"
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Athraigh raon cuimhne"
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, fuzzy, kde-format
 #| msgid "Close this view"
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Dún an t-amharc seo"
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Amharc cuimhne"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Amharc cuimhne"
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Amharc cuimhne"
+
+#: toolviewfactoryholder.cpp:34
+#, fuzzy, kde-format
+#| msgid "Disassemble View"
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Amharc Dídhíolama"
+
+#: toolviewfactoryholder.cpp:38
+#, fuzzy, kde-format
+#| msgid "GDB"
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: toolviewfactoryholder.cpp:43
+#, fuzzy, kde-format
+#| msgid "Memory view"
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Amharc cuimhne"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Níorbh fhéidir an dífhabhtóir a thosú:</b><br />"
 
 #~ msgid "gdb error"
 #~ msgstr "Earráid gdb"

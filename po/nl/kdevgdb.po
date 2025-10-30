@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2023-07-26 18:08+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -18,28 +18,10 @@ msgstr ""
 "X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr "Disassembleren/registers"
-
-#: debuggerplugin.cpp:117
-#, kde-format
-msgctxt "@title:window"
-msgid "GDB"
-msgstr "GDB"
-
-#: debuggerplugin.cpp:126
-#, kde-format
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "Geheugen"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -105,7 +87,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Eigen formaat"
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -115,29 +97,15 @@ msgstr ""
 "controleer de uitvoeringsconfiguratie '%1'. Met gebruik van het standaard "
 "omgevingsprofiel."
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr "<onbekende versie>"
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>U hebt gdb 7.0.0 of hoger nodig.</b><br />U gebruikt: %1"
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Kon debugger niet starten:</b><br />"
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Kernbestand laden is mislukt</b><p>De debugger melde de volgende fout:"
-"<p><tt>%1"
 
 #: gdb.cpp:68
 #, kde-format
@@ -464,144 +432,172 @@ msgstr "Alles kopiëren"
 msgid "Debugger Toolbar"
 msgstr "Debuggerwerkbalk"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Begin:"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Aantal:"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Geheugenweergave"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (1 byte)"
 msgstr[1] "%2 (%1 bytes)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "He&rladen"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "&Formatteren"
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&Binair"
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&Octaal"
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&Decimaal"
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "&Hexadecimaal"
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "&Groeperen"
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "Wijzigingen wegschrijven"
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Geheugenbereik wijzigen"
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Weergave sluiten"
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Geheugenweergave"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Nieuwe geheugenweergave"
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Open een nieuwe geheugenweergave."
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Disassembleren/registers"
+
+#: toolviewfactoryholder.cpp:38
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: toolviewfactoryholder.cpp:43
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Geheugen"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Kon debugger niet starten:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Kernbestand laden is mislukt</b><p>De debugger melde de volgende fout:"
+#~ "<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

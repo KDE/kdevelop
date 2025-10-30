@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -89,12 +89,62 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr "Perzess griepen"
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, fuzzy, kde-format
 #| msgid "Select Core File"
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Karndatei utsöken"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgid "Executable file does not exist"
+msgstr "Dat gifft dat Programm nich"
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Empty core file name"
+msgstr "Karndatei bekieken"
+
+#: dialogs/selectcoredialog.cpp:74
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Invalid core file name"
+msgstr "Karndatei bekieken"
+
+#: dialogs/selectcoredialog.cpp:80
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgid "Core file does not exist"
+msgstr "Dat gifft dat Programm nich"
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgid "Core File:"
+msgid "Core is not a file"
+msgstr "Karndatei:"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -112,7 +162,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Karndatei:"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, fuzzy, kde-format
 #| msgid "<br>Old value: %1"
 msgid ""
@@ -120,7 +170,7 @@ msgid ""
 "Old value: %1"
 msgstr "<br>Oolt Weert: %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, fuzzy, kde-format
 #| msgid "<br>New value: %1"
 msgid ""
@@ -128,7 +178,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Nieg Weert: %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -143,7 +193,7 @@ msgstr ""
 "<p>Binnen de Fehlersöker-Komponent hett dat en Fehler geven, bides se en "
 "Antwoort vun \"gdb\" afarbeidt hett. Bericht dissen Fehler bitte."
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -152,19 +202,19 @@ msgstr ""
 "De Utnahm is: %1\n"
 "De MI-Antwoort is: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern Fehlersöök-Fehler"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "Perzess verlaten"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -173,12 +223,12 @@ msgstr ""
 "<b>De Fehlersöker lett sik nich starten.</b><p>\"%1\" lett sik nich starten. "
 "Kiek, wat de Paddnaam richtig angeven is."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -186,34 +236,34 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Fehlersöker anhollen"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
 msgstr "Perzess verlaten"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Karndatei bekieken..."
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -232,14 +282,14 @@ msgstr ""
 "Spiekertogriep-Fehler. De Karndatei bargt en Afbild vun den Programmspieker, "
 "as he bi den Afstört weer, so dat Du em later noch bekieken kannst.</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Perzess griepen"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -249,30 +299,30 @@ msgid ""
 msgstr ""
 "<b>Perzess griepen</b><p>Lett den Fehlersöker en lopen Perzess griepen.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Karndatei för't Bekieken utsöken..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Perzess för't Griepen utsöken..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Perzess %1 lett sik nich griepen: de Fehlersöker kann sik nich sülven "
 "griepen."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "Fehlersöker"
@@ -305,42 +355,47 @@ msgid ""
 "running debug session and continue with the launch?"
 msgstr ""
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "Programm warrt utföhrt"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Perzess \"%1\" warrt grepen"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Fehlersöker lett sik nich griepen:</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Fehlersöker lett sik nich opropen:</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Karndatei \"%1\" warrt bekeken"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Fehlersöker anhollen"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "Programm löppt"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "Programm wöör ophollen"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -349,39 +404,45 @@ msgstr ""
 "<b>\"gdb\"-Befehl geven, man de Fehlersöker löppt nich.</b><br>De Befehl "
 "weer:<br> %1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Leeg Fehlersöök-Befehl</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
+msgid "<b>Failed to load core file:</b><br />"
+msgstr "<b>Fehlersöker lett sik nich opropen:</b><br />"
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Mit Utstiegkode %1 afslaten"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "Normaal beendt"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Na Signaal %1 verlaten"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programm hett Signaal %1 (%2) kregen"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 Befehl in de Reeg\n"
 msgstr[1] "%1 Befehlen in de Reeg\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -389,12 +450,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 Befehl warrt vun \"gdb\" afarbeidt\n"
 msgstr[1] "%1 Befehlen warrt vun \"gdb\" afarbeidt\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Fehlersöker-Status: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -405,11 +466,11 @@ msgstr ""
 "Aktuell Befehltext: \"%2\"\n"
 "Aktuell Befehl-Orginaaltext: \"%3\"\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr ""
-"<b>Fehlersöök-Fehler</b><p>De Fehlersöker hett dissen Fehler meldt:<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "Debugger error"
+msgid "<b>Debugger error:</b><br />"
+msgstr "Fehlersöök-Fehler"
 
 #: miframestackmodel.cpp:71
 #, fuzzy, kde-format
@@ -447,62 +508,62 @@ msgstr ""
 msgid "Unsigned"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr ""
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr ""
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr ""
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr ""
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, fuzzy, kde-format
 #| msgid "Format"
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Formaat"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr ""
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -639,28 +700,28 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, fuzzy, kde-format
 #| msgid "Address Selector"
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Adressköör"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, fuzzy, kde-format
 #| msgid "Change &address"
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "&Adress ännern"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "Na Blinker jumpen"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Set Execution Position </b><p>Set the execution pointer to the current "
@@ -671,14 +732,14 @@ msgstr ""
 "<b>Utföhrpositschoon setten</b><p>Sett den Utföhr-Wieser op de aktuelle "
 "Blinkerpositschoon."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "Bet &Blinker utföhren"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Run to cursor</b><p>Continues execution until the cursor position is "
@@ -689,25 +750,25 @@ msgstr ""
 "<b>Bet Blinker utföhren</b><p>Maakt mit dat Utföhren bet na de "
 "Blinkerpositschoon wieder."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -715,14 +776,14 @@ msgid ""
 "+0xc])."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, fuzzy, kde-format
 #| msgid "Disassemble"
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Disassembleren"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Machine code display</b><p>A machine code view into your running "
@@ -741,28 +802,28 @@ msgstr ""
 "Knööp \"Anwiesen utföhren\" un \"Na Anwiesen ringahn\" op den Fehlersöök-"
 "Warktüüchbalken afarbeiden."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, fuzzy, kde-format
 #| msgid "Address"
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Adress"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, fuzzy, kde-format
 #| msgid "Function"
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Funkschoon"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, fuzzy, kde-format
 #| msgid "Instruction"
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Anwiesen"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, fuzzy, kde-format
 #| msgid "Disassemble View"
 msgctxt "@title:window"
@@ -784,6 +845,12 @@ msgstr "Söök de Adress ut, woneem Du ümto disassembleren wullt."
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Fehlersöök-Fehler</b><p>De Fehlersöker hett dissen Fehler meldt:<p><tt>"
+#~ "%1"
 
 #, fuzzy
 #~| msgid "Evaluate: %1"
@@ -841,14 +908,8 @@ msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
 #~ msgid "Debugger status"
 #~ msgstr "Fehlersöker-Status"
 
-#~ msgid "Debugger error"
-#~ msgstr "Fehlersöök-Fehler"
-
 #~ msgid "Address selector"
 #~ msgstr "Adressköör"
-
-#~ msgid "Examine core file"
-#~ msgstr "Karndatei bekieken"
 
 #, fuzzy
 #~| msgid "Attach to process..."
@@ -942,9 +1003,6 @@ msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
 
 #~ msgid "gdb error"
 #~ msgstr "\"gdb\"-Fehler"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>Fehlersöker lett sik nich opropen:</b><br />"
 
 #~ msgid "Could not locate the debugging shell '%1'."
 #~ msgstr "Fehlersöök-Konsool \"%1\" lett sik nich finnen."
@@ -1390,9 +1448,6 @@ msgstr "Söök Adressen ut, woneem Du ümto disassembleren wullt."
 #~ "Fehlers söken wullt,<br>    %1\n"
 #~ "<br>gifft dat nich. Kiek bitte, wat Du dat richtige Programm binnen de "
 #~ "Fehlersöök-Instellen angeven hest."
-
-#~ msgid "Application does not exist"
-#~ msgstr "Dat gifft dat Programm nich"
 
 #~ msgid ""
 #~ "<b>Could not run application '%1'.</b><p>The application does not have "

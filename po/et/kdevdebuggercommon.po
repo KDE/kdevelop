@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2020-01-15 14:24+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -86,12 +86,62 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr ""
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, fuzzy, kde-format
 #| msgid "Select Core File"
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Mälupildifaili valimine"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgid "Executable file does not exist"
+msgstr "Rakendust ei ole olemas"
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Empty core file name"
+msgstr "Uuri mälupildifaili"
+
+#: dialogs/selectcoredialog.cpp:74
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Invalid core file name"
+msgstr "Uuri mälupildifaili"
+
+#: dialogs/selectcoredialog.cpp:80
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgid "Core file does not exist"
+msgstr "Rakendust ei ole olemas"
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgid "Core file:"
+msgid "Core is not a file"
+msgstr "Mälupildifail:"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -109,7 +159,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Mälupildifail:"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, fuzzy, kde-format
 #| msgid "<br>Old value: %1"
 msgid ""
@@ -117,7 +167,7 @@ msgid ""
 "Old value: %1"
 msgstr "<br>Vana väärtus: %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, fuzzy, kde-format
 #| msgid "<br>New value: %1"
 msgid ""
@@ -125,7 +175,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Uus väärtus: %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -137,7 +187,7 @@ msgstr ""
 "anna veast teada. Võimaliku krahhi vältimiseks siluri seanss praegu "
 "lõpetatakse."
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -146,19 +196,19 @@ msgstr ""
 "Erind on: %1\n"
 "MI vastus on: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Sisemine siluri viga"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "Protsess lõpetas"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -167,12 +217,12 @@ msgstr ""
 "<b>Siluri käivitamine nurjus.</b><p>\"%1\" käivitamine nurjus. Kontrolli, "
 "kas asukoht on korrektselt määratud."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Protsessi käivitamine nurjus"
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -183,19 +233,19 @@ msgstr ""
 "<br>Seepärast tuli lõpetada silumisseanss.<br>Proovi krahhi korrata ainult "
 "ilma KDevelopita ja anna veast teada.<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, fuzzy, kde-format
 #| msgid "Debugger crashed"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Silurit tabas krahh"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Protsessi tabas krahh"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -204,14 +254,14 @@ msgstr ""
 "Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
 "jätkata?"
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, fuzzy, kde-format
 #| msgid "Examine Core File with %1"
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Uuri mälupildifaili rakendusega %1"
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -229,14 +279,14 @@ msgstr ""
 "luuakse pärast rakenduse krahhi. See fail sisaldab rakenduse mälu tõmmist "
 "krahhi hetkel, võimaldades nii omamoodi \"lahkamist\".</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, fuzzy, kde-format
 #| msgid "Attach to Process with %1"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Seonda protsessiga rakenduse %1 abil"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -246,27 +296,27 @@ msgid ""
 msgstr ""
 "<b>Protsessiga seondamine</b><p>Seondab siluri töötava protsessiga.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Vali uuritav mälupildifail..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Vali protsess, millega seondada..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Protsessiga %1 ei seondata: silurit ei saa seondada iseendaga."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "Silur"
@@ -304,81 +354,92 @@ msgstr ""
 "Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
 "jätkata?"
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "Programm töötab"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Seondamine protsessiga %1"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Siluri kaasamine nurjus.</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Siluri käivitamine nurjus.</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Mälupildifaili %1 uurimine"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Silur peatatud"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "Rakendus töötab"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "Rakenduse töös on paus"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>Saadeti GDB käsk, kui silur ei töötanud</b><br>Käsk oli:<br> %1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Vigane siluri käsk</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
+msgid "<b>Failed to load core file:</b><br />"
+msgstr "<b>Siluri käivitamine nurjus.</b><br />"
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Väljuti koodiga %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "Lõpetati normaalselt"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Lõpetati signaaliga %1"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programm sai signaali %1 (%2)"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 käsk järjekorras\n"
 msgstr[1] "%1 käsku järjekorras\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -386,12 +447,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "GDB töötleb 1 käsku\n"
 msgstr[1] "GDB töötleb %1 käsku\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Siluri olek: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -402,10 +463,11 @@ msgstr ""
 "Aktiivse käsu tekst: '%2'\n"
 "Aktiivse käsu originaaltekst: '%3'\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr "<b>Siluri viga</b><p>Silur andis teada järgmisest veast:<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "Debugger error"
+msgid "<b>Debugger error:</b><br />"
+msgstr "Siluri viga"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -442,63 +504,63 @@ msgstr "Toores"
 msgid "Unsigned"
 msgstr "Märgita"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "Üldine"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "Lipud"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "VFP üksiksõna"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "VFP kaksiksõna"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "VFP neliksõna"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "Segment"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, fuzzy, kde-format
 #| msgid "Format"
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Vorming"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, fuzzy, kde-format
 #| msgid "Mode"
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "Režiim"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:inmenu"
@@ -641,70 +703,70 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr "Viimase käsu kordamine <Return> vajutamisel"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, fuzzy, kde-format
 #| msgid "Address Selector"
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Aadressivalija"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, fuzzy, kde-format
 #| msgid "Change &address"
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "Muuda &aadressi"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, fuzzy, kde-format
 #| msgid "&Jump to Cursor"
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&Hüppa kursorile"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, fuzzy, kde-format
 #| msgid "Sets the execution pointer to the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "Täitmise viida määramine kursori aktiivsesse asukohta."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, fuzzy, kde-format
 #| msgid "&Run to Cursor"
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "&Täida kursorini"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Täitmise jätkamine kuni kursori asukohani."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, fuzzy, kde-format
 #| msgid "&AT&&T"
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "&AT&&T"
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, fuzzy, kde-format
 #| msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr "GDB kasutab AT&T pöördtransleerimist (nt mov 0xc(%ebp),%eax)."
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "&Intel"
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "&Intel"
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, fuzzy, kde-format
 #| msgid ""
 #| "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
@@ -716,14 +778,14 @@ msgid ""
 msgstr ""
 "GDB kasutab Inteli pöördtransleerimist (nt mov eax, DWORD PTR [ebp+0xc])."
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, fuzzy, kde-format
 #| msgid "Disassembly flavor"
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Pöördtransleerimine"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Machine code display</b><p>A machine code view into your running "
@@ -741,28 +803,28 @@ msgstr ""
 "instruktsioon on esile tõstetud. Instruktsioonidesse saab sisse või neist "
 "üle astuda siluri tööriistariba nuppudega \"astu üle\" ja \"astu sisse\"."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, fuzzy, kde-format
 #| msgid "Address"
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Aadress"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, fuzzy, kde-format
 #| msgid "Function"
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Funktsioon"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, fuzzy, kde-format
 #| msgid "Instruction"
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Instruktsioon"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, fuzzy, kde-format
 #| msgid "Disassemble/Registers View"
 msgctxt "@title:window"
@@ -784,6 +846,10 @@ msgstr "Aadressi valimine pöördtransleerimiseks"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Aadressi valimine pöördtransleerimiseks"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr "<b>Siluri viga</b><p>Silur andis teada järgmisest veast:<p><tt>%1"
 
 #, fuzzy
 #~| msgid "Evaluate: %1"
@@ -842,14 +908,8 @@ msgstr "Aadressi valimine pöördtransleerimiseks"
 #~ msgid "Debugger status"
 #~ msgstr "Siluri olek"
 
-#~ msgid "Debugger error"
-#~ msgstr "Siluri viga"
-
 #~ msgid "Address selector"
 #~ msgstr "Aadressivalija"
-
-#~ msgid "Examine core file"
-#~ msgstr "Uuri mälupildifaili"
 
 #, fuzzy
 #~| msgid "Attach to process..."
@@ -936,9 +996,6 @@ msgstr "Aadressi valimine pöördtransleerimiseks"
 
 #~ msgid "gdb error"
 #~ msgstr "GDB viga"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>Siluri käivitamine nurjus.</b><br />"
 
 #~ msgid "Could not locate the debugging shell '%1'."
 #~ msgstr "Silumisshelli \"%1\" tuvastamine nurjus."
@@ -1382,9 +1439,6 @@ msgstr "Aadressi valimine pöördtransleerimiseks"
 #~ "<b>Rakendust ei ole olemas</b><p>Rakendust %1, <br>    mida proovid "
 #~ "siluda, ei ole olemas.\n"
 #~ "<br>Kontrolli, kas oled määranud siluri seadistuses õige rakenduse."
-
-#~ msgid "Application does not exist"
-#~ msgstr "Rakendust ei ole olemas"
 
 #~ msgid ""
 #~ "<b>Could not run application '%1'.</b><p>The application does not have "

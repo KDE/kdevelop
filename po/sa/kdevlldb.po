@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -24,42 +24,22 @@ msgstr ""
 msgid "(running)"
 msgstr "(चलति)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "एलएलडीबी"
 
-#: debuggerplugin.cpp:95
-#, kde-format
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "LLDB Console इति"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "असमर्थित LLDB संस्करणे उपयोक्तृ-आदेशं निष्पादयितुं प्रयत्नः"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>त्रुटिनिवारणं आरभुं न शक्तम्:</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>दूरस्थलक्ष्यं प्रति सम्बद्धतायां त्रुटिः : १.</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>कोर सञ्चिकां लोड् कर्तुं असफलम्</b><p> Debugger इत्यनेन निम्नलिखितदोषः निवेदितः ।<p> "
-"<tt>%1</tt>"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -72,12 +52,12 @@ msgstr ""
 "<br/> दुर्घटनानिवारयितुं Debugger console अक्षमं भविष्यति ।<br/> किं त्वं निरन्तरं कर्तुम् "
 "इच्छसि ?"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB संस्करणम् असमर्थितम्"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -94,6 +74,12 @@ msgstr "डिबगर टूलबार"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "LLDB मध्ये एकं देशीयं अनुप्रयोगं त्रुटिनिवारणं कुर्वन्तु"
+
+#: toolviewfactoryholder.cpp:41
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB Console इति"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -233,6 +219,16 @@ msgstr "दूरस्थः कार्यमार्गः :"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/मार्गः/एकं/यन्त्रे/लेखनीय/निर्देशिकां प्रति"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>त्रुटिनिवारणं आरभुं न शक्तम्:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>कोर सञ्चिकां लोड् कर्तुं असफलम्</b><p> Debugger इत्यनेन निम्नलिखितदोषः निवेदितः ।"
+#~ "<p> <tt>%1</tt>"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

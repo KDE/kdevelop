@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-11-10 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -22,43 +22,23 @@ msgstr ""
 msgid "(running)"
 msgstr "(çalışıyor)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:95
-#, kde-format
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "LLDB Konsolu"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 "Desteklenmeyen LLDB sürümü üzerinde kullanıcı komutu yürütmeye çalışıyor"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Hata ayıklayıcısı başlatılamadı:</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Uzak hedefe bağlanma hatası:</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Çekirdek dosyayı yükleme başarısız oldu</b><p>Hata ayıklayıcısı aşağıdaki "
-"hatayı raporladı:<p><tt>%1"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -71,12 +51,12 @@ msgstr ""
 ">Hata ayıklayıcısı konsolu çökmeyi engellemek için devre dışı bırakılacaktır."
 "<br/>Sürdürmek istiyor musunuz?"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB Sürümü Desteklenmiyor"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -94,6 +74,12 @@ msgstr "Hata Ayıklayıcısı Araç Çubuğu"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "LLDB içerisinde bir yerel uygulama hata ayıklaması"
+
+#: toolviewfactoryholder.cpp:41
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB Konsolu"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -233,6 +219,16 @@ msgstr "Uzak çalışma yolu:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/aygıt/üzerinde/yazılabilir/bir/dizin/yolu"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Hata ayıklayıcısı başlatılamadı:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Çekirdek dosyayı yükleme başarısız oldu</b><p>Hata ayıklayıcısı "
+#~ "aşağıdaki hatayı raporladı:<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

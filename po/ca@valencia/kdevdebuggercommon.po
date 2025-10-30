@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2025-09-07 10:05+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -84,11 +84,59 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr "Tots els processos"
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Trieu un fitxer de nucli"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, kde-format
+msgid "Executable file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examining core file %1"
+msgid "Empty core file name"
+msgstr "S'està examinant el fitxer de nucli %1"
+
+#: dialogs/selectcoredialog.cpp:74
+#, kde-format
+msgid "Invalid core file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:80
+#, kde-format
+msgid "Core file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgctxt "@label:chooser"
+#| msgid "Core file:"
+msgid "Core is not a file"
+msgstr "Fitxer de nucli:"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -104,7 +152,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Fitxer de nucli:"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, kde-format
 msgid ""
 "\n"
@@ -113,7 +161,7 @@ msgstr ""
 "\n"
 "Valor antic: %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, kde-format
 msgid ""
 "\n"
@@ -122,7 +170,7 @@ msgstr ""
 "\n"
 "Valor nou: %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -134,7 +182,7 @@ msgstr ""
 "de la resposta del depurador. Envieu un informe d'error. La sessió de "
 "depuració finalitzarà ara per a evitar una fallada potencial"
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -143,18 +191,18 @@ msgstr ""
 "L'excepció és: %1\n"
 "La resposta MI és: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "S'ha produït un error intern en el depurador"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "S'ha eixit del procés"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -163,12 +211,12 @@ msgstr ""
 "<b>No s'ha pogut iniciar el depurador.</b><p>No s'ha pogut executar «%1». "
 "Assegureu-vos que el nom de camí s'ha especificat correctament."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "El procés ha fallat en iniciar"
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -179,18 +227,18 @@ msgstr ""
 "<br>Per este motiu, cal finalitzar la sessió de depuració.<br>Intenteu "
 "reproduir la fallada sense KDevelop i informeu de l'error.<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "El depurador ha fallat"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "El procés ha fallat"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -199,13 +247,13 @@ msgstr ""
 "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
 "actualment en execució i continuar?"
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Examina el fitxer de codi amb %1"
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -219,13 +267,13 @@ msgstr ""
 "segmentació. El fitxer de nucli conté una imatge de la memòria del programa "
 "al moment de la fallada, i açò us permet fer una anàlisi post mortem.</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Adjunta al procés amb %1"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -233,29 +281,29 @@ msgid ""
 msgstr ""
 "<b>Adjunta al procés</b><p>Adjunta el depurador a un procés en execució.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Tria un fitxer de nucli que s'haja d'examinar…"
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Tria un procés al qual adjuntar…"
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "No s'està adjuntant al procés %1: no es pot adjuntar el depurador a si "
 "mateix."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "Depurador"
@@ -290,42 +338,48 @@ msgstr ""
 "Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
 "actualment en execució i continuar amb el llançament?"
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "Programa en execució"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "S'està adjuntant al procés %1"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>No s'ha pogut adjuntar al depurador:</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, fuzzy, kde-format
+#| msgid "<b>Could not attach debugger:</b><br />"
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>No s'ha pogut adjuntar al depurador:</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "S'està examinant el fitxer de nucli %1"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Depurador parat"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "L'aplicació és en execució"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "L'aplicació està en pausa"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -334,39 +388,44 @@ msgstr ""
 "<b>Ordre gdb enviada quan no s'executava el depurador</b><br>L'ordre és:<br> "
 "%1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ordre de depuració no vàlida</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, kde-format
+msgid "<b>Failed to load core file:</b><br />"
+msgstr ""
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Ha eixit retornant el codi: %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "Ha eixit normalment"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "S'ha parat en rebre el senyal %1"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "El programa ha rebut el senyal %1 (%2)"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 ordre en la pila\n"
 msgstr[1] "%1 ordres en la pila\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -374,12 +433,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "S'està processant 1 ordre amb gdb\n"
 msgstr[1] "S'estan processant %1 ordres amb gdb\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Estat del depurador: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -390,12 +449,11 @@ msgstr ""
 "Text de l'ordre actual: «%2»\n"
 "Text original de l'ordre actual: «%3»\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr ""
-"<b>S'ha produït un error del depurador</b><p>El depurador ha informat de "
-"l'error següent:<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "<b>Could not attach debugger:</b><br />"
+msgid "<b>Debugger error:</b><br />"
+msgstr "<b>No s'ha pogut adjuntar al depurador:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -432,61 +490,61 @@ msgstr "En brut"
 msgid "Unsigned"
 msgstr "Sense signe"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "General"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "Indicadors"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "Paraula simple VFP"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "Paraula doble VFP"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "Paraula quàdruple VFP"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "Segment"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Format"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "Mode"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -610,62 +668,62 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr "Repetix l'última ordre quan es prema la tecla <Retorn>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Selector d'adreça"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "Canvi d'&adreça"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&Salta fins al cursor"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "Establix el punter d'execució a la posició actual del cursor."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "Executa fins al cu&rsor"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Continua l'execució fins a assolir la posició del cursor."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "&AT&&T"
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 "GDB utilitzarà el tipus de desassemblador AT&T (p. ex., mov 0xc(%ebp),%eax)."
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "&Intel"
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -675,13 +733,13 @@ msgstr ""
 "GDB utilitzarà el tipus de desassemblador Intel (p. ex., mov eax, DWORD PTR "
 "[ebp +0xc])."
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Tipus de desassemblador"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -695,25 +753,25 @@ msgstr ""
 "avançar instrucció per instrucció utilitzant els botons «avança per damunt» "
 "i «avança per dins» (de la instrucció) de la barra d'eines del depurador."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Adreça"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Funció"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Instrucció"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
@@ -732,3 +790,9 @@ msgstr "Trieu l'adreça al voltant de la qual es desassemblarà"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Adreça al voltant de la qual es desassemblarà:"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>S'ha produït un error del depurador</b><p>El depurador ha informat de "
+#~ "l'error següent:<p><tt>%1"

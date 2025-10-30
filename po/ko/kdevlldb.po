@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -22,42 +22,22 @@ msgstr ""
 msgid "(running)"
 msgstr "(실행 중)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:95
-#, kde-format
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "LLDB 콘솔"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "지원하지 않는 LLDP 버전에서 사용자 명령 실행 시도 중"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>디버거를 시작할 수 없음:</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>원격 대상에 연결할 수 없음:</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>코어 파일을 불러올 수 없음</b><p>디버거에서 다음 오류를 반환했습니다:"
-"<p><tt>%1"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -70,12 +50,12 @@ msgstr ""
 "id=28026 페이지를 참조하십시오.<br/>충돌을 방지할 수 있도록 디버거 콘솔을 비"
 "활성화합니다.<br/>계속 진행하시겠습니까?"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "지원하지 않는 LLDB 버전"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -91,6 +71,12 @@ msgstr "디버거 도구 모음"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "LLDB로 네이티브 앱 디버그"
+
+#: toolviewfactoryholder.cpp:41
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB 콘솔"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -230,6 +216,16 @@ msgstr "원격 작업 경로:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/path/to/a/on-device/writable/directory"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>디버거를 시작할 수 없음:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>코어 파일을 불러올 수 없음</b><p>디버거에서 다음 오류를 반환했습니다:"
+#~ "<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

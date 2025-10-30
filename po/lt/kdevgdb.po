@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2011-10-31 15:43+0000\n"
 "Last-Translator: Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -19,29 +19,10 @@ msgstr ""
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
 "X-Generator: Lokalize 1.2\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr ""
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr ""
-
-#: debuggerplugin.cpp:117
-#, kde-format
-msgctxt "@title:window"
-msgid "GDB"
-msgstr ""
-
-#: debuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Memory view"
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "Atminties žiūryklė"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -95,33 +76,21 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr ""
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr ""
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr ""
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
 msgstr ""
 
 #: gdb.cpp:68
@@ -402,28 +371,28 @@ msgstr "Kopijuoti viską"
 msgid "Debugger Toolbar"
 msgstr ""
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, fuzzy, kde-format
 #| msgid "Start"
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Pradėti"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, fuzzy, kde-format
 #| msgid "Amount"
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Kiekis"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Atminties žiūryklė"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
@@ -432,123 +401,142 @@ msgstr[1] "%2 (%1 baitas)"
 msgstr[2] "%2 (%1 baitų)"
 msgstr[3] "%2 (%1 baitas)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "Perkrauti"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr ""
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr ""
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr ""
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr ""
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr ""
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr ""
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr ""
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr ""
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr ""
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr ""
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr ""
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr ""
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr ""
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, fuzzy, kde-format
 #| msgid "Change memory range"
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Keisti atminties rėžius"
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr ""
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Atminties žiūryklė"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Atminties žiūryklė"
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, fuzzy, kde-format
 #| msgid "Memory view"
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
+msgstr "Atminties žiūryklė"
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr ""
+
+#: toolviewfactoryholder.cpp:38
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr ""
+
+#: toolviewfactoryholder.cpp:43
+#, fuzzy, kde-format
+#| msgid "Memory view"
+msgctxt "@title:window"
+msgid "Memory"
 msgstr "Atminties žiūryklė"
 
 #~ msgid "OK"

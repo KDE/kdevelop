@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-12-15 15:59+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -79,10 +79,55 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr ""
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, kde-format
+msgid "Executable file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, kde-format
+msgid "Empty core file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:74
+#, kde-format
+msgid "Invalid core file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:80
+#, kde-format
+msgid "Core file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:84
+#, kde-format
+msgid "Core is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -99,21 +144,21 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr ""
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, kde-format
 msgid ""
 "\n"
 "Old value: %1"
 msgstr ""
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, kde-format
 msgid ""
 "\n"
 "New value: %1"
 msgstr ""
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -122,37 +167,37 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
 "The MI response is: %2"
 msgstr ""
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr ""
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr ""
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -160,31 +205,31 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr ""
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr ""
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -194,40 +239,40 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr ""
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr ""
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr ""
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr ""
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr ""
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr ""
@@ -260,81 +305,91 @@ msgid ""
 "running debug session and continue with the launch?"
 msgstr ""
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr ""
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr ""
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr ""
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr ""
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr ""
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr ""
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr ""
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr ""
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr ""
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr ""
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, kde-format
+msgid "<b>Failed to load core file:</b><br />"
+msgstr ""
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr ""
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr ""
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr ""
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr ""
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -342,12 +397,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr ""
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -355,9 +410,9 @@ msgid ""
 "Current command original text: '%3'\n"
 msgstr ""
 
-#: midebugsession.cpp:1226
+#: midebugsession.cpp:1292
 #, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgid "<b>Debugger error:</b><br />"
 msgstr ""
 
 #: miframestackmodel.cpp:71
@@ -395,61 +450,61 @@ msgstr ""
 msgid "Unsigned"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr ""
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr ""
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr ""
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr ""
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr ""
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr ""
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr ""
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -558,61 +613,61 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -620,13 +675,13 @@ msgid ""
 "+0xc])."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -636,25 +691,25 @@ msgid ""
 "\" instruction and \"step into\" instruction."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"

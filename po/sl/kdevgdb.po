@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2023-07-26 07:12+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19,28 +19,10 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr "Razberi/registri"
-
-#: debuggerplugin.cpp:117
-#, kde-format
-msgctxt "@title:window"
-msgid "GDB"
-msgstr "GDB"
-
-#: debuggerplugin.cpp:126
-#, kde-format
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "Pomnilnik"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -104,7 +86,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Niz oblikovan po meri"
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -113,29 +95,15 @@ msgstr ""
 "Ni bilo podanega profila okolja, kar namiguje na pokvarjene nastavitve. "
 "Preverite zagonske nastavitve »%1«. Uporabljen bo privzeti profil okolja."
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr "<unknown version>"
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Potrebujete gdb 7.0.0 ali novejšega.</b><br />Uporabljate: %1"
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Razhroščevalnika ni bilo mogoče zagnati:</b><br />"
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Datoteke jedra ni bilo mogoče naložiti</b><p>Razhroščevalnik je sporočil "
-"naslednjo napako:<p><tt>%1"
 
 #: gdb.cpp:68
 #, kde-format
@@ -456,25 +424,25 @@ msgstr "Kopiraj vse"
 msgid "Debugger Toolbar"
 msgstr "Orodna vrstica razhroščevalnika"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "Zaženi:"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "Količina:"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Pogled pomnilnika"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
@@ -483,119 +451,147 @@ msgstr[1] "%2 (%1 bajt)"
 msgstr[2] "%2 (%1 bajta)"
 msgstr[3] "%2 (%1 bajti)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "&Znova naloži"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "Oblika"
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "Dvojiško"
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&Osmiško"
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&Desetiško"
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "Šestnajstiško"
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "&Združevanje"
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "Zapiši spremembe"
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Spremeni obseg pomnilnika"
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr "Zapri ta prikaz"
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Pregledovalnik pomnilnika"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Nov pregledovalnik pomnilnika"
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Odpri nov pregledovalnik pomnilnika"
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Razberi/registri"
+
+#: toolviewfactoryholder.cpp:38
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: toolviewfactoryholder.cpp:43
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Pomnilnik"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Razhroščevalnika ni bilo mogoče zagnati:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Datoteke jedra ni bilo mogoče naložiti</b><p>Razhroščevalnik je "
+#~ "sporočil naslednjo napako:<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

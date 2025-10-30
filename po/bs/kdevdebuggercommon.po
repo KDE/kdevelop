@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2013-12-15 19:17+0000\n"
 "Last-Translator: Nermina Ahmić <nahmic1@etf.unsa.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -87,12 +87,60 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr ""
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, fuzzy, kde-format
 #| msgid "Select Core File"
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Izaberi datoteku jezgra"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, kde-format
+msgid "Executable file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Empty core file name"
+msgstr "Ispitaj datoteku jezgra"
+
+#: dialogs/selectcoredialog.cpp:74
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Invalid core file name"
+msgstr "Ispitaj datoteku jezgra"
+
+#: dialogs/selectcoredialog.cpp:80
+#, kde-format
+msgid "Core file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgid "Core File:"
+msgid "Core is not a file"
+msgstr "Datoteka jezgra:"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -110,7 +158,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Datoteka jezgra:"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, fuzzy, kde-format
 #| msgid "<br>Old value: %1"
 msgid ""
@@ -118,7 +166,7 @@ msgid ""
 "Old value: %1"
 msgstr "<br>Stara vrijednost: %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, fuzzy, kde-format
 #| msgid "<br>New value: %1"
 msgid ""
@@ -126,7 +174,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>Nova vrijednost: %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -141,7 +189,7 @@ msgstr ""
 "<p>Debager komponenta je naišlana internu grešku prilikom obrade odgovora od "
 "GDB. Molimo Vas da pošaljete izveštaj o grešci."
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -150,19 +198,19 @@ msgstr ""
 "Izuzetak je: %1\n"
 "MI odgovor je: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Interna debagerska greška"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "Proces izašao"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -171,12 +219,12 @@ msgstr ""
 "<b>Ne mogu pokrenuti debager.</b><p>Ne mogu pokrenuti '%1'. Uvjerite se da "
 "je ime staze ispravno navedeno."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -189,34 +237,34 @@ msgstr ""
 "<b>Gdb pao.</b><p>Zbog toga je sesija traženja grešaka prekinuta."
 "<br>Pokušajte reprodukovati pad običnm gdb i prijavite grešku.<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Debager zaustavljen"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"
 msgstr "Proces izašao"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, fuzzy, kde-format
 #| msgid "Examine Core File..."
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Ispitaj datoteku jezgra..."
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Examine core file</b><p>This loads a core file, which is typically "
@@ -235,14 +283,14 @@ msgstr ""
 "jezgra sadrži sliku programske memorije u trenutku kada se srušio, što vam "
 "omogućava da uradite post mortem analizu.</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, fuzzy, kde-format
 #| msgid "Attach to Process"
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Priloži uz proces"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
@@ -251,28 +299,28 @@ msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>Priloži uz proces</b><p>Priloži debager uz izvršavani proces.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, fuzzy, kde-format
 #| msgid "KDevelop"
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Izaberi datoteku jezgra na ispitivanje..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Izaberite proces na koji se treba zakačiti..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "Ne kači se za proces %1: ne može se zakačiti za sam debager."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "Ispravljač grešaka"
@@ -305,42 +353,47 @@ msgid ""
 "running debug session and continue with the launch?"
 msgstr ""
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "Izvršavam program"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Kačenje na proces %1"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Ne mobu prikačiti debager:</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>ne mogu pokrenuti debager:</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Ispitujem datoteku jezgra %1"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Debager zaustavljen"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "Program se izvršava"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "Program je pauziran"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -349,32 +402,38 @@ msgstr ""
 "<b>Gdb komanda je poslana kada se debager nije izvršavao</b><br>Komanda je "
 "bila:<br> %1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Pogrešna debagerska komanda</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
+msgid "<b>Failed to load core file:</b><br />"
+msgstr "<b>ne mogu pokrenuti debager:</b><br />"
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Izašao s izlaznim kodom: %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "Izašao normalno"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Izašao na signal %1"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Program primio signal %1 (%2)"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -382,7 +441,7 @@ msgstr[0] "%1 komanda u redu čekanja\n"
 msgstr[1] "%1 komande u redu čekanja\n"
 msgstr[2] "%1 komandi u redu čekanja\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -391,12 +450,12 @@ msgstr[0] "%1 komandu obrađuje gdb\n"
 msgstr[1] "%1 komande obrađuje gdb\n"
 msgstr[2] "%1 komandi obrađuje gdb\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Debagersko stanje: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -407,10 +466,11 @@ msgstr ""
 "Tekst trenutne naredbe: '%2'\n"
 "Originalni tekst trenutne naredbe: '%3'\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr "<b>Debagerska greška</b><p>Debager je javio sljedeću grešku:<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "Debugger error"
+msgid "<b>Debugger error:</b><br />"
+msgstr "Debagerska greška"
 
 #: miframestackmodel.cpp:71
 #, fuzzy, kde-format
@@ -448,63 +508,63 @@ msgstr "Sirovo"
 msgid "Unsigned"
 msgstr "Nepredznačeno"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "Opće"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "Indikatori"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "VFP jednostruka riječ"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "VFP dvostruka riječ"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "VFP četverostruka riječ"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "Segment"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, fuzzy, kde-format
 #| msgid "Format"
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Format"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, fuzzy, kde-format
 #| msgid "Mode"
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "Režim"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, fuzzy, kde-format
 #| msgid "Update"
 msgctxt "@action:inmenu"
@@ -636,67 +696,67 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, fuzzy, kde-format
 #| msgid "Address Selector"
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Izbor adrese"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, fuzzy, kde-format
 #| msgid "Change &address"
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "Promijeni &adresu"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, fuzzy, kde-format
 #| msgid "&Jump to Cursor"
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&Skoči na kursor"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, fuzzy, kde-format
 #| msgid "Sets the execution pointer to the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "Postavlja izvršavajući pokazivač na trenutnu poziciju kursora."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, fuzzy, kde-format
 #| msgid "&Run to Cursor"
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "&Idi do kursora"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Nastavlja izvršavaje dok ne dostigne poziciju kursora."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -704,14 +764,14 @@ msgid ""
 "+0xc])."
 msgstr ""
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, fuzzy, kde-format
 #| msgid "Disassemble"
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Disasembliranje"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Machine code display</b><p>A machine code view into your running "
@@ -730,28 +790,28 @@ msgstr ""
 "dugmad na debagerskoj alatnoj traci  instrukcije \"korak preko\" i "
 "instrukcije \"korak unutra\"."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, fuzzy, kde-format
 #| msgid "Address"
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Adresa"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, fuzzy, kde-format
 #| msgid "Function"
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Funkcija"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, fuzzy, kde-format
 #| msgid "Instruction"
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Instrukcija"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, fuzzy, kde-format
 #| msgid "Disassemble/Registers View"
 msgctxt "@title:window"
@@ -773,6 +833,11 @@ msgstr "Odaberi adresu za disasembliranje oko nje"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Odaberi adresu za disasembliranje oko nje"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Debagerska greška</b><p>Debager je javio sljedeću grešku:<p><tt>%1"
 
 #, fuzzy
 #~| msgid "Evaluate: %1"
@@ -829,14 +894,8 @@ msgstr "Odaberi adresu za disasembliranje oko nje"
 #~ msgid "Debugger status"
 #~ msgstr "Debagerski status"
 
-#~ msgid "Debugger error"
-#~ msgstr "Debagerska greška"
-
 #~ msgid "Address selector"
 #~ msgstr "Izbor adrese"
-
-#~ msgid "Examine core file"
-#~ msgstr "Ispitaj datoteku jezgra"
 
 #, fuzzy
 #~| msgid "Attach to process..."
@@ -925,9 +984,6 @@ msgstr "Odaberi adresu za disasembliranje oko nje"
 
 #~ msgid "gdb error"
 #~ msgstr "gdb greška"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>ne mogu pokrenuti debager:</b><br />"
 
 #~ msgid "Could not locate the debugging shell '%1'."
 #~ msgstr "Nije moguće pronaći za školjku za otklanjanje grešaka '%1'."

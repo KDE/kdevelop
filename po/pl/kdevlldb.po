@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2022-09-23 11:17+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -22,42 +22,22 @@ msgstr ""
 msgid "(running)"
 msgstr "(uruchomiony)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:95
-#, kde-format
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "Konsola LLDB"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Próba wykonania polecenia użytkownika na nieobsługiwanej wersji LLDB"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Nie można uruchomić z diagnozowaniem:</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Błąd łączenia ze zdalnym celem:</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Nie udało się wczytać pliku jądra</b><p>Program diagnostyczny zgłosił "
-"następujący błąd:<p><tt>%1"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -70,12 +50,12 @@ msgstr ""
 "cgi?id=28026.<br/>Konsola programu diagnostycznego zostanie wyłączona, aby "
 "uniknąć usterki.<br/>Czy chcesz kontynuować?"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Nieobsługiwana wersja LLDB"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -91,6 +71,12 @@ msgstr "Pasek narzędzi programu diagnostycznego"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Diagnozuj macierzysty program w LLDB"
+
+#: toolviewfactoryholder.cpp:41
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "Konsola LLDB"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -230,6 +216,16 @@ msgstr "Zdalna ścieżka pracy:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/ścieżka/do/zapisywalnego/katalogu/na/urządzeniu"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Nie można uruchomić z diagnozowaniem:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Nie udało się wczytać pliku jądra</b><p>Program diagnostyczny zgłosił "
+#~ "następujący błąd:<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -81,11 +81,59 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr "सर्वाणि प्रक्रियाः"
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Core File इति चिनोतु"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, kde-format
+msgid "Executable file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examining core file %1"
+msgid "Empty core file name"
+msgstr "कोर सञ्चिकायाः परीक्षणं %1"
+
+#: dialogs/selectcoredialog.cpp:74
+#, kde-format
+msgid "Invalid core file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:80
+#, kde-format
+msgid "Core file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgctxt "@label:chooser"
+#| msgid "Core file:"
+msgid "Core is not a file"
+msgstr "कोर सञ्चिका :"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -101,7 +149,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "कोर सञ्चिका :"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, fuzzy, kde-format
 #| msgid "<br>Old value: %1"
 msgid ""
@@ -109,7 +157,7 @@ msgid ""
 "Old value: %1"
 msgstr "<br>पुरातनं मूल्यम् : %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, fuzzy, kde-format
 #| msgid "<br>New value: %1"
 msgid ""
@@ -117,7 +165,7 @@ msgid ""
 "New value: %1"
 msgstr "<br>नवीनं मूल्यम् : %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -128,7 +176,7 @@ msgstr ""
 "<p>त्रुटिनिवारकघटकेन त्रुटिनिवारणकर्तृणां उत्तरं संसाधयन् आन्तरिकदोषः अभवत् । कृपया "
 "दोषप्रतिवेदनं प्रस्तूयताम्। सम्भाव्यं दुर्घटनां निवारयितुं इदानीं त्रुटिनिवारणसत्रं समाप्तं भविष्यति"
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -137,18 +185,18 @@ msgstr ""
 "अपवादः अस्ति : %1\n"
 "MI प्रतिक्रिया अस्ति: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "आन्तरिकं त्रुटिनिवारणदोषः"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "प्रक्रिया निर्गतवती"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -157,12 +205,12 @@ msgstr ""
 "<b>त्रुटिनिवारणं आरभुं न शक्तवान् ।</b><p> &#39;%1&#39; चालयितुं न शक्यते । मार्गनाम "
 "सम्यक् निर्दिष्टम् इति सुनिश्चितं कुर्वन्तु ।"
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "प्रक्रिया आरभ्यतुं असफलतां प्राप्तवती"
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -173,18 +221,18 @@ msgstr ""
 "त्रुटिनिवारणप्रक्रिया दुर्घटना अभवत् ।<br> तस्मात् कारणात् त्रुटिनिवारणसत्रं समाप्तं कर्तव्यम् "
 "अस्ति ।<br> KDevelop विना दुर्घटना पुनः प्रदर्शयितुं प्रयतध्वं तथा च दोषं निवेदयन्तु ।<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "त्रुटिनिवारणकर्ता दुर्घटनाग्रस्तः अभवत्"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "प्रक्रिया दुर्घटना अभवत्"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -193,13 +241,13 @@ msgstr ""
 "पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
 "निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "%1 इत्यनेन सह Core File इत्यस्य परीक्षणं कुर्वन्तु"
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -213,13 +261,13 @@ msgstr ""
 "प्रोग्रामस्मृतेः प्रतिबिम्बं भवति यदा सा दुर्घटना अभवत्, येन भवान् मृत्योः पश्चात् विश्लेषणं कर्तुं "
 "शक्नोति ।</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "%1 इत्यनेन सह Process इत्यत्र संलग्नं कुर्वन्तु"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -227,27 +275,27 @@ msgid ""
 msgstr ""
 "<b>प्रक्रियां प्रति संलग्नं कुर्वन्तु</b><p> त्रुटिनिवारणं चालितप्रक्रियायां संलग्नं करोति ।</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "परीक्षितुं कोरसञ्चिकां चिनोतु..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "संलग्नं कर्तुं प्रक्रियां चिनुत..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "%1 प्रक्रियायां न संलग्नम्: त्रुटिनिवारणं स्वयमेव संलग्नं कर्तुं न शक्नोति ।"
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "त्रुटिनिवारकः"
@@ -285,42 +333,48 @@ msgstr ""
 "पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
 "निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "कार्यक्रमं चालयति"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "प्रक्रिया %1 सह संलग्नम्"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, fuzzy, kde-format
+#| msgid "<b>Could not attach debugger:</b><br />"
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "कोर सञ्चिकायाः परीक्षणं %1"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "त्रुटिनिवारणकर्ता स्थगितवान्"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "अनुप्रयोगः प्रचलति"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "अनुप्रयोगः विरामः भवति"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -328,39 +382,44 @@ msgid ""
 msgstr ""
 "<b>यदा debugger न चाल्यते तदा Gdb आदेशः प्रेषितः</b><br> आदेशः आसीत् - १.<br> %1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>अमान्यः त्रुटिनिवारणनिर्देशः</b><br> %1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, kde-format
+msgid "<b>Failed to load core file:</b><br />"
+msgstr ""
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "रिटर्न् कोड् इत्यनेन सह निर्गतम्: %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "सामान्यतया निर्गतः"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "%1 संकेते निर्गतम्"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "कार्यक्रमः संकेतं प्राप्तवान् %1 (%2) ."
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "१ पङ्क्तौ आदेशः\n"
 msgstr[1] "%1 आदेशाः पङ्क्तौ\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -368,12 +427,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "१ आदेशः gdb द्वारा संसाधितः भवति\n"
 msgstr[1] "%1 आदेशाः gdb द्वारा संसाधिताः भवन्ति\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "त्रुटिनिवारणस्थितिः: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -384,12 +443,11 @@ msgstr ""
 "वर्तमान आदेशपाठः '%2' ।\n"
 "वर्तमान आदेशः मूलपाठः: '%3'.\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr ""
-"<b>त्रुटिनिवारणदोषः</b><p> Debugger इत्यनेन निम्नलिखितदोषः निवेदितः ।<p> <tt>%1</"
-"tt>"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "<b>Could not attach debugger:</b><br />"
+msgid "<b>Debugger error:</b><br />"
+msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -426,61 +484,61 @@ msgstr "अपक्व"
 msgid "Unsigned"
 msgstr "अहस्ताक्षरितम्"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "सामान्य"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "ध्वजाः"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "VFP एक-शब्द"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "VFP द्विगुण-शब्द"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "VFP चतुर्-शब्द"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "खण्डः"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "प्रारूप"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "मोड्"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -604,61 +662,61 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr "<Return> इति नुत्वा अन्तिमं प्रेषितं आदेशं पुनः कुर्वन्तु"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "पता चयनकर्ता"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "&पता परिवर्तनं कुर्वन्तु"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&कर्सर प्रति कूदन्तु"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "निष्पादनसूचकं वर्तमानकर्सरस्थाने सेट् करोति ।"
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "&कर्सर प्रति चालयन्तु"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "यावत् कर्सरस्थानं न प्राप्यते तावत् निष्पादनं निरन्तरं करोति ।"
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "&AT&&T"
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr "GDB AT&T विघटनस्वादस्य उपयोगं करिष्यति (उदा. mov 0xc(%ebp),%eax) ।"
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "&इण्टेल्"
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -667,13 +725,13 @@ msgid ""
 msgstr ""
 "GDB Intel विच्छेदनस्वादस्य उपयोगं करिष्यति (उदा. mov eax, DWORD PTR [ebp+0xc]) ।"
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "विघटन स्वाद"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -686,25 +744,25 @@ msgstr ""
 "यन्त्रसङ्केतदृश्यम् । &quot;step over&quot; निर्देशस्य &quot;step into&quot; निर्देशस्य च "
 "debuggers toolbar बटन् उपयुज्य निर्देशेन निर्देशं पदानि स्थापयितुं शक्नुवन्ति ।"
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr "पत्रसङ्केतः"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "नियोग"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "निर्देशः"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
@@ -723,6 +781,12 @@ msgstr "परितः विच्छेदनार्थं पतां च
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "परितः विच्छेदनार्थं पताः :"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>त्रुटिनिवारणदोषः</b><p> Debugger इत्यनेन निम्नलिखितदोषः निवेदितः ।<p> <tt>"
+#~ "%1</tt>"
 
 #~ msgctxt "@action:button"
 #~ msgid "Abort Current Session"

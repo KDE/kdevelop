@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2020-01-16 19:12+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -22,43 +22,22 @@ msgstr ""
 msgid "(running)"
 msgstr "(töötab)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:95
-#, fuzzy, kde-format
-#| msgid "LLDB Console"
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "LLDB konsool"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Kasutaja käsu täitmise katse LLDB toetamata versiooniga"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Siluri käivitamine nurjus:</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Tõrge ühendumisel kaugsihtmärgiga:</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Mälupildifaili laadimine nurjus</b><p>Silur andis teada järgmisest "
-"tõrkest:<p><tt>%1"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -70,12 +49,12 @@ msgstr ""
 "b><br/>Vaata lähemat teavet aadressil https://llvm.org/bugs/show_bug.cgi?"
 "id=28026.<br/>Krahhi vältimiseks siluri konsool keelatakse.<br/>Kas jätkata?"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB toetamata versioon"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -93,6 +72,13 @@ msgstr "Silumisriba"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Omarakenduse silumine LLDB-s"
+
+#: toolviewfactoryholder.cpp:41
+#, fuzzy, kde-format
+#| msgid "LLDB Console"
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB konsool"
 
 #: widgets/lldbconfigpage.cpp:67
 #, fuzzy, kde-format
@@ -252,6 +238,16 @@ msgstr "Kaugmasina töökataloog:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/seadme/kirjutatava/kataloogi/asukoht"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Siluri käivitamine nurjus:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Mälupildifaili laadimine nurjus</b><p>Silur andis teada järgmisest "
+#~ "tõrkest:<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

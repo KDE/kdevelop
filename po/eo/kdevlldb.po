@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-22 00:42+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-05-30 22:41+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -23,42 +23,22 @@ msgstr ""
 msgid "(running)"
 msgstr "(rulanta)"
 
-#: debuggerplugin.cpp:30 lldblauncher.cpp:27
+#: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debuggerplugin.cpp:95
-#, kde-format
-msgctxt "@title:window"
-msgid "LLDB Console"
-msgstr "LLDB-konzolo"
-
-#: debugsession.cpp:138
+#: debugsession.cpp:128
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Provante ruli uzantokomandon en nesubtenata LLDB-versio"
 
-#: debugsession.cpp:337
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Ne eblis lanĉi sencimigilon:</b><br />"
-
-#: debugsession.cpp:348
+#: debugsession.cpp:320
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Eraro konektante al fora celo:</b><br />"
 
-#: debugsession.cpp:361
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
-msgstr ""
-"<b>Malsukcesis ŝargi kerna dosiero</b><p>Elĉimilo raportis la jenan eraron:"
-"<p><tt>%1"
-
-#: debugsession.cpp:392
+#: debugsession.cpp:354
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -71,12 +51,12 @@ msgstr ""
 "<br />Elĉimilo konzolo estos malŝaltita por malhelpi paneon.<br/>Ĉu vi volas "
 "daŭrigi?"
 
-#: debugsession.cpp:396
+#: debugsession.cpp:358
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB-Versio Nesubtenata"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:404
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -92,6 +72,12 @@ msgstr "Sencimiga Ilobreto"
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Sencimigi denaskan aplikaĵon en LLDB"
+
+#: toolviewfactoryholder.cpp:41
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB-konzolo"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
@@ -231,6 +217,16 @@ msgstr "Vojo de Fora Laboro:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/path/to/a/on-device/writable/directory"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Ne eblis lanĉi sencimigilon:</b><br />"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Malsukcesis ŝargi kerna dosiero</b><p>Elĉimilo raportis la jenan "
+#~ "eraron:<p><tt>%1"
 
 #~ msgid ""
 #~ "A program is already being debugged. Do you want to abort the currently "

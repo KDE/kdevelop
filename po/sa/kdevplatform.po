@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -321,13 +321,13 @@ msgstr ""
 msgid "Threads:"
 msgstr "सूत्राणि :"
 
-#: debugger/framestack/framestackwidget.cpp:225
+#: debugger/framestack/framestackwidget.cpp:233
 #, kde-format
 msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
 msgstr "#%1 %2() %3 इत्यत्र\n"
 
-#: debugger/framestack/framestackwidget.cpp:228
+#: debugger/framestack/framestackwidget.cpp:236
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
@@ -1816,111 +1816,111 @@ msgstr ""
 "community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">अयं लेखः</a> पश्यन्तु ।"
 
-#: shell/debugcontroller.cpp:113
+#: shell/debugcontroller.cpp:74
 #, kde-format
 msgid "Debugger"
 msgstr "त्रुटिनिवारकः"
 
-#: shell/debugcontroller.cpp:143
+#: shell/debugcontroller.cpp:104
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "फ्रेम स्टैक"
 
-#: shell/debugcontroller.cpp:148
+#: shell/debugcontroller.cpp:109
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "भङ्गबिन्दवः"
 
-#: shell/debugcontroller.cpp:153
+#: shell/debugcontroller.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "चराः"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:182
 #, kde-format
 msgid "&Restart"
 msgstr "&पुनः आरभत"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:183
 #, kde-format
 msgid "Restart program"
 msgstr "कार्यक्रमं पुनः आरभत"
 
-#: shell/debugcontroller.cpp:221
+#: shell/debugcontroller.cpp:184
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "आरम्भादेव अनुप्रयोगाः पुनः आरभते ।"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:190
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "व्यवधान"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "अनुप्रयोगं व्यत्यययतु"
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:192
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "त्रुटिनिवारणप्रक्रिया अथवा वर्तमानदोषनिवारणादेशं बाधते ।"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:196
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "&Cursor इत्यत्र चालयन्तु"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:197
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "कर्सरं प्रति चालयन्तु"
 
-#: shell/debugcontroller.cpp:235
+#: shell/debugcontroller.cpp:198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "यावत् कर्सरस्थानं न प्राप्यते तावत् निष्पादनं निरन्तरं करोति ।"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:203
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "E&execution Position इत्येतत् Cursor इत्यत्र सेट् कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:241
+#: shell/debugcontroller.cpp:204
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "कर्सरं प्रति कूदन्तु"
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:205
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "वर्तमान कर्सरस्थानात् निष्पादनं निरन्तरं कुर्वन्तु ।"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:209
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Step &Over इति"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:211
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "अग्रिमपङ्क्तौ पदानि स्थापयन्तु"
 
-#: shell/debugcontroller.cpp:249
+#: shell/debugcontroller.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1932,37 +1932,37 @@ msgstr ""
 "इत्यस्य आह्वानं भवति तर्हि सम्पूर्णं फंक्शन् निष्पादितं भवति तथा च एप् फंक्शन् कॉल् इत्यस्य अनन्तरं "
 "रेखायां स्थगयिष्यति ।"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Ins&truction इत्यस्य उपरि कदमः"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "निर्देशस्य उपरि पदानि स्थापयन्तु"
 
-#: shell/debugcontroller.cpp:259
+#: shell/debugcontroller.cpp:222
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "अग्रिमस्य विधानसभानिर्देशस्य उपरि पदानि।"
 
-#: shell/debugcontroller.cpp:264
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Step &Into"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "अग्रिमे कथने पदानि स्थापयन्तु"
 
-#: shell/debugcontroller.cpp:267
+#: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1972,37 +1972,37 @@ msgstr ""
 "स्रोतस्य एकां रेखां सम्यक् निष्पादयति । यदि स्रोतरेखा कस्यचित् कार्यस्य आह्वानं भवति तर्हि "
 "कार्यस्य प्रविष्टेः अनन्तरं निष्पादनं स्थगितम् भविष्यति ।"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:237
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "I&nstruction इत्यत्र पदानि स्थापयन्तु"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "निर्देशे पदानि स्थापयन्तु"
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "अग्रिमे विधानसभानिर्देशे पदानि।"
 
-#: shell/debugcontroller.cpp:280
+#: shell/debugcontroller.cpp:243
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Step O&ut"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "वर्तमानकार्यतः बहिः गच्छन्तु"
 
-#: shell/debugcontroller.cpp:283
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2016,48 +2016,48 @@ msgstr ""
 "निष्पादनं बाह्यतम-चतुष्कोणे (अर्थात् main() मध्ये) अस्ति तर्हि एतस्य क्रियायाः कोऽपि "
 "प्रभावः नास्ति ।"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Breakpoint toggle कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:255
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B इति"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:256
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "ब्रेकपॉइंटं टॉगलं कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:294
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "सम्पादके वर्तमानपङ्क्तौ विच्छेदबिन्दुं टॉग्ल् करोति ।"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:261
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "वर्तमान रेखां दर्शयतु"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:262
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "वर्तमानं निष्पादनस्थानं दर्शयतु"
 
-#: shell/debugcontroller.cpp:300
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "सम्पादके निष्पादनपङ्क्तौ कूर्दति ।"
 
-#: shell/debugcontroller.cpp:313
+#: shell/debugcontroller.cpp:276
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Delete Current Session..."
@@ -2065,19 +2065,19 @@ msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "वर्तमान सत्रं विलोपयन्तु..."
 
-#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "त्रुटिनिवारणं प्रारम्भं कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:502 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "वर्तमान प्रक्षेपणं त्रुटिनिवारणं कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:503 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2087,19 +2087,19 @@ msgstr ""
 "वर्तमान सक्रियप्रक्षेपणविन्यासे निर्दिष्टं लक्ष्यं वा कार्यक्रमं वा Debugger इत्यस्य अन्तः "
 "निष्पादयति ।"
 
-#: shell/debugcontroller.cpp:506
+#: shell/debugcontroller.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&अनुवर्तते"
 
-#: shell/debugcontroller.cpp:508
+#: shell/debugcontroller.cpp:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "अनुप्रयोगनिष्पादनं निरन्तरं कुर्वन्तु"
 
-#: shell/debugcontroller.cpp:509
+#: shell/debugcontroller.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

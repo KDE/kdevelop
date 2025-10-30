@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -17,30 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:94
+#: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
-
-#: debuggerplugin.cpp:113
-#, kde-format
-msgctxt "@title:window"
-msgid "Disassemble/Registers"
-msgstr ""
-
-#: debuggerplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "GDB"
-msgctxt "@title:window"
-msgid "GDB"
-msgstr "GDB"
-
-#: debuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Memory"
-msgctxt "@title:window"
-msgid "Memory"
-msgstr "ئەسلەك"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -94,33 +74,21 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr ""
 
-#: debugsession.cpp:173
+#: debugsession.cpp:164
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: debugsession.cpp:275
+#: debugsession.cpp:255
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:299
+#: debugsession.cpp:279
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr ""
-
-#: debugsession.cpp:311
-#, kde-format
-msgid "<b>Could not start debugger:</b><br />"
-msgstr ""
-
-#: debugsession.cpp:325
-#, kde-format
-msgid ""
-"<b>Failed to load core file</b><p>Debugger reported the following error:"
-"<p><tt>%1"
 msgstr ""
 
 #: gdb.cpp:68
@@ -406,156 +374,176 @@ msgstr "ھەممىنى كۆچۈر"
 msgid "Debugger Toolbar"
 msgstr "سازلىغۇچ قورال بالدىقى"
 
-#: memviewdlg.cpp:69
+#: memviewdlg.cpp:68
 #, fuzzy, kde-format
 #| msgid "Start"
 msgctxt "@label:textbox"
 msgid "Start:"
 msgstr "باشلاش"
 
-#: memviewdlg.cpp:72
+#: memviewdlg.cpp:71
 #, fuzzy, kde-format
 #| msgid "Amount"
 msgctxt "@label:textbox"
 msgid "Amount:"
 msgstr "مىقدارى"
 
-#: memviewdlg.cpp:95
+#: memviewdlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "Memory"
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "ئەسلەك"
 
-#: memviewdlg.cpp:209
+#: memviewdlg.cpp:223
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (%1 بايت)"
 
-#: memviewdlg.cpp:254
+#: memviewdlg.cpp:267
 #, fuzzy, kde-format
 #| msgid "&Reload"
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "قايتا يۈكلە(&R)"
 
-#: memviewdlg.cpp:262
+#: memviewdlg.cpp:275
 #, fuzzy, kde-format
 #| msgid "&Format"
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "فورمات(&F)"
 
-#: memviewdlg.cpp:265
+#: memviewdlg.cpp:278
 #, fuzzy, kde-format
 #| msgid "&Binary"
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "ئىككىلىك سان(&B)"
 
-#: memviewdlg.cpp:270
+#: memviewdlg.cpp:283
 #, fuzzy, kde-format
 #| msgid "&Octal"
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "سەككىزلىك سىستېما(&O)"
 
-#: memviewdlg.cpp:275
+#: memviewdlg.cpp:288
 #, fuzzy, kde-format
 #| msgid "&Decimal"
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "ئونلۇق سان(&D)"
 
-#: memviewdlg.cpp:280
+#: memviewdlg.cpp:293
 #, fuzzy, kde-format
 #| msgid "&Hexadecimal"
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "ئون ئالتىلىك سان(&H)"
 
-#: memviewdlg.cpp:294
+#: memviewdlg.cpp:307
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr ""
 
-#: memviewdlg.cpp:297
+#: memviewdlg.cpp:310
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr ""
 
-#: memviewdlg.cpp:302
+#: memviewdlg.cpp:315
 #, fuzzy, kde-format
 #| msgid "&1"
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
-#: memviewdlg.cpp:307
+#: memviewdlg.cpp:320
 #, fuzzy, kde-format
 #| msgid "&2"
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
-#: memviewdlg.cpp:312
+#: memviewdlg.cpp:325
 #, fuzzy, kde-format
 #| msgid "&4"
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
-#: memviewdlg.cpp:317
+#: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr ""
 
-#: memviewdlg.cpp:322
+#: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr ""
 
-#: memviewdlg.cpp:335
+#: memviewdlg.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr ""
 
-#: memviewdlg.cpp:339
+#: memviewdlg.cpp:352
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr ""
 
-#: memviewdlg.cpp:343
+#: memviewdlg.cpp:356
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
 msgstr ""
 
-#: memviewdlg.cpp:394
+#: memviewdlg.cpp:407
 #, fuzzy, kde-format
 #| msgid "Memory"
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "ئەسلەك"
 
-#: memviewdlg.cpp:398
+#: memviewdlg.cpp:411
 #, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr ""
 
-#: memviewdlg.cpp:399
+#: memviewdlg.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr ""
+
+#: toolviewfactoryholder.cpp:34
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr ""
+
+#: toolviewfactoryholder.cpp:38
+#, fuzzy, kde-format
+#| msgid "GDB"
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: toolviewfactoryholder.cpp:43
+#, fuzzy, kde-format
+#| msgid "Memory"
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "ئەسلەك"
 
 #~ msgctxt "@title:menu"
 #~ msgid "Run"

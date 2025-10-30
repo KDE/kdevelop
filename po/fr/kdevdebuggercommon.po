@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2025-09-08 09:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -88,11 +88,60 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr "Tous les processus"
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Sélectionner un fichier « Core »"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, kde-format
+msgid "Executable file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Empty core file name"
+msgstr "Examiner un fichier « core »"
+
+#: dialogs/selectcoredialog.cpp:74
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Invalid core file name"
+msgstr "Examiner un fichier « core »"
+
+#: dialogs/selectcoredialog.cpp:80
+#, kde-format
+msgid "Core file does not exist"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgctxt "@label:chooser"
+#| msgid "Core file:"
+msgid "Core is not a file"
+msgstr "Fichier « Core » :"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -108,7 +157,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Fichier « Core » :"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, kde-format
 msgid ""
 "\n"
@@ -117,7 +166,7 @@ msgstr ""
 "\n"
 "Ancienne valeur : %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, kde-format
 msgid ""
 "\n"
@@ -126,7 +175,7 @@ msgstr ""
 "\n"
 "Nouvelle valeur : %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -138,7 +187,7 @@ msgstr ""
 "réponse du débogueur. Veuillez envoyer un rapport de bogue. La session de "
 "débogage va maintenant prendre fin pour éviter un plantage éventuel."
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -147,18 +196,18 @@ msgstr ""
 "L'exception est : %1\n"
 "La réponse de MI est : %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erreur interne du débogueur"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "Le processus s'est terminé"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -168,12 +217,12 @@ msgstr ""
 "d'exécuter « %1 ». Vérifiez que le nom de l'emplacement est spécifié "
 "correctement."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Impossible de démarrer le processus"
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -185,18 +234,18 @@ msgstr ""
 "débogage<br>Essayez de reproduire ce plantage sans KDevelop et envoyez un "
 "rapport de bogue.<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Le débogueur a planté"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Le processus a planté"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -205,13 +254,13 @@ msgstr ""
 "Il y a déjà un programme en cours de débogage. Voulez-vous arrêter la "
 "session de débogage en cours et continuer ?"
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Examiner un fichier « Core » avec %1"
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -227,13 +276,13 @@ msgstr ""
 "brutalement, ce qui permet d'effectuer une analyse post mortem de "
 "l'application.</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Attacher au processus avec %1"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -242,29 +291,29 @@ msgstr ""
 "<b>Attacher au processus</b><p>Attache le débogueur à un processus en cours "
 "d'exécution.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Choisir un fichier « core » à examiner..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Choisir un processus à attacher à..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Pas d'attachement au processus %1 : impossible d'attacher le débogueur à lui-"
 "même."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "Débogueur"
@@ -299,42 +348,47 @@ msgstr ""
 "Un programme est déjà en cours de débogage. Voulez-vous arrêter la session "
 "avec le programme en cours de débogage et démarrer avec celui lancé ?"
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "Exécution du programme"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Attachement au processus %1"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Il est impossible d'attacher le débogueur :</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Il est impossible de démarrer le débogueur :</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Examen du fichier « core » %1"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Le débogueur est arrêté"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "L'application est en cours d'exécution"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "L'application est en pause"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -343,39 +397,45 @@ msgstr ""
 "<b>Commande « gdb » envoyée quand le débogueur n'est pas en cours "
 "d'exécution</b><br>La commande était :<br> %1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Commande de débogueur non valable</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
+msgid "<b>Failed to load core file:</b><br />"
+msgstr "<b>Il est impossible de démarrer le débogueur :</b><br />"
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "S'est terminé avec le code de retour : %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "Arrêté anormalement"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "S'est arrêté avec le signal %1"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Le programme a reçu le signal %1 (%2)"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 commande dans la file d'attente\n"
 msgstr[1] "%1 commandes dans la file d'attente\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -383,12 +443,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "%1 commande est en cours de traitement par GDB\n"
 msgstr[1] "%1 commandes sont en cours de traitement par GDB\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "État du débogueur : %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -399,12 +459,11 @@ msgstr ""
 "Texte de la commande actuelle : « %2 »\n"
 "Texte original de la commande actuelle : « %3 »\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr ""
-"<b>Erreur du débogueur</b><p>Le débogueur a signalé l'erreur suivante :"
-"<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "Debugger error"
+msgid "<b>Debugger error:</b><br />"
+msgstr "Erreur du débogueur"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -441,61 +500,61 @@ msgstr "Brut"
 msgid "Unsigned"
 msgstr "Non signé"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "Général"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "Drapeaux"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "VFP d'un seul mot"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "VFP de deux mots"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "VFP de quatre mots"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "Segment"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Format"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "Mode"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -620,63 +679,63 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr "Répéter la dernière commande lors d'un appui sur la touche <Entrée>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Sélecteur d'adresses"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "Modifier l'&adresse"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&Aller directement au curseur"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "Fixe le pointeur d'exécution à la position actuelle du curseur."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "&Exécuter jusqu'au curseur"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr ""
 "Continue l'exécution jusqu'à ce que la position du curseur soit atteinte."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "&AT&&T"
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 "GDB utilisera la syntaxe du désassembleur AT&T (Par ex. mov 0xc(%ebp),%eax)."
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "&Intel"
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -686,13 +745,13 @@ msgstr ""
 "GDB utilisera la syntaxe désassembleur Intel (Par ex. mov eax, DWORD PTR "
 "[ebp + 0xc])."
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Syntaxe désassembleur"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -707,25 +766,25 @@ msgstr ""
 "d'outils du débogueur de l'instruction « Avancer d'une ligne » (step over) "
 "et de l'instruction « Pas à pas en rentrant » (step into)."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Adresse"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Fonction"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Instruction"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
@@ -744,6 +803,12 @@ msgstr "Sélectionner l'adresse à désassembler"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Adresse à désassembler :"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Erreur du débogueur</b><p>Le débogueur a signalé l'erreur suivante :"
+#~ "<p><tt>%1"
 
 #~ msgctxt "@action:button"
 #~ msgid "Abort Current Session"
@@ -794,14 +859,8 @@ msgstr "Adresse à désassembler :"
 #~ msgid "Debugger status"
 #~ msgstr "État du débogueur"
 
-#~ msgid "Debugger error"
-#~ msgstr "Erreur du débogueur"
-
 #~ msgid "Address selector"
 #~ msgstr "Sélecteur d'adresses"
-
-#~ msgid "Examine core file"
-#~ msgstr "Examiner un fichier « core »"
 
 #, fuzzy
 #~| msgid "Attach to process..."
@@ -891,9 +950,6 @@ msgstr "Adresse à désassembler :"
 
 #~ msgid "gdb error"
 #~ msgstr "Erreur de GDB"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>Il est impossible de démarrer le débogueur :</b><br />"
 
 #~ msgid "Could not locate the debugging shell '%1'."
 #~ msgstr "Il est impossible de trouver le shell de débogage « %1 »."

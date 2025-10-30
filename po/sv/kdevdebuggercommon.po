@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-07 00:41+0000\n"
+"POT-Creation-Date: 2025-10-30 00:41+0000\n"
 "PO-Revision-Date: 2025-09-08 18:21+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -81,11 +81,62 @@ msgctxt "@item:inlistbox"
 msgid "All Processes"
 msgstr "Alla processer"
 
-#: dialogs/selectcoredialog.cpp:18
+#: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
 msgstr "Välj minnesdump"
+
+#: dialogs/selectcoredialog.cpp:49
+#, kde-format
+msgid "Invalid executable file name"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:55
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgid "Executable file does not exist"
+msgstr "Programmet finns inte"
+
+#: dialogs/selectcoredialog.cpp:59
+#, kde-format
+msgid "Executable is not a file"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:63
+#, kde-format
+msgid "Executable file is not readable"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:70
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Empty core file name"
+msgstr "Undersök minnesdump"
+
+#: dialogs/selectcoredialog.cpp:74
+#, fuzzy, kde-format
+#| msgid "Examine core file"
+msgid "Invalid core file name"
+msgstr "Undersök minnesdump"
+
+#: dialogs/selectcoredialog.cpp:80
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgid "Core file does not exist"
+msgstr "Programmet finns inte"
+
+#: dialogs/selectcoredialog.cpp:84
+#, fuzzy, kde-format
+#| msgctxt "@label:chooser"
+#| msgid "Core file:"
+msgid "Core is not a file"
+msgstr "Minnesdump:"
+
+#: dialogs/selectcoredialog.cpp:88
+#, kde-format
+msgid "Core file is not readable"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -101,7 +152,7 @@ msgctxt "@label:chooser"
 msgid "Core file:"
 msgstr "Minnesdump:"
 
-#: mibreakpointcontroller.cpp:809
+#: mibreakpointcontroller.cpp:810
 #, kde-format
 msgid ""
 "\n"
@@ -110,7 +161,7 @@ msgstr ""
 "\n"
 "Gammalt värde: %1"
 
-#: mibreakpointcontroller.cpp:812
+#: mibreakpointcontroller.cpp:813
 #, kde-format
 msgid ""
 "\n"
@@ -119,7 +170,7 @@ msgstr ""
 "\n"
 "Nytt värde: %1"
 
-#: midebugger.cpp:317
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -131,7 +182,7 @@ msgstr ""
 "behandlades. Skicka gärna in en felrapport. Avlusningssessionen avslutas nu "
 "för att undvika en potentiell krasch."
 
-#: midebugger.cpp:320
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -140,18 +191,18 @@ msgstr ""
 "Undantaget är: %1\n"
 "MI-svaret är: %2"
 
-#: midebugger.cpp:323
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Internt fel i avlusaren"
 
-#: midebugger.cpp:335 midebugsession.cpp:445
+#: midebugger.cpp:337 midebugsession.cpp:503
 #, kde-format
 msgid "Process exited"
 msgstr "Processen avslutades"
 
-#: midebugger.cpp:344
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -160,12 +211,12 @@ msgstr ""
 "<b>Kunde inte starta avlusaren.</b><p>Kunde inte köra '%1'. Försäkra dig om "
 "att sökvägsnamnet är riktigt angivet."
 
-#: midebugger.cpp:352
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Processen misslyckades starta"
 
-#: midebugger.cpp:357
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -176,18 +227,18 @@ msgstr ""
 "grund av det måste avlusningssessionen avslutas.<br>Försök att upprepa "
 "kraschen utan KDevelop och rapportera felet.<br>"
 
-#: midebugger.cpp:362
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Avlusaren kraschade"
 
-#: midebugger.cpp:365
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Processen kraschade"
 
-#: midebuggerplugin.cpp:44
+#: midebuggerplugin.cpp:47
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -196,13 +247,13 @@ msgstr ""
 "Ett program håller redan på att avlusas. Vill du avbryta avlusningssessionen "
 "som pågår och fortsätta?"
 
-#: midebuggerplugin.cpp:118
+#: midebuggerplugin.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Undersök minnesdump med %1"
 
-#: midebuggerplugin.cpp:120
+#: midebuggerplugin.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -216,13 +267,13 @@ msgstr ""
 "Minnesdumpen innehåller en avbildning av programmets minne vid tiden då det "
 "kraschade, vilket gör en post-mortem analys möjlig.</p>"
 
-#: midebuggerplugin.cpp:132
+#: midebuggerplugin.cpp:135
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Anslut till process med %1"
 
-#: midebuggerplugin.cpp:134
+#: midebuggerplugin.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -230,28 +281,28 @@ msgid ""
 msgstr ""
 "<b>Anslut till process</b><p>Ansluter avlusaren till en process som kör.</p>"
 
-#: midebuggerplugin.cpp:147
+#: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:215
+#: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Välj en minnesdump att undersöka..."
 
-#: midebuggerplugin.cpp:236
+#: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Välj en process att ansluta till..."
 
-#: midebuggerplugin.cpp:250
+#: midebuggerplugin.cpp:268
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Ansluter inte till processen %1: kan inte ansluta avlusaren till sig själv."
 
-#: midebuggerplugin.cpp:270
+#: midebuggerplugin.cpp:288
 #, kde-format
 msgid "Debugger"
 msgstr "Avlusare"
@@ -286,42 +337,47 @@ msgstr ""
 "Ett program håller redan på att avlusas. Vill du avbryta avlusningssessionen "
 "som pågår och fortsätta starta programmet?"
 
-#: midebugsession.cpp:244
+#: midebugsession.cpp:256
 #, kde-format
 msgid "Running program"
 msgstr "Kör programmet"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:329
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Ansluter till processen %1"
 
-#: midebugsession.cpp:349
+#: midebugsession.cpp:359
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Kunde inte ansluta avlusaren:</b><br />"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:372
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Kunde inte starta avlusaren:</b><br />"
+
+#: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Undersöker minnesdump %1"
 
-#: midebugsession.cpp:431
+#: midebugsession.cpp:489
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Avlusare stoppad"
 
-#: midebugsession.cpp:450
+#: midebugsession.cpp:508
 #, kde-format
 msgid "Application is running"
 msgstr "Programmet kör"
 
-#: midebugsession.cpp:455
+#: midebugsession.cpp:513
 #, kde-format
 msgid "Application is paused"
 msgstr "Programmet gör paus"
 
-#: midebugsession.cpp:770
+#: midebugsession.cpp:826
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -330,39 +386,45 @@ msgstr ""
 "<b>Kommando till gdb skickat när avlusaren inte kör</b><br>Kommandot är:<br>"
 "%1"
 
-#: midebugsession.cpp:882
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Felaktigt kommando till avlusaren</b><br>%1"
 
-#: midebugsession.cpp:1018
+#: midebugsession.cpp:1013
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
+msgid "<b>Failed to load core file:</b><br />"
+msgstr "<b>Kunde inte starta avlusaren:</b><br />"
+
+#: midebugsession.cpp:1102
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Avslutades med returkoden: %1"
 
-#: midebugsession.cpp:1020
+#: midebugsession.cpp:1104
 #, kde-format
 msgid "Exited normally"
 msgstr "Avslutade normalt"
 
-#: midebugsession.cpp:1027
+#: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Avslutades med signal %1"
 
-#: midebugsession.cpp:1062
+#: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programmet tog emot signalen %1 (%2)"
 
-#: midebugsession.cpp:1194
+#: midebugsession.cpp:1262
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 kommando i kö\n"
 msgstr[1] "%1 kommandon i kö\n"
 
-#: midebugsession.cpp:1195
+#: midebugsession.cpp:1263
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -370,12 +432,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 kommando behandlas av gdb\n"
 msgstr[1] "%1 kommandon behandlas av gdb\n"
 
-#: midebugsession.cpp:1196
+#: midebugsession.cpp:1264
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Avlusarens status: %1\n"
 
-#: midebugsession.cpp:1199
+#: midebugsession.cpp:1267
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -386,10 +448,11 @@ msgstr ""
 "Nuvarande kommandotext: '%2'\n"
 "Nuvarande kommandots originaltext: '%3'\n"
 
-#: midebugsession.cpp:1226
-#, kde-format
-msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr "<b>Fel i avlusaren</b><p>Avlusaren rapporterade följande fel:<p><tt>%1"
+#: midebugsession.cpp:1292
+#, fuzzy, kde-format
+#| msgid "Debugger error"
+msgid "<b>Debugger error:</b><br />"
+msgstr "Fel i avlusaren"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -426,61 +489,61 @@ msgstr "Obehandlad"
 msgid "Unsigned"
 msgstr "Utan tecken"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "General"
 msgstr "Allmänt"
 
-#: registers/registercontroller_arm.cpp:100
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_arm.cpp:89
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Flags"
 msgstr "Flaggor"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP single-word"
 msgstr "VFP enkelord"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP double-word"
 msgstr "VFP dubbelord"
 
-#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_arm.cpp:89
 #, kde-format
 msgid "VFP quad-word"
 msgstr "VFP fyrdubbelt ord"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "FPU"
 msgstr "FPU"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "XMM"
 msgstr "XMM"
 
-#: registers/registercontroller_x86.cpp:100
+#: registers/registercontroller_x86.cpp:89
 #, kde-format
 msgid "Segment"
 msgstr "Segment"
 
-#: registers/registersview.cpp:51
+#: registers/registersview.cpp:59
 #, kde-format
 msgctxt "@title:menu"
 msgid "Format"
 msgstr "Format"
 
-#: registers/registersview.cpp:60
+#: registers/registersview.cpp:68
 #, kde-format
 msgctxt "@title:menu"
 msgid "Mode"
 msgstr "Läge"
 
-#: registers/registersview.cpp:195
+#: registers/registersview.cpp:214
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
@@ -601,62 +664,62 @@ msgid "Repeat last sent command when hit <Return>"
 msgstr "Upprepa senast skickade kommando med returtangenten"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
-#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#: widgets/disassemblewidget.cpp:91 widgets/selectaddressdialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Address Selector"
 msgstr "Adressväljare"
 
-#: widgets/disassemblewidget.cpp:88
+#: widgets/disassemblewidget.cpp:132
 #, kde-format
 msgctxt "@action"
 msgid "Change &Address"
 msgstr "Ändra &adress"
 
-#: widgets/disassemblewidget.cpp:92
+#: widgets/disassemblewidget.cpp:136
 #, kde-format
 msgctxt "@action"
 msgid "&Jump to Cursor"
 msgstr "&Gå till markör"
 
-#: widgets/disassemblewidget.cpp:93
+#: widgets/disassemblewidget.cpp:137
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
 msgstr "Ställ in körpekaren på nuvarande markörposition."
 
-#: widgets/disassemblewidget.cpp:96
+#: widgets/disassemblewidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "&Run to Cursor"
 msgstr "&Kör till markör"
 
-#: widgets/disassemblewidget.cpp:97
+#: widgets/disassemblewidget.cpp:141
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Fortsätter köra till markörpositionen nås."
 
-#: widgets/disassemblewidget.cpp:100
+#: widgets/disassemblewidget.cpp:144
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
 msgstr "&AT&&T"
 
-#: widgets/disassemblewidget.cpp:101
+#: widgets/disassemblewidget.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
 "GDB använder AT&T:s variant av assemblerkod (t.ex. mov 0xc(%ebp),%eax)."
 
-#: widgets/disassemblewidget.cpp:105
+#: widgets/disassemblewidget.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
 msgstr "&Intel"
 
-#: widgets/disassemblewidget.cpp:106
+#: widgets/disassemblewidget.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -666,13 +729,13 @@ msgstr ""
 "GDB använder Intels variant av assemblerkod (t.ex. mov eax, DWORD PTR [ebp"
 "+0xc])."
 
-#: widgets/disassemblewidget.cpp:143
+#: widgets/disassemblewidget.cpp:189
 #, kde-format
 msgctxt "@title:menu"
 msgid "Disassembly Flavor"
 msgstr "Variant av assemblerkod"
 
-#: widgets/disassemblewidget.cpp:174
+#: widgets/disassemblewidget.cpp:220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -686,25 +749,25 @@ msgstr ""
 "med knapparna \"stega förbi instruktion\" och \"stega in i instruktion\" på "
 "avlusarens verktygsrad."
 
-#: widgets/disassemblewidget.cpp:190
+#: widgets/disassemblewidget.cpp:236
 #, kde-format
 msgctxt "@title:column"
 msgid "Address"
 msgstr "Adress"
 
-#: widgets/disassemblewidget.cpp:191
+#: widgets/disassemblewidget.cpp:237
 #, kde-format
 msgctxt "@title:column"
 msgid "Function"
 msgstr "Funktion"
 
-#: widgets/disassemblewidget.cpp:192
+#: widgets/disassemblewidget.cpp:238
 #, kde-format
 msgctxt "@title:column"
 msgid "Instruction"
 msgstr "Instruktion"
 
-#: widgets/disassemblewidget.cpp:212
+#: widgets/disassemblewidget.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers View"
@@ -723,6 +786,11 @@ msgstr "Välj adress att visa assembler kod omkring"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "Välj adress att visa assembler kod omkring"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Fel i avlusaren</b><p>Avlusaren rapporterade följande fel:<p><tt>%1"
 
 #~ msgctxt "@action:button"
 #~ msgid "Abort Current Session"
@@ -772,14 +840,8 @@ msgstr "Välj adress att visa assembler kod omkring"
 #~ msgid "Debugger status"
 #~ msgstr "Avlusarens status"
 
-#~ msgid "Debugger error"
-#~ msgstr "Fel i avlusaren"
-
 #~ msgid "Address selector"
 #~ msgstr "Adressväljare"
-
-#~ msgid "Examine core file"
-#~ msgstr "Undersök minnesdump"
 
 #~ msgid "Attach to Process... (%1)"
 #~ msgstr "Anslut till process... (%1)"
@@ -861,9 +923,6 @@ msgstr "Välj adress att visa assembler kod omkring"
 
 #~ msgid "gdb error"
 #~ msgstr "Fel i gdb"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>Kunde inte starta avlusaren:</b><br />"
 
 #~ msgid "Could not locate the debugging shell '%1'."
 #~ msgstr "Kunde inte hitta avlusningsskalet '%1'."
@@ -1306,9 +1365,6 @@ msgstr "Välj adress att visa assembler kod omkring"
 #~ "<b>Programmet finns inte</b><p>Programmet du försöker avlusa,<br>    %1\n"
 #~ "<br>finns inte. Kontrollera att du har angivit rätt program i "
 #~ "avlusarinställningarna."
-
-#~ msgid "Application does not exist"
-#~ msgstr "Programmet finns inte"
 
 #~ msgid ""
 #~ "<b>Could not run application '%1'.</b><p>The application does not have "
