@@ -2059,15 +2059,6 @@ void DebuggerTestBase::testReceivePosixSignal()
 
     QSignalSpy errorOutputSpy(session, &MIDebugSession::inferiorStderrLines);
 
-    if (isLldb()) {
-        if (QTest::currentDataTag() == QLatin1String{"debuggee_abort"}
-            || QTest::currentDataTag() == QLatin1String{"debuggee_arithmetic_signal"}) {
-            QSKIP(
-                "Skipping to prevent an internal debugger error due to an "
-                "unconditionally accessed but missing MI field \"signal-meaning\"");
-        }
-    }
-
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
     QVERIFY(session->hasCrashed());
@@ -2076,10 +2067,24 @@ void DebuggerTestBase::testReceivePosixSignal()
     constexpr auto signalLine = 25;
 
     if (isSignaRaisedInLibraryFunction) {
+        if (isLldb()) {
+            QEXPECT_FAIL(
+                "debuggee_abort",
+                "A *stopped MI output record does not have a field \"frame\" when a SIGABRT signal is received", Abort);
+        }
         VERIFY_VALID_ADDRESS(session->currentAddr());
         QCOMPARE_NE(session->currentUrl(), sourceUrl);
     } else {
-        VERIFY_VALID_CURRENT_LOCATION(session, sourceUrl, signalLine);
+        if (isLldb()) {
+            QEXPECT_FAIL("debuggee_arithmetic_signal",
+                         "A *stopped MI output record does not have a field \"frame\" when a SIGFPE signal is received",
+                         Abort);
+            // Cannot just expect a failure of the more thorough VERIFY_VALID_CURRENT_LOCATION() check
+            // below, because verifyCurrentLocation() verifies that the session is not null first.
+            QCOMPARE_EQ(session->currentUrl(), sourceUrl);
+        } else {
+            VERIFY_VALID_CURRENT_LOCATION(session, sourceUrl, signalLine);
+        }
     }
 
     const auto threadIndex = stackModel->index(0, 0);
