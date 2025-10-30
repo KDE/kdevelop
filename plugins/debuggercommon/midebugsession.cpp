@@ -1121,7 +1121,9 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
 
     if (reason == QLatin1String("signal-received")) {
         QString name = r[QStringLiteral("signal-name")].literal();
-        QString user_name = r[QStringLiteral("signal-meaning")].literal();
+        // GDB/MI always sends a field "signal-meaning", e.g. "Aborted" for SIGABRT. LLDB-MI sends this
+        // field for some signals (e.g. SIGSEGV) but does not send it for others (e.g. SIGABRT and SIGFPE).
+        const auto userFriendlyName = literalIfHasField(r, QStringLiteral("signal-meaning"));
 
         // SIGINT is a "break into running program".
         // We do this when the user set/mod/clears a breakpoint but the
@@ -1135,7 +1137,10 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
             // program has a signal that's caused the prog to stop.
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
-            programFinished(i18n("Program received signal %1 (%2)", name, user_name));
+            programFinished(userFriendlyName.isEmpty()
+                                ? i18nc("%1 - the name of a POSIX signal", "Program received signal %1", name)
+                                : i18nc("%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal",
+                                        "Program received signal %1 (%2)", name, userFriendlyName));
 
             m_hasCrashed = true;
         }
