@@ -153,6 +153,8 @@ private Q_SLOTS:
     void testStackFetchMore();
     void testStackSwitchThread();
 
+    void testThreadAndFrameInfo();
+
     void testCoreFile_data();
     void testCoreFile();
 

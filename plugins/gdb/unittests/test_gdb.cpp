@@ -32,7 +32,6 @@
 #include <QList>
 #include <QScopeGuard>
 #include <QStandardPaths>
-#include <QSignalSpy>
 #include <QTest>
 #include <QTemporaryFile>
 
@@ -508,36 +507,6 @@ void GdbTest::testBreakpointDisabledOnStart()
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 31);
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-}
-
-void GdbTest::testThreadAndFrameInfo()
-{
-    // Check if --thread is added to user commands
-
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
-    QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
-
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QSignalSpy outputSpy(session, &TestDebugSession::debuggerUserCommandOutput);
-
-    session->addCommand(std::make_unique<MI::UserCommand>(MI::ThreadInfo, QString()));
-    session->addCommand(std::make_unique<MI::UserCommand>(MI::StackListLocals, QStringLiteral("0")));
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // wait for command finish
-
-    // outputs should be
-    // 1. -thread-info
-    // 2. ^done for thread-info
-    // 3. -stack-list-locals
-    // 4. ^done for -stack-list-locals
-    QCOMPARE(outputSpy.count(), 4);
-    QVERIFY(outputSpy.at(2).at(0).toString().contains(QLatin1String("--thread 1")));
-
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

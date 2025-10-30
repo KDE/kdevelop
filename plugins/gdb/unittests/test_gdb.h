@@ -38,7 +38,6 @@ private Q_SLOTS:
 
     void testBreakpointDisabledOnStart();
 
-    void testThreadAndFrameInfo();
     void parseBug304730();
 
 private:

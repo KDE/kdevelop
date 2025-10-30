@@ -10,6 +10,7 @@
 #include "debuggertestbase.h"
 
 #include "mi/mi.h"
+#include "mi/micommand.h"
 #include "midebugsession.h"
 #include "testhelper.h"
 
@@ -1402,6 +1403,36 @@ void DebuggerTestBase::testStackSwitchThread()
     VALIDATE_COLUMN_COUNTS_THREAD_COUNT_AND_STACK_FRAME_NUMBERS(threadIndex, 4);
     QVERIFY(stackModel->data(threadIndex).toString().startsWith("#2 at "));
     QCOMPARE_GE(stackModel->rowCount(threadIndex), 4);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testThreadAndFrameInfo()
+{
+    // Verify that `--thread <current thread number>` is added to commands that can specify a thread but do not do so.
+
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("debuggee_debugeethreads");
+    const auto fileName = findSourceFile("debugeethreads.cpp");
+
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 43); // QThread::msleep(600);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    const QSignalSpy userCommandOutputSpy(session, &MIDebugSession::debuggerUserCommandOutput);
+
+    session->addCommand(std::make_unique<MI::UserCommand>(MI::ThreadInfo, ""));
+    session->addCommand(std::make_unique<MI::UserCommand>(MI::StackListLocals, "0"));
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState); // wait for command finish
+
+    // The user command outputs should be:
+    // 0. -thread-info
+    // 1. ^done for thread-info
+    // 2. -stack-list-locals
+    // 3. ^done for -stack-list-locals
+    QCOMPARE(userCommandOutputSpy.count(), 4);
+    QVERIFY(userCommandOutputSpy.at(2).constFirst().toString().contains("--thread 1"));
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
