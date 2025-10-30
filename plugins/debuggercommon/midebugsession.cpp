@@ -1186,8 +1186,11 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     // id that is not already in the list, and it will be upset.
     if (r.hasField(QStringLiteral("frame"))) {
         setCurrentPositionToFrameFieldOf(r);
-        reloadProgramState();
+    } else {
+        qCDebug(DEBUGGERCOMMON) << "a non-exited *stopped MI output record does not have a field \"frame\"";
+        askDebuggerAboutSelectedFrame();
     }
+    reloadProgramState();
 
     setDebuggerStateOff(s_interruptSent);
     if (!wasInterrupt)
