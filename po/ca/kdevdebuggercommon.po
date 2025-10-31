@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-09-07 10:05+0200\n"
+"PO-Revision-Date: 2025-10-30 13:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -93,50 +93,47 @@ msgstr "Seleccioneu un fitxer de nucli"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Nom no vàlid de fitxer executable"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "El fitxer executable no existeix"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "L'executable no és un fitxer"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "L'executable no es pot llegir"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examining core file %1"
+#, kde-format
 msgid "Empty core file name"
-msgstr "S'està examinant el fitxer de nucli %1"
+msgstr "El nom de fitxer de nucli és buit"
 
 #: dialogs/selectcoredialog.cpp:74
 #, kde-format
 msgid "Invalid core file name"
-msgstr ""
+msgstr "El nom de fitxer de nucli no és vàlid"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "El fitxer de nucli no existeix"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Fitxer de nucli:"
+msgstr "El nucli no és cap fitxer"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "El fitxer de nucli no es pot llegir"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -354,10 +351,9 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>No s'ha pogut adjuntar al depurador:</b><br />"
 
 #: midebugsession.cpp:372
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>No s'ha pogut adjuntar al depurador:</b><br />"
+msgstr "<b>No s'ha pogut iniciar el depurador:</b><br />"
 
 #: midebugsession.cpp:386
 #, kde-format
@@ -396,7 +392,7 @@ msgstr "<b>Ordre de depuració invàlida</b><br>%1"
 #: midebugsession.cpp:1013
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr ""
+msgstr "<b>Ha fallat en carregar el fitxer de nucli:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -450,10 +446,9 @@ msgstr ""
 "Text original de l'ordre actual: «%3»\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "<b>No s'ha pogut adjuntar al depurador:</b><br />"
+msgstr "<b>Error del depurador:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format

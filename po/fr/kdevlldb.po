@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-10-31 00:41+0000\n"
 "PO-Revision-Date: 2024-04-26 17:10+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -33,19 +33,19 @@ msgstr "(exécution)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:128
+#: debugsession.cpp:119
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 "Tentative d'exécuter une commande utilisateur sur une version non prise en "
 "charge de LLDB"
 
-#: debugsession.cpp:320
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Erreur de connexion à la cible distante :</b><br />"
 
-#: debugsession.cpp:354
+#: debugsession.cpp:345
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -58,12 +58,12 @@ msgstr ""
 "id=28026 pour plus d'informations.<br/>La console du débogueur sera "
 "désactivée pour éviter un plantage.<br/>Voulez-vous continuer ?"
 
-#: debugsession.cpp:358
+#: debugsession.cpp:349
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Version de LLDB non prise en charge"
 
-#: debugsession.cpp:404
+#: debugsession.cpp:395
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"

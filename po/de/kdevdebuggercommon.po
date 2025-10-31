@@ -359,7 +359,8 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Debugger kann sich nicht verbinden:</b><br />"
 
 #: midebugsession.cpp:372
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Debugger kann nicht gestartet werden:</b><br />"
 

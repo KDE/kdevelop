@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-10-31 00:41+0000\n"
 "PO-Revision-Date: 2024-05-30 22:41+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -28,17 +28,17 @@ msgstr "(rulanta)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:128
+#: debugsession.cpp:119
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Provante ruli uzantokomandon en nesubtenata LLDB-versio"
 
-#: debugsession.cpp:320
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Eraro konektante al fora celo:</b><br />"
 
-#: debugsession.cpp:354
+#: debugsession.cpp:345
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -51,12 +51,12 @@ msgstr ""
 "<br />Elĉimilo konzolo estos malŝaltita por malhelpi paneon.<br/>Ĉu vi volas "
 "daŭrigi?"
 
-#: debugsession.cpp:358
+#: debugsession.cpp:349
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB-Versio Nesubtenata"
 
-#: debugsession.cpp:404
+#: debugsession.cpp:395
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"

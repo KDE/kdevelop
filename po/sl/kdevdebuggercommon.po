@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-09-07 09:49+0200\n"
+"PO-Revision-Date: 2025-10-30 07:51+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -90,51 +90,47 @@ msgstr "Izberite jedrno datoteko"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Neveljavno ime izvedljive datoteke"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "Izvedljiva datoteka ne obstaja"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "Izvedljiva datoteka ni datoteka"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Izvedljiva datoteka ni berljiva"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Preuči jedrno datoteko"
+msgstr "Prazno ime datoteke jedra"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
-msgstr "Preuči jedrno datoteko"
+msgstr "Neveljavno ime datoteke jedra"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "Datoteka jedra ne obstaja"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Jedrna datoteka:"
+msgstr "Jedro ni datoteka"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Datoteka jedra ni berljiva"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -391,10 +387,9 @@ msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Neveljaven ukaz razhroščevalnika</b><br>%1"
 
 #: midebugsession.cpp:1013
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>Razhroščevalnika ni bilo mogoče zagnati:</b><br />"
+msgstr "<b>Ni bilo mogoče naložiti datoteke jedra:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -452,10 +447,9 @@ msgstr ""
 "Trenutno izvorno besedilo ukaza: '%3'\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "Napaka razhroščevalnika"
+msgstr "<b>Napaka razhroščevalnika:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format

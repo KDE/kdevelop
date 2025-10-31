@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 22:34+0200\n"
+"PO-Revision-Date: 2025-10-30 13:48+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -83,56 +83,52 @@ msgstr "Alle processen"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
-msgstr "Core-bestand selecteren"
+msgstr "Kern-bestand selecteren"
 
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Ongeldige bestandsnaam van uitvoerbaar bestand"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "Uitvoerbaar bestand bestaat niet"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "Uitvoerbaar bestand is geen bestand"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Uitvoerbaar bestand is niet leesbaar"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Core-bestand onderzoeken"
+msgstr "Leeg kern-bestandsnaam"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
-msgstr "Core-bestand onderzoeken"
+msgstr "Ongeldig kern-bestandsnaam"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "Kern-bestand  bestaat niet"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Core-bestand:"
+msgstr "Kern is geen bestand"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Kern-bestand is niet leesbaar"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -146,7 +142,7 @@ msgstr "Uitvoerbaar bestand:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Core file:"
-msgstr "Core-bestand:"
+msgstr "Kern-bestand:"
 
 #: mibreakpointcontroller.cpp:810
 #, kde-format
@@ -247,7 +243,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
-msgstr "Core-bestand onderzoeken met %1"
+msgstr "Kern-bestand onderzoeken met %1"
 
 #: midebuggerplugin.cpp:123
 #, kde-format
@@ -258,8 +254,8 @@ msgid ""
 "The core file contains an image of the program memory at the time it "
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
-"<b>Core-bestand onderzoeken</b> <p>Dit laadt een core-bestand, die na een "
-"programma-crash aangemaakt wordt, bijv. na een segmentatiefout. Het core-"
+"<b>Kern-bestand onderzoeken</b> <p>Dit laadt een kern-bestand, die na een "
+"programma-crash aangemaakt wordt, bijv. na een segmentatiefout. Het kern-"
 "bestand bevat een beeld van het programmageheugen op het moment dat het "
 "programma gecrashed is, zodat u een post-mortem-analyse kunt uitvoeren.</p>"
 
@@ -285,7 +281,7 @@ msgstr "KDevelop (%1) - %2"
 #: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
-msgstr "Voer hier de naam van het te onderzoeken Core-bestand in..."
+msgstr "Voer hier de naam van het te onderzoeken kern-bestand in..."
 
 #: midebuggerplugin.cpp:254
 #, kde-format
@@ -316,7 +312,7 @@ msgstr "'%1' is geen uitvoerbaar bestand"
 #: midebugjobs.cpp:196
 #, kde-format
 msgid "Debug core file"
-msgstr "Core-bestand debuggen"
+msgstr "Kern-bestand debuggen"
 
 #: midebugjobs.cpp:212
 #, kde-format
@@ -348,15 +344,14 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Kon debugger niet aanhechten:</b><br />"
 
 #: midebugsession.cpp:372
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Kon debugger niet aanhechten:</b><br />"
+msgstr "<b>Kon debugger niet starten:</b><br />"
 
 #: midebugsession.cpp:386
 #, kde-format
 msgid "Examining core file %1"
-msgstr "Code-bestand %1 wordt onderzocht"
+msgstr "Kern-bestand %1 wordt onderzocht"
 
 #: midebugsession.cpp:489
 #, kde-format
@@ -388,14 +383,9 @@ msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ongeldige debugger-commando</b><br>%1"
 
 #: midebugsession.cpp:1013
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Failed to load core file</b><p>Debugger reported the following error:"
-#| "<p><tt>%1"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr ""
-"<b>Kernbestand laden is mislukt</b><p>De debugger melde de volgende fout:"
-"<p><tt>%1"
+msgstr "<b>Kernbestand laden is mislukt</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -449,10 +439,9 @@ msgstr ""
 "Huidige commando originele tekst: '%3'\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "Debuggerfout"
+msgstr "<b>Debuggerfout:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format

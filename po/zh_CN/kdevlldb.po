@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-10-31 00:41+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -27,17 +27,17 @@ msgstr "(正在运行)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:128
+#: debugsession.cpp:119
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "试图在不受支持的 LLDB 版本上执行用户命令"
 
-#: debugsession.cpp:320
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>链接远程目标时出错：</b><br />"
 
-#: debugsession.cpp:354
+#: debugsession.cpp:345
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -49,12 +49,12 @@ msgstr ""
 "llvm.org/bugs/show_bug.cgi?id=28026 了解更多信息。<br/>调试器控制台将被禁用以"
 "避免崩溃。<br/>您想要继续吗？"
 
-#: debugsession.cpp:358
+#: debugsession.cpp:349
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB 版本不受支持"
 
-#: debugsession.cpp:404
+#: debugsession.cpp:395
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"

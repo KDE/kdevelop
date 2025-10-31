@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-10-31 00:41+0000\n"
 "PO-Revision-Date: 2023-06-30 08:46+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -27,19 +27,19 @@ msgstr "(en execución)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:128
+#: debugsession.cpp:119
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 "Intentando executar unha orde da persoa usuaria nunha versión incompatíbel "
 "de LLDB."
 
-#: debugsession.cpp:320
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Erro ao conectar ao destino remoto:</b><br />"
 
-#: debugsession.cpp:354
+#: debugsession.cpp:345
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -52,12 +52,12 @@ msgstr ""
 "máis información.<br/>A consola do depurador desactivarase para evitar unha "
 "quebra.<br/>Quere continuar?"
 
-#: debugsession.cpp:358
+#: debugsession.cpp:349
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Versión incompatíbel de LLDB"
 
-#: debugsession.cpp:404
+#: debugsession.cpp:395
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"

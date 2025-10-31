@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-09-07 04:16+0200\n"
+"PO-Revision-Date: 2025-10-30 05:31+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -89,50 +89,47 @@ msgstr "აირჩიეთ Core ფაილი"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "არასწორი გამშვები ფაილის სახელი"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "გამშვები ფაილი არ არსებობს"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "გამშვები ფაილი არაა"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "გამშვები ფაილი წაკითხვადი არაა"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examining core file %1"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Core ფაილის ანალიზი %1"
+msgstr "ცარიელი Core ფაილის სახელი"
 
 #: dialogs/selectcoredialog.cpp:74
 #, kde-format
 msgid "Invalid core file name"
-msgstr ""
+msgstr "არასწორი Core ფაილის სახელი"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "Core ფაილი არ არსებობს"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Core ფაილი:"
+msgstr "Core ფაილი არაა"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Core ფაილი წაკითხვადი არაა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -350,10 +347,9 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>გამმართველის მიმაგრების შეცდომა:</b><br />"
 
 #: midebugsession.cpp:372
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>გამმართველის მიმაგრების შეცდომა:</b><br />"
+msgstr "<b>გამართვის პროგრამის გაშვების შეცდომა:</b><br />"
 
 #: midebugsession.cpp:386
 #, kde-format
@@ -392,7 +388,7 @@ msgstr "<b>გამმართველის ბრძანების შ�
 #: midebugsession.cpp:1013
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr ""
+msgstr "<b>წაკითხვის შეცდომა Core ფაილისთვის:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -446,10 +442,9 @@ msgstr ""
 "მიმდინარე ბრძანების საწყისი ტექსტი: '%3'\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "<b>გამმართველის მიმაგრების შეცდომა:</b><br />"
+msgstr "<b>გამმართველის შეცდომა:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format

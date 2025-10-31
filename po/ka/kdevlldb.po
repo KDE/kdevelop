@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-10-31 00:41+0000\n"
 "PO-Revision-Date: 2024-07-19 06:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -28,17 +28,17 @@ msgstr "[გაშვებულია]"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:128
+#: debugsession.cpp:119
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "მომხმარებლის ბრძანების მხარდაუჭერელი LLDB-ის ვერსიით გაშვება"
 
-#: debugsession.cpp:320
+#: debugsession.cpp:311
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>დაშორებულ სამიზნესთან მიერთების პრობლემა:</b><br />"
 
-#: debugsession.cpp:354
+#: debugsession.cpp:345
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -51,12 +51,12 @@ msgstr ""
 ">გამმართველის კონსოლი გათიშულია ზედმეტი პრობლემების ასაცილებლად.<br/>გნებავთ "
 "გააგრძელოთ?"
 
-#: debugsession.cpp:358
+#: debugsession.cpp:349
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB-ის მხარდაუჭერელი ვერსია"
 
-#: debugsession.cpp:404
+#: debugsession.cpp:395
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"

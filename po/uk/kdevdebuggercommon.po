@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-09-07 14:59+0300\n"
+"PO-Revision-Date: 2025-10-30 13:52+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -91,51 +91,47 @@ msgstr "Вибір файла core"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Некоректна назва виконуваного файла"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "Виконуваного файла не існує"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "Виконуваний файл є не файлом"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Виконуваний файл є непридатним до читання"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Дослідити файл core"
+msgstr "Порожня назва файла ядра"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
-msgstr "Дослідити файл core"
+msgstr "Некоректна назва файла ядра"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "Файла ядра не існує"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Файл ядра:"
+msgstr "Файл ядра не є файлом"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Файл ядра непридатний до читання"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -394,10 +390,9 @@ msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Некоректна команда зневаднику</b><br>%1"
 
 #: midebugsession.cpp:1013
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>Не вдалося запустити зневадник</b><br />"
+msgstr "<b>Не вдалося завантажити файл ядра:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -455,10 +450,9 @@ msgstr ""
 "Початковий текст поточної команди: '%3'\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "Помилка зневадника"
+msgstr "<b>Помилка засобу діагностики:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
