@@ -32,8 +32,10 @@
 #include <QApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QStandardPaths>
 #include <QGuiApplication>
+#include <QRegularExpression>
+#include <QStandardPaths>
+#include <QVersionNumber>
 
 using namespace KDevMI::LLDB;
 using namespace KDevMI::MI;
@@ -355,46 +357,50 @@ void DebugSession::handleVersion(const QStringList& s)
         return;
     }
 
-    qCDebug(DEBUGGERLLDB) << s.first();
+    // Join stream output strings by an empty separator because such a string
+    // ends with '\n' unless the next string in the list continues a logical line.
+    auto versionText = s.join(QLatin1String{});
 
-// minimal version is 3.8.1
+    qCDebug(DEBUGGERLLDB) << versionText;
+
 #ifdef Q_OS_OSX
-    QRegularExpression rx(QStringLiteral("^lldb-(\\d+).(\\d+).(\\d+)\\b"), QRegularExpression::MultilineOption);
+    static const QRegularExpression versionPrefix(QStringLiteral("^lldb-\\d"), QRegularExpression::MultilineOption);
     // lldb 3.8.1 reports version 350.99.0 on OS X
-    const int min_ver[] = {350, 99, 0};
+    const QVersionNumber minimumVersion{350, 99, 0};
 #else
-    QRegularExpression rx(QStringLiteral("^lldb version (\\d+).(\\d+).(\\d+)\\b"), QRegularExpression::MultilineOption);
-    const int min_ver[] = {3, 8, 1};
+    static const QRegularExpression versionPrefix(QStringLiteral("^lldb version \\d"),
+                                                  QRegularExpression::MultilineOption);
+    const QVersionNumber minimumVersion{3, 8, 1};
 #endif
 
-    auto match = rx.match(s.first());
-    int version[] = {0, 0, 0};
-    if (match.hasMatch()) {
-        for (int i = 0; i != 3; ++i) {
-            version[i] = match.capturedView(i + 1).toInt();
+    const auto reportErrorAndStopDebugger = [this](const QString& messageText) {
+        if (!qobject_cast<QGuiApplication*>(qApp)) {
+            qFatal() << messageText; // for unit tests
         }
-    }
-
-    bool ok = true;
-    for (int i = 0; i < 3; ++i) {
-        if (version[i] < min_ver[i]) {
-            ok = false;
-            break;
-        } else if (version[i] > min_ver[i]) {
-            ok = true;
-            break;
-        }
-    }
-
-    if (!ok) {
-        if (!qobject_cast<QGuiApplication*>(qApp))  {
-            //for unittest
-            qFatal("You need a graphical application.");
-        }
-
-        const QString messageText = i18n("<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />"
-            "You are using: %1", s.first());
         stopDebuggerOnError(messageText);
+    };
+
+    const auto match = versionPrefix.match(versionText);
+    if (!match.hasMatch()) {
+        if (versionText.endsWith(QLatin1Char{'\n'})) {
+            versionText.removeLast(); // prevent line break at the end to save vertical space
+        }
+        versionText = versionText.toHtmlEscaped();
+        versionText.replace(QLatin1Char{'\n'}, QLatin1String{"<br />"});
+
+        reportErrorAndStopDebugger(
+            i18n("The LLDB version used by your <code>lldb-mi</code> could not be detected.<br />"
+                 "Your <code>lldb-mi</code> sent the following reply to a CLI command <code>version</code>:<br />")
+            + versionText);
+        return;
+    }
+
+    const auto lldbVersion = QVersionNumber::fromString(QStringView(versionText).sliced(match.capturedEnd() - 1));
+    if (lldbVersion < minimumVersion) {
+        reportErrorAndStopDebugger(
+            i18n("Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />"
+                 "But it is currently using LLDB version %2",
+                 minimumVersion.toString(), lldbVersion.toString()));
     }
 }
 
