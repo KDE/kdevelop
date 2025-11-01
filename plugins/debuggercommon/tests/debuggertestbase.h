@@ -174,7 +174,8 @@ private Q_SLOTS:
 
     void testCommandOrderFastStepping();
 
-    void testSegfaultDebugee();
+    void testReceivePosixSignal_data();
+    void testReceivePosixSignal();
 
     void testDebugInExternalTerminal_data();
     void testDebugInExternalTerminal();

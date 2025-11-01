@@ -2025,21 +2025,54 @@ void DebuggerTestBase::testCommandOrderFastStepping()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
-void DebuggerTestBase::testSegfaultDebugee()
+void DebuggerTestBase::testReceivePosixSignal_data()
 {
+    QTest::addColumn<QString>("executableName");
+    QTest::addColumn<QString>("sourceFileName");
+    QTest::addColumn<bool>("isSignaRaisedInLibraryFunction");
+
+    QTest::newRow("debuggee_crash") << "debuggee_crash" << "debugeecrash.cpp" << false;
+    QTest::newRow("debuggee_abort") << "debuggee_abort" << "debugeeabort.cpp" << true;
+    QTest::newRow("debuggee_arithmetic_signal")
+        << "debuggee_arithmetic_signal" << "debugeearithmeticsignal.cpp" << false;
+}
+
+void DebuggerTestBase::testReceivePosixSignal()
+{
+    QFETCH(const QString, executableName);
+    QFETCH(const QString, sourceFileName);
+
     auto* const session = createTestDebugSession();
-    TestLaunchConfiguration cfg("debuggee_crash");
-    const auto fileName = findSourceFile("debugeecrash.cpp");
+    TestLaunchConfiguration cfg(executableName);
+    const auto sourceFilePath = findSourceFile(sourceFileName);
+    const auto sourceUrl = QUrl::fromLocalFile(sourceFilePath);
 
     session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
 
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 23);
+    breakpoints()->addCodeBreakpoint(sourceUrl, 23);
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 23);
 
+    if (isLldb()) {
+        if (QTest::currentDataTag() == QLatin1String{"debuggee_abort"}
+            || QTest::currentDataTag() == QLatin1String{"debuggee_arithmetic_signal"}) {
+            QSKIP(
+                "Skipping to prevent an internal debugger error due to an "
+                "unconditionally accessed but missing MI field \"signal-meaning\"");
+        }
+    }
+
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
-    QCOMPARE(currentMiLine(session), 25);
+
+    QFETCH(const bool, isSignaRaisedInLibraryFunction);
+    constexpr auto signalLine = 25;
+    if (isSignaRaisedInLibraryFunction) {
+        VERIFY_VALID_ADDRESS(session->currentAddr());
+        QCOMPARE_NE(session->currentUrl(), sourceUrl);
+    } else {
+        VERIFY_VALID_CURRENT_LOCATION(session, sourceUrl, signalLine);
+    }
 
     session->stopDebugger();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
