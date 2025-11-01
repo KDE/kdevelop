@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-09-07 23:43+0200\n"
+"PO-Revision-Date: 2025-10-30 18:23+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -90,53 +90,47 @@ msgstr "Seleziona file core"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Nome di file eseguibile non valido"
 
 #: dialogs/selectcoredialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgid "Executable file does not exist"
-msgstr "L'applicazione non esiste"
+msgstr "Il file eseguibile non esiste"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "L'eseguibile non è un file"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Il file eseguibile non è leggibile"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Esamina file core"
+msgstr "Nome di file core vuoto"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
-msgstr "Esamina file core"
+msgstr "Nome di file core non valido"
 
 #: dialogs/selectcoredialog.cpp:80
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgid "Core file does not exist"
-msgstr "L'applicazione non esiste"
+msgstr "Il file core non esiste"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "File core:"
+msgstr "Il core non è un file"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Il file core non è leggibile"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -356,7 +350,7 @@ msgstr "<b>Impossibile connettersi ad un processo per il debug.</b><br />"
 #: midebugsession.cpp:372
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Impossibile avviare il debug</b><br />"
+msgstr "<b>Impossibile avviare il programma di debug:</b><br />"
 
 #: midebugsession.cpp:386
 #, kde-format
@@ -393,10 +387,9 @@ msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Comando di debug non valido</b><br>%1"
 
 #: midebugsession.cpp:1013
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>Impossibile avviare il debug</b><br />"
+msgstr "<b>Impossibile caricare il file core:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -450,10 +443,9 @@ msgstr ""
 "Testo originale del comando corrente: «%3»\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "Errore di debug"
+msgstr "<b>Errore del programma di debug:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
