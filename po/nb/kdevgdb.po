@@ -526,6 +526,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Memory"
 msgstr ""
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>Klarte ikke starte feilsøkeren:</b><br />"

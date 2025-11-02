@@ -370,7 +370,8 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Nie można dołączyć programu diagnostycznego:</b><br />"
 
 #: midebugsession.cpp:372
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Nie można rozpocząć diagnozowania:</b><br />"
 
