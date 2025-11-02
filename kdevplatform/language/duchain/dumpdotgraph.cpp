@@ -35,7 +35,7 @@ class DumpDotGraphPrivate
 {
 public:
 
-    QString dotGraphInternal(KDevelop::DUContext* contex, bool isMaster, bool shortened);
+    QString dotGraphInternal(KDevelop::DUContext* context, bool isMaster, bool shortened);
 
     void addDeclaration(QTextStream& stream, Declaration* decl);
 
