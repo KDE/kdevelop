@@ -36,9 +36,9 @@ QStringList MesonTargetSources::compiler() const
     return m_compiler;
 }
 
-QStringList MesonTargetSources::paramerters() const
+QStringList MesonTargetSources::parameters() const
 {
-    return m_paramerters;
+    return m_parameters;
 }
 
 KDevelop::Path::List MesonTargetSources::sources() const
@@ -86,20 +86,20 @@ void MesonTargetSources::fromJSON(const QJsonObject& json)
     QJsonArray gensrc = json[QStringLiteral("generated_sources")].toArray();
 
     transform(begin(comp), end(comp), back_inserter(m_compiler), [](const auto& x) { return x.toString(); });
-    transform(begin(param), end(param), back_inserter(m_paramerters), [](const auto& x) { return x.toString(); });
+    transform(begin(param), end(param), back_inserter(m_parameters), [](const auto& x) { return x.toString(); });
     transform(begin(src), end(src), back_inserter(m_sources), [](const auto& x) { return Path(x.toString()); });
     transform(begin(gensrc), end(gensrc), back_inserter(m_generatedSources),
               [](const auto& x) { return Path(x.toString()); });
 
-    splitParamerters();
+    splitParameters();
     qCDebug(KDEV_Meson) << "    - language:" << m_language << "has" << m_sources.count() + m_generatedSources.count()
                         << "files with" << m_includeDirs.count() << "include directories and" << m_defines.count()
                         << "defines";
 }
 
-void MesonTargetSources::splitParamerters()
+void MesonTargetSources::splitParameters()
 {
-    for (const QString& i : m_paramerters) {
+    for (const QString& i : m_parameters) {
         [&]() {
             for (auto j : { QStringLiteral("-I"), QStringLiteral("/I"), QStringLiteral("-isystem") }) {
                 if (i.startsWith(j)) {

@@ -31,7 +31,7 @@ public:
 
     QString language() const;
     QStringList compiler() const;
-    QStringList paramerters() const;
+    QStringList parameters() const;
     KDevelop::Path::List sources() const;
     KDevelop::Path::List generatedSources() const;
     KDevelop::Path::List allSources() const;
@@ -47,7 +47,7 @@ public:
 private:
     QString m_language;
     QStringList m_compiler;
-    QStringList m_paramerters;
+    QStringList m_parameters;
     KDevelop::Path::List m_sources;
     KDevelop::Path::List m_generatedSources;
 
@@ -57,7 +57,7 @@ private:
 
     MesonTarget* m_target; // Store a pointer to the parent target
 
-    void splitParamerters();
+    void splitParameters();
 };
 
 class MesonTarget
