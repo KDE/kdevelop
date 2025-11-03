@@ -2029,12 +2029,13 @@ void DebuggerTestBase::testReceivePosixSignal_data()
 {
     QTest::addColumn<QString>("executableName");
     QTest::addColumn<QString>("sourceFileName");
+    QTest::addColumn<QString>("signalName");
     QTest::addColumn<bool>("isSignaRaisedInLibraryFunction");
 
-    QTest::newRow("debuggee_crash") << "debuggee_crash" << "debugeecrash.cpp" << false;
-    QTest::newRow("debuggee_abort") << "debuggee_abort" << "debugeeabort.cpp" << true;
+    QTest::newRow("debuggee_crash") << "debuggee_crash" << "debugeecrash.cpp" << "SIGSEGV" << false;
+    QTest::newRow("debuggee_abort") << "debuggee_abort" << "debugeeabort.cpp" << "SIGABRT" << true;
     QTest::newRow("debuggee_arithmetic_signal")
-        << "debuggee_arithmetic_signal" << "debugeearithmeticsignal.cpp" << false;
+        << "debuggee_arithmetic_signal" << "debugeearithmeticsignal.cpp" << "SIGFPE" << false;
 }
 
 void DebuggerTestBase::testReceivePosixSignal()
@@ -2055,6 +2056,8 @@ void DebuggerTestBase::testReceivePosixSignal()
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(session->currentLine(), 23);
+
+    QSignalSpy errorOutputSpy(session, &MIDebugSession::inferiorStderrLines);
 
     if (isLldb()) {
         if (QTest::currentDataTag() == QLatin1String{"debuggee_abort"}
@@ -2095,8 +2098,59 @@ void DebuggerTestBase::testReceivePosixSignal()
     COMPARE_DATA(stackModel->index(firstDebuggeeFrameNumber, 2, threadIndex),
                  sourceFilePath + ':' + QString::number(signalLine));
 
-    session->stopDebugger();
+    const auto takeStderrOutput = [&errorOutputSpy] {
+        QStringList errorOutputLines;
+        for (const auto& arguments : std::as_const(errorOutputSpy)) {
+            QCOMPARE_RETURN(arguments.size(), 1, QString{}); // MIDebugSession::inferiorStderrLines() has one parameter
+            errorOutputLines << arguments.constFirst().toStringList();
+        }
+        errorOutputSpy.clear();
+
+        auto ret = errorOutputLines.join('\n');
+        if (errorOutputLines.empty()) {
+            qDebug() << "inferior stderr output is empty";
+        } else {
+            qDebug().noquote() << "inferior stderr output:\n" << ret;
+        }
+        return ret;
+    };
+    QFETCH(const QString, signalName);
+
+    auto stderrOutput = takeStderrOutput();
+    RETURN_IF_TEST_FAILED();
+    QVERIFY(stderrOutput.contains(signalName));
+
+    session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    stderrOutput = takeStderrOutput();
+    RETURN_IF_TEST_FAILED();
+    // An MI output record like the following is expected:
+    // *stopped,reason="exited-signalled",signal-name="SIGSEGV",signal-meaning="Segmentation fault"
+    // Verify that the received signal name is present in a final message
+    // appended by KDevelop to the stderr output of the inferior.
+    if (isLldb()) {
+        QEXPECT_FAIL("",
+                     "The reason of the *stopped MI output record sent by LLDB-MI "
+                     "is \"exited-normally\" instead of \"exited-signalled\"",
+                     Continue);
+    } else if (stderrOutput.contains("01")) {
+        // In case of a SIGSEGV or a SIGFPE signal, GDB/MI sends *stopped,reason="exited",exit-code="01" in place of
+        // the expected *stopped MI output record with reason="exited-signalled" on the openSUSE Tumbleweed CI servers.
+        // KDevelop then appends to the stderr output of the inferior a different final message that contains the
+        // received exit code. GDB/MI sends the expected output record on developers' local GNU/Linux systems and on the
+        // FreeBSD CI server. Work around the difference by accepting either the expected signal name or the exit code.
+        // TODO: why does this difference in output records exists despite equal GDB version numbers?
+        //       Is this some openSUSE bug or a CI server configuration issue?
+        if (QTest::currentDataTag() == QLatin1String{"debuggee_crash"}
+            || QTest::currentDataTag() == QLatin1String{"debuggee_arithmetic_signal"}) {
+            QEXPECT_FAIL("",
+                         "The reason of the *stopped MI output record sent by GDB/MI "
+                         "is \"exited\" instead of \"exited-signalled\"",
+                         Continue);
+        }
+    }
+    QVERIFY(stderrOutput.contains(signalName));
 }
 
 void DebuggerTestBase::testDebugInExternalTerminal_data()
