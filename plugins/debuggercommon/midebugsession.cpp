@@ -58,6 +58,31 @@ constexpr DBGStateFlags notStartedDebuggerFlags{s_dbgNotStarted | s_appNotStarte
 {
     return tupleValue.hasField(fieldName) ? tupleValue[fieldName].literal() : QString{};
 }
+
+struct SignalInfo
+{
+    /**
+     * The value of a field "signal-name" of an MI record.
+     */
+    QString name;
+    /**
+     * The value of a field "signal-meaning" of an MI record or an empty string if the field is missing.
+     *
+     * @note GDB/MI always sends this field, e.g. "Aborted" for SIGABRT. LLDB-MI sends this field for
+     *       some signals (e.g. SIGSEGV) but does not send it for others (e.g. SIGABRT and SIGFPE).
+     */
+    QString meaning;
+
+    /**
+     * @return the values of fields "signal-name" and (optional) "signal-meaning" of a given MI record
+     */
+    [[nodiscard]] static SignalInfo fromRecord(const TupleRecord& record)
+    {
+        return {record[QStringLiteral("signal-name")].literal(),
+                literalIfHasField(record, QStringLiteral("signal-meaning"))};
+    }
+};
+
 } // unnamed namespace
 
 MIDebugSession::MIDebugSession()
@@ -1100,7 +1125,12 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     }
 
     if (reason == QLatin1String("exited-signalled")) {
-        programNoApp(i18n("Exited on signal %1", r[QStringLiteral("signal-name")].literal()));
+        const auto info = SignalInfo::fromRecord(r);
+        programNoApp(info.meaning.isEmpty()
+                         ? i18nc("%1 - the name of a POSIX signal", "Exited on signal %1", info.name)
+                         : i18nc("%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal",
+                                 "Exited on signal %1 (%2)", info.name, info.meaning));
+
         m_stateReloadNeeded = false;
         return;
     }
@@ -1120,16 +1150,13 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     bool wasInterrupt = false;
 
     if (reason == QLatin1String("signal-received")) {
-        QString name = r[QStringLiteral("signal-name")].literal();
-        // GDB/MI always sends a field "signal-meaning", e.g. "Aborted" for SIGABRT. LLDB-MI sends this
-        // field for some signals (e.g. SIGSEGV) but does not send it for others (e.g. SIGABRT and SIGFPE).
-        const auto userFriendlyName = literalIfHasField(r, QStringLiteral("signal-meaning"));
+        const auto info = SignalInfo::fromRecord(r);
 
         // SIGINT is a "break into running program".
         // We do this when the user set/mod/clears a breakpoint but the
         // application is running.
         // And the user does this to stop the program also.
-        if (name == QLatin1String("SIGINT") && debuggerStateIsOn(s_interruptSent)) {
+        if (info.name == QLatin1String("SIGINT") && debuggerStateIsOn(s_interruptSent)) {
             wasInterrupt = true;
         } else {
             // Whenever we have a signal raised then tell the user, but don't
@@ -1137,10 +1164,10 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
             // program has a signal that's caused the prog to stop.
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
-            programFinished(userFriendlyName.isEmpty()
-                                ? i18nc("%1 - the name of a POSIX signal", "Program received signal %1", name)
+            programFinished(info.meaning.isEmpty()
+                                ? i18nc("%1 - the name of a POSIX signal", "Program received signal %1", info.name)
                                 : i18nc("%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal",
-                                        "Program received signal %1 (%2)", name, userFriendlyName));
+                                        "Program received signal %1 (%2)", info.name, info.meaning));
 
             m_hasCrashed = true;
         }
