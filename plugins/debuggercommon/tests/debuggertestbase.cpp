@@ -2049,6 +2049,8 @@ void DebuggerTestBase::testReceivePosixSignal()
 
     session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
 
+    const auto* const stackModel = session->frameStackModel();
+
     breakpoints()->addCodeBreakpoint(sourceUrl, 23);
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
@@ -2067,12 +2069,29 @@ void DebuggerTestBase::testReceivePosixSignal()
 
     QFETCH(const bool, isSignaRaisedInLibraryFunction);
     constexpr auto signalLine = 25;
+
     if (isSignaRaisedInLibraryFunction) {
         VERIFY_VALID_ADDRESS(session->currentAddr());
         QCOMPARE_NE(session->currentUrl(), sourceUrl);
     } else {
         VERIFY_VALID_CURRENT_LOCATION(session, sourceUrl, signalLine);
     }
+
+    const auto threadIndex = stackModel->index(0, 0);
+    auto firstDebuggeeFrameNumber = 0;
+    if (isSignaRaisedInLibraryFunction) {
+        firstDebuggeeFrameNumber = -1;
+        for (auto frame = 0, count = stackModel->rowCount(threadIndex); frame < count; ++frame) {
+            // The line signalLine is in the function main() of the debuggee.
+            if (stackModel->index(frame, 1, threadIndex).data().toString() == "main") {
+                firstDebuggeeFrameNumber = frame;
+                break;
+            }
+        }
+        QCOMPARE_GT(firstDebuggeeFrameNumber, 0); // the frame #0 is in a library function
+    }
+    COMPARE_DATA(stackModel->index(firstDebuggeeFrameNumber, 2, threadIndex),
+                 sourceFilePath + ':' + QString::number(signalLine));
 
     session->stopDebugger();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
