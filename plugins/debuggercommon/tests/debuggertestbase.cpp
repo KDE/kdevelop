@@ -2067,6 +2067,8 @@ void DebuggerTestBase::testReceivePosixSignal()
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
 
+    QVERIFY(session->hasCrashed());
+
     QFETCH(const bool, isSignaRaisedInLibraryFunction);
     constexpr auto signalLine = 25;
 
