@@ -753,11 +753,14 @@ void MIDebugSession::jumpToMemoryAddress(const QString& address)
 
 void MIDebugSession::addUserCommand(const QString& cmd)
 {
-    auto usercmd = createUserCommand(cmd);
-    if (!usercmd)
-        return;
+    auto adjustedCommand = cmd;
+    if (!cmd.isEmpty() && cmd[0].isDigit()) {
+        // Add a space to the beginning so debugger won't get confused if the
+        // command starts with a number (won't mix it up with command token added).
+        adjustedCommand.prepend(QLatin1Char{' '});
+    }
+    queueCmd(std::make_unique<UserCommand>(MI::NonMI, adjustedCommand));
 
-    queueCmd(std::move(usercmd));
     // User command can theoretically modify absolutely everything,
     // so need to force a reload.
 
@@ -766,17 +769,6 @@ void MIDebugSession::addUserCommand(const QString& cmd)
     // user command anyway.
     if (!debuggerStateIsOn(s_appNotStarted) && !debuggerStateIsOn(s_programExited))
         raiseEvent(program_state_changed);
-}
-
-std::unique_ptr<MICommand> MIDebugSession::createUserCommand(const QString& cmd) const
-{
-    if (!cmd.isEmpty() && cmd[0].isDigit()) {
-        // Add a space to the beginning, so debugger won't get confused if the
-        // command starts with a number (won't mix it up with command token added)
-        return std::make_unique<UserCommand>(MI::NonMI, QLatin1Char(' ') + cmd);
-    } else {
-        return std::make_unique<UserCommand>(MI::NonMI, cmd);
-    }
 }
 
 std::unique_ptr<MICommand> MIDebugSession::createCommand(CommandType type, const QString& arguments,

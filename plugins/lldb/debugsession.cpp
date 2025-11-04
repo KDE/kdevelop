@@ -26,7 +26,6 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KShell>
 
 #include <QApplication>
@@ -112,16 +111,6 @@ std::unique_ptr<MICommand> DebugSession::createCommand(MI::CommandType type, con
 {
     // using protected ctor, cannot use make_unique
     return std::unique_ptr<MICommand>(new LldbCommand(type, arguments, flags));
-}
-
-std::unique_ptr<MICommand> DebugSession::createUserCommand(const QString& cmd) const
-{
-    if (m_hasCorrectCLIOutput)
-        return MIDebugSession::createUserCommand(cmd);
-    auto msg = i18n("Attempting to execute user command on unsupported LLDB version");
-    emit debuggerInternalOutput(msg);
-    qCDebug(DEBUGGERLLDB) << "Attempting user command on unsupported LLDB version";
-    return nullptr;
 }
 
 void DebugSession::setFormatterPath(const QString &path)
@@ -332,31 +321,6 @@ void DebugSession::handleCoreFile(const QStringList &s)
 
 void DebugSession::handleVersion(const QStringList& s)
 {
-    m_hasCorrectCLIOutput = !s.isEmpty();
-    if (!m_hasCorrectCLIOutput) {
-        // No output from 'version' command. It's likely that
-        // the lldb used is not patched for the CLI output
-
-        if (!qobject_cast<QGuiApplication*>(qApp))  {
-            //for unittest
-            qFatal("You need a graphical application.");
-        }
-
-        auto ans = KMessageBox::warningTwoActions(
-            qApp->activeWindow(),
-            i18n("<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</b><br/>"
-                 "See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information.<br/>"
-                 "Debugger console will be disabled to prevent crash.<br/>"
-                 "Do you want to continue?"),
-            i18n("LLDB Version Unsupported"), KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-            QStringLiteral("unsupported-lldb-debugger"));
-        if (ans == KMessageBox::SecondaryAction) {
-            programFinished(QStringLiteral("Stopped because of unsupported LLDB version"));
-            stopDebugger();
-        }
-        return;
-    }
-
     // Join stream output strings by an empty separator because such a string
     // ends with '\n' unless the next string in the list continues a logical line.
     auto versionText = s.join(QLatin1String{});
@@ -365,12 +329,12 @@ void DebugSession::handleVersion(const QStringList& s)
 
 #ifdef Q_OS_OSX
     static const QRegularExpression versionPrefix(QStringLiteral("^lldb-\\d"), QRegularExpression::MultilineOption);
-    // lldb 3.9.0 reports version 360.99.0 on macOS (see https://bugs.kde.org/show_bug.cgi?id=368603#c4)
-    const QVersionNumber minimumVersion{360, 99, 0};
+    // LLDB 4.0 probably reports version 370.x.y on macOS
+    const QVersionNumber minimumVersion{370};
 #else
     static const QRegularExpression versionPrefix(QStringLiteral("^lldb version \\d"),
                                                   QRegularExpression::MultilineOption);
-    const QVersionNumber minimumVersion{3, 9, 0};
+    const QVersionNumber minimumVersion{4, 0, 0};
 #endif
 
     const auto reportErrorAndStopDebugger = [this](const QString& messageText) {

@@ -222,7 +222,7 @@ public:
 
     virtual std::unique_ptr<MI::MICommand> createCommand(MI::CommandType type, const QString& arguments,
                                                          MI::CommandFlags flags = {}) const;
-    virtual std::unique_ptr<MI::MICommand> createUserCommand(const QString& cmd) const;
+
     /** Adds a command to the end of queue of commands to be executed
         by debugger. The command will be actually sent to debugger only when
         replies from all previous commands are received and full processed.

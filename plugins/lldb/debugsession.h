@@ -39,7 +39,6 @@ public:
 
     std::unique_ptr<MI::MICommand> createCommand(MI::CommandType type, const QString& arguments,
                                                  MI::CommandFlags flags) const override;
-    std::unique_ptr<MI::MICommand> createUserCommand(const QString& cmd) const override;
 
     void updateAllVariables();
 
@@ -77,7 +76,6 @@ private:
     LldbFrameStackModel *m_frameStackModel = nullptr;
 
     QString m_formatterPath;
-    bool m_hasCorrectCLIOutput = false;
 };
 
 } // end of namespace GDB
