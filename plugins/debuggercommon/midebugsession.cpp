@@ -1019,9 +1019,14 @@ void MIDebugSession::handleStackInfoFrame(const ResultRecord& result)
     setCurrentPositionToFrameFieldOf(result);
 }
 
-void MIDebugSession::coreFileLoaded()
+void MIDebugSession::askDebuggerAboutSelectedFrame()
 {
     addCommand(StackInfoFrame, {}, this, &MIDebugSession::handleStackInfoFrame);
+}
+
+void MIDebugSession::coreFileLoaded()
+{
+    askDebuggerAboutSelectedFrame();
     setDebuggerStateOn(s_programExited | s_core);
 }
 
