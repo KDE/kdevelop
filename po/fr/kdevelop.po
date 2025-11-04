@@ -332,7 +332,7 @@ msgstr "Hamish Rodda"
 #: main.cpp:399
 #, kde-format
 msgid "Text editor integration, definition-use chain"
-msgstr "Intégration de l'éditeur de texte, chaîne définition-utilisation"
+msgstr "Intégration de l'éditeur de texte, chaine définition-utilisation"
 
 #: main.cpp:400
 #, kde-format

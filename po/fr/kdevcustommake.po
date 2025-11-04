@@ -74,7 +74,7 @@ msgstr "L'appel récursif a make a échoué"
 #, kde-format
 msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
 msgstr ""
-"La chaîne de paramètres « %1 » ne semble pas valable. La sortie était : %2."
+"La chaine de paramètres « %1 » ne semble pas valable. La sortie était : %2."
 
 #: makefileresolver/makefileresolver.cpp:497
 #, kde-format

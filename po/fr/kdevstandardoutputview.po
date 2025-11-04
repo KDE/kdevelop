@@ -131,7 +131,7 @@ msgctxt ""
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
 msgstr ""
-"Erreur concernant la chaîne d'expression rationnelle de filtre à la position "
+"Erreur concernant la chaine d'expression rationnelle de filtre à la position "
 "%1 : %2"
 
 #: outputwidgetconfig.cpp:64

@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:28+0000\n"
 "PO-Revision-Date: 2021-01-11 18:45+0100\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Android KDE extra-cmake-modules toolchain file"
-msgstr "Fichier de chaîne d'outils « extra-cmake-modules » de KDE pour Android"
+msgstr "Fichier de chaine d'outils « extra-cmake-modules » de KDE pour Android"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: androidpreferences.ui:32

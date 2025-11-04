@@ -90,7 +90,7 @@ msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
 "https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
 msgid "Captures are not allowed in pattern string"
-msgstr "Les captures ne sont pas autorisées dans la chaîne de motif"
+msgstr "Les captures ne sont pas autorisées dans la chaine de motif"
 
 #: grepjob.cpp:210
 #, kde-format
@@ -216,7 +216,7 @@ msgstr "Effacer l'historique de recherche"
 #: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
-msgstr "Voulez-vous remplacer par une chaîne vide ?"
+msgstr "Voulez-vous remplacer par une chaine vide ?"
 
 #: grepoutputview.cpp:325
 #, kde-format
@@ -279,7 +279,7 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
-"Ouvre la boîte de dialogue « Chercher / Remplacer dans les fichiers ». Vous "
+"Ouvre la boite de dialogue « Chercher / Remplacer dans les fichiers ». Vous "
 "pouvez y saisir une expression rationnelle faisant alors l'objet d'une "
 "recherche dans tous les fichiers présents dans les dossiers que vous "
 "spécifiez. Les correspondances seront affichées et vous pourrez passer à une "
@@ -404,7 +404,7 @@ msgstr ""
 "rationnelle que vous recherchez.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Si vous ne cochez pas "
-"« Expression rationnelle » ci-dessous, elle sera considérée comme une chaîne "
+"« Expression rationnelle » ci-dessous, elle sera considérée comme une chaine "
 "de caractères brute. Cela signifiera que tous les méta caractères sont "
 "échappés.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
