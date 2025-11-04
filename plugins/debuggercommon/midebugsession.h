@@ -450,6 +450,11 @@ private:
 
     void handleFileExecAndSymbols(const MI::ResultRecord& r);
 
+    /**
+     * Request info on the selected frame from the debugger, and update the current position when the result arrives.
+     */
+    void askDebuggerAboutSelectedFrame();
+
     void addGdbExitCommand();
     void killDebuggerImpl();
     void currentSessionChanged(IDebugSession* session, IDebugSession* previousSession);
