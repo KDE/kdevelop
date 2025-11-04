@@ -2572,7 +2572,7 @@ msgstr "Configure les notifications"
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
 msgstr ""
-"Affiche une boîte de dialogue permettant de configurer les notifications."
+"Affiche une boite de dialogue permettant de configurer les notifications."
 
 #: shell/mainwindow_p.cpp:234
 #, kde-format
@@ -2591,7 +2591,7 @@ msgstr "Afficher une liste de tous les modules externes chargés"
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
 msgstr ""
-"Affiche une boîte de dialogue comportant des informations sur tous les "
+"Affiche une boite de dialogue comportant des informations sur tous les "
 "modules externes chargés."
 
 #: shell/mainwindow_p.cpp:239
@@ -2975,7 +2975,7 @@ msgstr "Interruption…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
-msgstr "Ouvrir la boîte de dialogue de progression détaillée"
+msgstr "Ouvrir la boite de dialogue de progression détaillée"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
 #, kde-format
@@ -3430,7 +3430,7 @@ msgstr "Configurer les lanceurs…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
-msgstr "Ouvre la boîte de dialogue de configuration de lancement"
+msgstr "Ouvre la boite de dialogue de configuration de lancement"
 
 #: shell/runcontroller.cpp:462
 #, kde-format
@@ -3439,7 +3439,7 @@ msgid ""
 "Opens a dialog to setup new launch configurations, or to change the existing "
 "ones."
 msgstr ""
-"Ouvre une boîte de dialogue pour mettre en place de nouvelles configurations "
+"Ouvre une boite de dialogue pour mettre en place de nouvelles configurations "
 "de lancement ou pour modifier celles qui existent."
 
 #: shell/runcontroller.cpp:465
@@ -4463,7 +4463,7 @@ msgstr ""
 "plantage de KDevelop et sont supprimés uniquement lorsque la même session "
 "est re-démarrée. <br>\n"
 "Lorsque les préambules sont enregistrés en mémoire, ils sont sûrs de "
-"disparaître à la fermeture même si KDevelop se plante. <br>\n"
+"disparaitre à la fermeture même si KDevelop se plante. <br>\n"
 "La sélection d'un espace de stockage dans un dossier temporaire de session "
 "est logique sur les systèmes où la RAM est limitée et le dossier temporaire "
 "n'utilise pas « tmpfs », car les fichiers de préambule peuvent occuper des "
@@ -5603,7 +5603,7 @@ msgstr ""
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
-"Afficher la chaîne complète de définition-utilisation si l'analyse réussit"
+"Afficher la chaine complète de définition-utilisation si l'analyse réussit"
 
 #: util/duchainify/main.cpp:298
 #, kde-format

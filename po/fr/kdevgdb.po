@@ -50,11 +50,11 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
-"<b>Format de chaîne personnalisé</b\n"
-"<p>Spécifiez un format de chaîne dans le style du C qui sera utilisé lors de "
+"<b>Format de chaine personnalisé</b\n"
+"<p>Spécifiez un format de chaine dans le style du C qui sera utilisé lors de "
 "l'affichage de l'expression choisie. Par exemple :\n"
 "<p align=\"center\"> <tt>Point de traçage 1 : g = %d</tt></p>\n"
-"Si un format de chaîne personnalisé n'est pas activé, les noms et valeurs de "
+"Si un format de chaine personnalisé n'est pas activé, les noms et valeurs de "
 "toutes les expressions seront affichés, à l'aide du format « %d » comme "
 "spécificateur de format pour toutes les expressions."
 
@@ -93,7 +93,7 @@ msgstr "Activer le traçage"
 #, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
-msgstr "Format de chaîne personnalisé"
+msgstr "Format de chaine personnalisé"
 
 #: debugsession.cpp:164
 #, kde-format

@@ -291,7 +291,7 @@ msgstr "Ce dossier ne semble pas être un dossier de compilation « Meson » "
 #, kde-format
 msgid "Invalid build directory configuration (empty build directory string)"
 msgstr ""
-"Configuration du dossier de compilation non valable (chaîne vide pour le "
+"Configuration du dossier de compilation non valable (chaine vide pour le "
 "dossier de compilation)"
 
 #: settings/mesonconfigpage.cpp:203
