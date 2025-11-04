@@ -209,11 +209,6 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
         }
     }
 
-    // Needed so that breakpoint widget has a chance to insert breakpoints.
-    // FIXME: a bit hacky, as we're really not ready for new commands.
-    setDebuggerStateOn(s_dbgBusy);
-    raiseEvent(debugger_ready);
-
     qCDebug(DEBUGGERLLDB) << "Per inferior configuration done";
 }
 

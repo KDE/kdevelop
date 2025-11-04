@@ -46,8 +46,6 @@ public:
         // Emitted when the thread or frame that is selected in UI
         // changes.
         thread_or_frame_changed,
-        debugger_busy,
-        debugger_ready,
         // Raise when the debugger is in touch with the program,
         // and should have access to its debug symbols. The program
         // is not necessary running yet, or might already exited,

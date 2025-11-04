@@ -870,9 +870,7 @@ void MIDebugSession::queueCmd(std::unique_ptr<MICommand> cmd)
     }
 
     m_commandQueue->enqueue(std::move(cmd));
-
     setDebuggerStateOn(s_dbgBusy);
-    raiseEvent(debugger_busy);
 
     executeCmd();
 }
@@ -1069,7 +1067,6 @@ void MIDebugSession::slotDebuggerReady()
 
         qCDebug(DEBUGGERCOMMON) << "No more commands";
         setDebuggerStateOff(s_dbgBusy);
-        raiseEvent(debugger_ready);
     }
 }
 
