@@ -1203,7 +1203,6 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
 void MIDebugSession::slotInferiorRunning()
 {
     setDebuggerStateOn(s_appRunning);
-    raiseEvent(program_running);
 
     if (m_commandQueue->haveImmediateCommand() ||
         (m_debugger->currentCommand() && (m_debugger->currentCommand()->flags() & (CmdImmediately | CmdInterrupt)))) {
