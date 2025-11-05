@@ -1173,18 +1173,15 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         }
     }
 
-    if (!reason.contains(QLatin1String("exited"))) {
-        // FIXME: we should immediately update the current thread and
-        // frame in the framestackmodel, so that any user actions
-        // are in that thread. However, the way current framestack model
-        // is implemented, we can't change thread id until we refresh
-        // the entire list of threads -- otherwise we might set a thread
-        // id that is not already in the list, and it will be upset.
-
-        if (r.hasField(QStringLiteral("frame"))) {
-            setCurrentPositionToFrameFieldOf(r);
-            reloadProgramState();
-        }
+    // FIXME: we should immediately update the current thread and
+    // frame in the framestackmodel, so that any user actions
+    // are in that thread. However, the way current framestack model
+    // is implemented, we can't change thread id until we refresh
+    // the entire list of threads -- otherwise we might set a thread
+    // id that is not already in the list, and it will be upset.
+    if (r.hasField(QStringLiteral("frame"))) {
+        setCurrentPositionToFrameFieldOf(r);
+        reloadProgramState();
     }
 
     setDebuggerStateOff(s_interruptSent);
