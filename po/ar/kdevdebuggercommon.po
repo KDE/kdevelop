@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-30 00:41+0000\n"
-"PO-Revision-Date: 2025-10-15 20:15+0400\n"
+"PO-Revision-Date: 2025-11-05 20:51+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -89,50 +89,47 @@ msgstr "اختر ملفًّا لبيانات النظام"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "اسم الملف تنفيذي غير صالح"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "الملف التنفيذي غير موجود"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "التنفيذي ليس بملف"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "الملف التنفيذي غير قابل للقراءة"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examining core file %1"
+#, kde-format
 msgid "Empty core file name"
-msgstr "فحص ملفّ بيانات النظام %1"
+msgstr "اسم ملف أساسي فارغ"
 
 #: dialogs/selectcoredialog.cpp:74
 #, kde-format
 msgid "Invalid core file name"
-msgstr ""
+msgstr "اسم ملف أساسي غير صالح"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "ملف أساسي غير موجود"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "ملفّ بيانات النظام:"
+msgstr "الأساسي ليس بملف"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "ملف أساسي غير قابل للقراءة"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -342,10 +339,9 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>لا أستطيع إرفاق مصحّح الأخطاء:</b><br />"
 
 #: midebugsession.cpp:372
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>لا أستطيع إرفاق مصحّح الأخطاء:</b><br />"
+msgstr "<b>لا يمكن بدء المنقّح:</b><br />"
 
 #: midebugsession.cpp:386
 #, kde-format
@@ -382,7 +378,7 @@ msgstr "<b>أمر مصحّح أخطاء غير صالح</b><br>%1"
 #: midebugsession.cpp:1013
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr ""
+msgstr "<b>فشل تحميل الملف الأساسي:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -444,10 +440,9 @@ msgstr ""
 "نصّ الأمر الأصليّ الحاليّ: «%3»\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "<b>لا أستطيع إرفاق مصحّح الأخطاء:</b><br />"
+msgstr "<b>خطأ منقح الأخطاء:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
