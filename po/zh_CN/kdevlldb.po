@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevlldb.pot\n"
-"X-Crowdin-File-ID: 54602\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevlldb.pot\n"
+"X-Crowdin-File-ID: 54802\n"
 
 #: controllers/framestackmodel.cpp:97
 #, kde-format
@@ -215,11 +215,3 @@ msgstr "远程工作路径："
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/path/to/a/on-device/writable/directory"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>无法启动调试器。</b><br />"
-
-#~ msgid ""
-#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
-#~ "<p><tt>%1"
-#~ msgstr "<b>调试器错误</b><p>调试器报告了以下错误：<p><tt>%1"
