@@ -88,50 +88,47 @@ msgstr "选择核心文件"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "无效的可执行文件名称"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "可执行文件不存在"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "可执行目标不是一个文件"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "可执行文件不可读"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examining core file %1"
+#, kde-format
 msgid "Empty core file name"
-msgstr "正在剖析核心文件 %1"
+msgstr "内核转储文件名为空"
 
 #: dialogs/selectcoredialog.cpp:74
 #, kde-format
 msgid "Invalid core file name"
-msgstr ""
+msgstr "无效的内核转储文件名"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "内核转储文件不存在"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "核心文件："
+msgstr "内核转储目标不存在"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "内核转储文件不可读"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -337,10 +334,9 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>无法附加调试器：</b><br />"
 
 #: midebugsession.cpp:372
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>无法附加调试器：</b><br />"
+msgstr "<b>无法启动调试器：</b><br />"
 
 #: midebugsession.cpp:386
 #, kde-format
@@ -377,7 +373,7 @@ msgstr "<b>无效的调试器命令</b><br>%1"
 #: midebugsession.cpp:1013
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr ""
+msgstr "<b>无法加载内核转储文件：</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -429,10 +425,9 @@ msgstr ""
 "当前命令的原文：“%3”\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "<b>Could not attach debugger:</b><br />"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "<b>无法附加调试器：</b><br />"
+msgstr "<b>调试器错误：</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -759,7 +754,3 @@ msgstr "选择要反汇编的地址区域"
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
 msgstr "要反汇编的地址区域："
-
-#~ msgid ""
-#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-#~ msgstr "<b>调试器错误</b><p>调试器报告了以下错误：<p><tt>%1"

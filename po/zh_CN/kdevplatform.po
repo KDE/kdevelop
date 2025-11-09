@@ -5469,7 +5469,7 @@ msgctxt ""
 msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
-msgstr ""
+msgstr "拆分启动配置 “%2” 所用的 %1 时得到空列表。中止启动。"
 
 #: util/shellutils.cpp:291
 #, kde-format
@@ -5477,7 +5477,7 @@ msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
-msgstr ""
+msgstr "启动配置 “%2”指定的 %1 为空。中止启动。"
 
 #: util/shellutils.cpp:306
 #, kde-format
@@ -5486,7 +5486,7 @@ msgctxt ""
 "configuration name"
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
-msgstr ""
+msgstr "启动配置 “%2”没有指定有效的 %1。中止启动。"
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
