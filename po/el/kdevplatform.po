@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-11-11 00:41+0000\n"
 "PO-Revision-Date: 2024-09-20 13:57+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -332,7 +332,7 @@ msgstr ""
 msgid "Threads:"
 msgstr "Νήματα:"
 
-#: debugger/framestack/framestackwidget.cpp:233
+#: debugger/framestack/framestackwidget.cpp:231
 #, fuzzy, kde-format
 #| msgctxt "#thread-id at function-name or address"
 #| msgid "#%1 at %2"
@@ -340,7 +340,7 @@ msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
 msgstr "%1 στο %2"
 
-#: debugger/framestack/framestackwidget.cpp:236
+#: debugger/framestack/framestackwidget.cpp:234
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
