@@ -110,7 +110,7 @@ bool askUser(const QString& mainText,
              const QString& rejectText,
              bool ttyDefaultToYes)
 {
-    if (!qobject_cast<QGuiApplication*>(qApp)) {
+    if (!qobject_cast<QGuiApplication*>(QCoreApplication::instance())) {
         // no ui-mode e.g. for duchainify and other tools
         QTextStream out(stdout);
         out << mainText << Qt::endl;
