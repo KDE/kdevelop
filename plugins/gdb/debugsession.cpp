@@ -32,11 +32,9 @@
 #include <KLocalizedString>
 #include <KShell>
 
-#include <QApplication>
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
-#include <QGuiApplication>
 #include <QRegularExpression>
 #include <QVersionNumber>
 
@@ -267,11 +265,6 @@ void DebugSession::handleVersion(const QStringList& s)
         }
 
         detectedVersion = response;
-    }
-
-    if (!qobject_cast<QGuiApplication*>(qApp)) {
-        //for unittest
-        qFatal("You need a graphical application.");
     }
 
     // TODO: reuse minRequiredVersion in the error message text when the minimum

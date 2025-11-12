@@ -28,10 +28,8 @@
 #include <KLocalizedString>
 #include <KShell>
 
-#include <QApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QGuiApplication>
 #include <QRegularExpression>
 #include <QStandardPaths>
 #include <QVersionNumber>
@@ -337,13 +335,6 @@ void DebugSession::handleVersion(const QStringList& s)
     const QVersionNumber minimumVersion{4, 0, 0};
 #endif
 
-    const auto reportErrorAndStopDebugger = [this](const QString& messageText) {
-        if (!qobject_cast<QGuiApplication*>(qApp)) {
-            qFatal() << messageText; // for unit tests
-        }
-        stopDebuggerOnError(messageText);
-    };
-
     const auto match = versionPrefix.match(versionText);
     if (!match.hasMatch()) {
         if (versionText.endsWith(QLatin1Char{'\n'})) {
@@ -352,7 +343,7 @@ void DebugSession::handleVersion(const QStringList& s)
         versionText = versionText.toHtmlEscaped();
         versionText.replace(QLatin1Char{'\n'}, QLatin1String{"<br />"});
 
-        reportErrorAndStopDebugger(
+        stopDebuggerOnError(
             i18n("The LLDB version used by your <code>lldb-mi</code> could not be detected.<br />"
                  "Your <code>lldb-mi</code> sent the following reply to a CLI command <code>version</code>:<br />")
             + versionText);
@@ -361,7 +352,7 @@ void DebugSession::handleVersion(const QStringList& s)
 
     const auto lldbVersion = QVersionNumber::fromString(QStringView(versionText).sliced(match.capturedEnd() - 1));
     if (lldbVersion < minimumVersion) {
-        reportErrorAndStopDebugger(
+        stopDebuggerOnError(
             i18n("Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />"
                  "But it is currently using LLDB version %2",
                  minimumVersion.toString(), lldbVersion.toString()));
