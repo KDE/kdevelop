@@ -800,7 +800,10 @@ void UiController::registerStatus(QObject* status)
 void UiController::showErrorMessage(const QString& message, int timeout)
 {
     Sublime::MainWindow* w = activeSublimeWindow();
-    if (!w) return;
+    if (!w) {
+        qCCritical(SHELL) << "STATUS ERROR MESSAGE:" << message;
+        return;
+    }
     auto* mw = qobject_cast<KDevelop::MainWindow*>(w);
     if (!mw) return;
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
@@ -811,6 +814,21 @@ void UiController::postMessage(Sublime::Message* message)
     // if Core has flag Core::NoUi there also is no window, so caught as well here
     Sublime::MainWindow* window = activeSublimeWindow();
     if (!window) {
+        switch (message->messageType()) {
+        case Sublime::Message::Positive:
+            qCInfo(SHELL) << "POSITIVE MESSAGE:" << message->text();
+            break;
+        case Sublime::Message::Information:
+            qCInfo(SHELL) << "INFO MESSAGE:" << message->text();
+            break;
+        case Sublime::Message::Warning:
+            qCWarning(SHELL) << "WARNING MESSAGE:" << message->text();
+            break;
+        case Sublime::Message::Error:
+            qCCritical(SHELL) << "ERROR MESSAGE:" << message->text();
+            break;
+        }
+
         delete message;
         return;
     }
