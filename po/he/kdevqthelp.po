@@ -1,0 +1,217 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-10-09 00:41+0000\n"
+"PO-Revision-Date: 2025-11-11 15:21+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.08.3\n"
+
+#: qthelpconfig.cpp:47
+#, kde-format
+msgid "Qt Compressed Help Files"
+msgstr "קובצי עזרה דחוסים של Qt"
+
+#: qthelpconfig.cpp:50
+#, kde-format
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr "שינוי רשומה"
+
+#: qthelpconfig.cpp:52
+#, kde-format
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr "הוספת רשומה חדשה"
+
+#: qthelpconfig.cpp:70
+#, kde-format
+msgid "Name cannot be empty."
+msgstr "השם לא יכול להישאר ריק."
+
+#: qthelpconfig.cpp:105
+#, kde-format
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "הורדת תיעוד חדש"
+
+#: qthelpconfig.cpp:121
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr "הפקודה „qmake -query” לא הצליחה לספק נתיב לקובץ QtHelp‏ (QCH)."
+
+#: qthelpconfig.cpp:209
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr "התיעוד מסופק על ידי GHNS"
+
+#: qthelpconfig.cpp:235
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr "קובץ העזרה הדחוס של Qt אינו תקין."
+
+#: qthelpconfig.cpp:244
+#, kde-format
+msgid "Documentation already imported"
+msgstr "התיעוד כבר יובא"
+
+#: qthelpconfig.cpp:296
+#, kde-format
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "עזרה של Qt"
+
+#: qthelpconfig.cpp:301
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "הגדרת תצורת העזרה של Qt"
+
+#: qthelpconfig.cpp:326
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr "שינוי"
+
+#: qthelpconfig.cpp:332
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr "מחיקה"
+
+#: qthelpconfig.cpp:338
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr "נא להסיר את זה דרך GHNS."
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr "לטעון את תיעוד העזרה של Qt ממקומות במערכת"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "&טעינת תיעוד ה־API של Qt:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr "טעינת קובצי עזרה של Qt מתיקייה:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, kde-format
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "התקנת קובצי תיעוד נוספים"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "שם"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, kde-format
+msgctxt "@title:column"
+msgid "Path"
+msgstr "נתיב"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "הוספה"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr "סמל:"
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr "נא לבחור סמל"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:34
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "שם:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:41
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr "נא למלא שם"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr "נא לבחור שם…"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:51
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr "נתיב:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr "בחירת קובץ עזרה של Qt…"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr "בחירת קובץ עזרה של Qt…"
+
+#: qthelpdocumentation.cpp:384
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "לא ניתן למצוא תיעוד עבור ‚%1’"
+
+#: qthelpdocumentation.cpp:478
+#, kde-format
+msgid "%1 Home Page"
+msgstr "אתר הבית של %1"
+
+#: qthelpqtdoc.cpp:172
+#, kde-format
+msgid "QtHelp"
+msgstr "QtHelp"
