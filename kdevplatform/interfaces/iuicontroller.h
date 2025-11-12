@@ -137,8 +137,6 @@ public:
     /**
      * Shows a message in the message area.
      *
-     * If running in NoGui mode, the message will be discarded.
-     *
      * Unlike all other functions in this class, this function is thread-safe.
      * You can call it from the background.
      *
