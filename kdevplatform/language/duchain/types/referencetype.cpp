@@ -40,7 +40,7 @@ bool ReferenceType::equals(const AbstractType* _rhs) const
     Q_ASSERT(dynamic_cast<const ReferenceType*>(_rhs));
     const auto* rhs = static_cast<const ReferenceType*>(_rhs);
 
-    return d_func()->m_baseType == rhs->d_func()->m_baseType;
+    return d_func()->m_baseType == rhs->d_func()->m_baseType && d_func()->m_isRValue == rhs->d_func()->m_isRValue;
 }
 
 ReferenceType::ReferenceType()

@@ -34,6 +34,7 @@ private Q_SLOTS:
     void testProblemSerialization();
     void testIdentifiers();
     void testTypePtr();
+    void testReferenceType();
     ///NOTE: these are not "automated"!
 //     void testImportCache();
 

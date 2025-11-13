@@ -26,6 +26,7 @@
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/types/referencetype.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -954,6 +955,31 @@ void TestDUChain::testTypePtr()
 
     auto abstractT3 = AbstractType::Ptr(integralT);
     QCOMPARE(abstractT2.get(), integralT.get());
+}
+
+void TestDUChain::testReferenceType()
+{
+    IntegralType::Ptr integralT(new IntegralType(IntegralType::TypeDouble));
+
+    ReferenceType ref;
+    ref.setIsRValue(false);
+    ref.setBaseType(integralT);
+    QCOMPARE(ref.toString(), "double&");
+
+    ReferenceType rValueRef;
+    rValueRef.setIsRValue(true);
+    rValueRef.setBaseType(integralT);
+    QCOMPARE(rValueRef.toString(), "double&&");
+
+    QCOMPARE_NE(rValueRef.hash(), ref.hash());
+    QVERIFY(!rValueRef.equals(&ref));
+    QVERIFY(!ref.equals(&rValueRef));
+
+    // now toggle the flag to false and make sure the equalities succeed
+    rValueRef.setIsRValue(false);
+    QCOMPARE_EQ(rValueRef.hash(), ref.hash());
+    QVERIFY(rValueRef.equals(&ref));
+    QVERIFY(ref.equals(&rValueRef));
 }
 
 #if 0
