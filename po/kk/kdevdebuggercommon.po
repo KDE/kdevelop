@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2013-11-15 06:17+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -390,7 +390,7 @@ msgstr "Бағдарлама орындалып жатыр"
 msgid "Application is paused"
 msgstr "Бағдарлама аялдап тұр"
 
-#: midebugsession.cpp:826
+#: midebugsession.cpp:818
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -399,56 +399,56 @@ msgstr ""
 "<b>Gdb командасы жөндегіш жегілмеген кезде жіберілген</b><br>Командасы:<br> "
 "%1"
 
-#: midebugsession.cpp:938
+#: midebugsession.cpp:930
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Жарамсыз жөндегіш командасы</b><br>%1"
 
-#: midebugsession.cpp:1013
+#: midebugsession.cpp:1005
 #, fuzzy, kde-format
 #| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Жөндеу басталмады:</b><br />"
 
-#: midebugsession.cpp:1102
+#: midebugsession.cpp:1094
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Шығу коды: %1"
 
-#: midebugsession.cpp:1104
+#: midebugsession.cpp:1096
 #, kde-format
 msgid "Exited normally"
 msgstr "Дұрыс аяқталды"
 
-#: midebugsession.cpp:1111
+#: midebugsession.cpp:1103
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "%1 сигналымен шықты"
 
-#: midebugsession.cpp:1146
+#: midebugsession.cpp:1138
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Бығдарлама %1 (%2) сигналын қабылдады"
 
-#: midebugsession.cpp:1262
+#: midebugsession.cpp:1254
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "%1 команда кезекте\n"
 
-#: midebugsession.cpp:1263
+#: midebugsession.cpp:1255
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "%1 команда gdb-мен өңделмек\n"
 
-#: midebugsession.cpp:1264
+#: midebugsession.cpp:1256
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Жөндегіштің күй-жайы: %1\n"
 
-#: midebugsession.cpp:1267
+#: midebugsession.cpp:1259
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -459,7 +459,7 @@ msgstr ""
 "Назардағы команда мәтіні: '%2'\n"
 "Назардағы команданың бастапқы мәтіні: '%3'\n"
 
-#: midebugsession.cpp:1292
+#: midebugsession.cpp:1284
 #, fuzzy, kde-format
 #| msgid "Debugger error"
 msgid "<b>Debugger error:</b><br />"

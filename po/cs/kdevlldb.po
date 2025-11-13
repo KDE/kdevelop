@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2023-02-08 14:28+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Lokalize 22.12.2\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "(spuštěno)"
@@ -27,34 +27,24 @@ msgstr "(spuštěno)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr ""
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr ""
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "Verze LLDB není podporována"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
 
 #. i18n: ectx: ToolBar (debugToolBar)
@@ -212,3 +202,6 @@ msgstr ""
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr ""
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "Verze LLDB není podporována"

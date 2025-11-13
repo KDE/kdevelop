@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2025-09-08 18:21+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -377,7 +377,7 @@ msgstr "Programmet kör"
 msgid "Application is paused"
 msgstr "Programmet gör paus"
 
-#: midebugsession.cpp:826
+#: midebugsession.cpp:818
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -386,45 +386,45 @@ msgstr ""
 "<b>Kommando till gdb skickat när avlusaren inte kör</b><br>Kommandot är:<br>"
 "%1"
 
-#: midebugsession.cpp:938
+#: midebugsession.cpp:930
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Felaktigt kommando till avlusaren</b><br>%1"
 
-#: midebugsession.cpp:1013
+#: midebugsession.cpp:1005
 #, fuzzy, kde-format
 #| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Kunde inte starta avlusaren:</b><br />"
 
-#: midebugsession.cpp:1102
+#: midebugsession.cpp:1094
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Avslutades med returkoden: %1"
 
-#: midebugsession.cpp:1104
+#: midebugsession.cpp:1096
 #, kde-format
 msgid "Exited normally"
 msgstr "Avslutade normalt"
 
-#: midebugsession.cpp:1111
+#: midebugsession.cpp:1103
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Avslutades med signal %1"
 
-#: midebugsession.cpp:1146
+#: midebugsession.cpp:1138
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programmet tog emot signalen %1 (%2)"
 
-#: midebugsession.cpp:1262
+#: midebugsession.cpp:1254
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 kommando i kö\n"
 msgstr[1] "%1 kommandon i kö\n"
 
-#: midebugsession.cpp:1263
+#: midebugsession.cpp:1255
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -432,12 +432,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 kommando behandlas av gdb\n"
 msgstr[1] "%1 kommandon behandlas av gdb\n"
 
-#: midebugsession.cpp:1264
+#: midebugsession.cpp:1256
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Avlusarens status: %1\n"
 
-#: midebugsession.cpp:1267
+#: midebugsession.cpp:1259
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -448,7 +448,7 @@ msgstr ""
 "Nuvarande kommandotext: '%2'\n"
 "Nuvarande kommandots originaltext: '%3'\n"
 
-#: midebugsession.cpp:1292
+#: midebugsession.cpp:1284
 #, fuzzy, kde-format
 #| msgid "Debugger error"
 msgid "<b>Debugger error:</b><br />"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2025-10-30 13:48+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -368,7 +368,7 @@ msgstr "De toepassing is actief"
 msgid "Application is paused"
 msgstr "De toepassing is gepauzeerd"
 
-#: midebugsession.cpp:826
+#: midebugsession.cpp:818
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -377,44 +377,44 @@ msgstr ""
 "<b>Gdb-commando gegeven terwijl de debugger niet loopt</b><br> Het commando "
 "was:<br> %1"
 
-#: midebugsession.cpp:938
+#: midebugsession.cpp:930
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ongeldige debugger-commando</b><br>%1"
 
-#: midebugsession.cpp:1013
+#: midebugsession.cpp:1005
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Kernbestand laden is mislukt</b><br />"
 
-#: midebugsession.cpp:1102
+#: midebugsession.cpp:1094
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Beëindigd met returncode: %1"
 
-#: midebugsession.cpp:1104
+#: midebugsession.cpp:1096
 #, kde-format
 msgid "Exited normally"
 msgstr "Normaal beëindigd"
 
-#: midebugsession.cpp:1111
+#: midebugsession.cpp:1103
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Beëindigd met signaal %1"
 
-#: midebugsession.cpp:1146
+#: midebugsession.cpp:1138
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Het programma heeft het signaal %1 (%2) ontvangen"
 
-#: midebugsession.cpp:1262
+#: midebugsession.cpp:1254
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 commando in wachtrij\n"
 msgstr[1] "%1 commando's in wachtrij\n"
 
-#: midebugsession.cpp:1263
+#: midebugsession.cpp:1255
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -422,12 +422,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 commando dat uitgevoerd wordt door gdb\n"
 msgstr[1] "%1 commando's die uitgevoerd worden door gdb\n"
 
-#: midebugsession.cpp:1264
+#: midebugsession.cpp:1256
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Debuggerstatus: %1\n"
 
-#: midebugsession.cpp:1267
+#: midebugsession.cpp:1259
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -438,7 +438,7 @@ msgstr ""
 "Huidige commando-tekst: '%2'\n"
 "Huidige commando originele tekst: '%3'\n"
 
-#: midebugsession.cpp:1292
+#: midebugsession.cpp:1284
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>Debuggerfout:</b><br />"

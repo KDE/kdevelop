@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -387,7 +387,7 @@ msgstr "Az alkalmazás fut"
 msgid "Application is paused"
 msgstr "Az alkalmazás szüneteltetve"
 
-#: midebugsession.cpp:826
+#: midebugsession.cpp:818
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -396,45 +396,45 @@ msgstr ""
 "<b>Gdb parancs lett küldve, amikor a hibakereső nem futott</b><br>A parancs "
 "ez volt:<br> %1"
 
-#: midebugsession.cpp:938
+#: midebugsession.cpp:930
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Érvénytelen hibakereső parancs</b><br>%1"
 
-#: midebugsession.cpp:1013
+#: midebugsession.cpp:1005
 #, fuzzy, kde-format
 #| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Nem sikerült elindítani a hibakeresőt:</b><br />"
 
-#: midebugsession.cpp:1102
+#: midebugsession.cpp:1094
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Kilépett ezzel a visszatérési kóddal: %1"
 
-#: midebugsession.cpp:1104
+#: midebugsession.cpp:1096
 #, kde-format
 msgid "Exited normally"
 msgstr "Normálisan lépett ki"
 
-#: midebugsession.cpp:1111
+#: midebugsession.cpp:1103
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Kilépett a(z) %1 szignálnál"
 
-#: midebugsession.cpp:1146
+#: midebugsession.cpp:1138
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "A program a következő szignált kapta: %1 (%2)"
 
-#: midebugsession.cpp:1262
+#: midebugsession.cpp:1254
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 parancs a sorban\n"
 msgstr[1] "%1 parancs a sorban\n"
 
-#: midebugsession.cpp:1263
+#: midebugsession.cpp:1255
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -442,12 +442,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 parancsot dolgoz fel a gdb\n"
 msgstr[1] "%1 parancsot dolgoz fel a gdb\n"
 
-#: midebugsession.cpp:1264
+#: midebugsession.cpp:1256
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Hibakereső állapot: %1\n"
 
-#: midebugsession.cpp:1267
+#: midebugsession.cpp:1259
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -458,7 +458,7 @@ msgstr ""
 "Jelenlegi parancs szöveg: „%2”\n"
 "Jelenlegi parancs eredeti szöveg: „%3”\n"
 
-#: midebugsession.cpp:1292
+#: midebugsession.cpp:1284
 #, fuzzy, kde-format
 #| msgid "Debugger error"
 msgid "<b>Debugger error:</b><br />"

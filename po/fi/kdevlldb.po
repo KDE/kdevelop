@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2024-11-15 15:20+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "(käynnissä)"
@@ -27,40 +27,25 @@ msgstr "(käynnissä)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr "Yritetään suorittaa käyttäjän komentoa ei-tuetulla LLDB-versiolla"
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Virhe yhdistettäessä etäkohteeeseen:</b><br />"
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
-"<b>lldb-mi:n versiota ei tueta, koska siitä puuttuu oleellinen paikkaus.</"
-"b><br/>Lisätietoa löytyy sivulta https://llvm.org/bugs/show_bug.cig?id=28026."
-"<br/>Virheenjäljityskonsoli poistetaan käytöstä kaatumisen välttämiseksi.<br/"
-">Haluatko jatkaa?"
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "Ei-tuettu LLDB:n versio"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
-"<b>Vaaditaan lldb-mi LLDB 3.8.1:stä tai myöhemmästä.</b><br />Käytössä on: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -217,6 +202,29 @@ msgstr "Etätyösijainti:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/polku/kirjoitettavaan/kansioon/laitteella"
+
+#~ msgid "Attempting to execute user command on unsupported LLDB version"
+#~ msgstr "Yritetään suorittaa käyttäjän komentoa ei-tuetulla LLDB-versiolla"
+
+#~ msgid ""
+#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
+#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
+#~ ">Do you want to continue?"
+#~ msgstr ""
+#~ "<b>lldb-mi:n versiota ei tueta, koska siitä puuttuu oleellinen paikkaus.</"
+#~ "b><br/>Lisätietoa löytyy sivulta https://llvm.org/bugs/show_bug.cig?"
+#~ "id=28026.<br/>Virheenjäljityskonsoli poistetaan käytöstä kaatumisen "
+#~ "välttämiseksi.<br/>Haluatko jatkaa?"
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "Ei-tuettu LLDB:n versio"
+
+#~ msgid ""
+#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>Vaaditaan lldb-mi LLDB 3.8.1:stä tai myöhemmästä.</b><br />Käytössä "
+#~ "on: %1"
 
 #~ msgid "<b>Could not start debugger:</b><br />"
 #~ msgstr "<b>Virheenpaikanninta ei voitu käynnistää:</b><br />"

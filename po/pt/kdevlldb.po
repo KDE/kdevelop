@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2022-07-09 13:01+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-POFile-SpellExtra: LLDB configuracao lldb\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "(em execução)"
@@ -23,42 +23,25 @@ msgstr "(em execução)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr ""
-"A tentar executar um comando do utilizador numa versão não suportada do LLDB"
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Erro ao ligar-se ao alvo remoto:</b><br />"
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
-"<b>A sua versão do 'lldb-mi' não é suportada, por não ter uma modificação "
-"essencial incorporada.</b><br/>Veja mais informações em https://llvm.org/"
-"bugs/show_bug.cgi?id=28026.<br/>A consola de depuração ficará desactivada "
-"para evitar um estoiro.<br/>Deseja continuar?"
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "Versão do LLDB Não Suportada"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
-"<b>É necessário o 'lldb-mi' do LLDB 3.8.1 ou posterior.</b><br />Você está a "
-"usar: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -215,6 +198,31 @@ msgstr "Localização de trabalho remota:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/local/de/pasta/no/dispositivo/para/escrita"
+
+#~ msgid "Attempting to execute user command on unsupported LLDB version"
+#~ msgstr ""
+#~ "A tentar executar um comando do utilizador numa versão não suportada do "
+#~ "LLDB"
+
+#~ msgid ""
+#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
+#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
+#~ ">Do you want to continue?"
+#~ msgstr ""
+#~ "<b>A sua versão do 'lldb-mi' não é suportada, por não ter uma modificação "
+#~ "essencial incorporada.</b><br/>Veja mais informações em https://llvm.org/"
+#~ "bugs/show_bug.cgi?id=28026.<br/>A consola de depuração ficará desactivada "
+#~ "para evitar um estoiro.<br/>Deseja continuar?"
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "Versão do LLDB Não Suportada"
+
+#~ msgid ""
+#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>É necessário o 'lldb-mi' do LLDB 3.8.1 ou posterior.</b><br />Você "
+#~ "está a usar: %1"
 
 #~ msgid "<b>Could not start debugger:</b><br />"
 #~ msgstr "<b>Não foi possível iniciar o depurador:</b><br/>"

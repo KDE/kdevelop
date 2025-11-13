@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "(चलति)"
@@ -29,40 +29,25 @@ msgstr "(चलति)"
 msgid "LLDB"
 msgstr "एलएलडीबी"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr "असमर्थित LLDB संस्करणे उपयोक्तृ-आदेशं निष्पादयितुं प्रयत्नः"
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>दूरस्थलक्ष्यं प्रति सम्बद्धतायां त्रुटिः : १.</b><br />"
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
-"<b>भवतः lldb-mi संस्करणम् असमर्थितम् अस्ति, यतः अस्मिन् आवश्यकस्य पट्टिकायाः अभावः अस्ति "
-"।</b><br/> अधिकविवरणार्थं https://llvm.org/bugs/show_bug.cgi?id=28026 पश्यन्तु ।"
-"<br/> दुर्घटनानिवारयितुं Debugger console अक्षमं भविष्यति ।<br/> किं त्वं निरन्तरं कर्तुम् "
-"इच्छसि ?"
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "LLDB संस्करणम् असमर्थितम्"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
-"<b>भवद्भ्यः LLDB 3.8.1 अथवा उच्चतरात् lldb-mi आवश्यकम् ।</b><br /> भवान् उपयुज्यते: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -219,6 +204,29 @@ msgstr "दूरस्थः कार्यमार्गः :"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/मार्गः/एकं/यन्त्रे/लेखनीय/निर्देशिकां प्रति"
+
+#~ msgid "Attempting to execute user command on unsupported LLDB version"
+#~ msgstr "असमर्थित LLDB संस्करणे उपयोक्तृ-आदेशं निष्पादयितुं प्रयत्नः"
+
+#~ msgid ""
+#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
+#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
+#~ ">Do you want to continue?"
+#~ msgstr ""
+#~ "<b>भवतः lldb-mi संस्करणम् असमर्थितम् अस्ति, यतः अस्मिन् आवश्यकस्य पट्टिकायाः अभावः "
+#~ "अस्ति ।</b><br/> अधिकविवरणार्थं https://llvm.org/bugs/show_bug.cgi?id=28026 "
+#~ "पश्यन्तु ।<br/> दुर्घटनानिवारयितुं Debugger console अक्षमं भविष्यति ।<br/> किं त्वं "
+#~ "निरन्तरं कर्तुम् इच्छसि ?"
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "LLDB संस्करणम् असमर्थितम्"
+
+#~ msgid ""
+#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>भवद्भ्यः LLDB 3.8.1 अथवा उच्चतरात् lldb-mi आवश्यकम् ।</b><br /> भवान् उपयुज्यते: "
+#~ "%1"
 
 #~ msgid "<b>Could not start debugger:</b><br />"
 #~ msgstr "<b>त्रुटिनिवारणं आरभुं न शक्तम्:</b><br />"

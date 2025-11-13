@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2024-11-10 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "(çalışıyor)"
@@ -27,42 +27,25 @@ msgstr "(çalışıyor)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr ""
-"Desteklenmeyen LLDB sürümü üzerinde kullanıcı komutu yürütmeye çalışıyor"
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Uzak hedefe bağlanma hatası:</b><br />"
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
-"<b>lldb-mi sürümünüz desteklenmiyor, temel bir yama da eksik.</b><br/>Daha "
-"fazla bilgi için bakınız: https://llvm.org/bugs/show_bug.cgi?id=28026.<br/"
-">Hata ayıklayıcısı konsolu çökmeyi engellemek için devre dışı bırakılacaktır."
-"<br/>Sürdürmek istiyor musunuz?"
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "LLDB Sürümü Desteklenmiyor"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
-"<b>LLDB 3.8.1 veya daha yüksekten bir lldb-mi’ye gereksiniminiz var.</b><br /"
-">Sizin kullandığınız: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -219,6 +202,30 @@ msgstr "Uzak çalışma yolu:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/aygıt/üzerinde/yazılabilir/bir/dizin/yolu"
+
+#~ msgid "Attempting to execute user command on unsupported LLDB version"
+#~ msgstr ""
+#~ "Desteklenmeyen LLDB sürümü üzerinde kullanıcı komutu yürütmeye çalışıyor"
+
+#~ msgid ""
+#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
+#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
+#~ ">Do you want to continue?"
+#~ msgstr ""
+#~ "<b>lldb-mi sürümünüz desteklenmiyor, temel bir yama da eksik.</b><br/"
+#~ ">Daha fazla bilgi için bakınız: https://llvm.org/bugs/show_bug.cgi?"
+#~ "id=28026.<br/>Hata ayıklayıcısı konsolu çökmeyi engellemek için devre "
+#~ "dışı bırakılacaktır.<br/>Sürdürmek istiyor musunuz?"
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "LLDB Sürümü Desteklenmiyor"
+
+#~ msgid ""
+#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>LLDB 3.8.1 veya daha yüksekten bir lldb-mi’ye gereksiniminiz var.</"
+#~ "b><br />Sizin kullandığınız: %1"
 
 #~ msgid "<b>Could not start debugger:</b><br />"
 #~ msgstr "<b>Hata ayıklayıcısı başlatılamadı:</b><br />"

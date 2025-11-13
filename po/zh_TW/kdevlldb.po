@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2025-05-03 15:32+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Lokalize 25.07.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "（執行中）"
@@ -27,39 +27,25 @@ msgstr "（執行中）"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr "正嘗試在不支援的 LLDB 版本上執行使用者指令"
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>無法連接到遠端目標：</b><br />"
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
-"<b>您的 lldb-mi 版本不受支援，因為它缺乏一個必要的改變。</b><br/>詳細資訊請"
-"見 https://llvm.org/bugs/show_bug.cgi?id=28026。<br/>除錯器主控台會停用來防止"
-"崩潰。<br/>您要繼續嗎？"
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "不支援的 LLDB 版本"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
-"<b>您需要來自 LLDB 3.8.1 版以上的 lldb-mi。</b><br />您目前的版本是：%1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -216,6 +202,27 @@ msgstr "遠端工作路徑："
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/裝置上/一個/可寫入目錄/的/路徑"
+
+#~ msgid "Attempting to execute user command on unsupported LLDB version"
+#~ msgstr "正嘗試在不支援的 LLDB 版本上執行使用者指令"
+
+#~ msgid ""
+#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
+#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
+#~ ">Do you want to continue?"
+#~ msgstr ""
+#~ "<b>您的 lldb-mi 版本不受支援，因為它缺乏一個必要的改變。</b><br/>詳細資訊"
+#~ "請見 https://llvm.org/bugs/show_bug.cgi?id=28026。<br/>除錯器主控台會停用"
+#~ "來防止崩潰。<br/>您要繼續嗎？"
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "不支援的 LLDB 版本"
+
+#~ msgid ""
+#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>您需要來自 LLDB 3.8.1 版以上的 lldb-mi。</b><br />您目前的版本是：%1"
 
 #~ msgid "<b>Could not start debugger:</b><br />"
 #~ msgstr "<b>無法啟動除錯器：</b><br />"

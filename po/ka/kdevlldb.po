@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:41+0000\n"
+"POT-Creation-Date: 2025-11-13 00:41+0000\n"
 "PO-Revision-Date: 2024-07-19 06:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: controllers/framestackmodel.cpp:97
+#: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
 msgstr "[გაშვებულია]"
@@ -28,40 +28,25 @@ msgstr "[გაშვებულია]"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:119
-#, kde-format
-msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr "მომხმარებლის ბრძანების მხარდაუჭერელი LLDB-ის ვერსიით გაშვება"
-
-#: debugsession.cpp:311
+#: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>დაშორებულ სამიზნესთან მიერთების პრობლემა:</b><br />"
 
-#: debugsession.cpp:345
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
-"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
-"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
-"continue?"
+"The LLDB version used by your <code>lldb-mi</code> could not be detected."
+"<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
+"<code>version</code>:<br />"
 msgstr ""
-"<b> lldb-mi-ის თქვენი ვერსიის მხარდაჭერა არ არსებობს. </b><br/> მეტი "
-"ინფორმაციისთვის იხ. https://llvm.org/bugs/show_bug.cgi?id=28026.<br/"
-">გამმართველის კონსოლი გათიშულია ზედმეტი პრობლემების ასაცილებლად.<br/>გნებავთ "
-"გააგრძელოთ?"
 
-#: debugsession.cpp:349
-#, kde-format
-msgid "LLDB Version Unsupported"
-msgstr "LLDB-ის მხარდაუჭერელი ვერსია"
-
-#: debugsession.cpp:395
+#: debugsession.cpp:365
 #, kde-format
 msgid ""
-"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+"Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
+"currently using LLDB version %2"
 msgstr ""
-"<b>საჭიროა lldb-mi LLDB 3.8.1 ან უფრო ახალი. </b><br /> თქვენ იყენებთ: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -218,6 +203,28 @@ msgstr "დაშორებული სამუშაო ბილიკი:
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/ბილიკი/მოწყობილობაზე/ჩაწერის/უფლების/მქონე/საქაღალდემდე"
+
+#~ msgid "Attempting to execute user command on unsupported LLDB version"
+#~ msgstr "მომხმარებლის ბრძანების მხარდაუჭერელი LLDB-ის ვერსიით გაშვება"
+
+#~ msgid ""
+#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
+#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
+#~ ">Do you want to continue?"
+#~ msgstr ""
+#~ "<b> lldb-mi-ის თქვენი ვერსიის მხარდაჭერა არ არსებობს. </b><br/> მეტი "
+#~ "ინფორმაციისთვის იხ. https://llvm.org/bugs/show_bug.cgi?id=28026.<br/"
+#~ ">გამმართველის კონსოლი გათიშულია ზედმეტი პრობლემების ასაცილებლად.<br/"
+#~ ">გნებავთ გააგრძელოთ?"
+
+#~ msgid "LLDB Version Unsupported"
+#~ msgstr "LLDB-ის მხარდაუჭერელი ვერსია"
+
+#~ msgid ""
+#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>საჭიროა lldb-mi LLDB 3.8.1 ან უფრო ახალი. </b><br /> თქვენ იყენებთ: %1"
 
 #~ msgid "<b>Could not start debugger:</b><br />"
 #~ msgstr "<b>გამართვის პროგრამის გაშვების შეცდომა:</b><br />"
