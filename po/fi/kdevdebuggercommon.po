@@ -367,7 +367,8 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Virheenpaikantimen liittäminen epäonnistui:</b><br />"
 
 #: midebugsession.cpp:372
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Virheenpaikantimen käynnistäminen epäonnistui:</b><br />"
 
