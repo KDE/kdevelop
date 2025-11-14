@@ -1,16 +1,16 @@
 # Translation of kdevlldb.po to Catalan
-# Copyright (C) 2016-2022 This_file_is_part_of_KDE
+# Copyright (C) 2016-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # SPDX-FileCopyrightText: 2016, 2017, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-13 00:41+0000\n"
-"PO-Revision-Date: 2022-07-09 16:17+0200\n"
+"PO-Revision-Date: 2025-11-13 14:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
@@ -43,6 +43,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"No s'ha pogut detectar la versió del LLDB utilitzada en el <code>lldb-mi</"
+"code>.<br />El <code>lldb-mi</code> ha enviat la resposta següent a l'ordre "
+"<code>version</code> de la CLI:<br />"
 
 #: debugsession.cpp:365
 #, kde-format
@@ -50,6 +53,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"El <code>lldb-mi</code> cal que usi el LLDB versió %1 o posterior.<br />Però "
+"actualment està utilitzant el LLDB versió %2"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19

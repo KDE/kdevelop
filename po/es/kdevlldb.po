@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-13 00:41+0000\n"
-"PO-Revision-Date: 2025-05-17 02:04+0100\n"
+"PO-Revision-Date: 2025-11-14 01:06+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
@@ -41,6 +41,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"No se puede detectar la versión de LLDB que usa su <code>lldb-mi</code>.<br /"
+">Su <code>lldb-mi</code> ha enviado la siguiente respuesta a la orden "
+"<code>version</code> de la consola:<br />"
 
 #: debugsession.cpp:365
 #, kde-format
@@ -48,6 +51,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"Su <code>lldb-mi</code> debe usar LLDB versión %1 o posterior.<br /"
+">Actualmente está usando LLDB versión %2."
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
@@ -204,48 +209,3 @@ msgstr "Ruta de trabajo remota:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/ruta/a/un/directorio/con/permisos/de/escritura/en/el/dispositivo"
-
-#~ msgid "Attempting to execute user command on unsupported LLDB version"
-#~ msgstr ""
-#~ "Intentando ejecutar orden del usuario con una versión de LLDB no "
-#~ "contemplada"
-
-#~ msgid ""
-#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
-#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
-#~ ">Do you want to continue?"
-#~ msgstr ""
-#~ "<b>Su versión de lldb-mi no está contemplada, ya que carece de un parche "
-#~ "esencial.</b><br/>Consulte https://llvm.org/bugs/show_bug.cgi?id=28026  "
-#~ "para más información.<br/>La consola de depuración se desactivará para "
-#~ "impedir un cuelgue del programa.<br/>¿Desea continuar?"
-
-#~ msgid "LLDB Version Unsupported"
-#~ msgstr "Versión de LLDB no permitida"
-
-#~ msgid ""
-#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
-#~ msgstr ""
-#~ "<b>Necesita «lldb-mi» de LLDB 3.8.1 o superior.</b><br />Está usando: %1"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>No se puede iniciar el depurador:</b><br />"
-
-#~ msgid ""
-#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
-#~ "<p><tt>%1"
-#~ msgstr ""
-#~ "<b>La carga del archivo de volcado ha fallado.</b><p>El depurador ha "
-#~ "informado del siguiente error:<p><tt>%1"
-
-#~ msgid ""
-#~ "A program is already being debugged. Do you want to abort the currently "
-#~ "running debug session and continue with the launch?"
-#~ msgstr ""
-#~ "Ya se está depurando un programa. ¿Desea interrumpir la sesión actual de "
-#~ "depuración y continuar con el lanzamiento?"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Interrumpir la sesión actual"

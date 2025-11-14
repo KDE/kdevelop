@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2016, 2017, 2020, 2022.
+# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-13 00:41+0000\n"
-"PO-Revision-Date: 2022-07-09 10:28+0200\n"
+"PO-Revision-Date: 2025-11-13 17:18+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
@@ -39,6 +39,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"De LLDB-versie gebruikt door uw <code>lldb-mi</code> kon niet gedetecteerd "
+"worden.<br />Uw <code>lldb-mi</code> zendt het volgende antwoord naar een "
+"CLI-commando <code>versie</code>:<br />"
 
 #: debugsession.cpp:365
 #, kde-format
@@ -46,6 +49,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"Uw <code>lldb-mi</code> moet LLDB-versie %1 of later gebruiken.<br />Maar nu "
+"wordt LLDB-versie %2 gebruikt"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19

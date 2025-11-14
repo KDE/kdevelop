@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-13 00:41+0000\n"
-"PO-Revision-Date: 2024-07-19 06:04+0200\n"
+"PO-Revision-Date: 2025-11-13 03:18+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
@@ -40,6 +40,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"თქვენი <code>lldb-mi</code>-ის მიერ გამოყენებული LLDB-ის ვერსიის დადგენა "
+"შეუძლებელია.<br />თქენმა <code>lldb-mi</code>-მა გამოაგზავნა შემდეგი პასუხი "
+"CLI ბრძანებაზე <code>version</code>:<br />"
 
 #: debugsession.cpp:365
 #, kde-format
@@ -47,6 +50,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"თქვენი <code>lldb-mi</code> უნდა იყენებდეს LLDB-ის ვერსიას %1 ან უფრო ახალს."
+"<br />მაგრამ ამჟამად იყენებს LLDB-ის ვერსიას %2"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
