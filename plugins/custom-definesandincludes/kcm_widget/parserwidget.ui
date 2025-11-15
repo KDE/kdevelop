@@ -83,7 +83,17 @@
         </item>
         <item>
          <property name="text">
-          <string notr="true">c++2a</string>
+          <string notr="true">c++20</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c++23</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c++2c</string>
          </property>
         </item>
        </widget>
@@ -168,6 +178,36 @@
         <item>
          <property name="text">
           <string notr="true">gnu11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c17</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">gnu17</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c23</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">gnu23</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c2y</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">gnu2y</string>
          </property>
         </item>
        </widget>
@@ -306,6 +346,16 @@
         <item>
          <property name="text">
           <string notr="true">c++14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c++17</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">c++20</string>
          </property>
         </item>
         <item>
