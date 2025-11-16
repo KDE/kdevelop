@@ -3,14 +3,14 @@
 # Vincent Pinon <vpinon@kde.org>, 2016.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
 # Johnny Jazeix <jazeix@gmail.com>, 2020.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-13 00:41+0000\n"
-"PO-Revision-Date: 2024-04-26 17:10+0200\n"
+"PO-Revision-Date: 2025-11-14 13:52+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 25.08.3\n"
 "X-Text-Markup: kde4\n"
 
 #: controllers/framestackmodel.cpp:86
@@ -45,6 +45,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"La version « LLDB » utilisée par votre  module <code>lldb-mi</code> n'a pas "
+"pu être détectée.<br />Votre module <code>lldb-mi</code> a envoyé la réponse "
+"suivante à une <code>version</code> de commande CLI :<br />"
 
 #: debugsession.cpp:365
 #, kde-format
@@ -52,6 +55,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"Votre module <code>lldb-mi</code> doit utiliser la version %1 de « LLDB » ou "
+"ultérieure.<br />Mais il utilise actuellement la version %2."
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
