@@ -1,26 +1,26 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# SPDX-FileCopyrightText: 2016, 2017, 2020, 2022, 2025 Luigi Toscano <luigi.toscano@tiscali.it>
 #
+# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-13 00:41+0000\n"
-"PO-Revision-Date: 2025-11-14 00:19+0100\n"
-"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
-"Language-Team: Italian <kde-i18n-it@kde.org>\n"
-"Language: it\n"
+"PO-Revision-Date: 2025-11-16 15:43+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
 msgid "(running)"
-msgstr "(in esecuzione)"
+msgstr "(רץ)"
 
 #: debuggerplugin.cpp:29 lldblauncher.cpp:27
 #, kde-format
@@ -30,7 +30,7 @@ msgstr "LLDB"
 #: debugsession.cpp:302
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
-msgstr "<b>Errore nella connessione all'obiettivo remoto:</b><br />"
+msgstr "<b>שגיאת חיבור ליעד המרוחק:</b><br />"
 
 #: debugsession.cpp:356
 #, kde-format
@@ -39,9 +39,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
-"Non è stato possibile rilevare la versione di LLDB usata da <code>lldb-mi</"
-"code>. <br /><code>lldb-mi</code> invierà la seguente risposta in caso di "
-"comando <code>version</code> a riga di comando:<br />"
+"לא ניתן לזהות את גרסת ה־LLDB שה־<code>lldb-mi</code> שלך משתמש בה.<br />ה־"
+"<code>lldb-mi</code> שלך שלח את התגובה הבאה לפקודה <code>version</code> "
+"שנשלחה דרך שורת הפקודות:<br />"
 
 #: debugsession.cpp:365
 #, kde-format
@@ -49,234 +49,161 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
-"<code>lldb-mi</code> deve usare la versione %1 o superiore di LLDB.<br />Ma "
-"attualmente usa la versione %2 di LLDB"
+"ה־<code>lldb-mi</code> שלך חייב להשתמש ב־LLDB בגרסה %1 ומעלה.<br />אבל כרגע "
+"הוא משתמש ב־LLDB בגרסה %2"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr "Barra degli strumenti di debug"
+msgstr "סרגל כלי ניפוי שגיאות"
 
 #: lldblauncher.cpp:32
 #, kde-format
 msgid "Debug a native application in LLDB"
-msgstr "Effettua il debug di un'applicazione nativa con LLDB"
+msgstr "ניפוי שגיאות של יישום מוטמע ב־LLDB"
 
 #: toolviewfactoryholder.cpp:41
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
-msgstr "Console LLDB"
+msgstr "מסוף LLDB"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
 msgctxt "@title:tab"
 msgid "LLDB Configuration"
-msgstr "Configurazione di LLDB"
+msgstr "הגדרות LLDB"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
 #: widgets/lldbconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr "Debugger"
+msgstr "מנפה שגיאות"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/lldbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger executable:"
-msgstr "Eseguibile di debug:"
+msgstr "קובץ הפעלת מנפה שגיאות:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
 #: widgets/lldbconfigpage.ui:42
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr "Forza il percorso per l'eseguibile lldb-mi..."
+msgstr "דריסת הנתיב לקובץ ההפעלה של lldb-mi…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional arguments:"
-msgstr "Argomenti aggiuntivi:"
+msgstr "ארגומנטים נוספים:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/lldbconfigpage.ui:60
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr "Ambiente:"
+msgstr "סביבה:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
 #: widgets/lldbconfigpage.ui:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Inherit system environment"
-msgstr "Eredita l'ambiente di sistema"
+msgstr "קבלת סביבת המערכת בירושה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
 #: widgets/lldbconfigpage.ui:95
 #, kde-format
 msgctxt "@title:group"
 msgid "Options"
-msgstr "Opzioni"
+msgstr "אפשרויות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: widgets/lldbconfigpage.ui:101
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Config script:"
-msgstr "Script di configurazione:"
+msgstr "סקריפט הגדרות:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
 #: widgets/lldbconfigpage.ui:108
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/lldb/config/script"
-msgstr "/percorso/per/lo/script/di/configurazione/di/lldb"
+msgstr "/path/to/lldb/config/script"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: widgets/lldbconfigpage.ui:115
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Start debugger with:"
-msgstr "Avvia il debugger con:"
+msgstr "התחלת מנפה שגיאות עם:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:123
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr "Output del programma"
+msgstr "פלט יישום"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:128
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "LLDB Console"
-msgstr "Console LLDB"
+msgstr "מסוף LLDB"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:133
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr "Frame Stack"
+msgstr "מחסנית מסגרות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: widgets/lldbconfigpage.ui:141
 #, kde-format
 msgctxt "@option:check"
 msgid "Break on start:"
-msgstr "Interrompi all'avvio:"
+msgstr "עצירה עם ההתחלה:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
 #: widgets/lldbconfigpage.ui:158
 #, kde-format
 msgctxt "@title:group"
 msgid "Remo&te Debugging"
-msgstr "Debug remo&to"
+msgstr "ניפוי שגיאות מ&רוחק"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: widgets/lldbconfigpage.ui:167
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote server:"
-msgstr "Server remoto:"
+msgstr "שרת מרוחק:"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
 #: widgets/lldbconfigpage.ui:174
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "host:port"
-msgstr "host:porta"
+msgstr "מארח:פתחה (host:port)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: widgets/lldbconfigpage.ui:181
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote work path:"
-msgstr "Percorso di lavoro remoto:"
+msgstr "נתיב עבודה מרוחק:"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
 #: widgets/lldbconfigpage.ui:188
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
-msgstr "/percorso/per/una/directory/scrivibile/nel/dispositivo"
-
-#~ msgid "Attempting to execute user command on unsupported LLDB version"
-#~ msgstr ""
-#~ "Tentativo di eseguire un comando utente su una versione non supportata di "
-#~ "LLDB"
-
-#~ msgid ""
-#~ "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
-#~ "b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more "
-#~ "information.<br/>Debugger console will be disabled to prevent crash.<br/"
-#~ ">Do you want to continue?"
-#~ msgstr ""
-#~ "<b>La versione presente sul sistema di lldb-mi non è supportata, perché "
-#~ "non contiene una modifica essenziale.</b><br/>Vedi https://llvm.org/bugs/"
-#~ "show_bug.cgi?id=28026 per maggiori informazioni.<br/>La console del "
-#~ "programma di debug sarà disabilitata per prevenire crash.<br/>Vuoi "
-#~ "continuare?"
-
-#~ msgid "LLDB Version Unsupported"
-#~ msgstr "Versione non supportata di LLDB"
-
-#~ msgid ""
-#~ "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
-#~ msgstr ""
-#~ "<b>È richiesto lldb-mi da LLDB 3.8.1 o superiore.</b><br /> È in uso: %1"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>Impossibile avviare il programma di debug:</b><br />"
-
-#~ msgid ""
-#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
-#~ "<p><tt>%1"
-#~ msgstr ""
-#~ "<b>Impossibile caricare il file core</b><p>Il programma di debug ha "
-#~ "restituito il seguente errore:<p><tt>%1"
-
-#~ msgid ""
-#~ "A program is already being debugged. Do you want to abort the currently "
-#~ "running debug session and continue with the launch?"
-#~ msgstr ""
-#~ "Si sta facendo già il debug di un programma. Vuoi fermare l'esecuzione "
-#~ "della sessione corrente di debug e continuare con il lancio?"
-
-#~ msgctxt "@action:button"
-#~ msgid "Abort Current Session"
-#~ msgstr "Interrompi la sessione attuale"
-
-#~ msgid "Startup error"
-#~ msgstr "Errore all'avvio"
-
-#~ msgid "LLDB Error"
-#~ msgstr "Errore di LLDB"
-
-#~ msgid "Debugger Configuration"
-#~ msgstr "Configurazione del programma di debug"
-
-#~ msgid ""
-#~ "No environment profile specified, looks like a broken configuration, "
-#~ "please check run configuration '%1'. Using default environment profile."
-#~ msgstr ""
-#~ "Non è stato specificato alcun profilo di ambiente, sembra che la "
-#~ "configurazione sia errata; controllare la configurazione di esecuzione "
-#~ "«%1».Verrà utilizzato il profilo di ambiente predefinito."
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Esegui"
-
-#~ msgid "/path/to/lldb-mi/"
-#~ msgstr "/percorso/per/lldb-mi/"
-
-#~ msgid "Arguments:"
-#~ msgstr "Argomenti:"
+msgstr "/path/to/a/on-device/writable/directory"
