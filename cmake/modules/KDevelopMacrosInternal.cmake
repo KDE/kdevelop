@@ -19,8 +19,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
-include(CMakeParseArguments)
-
 # helper method to ensure consistent cache var names
 function(_varname_for_compile_flag_check_result _varname _flag )
     string(REGEX REPLACE "[-=]" "_" _varname ${_flag})

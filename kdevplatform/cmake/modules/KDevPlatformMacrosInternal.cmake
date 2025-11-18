@@ -10,8 +10,6 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-include(CMakeParseArguments)
-
 function(kdevplatform_add_library target)
     set(options)
     set(oneValueArgs)

@@ -20,8 +20,6 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-include(CMakeParseArguments)
-
 # creates a template archive from the given directory, internal
 macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
