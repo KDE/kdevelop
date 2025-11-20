@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
 "PO-Revision-Date: 2023-07-26 10:19+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -87,7 +87,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Egen formatsträng"
 
-#: debugsession.cpp:164
+#: debugsession.cpp:162
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -96,12 +96,12 @@ msgstr ""
 "Ingen miljöprofil angiven. Detta verkar vara en felaktig inställning. "
 "Kontrollera körinställningen '%1'. Använder standardmiljöprofilen."
 
-#: debugsession.cpp:255
+#: debugsession.cpp:253
 #, kde-format
 msgid "<unknown version>"
 msgstr "<okänd version>"
 
-#: debugsession.cpp:279
+#: debugsession.cpp:272
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Du behöver gdb 7.0.0 eller senare.</b><br />Du använder: %1"

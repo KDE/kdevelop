@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
 "PO-Revision-Date: 2025-11-13 14:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -31,12 +31,12 @@ msgstr "(en execució)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:302
+#: debugsession.cpp:300
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Error en connectar amb l'objectiu remot:</b><br />"
 
-#: debugsession.cpp:356
+#: debugsession.cpp:347
 #, kde-format
 msgid ""
 "The LLDB version used by your <code>lldb-mi</code> could not be detected."
@@ -47,7 +47,7 @@ msgstr ""
 "code>.<br />El <code>lldb-mi</code> ha enviat la resposta següent a l'ordre "
 "<code>version</code> de la CLI:<br />"
 
-#: debugsession.cpp:365
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "

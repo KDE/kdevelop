@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
 "PO-Revision-Date: 2025-10-05 15:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -85,7 +85,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "سلسلة تنسيق مخصصة"
 
-#: debugsession.cpp:164
+#: debugsession.cpp:162
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -94,12 +94,12 @@ msgstr ""
 "لَم تُحدّد تشكيلة بيئة، يبدو أنّ التشكيل معطّل، الرجاء التحقق من تشكيلة التشغيل "
 "'%1'. استخدام تشكيلة البيئة المبدئية."
 
-#: debugsession.cpp:255
+#: debugsession.cpp:253
 #, kde-format
 msgid "<unknown version>"
 msgstr "<إصدار مجهول>"
 
-#: debugsession.cpp:279
+#: debugsession.cpp:272
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>تحتاج GDB 7.0.0 أو أعلى.</b><br />أنت تستخدم: %1"

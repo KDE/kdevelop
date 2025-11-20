@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
 "PO-Revision-Date: 2024-11-17 17:09+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -109,7 +109,7 @@ msgid "Custom format string"
 msgstr "Mukautettu muotomerkkijono"
 
 # Run configuration tarkoittaa tässä samaa kuin launch configuration.
-#: debugsession.cpp:164
+#: debugsession.cpp:162
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -121,12 +121,12 @@ msgstr ""
 "Ympäristöryhmää ei ole määritetty. Näyttää rikkoutuneelta määritykseltä, "
 "tarkista käynnistysmääritys ”%1”. Käytetään oletusympäristöryhmää."
 
-#: debugsession.cpp:255
+#: debugsession.cpp:253
 #, kde-format
 msgid "<unknown version>"
 msgstr "<tuntematon versio>"
 
-#: debugsession.cpp:279
+#: debugsession.cpp:272
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""

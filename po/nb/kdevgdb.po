@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
 "PO-Revision-Date: 2013-09-16 12:41+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -76,19 +76,19 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr ""
 
-#: debugsession.cpp:164
+#: debugsession.cpp:162
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
 
-#: debugsession.cpp:255
+#: debugsession.cpp:253
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:279
+#: debugsession.cpp:272
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Du trenger gdb 7.0.0 eller høyere.</b><br />Du bruker: %1"

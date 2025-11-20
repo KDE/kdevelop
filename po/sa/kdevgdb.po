@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -83,7 +83,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "कस्टम् प्रारूप स्ट्रिंग्"
 
-#: debugsession.cpp:164
+#: debugsession.cpp:162
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -92,12 +92,12 @@ msgstr ""
 "कोऽपि वातावरणप्रोफाइलः निर्दिष्टः नास्ति, भग्नविन्यासः इव दृश्यते, कृपया '%1' "
 "चालनविन्यासं परीक्ष्यताम् । पूर्वनिर्धारितपर्यावरणरूपरेखायाः उपयोगेन।"
 
-#: debugsession.cpp:255
+#: debugsession.cpp:253
 #, kde-format
 msgid "<unknown version>"
 msgstr "<अज्ञातसंस्करणम्>"
 
-#: debugsession.cpp:279
+#: debugsession.cpp:272
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>भवतः gdb 7.0.0 अथवा अधिकं आवश्यकम् ।</b><br /> भवान् उपयुज्यते: %1"

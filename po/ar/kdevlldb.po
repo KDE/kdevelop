@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2025-10-05 15:50+0400\n"
+"POT-Creation-Date: 2025-11-20 00:41+0000\n"
+"PO-Revision-Date: 2025-11-19 20:50+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28,25 +28,29 @@ msgstr "(يعمل)"
 msgid "LLDB"
 msgstr "LLDB"
 
-#: debugsession.cpp:302
+#: debugsession.cpp:300
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>خطأ في الاتصال بالهدف البعيد:</b><br />"
 
-#: debugsession.cpp:356
+#: debugsession.cpp:347
 #, kde-format
 msgid ""
 "The LLDB version used by your <code>lldb-mi</code> could not be detected."
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"تعذر الكشف عن إصدار LLDB المستخدم بواسطة <code>lldb-mi</code>.<br />أرسل "
+"<code>lldb-mi</code> الرد التالي على أمر CLI <code>version</code>:<br />"
 
-#: debugsession.cpp:365
+#: debugsession.cpp:356
 #, kde-format
 msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"يجب أن يستخدم <code>lldb-mi</code> الخاص بك إصدار LLDB %1 أو أحدث.ولكنه "
+"يستخدم حاليًا إصدار LLDB %2."
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
