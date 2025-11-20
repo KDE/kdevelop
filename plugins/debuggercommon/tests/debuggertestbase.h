@@ -171,6 +171,8 @@ private Q_SLOTS:
     void testVariablesAttributes();
     void testVariablesChanged();
 
+    void testReturnValueVariable();
+
     void testSwitchFrameDebuggerConsole();
 
     void testCommandOrderFastStepping();

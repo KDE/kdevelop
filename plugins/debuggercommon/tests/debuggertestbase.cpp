@@ -50,6 +50,7 @@
 #include <algorithm>
 #include <array>
 #include <memory>
+#include <optional>
 
 using namespace KDevelop;
 using namespace KDevMI;
@@ -2057,6 +2058,108 @@ void DebuggerTestBase::testVariablesChanged()
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testReturnValueVariable()
+{
+    struct ReturnValue
+    {
+        QString type;
+        QString value;
+    };
+
+    const auto verifyReturnValueVariable = [this](const std::optional<ReturnValue>& expectedReturnValue = {}) {
+        const auto watchesIndex = variableCollection()->index(0, 0);
+        COMPARE_DATA(watchesIndex, Watches::sectionTitle());
+        if (isLldb() && expectedReturnValue) {
+            // NOTE: the Abort mode merely returns from this lambda to prevent a crash; the test proceeds then.
+            QEXPECT_FAIL("", "LLDB-MI never sends a field \"gdb-result-var\"", Abort);
+        }
+        QCOMPARE_EQ(variableCollection()->rowCount(watchesIndex), expectedReturnValue.has_value());
+        if (expectedReturnValue) {
+            COMPARE_DATA(variableCollection()->index(0, 0, watchesIndex), "$ret");
+            COMPARE_DATA(variableCollection()->index(0, 1, watchesIndex), expectedReturnValue->value);
+            COMPARE_DATA(variableCollection()->index(0, 2, watchesIndex), expectedReturnValue->type);
+        }
+    };
+
+#define VERIFY_RETURN_VALUE_VARIABLE(...)                                                                              \
+    do {                                                                                                               \
+        verifyReturnValueVariable(__VA_ARGS__);                                                                        \
+        RETURN_IF_TEST_FAILED();                                                                                       \
+    } while (false)
+
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg("debuggee_debugeereturnvalues");
+    const auto fileUrl = QUrl::fromLocalFile(findSourceFile("debugeereturnvalues.cpp"));
+
+    constexpr std::array functionBodyLines{13, 18};
+    for (const auto miLine : functionBodyLines) {
+        breakpoints()->addCodeBreakpoint(fileUrl, miLine - 1);
+    }
+
+    constexpr auto secondFunctionStepOutLine = 40;
+    breakpoints()->addCodeBreakpoint(fileUrl, secondFunctionStepOutLine - 1);
+
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+    QCOMPARE(currentMiLine(session), functionBodyLines[0]);
+    // Initially a return value variable does not exist.
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 39);
+    // KDevelop creates a return value variable after stepping out of a non-void function.
+    VERIFY_RETURN_VALUE_VARIABLE(ReturnValue{"int", "5"});
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), functionBodyLines[1]);
+    // KDevelop removes the return value variable at the next debugger stop.
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    // NOTE: here the debugger stops for two reasons - "function-finished" and "breakpoint-hit".
+    QCOMPARE(currentMiLine(session), secondFunctionStepOutLine);
+    VERIFY_RETURN_VALUE_VARIABLE(ReturnValue{"int", "7"});
+
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 23);
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 42);
+    // The debugger does not report a return value after stepping out of a void function.
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 28);
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    // NOTE: here the debugger stops at the line where a function is called after stepping
+    //       out of it because the return value is assigned to a variable on the same line.
+    QCOMPARE(currentMiLine(session), 42);
+    VERIFY_RETURN_VALUE_VARIABLE(ReturnValue{"double", "2.5"});
+
+    STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 43);
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_INTO_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 33);
+    VERIFY_RETURN_VALUE_VARIABLE();
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    // NOTE: but in case of a non-fundamental type of the return value,
+    //       the debugger stops at the next line after stepping out.
+    QCOMPARE(currentMiLine(session), 44);
+    VERIFY_RETURN_VALUE_VARIABLE(ReturnValue{"QString", "\"Bob\""});
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+    // The debugger has stopped with reason="exited" or reason="exited-normally",
+    // hence KDevelop removed the return value variable.
+    VERIFY_RETURN_VALUE_VARIABLE();
 }
 
 void DebuggerTestBase::testSwitchFrameDebuggerConsole()

@@ -33,6 +33,9 @@ add_debuggable_executable(debuggee_debugeemultiplebreakpoint SRCS debugeemultipl
 add_debuggable_executable(debuggee_debugeeechoenv SRCS debugeeechoenv.cpp)
 add_debuggable_executable(debuggee_debugeepath SRCS debugeepath.cpp)
 
+add_debuggable_executable(debuggee_debugeereturnvalues SRCS debugeereturnvalues.cpp)
+target_link_libraries(debuggee_debugeereturnvalues Qt::Core)
+
 add_debuggable_executable(debuggee_debugeethreads SRCS debugeethreads.cpp)
 target_link_libraries(debuggee_debugeethreads Qt::Core)
 

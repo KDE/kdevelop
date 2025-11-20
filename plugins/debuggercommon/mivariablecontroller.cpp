@@ -49,10 +49,9 @@ void MIVariableController::programStopped(const AsyncRecord& r)
 {
     if (debugSession()->debuggerStateIsOn(s_shuttingDown)) return;
 
-    if (r.hasField(QStringLiteral("reason")) && r[QStringLiteral("reason")].literal() == QLatin1String("function-finished")
-        && r.hasField(QStringLiteral("gdb-result-var")))
-    {
-        variableCollection()->watches()->addFinishResult(r[QStringLiteral("gdb-result-var")].literal());
+    static const auto returnValueVariableField = QStringLiteral("gdb-result-var");
+    if (r.hasField(returnValueVariableField)) {
+        variableCollection()->watches()->addFinishResult(r[returnValueVariableField].literal());
     } else {
         variableCollection()->watches()->removeFinishResult();
     }
