@@ -1,0 +1,367 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"PO-Revision-Date: 2025-11-21 14:02+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.08.3\n"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Helpers"
+msgstr "מסייעי C/C++‎"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure C/C++ Helpers"
+msgstr "הגדרת מסייעי C/C++‎"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: clangsettings/sessionsettings/sessionsettings.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "השלמת קוד"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"If disabled, macros will not be included in the code completion results. "
+"This can improve the responsiveness of code completion in some cases."
+msgstr ""
+"אם האפשרות כבויה, תסריטי המאקרו לא יוכללו בתוצאות השלמת הקוד. ההגדרות הזאת "
+"יכולה לשפר את זמן התגובה של השלמת קוד בחלק מהמקרים."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:38
+#, kde-format
+msgctxt "@option:check"
+msgid "Add macros to code completion"
+msgstr "הוספת תסריטי מאקרו להשלמת קוד"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
+#: clangsettings/sessionsettings/sessionsettings.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable Look-ahead code completion"
+msgstr "הפעלת השלמת קוד לפי הסתכלות קדימה"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: clangsettings/sessionsettings/sessionsettings.ui:64
+#, kde-format
+msgctxt "@title:group"
+msgid "Assistants"
+msgstr "עוזרים"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
+#: clangsettings/sessionsettings/sessionsettings.ui:70
+#, kde-format
+msgctxt "@option:check"
+msgid "Forward declare assistant"
+msgstr "מסייע הכרזה קדימה"
+
+#: clangsupport.cpp:171
+#, kde-format
+msgid ""
+"The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
+"Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix "
+"this.\n"
+"See also: https://bugs.kde.org/show_bug.cgi?id=393779"
+msgstr ""
+"נתיב ההכללה (include) המובנה ב־clang ‏„%1” הוא שגוי חסרה כותרת cpuid.h).\n"
+"כדאי לנהות להגדיר את משתנה הסביבה KDEV_CLANG_BUILTIN_DIR ידנית כדי לתקן את "
+"זה.\n"
+"למידע נוסף: https://bugs.kde.org/show_bug.cgi?id=393779"
+
+#: clangsupport.cpp:278
+#, kde-format
+msgctxt "@action"
+msgid "Rename Declaration"
+msgstr "שינוי שם ההכרזה"
+
+#: clangsupport.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Move into Source"
+msgstr "העברה למקור"
+
+#: codecompletion/context.cpp:149
+#, kde-format
+msgid "Override %1"
+msgstr "דריסת %1"
+
+#: codecompletion/context.cpp:346
+#, kde-format
+msgid "Implement %1"
+msgstr "מימוש %1"
+
+#: codecompletion/context.cpp:1408
+#, kde-format
+msgid "Special"
+msgstr "מיוחד"
+
+#: codecompletion/context.cpp:1409
+#, kde-format
+msgid "Look-ahead Matches"
+msgstr "תוצאות בהסתכלות קדימה"
+
+#: codecompletion/context.cpp:1410
+#, kde-format
+msgid "Builtin"
+msgstr "מוּבנה"
+
+#: codecompletion/context.cpp:1411
+#, kde-format
+msgid "Macros"
+msgstr "תסריטי מאקרו"
+
+#: codecompletion/context.cpp:1454
+#, kde-format
+msgid "Abstract Override"
+msgstr "דריסה מופשטת"
+
+#: codecompletion/context.cpp:1455
+#, kde-format
+msgid "Virtual Override"
+msgstr "דריסה וירטואלית"
+
+#: codecompletion/context.cpp:1470
+#, kde-format
+msgid "Implement Function"
+msgstr "מימוש פונקציה"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update declaration signature"
+msgstr "עדכון חתימת הכרזה"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update definition signature"
+msgstr "עדכון חתימת הגדרה"
+
+#: codegen/adaptsignatureaction.cpp:62
+#, kde-format
+msgid ""
+"Update declaration signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"עדכון חתימת הכרזה\n"
+"מהחתימה: %1\n"
+"לחתימה: %2"
+
+#: codegen/adaptsignatureaction.cpp:63
+#, kde-format
+msgid ""
+"Update definition signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"עדכון חתימת הגדרה\n"
+"מהחתימה: %1\n"
+"לחתימה: %2"
+
+#: codegen/adaptsignatureaction.cpp:113
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "החלת השינויים נכשלה: %1"
+
+#: codegen/adaptsignatureassistant.cpp:76
+#, kde-format
+msgid "Adapt Signature"
+msgstr "התאמת חתימה"
+
+#: codegen/clangrefactoring.cpp:82
+#, kde-format
+msgctxt "@action"
+msgid "Rename %1"
+msgstr "שינוי השם של %1"
+
+#: codegen/clangrefactoring.cpp:94
+#, kde-format
+msgid "Create separate definition for %1"
+msgstr "יצירת הגדרה נפרדת עבור %1"
+
+#: codegen/clangrefactoring.cpp:137
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "אין הכרזה תחת הסמן"
+
+#: codegen/clangrefactoring.cpp:145
+#, kde-format
+msgid "No source file available for %1."
+msgstr "אין קובץ מקור זמין עבור %1."
+
+#: codegen/clangrefactoring.cpp:157
+#, kde-format
+msgid "Failed to update DUChain for %1."
+msgstr "עדכון DUChain עבור %1 נכשל."
+
+#: codegen/clangrefactoring.cpp:161
+#, kde-format
+msgid "Declaration lost while updating."
+msgstr "ההכרזה אבדה בזמן העדכון."
+
+#: codegen/clangrefactoring.cpp:167
+#, kde-format
+msgid "Cannot create definition for this declaration."
+msgstr "לא ניתן ליצור הגדרה להכרזה הזאת."
+
+#: codegen/clangrefactoring.cpp:174
+#, kde-format
+msgid "No document for %1"
+msgstr "אין מסמך עבור %1"
+
+#: codegen/clangrefactoring.cpp:205
+#, kde-format
+msgid "Insertion failed"
+msgstr "ההוספה נכשלה"
+
+#: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
+#, kde-format
+msgid "Applying changes failed: %1"
+msgstr "החלת השינויים נכשלה: %1"
+
+#: duchain/clangproblem.cpp:204
+#, kde-format
+msgid "Fix-it Hints"
+msgstr "רמזים לתיקון"
+
+#: duchain/clangproblem.cpp:246
+#, kde-format
+msgid "Insert \"%1\" at line: %2, column: %3"
+msgstr "להוסיף את „%1” בשורה: %2, עמודה: %3"
+
+#: duchain/clangproblem.cpp:250
+#, kde-format
+msgid "Replace text at line: %1, column: %2 with: \"%3\""
+msgstr "להחליף את הטקסט בשורה: %1, עמודה: %2 ב־: „%3”"
+
+#: duchain/clangproblem.cpp:253
+#, kde-format
+msgid "Replace \"%1\" with: \"%2\""
+msgstr "להחליף את „%1” ב־: „%2’"
+
+#: duchain/clangproblem.cpp:256
+#, kde-format
+msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
+msgstr "להחליף כמה שורות שנפתחות בשורה: %1, עמודה: %2 ב־:„%3”"
+
+#: duchain/headerguardassistant.cpp:45
+#, kde-format
+msgid "Add #pragma once"
+msgstr "יש לציין ‎#pragma פעם אחת בלבד"
+
+#: duchain/headerguardassistant.cpp:46
+#, kde-format
+msgid "Add macro-based #ifndef/#define/#endif header guard"
+msgstr "יש להוסיף מגני כותרות  מבוססי מאקרו כגון ‎#ifndef/#define/#endif"
+
+#: duchain/macrodefinition.cpp:112
+#, kde-format
+msgid "Macro %1"
+msgstr "תסריט מאקרו %1"
+
+#: duchain/macronavigationcontext.cpp:64
+#, kde-format
+msgctxt ""
+"%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
+"arguments"
+msgid "%1: %2"
+msgstr ""
+
+#: duchain/macronavigationcontext.cpp:65
+#, kde-format
+msgid "Function macro"
+msgstr "מאקרו של פונקציה"
+
+#: duchain/macronavigationcontext.cpp:65
+#, kde-format
+msgid "Macro"
+msgstr "מאקרו"
+
+#: duchain/macronavigationcontext.cpp:68
+#, kde-format
+msgctxt "%1: the link to the definition"
+msgid "Defined in: %1"
+msgstr "הוגדר תחת: %1"
+
+#: duchain/macronavigationcontext.cpp:72
+#, kde-format
+msgid "Show uses"
+msgstr "הצגת שימושים"
+
+#: duchain/macronavigationcontext.cpp:75
+#, kde-format
+msgid "Body: "
+msgstr "תוכן: "
+
+#: duchain/missingincludepathproblem.cpp:35
+#, kde-format
+msgid "Add Custom Include Path"
+msgstr "הוספת נתיב הכללה מותאם אישית"
+
+#: duchain/missingincludepathproblem.cpp:58
+#, kde-format
+msgid "Open Project"
+msgstr "פתיחת מיזם"
+
+#: duchain/parsesession.cpp:575
+#, kde-format
+msgid "Requested here: %1"
+msgstr "התקבלה בקשה כאן: %1"
+
+#: duchain/parsesession.cpp:616
+#, kde-format
+msgid "In included file: %1"
+msgstr "בקבצים שנכללים: %1"
+
+#: duchain/parsesession.cpp:639
+#, kde-format
+msgid "Header is not guarded against multiple inclusions"
+msgstr "הכותרת לא מוגנת מהכללות"
+
+#: duchain/parsesession.cpp:640
+#, kde-format
+msgid ""
+"The given header is not guarded against multiple inclusions, either with the "
+"conventional #ifndef/#define/#endif macro guards or with #pragma once."
+msgstr ""
+"הכותרת שסופקה לא מוגנת מהכללות, או עם הגנות המאקרו המקובלות ‎#ifndef/#define/"
+"#endif או עם ‎#pragma פעם אחת."
+
+#: duchain/unknowndeclarationproblem.cpp:374
+#, kde-format
+msgid "Insert '%1'"
+msgstr "הוספת ‚%1’"
+
+#: duchain/unknowndeclarationproblem.cpp:434
+#, kde-format
+msgid "Forward declare as 'class'"
+msgstr "העברת ההכרזה בתור ‚מחלקה’ (class)"
+
+#: duchain/unknowndeclarationproblem.cpp:441
+#, kde-format
+msgid "Forward declare as 'struct'"
+msgstr "העברת ההכרזה בתור ‚מבנה’ (struct)"
+
+#: util/clangutils.cpp:191
+#, kde-format
+msgid "<parse error>"
+msgstr "<שגיאת פענוח>"

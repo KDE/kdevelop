@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-11-22 00:41+0000\n"
 "PO-Revision-Date: 2025-10-30 01:07-0300\n"
 "Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -194,7 +194,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erro interno do depurador"
 
-#: midebugger.cpp:337 midebugsession.cpp:503
+#: midebugger.cpp:337 midebugsession.cpp:528
 #, kde-format
 msgid "Process exited"
 msgstr "O processo terminou"
@@ -337,47 +337,47 @@ msgstr ""
 "Um programa já está sendo depurado. Deseja cancelar a sessão de depuração "
 "que está em execução e continuar com a inicialização?"
 
-#: midebugsession.cpp:256
+#: midebugsession.cpp:281
 #, kde-format
 msgid "Running program"
 msgstr "Programa rodando"
 
-#: midebugsession.cpp:329
+#: midebugsession.cpp:354
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Associando-se ao processo %1"
 
-#: midebugsession.cpp:359
+#: midebugsession.cpp:384
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Não foi possível anexar o depurador:</b><br />"
 
-#: midebugsession.cpp:372
+#: midebugsession.cpp:397
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Não foi possível iniciar o depurador:</b><br />"
 
-#: midebugsession.cpp:386
+#: midebugsession.cpp:411
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Examinando o arquivo 'core' %1"
 
-#: midebugsession.cpp:489
+#: midebugsession.cpp:514
 #, kde-format
 msgid "Debugger stopped"
 msgstr "O depurador parou"
 
-#: midebugsession.cpp:508
+#: midebugsession.cpp:533
 #, kde-format
 msgid "Application is running"
 msgstr "O aplicativo está em execução"
 
-#: midebugsession.cpp:513
+#: midebugsession.cpp:538
 #, kde-format
 msgid "Application is paused"
 msgstr "O aplicativo está em pausa"
 
-#: midebugsession.cpp:818
+#: midebugsession.cpp:843
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -386,44 +386,64 @@ msgstr ""
 "<b>Comando do Gdb enviando enquanto o depurador estava parado</b><br>O "
 "comando foi:<br> %1"
 
-#: midebugsession.cpp:930
+#: midebugsession.cpp:955
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Comando inválido do depurador </b><br>%1"
 
-#: midebugsession.cpp:1005
+#: midebugsession.cpp:1035
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Falha ao carregar o arquivo core:</b><br />"
 
-#: midebugsession.cpp:1094
+#: midebugsession.cpp:1124
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Saiu com o código: %1"
 
-#: midebugsession.cpp:1096
+#: midebugsession.cpp:1126
 #, kde-format
 msgid "Exited normally"
 msgstr "Terminou normalmente"
 
-#: midebugsession.cpp:1103
-#, kde-format
+#: midebugsession.cpp:1135
+#, fuzzy, kde-format
+#| msgid "Exited on signal %1"
+msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Saiu com o sinal %1"
 
-#: midebugsession.cpp:1138
-#, kde-format
+#: midebugsession.cpp:1137
+#, fuzzy, kde-format
+#| msgid "Exited on signal %1"
+msgctxt ""
+"%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
+msgid "Exited on signal %1 (%2)"
+msgstr "Saiu com o sinal %1"
+
+#: midebugsession.cpp:1173
+#, fuzzy, kde-format
+#| msgid "Program received signal %1 (%2)"
+msgctxt "%1 - the name of a POSIX signal"
+msgid "Program received signal %1"
+msgstr "O programa recebeu o sinal %1 (%2)"
+
+#: midebugsession.cpp:1175
+#, fuzzy, kde-format
+#| msgid "Program received signal %1 (%2)"
+msgctxt ""
+"%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
 msgstr "O programa recebeu o sinal %1 (%2)"
 
-#: midebugsession.cpp:1254
+#: midebugsession.cpp:1294
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 comando em espera\n"
 msgstr[1] "%1 comandos em espera\n"
 
-#: midebugsession.cpp:1255
+#: midebugsession.cpp:1295
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -431,12 +451,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 comando em processamento pelo gdb\n"
 msgstr[1] "%1 comandos em processamento pelo gdb\n"
 
-#: midebugsession.cpp:1256
+#: midebugsession.cpp:1296
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Estado do depurador: %1\n"
 
-#: midebugsession.cpp:1259
+#: midebugsession.cpp:1299
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -447,7 +467,7 @@ msgstr ""
 "Texto do comando atual: '%2'\n"
 "Texto original do comando atual: '%3'\n"
 
-#: midebugsession.cpp:1284
+#: midebugsession.cpp:1324
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>Erro do depurador:</b><br />"
