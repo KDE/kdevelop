@@ -386,34 +386,30 @@ msgid "Exited normally"
 msgstr "正常退出"
 
 #: midebugsession.cpp:1135
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
-msgstr "以信号 %1 退出"
+msgstr ""
 
 #: midebugsession.cpp:1137
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr "以信号 %1 退出"
+msgstr ""
 
 #: midebugsession.cpp:1173
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr "程序收到了信号 %1(%2)"
+msgstr ""
 
 #: midebugsession.cpp:1175
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
-msgstr "程序收到了信号 %1(%2)"
+msgstr ""
 
 #: midebugsession.cpp:1294
 #, kde-format

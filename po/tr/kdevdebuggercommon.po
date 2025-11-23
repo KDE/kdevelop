@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 00:41+0000\n"
-"PO-Revision-Date: 2025-10-31 17:32+0300\n"
+"PO-Revision-Date: 2025-11-22 18:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -402,34 +402,30 @@ msgid "Exited normally"
 msgstr "Normal olarak çıkıldı"
 
 #: midebugsession.cpp:1135
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
-msgstr "%1 sinyaliyle çıkıldı"
+msgstr "%1 sinyalinde çıkıldı"
 
 #: midebugsession.cpp:1137
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr "%1 sinyaliyle çıkıldı"
+msgstr "%1 (%2) sinyalinde çıkıldı"
 
 #: midebugsession.cpp:1173
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr "Uygulama %1 (%2) sinyali aldı"
+msgstr "Program %1 sinyalini aldı"
 
 #: midebugsession.cpp:1175
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
-msgstr "Uygulama %1 (%2) sinyali aldı"
+msgstr "Program %1 (%2) sinyalini aldı"
 
 #: midebugsession.cpp:1294
 #, kde-format
@@ -458,7 +454,7 @@ msgid ""
 "Current command text: '%2'\n"
 "Current command original text: '%3'\n"
 msgstr ""
-"Geçerli komutun sınıfı: “%1”'\n"
+"Geçerli komutun sınıfı: “%1”\n"
 "Geçerli komutun metni: “%2”\n"
 "Geçerli komutun özgün metni: “%3”\n"
 

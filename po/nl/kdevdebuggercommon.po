@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 00:41+0000\n"
-"PO-Revision-Date: 2025-10-30 13:48+0100\n"
+"PO-Revision-Date: 2025-11-22 18:25+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -398,30 +398,26 @@ msgid "Exited normally"
 msgstr "Normaal beëindigd"
 
 #: midebugsession.cpp:1135
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
-msgstr "Beëindigd met signaal %1"
+msgstr "Beëindigd op signaal %1"
 
 #: midebugsession.cpp:1137
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr "Beëindigd met signaal %1"
+msgstr "Beëindigd op signaal %1 (%2)"
 
 #: midebugsession.cpp:1173
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr "Het programma heeft het signaal %1 (%2) ontvangen"
+msgstr "Programma ontving signaal %1"
 
 #: midebugsession.cpp:1175
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
