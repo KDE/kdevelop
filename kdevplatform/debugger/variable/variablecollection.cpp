@@ -231,6 +231,11 @@ QString Watches::sectionTitle()
     return i18n("Auto");
 }
 
+QString Watches::returnValueVariableDisplayName()
+{
+    return QStringLiteral("$ret");
+}
+
 Watches::Watches(TreeModel* model, TreeItem* parent)
 : TreeItem(model, parent), finishResult_(nullptr)
 {
@@ -257,8 +262,8 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
     {
         removeFinishResult();
     }
-    finishResult_ = currentSession()->variableController()->createVariable(
-        model(), this, convenienceVarible, QStringLiteral("$ret"));
+    finishResult_ = currentSession()->variableController()->createVariable(model(), this, convenienceVarible,
+                                                                           returnValueVariableDisplayName());
     appendChild(finishResult_);
     finishResult_->attachMaybe();
     if (childCount() == 1 && !isExpanded()) {

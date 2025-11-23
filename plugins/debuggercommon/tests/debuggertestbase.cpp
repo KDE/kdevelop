@@ -2077,7 +2077,7 @@ void DebuggerTestBase::testReturnValueVariable()
         }
         QCOMPARE_EQ(variableCollection()->rowCount(watchesIndex), expectedReturnValue.has_value());
         if (expectedReturnValue) {
-            COMPARE_DATA(variableCollection()->index(0, 0, watchesIndex), "$ret");
+            COMPARE_DATA(variableCollection()->index(0, 0, watchesIndex), Watches::returnValueVariableDisplayName());
             COMPARE_DATA(variableCollection()->index(0, 1, watchesIndex), expectedReturnValue->value);
             COMPARE_DATA(variableCollection()->index(0, 2, watchesIndex), expectedReturnValue->type);
         }

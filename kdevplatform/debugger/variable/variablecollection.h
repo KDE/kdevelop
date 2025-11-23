@@ -131,6 +131,10 @@ public:
      * @return the name (title) of the watches section
      */
     [[nodiscard]] static QString sectionTitle();
+    /**
+     * @return the name of a return value variable displayed in the watches section
+     */
+    [[nodiscard]] static QString returnValueVariableDisplayName();
 
     Watches(TreeModel* model, TreeItem* parent);
     Variable* add(const QString& expression);
