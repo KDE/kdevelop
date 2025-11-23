@@ -388,12 +388,12 @@ msgstr "正常退出"
 #: midebugsession.cpp:1111
 #, kde-format
 msgid "Exited on signal %1"
-msgstr "以信号 %1 退出"
+msgstr ""
 
 #: midebugsession.cpp:1146
 #, kde-format
 msgid "Program received signal %1 (%2)"
-msgstr "程序收到了信号 %1(%2)"
+msgstr ""
 
 #: midebugsession.cpp:1262
 #, kde-format
