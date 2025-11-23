@@ -42,7 +42,16 @@
 
 namespace {
 constexpr auto executionMark = KTextEditor::Document::MarkTypes::Execution;
+
+/**
+ * @return the title of the Variables tool view
+ */
+[[nodiscard]] QString variablesToolViewTitle()
+{
+    return i18nc("@title:window", "Variables");
 }
+
+} // unnamed namespace
 
 namespace KDevelop {
 
@@ -111,7 +120,7 @@ void DebugController::initializeUi()
             this, QStringLiteral("org.kdevelop.debugger.BreakpointsView"), Qt::BottomDockWidgetArea));
 
     ICore::self()->uiController()->addToolView(
-        i18nc("@title:window", "Variables"),
+        variablesToolViewTitle(),
         new DebuggerToolFactory<VariableWidget>(this, QStringLiteral("org.kdevelop.debugger.VariablesView"),
                                                 Qt::LeftDockWidgetArea));
 
@@ -243,11 +252,17 @@ void DebugController::setupActions()
     m_stepOut = action = new QAction(QIcon::fromTheme(QStringLiteral("debug-step-out")), i18nc("@action", "Step O&ut"), this);
     ac->setDefaultShortcut( action, Qt::Key_F12);
     action->setToolTip( i18nc("@info:tooltip", "Step out of the current function") );
-    action->setWhatsThis( i18nc("@whatsthis", "Executes the application until the currently executing "
+    action->setWhatsThis(i18nc("@whatsthis",
+                               "Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
                                "the line after the original call to that function. If "
                                "program execution is in the outermost frame (i.e. in "
-                               "main()) then this operation has no effect.") );
+                               "<code>main()</code>) then this operation has no effect.<br>"
+                               "After stepping out of a non-<code>void</code> function, its return "
+                               "value and type are displayed in a variable named <code>%1</code> "
+                               "in a section <i>%2</i> of '%3' tool view.",
+                               Watches::returnValueVariableDisplayName(), Watches::sectionTitle(),
+                               variablesToolViewTitle()));
     connect(action, &QAction::triggered, this, &DebugController::stepOut);
     ac->addAction(QStringLiteral("debug_stepout"), action);
 
