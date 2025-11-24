@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 00:41+0000\n"
-"PO-Revision-Date: 2025-10-30 18:23+0100\n"
+"PO-Revision-Date: 2025-11-23 15:49+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -402,30 +402,26 @@ msgid "Exited normally"
 msgstr "Terminato in modo corretto"
 
 #: midebugsession.cpp:1135
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Terminato a causa del segnale %1"
 
 #: midebugsession.cpp:1137
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr "Terminato a causa del segnale %1"
+msgstr "Terminato a causa del segnale %1 (%2)"
 
 #: midebugsession.cpp:1173
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr "Il programma ha ricevuto il segnale %1 (%2)"
+msgstr "Il programma ha ricevuto il segnale %1"
 
 #: midebugsession.cpp:1175
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
