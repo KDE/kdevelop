@@ -2141,6 +2141,26 @@ void DebuggerTestBase::testReturnValueVariable()
     QCOMPARE(currentMiLine(session), 42);
     VERIFY_RETURN_VALUE_VARIABLE(ReturnValue{"double", "2.5"});
 
+    // Simulate removal of the return value variable by the user. There should be no crash afterwards.
+    [this] {
+        const auto watchesIndex = variableCollection()->index(0, 0);
+        const auto returnValueIndex = variableCollection()->index(0, 0, watchesIndex);
+        if (isLldb()) {
+            // NOTE: the Abort mode merely returns from this lambda
+            //       to avoid consequent failures; the test proceeds then.
+            QEXPECT_FAIL("", "LLDB-MI never sends a field \"gdb-result-var\"", Abort);
+        }
+        QVERIFY(returnValueIndex.isValid());
+        auto* const returnValueItem = variableCollection()->itemForIndex(returnValueIndex);
+        QVERIFY(returnValueItem);
+        auto* const returnValueVariable = qobject_cast<Variable*>(returnValueItem);
+        QVERIFY(returnValueVariable);
+
+        returnValueVariable->die();
+    }();
+    RETURN_IF_TEST_FAILED();
+    VERIFY_RETURN_VALUE_VARIABLE();
+
     STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 43);
     VERIFY_RETURN_VALUE_VARIABLE();

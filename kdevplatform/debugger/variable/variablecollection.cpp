@@ -237,7 +237,7 @@ QString Watches::returnValueVariableDisplayName()
 }
 
 Watches::Watches(TreeModel* model, TreeItem* parent)
-: TreeItem(model, parent), finishResult_(nullptr)
+    : TreeItem(model, parent)
 {
     setData(QVariantList{sectionTitle(), QString()});
 }
@@ -258,26 +258,28 @@ Variable* Watches::add(const QString& expression)
 
 Variable *Watches::addFinishResult(const QString& convenienceVarible)
 {
-    if( finishResult_ )
-    {
-        removeFinishResult();
-    }
-    finishResult_ = currentSession()->variableController()->createVariable(model(), this, convenienceVarible,
-                                                                           returnValueVariableDisplayName());
-    appendChild(finishResult_);
-    finishResult_->attachMaybe();
+    removeFinishResult();
+
+    // resultVariable is a raw pointer cache that prevents repeated weak pointer access
+    auto* const resultVariable = currentSession()->variableController()->createVariable(
+        model(), this, convenienceVarible, returnValueVariableDisplayName());
+    m_finishResult = resultVariable;
+
+    appendChild(resultVariable);
+    resultVariable->attachMaybe();
     if (childCount() == 1 && !isExpanded()) {
         setExpanded(true);
     }
-    return finishResult_;
+
+    return resultVariable;
 }
 
 void Watches::removeFinishResult()
 {
-    if (finishResult_)
-    {
-        finishResult_->die();
-        finishResult_ = nullptr;
+    // resultVariable is a raw pointer cache that prevents repeated weak pointer access
+    if (auto* const resultVariable = m_finishResult.get()) {
+        m_finishResult.clear();
+        resultVariable->die();
     }
 }
 
