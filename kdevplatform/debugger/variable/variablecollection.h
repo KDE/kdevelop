@@ -154,7 +154,7 @@ private:
 
     void fetchMoreChildren() override {}
 
-    Variable* finishResult_;
+    QPointer<Variable> m_finishResult;
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
