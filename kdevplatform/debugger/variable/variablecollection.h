@@ -173,7 +173,7 @@ public:
     explicit VariablesRoot(TreeModel* model);
 
     Watches *watches() const { return m_watches; }
-    Locals *locals(const QString &name = QStringLiteral("Locals"));
+    Locals* locals(const QString& name);
     QHash<QString, Locals*> allLocals() const;
 
     void fetchMoreChildren() override {}
