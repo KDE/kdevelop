@@ -244,7 +244,7 @@ void GdbTest::testVariablesLocals()
 
     QCOMPARE(variableCollection()->rowCount(), 2);
     QModelIndex i = variableCollection()->index(1, 0);
-    COMPARE_DATA(i, "Locals");
+    COMPARE_DATA(i, KDevelop::VariableCollection::defaultLocalsSectionTitle());
     QCOMPARE(variableCollection()->rowCount(i), 2);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "0");

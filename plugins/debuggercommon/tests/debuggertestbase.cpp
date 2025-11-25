@@ -1816,7 +1816,7 @@ void DebuggerTestBase::testVariablesSwitchFrame()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
 
     auto localsIndex = variableCollection()->index(1, 0);
-    COMPARE_DATA(localsIndex, "Locals");
+    COMPARE_DATA(localsIndex, VariableCollection::defaultLocalsSectionTitle());
 
     int jRow;
     if (isLldb()) {
@@ -1997,11 +1997,11 @@ void DebuggerTestBase::testVariablesChanged()
     QVERIFY(iVariable);
     // Expand the "Auto" collection.
     const auto watchesIndex = collection->index(0, 0);
-    COMPARE_DATA(watchesIndex, "Auto");
+    COMPARE_DATA(watchesIndex, Watches::sectionTitle());
     collection->expanded(watchesIndex);
     // Expand the Locals collection.
     const auto localsIndex = collection->index(1, 0);
-    COMPARE_DATA(localsIndex, "Locals");
+    COMPARE_DATA(localsIndex, VariableCollection::defaultLocalsSectionTitle());
     collection->expanded(localsIndex);
 
     // Wait for the watch to be added and the collections to be expanded.

@@ -226,10 +226,15 @@ QVariant Variable::data(int column, int role) const
     return TreeItem::data(column, role);
 }
 
+QString Watches::sectionTitle()
+{
+    return i18n("Auto");
+}
+
 Watches::Watches(TreeModel* model, TreeItem* parent)
 : TreeItem(model, parent), finishResult_(nullptr)
 {
-    setData(QVector<QVariant>{i18n("Auto"), QString()});
+    setData(QVariantList{sectionTitle(), QString()});
 }
 
 Variable* Watches::add(const QString& expression)
@@ -403,6 +408,11 @@ void VariablesRoot::resetChanged()
     }
 }
 
+QString VariableCollection::defaultLocalsSectionTitle()
+{
+    return i18n("Locals");
+}
+
 VariableCollection::VariableCollection(IDebugController* controller)
     : TreeModel({i18n("Name"), i18n("Value"), i18n("Type")}, controller)
     , m_widgetVisible(false)
@@ -497,7 +507,7 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
 
 Locals* VariableCollection::locals(const QString &name) const
 {
-    return m_universe->locals(name.isEmpty() ? i18n("Locals") : name);
+    return m_universe->locals(name.isEmpty() ? defaultLocalsSectionTitle() : name);
 }
 
 VariableProvider::VariableProvider(VariableCollection* collection)

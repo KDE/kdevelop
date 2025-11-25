@@ -127,6 +127,11 @@ class KDEVPLATFORMDEBUGGER_EXPORT Watches : public TreeItem
     Q_OBJECT
     friend class KDevMI::GDB::GdbTest;
 public:
+    /**
+     * @return the name (title) of the watches section
+     */
+    [[nodiscard]] static QString sectionTitle();
+
     Watches(TreeModel* model, TreeItem* parent);
     Variable* add(const QString& expression);
 
@@ -200,6 +205,11 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableCollection : public TreeModel
     Q_OBJECT
 
 public:
+    /**
+     * @return the name (title) of the default locals section
+     */
+    [[nodiscard]] static QString defaultLocalsSectionTitle();
+
     enum Column {
         NameColumn,
         ValueColumn,
@@ -211,6 +221,9 @@ public:
 
     VariablesRoot* root() const { return m_universe; }
     Watches* watches() const { return m_universe->watches(); }
+    /**
+     * @return the locals section with a given name or with the name defaultLocalsSectionTitle() if @p name is empty
+     */
     Locals* locals(const QString &name = QString()) const;
     QHash<QString, Locals*> allLocals() const { return m_universe->allLocals(); }
 

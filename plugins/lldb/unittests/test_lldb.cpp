@@ -299,7 +299,7 @@ void LldbTest::testVariablesLocals()
 
     QCOMPARE(variableCollection()->rowCount(), 2);
     QModelIndex i = variableCollection()->index(1, 0);
-    COMPARE_DATA(i, "Locals");
+    COMPARE_DATA(i, VariableCollection::defaultLocalsSectionTitle());
 
     QCOMPARE(variableCollection()->rowCount(i), 1);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "j");
