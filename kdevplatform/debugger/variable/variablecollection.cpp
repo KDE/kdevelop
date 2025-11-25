@@ -134,7 +134,7 @@ Variable::~Variable()
 void Variable::die()
 {
     removeSelf();
-    deleteLater();
+    delete this;
 }
 
 

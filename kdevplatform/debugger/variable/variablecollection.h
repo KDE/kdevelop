@@ -86,6 +86,11 @@ public:
     void resetChanged();
 
 public Q_SLOTS:
+    /**
+     * Remove from the tree and destroy this variable synchronously.
+     *
+     * @warning Never use a variable object after calling die() on it.
+     */
     void die();
 
 protected:
