@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2025-11-16 15:43+0200\n"
+"PO-Revision-Date: 2025-11-25 14:52+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -31,7 +31,7 @@ msgstr "LLDB"
 #: debugsession.cpp:119
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr ""
+msgstr "מתבצע ניסיון להריץ פקודת משתמש בגרסת LLDB לא נתמכת"
 
 #: debugsession.cpp:311
 #, kde-format
@@ -46,17 +46,20 @@ msgid ""
 "<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
 "continue?"
 msgstr ""
+"<b>גרסת ה־lldb-mi שלך לא נתמכת, כיוון שחסר לה טלאי הכרחי.</b><br/>בעמוד "
+"https://llvm.org/bugs/show_bug.cgi?id=28026 יש פרטים נוספים.<br/>מסוף ניפוי "
+"השגיאות יושבת כדי למנוע קריסות.<br/>להמשיך?"
 
 #: debugsession.cpp:349
 #, kde-format
 msgid "LLDB Version Unsupported"
-msgstr ""
+msgstr "גרסת ה־LLDB לא נתמכת"
 
 #: debugsession.cpp:395
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
-msgstr ""
+msgstr "<b>חובה lldb-mi מתוך LLDB 3.8.1 ומעלה.</b><br />הגרסה שלך: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19

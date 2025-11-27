@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2025-11-17 15:59+0200\n"
+"PO-Revision-Date: 2025-11-25 13:52+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -272,13 +272,13 @@ msgstr "הגדרה"
 #, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
-msgstr ""
+msgstr "קיצוץ הבחירה"
 
 #: projectmanagerviewplugin.cpp:177
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
-msgstr ""
+msgstr "קיצוץ"
 
 #: projectmanagerviewplugin.cpp:283
 #, kde-format
