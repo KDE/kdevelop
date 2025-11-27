@@ -270,23 +270,27 @@ Variable* VariableTree::selectedVariable() const
 
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 {
-    if (!selectedVariable()) return;
+    auto* const selectedVariable = this->selectedVariable();
+    if (!selectedVariable)
+        return;
 
     // set up menu
     QMenu contextMenu(this->parentWidget());
-    m_contextMenuTitle->setText(selectedVariable()->expression());
+    m_contextMenuTitle->setText(selectedVariable->expression());
     contextMenu.addAction(m_contextMenuTitle);
 
-    if(selectedVariable()->canSetFormat())
+    if (selectedVariable->canSetFormat()) {
         contextMenu.addMenu(m_formatMenu);
+    }
 
     const auto formatMenuActions = m_formatMenu->actions();
     for (QAction* act : formatMenuActions) {
-        if(act->data().toInt()==selectedVariable()->format())
+        if (act->data().toInt() == selectedVariable->format()) {
             act->setChecked(true);
+        }
     }
 
-    if (qobject_cast<Watches*>(selectedVariable()->parent())) {
+    if (qobject_cast<Watches*>(selectedVariable->parent())) {
         contextMenu.addAction(m_watchDelete);
     }
 
@@ -304,29 +308,36 @@ QModelIndex VariableTree::mapViewIndexToTreeModelIndex(const QModelIndex& viewIn
 
 void VariableTree::changeVariableFormat(int format)
 {
-    if (!selectedVariable()) return;
-    selectedVariable()->setFormat(static_cast<Variable::format_t>(format));
+    auto* const selectedVariable = this->selectedVariable();
+    if (!selectedVariable)
+        return;
+    selectedVariable->setFormat(static_cast<Variable::format_t>(format));
 }
 
 void VariableTree::watchDelete()
 {
-    if (!selectedVariable()) return;
-    if (!qobject_cast<Watches*>(selectedVariable()->parent())) return;
-    selectedVariable()->die();
+    auto* const selectedVariable = this->selectedVariable();
+    if (!selectedVariable || !qobject_cast<Watches*>(selectedVariable->parent()))
+        return;
+    selectedVariable->die();
 }
 
 void VariableTree::copyVariableValue()
 {
-    if (!selectedVariable()) return;
-    QApplication::clipboard()->setText(selectedVariable()->value());
+    const auto* const selectedVariable = this->selectedVariable();
+    if (!selectedVariable)
+        return;
+    QApplication::clipboard()->setText(selectedVariable->value());
 }
 
 void VariableTree::stopOnChange()
 {
-    if (!selectedVariable()) return;
+    auto* const selectedVariable = this->selectedVariable();
+    if (!selectedVariable)
+        return;
     IDebugSession *session = ICore::self()->debugController()->currentSession();
     if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {
-        session->variableController()->addWatchpoint(selectedVariable());
+        session->variableController()->addWatchpoint(selectedVariable);
     }
 }
 }
