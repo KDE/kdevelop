@@ -79,8 +79,11 @@ bool Variable::inScope() const
 
 void Variable::setValue(const QString& v)
 {
-    itemData[VariableCollection::ValueColumn] = v;
-    reportChange();
+    auto& currentValue = itemData[VariableCollection::ValueColumn];
+    if (v != currentValue) {
+        currentValue = v;
+        reportChange();
+    }
 }
 
 QString Variable::value() const
@@ -90,8 +93,11 @@ QString Variable::value() const
 
 void Variable::setType(const QString& type)
 {
-    itemData[VariableCollection::TypeColumn] = type;
-    reportChange();
+    auto& currentType = itemData[VariableCollection::TypeColumn];
+    if (type != currentType) {
+        currentType = type;
+        reportChange();
+    }
 }
 
 QString Variable::type() const
@@ -106,19 +112,23 @@ void Variable::setTopLevel(bool v)
 
 void Variable::setInScope(bool v)
 {
-    m_inScope = v;
     for (int i=0; i < childCount(); ++i) {
         if (auto *var = qobject_cast<Variable*>(child(i))) {
             var->setInScope(v);
         }
     }
-    reportChange();
+    if (v != m_inScope) {
+        m_inScope = v;
+        reportChange();
+    }
 }
 
 void Variable::setShowError (bool v)
 {
-    m_showError = v;
-    reportChange();
+    if (v != m_showError) {
+        m_showError = v;
+        reportChange();
+    }
 }
 
 bool Variable::showError() const
@@ -140,8 +150,10 @@ void Variable::die()
 
 void Variable::setChanged(bool c)
 {
-    m_changed=c;
-    reportChange();
+    if (c != m_changed) {
+        m_changed=c;
+        reportChange();
+    }
 }
 
 void Variable::resetChanged()
