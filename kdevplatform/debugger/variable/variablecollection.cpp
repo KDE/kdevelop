@@ -306,20 +306,6 @@ void Watches::resetChanged()
     }
 }
 
-QVariant Watches::data(int column, int role) const
-{
-#if 0
-    if (column == 0 && role == Qt::FontRole)
-    {
-        /* FIXME: is creating font again and again efficient? */
-        QFont f = font();
-        f.setBold(true);
-        return f;
-    }
-#endif
-    return TreeItem::data(column, role);
-}
-
 void Watches::reinstall()
 {
     for (int i = 0; i < childItems.size(); ++i)
