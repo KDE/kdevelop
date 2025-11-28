@@ -58,6 +58,7 @@
         "Description[fi]": "Sallii KDevelop-ohjelman hallinnoida CMake-perustaisia projekteja",
         "Description[fr]": "Permet à KDevelop de gérer des projets fondés sur CMake",
         "Description[gl]": "Permítelle a KDevelop xestionar proxectos baseados en CMake.",
+        "Description[he]": "מתן אפשרות ל־KDevelop לנהל מיזמים מבוססי CMake",
         "Description[it]": "Permette a KDevelop di gestire i progetti basati su CMake",
         "Description[ka]": "საშუალებას აძლევს KDevelop-ს, CMake-ის პროექტები მართოს",
         "Description[ko]": "KDevelop에서 CMake 프로젝트를 관리합니다",
