@@ -8,7 +8,14 @@
 
 #include "variablecollection.h"
 
+#include <debugger/interfaces/idebugsession.h>
+#include <debugger/interfaces/ivariablecontroller.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
 #include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
 
 #include <QFont>
 #include <QApplication>
@@ -18,12 +25,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include "../../interfaces/icore.h"
-#include "../../interfaces/idocumentcontroller.h"
-#include "../../interfaces/iuicontroller.h"
-#include "../../interfaces/idebugcontroller.h"
-#include "../interfaces/idebugsession.h"
-#include "../interfaces/ivariablecontroller.h"
 #include <debug.h>
 #include "util/texteditorhelpers.h"
 #include "variabletooltip.h"
