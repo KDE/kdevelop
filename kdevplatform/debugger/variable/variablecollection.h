@@ -56,14 +56,8 @@ public:
     void setShowError(bool v);
     [[nodiscard]] bool showError() const;
 
-    using TreeItem::setHasMore;
-    using TreeItem::setHasMoreInitial;
-    using TreeItem::appendChild;
     using TreeItem::deleteChildren;
-    using TreeItem::isExpanded;
     using TreeItem::parent;
-
-    using TreeItem::model;
 
     ~Variable() override;
 
@@ -170,7 +164,6 @@ public:
     QList<Variable*> updateLocals(const QStringList& locals);
     void resetChanged();
 
-    using TreeItem::deleteChildren;
     using TreeItem::setHasMore;
 
     friend class VariableCollection;
