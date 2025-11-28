@@ -11,14 +11,11 @@
 
 #include <QPointer>
 
-#include <KLocalizedString>
 #include <KTextEditor/TextHintInterface>
 
 #include <debugger/debuggerexport.h>
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
-#include "../../interfaces/idocument.h"
-#include "../../interfaces/idebugcontroller.h"
 
 namespace KDevMI { namespace GDB {
     class GdbTest;
@@ -27,8 +24,11 @@ namespace KDevMI { namespace GDB {
 
 namespace KDevelop
 {
-class VariableToolTip;
+class IDebugController;
 class IDebugSession;
+class IDocument;
+class VariableCollection;
+class VariableToolTip;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {

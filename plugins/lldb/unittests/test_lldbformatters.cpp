@@ -15,6 +15,7 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
