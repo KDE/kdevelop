@@ -139,9 +139,9 @@ void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
     }
 }
 
-QFlags<IVariableController::UpdateType> IVariableController::autoUpdate()
+IVariableController::UpdateTypes IVariableController::autoUpdate() const
 {
-    Q_D(IVariableController);
+    Q_D(const IVariableController);
 
     return d->autoUpdate;
 }

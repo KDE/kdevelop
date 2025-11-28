@@ -52,7 +52,7 @@ public:
     };
     Q_DECLARE_FLAGS(UpdateTypes, UpdateType)
     void setAutoUpdate(QFlags<UpdateType> autoUpdate);
-    QFlags<UpdateType> autoUpdate();
+    [[nodiscard]] UpdateTypes autoUpdate() const;
 
 protected:
     /**
