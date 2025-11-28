@@ -104,20 +104,20 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
             }
         }
     }
-    if (d->autoUpdate != UpdateNone) {
-        if (thread != d->activeThread || frame != d->activeFrame) {
-            qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << thread << ';' << "frame"
-                              << d->activeFrame << "=>" << frame;
 
-            variableCollection()->root()->resetChanged();
-            update();
-        }
+    if (thread == d->activeThread && frame == d->activeFrame) {
+        return;
     }
 
-    // update our cache of active thread/frame regardless of d->autoUpdate
-    // to keep them synced when user currently hides the variable list
+    qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << thread << ';' << "frame"
+                      << d->activeFrame << "=>" << frame;
     d->activeThread = thread;
     d->activeFrame = frame;
+
+    variableCollection()->root()->resetChanged();
+    if (d->autoUpdate != UpdateNone) {
+        update();
+    }
 }
 
 void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)

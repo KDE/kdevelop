@@ -2073,6 +2073,9 @@ void DebuggerTestBase::testVariablesChanged()
     auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg;
 
+    const auto* const variableController = session->variableController();
+    QVERIFY(variableController);
+
     auto* const collection = variableCollection();
     collection->variableWidgetShown();
 
@@ -2081,18 +2084,25 @@ void DebuggerTestBase::testVariablesChanged()
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 23);
 
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateNone);
     // Prepare "static int i = 0;"
     // In LLDB, "i" doesn't exist in Locals, so we have to do this via a watch.
     const auto* const iVariable = collection->watches()->add("i");
     QVERIFY(iVariable);
+    // Adding a watch automatically expands the "Auto" collection.
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateWatches);
+
     // Expand the "Auto" collection.
     const auto watchesIndex = collection->index(0, 0);
     COMPARE_DATA(watchesIndex, Watches::sectionTitle());
     collection->expanded(watchesIndex);
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateWatches);
+
     // Expand the Locals collection.
     const auto localsIndex = collection->index(1, 0);
     COMPARE_DATA(localsIndex, VariableCollection::defaultLocalsSectionTitle());
     collection->expanded(localsIndex);
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateLocals | IVariableController::UpdateWatches);
 
     // Wait for the watch to be added and the collections to be expanded.
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
@@ -2139,8 +2149,23 @@ void DebuggerTestBase::testVariablesChanged()
     }
     QCOMPARE(jVariable->isChanged(), true);
 
+    // Collapse all collections to verify that the changed state is reset even if auto-update is disabled.
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateLocals | IVariableController::UpdateWatches);
+    collection->collapsed(watchesIndex);
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateLocals);
+    collection->collapsed(localsIndex);
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateNone);
+
     STEP_OVER_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 25);
+
+    QCOMPARE(jVariable->value(), "2");
+    QCOMPARE(jVariable->isChanged(), false);
+
+    // Expand the Locals collection again and verify that the local variable "j" remains unchanged.
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateNone);
+    EXPAND_VARIABLE_COLLECTION(localsIndex);
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateLocals);
 
     QCOMPARE(jVariable->value(), "2");
     QCOMPARE(jVariable->isChanged(), false);
