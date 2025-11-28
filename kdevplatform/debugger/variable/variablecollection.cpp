@@ -83,7 +83,7 @@ void Variable::setValue(const QString& v)
     auto& currentValue = itemData[VariableCollection::ValueColumn];
     if (v != currentValue) {
         currentValue = v;
-        reportChange();
+        reportChange(VariableCollection::ValueColumn);
     }
 }
 
@@ -97,7 +97,7 @@ void Variable::setType(const QString& type)
     auto& currentType = itemData[VariableCollection::TypeColumn];
     if (type != currentType) {
         currentType = type;
-        reportChange();
+        reportChange(VariableCollection::TypeColumn);
     }
 }
 
@@ -120,7 +120,7 @@ void Variable::setInScope(bool v)
     }
     if (v != m_inScope) {
         m_inScope = v;
-        reportChange();
+        reportChange(VariableCollection::ValueColumn);
     }
 }
 
@@ -153,7 +153,7 @@ void Variable::setChanged(bool c)
 {
     if (c != m_changed) {
         m_changed=c;
-        reportChange();
+        reportChange(VariableCollection::ValueColumn);
     }
 }
 
