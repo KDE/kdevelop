@@ -9,13 +9,13 @@
 #ifndef KDEVPLATFORM_VARIABLECOLLECTION_H
 #define KDEVPLATFORM_VARIABLECOLLECTION_H
 
+#include <debugger/debuggerexport.h>
+#include <debugger/util/treeitem.h>
+#include <debugger/util/treemodel.h>
+
 #include <QPointer>
 
 #include <KTextEditor/TextHintInterface>
-
-#include <debugger/debuggerexport.h>
-#include "../util/treemodel.h"
-#include "../util/treeitem.h"
 
 namespace KDevMI { namespace GDB {
     class GdbTest;
