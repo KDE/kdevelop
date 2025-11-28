@@ -145,11 +145,10 @@ public:
     void resetChanged();
 
     using TreeItem::childCount;
+
+private:
     friend class VariableCollection;
     friend class IVariableController;
-private:
-
-    QVariant data(int column, int role) const override;
 
     void fetchMoreChildren() override {}
 
