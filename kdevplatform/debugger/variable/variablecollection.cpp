@@ -217,12 +217,11 @@ QVariant Variable::data(int column, int role) const
             QFont font = ret.value<QFont>();
             font.setStyle(QFont::StyleItalic);
             return font;
-        } else if (column == 1 && role == Qt::DisplayRole) {
+        } else if (column == VariableCollection::ValueColumn && role == Qt::DisplayRole) {
             return i18n("Error");
         }
     }
-    if (column == 1 && role == Qt::ForegroundRole)
-    {
+    if (column == VariableCollection::ValueColumn && role == Qt::ForegroundRole) {
         KColorScheme scheme(QPalette::Active);
         if (!m_inScope) {
             return scheme.foreground(KColorScheme::InactiveText).color();
