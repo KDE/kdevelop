@@ -104,12 +104,13 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
             }
         }
     }
-    if (d->autoUpdate != UpdateNone) {
-        if (thread != d->activeThread || frame != d->activeFrame) {
-            qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << thread << ';' << "frame"
-                              << d->activeFrame << "=>" << frame;
 
-            variableCollection()->root()->resetChanged();
+    if (thread != d->activeThread || frame != d->activeFrame) {
+        qCDebug(DEBUGGER) << "handling a change: thread" << d->activeThread << "=>" << thread << ';' << "frame"
+                          << d->activeFrame << "=>" << frame;
+
+        variableCollection()->root()->resetChanged();
+        if (d->autoUpdate != UpdateNone) {
             update();
         }
     }
