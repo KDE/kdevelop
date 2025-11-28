@@ -8,6 +8,8 @@
 
 #include "variablecollection.h"
 
+#include <interfaces/idocument.h>
+
 #include <QFont>
 #include <QApplication>
 
@@ -19,8 +21,6 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idocumentcontroller.h"
 #include "../../interfaces/iuicontroller.h"
-#include "../../sublime/controller.h"
-#include "../../sublime/view.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../interfaces/idebugsession.h"
 #include "../interfaces/ivariablecontroller.h"

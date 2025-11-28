@@ -13,6 +13,7 @@
 
 #include <debugger/interfaces/ivariablecontroller.h>
 #include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
 
 using namespace KDevelop;
 using namespace KDevMI;
