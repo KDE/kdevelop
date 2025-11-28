@@ -1226,7 +1226,6 @@ void DebuggerTestBase::testCatchpoint()
 {
     auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg("debuggee_debugeeexception");
-    session->variableController()->setAutoUpdate(IVariableController::UpdateLocals);
 
     const auto* const stackModel = qobject_cast<FrameStackModel*>(session->frameStackModel());
     QVERIFY(stackModel);
