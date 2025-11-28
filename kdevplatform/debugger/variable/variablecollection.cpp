@@ -441,8 +441,6 @@ VariableCollection::VariableCollection(IDebugController* controller)
     m_universe = new VariablesRoot(this);
     setRootItem(m_universe);
 
-    //new ModelTest(this);
-
     connect (ICore::self()->documentController(),
          &IDocumentController::textDocumentCreated,
          this,
