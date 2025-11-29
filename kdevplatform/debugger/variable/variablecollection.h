@@ -17,11 +17,6 @@
 
 #include <KTextEditor/TextHintInterface>
 
-namespace KDevMI { namespace GDB {
-    class GdbTest;
-}
-}
-
 namespace KDevelop
 {
 class IDebugController;
@@ -33,8 +28,6 @@ class VariableToolTip;
 class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {
     Q_OBJECT
-    friend class KDevMI::GDB::GdbTest;
-public:
 protected:
     Variable(TreeModel* model, TreeItem* parent,
              const QString& expression,
@@ -124,7 +117,6 @@ public:
 class KDEVPLATFORMDEBUGGER_EXPORT Watches : public TreeItem
 {
     Q_OBJECT
-    friend class KDevMI::GDB::GdbTest;
 public:
     /**
      * @return the name (title) of the watches section

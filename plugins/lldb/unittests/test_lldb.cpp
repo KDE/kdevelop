@@ -336,61 +336,6 @@ void LldbTest::testVariablesWatchesQuotes()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void LldbTest::testVariablesWatchesTwoSessions()
-{
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg;
-
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    const ActiveStateSessionSpy sessionSpy(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
-
-    variableCollection()->watches()->add(QStringLiteral("ts"));
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    EXPAND_VARIABLE_COLLECTION(ts);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    //check if variable is marked as out-of-scope
-    QCOMPARE(variableCollection()->watches()->childCount(), 1);
-    auto v = qobject_cast<LldbVariable*>(watchVariableAt(0));
-    QVERIFY(v);
-    QVERIFY(!v->inScope());
-    QCOMPARE(v->childCount(), 3);
-    v = qobject_cast<LldbVariable*>(v->child(0));
-    QVERIFY(!v->inScope());
-
-    //start a second debug session
-    session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
-
-    const ActiveStateSessionSpy sessionSpy2(session);
-    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy2);
-
-    QCOMPARE(variableCollection()->watches()->childCount(), 1);
-    ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    v = qobject_cast<LldbVariable*>(watchVariableAt(0));
-    QVERIFY(v);
-    QVERIFY(v->inScope());
-    QCOMPARE(v->childCount(), 3);
-    v = qobject_cast<LldbVariable*>(v->child(0));
-    QVERIFY(v->inScope());
-    COMPARE_DATA(variableCollection()->indexForItem(v, 1), QString::number(0));
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    //check if variable is marked as out-of-scope
-    v = qobject_cast<LldbVariable*>(watchVariableAt(0));
-    QVERIFY(!v->inScope());
-    QVERIFY(!qobject_cast<KDevelop::Variable*>(v->child(0))->inScope());
-}
-
 QTEST_MAIN(KDevMI::LLDB::LldbTest)
 
 #include "test_lldb.moc"

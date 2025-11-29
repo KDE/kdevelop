@@ -31,7 +31,6 @@ private Q_SLOTS:
 
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
-    void testVariablesWatchesTwoSessions();
 
 private:
     [[nodiscard]] bool isLldb() const override;
