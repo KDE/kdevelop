@@ -188,7 +188,7 @@ VariableTree::VariableTree(IDebugController* controller, VariableWidget* parent,
 
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
-    setExpanded(index, true);
+    setExpanded(m_proxy->mapFromSource(index), true);
 
     setupActions();
 }
