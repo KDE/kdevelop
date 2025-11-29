@@ -51,15 +51,6 @@ void GdbTest::startInitTestCase()
 #endif
 }
 
-void GdbTest::finishInit()
-{
-    KDevelop::VariableCollection *vc = KDevelop::ICore::self()->debugController()->variableCollection();
-    for (int i=0; i < vc->watches()->childCount(); ++i) {
-        delete vc->watches()->child(i);
-    }
-    vc->watches()->clear();
-}
-
 class TestDebugSession : public DebugSession
 {
     Q_OBJECT
