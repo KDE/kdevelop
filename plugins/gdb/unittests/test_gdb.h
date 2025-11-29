@@ -43,7 +43,6 @@ private Q_SLOTS:
 private:
     [[nodiscard]] bool isLldb() const override;
     void startInitTestCase() override;
-    void finishInit() override;
 };
 
 } // end of namespace GDB

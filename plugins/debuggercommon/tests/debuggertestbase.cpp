@@ -204,6 +204,13 @@ void DebuggerTestBase::expandVariableCollection(const QModelIndex& index)
     }
 }
 
+Variable* DebuggerTestBase::watchVariableAt(int index) const
+{
+    const auto watchesIndex = variableCollection()->indexForItem(variableCollection()->watches(), 0);
+    const auto childIndex = variableCollection()->index(index, 0, watchesIndex);
+    return qobject_cast<Variable*>(variableCollection()->itemForIndex(childIndex));
+}
+
 void DebuggerTestBase::verifyInferiorStdout(TestLaunchConfiguration& launchConfiguration,
                                             const QStringList& expectedOutputLines)
 {
@@ -257,7 +264,11 @@ void DebuggerTestBase::init()
     auto* const breakpointModel = breakpoints();
     breakpointModel->removeRows(0, breakpointModel->rowCount());
 
-    finishInit();
+    while (variableCollection()->watches()->childCount() != 0) {
+        auto* const watchVariable = watchVariableAt(0);
+        QVERIFY(watchVariable);
+        watchVariable->die();
+    }
 }
 
 void DebuggerTestBase::testStdout()
