@@ -204,6 +204,21 @@ void DebuggerTestBase::expandVariableCollection(const QModelIndex& index)
     }
 }
 
+int DebuggerTestBase::variableChildCount(Variable* variable) const
+{
+    QVERIFY_RETURN(variable, -1);
+    const auto variableIndex = variableCollection()->indexForItem(variable, 0);
+    return variableCollection()->rowCount(variableIndex);
+}
+
+Variable* DebuggerTestBase::variableChildAt(Variable* variable, int index) const
+{
+    QVERIFY_RETURN(variable, nullptr);
+    const auto variableIndex = variableCollection()->indexForItem(variable, 0);
+    const auto childIndex = variableCollection()->index(index, 0, variableIndex);
+    return qobject_cast<Variable*>(variableCollection()->itemForIndex(childIndex));
+}
+
 Variable* DebuggerTestBase::watchVariableAt(int index) const
 {
     const auto watchesIndex = variableCollection()->indexForItem(variableCollection()->watches(), 0);
@@ -1736,6 +1751,62 @@ void DebuggerTestBase::testVariablesWatches()
 
     session->run();
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
+void DebuggerTestBase::testVariablesWatchesTwoSessions()
+{
+    auto* session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    session->variableController()->setAutoUpdate(IVariableController::UpdateWatches);
+
+    addDebugeeBreakpoint(39);
+    const ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    variableCollection()->watches()->add("ts");
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+
+    const auto ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
+    EXPAND_VARIABLE_COLLECTION(ts);
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    // check if variable is marked as out-of-scope
+    QCOMPARE(variableCollection()->watches()->childCount(), 1);
+    auto* tsWatchVariable = watchVariableAt(0);
+    QVERIFY(tsWatchVariable);
+    QCOMPARE(tsWatchVariable->inScope(), false);
+    QCOMPARE(variableChildCount(tsWatchVariable), 3);
+    auto* tsChildVariable = variableChildAt(tsWatchVariable, 0);
+    QCOMPARE(tsChildVariable->inScope(), false);
+
+    // start a second debug session
+    session = createTestDebugSession();
+    session->variableController()->setAutoUpdate(IVariableController::UpdateWatches);
+
+    const ActiveStateSessionSpy sessionSpy2(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy2);
+
+    // the variable is now in scope
+    QCOMPARE(variableCollection()->watches()->childCount(), 1);
+    tsWatchVariable = watchVariableAt(0);
+    QVERIFY(tsWatchVariable);
+    QCOMPARE(tsWatchVariable->inScope(), true);
+    QCOMPARE(variableChildCount(tsWatchVariable), 3);
+    tsChildVariable = variableChildAt(tsWatchVariable, 0);
+    QCOMPARE(tsChildVariable->inScope(), true);
+    COMPARE_DATA(variableCollection()->indexForItem(tsChildVariable, 1), "0");
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+
+    // check if variable is marked as out-of-scope
+    tsWatchVariable = watchVariableAt(0);
+    QCOMPARE(tsWatchVariable->inScope(), false);
+    tsChildVariable = variableChildAt(tsWatchVariable, 0);
+    QCOMPARE(tsChildVariable->inScope(), false);
 }
 
 void DebuggerTestBase::testVariablesStopDebugger()

@@ -302,61 +302,6 @@ void GdbTest::testVariablesWatchesQuotes()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void GdbTest::testVariablesWatchesTwoSessions()
-{
-    auto *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
-
-    TestLaunchConfiguration cfg;
-
-    breakpoints()->addCodeBreakpoint(debugeeUrl(), 38);
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    variableCollection()->watches()->add(QStringLiteral("ts"));
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-
-    QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    EXPAND_VARIABLE_COLLECTION(ts);
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    //check if variable is marked as out-of-scope
-    QCOMPARE(variableCollection()->watches()->childCount(), 1);
-    auto* v = qobject_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
-    QVERIFY(v);
-    QVERIFY(!v->inScope());
-    QCOMPARE(v->childCount(), 3);
-    v = qobject_cast<KDevelop::Variable*>(v->child(0));
-    QVERIFY(!v->inScope());
-
-    //start a second debug session
-    session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
-    START_DEBUGGING_E(session, cfg);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    QCOMPARE(variableCollection()->watches()->childCount(), 1);
-    ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    v = qobject_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
-    QVERIFY(v);
-    QVERIFY(v->inScope());
-    QCOMPARE(v->childCount(), 3);
-
-    v = qobject_cast<KDevelop::Variable*>(v->child(0));
-    QVERIFY(v->inScope());
-    QCOMPARE(v->data(1, Qt::DisplayRole).toString(), QString::number(0));
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::EndedState);
-
-    //check if variable is marked as out-of-scope
-    v = qobject_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
-    QVERIFY(!v->inScope());
-    QVERIFY(!dynamic_cast<KDevelop::Variable*>(v->child(0))->inScope());
-}
-
 void GdbTest::testPickupCatchThrowOnlyOnce()
 {
     QTemporaryFile configScript;

@@ -28,10 +28,6 @@ public:
 
     using KDevelop::Variable::topLevel;
 
-    // For testing
-    using KDevelop::Variable::childCount;
-    using KDevelop::Variable::child;
-
 protected:
     QString formatValue(const QString &value) const override;
 
