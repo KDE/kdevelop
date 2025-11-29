@@ -81,13 +81,6 @@ const char* LldbTest::runScriptEntryKey() const
     return Config::LldbConfigScriptEntry;
 }
 
-Variable *LldbTest::watchVariableAt(int i)
-{
-    auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
-    auto idx = variableCollection()->index(i, 0, watchRoot);
-    return qobject_cast<Variable*>(variableCollection()->itemForIndex(idx));
-}
-
 QModelIndex LldbTest::localVariableIndexAt(int i, int col)
 {
     auto localRoot = variableCollection()->indexForItem(variableCollection()->locals(), 0);
@@ -104,15 +97,6 @@ void LldbTest::startInitTestCase()
     const QString lldbMiExecutable = QStandardPaths::findExecutable(QStringLiteral("lldb-mi"));
     if (lldbMiExecutable.isEmpty()) {
         QSKIP("Skipping, lldb-mi not available");
-    }
-}
-
-void LldbTest::finishInit()
-{
-    while (variableCollection()->watches()->childCount() > 0) {
-        auto var = watchVariableAt(0);
-        if (!var) break;
-        var->die();
     }
 }
 

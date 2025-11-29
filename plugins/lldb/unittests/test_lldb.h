@@ -9,10 +9,6 @@
 
 #include "tests/debuggertestbase.h"
 
-namespace KDevelop {
-class Variable;
-}
-
 namespace KDevMI { namespace LLDB {
 
 class LldbTest : public DebuggerTestBase
@@ -39,12 +35,10 @@ private Q_SLOTS:
 
 private:
     // convenient access methods
-    KDevelop::Variable *watchVariableAt(int i);
     QModelIndex localVariableIndexAt(int i, int col = 0);
 
     [[nodiscard]] bool isLldb() const override;
     void startInitTestCase() override;
-    void finishInit() override;
 };
 
 } // end of namespace LLDB

@@ -23,6 +23,7 @@ namespace KDevelop {
 class Breakpoint;
 class BreakpointModel;
 class ICore;
+class Variable;
 class VariableCollection;
 }
 
@@ -85,6 +86,11 @@ protected:
      * Call RETURN_IF_TEST_FAILED() after this function or use the wrapper macro EXPAND_VARIABLE_COLLECTION() instead.
      */
     void expandVariableCollection(const QModelIndex& index);
+
+    /**
+     * @return a watched variable (i.e. a child of Watches) at a given index or @c nullptr if it does not exist
+     */
+    [[nodiscard]] KDevelop::Variable* watchVariableAt(int index) const;
 
     /**
      * Debug the inferior program specified by @p launchConfiguration
@@ -190,12 +196,6 @@ private:
      * This function is called at the beginning of the slot initTestCase().
      */
     virtual void startInitTestCase()
-    {
-    }
-    /**
-     * This function is called at the end of the slot init().
-     */
-    virtual void finishInit()
     {
     }
 
