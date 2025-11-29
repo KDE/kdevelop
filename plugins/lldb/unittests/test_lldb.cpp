@@ -81,12 +81,6 @@ const char* LldbTest::runScriptEntryKey() const
     return Config::LldbConfigScriptEntry;
 }
 
-QModelIndex LldbTest::localVariableIndexAt(int i, int col)
-{
-    auto localRoot = variableCollection()->indexForItem(variableCollection()->locals(), 0);
-    return variableCollection()->index(i, col, localRoot);
-}
-
 bool LldbTest::isLldb() const
 {
     return true;

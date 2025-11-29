@@ -34,9 +34,6 @@ private Q_SLOTS:
     void testVariablesWatchesTwoSessions();
 
 private:
-    // convenient access methods
-    QModelIndex localVariableIndexAt(int i, int col = 0);
-
     [[nodiscard]] bool isLldb() const override;
     void startInitTestCase() override;
 };
