@@ -88,6 +88,15 @@ protected:
     void expandVariableCollection(const QModelIndex& index);
 
     /**
+     * @return the number of children of a given non-null variable
+     */
+    [[nodiscard]] int variableChildCount(KDevelop::Variable* variable) const;
+    /**
+     * @return a child of a given non-null variable at a given index or @c nullptr if it does not exist
+     */
+    [[nodiscard]] KDevelop::Variable* variableChildAt(KDevelop::Variable* variable, int index) const;
+
+    /**
      * @return a watched variable (i.e. a child of Watches) at a given index or @c nullptr if it does not exist
      */
     [[nodiscard]] KDevelop::Variable* watchVariableAt(int index) const;
@@ -169,6 +178,7 @@ private Q_SLOTS:
 
     void testVariablesLocalsStruct();
     void testVariablesWatches();
+    void testVariablesWatchesTwoSessions();
     void testVariablesStopDebugger();
     void testVariablesStartSecondSession();
     void testVariablesSameWatchInSecondSession();

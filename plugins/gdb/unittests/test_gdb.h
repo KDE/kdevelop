@@ -29,7 +29,6 @@ private Q_SLOTS:
     void testManualAttach();
     void testVariablesLocals();
     void testVariablesWatchesQuotes();
-    void testVariablesWatchesTwoSessions();
 
     void testPickupCatchThrowOnlyOnce();
 
