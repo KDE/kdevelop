@@ -27,3 +27,4 @@ Options:
   per-test-timeout: 200 # the 60-second default is not enough for test_gdb
   use-ccache: True
   allow-failing-tests-on: ['@all']
+  gcovr-arguments: '--gcov-ignore-parse-errors=negative_hits.warn'
