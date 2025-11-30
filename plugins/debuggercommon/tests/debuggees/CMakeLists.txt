@@ -10,7 +10,11 @@ function(add_debuggable_executable target)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS_RELEASE "/DEBUG /Od")
     else()
         # explicitly disable sanitizers, in case they got enabled globally
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-g -O0 -fno-sanitize=address,undefined")
+        # Also disable Gcov code coverage support because it inserts profiling assembly instructions that
+        # affect the current line number after stepping out of a function, which causes test failures.
+        # A linker flag -lgcov added by ECMCoverageOption.cmake cannot be easily removed and does not hurt.
+        set_target_properties(${target} PROPERTIES
+            COMPILE_FLAGS "-g -O0 -fno-sanitize=address,undefined -fno-profile-arcs -fno-test-coverage")
         set_target_properties(${target} PROPERTIES LINK_FLAGS "-g -O0 -fno-sanitize=address,undefined")
     endif()
     set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
