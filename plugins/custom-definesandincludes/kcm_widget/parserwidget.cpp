@@ -19,7 +19,7 @@ QString languageStandard(const QString& arguments)
 {
     int idx = arguments.indexOf(QLatin1String("-std="));
     if(idx == -1){
-        return QStringLiteral("c++11");
+        return QStringLiteral("c++17");
     }
 
     idx += 5;
@@ -31,17 +31,17 @@ QString languageDefaultStandard(Utils::LanguageType languageType)
 {
     switch (languageType) {
     case Utils::C:
-        return QStringLiteral("c99");
+        return QStringLiteral("c11");
     case Utils::Cpp:
-        return QStringLiteral("c++11");
+        return QStringLiteral("c++17");
     case Utils::OpenCl:
         return QStringLiteral("CL1.1");
     case Utils::Cuda:
-        return QStringLiteral("c++11");
+        return QStringLiteral("c++17");
     case Utils::ObjC:
-        return QStringLiteral("c99");
+        return QStringLiteral("c11");
     case Utils::ObjCpp:
-        return QStringLiteral("c++11");
+        return QStringLiteral("c++17");
     case Utils::Other:
         break;
     }

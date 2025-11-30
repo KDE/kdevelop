@@ -84,10 +84,13 @@ QStringList sorted(QStringList list)
 ParserArguments createDefaultArguments()
 {
     ParserArguments arguments;
-    arguments[Utils::C] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99");
-    arguments[Utils::Cpp] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
+    arguments[Utils::C] = QStringLiteral(
+        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c11");
+    arguments[Utils::Cpp] = QStringLiteral(
+        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++17");
     arguments[Utils::OpenCl] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -cl-std=CL1.1");
-    arguments[Utils::Cuda] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
+    arguments[Utils::Cuda] = QStringLiteral(
+        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++17");
     // For now, use the same arguments for ObjC(++) as for C(++). -Wall enables a number
     // of language-specific warnings, removing the need to add them explicitly.
     // (https://embeddedartistry.com/blog/2017/3/7/clang-weverything)

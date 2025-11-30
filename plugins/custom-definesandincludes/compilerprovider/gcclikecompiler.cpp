@@ -55,11 +55,11 @@ QString languageStandard(const QString& arguments, Utils::LanguageType type)
     switch (type) {
         case Utils::C:
         case Utils::ObjC:
-            return QStringLiteral("-std=c99");
+            return QStringLiteral("-std=c11");
         case Utils::Cpp:
         case Utils::ObjCpp:
         case Utils::Cuda:
-            return QStringLiteral("-std=c++11");
+            return QStringLiteral("-std=c++17");
         case Utils::OpenCl:
             return QStringLiteral("-cl-std=CL1.1");
         default:
