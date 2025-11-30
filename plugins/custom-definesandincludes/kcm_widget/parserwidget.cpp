@@ -31,17 +31,14 @@ QString languageDefaultStandard(Utils::LanguageType languageType)
 {
     switch (languageType) {
     case Utils::C:
+    case Utils::ObjC:
         return QStringLiteral("c11");
     case Utils::Cpp:
+    case Utils::ObjCpp:
+    case Utils::Cuda:
         return QStringLiteral("c++17");
     case Utils::OpenCl:
         return QStringLiteral("CL1.1");
-    case Utils::Cuda:
-        return QStringLiteral("c++17");
-    case Utils::ObjC:
-        return QStringLiteral("c11");
-    case Utils::ObjCpp:
-        return QStringLiteral("c++17");
     case Utils::Other:
         break;
     }
