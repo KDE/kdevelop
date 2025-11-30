@@ -15,11 +15,21 @@
 namespace
 {
 
+[[nodiscard]] QString defaultCLanguageStandard()
+{
+    return QStringLiteral("c11");
+}
+
+[[nodiscard]] QString defaultCppLanguageStandard()
+{
+    return QStringLiteral("c++17");
+}
+
 QString languageStandard(const QString& arguments)
 {
     int idx = arguments.indexOf(QLatin1String("-std="));
     if(idx == -1){
-        return QStringLiteral("c++17");
+        return defaultCppLanguageStandard();
     }
 
     idx += 5;
@@ -32,11 +42,11 @@ QString languageDefaultStandard(Utils::LanguageType languageType)
     switch (languageType) {
     case Utils::C:
     case Utils::ObjC:
-        return QStringLiteral("c11");
+        return defaultCLanguageStandard();
     case Utils::Cpp:
     case Utils::ObjCpp:
     case Utils::Cuda:
-        return QStringLiteral("c++17");
+        return defaultCppLanguageStandard();
     case Utils::OpenCl:
         return QStringLiteral("CL1.1");
     case Utils::Other:
