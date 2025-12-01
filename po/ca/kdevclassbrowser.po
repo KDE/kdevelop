@@ -45,15 +45,3 @@ msgstr "C&erca:"
 msgctxt "@info:whatsthis"
 msgid "Class Browser"
 msgstr "Navegador de classes"
-
-#~ msgid "All projects classes"
-#~ msgstr "Totes les classes dels projectes"
-
-#~ msgid "Base classes"
-#~ msgstr "Classes bàsiques"
-
-#~ msgid "Derived classes"
-#~ msgstr "Classes derivades"
-
-#~ msgid "Classes in project %1"
-#~ msgstr "Classes en el projecte %1"

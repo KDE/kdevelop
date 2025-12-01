@@ -70,6 +70,3 @@ msgstr "No s'ha especificat el projecte."
 #, kde-format
 msgid "QMake: %1"
 msgstr "QMake: %1"
-
-#~ msgid "Configure error"
-#~ msgstr "Error de «configure»"

@@ -110,7 +110,3 @@ msgid ""
 msgstr ""
 "Error de JSON durant l'anàlisi del fitxer de base de dades de compilació "
 "«%1»: el document no és una matriu."
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Prova"

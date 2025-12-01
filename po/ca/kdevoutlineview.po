@@ -48,6 +48,3 @@ msgstr "Ordena alfabèticament els elements"
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filtre..."
-
-#~ msgid "Outline View"
-#~ msgstr "Vista del contorn"

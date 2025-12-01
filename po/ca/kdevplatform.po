@@ -6354,11 +6354,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgctxt "@title:window"
-#~ msgid "Debug"
-#~ msgstr "Depura"
-
-#~ msgctxt "@option:check"
-#~ msgid "Recursive"
-#~ msgstr "Recursiu"
