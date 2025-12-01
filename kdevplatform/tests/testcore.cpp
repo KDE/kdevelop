@@ -67,7 +67,9 @@ void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)
         session = QLatin1String("test-") + QCoreApplication::applicationName();
     }
 
-    d->initialize(mode, session);
+    if (!d->initialize(mode, session)) {
+        qFatal("could not initialize the core");
+    }
 
     if (_session.isEmpty()) {
         activeSession()->setTemporary(true);
