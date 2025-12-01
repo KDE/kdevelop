@@ -279,11 +279,18 @@ void DebuggerTestBase::init()
     auto* const breakpointModel = breakpoints();
     breakpointModel->removeRows(0, breakpointModel->rowCount());
 
+    // Reset the VariableCollection to the default initial state so that test functions are independent from each other.
+
     while (variableCollection()->watches()->childCount() != 0) {
         auto* const watchVariable = watchVariableAt(0);
         QVERIFY(watchVariable);
         watchVariable->die();
     }
+
+    for (auto row = 0; row < variableCollection()->rowCount(); ++row) {
+        variableCollection()->collapsed(variableCollection()->index(row, 0));
+    }
+    variableCollection()->variableWidgetHidden();
 }
 
 void DebuggerTestBase::testStdout()
