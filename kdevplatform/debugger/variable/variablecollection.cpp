@@ -262,9 +262,7 @@ Variable* Watches::add(const QString& expression)
         model(), this, expression);
     appendChild(v);
     v->attachMaybe();
-    if (childCount() == 1 && !isExpanded()) {
-        setExpanded(true);
-    }
+
     return v;
 }
 
@@ -279,9 +277,6 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
 
     appendChild(resultVariable);
     resultVariable->attachMaybe();
-    if (childCount() == 1 && !isExpanded()) {
-        setExpanded(true);
-    }
 
     return resultVariable;
 }
