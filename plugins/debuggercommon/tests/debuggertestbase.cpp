@@ -287,9 +287,16 @@ void DebuggerTestBase::init()
         watchVariable->die();
     }
 
-    for (auto row = 0; row < variableCollection()->rowCount(); ++row) {
-        variableCollection()->collapsed(variableCollection()->index(row, 0));
-    }
+    const auto watchesIndex = variableCollection()->index(0, 0);
+    COMPARE_DATA(watchesIndex, Watches::sectionTitle());
+    // Creating a variable widget automatically expands the Watches item => auto-expand it in tests as well.
+    variableCollection()->expanded(watchesIndex);
+
+    const auto localsIndex = variableCollection()->index(1, 0);
+    COMPARE_DATA(localsIndex, VariableCollection::defaultLocalsSectionTitle());
+    // The Locals item is initially collapsed => ensure that it starts collapsed in tests as well.
+    variableCollection()->collapsed(localsIndex);
+
     variableCollection()->variableWidgetHidden();
 }
 
@@ -1726,7 +1733,10 @@ void DebuggerTestBase::testVariablesWatches()
     auto* const session = createTestDebugSession();
     TestLaunchConfiguration cfg;
 
+    QCOMPARE(session->variableController()->autoUpdate(), IVariableController::UpdateNone);
     variableCollection()->variableWidgetShown();
+    // The "Auto" collection is initially expanded.
+    QCOMPARE(session->variableController()->autoUpdate(), IVariableController::UpdateWatches);
 
     addDebugeeBreakpoint(39);
     ActiveStateSessionSpy sessionSpy(session);
@@ -2076,35 +2086,33 @@ void DebuggerTestBase::testVariablesChanged()
     QVERIFY(variableController);
 
     auto* const collection = variableCollection();
+
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateNone);
     collection->variableWidgetShown();
+    // The "Auto" collection is initially expanded.
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateWatches);
 
     auto* const breakpoint = addDebugeeBreakpoint(23);
     ActiveStateSessionSpy sessionSpy(session);
     START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
     QCOMPARE(currentMiLine(session), 23);
 
-    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateNone);
     // Prepare "static int i = 0;"
     // In LLDB, "i" doesn't exist in Locals, so we have to do this via a watch.
     const auto* const iVariable = collection->watches()->add("i");
     QVERIFY(iVariable);
-    // Adding a watch automatically expands the "Auto" collection.
-    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateWatches);
-
-    // Expand the "Auto" collection.
-    const auto watchesIndex = collection->index(0, 0);
-    COMPARE_DATA(watchesIndex, Watches::sectionTitle());
-    collection->expanded(watchesIndex);
-    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateWatches);
 
     // Expand the Locals collection.
     const auto localsIndex = collection->index(1, 0);
     COMPARE_DATA(localsIndex, VariableCollection::defaultLocalsSectionTitle());
+    QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateWatches);
     collection->expanded(localsIndex);
     QCOMPARE(variableController->autoUpdate(), IVariableController::UpdateLocals | IVariableController::UpdateWatches);
 
     // Wait for the watch to be added and the collections to be expanded.
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    const auto watchesIndex = collection->index(0, 0);
+    COMPARE_DATA(watchesIndex, Watches::sectionTitle());
     QCOMPARE(collection->rowCount(watchesIndex), 1);
 
     QCOMPARE(iVariable->value(), "0");
