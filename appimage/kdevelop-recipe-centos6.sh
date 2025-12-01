@@ -67,7 +67,7 @@ export CMAKE_PREFIX_PATH=$QTDIR:/kdevelop.appdir/share/llvm/
 export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/kdevelop.appdir/usr/lib:$QTDIR/lib/:/opt/python3.6/lib/:$LD_LIBRARY_PATH
 
 # Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
-# However, this is where .pc files get installed when bulding libraries... (FIXME)
+# However, this is where .pc files get installed when building libraries... (FIXME)
 # I found this by comparing the output of librevenge's "make install" command
 # between Ubuntu and CentOS 6
 ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
