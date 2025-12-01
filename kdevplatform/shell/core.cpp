@@ -179,12 +179,18 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         pluginController = new PluginController(m_core);
         const auto pluginInfos = pluginController->allPluginInfos();
         if (pluginInfos.isEmpty()) {
-            QMessageBox::critical(nullptr,
-                                  i18nc("@title:window", "No Plugins Found"),
-                                  i18n("<p>Could not find any plugins during startup.<br/>"
-                                  "Please make sure QT_PLUGIN_PATH is set correctly.</p>"
-                                  "Refer to <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment\">this article</a> for more information."),
-                                  QMessageBox::Abort, QMessageBox::Abort);
+            const auto errorMessage = i18n(
+                "<p>Could not find any plugins during startup.<br/>"
+                "Please make sure QT_PLUGIN_PATH is set correctly.</p>"
+                "Refer to <a href="
+                "\"https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment\""
+                ">this article</a> for more information.");
+            if (mode & Core::NoUi) {
+                qCCritical(SHELL) << errorMessage;
+            } else {
+                QMessageBox::critical(nullptr, i18nc("@title:window", "No Plugins Found"), errorMessage,
+                                      QMessageBox::Abort, QMessageBox::Abort);
+            }
             qCWarning(SHELL) << "Could not find any plugins, aborting";
             return false;
         }
