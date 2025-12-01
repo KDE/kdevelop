@@ -6,6 +6,7 @@
 
 #include "sessionlock.h"
 
+#include "core.h"
 #include "debug.h"
 #include "sessioncontroller.h"
 
@@ -191,8 +192,16 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
     choose.setText(i18nc("@action:button", "Choose Another Session"));
 
     KGuiItem cancel = KStandardGuiItem::quit();
-    int ret = KMessageBox::warningTwoActionsCancel(
-        nullptr, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName), retry, choose, cancel);
+
+    KMessageBox::ButtonCode ret;
+    if (Core::self()->setupFlags() & Core::NoUi) {
+        qCCritical(SHELL) << errmsg;
+        ret = KMessageBox::Cancel;
+    } else {
+        ret = KMessageBox::warningTwoActionsCancel(
+            nullptr, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName), retry, choose, cancel);
+    }
+
     switch( ret ) {
     case KMessageBox::PrimaryAction:
         return sessionId;
