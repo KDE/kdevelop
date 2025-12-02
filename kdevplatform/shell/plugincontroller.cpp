@@ -367,9 +367,12 @@ PluginController::PluginController(Core *core)
     if (d->plugins.empty()) {
         qCWarning(SHELL) << "Did not find any plugins, check your environment.";
         qCWarning(SHELL) << "  Note: QT_PLUGIN_PATH is set to:" << qgetenv("QT_PLUGIN_PATH");
+    } else {
+        // KDevelop exits with an error if KDevelop plugins cannot be found. So do not
+        // waste time initializing KTextEditor integration then. Furthermore, finding
+        // KTextEditor plugins makes allPluginInfos() nonempty, which hinders error detection.
+        d->initKTextEditorIntegration();
     }
-
-    d->initKTextEditorIntegration();
 
     d->cleanupMode = PluginControllerPrivate::Running;
     // Register the KDevelop::IPlugin* metatype so we can properly unload it
