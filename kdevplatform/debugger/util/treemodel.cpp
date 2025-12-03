@@ -154,21 +154,16 @@ TreeItem* TreeModel::itemForIndex(const QModelIndex& index) const
 
 QModelIndex TreeModel::indexForItem(TreeItem *item, int column) const
 {
-    if (item->parent() == nullptr)
-        return QModelIndex();
-
-    if (TreeItem* parent = item->parent())
-    {
-        /* FIXME: we might store row directly in item.  */
-        int row = parent->childItems.indexOf(item);
-        Q_ASSERT(row != -1);
-
-        return createIndex(row, column, item);
-    }
-    else
-    {
+    const auto* const parent = item->parent();
+    if (!parent) {
         return QModelIndex();
     }
+
+    /* FIXME: we might store row directly in item.  */
+    int row = parent->childItems.indexOf(item);
+    Q_ASSERT(row != -1);
+
+    return createIndex(row, column, item);
 }
 
 void TreeModel::expanded(const QModelIndex &index)
