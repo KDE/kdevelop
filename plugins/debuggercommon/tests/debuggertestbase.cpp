@@ -2198,9 +2198,13 @@ void DebuggerTestBase::testReturnValueVariable()
         }
         QCOMPARE_EQ(variableCollection()->rowCount(watchesIndex), expectedReturnValue.has_value());
         if (expectedReturnValue) {
-            COMPARE_DATA(variableCollection()->index(0, 0, watchesIndex), Watches::returnValueVariableDisplayName());
-            COMPARE_DATA(variableCollection()->index(0, 1, watchesIndex), expectedReturnValue->value);
-            COMPARE_DATA(variableCollection()->index(0, 2, watchesIndex), expectedReturnValue->type);
+            const auto returnValueVariableIndex = [&watchesIndex, this](int column) {
+                return variableCollection()->index(0, column, watchesIndex);
+            };
+
+            COMPARE_DATA(returnValueVariableIndex(0), Watches::returnValueVariableDisplayName());
+            COMPARE_DATA(returnValueVariableIndex(1), expectedReturnValue->value);
+            COMPARE_DATA(returnValueVariableIndex(2), expectedReturnValue->type);
         }
     };
 
