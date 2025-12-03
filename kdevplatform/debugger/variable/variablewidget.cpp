@@ -67,6 +67,16 @@ VariableCollection *variableCollection()
     return ICore::self()->debugController()->variableCollection();
 }
 
+/**
+ * @return whether a watchpoint set on a given variable can possibly be hit
+ */
+[[nodiscard]] bool canStopOnChange(const Variable& variable)
+{
+    // Each GDB or LLDB return value variable has its own unique numbered name, e.g. $1.
+    // A watchpoint on such a variable cannot be hit because the value of the variable never changes.
+    return &variable != variableCollection()->watches()->returnValueVariable();
+}
+
 } // unnamed namespace
 
 VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
@@ -291,7 +301,9 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
     contextMenu.addSeparator();
     contextMenu.addAction(m_copyVariableValue);
-    contextMenu.addAction(m_stopOnChange);
+    if (canStopOnChange(*selectedVariable)) {
+        contextMenu.addAction(m_stopOnChange);
+    }
 
     contextMenu.exec(event->globalPos());
 }
@@ -328,7 +340,7 @@ void VariableTree::copyVariableValue()
 void VariableTree::stopOnChange()
 {
     auto* const selectedVariable = this->selectedVariable();
-    if (!selectedVariable)
+    if (!selectedVariable || !canStopOnChange(*selectedVariable))
         return;
     IDebugSession *session = ICore::self()->debugController()->currentSession();
     if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {

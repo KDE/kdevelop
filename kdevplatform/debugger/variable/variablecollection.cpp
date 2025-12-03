@@ -266,6 +266,11 @@ Variable* Watches::add(const QString& expression)
     return v;
 }
 
+const Variable* Watches::returnValueVariable() const
+{
+    return m_finishResult;
+}
+
 Variable *Watches::addFinishResult(const QString& convenienceVarible)
 {
     removeFinishResult();

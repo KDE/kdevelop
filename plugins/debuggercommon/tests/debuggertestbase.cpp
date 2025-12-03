@@ -2202,6 +2202,9 @@ void DebuggerTestBase::testReturnValueVariable()
                 return variableCollection()->index(0, column, watchesIndex);
             };
 
+            QCOMPARE_NE(variableCollection()->watches()->returnValueVariable(), nullptr);
+            QCOMPARE_EQ(variableCollection()->watches()->returnValueVariable(),
+                        variableCollection()->itemForIndex(returnValueVariableIndex(0)));
             COMPARE_DATA(returnValueVariableIndex(0), Watches::returnValueVariableDisplayName());
             COMPARE_DATA(returnValueVariableIndex(1), expectedReturnValue->value);
             COMPARE_DATA(returnValueVariableIndex(2), expectedReturnValue->type);
@@ -2280,6 +2283,7 @@ void DebuggerTestBase::testReturnValueVariable()
         QVERIFY(returnValueItem);
         auto* const returnValueVariable = qobject_cast<Variable*>(returnValueItem);
         QVERIFY(returnValueVariable);
+        QCOMPARE_EQ(variableCollection()->watches()->returnValueVariable(), returnValueVariable);
 
         returnValueVariable->die();
     }();
