@@ -281,7 +281,11 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
     // set up menu
     QMenu contextMenu(this->parentWidget());
-    m_contextMenuTitle->setText(selectedVariable->expression());
+
+    m_contextMenuTitle->setText(selectedVariable == variableCollection()->watches()->returnValueVariable()
+                                    ? i18nc("%1 - the name of a GDB variable, e.g. \"$1\"",
+                                            "%1 (last function return value)", selectedVariable->expression())
+                                    : selectedVariable->expression());
     contextMenu.addAction(m_contextMenuTitle);
 
     if (selectedVariable->canSetFormat()) {
