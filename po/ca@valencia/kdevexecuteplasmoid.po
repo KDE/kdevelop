@@ -120,4 +120,4 @@ msgstr "*** Finalitzat ***"
 #: plasmoidexecutionjob.cpp:94
 #, kde-format
 msgid "Plasmoid failed to execute on %1"
-msgstr "El plasmoide ha fallat en executar a %1"
+msgstr "El plasmoide ha fallat mentre s'executava a %1"

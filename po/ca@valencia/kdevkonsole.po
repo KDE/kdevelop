@@ -36,4 +36,4 @@ msgstr "Terminal"
 #: kdevkonsoleviewplugin.cpp:48
 #, kde-format
 msgid "Failed to load 'konsolepart' plugin: %1"
-msgstr "No s'ha pogut carregar el connector «konsolepart»: %1"
+msgstr "Ha fallat mentre es carregava el connector «konsolepart»: %1"

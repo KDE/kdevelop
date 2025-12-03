@@ -277,7 +277,7 @@ msgid ""
 "Error executing Job:\n"
 "%1"
 msgstr ""
-"S'ha produït un error en executar la tasca:\n"
+"S'ha produït un error mentre s'executava la tasca:\n"
 "%1"
 
 #: svnlogjob.cpp:105

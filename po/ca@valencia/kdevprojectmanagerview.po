@@ -80,15 +80,15 @@ msgstr "La suboperació s'ha omés per a evitar la pèrdua de dades"
 #, kde-format
 msgctxt "@title:window"
 msgid "Paste Failed"
-msgstr "No s'ha pogut apegar"
+msgstr "Ha fallat mentre s'apegava"
 
 #: cutcopypastehelpers.cpp:333
 #, kde-format
 msgid ""
 "Failed to paste. Below is a list of suboperations that have been attempted."
 msgstr ""
-"No s'ha pogut apegar. A davall hi ha la llista de suboperacions que s'han "
-"intentat."
+"Ha fallat mentre s'apegava. A davall hi ha la llista de suboperacions que "
+"s'han intentat."
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevprojectmanagerview.rc:26

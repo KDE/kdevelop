@@ -478,5 +478,5 @@ msgstr "…"
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
 msgstr ""
-"No s'han pogut guardar els camins «include» personalitzats en el directori: "
-"%1"
+"Ha fallat mentre es guardaven els camins «include» personalitzats en el "
+"directori: %1"

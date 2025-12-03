@@ -186,7 +186,7 @@ msgstr ""
 #: codegen/adaptsignatureaction.cpp:113
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr "No s'han pogut aplicar els canvis: %1"
+msgstr "Ha fallat mentre s'aplicaven els canvis: %1"
 
 #: codegen/adaptsignatureassistant.cpp:76
 #, kde-format
@@ -217,7 +217,7 @@ msgstr "El fitxer de codi font per a %1 no està disponible."
 #: codegen/clangrefactoring.cpp:157
 #, kde-format
 msgid "Failed to update DUChain for %1."
-msgstr "No s'ha pogut actualitzar la cadena DU per a %1."
+msgstr "Ha fallat mentre s'actualitzava la cadena DU per a %1."
 
 #: codegen/clangrefactoring.cpp:161
 #, kde-format
@@ -242,7 +242,7 @@ msgstr "No s'ha pogut inserir"
 #: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
 #, kde-format
 msgid "Applying changes failed: %1"
-msgstr "No s'han pogut aplicar els canvis: %1"
+msgstr "Ha fallat mentre s'aplicaven els canvis: %1"
 
 #: duchain/clangproblem.cpp:204
 #, kde-format

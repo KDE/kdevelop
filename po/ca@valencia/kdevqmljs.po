@@ -172,7 +172,7 @@ msgstr "Discordança entre el tipus de valor (%1) i el tipus de propietat (%2)"
 #: navigation/propertypreviewwidget.cpp:163
 #, kde-format
 msgid "Error loading QML file: %1"
-msgstr "S'ha produït un error en carregar el fitxer en QML: %1"
+msgstr "S'ha produït un error mentre es carregava el fitxer en QML: %1"
 
 #: navigation/propertywidgets/Duration.qml:21
 #, kde-format

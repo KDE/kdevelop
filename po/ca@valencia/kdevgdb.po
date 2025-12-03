@@ -588,13 +588,3 @@ msgstr "GDB"
 msgctxt "@title:window"
 msgid "Memory"
 msgstr "Memòria"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>No s'ha pogut iniciar el depurador:</b><br />"
-
-#~ msgid ""
-#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
-#~ "<p><tt>%1"
-#~ msgstr ""
-#~ "<b>No s'ha pogut carregar el fitxer de nucli</b><p>El depurador ha "
-#~ "informat de l'error següent:<p><tt>%1"

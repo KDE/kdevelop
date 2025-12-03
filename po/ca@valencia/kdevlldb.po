@@ -40,7 +40,8 @@ msgstr ""
 #: debugsession.cpp:311
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
-msgstr "<b>S'ha produït un error en connectar amb l'objectiu remot:</b><br />"
+msgstr ""
+"<b>S'ha produït un error mentre es connectava amb l'objectiu remot:</b><br />"
 
 #: debugsession.cpp:345
 #, kde-format
@@ -223,13 +224,3 @@ msgstr "Camí de treball remot:"
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr "/camí/a/un/dispositiu/gravable/directori"
-
-#~ msgid "<b>Could not start debugger:</b><br />"
-#~ msgstr "<b>No s'ha pogut iniciar el depurador:</b><br />"
-
-#~ msgid ""
-#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
-#~ "<p><tt>%1"
-#~ msgstr ""
-#~ "<b>No s'ha pogut carregar el fitxer de nucli</b><p>El depurador ha "
-#~ "informat de l'error següent:<p><tt>%1"

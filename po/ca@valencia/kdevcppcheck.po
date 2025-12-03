@@ -403,7 +403,7 @@ msgstr "Cppcheck"
 #: job.cpp:150
 #, kde-format
 msgid "Failed to start Cppcheck from \"%1\"."
-msgstr "No s'ha pogut iniciar «Cppcheck» des de «%1»."
+msgstr "Ha fallat mentre s'iniciava «Cppcheck» des de «%1»."
 
 #: job.cpp:155
 #, kde-format
