@@ -132,6 +132,14 @@ public:
 
     void reinstall();
 
+    /**
+     * @return a return value variable or @c nullptr if it does not exist
+     *
+     * @note If this function returns a non-null pointer, it equals
+     *       the return value of the last call to addFinishResult().
+     */
+    [[nodiscard]] const Variable* returnValueVariable() const;
+
     Variable *addFinishResult(const QString& convenienceVarible);
     void removeFinishResult();
     void resetChanged();
