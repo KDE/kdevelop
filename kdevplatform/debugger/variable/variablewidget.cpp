@@ -51,9 +51,7 @@
     out of scope.
 */
 
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
+using namespace KDevelop;
 
 namespace {
 
@@ -64,15 +62,12 @@ auto variablesViewConfigGroup()
     return KSharedConfig::openConfig()->group(QStringLiteral("Variables View"));
 }
 
-}
-
-namespace KDevelop
-{
-
 VariableCollection *variableCollection()
 {
     return ICore::self()->debugController()->variableCollection();
 }
+
+} // unnamed namespace
 
 VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), m_variablesRoot(controller->variableCollection()->root())
@@ -339,7 +334,6 @@ void VariableTree::stopOnChange()
     if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {
         session->variableController()->addWatchpoint(selectedVariable);
     }
-}
 }
 
 #include "moc_variablewidget.cpp"
