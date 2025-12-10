@@ -58,11 +58,6 @@
         </item>
         <item>
          <property name="text">
-          <string notr="true">c++98</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string notr="true">c++03</string>
          </property>
         </item>
