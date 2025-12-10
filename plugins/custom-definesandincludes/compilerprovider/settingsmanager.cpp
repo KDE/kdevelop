@@ -85,9 +85,9 @@ ParserArguments createDefaultArguments()
 {
     ParserArguments arguments;
     arguments[Utils::C] = QStringLiteral(
-        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c11");
+        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c17");
     arguments[Utils::Cpp] = QStringLiteral(
-        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++17");
+        "-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++20");
     arguments[Utils::OpenCl] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -cl-std=CL1.1");
     arguments[Utils::Cuda] = arguments[Utils::Cpp];
     // For now, use the same arguments for ObjC(++) as for C(++). -Wall enables a number

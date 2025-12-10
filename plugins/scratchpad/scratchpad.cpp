@@ -83,7 +83,7 @@ QString commandForScratch(const QFileInfo& file)
     }
 
     const static QHash<QString, QString> defaultCommands = {
-        {QStringLiteral("cpp"), QStringLiteral("g++ -std=c++17 -o /tmp/a.out $f && /tmp/a.out")},
+        {QStringLiteral("cpp"), QStringLiteral("g++ -std=c++20 -o /tmp/a.out $f && /tmp/a.out")},
         {QStringLiteral("py"), QStringLiteral("python $f")},
         {QStringLiteral("js"), QStringLiteral("node $f")},
         {QStringLiteral("c"), QStringLiteral("gcc -o /tmp/a.out $f && /tmp/a.out")},

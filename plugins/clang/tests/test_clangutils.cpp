@@ -68,7 +68,7 @@ TranslationUnit parse(const QByteArray& code, QString* fileName = nullptr)
     }
 
     std::unique_ptr<void, void(*)(CXIndex)> index(clang_createIndex(1, 1), clang_disposeIndex);
-    const QList<const char*> args = {"-std=c++17", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
+    const QList<const char*> args = {"-std=c++20", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
     auto unit = TranslationUnit(clang_parseTranslationUnit(index.get(), qPrintable(tempFile.fileName()), args.data(),
                                                            args.size(), nullptr, 0, CXTranslationUnit_None));
     QVERIFY_RETURN(unit, {});

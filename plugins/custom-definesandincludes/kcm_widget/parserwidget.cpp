@@ -17,12 +17,12 @@ namespace
 
 [[nodiscard]] QString defaultCLanguageStandard()
 {
-    return QStringLiteral("c11");
+    return QStringLiteral("c17");
 }
 
 [[nodiscard]] QString defaultCppLanguageStandard()
 {
-    return QStringLiteral("c++17");
+    return QStringLiteral("c++20");
 }
 
 QString languageStandard(const QString& arguments)
