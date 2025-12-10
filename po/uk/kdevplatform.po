@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2025-09-07 15:04+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1825,12 +1825,6 @@ msgstr "Застосувати параметри"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Додатків не знайдено"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1842,6 +1836,12 @@ msgstr ""
 "дізнатися більше, зверніться до <a href=\"https://community.kde.org/"
 "Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">цієї статті</a>."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Додатків не знайдено"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3754,7 +3754,7 @@ msgstr "Фільтр:"
 msgid "Create New Session"
 msgstr "Створити сеанс"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3764,13 +3764,13 @@ msgstr ""
 "Виявлено запущений екземпляр %1 (PID: %2), робимо цей екземпляр видимим "
 "замість запуску нового"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Запущений екземпляр %1 (PID: %2) ймовірно зациклився"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3780,7 +3780,7 @@ msgstr ""
 "Вказана програма не відповіла на виклик D-Bus. Ймовірно, вона завершила "
 "роботу у аварійному режимі або зациклилася."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3789,14 +3789,14 @@ msgstr ""
 "Не вдалося заблокувати сеанс <em>%1</em>, його вже заблоковано %2 на %3 (PID "
 "%4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
 "Не вдалося заблокувати сеанс <em>%1</em> (файл блокування є недоступним)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3806,25 +3806,25 @@ msgstr ""
 "<p>Будь ласка, завершіть роботу зайвого екземпляра програми або виберіть для "
 "запуску інший сеанс.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Повторити запуск"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Вибрати інший сеанс"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Не вдалося заблокувати сеанс %1"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

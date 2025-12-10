@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -1868,13 +1868,6 @@ msgid "Apply Settings"
 msgstr ""
 
 #: shell/core.cpp:183
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Жүктелген плагиндері"
-
-#: shell/core.cpp:184
 #, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
@@ -1882,6 +1875,13 @@ msgid ""
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">this article</a> for more information."
 msgstr ""
+
+#: shell/core.cpp:191
+#, fuzzy, kde-format
+#| msgid "Loaded Plugins"
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Жүктелген плагиндері"
 
 #: shell/debugcontroller.cpp:74
 #, fuzzy, kde-format
@@ -3943,7 +3943,7 @@ msgstr "Сүзгі:"
 msgid "Create New Session"
 msgstr "Жаңа сеансты бастау"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3951,7 +3951,7 @@ msgid ""
 "starting a new one"
 msgstr ""
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, fuzzy, kde-format
 #| msgctxt "@info:shell"
 #| msgid "running %1 instance (PID: %2) is apparently hung"
@@ -3959,7 +3959,7 @@ msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "жегілген %1 данасы (PID: %2) сірә тоқтап қалған"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3969,7 +3969,7 @@ msgstr ""
 "Бұл бағдарлама DBUS шақырымына жауап бермейді, бәлкім ол қирап не тоқтап "
 "қалған."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3977,13 +3977,13 @@ msgid ""
 msgstr ""
 "<em>%1</em> сеансы иемделмеді, ол %2 дегенмен %3 дегенде (PID %4) иемделген."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "<em>%1</em> сеансы иемделмеді, (иемдеу-файлы қол жеткізбеген)"
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3992,7 +3992,7 @@ msgid ""
 msgstr ""
 "<p>Шатасқан бағдаламаның данасын жабыңыз немесе басқа сеансты бастаңыз.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -4000,7 +4000,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Жаңадан бастау"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -4008,13 +4008,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Басқа сеансты таңдау"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "%1 сеансын иемдеу жаңылысы"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

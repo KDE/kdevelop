@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1776,12 +1776,6 @@ msgstr "应用设置"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "未找到插件"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1791,6 +1785,12 @@ msgstr ""
 "<p>启动时无法找到任何插件。<br/>请确保 QT_PLUGIN_PATH 设置正确。</p>请参考<a "
 "href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">此文章</a>了解更多信息。"
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "未找到插件"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3658,7 +3658,7 @@ msgstr "过滤："
 msgid "Create New Session"
 msgstr "创建新会话"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3666,13 +3666,13 @@ msgid ""
 "starting a new one"
 msgstr "检测到正在运行的 %1 实例 (PID：%2)，将显示此实例，而不启动新的实例"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "正在运行的 %1 实例 (PID：%2) 可能已经失去响应"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3680,20 +3680,20 @@ msgid ""
 "is hanging."
 msgstr "给定的应用程序没有响应 DBUS 调用，它可能已崩溃或挂起。"
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr "未能锁定会话 <em>%1</em>，已经被 %3 的 %2 锁定 (PID %4)。"
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "未能锁定会话 <em>%1</em> (锁文件不可用)。"
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3701,25 +3701,25 @@ msgid ""
 "session to launch.</p>"
 msgstr "<p>请关闭冲突的程序实例或选择其他会话启动。</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "重新尝试启动"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "选择其他会话"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "锁定会话“%1”失败"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

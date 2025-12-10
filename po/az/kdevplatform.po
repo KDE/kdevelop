@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -1809,12 +1809,6 @@ msgstr "Ayarları tətbiq edin"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Qoşmalar tapılmadı"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1825,6 +1819,12 @@ msgstr ""
 "təyin olunub.</p>Daha çox məlumat üçün <a href=\"https://community. kde.org/"
 "Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment\">bu "
 "məqalə</a> ilə tanış olun."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Qoşmalar tapılmadı"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3747,7 +3747,7 @@ msgstr "Süzgəc:"
 msgid "Create New Session"
 msgstr "Yeni sessiya yaradın"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3757,13 +3757,13 @@ msgstr ""
 "İşlək %1 nümunısi (PİD: %2) aşkarlandı, Yenisini başlatmaq əvəzinə bu birini "
 "görünən etmək"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "İşlək %1 nümunəsinin (PİD: %2) ilişdiyi görünür"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3773,7 +3773,7 @@ msgstr ""
 "Verilmiş tətbiq DBUS çağırışına cavab vermədi, həmin tətbiq çöküb və ya "
 "ilişib."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3782,13 +3782,13 @@ msgstr ""
 "<em>%1</em> sessiyası kilidlənməsi alınmadı, o, artıq %3 üzərində, %2 "
 "tərəfindən kilidlənib (PİD: %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "<em>%1</em> sessiyasını kilidləmək alınmadı (kilid faylı əlçatmazdır)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3798,25 +3798,25 @@ msgstr ""
 "<p>Lütfən, problem yaradan tətbiq nümunəsini bağlayın və ya başlatmaq üçün "
 "başqa sessiyanı seçin.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Başlatmanı təkrarlayın"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Başqa sessiyanı seçin"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "%1 sessiyasının kilidlənməsi alınmadı"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

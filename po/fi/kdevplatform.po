@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2024-11-15 18:23+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1818,12 +1818,6 @@ msgstr "Hyväksy asetukset"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Liitännäisiä ei löytynyt"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1834,6 +1828,12 @@ msgstr ""
 "QT_PLUGIN_PATH on asetettu oikein.</p>Lisää tietoa on (englanniksi) <a href="
 "\"https://community.kde.org/Frameworks/Building#Runtime_setup\">tässä "
 "artikkelissa</a>."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Liitännäisiä ei löytynyt"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3807,7 +3807,7 @@ msgstr "Suodatin:"
 msgid "Create New Session"
 msgstr "Luo uusi istunto"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3815,7 +3815,7 @@ msgid ""
 "starting a new one"
 msgstr ""
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, fuzzy, kde-format
 #| msgctxt "@info:shell"
 #| msgid "running %1 instance (PID: %2) is apparently hung"
@@ -3823,7 +3823,7 @@ msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "käynnissä oleva %1-instanssi (PID: %2) on nähtävästi jumissa"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3833,7 +3833,7 @@ msgstr ""
 "Valittu ohjelma ei vastannut D-Bus-pyyntöön, joten se saattaa olla kaatunut "
 "tai jumissa."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3842,7 +3842,7 @@ msgstr ""
 "Istunnon <em>%1</em> lukitseminen epäonnistui, koska %2 on jo lukinnut sen "
 "koneella %3 (PID %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
@@ -3850,7 +3850,7 @@ msgstr ""
 "Istunnon <em>%1</em> lukitseminen epäonnistui (lukitustiedosto ei ole "
 "saatavilla)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3860,7 +3860,7 @@ msgstr ""
 "<p>Sulje häiritsevä ohjelmainstanssi tai valitse toinen käynnistettävä "
 "istunto.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -3868,7 +3868,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Yritä käynnistämistä uudelleen"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -3876,13 +3876,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Valitse toinen istunto"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Istunnon %1 lukitseminen epäonnistui"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

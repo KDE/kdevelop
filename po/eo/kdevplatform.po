@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2025-03-15 10:38+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -1809,12 +1809,6 @@ msgstr "Apliki Agordojn"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Neniuj Kromaĵoj Trovitaj"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1826,6 +1820,12 @@ msgstr ""
 "community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">ĉi tiu artikolo</a> por "
 "pliaj informoj."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Neniuj Kromaĵoj Trovitaj"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3735,7 +3735,7 @@ msgstr "Filtro:"
 msgid "Create New Session"
 msgstr "Krei Novan Seancon"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3745,13 +3745,13 @@ msgstr ""
 "Rulanta instanco %1 (PID: %2) detektita, igante ĉi tiun videbla anstataŭ "
 "komenci novan"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Rulanta instanco %1 (PID: %2) ŝajne estas interrompita"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3760,7 +3760,7 @@ msgid ""
 msgstr ""
 "La donita aplikaĵo ne respondis al DBUS-voko, ĝi eble paneis aŭ pendas."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3768,14 +3768,14 @@ msgid ""
 msgstr ""
 "Malsukcesis ŝlosi la seancon <em>%1</em>, jam ŝlosita de %2 sur %3 (PID %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
 "Malsukcesis ŝlosi la seancon <em>%1</em> (ŝlosi dosieron nedisponebla)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3784,25 +3784,25 @@ msgid ""
 msgstr ""
 "<p>Bonvolu fermi la ofendan aplikaĵon aŭ elekti alian seancon por lanĉi.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Reprovi Lanĉon"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Elekti Alian Seancon"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Malsukcesis Ŝlosi Seancon %1"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

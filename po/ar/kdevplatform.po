@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2025-10-05 21:20+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -1821,12 +1821,6 @@ msgstr "طبّق الإعدادات"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "لا يوجد ملحقات"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1837,6 +1831,12 @@ msgstr ""
 "QT_PLUGIN_PATH بشكل صحيح.</p>ارجع إلى <a href=\"https://community.kde.org/"
 "Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment\">هذه "
 "المقالة</a> لمزيد من المعلومات."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "لا يوجد ملحقات"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3712,7 +3712,7 @@ msgstr "المرشّح:"
 msgid "Create New Session"
 msgstr "أَنشِئ جلسة جديدة"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3721,13 +3721,13 @@ msgid ""
 msgstr ""
 "اكتُشفت نسخة %1 جارية (رقم العملية: %2)، إِجعل هذه مرئية بدلًا من بدء نسخة جديدة"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "يبدو أن النسخة %1 الجارية (رقم العملية: %2) معلَّقة"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3735,7 +3735,7 @@ msgid ""
 "is hanging."
 msgstr "التطبيق المُعطى لم يستجِب لـ استدعاء DBUS، ربما انهار أو أنه مُعلَّق."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3743,13 +3743,13 @@ msgid ""
 msgstr ""
 "فشِل قفل الجلسة <em>%1</em>، مقفلة بالفعل بواسطة %2 على %3 (رقم العملية %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "فشِل قفل الجلسة <em>%1</em> (ملف القفل غير متوفر)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3757,25 +3757,25 @@ msgid ""
 "session to launch.</p>"
 msgstr "<p>اِرجوك، أَغلِق نسخة التطبيق المُخالِفة أو اِختر جلسة أخرى لـ إطلاقها.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "أَعِد محاولة البدء"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "اِختر جلسة أخرى"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "فشِل قفل الجلسة %1"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

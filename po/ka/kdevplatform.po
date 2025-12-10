@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2025-09-07 04:21+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1815,12 +1815,6 @@ msgstr "პარამეტრების გადატარება"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "დამატებები ნაპოვნი არაა"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1831,6 +1825,12 @@ msgstr ""
 "გარემოს ცვლადი QT_PLUGIN_PATH სწორადაა დაყენებული.</p>მეტი ინფორმაციისთვის "
 "იხილეთ <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">ეს სტატია</a>."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "დამატებები ნაპოვნი არაა"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3732,7 +3732,7 @@ msgstr "ფილტრი:"
 msgid "Create New Session"
 msgstr "ახალი სესიის შექმნა"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3742,13 +3742,13 @@ msgstr ""
 "აღმოჩენილია %1-ის გაშვებული ასლი (PID: %2). ახლის გაშვების მაგიერ მას "
 "გამოვაჩენ"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "%1-ი გაშვებული ასლი (PID %2) როგორც ჩანს, დაეკიდა"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3758,7 +3758,7 @@ msgstr ""
 "მითითებული აპლიკაცია DBUS-ის გამოძახებას არ პასუხობს. ის, შეიძლება, "
 "ავარიულად დასრულდა, ან დაეკიდა."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3767,14 +3767,14 @@ msgstr ""
 "ჩავარდა დაბლოკვ სესიისთვის <em>%1</em>. უკვე დაბლოკილია პროცესით %2 %3-ზე "
 "(PID %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
 "ჩავარდა დაბლოკვა სესისთვის <em>%1</em> (დაბლოკვის ფაილი ხელმისაწვდომი არაა)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3784,25 +3784,25 @@ msgstr ""
 "<p>დახურეთ უხეში აპლიკაციის გაშვებული ასლი, ან აირჩიეთ სხვა სესია გასაშვებად."
 "</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "გაშვების თვიდან ცდა"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "აირჩიეთ სხვა სესია"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "სესიის (%1) დაბლოკვის შეცდომა"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

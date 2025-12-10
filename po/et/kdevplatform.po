@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1859,13 +1859,6 @@ msgid "Apply Settings"
 msgstr "Seadistuste rakendamine"
 
 #: shell/core.cpp:183
-#, fuzzy, kde-format
-#| msgid "Plugins"
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Pluginad"
-
-#: shell/core.cpp:184
 #, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
@@ -1877,6 +1870,13 @@ msgstr ""
 "QT_PLUGIN_PATH on korrektselt määratud.</p>Täpsemat teavet leiab <a href="
 "\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">sellest artiklist</a>."
+
+#: shell/core.cpp:191
+#, fuzzy, kde-format
+#| msgid "Plugins"
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Pluginad"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3998,7 +3998,7 @@ msgstr "Filter:"
 msgid "Create New Session"
 msgstr "Loo uus seanss"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -4007,13 +4007,13 @@ msgid ""
 msgstr ""
 "Leiti töötav %1 isend (PID: %2), mis tehakse nähtavaks ega käivitata uut"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Töötav %1 isend (PID %2) on nähtavasti hangunud"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4023,7 +4023,7 @@ msgstr ""
 "Määratud rakendus ei vasta D-Busi väljakutsele, seda võib olla tabanud krahh "
 "või on see hangunud."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4032,13 +4032,13 @@ msgstr ""
 "Seansi <em>%1</em> lukustamine nurjus, selle on juba lukustanud %2 masinas "
 "%3 (PID %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "Seansi <em>%1</em> lukustamine nurjus (lukustusfail pole kättesaadav)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4046,7 +4046,7 @@ msgid ""
 "session to launch.</p>"
 msgstr "<p>Palun sulge tõrkuv rakenduse isend või käivita uus seanss.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -4054,7 +4054,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Proovi uuesti käivitada"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -4062,13 +4062,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Vali teine seanss"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Seansi %1 lukustamine nurjus"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

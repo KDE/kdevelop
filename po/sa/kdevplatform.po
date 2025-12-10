@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -1799,12 +1799,6 @@ msgstr "सेटिंग्स् प्रयोजयन्तु"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "प्लगिन्स् न प्राप्ताः"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1815,6 +1809,12 @@ msgstr ""
 "QT_PLUGIN_PATH सम्यक् सेट् कृतम् अस्ति ।</p> अधिकविवरणार्थं <a href=\"https://"
 "community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">अयं लेखः</a> पश्यन्तु ।"
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "प्लगिन्स् न प्राप्ताः"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3702,7 +3702,7 @@ msgstr "फ़िल्टर :"
 msgid "Create New Session"
 msgstr "नूतनं सत्रं रचयन्तु"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3710,13 +3710,13 @@ msgid ""
 "starting a new one"
 msgstr "%1 उदाहरणं चालयन् (PID: %2) ज्ञातम्, नूतनं आरभ्यतुं स्थाने एतत् दृश्यमानं कृत्वा"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "%1 उदाहरणं (PID: %2) चालयन् प्रत्यक्षतया लम्बितम् अस्ति"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3726,20 +3726,20 @@ msgstr ""
 "दत्तः अनुप्रयोगः DBUS-आह्वानस्य प्रतिक्रियां न दत्तवान्, सः दुर्घटनाग्रस्तः अथवा लम्बितः "
 "अस्ति वा ।"
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr "<em>%1 (PID %4) इत्यत्र %2 द्वारा पूर्वमेव ताडितम् %3</em> सत्रं ताडयितुं असफलम् ।"
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "<em>%1</em> सत्रं ताडयितुं असफलम् (लॉक-सञ्चिका अनुपलब्धम्) ।"
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3748,25 +3748,25 @@ msgid ""
 msgstr ""
 "<p>कृपया, आक्षेपार्हं अनुप्रयोगदृष्टान्तं पिधाय अथवा प्रारम्भार्थं अन्यं सत्रं चिनोतु ।</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "पुनः स्टार्टअप इत्यस्य प्रयासं कुर्वन्तु"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "अन्यं सत्रं चिनोतु"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "सत्रं %1 ताडयितुं असफलम्"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

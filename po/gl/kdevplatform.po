@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2025-06-22 11:37+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -1819,12 +1819,6 @@ msgstr "Aplicar a configuración"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "Non se atopou ningún complemento"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1836,6 +1830,12 @@ msgstr ""
 "\"https://community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">este artigo</a> (en "
 "inglés) para máis información."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Non se atopou ningún complemento"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3754,7 +3754,7 @@ msgstr "Filtro:"
 msgid "Create New Session"
 msgstr "Crear unha sesión nova"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3764,13 +3764,13 @@ msgstr ""
 "Detectouse unha instancia de %1 en execución (PID: %2), amosarase en vez de "
 "iniciar unha nova"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Aparentemente, a instancia en execución de %1 (PID: %2) colgouse"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3780,7 +3780,7 @@ msgstr ""
 "A aplicación mencionada non respondeu a unha chamada de DBUS; pode que "
 "quebrase ou que estea «colgada»."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3789,7 +3789,7 @@ msgstr ""
 "Non foi posíbel bloquear a sesión <em>%1</em>; xa está bloqueada por %2 en "
 "%3 (PID %4)."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
@@ -3797,7 +3797,7 @@ msgstr ""
 "Non foi posíbel bloquear a sesión <em>%1</em> (o ficheiro de bloqueo non "
 "está dispoñíbel)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3807,25 +3807,25 @@ msgstr ""
 "<p>Peche a instancia da aplicación correspondente ou escolla outra sesión "
 "para iniciar.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Intentar iniciar de novo"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Escoller outra sesión"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Non foi posíbel bloquear a sesión %1"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."

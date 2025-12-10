@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-10 00:42+0000\n"
 "PO-Revision-Date: 2025-10-09 00:53+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1788,12 +1788,6 @@ msgstr "설정 적용"
 
 #: shell/core.cpp:183
 #, kde-format
-msgctxt "@title:window"
-msgid "No Plugins Found"
-msgstr "플러그인을 찾을 수 없음"
-
-#: shell/core.cpp:184
-#, kde-format
 msgid ""
 "<p>Could not find any plugins during startup.<br/>Please make sure "
 "QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
@@ -1804,6 +1798,12 @@ msgstr ""
 "게 설정되어 있는지 확인하십시오.</p> 자세한 내용은 <a href=\"https://"
 "community.kde.org/Guidelines_and_HOWTOs/"
 "Build_from_source#Set_up_the_runtime_environment\">이 글</a>을 참조하십시오."
+
+#: shell/core.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "플러그인을 찾을 수 없음"
 
 #: shell/debugcontroller.cpp:74
 #, kde-format
@@ -3692,7 +3692,7 @@ msgstr "필터:"
 msgid "Create New Session"
 msgstr "새 세션 만들기"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3702,13 +3702,13 @@ msgstr ""
 "실행 중인 %1 인스턴스(PID: %2)가 감지되어 새 인스턴스를 시작하는 대신 해당 인"
 "스턴스를 활성화함"
 
-#: shell/sessionlock.cpp:163
+#: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "실행 중인 %1 인스턴스(PID: %2)의 응답이 없음"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3718,7 +3718,7 @@ msgstr ""
 "지정한 앱이 D-Bus 호출에 응답하지 않았습니다. 앱이 충돌했거나 중단된 것 같습"
 "니다."
 
-#: shell/sessionlock.cpp:174
+#: shell/sessionlock.cpp:175
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3726,13 +3726,13 @@ msgid ""
 msgstr ""
 "세션 <em>%1</em>을(를) 잠글 수 없습니다. %3의 %2(PID %4)이(가) 잠갔습니다."
 
-#: shell/sessionlock.cpp:178
+#: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "세션 <em>%1</em>을 잠글 수 없습니다(잠금 파일을 사용할 수 없음)."
 
-#: shell/sessionlock.cpp:182
+#: shell/sessionlock.cpp:183
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3741,25 +3741,25 @@ msgid ""
 msgstr ""
 "<p>문제가 있는 앱 인스턴스를 닫거나 시작할 다른 세션을 선택하십시오.</p>"
 
-#: shell/sessionlock.cpp:188
+#: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "시작 다시 시도"
 
-#: shell/sessionlock.cpp:191
+#: shell/sessionlock.cpp:192
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "다른 세션 선택"
 
-#: shell/sessionlock.cpp:195
+#: shell/sessionlock.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "세션 %1을(를) 잠글 수 없음"
 
-#: shell/sessionlock.cpp:201
+#: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
