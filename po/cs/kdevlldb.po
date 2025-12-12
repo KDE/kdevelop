@@ -202,6 +202,3 @@ msgstr ""
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
 msgstr ""
-
-#~ msgid "LLDB Version Unsupported"
-#~ msgstr "Verze LLDB není podporována"
