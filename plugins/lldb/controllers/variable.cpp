@@ -17,6 +17,17 @@ using namespace KDevelop;
 using namespace KDevMI::LLDB;
 using namespace KDevMI::MI;
 
+namespace {
+/**
+ * @return the name of a field that must be present in the record argument of LldbVariable::handleRawUpdate()
+ */
+[[nodiscard]] QString rawUpdateField()
+{
+    return QStringLiteral("changelist");
+}
+
+} // unnamed namespace
+
 LldbVariable::LldbVariable(DebugSession *session, TreeModel *model, TreeItem *parent,
                            const QString& expression, const QString& display)
     : MIVariable(session, model, parent, expression, display)
@@ -53,7 +64,7 @@ void LldbVariable::refetch()
 void LldbVariable::handleRawUpdate(const ResultRecord& r)
 {
     qCDebug(DEBUGGERLLDB) << "handleRawUpdate for variable" << varobj();
-    const Value& changelist = r[QStringLiteral("changelist")];
+    const auto& changelist = r[rawUpdateField()];
     Q_ASSERT_X(changelist.size() <= 1, "LldbVariable::handleRawUpdate",
                "should only be used with one variable VarUpdate");
     if (changelist.size() == 1)
@@ -79,10 +90,9 @@ void LldbVariable::formatChanged()
                 VarSetFormat,
                 QStringLiteral(" %1 %2 ").arg(varobj(), format2str(format())),
                 [guarded_this](const ResultRecord &r){
-                    if(guarded_this && r.hasField(QStringLiteral("changelist"))) {
-                        if (r[QStringLiteral("changelist")].size() > 0) {
-                            guarded_this->handleRawUpdate(r);
-                        }
+                    auto* const variable = guarded_this.get();
+                    if (variable && r.hasField(rawUpdateField())) {
+                        variable->handleRawUpdate(r);
                     }
                 });
         }
