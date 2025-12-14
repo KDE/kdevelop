@@ -1918,7 +1918,6 @@ void DebuggerTestBase::testVariablesAttributes()
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 24);
     // A variable named `j` is present in the scope of foo().
-    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
     QCOMPARE(jVariable->showError(), false);
     QCOMPARE(jVariable->inScope(), true);
     QCOMPARE(jVariable->type(), "int");
@@ -1927,7 +1926,6 @@ void DebuggerTestBase::testVariablesAttributes()
 
     CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 24);
-    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
     QCOMPARE(jVariable->showError(), false);
     QCOMPARE(jVariable->inScope(), true);
     QCOMPARE(jVariable->type(), "int");
@@ -1937,7 +1935,6 @@ void DebuggerTestBase::testVariablesAttributes()
     jVariable->setFormat(Variable::Binary);
     // Wait for the results of an MI command -var-set-format.
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
     QCOMPARE(jVariable->showError(), false);
     QCOMPARE(jVariable->inScope(), true);
     QCOMPARE(jVariable->type(), "int");
@@ -1947,7 +1944,6 @@ void DebuggerTestBase::testVariablesAttributes()
     STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
     QCOMPARE(currentMiLine(session), 32);
     // Back to main() where `j` is out of scope. The type and value of an out-of-scope variable remain unchanged.
-    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
     QCOMPARE(jVariable->showError(), false);
     if (isLldb()) {
         // A workaround in LLDB::DebugSession::updateAllVariables() updates all variables manually.
@@ -1962,7 +1958,6 @@ void DebuggerTestBase::testVariablesAttributes()
     jVariable->setFormat(Variable::Hexadecimal);
     // Wait for the results of an MI command -var-set-format.
     WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
-    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
     QCOMPARE(jVariable->showError(), false);
     QCOMPARE(jVariable->inScope(), false);
     QCOMPARE(jVariable->type(), "int");

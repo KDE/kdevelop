@@ -102,9 +102,10 @@ public:
         MIVariable* variable = m_variable.data();
         variable->deleteChildren();
         variable->setInScope(true);
-        if (r.isReasonError()) {
-            variable->setShowError(true);
-        } else {
+
+        const auto isError = r.isReasonError();
+        variable->setShowError(isError);
+        if (!isError) {
             variable->setVarobj(r[QStringLiteral("name")].literal());
 
             bool hasMore = false;
