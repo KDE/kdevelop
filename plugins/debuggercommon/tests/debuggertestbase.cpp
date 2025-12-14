@@ -1885,6 +1885,103 @@ void DebuggerTestBase::testVariablesQuicklySwitchFrame()
     WAIT_FOR_STATE(session, IDebugSession::EndedState);
 }
 
+void DebuggerTestBase::testVariablesAttributes()
+{
+    auto* const session = createTestDebugSession();
+    TestLaunchConfiguration cfg;
+
+    variableCollection()->variableWidgetShown();
+
+    addDebugeeBreakpoint(24);
+    addDebugeeBreakpoint(29);
+    ActiveStateSessionSpy sessionSpy(session);
+    START_DEBUGGING_AND_WAIT_FOR_PAUSED_STATE_E(session, cfg, sessionSpy);
+
+    auto* const jVariable = variableCollection()->watches()->add("j");
+    QVERIFY(jVariable);
+    QCOMPARE(jVariable->canSetFormat(), true);
+    // Verify initialization of attributes in the constructor of a variable.
+    QCOMPARE(jVariable->expression(), "j");
+    QCOMPARE(jVariable->showError(), false);
+    QCOMPARE(jVariable->format(), Variable::Natural);
+
+    // Wait for the results of an MI command -var-create.
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QCOMPARE(currentMiLine(session), 29);
+    // There is no variable named `j` in the scope of main().
+    QCOMPARE(jVariable->showError(), true);
+
+    // Setting format of a not yet attached variable succeeds but does not modify the value of the variable.
+    jVariable->setFormat(Variable::Octal);
+    QCOMPARE(jVariable->format(), Variable::Octal);
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 24);
+    // A variable named `j` is present in the scope of foo().
+    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
+    QCOMPARE(jVariable->showError(), false);
+    QCOMPARE(jVariable->inScope(), true);
+    QCOMPARE(jVariable->type(), "int");
+    QCOMPARE(jVariable->format(), Variable::Octal);
+    QCOMPARE(jVariable->value(), "01");
+
+    CONTINUE_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 24);
+    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
+    QCOMPARE(jVariable->showError(), false);
+    QCOMPARE(jVariable->inScope(), true);
+    QCOMPARE(jVariable->type(), "int");
+    QCOMPARE(jVariable->format(), Variable::Octal);
+    QCOMPARE(jVariable->value(), "02");
+
+    jVariable->setFormat(Variable::Binary);
+    // Wait for the results of an MI command -var-set-format.
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
+    QCOMPARE(jVariable->showError(), false);
+    QCOMPARE(jVariable->inScope(), true);
+    QCOMPARE(jVariable->type(), "int");
+    QCOMPARE(jVariable->format(), Variable::Binary);
+    QCOMPARE(jVariable->value(), adjustedVariableValueInBinaryFormat("10"));
+
+    STEP_OUT_AND_WAIT_FOR_PAUSED_STATE(session, sessionSpy);
+    QCOMPARE(currentMiLine(session), 32);
+    // Back to main() where `j` is out of scope. The type and value of an out-of-scope variable remain unchanged.
+    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
+    QCOMPARE(jVariable->showError(), false);
+    if (isLldb()) {
+        // A workaround in LLDB::DebugSession::updateAllVariables() updates all variables manually.
+        // Consequently MIVariable::handleUpdate(), which updates Variable::inScope(), is not invoked regularly.
+        QEXPECT_FAIL("", "MIVariable::handleUpdate() is invoked only when the format of a variable changes", Continue);
+    }
+    QCOMPARE(jVariable->inScope(), false);
+    QCOMPARE(jVariable->type(), "int");
+    QCOMPARE(jVariable->format(), Variable::Binary);
+    QCOMPARE(jVariable->value(), adjustedVariableValueInBinaryFormat("10"));
+
+    jVariable->setFormat(Variable::Hexadecimal);
+    // Wait for the results of an MI command -var-set-format.
+    WAIT_FOR_STATE_AND_IDLE(session, IDebugSession::PausedState);
+    QEXPECT_FAIL("", "An attribute Variable::showError() is never reset back to false", Continue);
+    QCOMPARE(jVariable->showError(), false);
+    QCOMPARE(jVariable->inScope(), false);
+    QCOMPARE(jVariable->type(), "int");
+    QCOMPARE(jVariable->format(), Variable::Hexadecimal);
+    if (isLldb()) {
+        QEXPECT_FAIL("", "Changing format of an out-of-scope variable does not update its value", Continue);
+        QCOMPARE(jVariable->value(), "0x2");
+        QCOMPARE(jVariable->value(), adjustedVariableValueInBinaryFormat("10"));
+    } else {
+        // GDB/MI sends value="", and SetFormatHandler assigns the empty string to Variable::value().
+        QEXPECT_FAIL("", "Changing format of an out-of-scope variable clears its value", Continue);
+        QCOMPARE(jVariable->value(), "0x2");
+        QCOMPARE(jVariable->value(), "");
+    }
+
+    session->run();
+    WAIT_FOR_STATE(session, IDebugSession::EndedState);
+}
+
 void DebuggerTestBase::testVariablesChanged()
 {
     // kdevlldb xfails the test because of a workaround in LLDB::DebugSession::updateAllVariables()
@@ -2184,6 +2281,14 @@ QString DebuggerTestBase::adjustedStackModelFrameName(QString frameName) const
         frameName += "()";
     }
     return frameName;
+}
+
+QString DebuggerTestBase::adjustedVariableValueInBinaryFormat(QString binaryValue) const
+{
+    if (isLldb()) {
+        binaryValue.prepend("0b");
+    }
+    return binaryValue;
 }
 
 bool DebuggerTestBase::isAcceptableExecutableFileKindForCore(FileKind executableFileKind)

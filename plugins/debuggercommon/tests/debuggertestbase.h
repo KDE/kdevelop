@@ -168,6 +168,7 @@ private Q_SLOTS:
     void testVariablesSameWatchInSecondSession();
     void testVariablesSwitchFrame();
     void testVariablesQuicklySwitchFrame();
+    void testVariablesAttributes();
     void testVariablesChanged();
 
     void testSwitchFrameDebuggerConsole();
@@ -197,6 +198,7 @@ private:
     }
 
     [[nodiscard]] QString adjustedStackModelFrameName(QString frameName) const;
+    [[nodiscard]] QString adjustedVariableValueInBinaryFormat(QString binaryValue) const;
 
     enum class FileKind {
         Valid,
