@@ -121,7 +121,7 @@ void Variable::setShowError (bool v)
     reportChange();
 }
 
-bool Variable::showError()
+bool Variable::showError() const
 {
     return m_showError;
 }

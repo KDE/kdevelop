@@ -54,7 +54,7 @@ public:
     QString type() const;
     void setTopLevel(bool v);
     void setShowError(bool v);
-    bool showError();
+    [[nodiscard]] bool showError() const;
 
     using TreeItem::setHasMore;
     using TreeItem::setHasMoreInitial;
