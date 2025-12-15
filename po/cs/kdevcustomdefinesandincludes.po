@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2025-12-15 00:41+0000\n"
 "PO-Revision-Date: 2023-02-08 14:27+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -199,8 +199,8 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsOpenCl)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCuda)
-#: kcm_widget/parserwidget.ui:52 kcm_widget/parserwidget.ui:136
-#: kcm_widget/parserwidget.ui:220 kcm_widget/parserwidget.ui:289
+#: kcm_widget/parserwidget.ui:52 kcm_widget/parserwidget.ui:141
+#: kcm_widget/parserwidget.ui:255 kcm_widget/parserwidget.ui:324
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -212,57 +212,57 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsOpenCl)
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCuda)
-#: kcm_widget/parserwidget.ui:56 kcm_widget/parserwidget.ui:140
-#: kcm_widget/parserwidget.ui:224 kcm_widget/parserwidget.ui:293
+#: kcm_widget/parserwidget.ui:56 kcm_widget/parserwidget.ui:145
+#: kcm_widget/parserwidget.ui:259 kcm_widget/parserwidget.ui:328
 #, kde-format
 msgctxt "@item:inlistbox language standard"
 msgid "Custom"
 msgstr "Vlastní"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel)
-#: kcm_widget/parserwidget.ui:94
+#: kcm_widget/parserwidget.ui:99
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C++ co&mmand-line arguments:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: kcm_widget/parserwidget.ui:120
+#: kcm_widget/parserwidget.ui:125
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C profi&le:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
-#: kcm_widget/parserwidget.ui:178
+#: kcm_widget/parserwidget.ui:213
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C co&mmand-line arguments:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: kcm_widget/parserwidget.ui:204
+#: kcm_widget/parserwidget.ui:239
 #, kde-format
 msgctxt "@label:listbox"
 msgid "OpenCL C &profile:"
 msgstr "&Profil OpenCL C:"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_3)
-#: kcm_widget/parserwidget.ui:247
+#: kcm_widget/parserwidget.ui:282
 #, kde-format
 msgctxt "@label:textbox"
 msgid "OpenCL C comma&nd-line arguments:"
 msgstr "Argumenty příkazového řádku Ope&nCL C:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: kcm_widget/parserwidget.ui:273
+#: kcm_widget/parserwidget.ui:308
 #, kde-format
 msgctxt "@label:listbox"
 msgid "CUDA C P&rofile:"
 msgstr "P&rofil CUDA C:"
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_4)
-#: kcm_widget/parserwidget.ui:321
+#: kcm_widget/parserwidget.ui:366
 #, kde-format
 msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
