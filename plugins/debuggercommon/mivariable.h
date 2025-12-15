@@ -59,6 +59,12 @@ protected: // Internal
     QString enquotedExpression() const;
     virtual QString formatValue(const QString &rawValue) const;
 
+    /**
+     * If a given tuple value has a field "value", format the value
+     * of the field and assign the result to @c this->value().
+     */
+    void setValueToOptionalValueFieldOf(const MI::Value& tupleValue);
+
     bool sessionIsAlive() const;
 
     void setVarobj(const QString& v);

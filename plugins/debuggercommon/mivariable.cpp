@@ -320,8 +320,9 @@ public:
 
     void handle(const ResultRecord &r) override
     {
-        if(m_variable && r.hasField(QStringLiteral("value")))
-            m_variable->setValue(m_variable->formatValue(r[QStringLiteral("value")].literal()));
+        if (auto* const variable = m_variable.get()) {
+            variable->setValueToOptionalValueFieldOf(r);
+        }
     }
 private:
     QPointer<MIVariable> m_variable;
@@ -351,6 +352,14 @@ void MIVariable::formatChanged()
 QString MIVariable::formatValue(const QString &rawValue) const
 {
     return rawValue;
+}
+
+void MIVariable::setValueToOptionalValueFieldOf(const Value& tupleValue)
+{
+    static const auto valueField = QStringLiteral("value");
+    if (tupleValue.hasField(valueField)) {
+        setValue(formatValue(tupleValue[valueField].literal()));
+    }
 }
 
 #include "moc_mivariable.cpp"

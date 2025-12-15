@@ -47,8 +47,9 @@ void LldbVariable::refetch()
     // update the value itself
     QPointer<LldbVariable> guarded_this(this);
     m_debugSession->addCommand(VarEvaluateExpression, varobj(), [guarded_this](const ResultRecord &r){
-        if (guarded_this && r.reason == QLatin1String("done") && r.hasField(QStringLiteral("value"))) {
-            guarded_this->setValue(guarded_this->formatValue(r[QStringLiteral("value")].literal()));
+        auto* const variable = guarded_this.get();
+        if (variable && r.reason == QLatin1String("done")) {
+            variable->setValueToOptionalValueFieldOf(r);
         }
     });
 
