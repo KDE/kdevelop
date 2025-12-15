@@ -36,6 +36,7 @@ LldbVariable::LldbVariable(DebugSession *session, TreeModel *model, TreeItem *pa
 
 void LldbVariable::refetch()
 {
+    // NOTE: a comment in the function that calls this one describes bugs that are worked around here.
     if (!topLevel() || varobj().isEmpty()) {
         return;
     }
@@ -45,6 +46,17 @@ void LldbVariable::refetch()
     }
 
     // update the value itself
+    // LLDB-MI does not support floating variable objects (https://github.com/lldb-tools/lldb-mi/issues/105).
+    // Therefore it always binds each variable object to the debuggee object, for which it was originally
+    // created. Consequently, if another debuggee object with a name that matches a variable object's
+    // expression is in scope at a subsequent debugger stop, the value of the variable object returned by
+    // -var-evaluate-expression remains equal to the value of the original, now out-of-scope, debuggee object. Also
+    // note that even if LLDB-MI starts returning the value of a matching debuggee object that is in scope, KDevelop
+    // would display an obsolete type of the variable, seeing as -var-evaluate-expression does not return the type.
+    // TODO: -var-create a new variable object to display the types and values of variables that are currently in scope.
+    //       If the -var-create command succeeds, i.e. a matching debuggee object is in scope, compare the old and
+    //       new values of attributes of the reattached variable, update its attribute isChanged() accordingly
+    //       so as to match the behavior of kdevgdb, and -var-delete the replaced variable object to clean up.
     QPointer<LldbVariable> guarded_this(this);
     m_debugSession->addCommand(VarEvaluateExpression, varobj(), [guarded_this](const ResultRecord &r){
         auto* const variable = guarded_this.get();

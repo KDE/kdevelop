@@ -361,9 +361,19 @@ void DebugSession::handleVersion(const QStringList& s)
 
 void DebugSession::updateAllVariables()
 {
-    // FIXME: this is only a workaround for lldb-mi doesn't provide -var-update changelist
-    // for variables that have a python synthetic provider. Remove this after this is fixed
-    // in the upstream.
+    // This function together with its caller and callees works around the following bugs:
+    // 1. LLDB-MI does not support `*` as the variable object names argument, for example:
+    //      (lldb) 54-var-update --thread 1 --frame 0 --all-values *
+    //      54^error,msg="Command 'var-update'. Variable '*' does not exist"
+    // 2. LLDB-MI sends an empty -var-update changelist for variables that have a Python synthetic provider.
+    // 3. LLDB-MI does not support floating variable objects (https://github.com/lldb-tools/lldb-mi/issues/105).
+    //    Therefore it always binds each variable object to the debuggee object, for which it was originally created.
+    //    Consequently, if another debuggee object with a name that matches a variable object's expression is in scope
+    //    at a subsequent debugger stop, the changelist reported for the variable object is empty. For example:
+    //      (lldb) 107-var-update --thread 3 --frame 0 --all-values var9
+    //      107^done,changelist=[]
+    // TODO: remove this workaround after the bugs are fixed upstream. If only the first
+    //       bug remains unfixed, revert 91d7176c7a10cdb8eb65e8aa20ea0cd3816ed8e7.
 
     // re-fetch all toplevel variables, as -var-update doesn't work with data formatter
     // we have to pick out top level variables first, as refetching will delete child
