@@ -62,14 +62,19 @@ void LldbVariable::refetch()
     }
 }
 
-void LldbVariable::handleRawUpdate(const ResultRecord& r)
+const Value* LldbVariable::handleRawUpdate(const ResultRecord& r)
 {
     qCDebug(DEBUGGERLLDB) << "handleRawUpdate for variable" << varobj();
     const auto& changelist = r[rawUpdateField()];
     Q_ASSERT_X(changelist.size() <= 1, "LldbVariable::handleRawUpdate",
                "should only be used with one variable VarUpdate");
-    if (changelist.size() == 1)
-        handleUpdate(changelist[0]);
+    if (changelist.empty()) {
+        return nullptr;
+    }
+
+    const auto& changes = changelist[0];
+    handleUpdate(changes);
+    return &changes;
 }
 
 void LldbVariable::formatChanged()
@@ -93,7 +98,12 @@ void LldbVariable::formatChanged()
                 [guarded_this](const ResultRecord &r){
                     auto* const variable = guarded_this.get();
                     if (variable && r.hasField(rawUpdateField())) {
-                        variable->handleRawUpdate(r);
+                        const auto* const changes = variable->handleRawUpdate(r);
+                        if (changes && !variable->inScope()) {
+                            // MIVariable::handleUpdate() updates value() only if the variable is in scope. But
+                            // LLDB-MI always sends the value in the current format. Thus update value() manually.
+                            variable->setValueToOptionalValueFieldOf(*changes);
+                        }
                     }
                 });
         }

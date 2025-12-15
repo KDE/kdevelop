@@ -1963,9 +1963,7 @@ void DebuggerTestBase::testVariablesAttributes()
     QCOMPARE(jVariable->type(), "int");
     QCOMPARE(jVariable->format(), Variable::Hexadecimal);
     if (isLldb()) {
-        QEXPECT_FAIL("", "Changing format of an out-of-scope variable does not update its value", Continue);
         QCOMPARE(jVariable->value(), "0x2");
-        QCOMPARE(jVariable->value(), adjustedVariableValueInBinaryFormat("10"));
     } else {
         // GDB/MI sends value="", and SetFormatHandler assigns the empty string to Variable::value().
         QEXPECT_FAIL("", "Changing format of an out-of-scope variable clears its value", Continue);

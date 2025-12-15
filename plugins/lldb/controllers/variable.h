@@ -24,8 +24,6 @@ public:
     LldbVariable(DebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                 const QString& expression, const QString& display = QString());
 
-    void handleRawUpdate(const MI::ResultRecord &r);
-
     void refetch();
 
     using KDevelop::Variable::topLevel;
@@ -37,6 +35,15 @@ public:
 protected:
     void formatChanged() override;
     QString formatValue(const QString &value) const override;
+
+private:
+    /**
+     * Update this variable based on a given update record.
+     *
+     * @param r a record that contains a list field "changelist" of size 0 or 1
+     * @return a pointer to a single element of the changelist or @c nullptr if the changelist is empty
+     */
+    const MI::Value* handleRawUpdate(const MI::ResultRecord& r);
 };
 
 } // end of namespace LLDB
