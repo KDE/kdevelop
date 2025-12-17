@@ -18,6 +18,14 @@ using namespace KDevelop;
 using namespace KDevMI;
 using namespace KDevMI::MI;
 
+namespace {
+[[nodiscard]] QString valueField()
+{
+    return QStringLiteral("value");
+}
+
+} // unnamed namespace
+
 bool MIVariable::sessionIsAlive() const
 {
     if (!m_debugSession)
@@ -49,7 +57,7 @@ MIVariable *MIVariable::createChild(const Value& child)
     appendChild(var);
 
     var->setType(child[QStringLiteral("type")].literal());
-    var->setValue(formatValue(child[QStringLiteral("value")].literal()));
+    var->setValueToValueFieldOf(child);
     var->setChanged(true);
     return var;
 }
@@ -123,8 +131,8 @@ public:
             variable->setHasMore(hasMore);
 
             variable->setType(r[QStringLiteral("type")].literal());
-            variable->setValue(variable->formatValue(r[QStringLiteral("value")].literal()));
-            hasValue = !r[QStringLiteral("value")].literal().isEmpty();
+            const auto rawValue = variable->setValueToValueFieldOf(r);
+            hasValue = !rawValue.isEmpty();
             if (variable->isExpanded() && r[QStringLiteral("numchild")].toInt()) {
                 variable->fetchMoreChildren();
             }
@@ -294,7 +302,7 @@ void MIVariable::handleUpdate(const Value& var)
         if (var.hasField(QStringLiteral("type_changed")) && var[QStringLiteral("type_changed")].literal() == QLatin1String("true")) {
             setType(var[QStringLiteral("new_type")].literal());
         }
-        setValue(formatValue(var[QStringLiteral("value")].literal()));
+        setValueToValueFieldOf(var);
         setChanged(true);
         setHasMore(var.hasField(QStringLiteral("has_more")) && var[QStringLiteral("has_more")].toInt());
     }
@@ -354,11 +362,17 @@ QString MIVariable::formatValue(const QString &rawValue) const
     return rawValue;
 }
 
+QString MIVariable::setValueToValueFieldOf(const MI::Value& tupleValue)
+{
+    auto rawValue = tupleValue[valueField()].literal();
+    setValue(formatValue(rawValue));
+    return rawValue;
+}
+
 void MIVariable::setValueToOptionalValueFieldOf(const Value& tupleValue)
 {
-    static const auto valueField = QStringLiteral("value");
-    if (tupleValue.hasField(valueField)) {
-        setValue(formatValue(tupleValue[valueField].literal()));
+    if (tupleValue.hasField(valueField())) {
+        setValueToValueFieldOf(tupleValue);
     }
 }
 

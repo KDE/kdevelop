@@ -60,6 +60,14 @@ protected: // Internal
     virtual QString formatValue(const QString &rawValue) const;
 
     /**
+     * Format the value of a field "value" of a given tuple value and assign the result to @c this->value().
+     *
+     * @pre @p tupleValue contains a field named "value"
+     * @return unformatted, raw value of the "value" field of @p tupleValue
+     */
+    QString setValueToValueFieldOf(const MI::Value& tupleValue);
+
+    /**
      * If a given tuple value has a field "value", format the value
      * of the field and assign the result to @c this->value().
      */
