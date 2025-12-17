@@ -349,7 +349,7 @@ void MIVariable::formatChanged()
         return;
     }
 
-    if (!sessionIsAlive()) {
+    if (m_varobj.isEmpty() || !sessionIsAlive()) {
         return;
     }
 
