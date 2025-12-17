@@ -13,6 +13,7 @@
 
 #include <QPointer>
 
+#include <functional>
 
 class CreateVarobjHandler;
 class FetchMoreChildrenHandler;
@@ -81,6 +82,14 @@ protected:
     QPointer<MIDebugSession> m_debugSession;
 
 private:
+    /**
+     * @return a callback to handle the result of an MI command @c -var-set-format
+     *         for @c this->varobj() in place of the default handler
+     *
+     * The default implementation returns an empty function in order to use the default handler.
+     */
+    [[nodiscard]] virtual std::function<void(const MI::ResultRecord&)> handlerOfSetFormatCommand();
+
     QString m_varobj;
 
     // How many children should be fetched in one

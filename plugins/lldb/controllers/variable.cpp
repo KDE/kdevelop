@@ -89,37 +89,19 @@ const Value* LldbVariable::handleRawUpdate(const ResultRecord& r)
     return &changes;
 }
 
-void LldbVariable::formatChanged()
+std::function<void(const ResultRecord&)> LldbVariable::handlerOfSetFormatCommand()
 {
-    if(childCount())
-    {
-        for (TreeItem* item : std::as_const(childItems)) {
-            Q_ASSERT(qobject_cast<MIVariable*>(item));
-            if (auto* var = qobject_cast<MIVariable*>(item)) {
-                var->setFormat(format());
+    return [guarded_this = QPointer{this}](const ResultRecord& r) {
+        auto* const variable = guarded_this.get();
+        if (variable && r.hasField(rawUpdateField())) {
+            const auto* const changes = variable->handleRawUpdate(r);
+            if (changes && !variable->inScope()) {
+                // MIVariable::handleUpdate() updates value() only if the variable is in scope. But
+                // LLDB-MI always sends the value in the current format. Thus update value() manually.
+                variable->setValueToOptionalValueFieldOf(*changes);
             }
         }
-    }
-    else
-    {
-        if (sessionIsAlive()) {
-            QPointer<LldbVariable> guarded_this(this);
-            m_debugSession->addCommand(
-                VarSetFormat,
-                QStringLiteral(" %1 %2 ").arg(varobj(), format2str(format())),
-                [guarded_this](const ResultRecord &r){
-                    auto* const variable = guarded_this.get();
-                    if (variable && r.hasField(rawUpdateField())) {
-                        const auto* const changes = variable->handleRawUpdate(r);
-                        if (changes && !variable->inScope()) {
-                            // MIVariable::handleUpdate() updates value() only if the variable is in scope. But
-                            // LLDB-MI always sends the value in the current format. Thus update value() manually.
-                            variable->setValueToOptionalValueFieldOf(*changes);
-                        }
-                    }
-                });
-        }
-    }
+    };
 }
 
 QString LldbVariable::formatValue(const QString& value) const

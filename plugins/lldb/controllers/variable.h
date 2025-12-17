@@ -33,7 +33,6 @@ public:
     using KDevelop::Variable::child;
 
 protected:
-    void formatChanged() override;
     QString formatValue(const QString &value) const override;
 
 private:
@@ -44,6 +43,8 @@ private:
      * @return a pointer to a single element of the changelist or @c nullptr if the changelist is empty
      */
     const MI::Value* handleRawUpdate(const MI::ResultRecord& r);
+
+    [[nodiscard]] std::function<void(const MI::ResultRecord&)> handlerOfSetFormatCommand() override;
 };
 
 } // end of namespace LLDB

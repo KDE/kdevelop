@@ -346,14 +346,19 @@ void MIVariable::formatChanged()
                 var->setFormat(format());
             }
         }
+        return;
     }
-    else
-    {
-        if (sessionIsAlive()) {
-            m_debugSession->addCommand(VarSetFormat,
-                                     QStringLiteral(" %1 %2 ").arg(m_varobj, format2str(format())),
-                                     new SetFormatHandler(this));
-        }
+
+    if (!sessionIsAlive()) {
+        return;
+    }
+
+    constexpr auto commandType = VarSetFormat;
+    QString arguments = m_varobj + QLatin1Char{' '} + format2str(format());
+    if (auto customHandler = handlerOfSetFormatCommand())
+        m_debugSession->addCommand(commandType, std::move(arguments), std::move(customHandler));
+    else {
+        m_debugSession->addCommand(commandType, std::move(arguments), new SetFormatHandler(this));
     }
 }
 
@@ -374,6 +379,11 @@ void MIVariable::setValueToOptionalValueFieldOf(const Value& tupleValue)
     if (tupleValue.hasField(valueField())) {
         setValueToValueFieldOf(tupleValue);
     }
+}
+
+std::function<void(const ResultRecord&)> MIVariable::handlerOfSetFormatCommand()
+{
+    return {};
 }
 
 #include "moc_mivariable.cpp"
