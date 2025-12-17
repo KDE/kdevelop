@@ -96,6 +96,11 @@ public:
     virtual ~MICommand();
 
     CommandType type() const;
+    /**
+     * @return whether this command should be executed in the context of a specific thread and frame
+     */
+    [[nodiscard]] bool needsContext() const;
+
     virtual QString miCommand() const;
 
     CommandFlags flags() const {return flags_;}

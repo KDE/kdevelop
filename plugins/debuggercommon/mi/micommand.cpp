@@ -323,6 +323,12 @@ CommandType MICommand::type() const
     return type_;
 }
 
+bool MICommand::needsContext() const
+{
+    return (type_ >= StackInfoDepth && type_ <= StackListLocals)
+        || (type_ >= VarAssign && type_ <= VarUpdate && type_ != VarDelete);
+}
+
 int MICommand::thread() const
 {
     return m_thread;

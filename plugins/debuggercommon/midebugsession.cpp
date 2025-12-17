@@ -854,14 +854,7 @@ void MIDebugSession::queueCmd(std::unique_ptr<MICommand> cmd)
                             << (m_stateReloadInProgress ? "(state reloading)" : "")
                             << m_commandQueue->count() << "pending";
 
-    bool varCommandWithContext= (cmd->type() >= MI::VarAssign
-                                 && cmd->type() <= MI::VarUpdate
-                                 && cmd->type() != MI::VarDelete);
-
-    bool stackCommandWithContext = (cmd->type() >= MI::StackInfoDepth
-                                    && cmd->type() <= MI::StackListLocals);
-
-    if (varCommandWithContext || stackCommandWithContext) {
+    if (cmd->needsContext()) {
         if (cmd->thread() == -1)
             qCDebug(DEBUGGERCOMMON) << "\t--thread will be added on execution";
 
@@ -908,16 +901,7 @@ void MIDebugSession::executeCmd()
         setDebuggerStateOn(s_dbgNotListening);
     }
 
-    bool varCommandWithContext= (currentCmd->type() >= MI::VarAssign
-                                 && currentCmd->type() <= MI::VarUpdate
-                                 && currentCmd->type() != MI::VarDelete);
-
-    bool stackCommandWithContext = (currentCmd->type() >= MI::StackInfoDepth
-                                    && currentCmd->type() <= MI::StackListLocals);
-
-    if (varCommandWithContext || stackCommandWithContext) {
-        // Most var commands should be executed in the context
-        // of the selected thread and frame.
+    if (currentCmd->needsContext()) {
         if (currentCmd->thread() == -1)
             currentCmd->setThread(frameStackModel()->currentThread());
 
