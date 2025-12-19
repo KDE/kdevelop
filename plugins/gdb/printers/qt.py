@@ -1568,6 +1568,72 @@ class QVariantPrinter:
 
         return "QVariant(%s, %s)" % (type_str, value_str)
 
+class QTextFormatPrinter:
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        format_type = self.val['format_type']
+        className = ""
+        if format_type == -1:
+            return "QTextFormat(InvalidFormat)"
+        elif format_type == 1:
+            className = "QTextBlockFormat"
+        elif format_type == 2:
+            className = "QTextCharFormat"
+        elif format_type == 3:
+            className = "QTextListFormat"
+        elif format_type == 5:
+            className = "QTextFrameFormat"
+        elif format_type >= 100:
+            className = "QTextUserFormat"
+        else:
+            return f"QTextFormat(UnknownFormatType={format_type})"
+
+        d_ptr = self.val['d']['d']['ptr']
+        props = d_ptr['props']
+        # TODO print d_ptr['fnt'] once we have a QFont pretty-printer
+
+        property_names = {}
+        try:
+            enum_type = gdb.lookup_type('QTextFormat::Property')
+            for field in enum_type.fields():
+                if field.name:
+                    property_names[int(field.enumval)] = field.name.split('::')[-1]
+        except gdb.error:
+            pass
+
+        def format_prop(key, value):
+            indent = "    "
+            key_int = int(key)
+            name = property_names.get(key_int)
+            if name == "ObjectType":
+                # the value is a QVariant holding an int
+                obj_type = int(value['d']['data']['data'].cast(gdb.lookup_type('int').pointer()).dereference())
+                # which maps to QTextFormat::ObjectType enum
+                if obj_type == 0:
+                    obj_type = "NoObject"
+                elif obj_type == 1:
+                    obj_type = "ImageObject"
+                elif obj_type == 2:
+                    obj_type = "TableObject"
+                elif obj_type == 3:
+                    obj_type = "TableCellObject"
+                elif obj_type >= 0x1000:
+                    obj_type = f"UserObject ({obj_type})"
+                else:
+                    obj_type = f"UnknownObjectType ({obj_type})"
+                return f"{indent}ObjectType({obj_type})"
+            formatted_key = f"{name}" if name else str(key_int)
+            return f"{indent}{formatted_key} = {value}"
+
+        listPrinter = QListPrinter(props, "QList", None)
+        props_list = [format_prop(entry[1]['key'], entry[1]['value']) for entry in listPrinter.children()]
+        all_props = "\n" +  ",\n".join(props_list)
+        props_str = f"QList<Property> (size = {len(props_list)}) = {{{all_props}}}"
+
+        return f"{className} {props_str}"
+
 pretty_printers_dict = {}
 
 def register_qt_printers (obj):
@@ -1613,6 +1679,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QJsonDocument$')] = lambda val: QJsonDocumentPrinter(val)
     pretty_printers_dict[re.compile('^QJsonValue$')] = lambda val: QJsonValuePrinter(val)
     pretty_printers_dict[re.compile('^QJsonValue(Const|)Ref$')] = lambda val: QJsonValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QText[A-Za-z]*Format$')] = lambda val: QTextFormatPrinter(val)
 
 
 build_dictionary ()
