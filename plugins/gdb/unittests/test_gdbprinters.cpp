@@ -1118,6 +1118,62 @@ void QtPrintersTest::testQVariant()
     QVERIFY(printNext().contains("QVariant(SomeCustomType, {\n  foo = 42\n})"));
 }
 
+void QtPrintersTest::testQTextFormat()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qtextformat"));
+    gdb.execute("break qtextformat.cpp:39");
+    gdb.execute("run");
+
+    // The printer reads the members of QTextFormatPrivate, which is a private Qt class.
+    if (gdb.execute("ptype QTextFormatPrivate").contains("No symbol")) {
+        // Without that debug info the printer can only print the class name. It must not throw,
+        // waitForPrompt() fails the test if the printer raises a Python exception.
+        QVERIFY(printedValue(gdb, "charFormat").startsWith("QTextCharFormat "));
+        QSKIP("Skipping the rest because the debug info of QtGui is not available");
+    }
+
+    QCOMPARE(printedValue(gdb, "invalidFormat"), "QTextFormat(InvalidFormat)");
+    QCOMPARE(printedValue(gdb, "obsoleteFormat"), "QTextFormat(UnknownFormatType=4)");
+    QCOMPARE(printedValue(gdb, "userFormat"), "QTextFormat(UserFormat) (size = 0)");
+    QCOMPARE(printedValue(gdb, "userFormat3"), "QTextFormat(UserFormat+3) (size = 0)");
+    QCOMPARE(printedValue(gdb, "emptyCharFormat"), "QTextCharFormat (size = 0)");
+
+    QCOMPARE(printedValue(gdb, "blockFormat"), R"(QTextBlockFormat (size = 1) = {
+  BlockTopMargin = QVariant(double, 10)
+})");
+
+    QCOMPARE(printedValue(gdb, "charFormat"), R"(QTextCharFormat (size = 5) = {
+  FontItalic = QVariant(bool, true),
+  TextToolTip = QVariant(QString, "some tooltip"),
+  FontCapitalization = QVariant(int, 1),
+  FontSizeAdjustment = QVariant(int, 1),
+  UserProperty+1 = QVariant(int, 42)
+})");
+
+    QCOMPARE(printedValue(gdb, "userObjectFormat"), R"(QTextCharFormat (size = 1) = {
+  ObjectType = UserObject (4097)
+})");
+
+    // The formats below have additional properties set by their constructor, which vary between Qt versions
+    auto out = printedValue(gdb, "listFormat");
+    QVERIFY(out.startsWith("QTextListFormat (size = "));
+    QVERIFY(out.contains("ListIndent = QVariant(int, 2)"));
+
+    out = printedValue(gdb, "frameFormat");
+    QVERIFY(out.startsWith("QTextFrameFormat (size = "));
+    QVERIFY(out.contains("FrameBorder = QVariant(double, 3)"));
+
+    out = printedValue(gdb, "tableFormat");
+    QVERIFY(out.startsWith("QTextFrameFormat (size = "));
+    QVERIFY(out.contains("ObjectType = TableObject"));
+    QVERIFY(out.contains("TableCellPadding = QVariant(double, 4)"));
+
+    out = printedValue(gdb, "imageFormat");
+    QVERIFY(out.startsWith("QTextCharFormat (size = "));
+    QVERIFY(out.contains("ObjectType = ImageObject"));
+    QVERIFY(out.contains("ImageName = QVariant(QString, \"image.png\")"));
+}
+
 void QtPrintersTest::testKTextEditorTypes()
 {
     GdbProcess gdb(QStringLiteral("debuggee_ktexteditortypes"));

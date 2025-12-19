@@ -1568,6 +1568,126 @@ class QVariantPrinter:
 
         return "QVariant(%s, %s)" % (type_str, value_str)
 
+class QTextFormatPrinter(PrinterBaseType):
+    "Print a QTextFormat, with its properties as children"
+
+    # QTextFormat::FormatType, without InvalidFormat and UserFormat
+    _classNames = {
+        1: "QTextBlockFormat",
+        2: "QTextCharFormat",
+        3: "QTextListFormat",
+        5: "QTextFrameFormat",
+    }
+
+    # QTextFormat::ObjectTypes, without UserObject
+    _objectTypeNames = {
+        0: "NoObject",
+        1: "ImageObject",
+        2: "TableObject",
+        3: "TableCellObject",
+    }
+
+    # Enumerators of QTextFormat::Property which are aliases for another property.
+    # Note that OldFontLetterSpacingType and OldFontStretch are real properties, not aliases.
+    _propertyAliases = ('FirstFontProperty', 'LastFontProperty', 'FontSizeIncrement',
+                        'OldFontFamily', 'OldTextUnderlineColor')
+
+    _userFormat = 100 # QTextFormat::UserFormat
+    _objectTypeProperty = 0x2f00 # QTextFormat::ObjectType
+    _userProperty = 0x100000 # QTextFormat::UserProperty
+
+    def __init__(self, val):
+        self._properties = [] # list of (name, value) pairs
+
+        formatType = int(val['format_type'])
+        if formatType == -1: # QTextFormat::InvalidFormat
+            self._string = "QTextFormat(InvalidFormat)"
+            return
+        className = self._classNames.get(formatType)
+        if className is None:
+            if formatType < self._userFormat:
+                self._string = f"QTextFormat(UnknownFormatType={formatType})"
+                return
+            # user formats have no dedicated class
+            offset = formatType - self._userFormat
+            className = "QTextFormat(UserFormat)" if offset == 0 else f"QTextFormat(UserFormat+{offset})"
+
+        d_ptr = pointer_from_possible_totally_ordered_wrapper(val['d']['d'])
+        if d_ptr: # otherwise this is a default-constructed format, without any property
+            # TODO print d_ptr['fnt'] once we have a QFont pretty-printer
+            try:
+                self._properties = self._readProperties(d_ptr['props'])
+            except gdb.error as e:
+                # QTextFormatPrivate is a private Qt class, so its debug info is often missing
+                self._string = f"{className} (cannot read the properties: {e})"
+                return
+
+        self._string = f"{className} (size = {len(self._properties)})"
+
+    @classmethod
+    def _readProperties(cls, props):
+        propertyNames = cls._readPropertyNames()
+        properties = []
+        # props is a QVector in Qt5 and a QList in Qt6, QVectorPrinter handles both
+        for _, prop in QVectorPrinter(props, "QVector").children():
+            key = int(prop['key'])
+            name = propertyNames.get(key) or cls._unnamedProperty(key)
+            properties.append((name, cls._propertyValue(key, prop['value'])))
+        return properties
+
+    @classmethod
+    def _readPropertyNames(cls):
+        "Map QTextFormat::Property values to their enumerator names"
+        names = {}
+        try:
+            enumType = gdb.lookup_type('QTextFormat::Property')
+        except gdb.error:
+            return names
+        for field in enumType.fields():
+            if field.name:
+                name = field.name.split('::')[-1]
+                if name not in cls._propertyAliases:
+                    names[int(field.enumval)] = name
+        return names
+
+    @classmethod
+    def _unnamedProperty(cls, key):
+        "Name a property which has no enumerator, i.e. a custom one, or one from a newer Qt version"
+        if key > cls._userProperty:
+            return f"UserProperty+{key - cls._userProperty}"
+        return hex(key)
+
+    @classmethod
+    def _propertyValue(cls, key, value):
+        if key != cls._objectTypeProperty or not cls._isIntVariant(value):
+            return value
+        # the int maps to the QTextFormat::ObjectTypes enum
+        objectType = int(value['d']['data']['data'].cast(gdb.lookup_type('int').pointer()).dereference())
+        if objectType >= 0x1000: # QTextFormat::UserObject
+            return f"UserObject ({objectType})"
+        return cls._objectTypeNames.get(objectType, f"UnknownObjectType ({objectType})")
+
+    @staticmethod
+    def _isIntVariant(variant):
+        "Check that the QVariant really holds an int, before reading its data as such"
+        try:
+            d = variant['d']
+            if not has_field(d, 'packedType'): # Qt5, not supported here
+                return False
+            metaType = (d['packedType'] << 2).cast(gdb.lookup_type("QtPrivate::QMetaTypeInterface").pointer())
+            return metaType['name'].string() == 'int'
+        except gdb.error:
+            return False
+
+    def to_string(self):
+        return self._string
+
+    def num_children(self):
+        return len(self._properties)
+
+    def children(self):
+        return self._properties
+
 pretty_printers_dict = {}
 
 def register_qt_printers (obj):
@@ -1613,6 +1733,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QJsonDocument$')] = lambda val: QJsonDocumentPrinter(val)
     pretty_printers_dict[re.compile('^QJsonValue$')] = lambda val: QJsonValuePrinter(val)
     pretty_printers_dict[re.compile('^QJsonValue(Const|)Ref$')] = lambda val: QJsonValueConstRefPrinter(val)
+    pretty_printers_dict[re.compile('^QText[A-Za-z]*Format$')] = lambda val: QTextFormatPrinter(val)
 
 
 build_dictionary ()

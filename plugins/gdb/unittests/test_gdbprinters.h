@@ -42,6 +42,7 @@ private Q_SLOTS:
     void testQCbor();
     void testQJson();
     void testQVariant();
+    void testQTextFormat();
     void testKTextEditorTypes();
     void testKDevelopTypes();
 };
