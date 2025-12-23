@@ -1,0 +1,3286 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY kdevelop "<application
+>KDevelop</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Turkish "INCLUDE">
+]>
+<book id="kdevelop" lang="&language;">
+<bookinfo>
+<title
+>&kdevelop; El Kitabı</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Bu belgelendirme, KDE UserBase <ulink url="https://userbase.kde.org/KDevelop4/Manual"
+>KDevelop4/El Kitabı</ulink
+> sayfasından dönüştürülmüştür.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>Emir</firstname
+><surname
+>SARI</surname
+><affiliation
+><address
+><email
+>emir_sari@icloud.com</email
+></address
+></affiliation
+><contrib
+>Çeviri</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012‒08‒19</date>
+    <releaseinfo
+>&kdevelop; 4.4 (&kde; 4.9)</releaseinfo>
+<abstract>
+<para
+>&kdevelop;, çok çeşitli programlama görevlerinde kullanılan bir tümleşik geliştirme ortamıdır.</para>
+    </abstract>
+  <keywordset>
+    <keyword
+>KDE</keyword>
+    <keyword
+>K Geliştir</keyword>
+    <keyword
+>IDE</keyword>
+    <keyword
+>geliştirme</keyword>
+    <keyword
+>programlama</keyword>
+  </keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2012-08-19T12:36:08Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="what-is-kdevelop"
+><title
+>&kdevelop; nedir?</title>
+<para
+><ulink url="https://www.kdevelop.org/"
+>&kdevelop;</ulink
+>, C++ (ve diğer başka diller) için <ulink url="https://kde.org/applications/"
+>KDE</ulink
+> tarafından geliştirilen bir tümleşik geliştirme ortamıdır. &Linux; üzerinde çalışır (örneğin, GNOME gibi başka masaüstü ortamlarını kullansanız bile); ancak başka &UNIX; varyantlarında ve Windows üzerinde de kullanabilirsiniz.</para>
+<para
+>&kdevelop;, tüm çağdaş tümleşik geliştirme ortamlarının kolaylıklarını sunar. Büyük proje ve uygulamalar için en önemli özelliklerinden biri ise &kdevelop; <emphasis
+>C++ anlar</emphasis
+>: Tüm kod tabanını ayrıştırır ve hangi sınıfların hangi üye işlevleri içerdiğini, değişkenlerin nerede tanımlandığını, türlerinin ne olduğunu ve kodunuz hakkında bunun gibi birçok şeyi bilir. Örneğin, projelerinizden bir tanesinin aşağıdaki gibi bir sınıf beyan ettiğini varsayalım:</para>
+<para
+><programlisting
+>class Car {
+  // …
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>ve sonrasında programınızda aşağıdaki kod parçasının olduğunu:</para>
+<para
+><programlisting
+>Car my_ride;
+// bu değişkenle bir şeyler yap
+std::string color = my_ride.ge
+</programlisting>
+</para>
+<para
+>Son satırdaki <varname
+>my_ride</varname
+> ögesinin <varname
+>Car</varname
+> türünün bir değişkeni olduğunu anımsar ve hem <varname
+>ge</varname
+> ögesini <varname
+>get_color()</varname
+> olarak tamamlamayı önerir; çünkü bu, <varname
+>Car</varname
+> sınıfında böyle başlayan tek değişkendir. Yazmayı sürdürmek yerine tam sözcüğü almak için yalnızca &Enter; düğmesine basın; bu size zaman kazandırır; yanlış yazımları önler ve büyük projelerdeki yüzlerce veya binlerce değişkeni veya sınıfı ezberlemekten sizi kurtarır.</para>
+<para
+>İkinci bir örnek olarak, aşağıdaki gibi bir kodunuz olduğunu varsayalım:</para>
+<para
+><programlisting
+>double foo ()
+{
+  double var = my_func();
+ return var * var;
+}
+double bar ()
+{
+  double var = my_func();
+  return var * var * var;
+}
+</programlisting
+></para>
+<para
+><varname
+>bar</varname
+> işlevindeki <varname
+>var</varname
+> sembolünün üzerine fareyi getirirseniz bu sembolün tüm kullanımlarını görme seçeneğini elde edersiniz. Üzerine tıkladığınızda, yalnızca bu değişkenin <varname
+>bar</varname
+> işlevindeki kullanımları gösterilir; çünkü &kdevelop;, <varname
+>foo</varname
+> işlevindeki <varname
+>var</varname
+> değişkeninin bununla hiçbir ilgisi olmadığını anlar. Benzer şekilde, değişken adına sağ tıklamak, değişkeni yeniden adlandırmanıza olanak tanır; bunu yapmak yalnızca <varname
+>bar</varname
+> içindeki değişkene dokunur, <varname
+>foo</varname
+> içindeki aynı adlı değişkene dokunmaz.</para>
+<para
+>Ancak &kdevelop; yalnızca akıllı bir kod düzenleyicisi değildir; &kdevelop; yazılımının iyi yaptığı başka şeyler de vardır. Açıkça, kaynak kodunu farklı renklerle vurgular; özelleştirilebilir bir girintileme sistemine sahiptir; GNU hata ayıklayıcısı <application
+>gdb</application
+> için tümleşik bir arayüze sahiptir; fareyi bu işlevin bir kullanımının üzerine getirdiğinizde size bir işlevin belgelendirmesini gösterebilir; farklı türdeki yapı ortamları ve derleyicilerle (örneğin <guilabel
+>make</guilabel
+> ve <guilabel
+>cmake</guilabel
+> tabanlı projelerle) ve bu kılavuzda anlatılan birçok başka güzel şeyle bağlantı kurabilir.</para>
+</chapter>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"
+><title
+>Oturumlar ve projeler: &kdevelop; temelleri</title>
+<para
+>Bu bölümde, &kdevelop; yazılımının dünyayı nasıl gördüğüne ve işi nasıl yapılandırdığına dair bazı terminolojileri ele alacağız. Özellikle, <emphasis
+>oturumlar</emphasis
+> ve <emphasis
+>projeler</emphasis
+> kavramlarını tanıtacağız ve &kdevelop; yazılımında üzerinde çalışmak istediğiniz projeleri nasıl ayarlayabileceğinizi açıklayacağız.</para>
+<sect1 id="terminology"
+><title
+>Terminoloji</title>
+<para
+>&kdevelop;, <emphasis
+>oturumlar</emphasis
+> ve <emphasis
+>projeler</emphasis
+> kavramlarını kullanır. Bir oturum, birbirleriyle ilgisi olan tüm projeleri içerir. Aşağıdaki örnekler için hem bir kitaplığın hem de onu kullanan bir uygulamanın geliştiricisi olduğunuzu varsayalım. Çekirdek KDE kitaplıklarının birincisi, &kdevelop; yazılımını ise ikincisi olarak düşünebilirsiniz. Başka bir örnek: Diyelim ki bir &Linux; çekirdeği geliştiricisisiniz; ancak henüz çekirdek ağacına eklenmemiş bir &Linux; aygıt sürücüsü üzerinde çalışıyorsunuz.</para>
+<para
+>Yani ikincisini örnek olarak alırsak, &kdevelop; üzerinde iki projeye sahip bir oturumunuz olurdu: &Linux; çekirdeği ve aygıt sürücüsü. Bunları tek bir oturumda gruplamak isteyeceksiniz (her biri tek bir projeye sahip iki oturum yerine) çünkü sürücü için kaynak kodu yazdığınızda &kdevelop; üzerinde çekirdek işlevlerini ve veri yapılarını görebilmek faydalı olacaktır &mdash; örneğin çekirdek işlevi ve değişken adlarının kendiliğinden genişletilmesini sağlayabilmeniz veya aygıt sürücüsünde çalışırken çekirdek işlevi belgelendirmesini görebilmeniz için.</para>
+<para
+>Şimdi sizin de bir KDE geliştiricisi olduğunuzu düşünelim. O zaman KDE’yi bir proje olarak içeren ikinci bir oturumunuz olurdu. Prensipte tüm bunlar için sadece bir oturumunuz olabilirdi; ancak bunun gerçek bir nedeni yoktur: KDE çalışmanızda çekirdek veya aygıt sürücüsü işlevlerine erişmeniz gerekmez; ve &Linux; çekirdeği üzerinde çalışırken KDE sınıf adlarının kendiliğinden genişletilmesini istemezsiniz. Son olarak, KDE kitaplıklarından bazılarını derlemek, &Linux; çekirdeğini yeniden derlemekten bağımsızdır (oysa aygıt sürücüsünü derlediğinizde, çekirdek üstbilgi dosyalarından bazıları değişmişse &Linux; çekirdeğini yeniden derlemek de iyi olur).</para>
+<para
+>Son olarak, oturumların bir diğer kullanımı da hem projenin geçerli geliştirme sürümünde hem de bir dalda çalışmanız durumunda gerçekleşir: bu durumda, &kdevelop; yazılımının ana dalda ve dala ait sınıfları karıştırmasını istemezsiniz; böylece aynı proje kümesine sahip ancak farklı dizinlerden (farklı geliştirme dallarına karşılık gelen) iki oturumunuz olur.</para>
+</sect1>
+<sect1 id="setting-up-a-session-and-importing-an-existing-project"
+><title
+>Bir oturum açmak ve var olan bir projeyi içe aktarmak</title>
+<para
+>Şimdilik &Linux; çekirdeği ve aygıt sürücüsü örneğimizle sürdürelim &mdash; kendi projeleriniz yerine bu iki örneği kullanmak isteyebilirsiniz. Bu iki örneği içeren iki projeyle yeni bir oturum oluşturmak için sol üstteki <menuchoice
+><guimenu
+>Oturum</guimenu
+><guimenuitem
+>Yeni Oturum Başlat</guimenuitem
+></menuchoice
+> menü ögesini (veya bu &kdevelop; yazılımını ilk kullanımınızsa ilk açılıştaki boş oturumu) kullanın.</para>
+<para
+>Şimdi bu oturumu, şu an için bir yerde halihazırda var olduğunu varsaydığımız projelerle doldurmak istiyoruz (projeleri sıfırdan başlatma durumu bu kılavuzun başka bir yerinde ele alınmıştır). Bunun için projenin sabit diskinizde bir yerde olup olmamasına veya bir sunucudan indirilmesi gerekip gerekmediğine bağlı olarak özünde iki yöntem vardır.</para>
+<sect2 id="option-1--importing-a-project-from-a-version-control-system-server"
+><title
+>1. seçenek: Bir sürüm denetim sistemi sunucusundan bir proje içe aktarmak</title>
+<para
+>Öncelikle kurmak istediğimiz projenin &mdash;&Linux; çekirdeğinin&mdash; bir sunucudaki bir sürüm denetim sisteminde bulunduğunu; ancak henüz yerel sabit diskinize çıkış yapmadığınızı varsayalım. Bu durumda, <guilabel
+>Proje</guilabel
+> menüsüne giderek &Linux; çekirdeğini geçerli oturum içinde bir proje olarak oluşturun ve ardından şu adımları izleyin:</para>
+<itemizedlist>
+<listitem
+><para
+>Bir proje içe aktarmak için <menuchoice
+><guimenu
+>Proje</guimenu
+><guimenuitem
+>Proje Getir</guimenuitem
+></menuchoice
+> menü seçeneğini kullanın. </para
+></listitem>
+<listitem
+><para
+>Daha sonra, kaynak dosyalarının nereden gelmesi gerektiğine bağlı olarak, geçerli oturumda yeni bir proje başlatmak için birden fazla seçeneğiniz olur: &kdevelop; yazılımını var olan bir dizine yönlendirebilirsiniz (aşağıdaki 2. seçeneğe bakın) veya &kdevelop; yazılımının kaynakları bir depodan almasını isteyebilirsiniz. </para
+></listitem>
+<listitem
+><para
+>Daha önceden çıkışını yaptığınız bir sürüm olmadığını varsayarsak: <itemizedlist>
+<listitem
+><para
+>İletişim kutusunda <guilabel
+>Kaynak Seç</guilabel
+> altında <guilabel
+>Dosya Sisteminden</guilabel
+>, <guilabel
+>Subversion</guilabel
+>, <guilabel
+>Git</guilabel
+>, <guilabel
+>GitHub</guilabel
+> veya <guilabel
+>KDE</guilabel
+> seçeneklerinden birini seçin. </para
+></listitem>
+<listitem
+><para
+>Kaynakların çıkış yapılacağı hedef olarak bir çalışma dizini seçin. </para
+></listitem>
+<listitem
+><para
+>Kaynak dosyalarının edinilebileceği deponun konumunu belirten bir URL seçin. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Al</guilabel
+> düğmesine tıklayın. Bağlantınızın hızına ve projenin büyüklüğüne bağlı olarak bu biraz vakit alabilir. Ne yazık ki, &kdevelop; 4.2.x sürümünde ilerleme çubuğu bir şey bildirmez; ancak <screen
+>du -sk <replaceable
+>/projeye/olan/&kdevelop;/yolu</replaceable
+></screen
+> komutunun çıktısına bakarak ne kadar verinin indirildiğine bakabilirsiniz. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>İlerleme çubuğuyla ilgili olan sorun <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832"
+>&kdevelop; 256832 numaralı hata kaydında</ulink
+> bildirildi.</para
+></note
+></para>
+<para
+><note
+><para
+>Bu süreçte ayrıca <emphasis
+>proje için geçerli bir konum belirtmeniz gerekiyor</emphasis
+> hata iletisini da alıyorum, ancak bu ileti yok sayılabilir.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>Bu dizinde bir &kdevelop; proje dosyası seçmenizi ister. Büyük olasılıkla henüz bir tane olmadığından, yalnızca <guilabel
+>Sonraki</guilabel
+> düğmesine basın. </para
+></listitem>
+<listitem
+><para
+>Bir kez daha <guilabel
+>Sonraki</guilabel
+> düğmesine tıklayın. </para
+></listitem>
+<listitem
+><para
+>&kdevelop; şimdi bir proje yöneticisi seçmenizi isteyecek. Bu proje standart &UNIX; make dosyalarını kullanıyorsa özel makefile proje yöneticisini seçin. </para
+></listitem>
+<listitem
+><para
+>&kdevelop; daha sonra tüm projeyi ayrıştırmaya başlayacaktır. Yine, tüm dosyaları ve dizin sınıflarını vb. incelemek oldukça uzun sürecektir. Ana pencerenin sağ alt kısmında, bu sürecin ne kadar sürdüğünü gösteren bir ilerleme çubuğu vardır (Birden çok işlemci çekirdeğiniz varsa bu süreci <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guimenuitem
+>&kdevelop; Uygulamasını Yapılandır</guimenuitem
+></menuchoice
+> menü ögesini seçip sonrasında solda <guilabel
+>Arka Plan Ayrıştırıcısı</guilabel
+> seçeneğinden arka planda ayrıştırma için kullanılacak iş parçacığı sayısını artırarark ivmelendirebilirsiniz). </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"
+><title
+>Seçenek 2: Halihazırda sabit diskinizde bulunan bir projeyi içe aktarmak</title>
+<para
+>Alternatif olarak, üzerinde çalışmak istediğiniz proje sabit diskinizde halihazırda bulunuyorsa (örneğin, internetten bir tar arşivi indirmiş olabilirsiniz, bir sürüm denetim sisteminden çıkış yapmış olabilirsiniz veya <emphasis
+>yalnızca</emphasis
+> sizin sabit diskinizde bulunan bir proje de olabilir) o zaman <menuchoice
+><guimenu
+>Projeler</guimenu
+><guimenuitem
+>Proje Aç/İçe Aktar</guimenuitem
+></menuchoice
+> menü seçeneğini kullanın ve iletişim kutusundan projenizin bulunduğu dizini seçin.</para>
+</sect2>
+</sect1>
+<sect1 id="setting-up-an-application-as-a-second-project"
+><title
+>İkinci bir proje olarak bir uygulamayı ayarlamak</title>
+<para
+>Yapmak isteyeceğiniz bir sonraki şey aynı oturumda diğer projeleri ayarlamaktır. Yukarıdaki örnekte, aygıt sürücüsünü ikinci proje olarak eklemek isteyebilirsiniz, bunu da tam olarak aynı adımları kullanarak yapabilirsiniz.</para>
+<para
+>Birden fazla uygulamanız veya kitaplığınız varsa oturumunuza daha fazla proje eklemek için adımları yinelemeniz yeterlidir.</para>
+</sect1>
+<sect1 id="creating-projects-from-scratch"
+><title
+>En baştan proje oluşturmak</title>
+<para
+>Elbette sıfırdan yeni bir projeye başlama olasılığınız da vardır. Bunu, size bir şablon seçim iletişim kutusu sağlayacak <menuchoice
+><guimenu
+>Projeler</guimenu
+><guimenuitem
+>Şablondan Yeni…</guimenuitem
+></menuchoice
+> menü ögesiyle yapabilirsiniz. Bazı proje şablonları &kdevelop; ile verilir; daha fazlasını <application
+>K Uygulama Şablonu</application
+> uygulamasını kurarak edinebilirsiniz. İletişim kutusundan proje türünü ve programlama dilini seçin, projeniz için bir ad ve konum girip <guilabel
+>Sonraki</guilabel
+> düğmesine tıklayın. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-project-dialog.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>İletişim kutusunun ikinci sayfası bir sürüm denetim sistemi kurmanıza olanak tanır. Kullanmak istediğiniz sistemi seçin ve gerekirse sisteme özgü yapılandırmayı doldurun. Bir sürüm denetim sistemi kullanmak istemiyorsanız veya daha sonra elle ayarlamak isterseniz <guilabel
+>Yok</guilabel
+> seçeneğini seçin. Seçiminizden memnunsanız <guilabel
+>Bitir</guilabel
+> düğmesine tıklayın. </para>
+<para
+>Projeniz artık oluşturuldu, bu yüzden onu yapmayı veya kurmayı deneyebilirsiniz. Bazı şablonlar kod içinde yorumlar veya hatta ayrı bir README dosyası içerecektir ve bunları önce okumanız önerilir. Ardından, istediğiniz özellikleri ekleyerek projeniz üzerinde çalışmaya başlayabilirsiniz. </para>
+</sect1>
+</chapter>
+<chapter id="working-with-source-code"
+><title
+>Kaynak kodu ile çalışmak</title>
+<para
+>Hata ayıklamanın yanı sıra, kaynak kodunu okumak ve yazmak, yazılım geliştirirken en çok zaman harcayacağınız şeydir. Bu amaçla, &kdevelop; size kaynak kodlarını keşfetmeniz ve yazmayı daha üretken hale getirmeniz için birçok farklı yol sunar. Aşağıdaki bölümlerde daha ayrıntılı olarak açıklandığı üzere, &kdevelop; yalnızca bir kaynak düzenleyicisi değildir &mdash; bunun yerine, oturumunuzun kaynak kodunu toplu olarak oluşturan dosyalardaki çıkarılan bilgilerin farklı görünümlerini size sunan bir kaynak yönetim sistemidir.</para>
+<sect1 id="tools-and-views"
+><title
+>Araçlar ve görünümler</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-7.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Projelerle çalışmak için &kdevelop; <emphasis
+>araçlar</emphasis
+> kavramını kullanır. Bir araç, kaynağın belirli bir görünümünü veya onunla gerçekleştirilebilecek bir eylemi sağlar. Araçlar, pencerenizin çevresi etrafındaki düğmelerle temsil edilir (sol ve sağ kenar boşlukları boyunca dikey metinde veya alt kenar boşluğu boyunca yatay olarak). Üzerilerine tıklarsanız ana pencere içinde bir alt pencereye genişlerler, bir <emphasis
+>görünüm</emphasis
+> de diyebilirsiniz; araç düğmesine yeniden tıklarsanız alt pencere bir kez daha kaybolur.</para>
+<para
+>Bir alt pencereyi yok etmek için alt pencerenin sağ üst köşesindeki <guilabel
+>x</guilabel
+> işaretine de tıklayabilirsiniz.</para>
+<!--FIXME How to add a tool-->
+<para
+>Yukarıdaki resimde, sol ve sağ kenarlara hizalanmış belirli bir araç seçimi gösterilmektedir; resimde, solda <guilabel
+>Sınıflar</guilabel
+> aracı, sağda <guilabel
+>Kod Parçacıkları</guilabel
+> aracı açıktır ve ortada bir kaynak dosyası düzenleyicisi vardır. Pratikte, çoğu zaman muhtemelen sadece düzenleyiciniz ve belki de <guilabel
+>Sınıflar</guilabel
+> veya <guilabel
+>Kod Tarayıcısı</guilabel
+> aracınız solda açık olacaktır. Diğer araç görünümü, büyük olasılıka aracı kullandığınızda yalnızca geçici olarak açık olacaktır ve bu da çoğu zaman düzenleyici için daha fazla alan bırakacaktır.</para>
+<para
+>&kdevelop; yazılımını ilk kez çalıştırdığınızda, <guilabel
+>Projeler</guilabel
+> araç düğmesine halihazırda sahip olmalısınız. Üzerine tıklayın: Altta oturuma eklediğiniz projeleri gösteren bir alt pencere ve üstte projelerinizin dizinlerinin bir dosya sistemi görünümü açılacaktır.</para>
+<para
+>&kdevelop; ile kullanabileceğiniz birçok başka araç vardır; ancak bunların hepsi başlangıçta ortamda düğmeler olarak kullanılabilir değildir. Birkaç tane eklemek için <menuchoice
+><guimenu
+>Pencereler</guimenu
+><guimenuitem
+>Araç Görünümü Ekle</guimenuitem
+></menuchoice
+> menü girdisini kullanın. Aşağıda belki işinize yarayabilecek birkaç tanesini bulacaksınız:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Sınıflar</guilabel
+>: Projelerinizden birinde veya oturumunuzda tanımlanmış tüm sınıfların, tüm üye işlevleri ve değişkenleriyle birlikte tam listesi. Üyelerden herhangi birine tıklamak, tıkladığınız ögenin konumunda bir kaynak düzenleyicisi penceresi açar. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Belgeler</guilabel
+>: Son zamanlarda açılan dosyaların bazılarını türlerine göre listeler (örneğin kaynak, yama, düz metin dosyaları). </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Kod Tarayıcısı</guilabel
+>: Dosyadaki imleç konumunuza bağlı olarak bu araç, ilişkili olan şeyleri gösterir. Örneğin, bir <varname
+>#include</varname
+> satırındaysanız içerdiğiniz dosya hakkında bilgi gösterir, örneğin o dosyada hangi sınıfların beyan edildiği gibi; dosya kapsamında boş bir satırdaysanız geçerli dosyada beyan edilen ve tanımlanan sınıfları ve işlevleri gösterir (tümünü bağlantı olarak; bunlara tıklamak sizi dosyada beyanın veya tanımın gerçekte bulunduğu noktaya götürür); bir işlev tanımındaysanız beyanın nerede olduğunu gösterir ve işlevin kullanıldığı yerlerin bir listesini sunar. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Dosya Sistemi</guilabel
+>: Dosya sisteminin ağaç görünümünü gösterir. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Belgelendirme</guilabel
+>: Kılavuz sayfalarında ve diğer yardım belgelerinde arama yapmanıza olanak tanır. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Kod Parçaları</guilabel
+>: Bu, sürekli yeniden kullanılan ve her kerede yazmak istemeyeceğiniz metin dizileri sağlar. Örneğin, yukarıdaki resmin oluşturulduğu projede, şöyle kod yazmaya sıklıkla gereksinim duyulur: </para
+></listitem>
+</itemizedlist>
+<para
+><programlisting
+>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell
+      = triangulation.begin_active();
+   cell != triangulation.end();
+   ++cell)</programlisting
+>Bu garip bir ifadedir; ancak böyle bir döngüye her gereksinim duyduğunuzda neredeyse tam olarak buna benzeyecektir &mdash; bu da onu bir kod parçası için iyi bir aday yapar.</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Konsol</guilabel
+>: Arada sırada girmek isteyebileceğiniz komutlar için &kdevelop; ana penceresinde bir komut satırı penceresi açar (örneğin <varname
+>./configure</varname
+> çalıştırmak için). </para
+></listitem>
+</itemizedlist>
+<para
+>Araçların ve görünümlerin tam bir listesine <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
+>buradan</ulink
+> ulaşabilirsiniz.</para>
+<para
+>Birçok programcı için dikey ekran alanı en önemlisidir. Bu amaçla, araç görünümlerinizi pencerenin sol ve sağ kenarına yerleştirebilirsiniz: Bir aracı taşımak için sağ fare düğmesiyle sembolüne tıklayın ve yeni bir konum seçin.</para>
+</sect1>
+<sect1 id="exploring-source-code"
+><title
+>Kaynak koda göz atmak</title>
+<sect2 id="local-information"
+><title
+>Yerel bilgi</title>
+<para
+>&kdevelop; kaynak kodlarını <emphasis
+>anlar</emphasis
+> ve bunun bir sonucu olarak, programınızda olan değişkenler ve işlevler hakkında size bilgi sağlamada pek iyidir. Örneğin, bir kod parçasıyla çalışırken 1316. satırdaki <varname
+>cell</varname
+> simgesinin üzerine fareyi getirdiğinizde ne olacağını aşağıda görebilirsiniz (klavye odaklı çalışıyorsanız, &Alt; düğmesini bir süre basılı tutarak aynı etkiyi elde edebilirsiniz):</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop;, değişkenin türünü içeren bir araç ipucu, (burada: <varname
+>DoFHandler&lt;dim&gt;active_cell_iterator</varname
+>), bu değişkenin nerede beyan edildiğini, (<emphasis
+>kapsayıcısını</emphasis
+>, burada bu bir yerel değişken olduğundan kapsayan <varname
+>get_maximal_velocity</varname
+> işlevidir), ne olduğunu (bir değişken; bir işlev, sınıf veya ad alanı değil) ve nerede beyan edildiğini (az yukarıda, 1314. satırda) gösterir.</para>
+<para
+>Geçerli bağlamda, farenin üzerinde gezindiği sembolün ilişkili bir belgelendirmesi yoktur. Bu örnekte fare, 1318. satırdaki <varname
+>get_this_mpi_process</varname
+> sembolünün üzerine gelseydi, sonuç şu olurdu:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Burada &kdevelop;, tümüyle farklı bir dosyadaki (<filename
+>utilities.h</filename
+>, ki bu dosya aslında aynı oturumun farklı bir projesinde yer almaktadır) beyana, beyana eşlik eden doxygen tarzı yorumla birlikte çapraz başvurmuştur.</para>
+<para
+>Bu araç ipuçlarını daha da kullanışlı kılan şey devingen olmalarıdır: Değişkenin beyan edildiği bağlam hakkında bilgi almak için kapsayıcıya tıklayabilirim (&ie; <varname
+>Sistem</varname
+> ad alanı; örneğin nerede beyan edildiği, kullanıldığı veya belgelendirmesinin nerede olduğu hakkında) ve imleç konumunu sembolün beyan edildiği konuma sıfırlayacak mavi bağlantılara tıklayabilirim (örneğin, <varname
+>utilities.h</varname
+>, 289. satır) veya bana bu sembolün geçerli dosyada veya geçerli oturumun tüm projelerinde kullanıldığı yerlerin bir listesini alabilirim. İkincisi örneğin, belirli bir işlevin büyük bir kod tabanında nasıl kullanıldığını keşfetmek istiyorsanız genellikle yararlıdır.</para>
+<note
+><para
+>Bir araç ipucundaki bilgiler geçicidir &mdash; &Alt; düğmesine basılı tutmanıza veya farenizi üzerinde gezdirmenize bağlıdır. Bunun için daha kalıcı bir yer istiyorsanız alt pencerelerden birinde <guilabel
+>Kod Tarayıcısı</guilabel
+> araç görünümünü açın. Örneğin, burada imleç yukarıdaki örnektekiyle aynı işlevin üzerindedir ve soldaki araç görünümü, önceki araç ipucundakiyle aynı türde bilgileri sunar:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-15.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>İmleci sağda hareket ettirmek, solda sunulan bilgileri değiştirir. Dahası, sağ üstteki <guilabel
+>Geçerli Görünümü Kilitle</guilabel
+> düğmesine tıklamak, bu bilgileri kilitlemenizi ve orada sunulan bilgileri incelerken imleç hareketinden bağımsız hale getirmenizi sağlar.</para
+></note>
+<para
+><note
+><para
+>Bu tür bağlam bilgileri &kdevelop; yazılımında yalnızca kaynak düzenleyicisinde değil, birçok başka yerde de bulunur. Örneğin, bir tamamlama listesinde &Alt; düğmesine basılı tutmak (&eg; tez aç yaparken) geçerli sembol hakkındaki bağlam bilgilerini de verir.</para
+></note
+></para>
+</sect2>
+<sect2 id="file-scope-information"
+><title
+>Dosya kapsamı bilgisi</title>
+<para
+>Bir sonraki düzey, şu anda üzerinde çalıştığınız tüm kaynak dosyası hakkında bilgi edinmektir. Bu amaçla, imleci geçerli dosyadaki dosya kapsamına yerleştirin ve <guilabel
+>Kod Tarayıcısı</guilabel
+> aracının görünümünün ne gösterdiğine bakın:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Burada, geçerli dosyada bildirilen veya beyan edilen ad alanlarının, sınıfların ve işlevlerin bir listesi gösterilir ve bu dosyada neler olup bittiğine dair genel bir bakış sunulur ve dosyada yukarı aşağı sarma yapmadan veya belirli bir sembolü aramadan doğrudan bu beyanlardan veya tanımlardan herhangi birine gitmenize olanak tanır.</para>
+<para
+><note
+><para
+>Dosya kapsamı için gösterilen bilgiler, aşağıda kaynak kodunda gezinme konusunda açıklanan <quote
+>Ana Hat</quote
+> kipinde sunulan bilgilerle aynıdır; fark, ana hat kipinin yalnızca geçici bir araç ipucu olmasıdır.</para
+></note
+></para>
+</sect2>
+<sect2 id="project-and-session-scope-information"
+><title
+>Proje ve oturum kapsamı bilgisi</title>
+<para
+>Bir projenin tümü (veya aslında bir oturumdaki tüm projeler) hakkında bilgi edinmenin birçok yolu vardır. Bu tür bilgiler genellikle çeşitli araç görünümleri aracılığıyla sağlanır. Örneğin, <guilabel
+>Sınıflar</guilabel
+> araç görünümü, bir oturumdaki tüm projeler için tüm sınıfların ve çevreleyen ad alanlarının bir ağaç yapısını, bu sınıfların her birinin üye işlevleri ve değişkenleriyle birlikte sağlar:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bir girdinin üzerine gelindiğinde sembol, beyan ve tanım konumu ve kullanımları hakkında yeniden bilgi sağlanır. Bu ağaç görünümünde bir girdiye çift tıklandığında sembolün beyan edildiği veya tanımlandığı konumda bir düzenleyici penceresi açılır.</para>
+<para
+>Ancak global bilgilere bakmanın başka yolları da vardır. Örneğin, <guilabel
+>Belgeler</guilabel
+> aracı, bir projenin, bu projenin hangi tür dosyalardan veya diğer belgelerden oluştuğu açısından bir görünüm sağlar:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-18.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="rainbow-color-highlighting-explained"
+><title
+>Gökkuşağı renkli vurgulamanın açıklaması</title
+> 
+<para
+><application
+>K Geliştir</application
+>, kaynak kodundaki farklı nesneleri vurgulamak için çeşitli renkler kullanır. Farklı renklerin ne anlama geldiğini biliyorsanız tek bir karakter okumadan, yalnızca renklere bakarak kaynak kodundan tez çok fazla bilgi çıkarabilirsiniz. Vurgulama kuralları aşağıdaki gibidir: </para>
+<itemizedlist>
+<listitem
+><para
+>Sınıf/Yapı türündeki nesnelerin, enümerasyonların (değerler ve tür), (global) işlevlerin ve sınıf üyelerinin her birinin kendine ait bir rengi vardır (sınıflar yeşil, enümerasyonlar koyu kırmızı ve üyeler koyu sarı veya mor, (global) işlevler her zaman mor renktedir).</para
+></listitem>
+<listitem
+><para
+>Tüm global değişkenler koyu yeşil renkle gösterilir.</para
+></listitem>
+<listitem
+><para
+>Başka bir türün tür tanımı olan tanımlayıcılar mavi–yeşil renktedir.</para
+></listitem>
+<listitem
+><para
+>Nesnelerin tüm beyanları ve tanımları kalın yazıyla gösterilmiştir.</para
+></listitem>
+<listitem
+><para
+>Bir üyeye tanımlandığı bağlamın (temel veya türetilmiş sınıf) içinden erişiliyorsa üye sarı renkte, aksi takdirde mor renkte görünür.</para
+></listitem>
+<listitem
+><para
+>Eğer bir üye özel veya korumalı ise kullanıldığında biraz daha koyu bir renge bürünür.</para
+></listitem>
+<listitem
+><para
+>Bir işlev gövdesi kapsamına yerel değişkenler için gökkuşağı renkleri tanımlayıcının bir karmasına göre seçilir. Bu, işleve ait parametreleri içerir. Bir tanımlayıcı, kapsamı içinde her zaman aynı renge sahip olacaktır (ancak aynı tanımlayıcı, farklı bir nesneyi temsil ediyorsa yani daha iç içe geçmiş bir kapsamda yeniden tanımlanıyorsa farklı bir renk alacaktır) ve genellikle farklı kapsamlarda aynı tanımlayıcı adı için aynı rengi alırsınız. Bu nedenle, aynı adlara sahip parametreler alan birden fazla işleviniz varsa argümanların hepsi aynı renk açısından görünecektir. Bu gökkuşağı renkleri, ayarlar iletişim kutusundaki global renklendirmeden ayrı olarak kapatılabilir.</para
+></listitem>
+<listitem
+><para
+>&kdevelop; yazılımının karşılık gelen beyanı belirleyemediği tanımlayıcılar beyaz renkle gösterilir. Bu bazen eksik <varname
+>#include</varname
+> yönergelerinden kaynaklanabilir.</para
+></listitem>
+<listitem
+><para
+>Bu renklendirmeye ek olarak, &kate;’den bilindiği gibi normal düzenleyici sözdizim vurgulaması uygulanacaktır. Bir çakışma olması durumunda &kdevelop; yazılımının anlamsal vurgulaması her zaman düzenleyici vurgulamasını geçersiz kılacaktır.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="navigating-in-source-code"
+><title
+>Kaynak kodda dolaşmak</title>
+<para
+>Önceki bölümde kaynak kodunu keşfetmeyi; yani semboller, dosyalar ve projeler hakkında bilgi edinmeyi ele aldık. Sonraki adım kaynak tabanınızda, yani içinde dolaşmaktır. Bunun olanaklı olduğu çeşitli düzeyler vardır: Yerel, bir dosya içinde ve bir proje içinde.</para>
+<para
+><note
+><para
+>Kodda dolaşmanın birçok yoluna &kdevelop; ana penceresindeki <guilabel
+>Dolaşım</guilabel
+> menüsünden erişilebilir.</para
+></note
+></para>
+<sect2 id="local-navigation"
+><title
+>Yerel dolaşım</title>
+<para
+>&kdevelop; bir düzenleyiciden çok daha fazlasıdır; ancak <emphasis
+>aynı zamanda</emphasis
+> bir kod düzenleyicisidir de. Doğal olarak, bir kaynak kodu dosyasında imleci yukarı, aşağı, sağa ve sola hareket ettirebilirsiniz. Ayrıca, <keycap
+>Sayfa Yukarı</keycap
+> ve <keycap
+>Sayfa Aşağı</keycap
+> düğmelerini ve herhangi başka kullanışlı bir düzenleyiciden alışık olduğunuz diğer tüm komutları kullanabilirsiniz.</para>
+</sect2>
+<sect2 id="file-scope-navigation-and-outline-mode"
+><title
+>Dosya kapsamı dolaşımı ve ana hat kipi</title>
+<para
+>Dosya temelinde &kdevelop;, kaynak kodunda dolaşım için birçok olası yol sunmaktadır. Örneğin:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Ana Hat</guilabel
+>: Geçerli dosyada ne olduğunu en az üç farklı şekilde ana hatlarıyla öğrenebilirsiniz: <itemizedlist>
+<listitem
+><para
+>Ana pencerenin sağ üst köşesindeki <guilabel
+>Ana Hat</guilabel
+> metin kutusuna tıklamak veya <keycombo
+>&Alt;&Ctrl;<keycap
+>N</keycap
+></keycombo
+> düğme kombinasyonunu kullanmak, tüm işlev ve sınıf beyanlarını listeleyen bir açılır menü açar: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-19.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Daha sonra hangisine atlayacağınızı seçebilirsiniz veya &mdash;eğer çok sayıda varsa&mdash; gösterilen adlarda görünebilecek herhangi bir metni yazmaya başlayabilirsiniz; bu durumda, yazmayı sürdürdükçe, daha önce yazılmış metinle uyuşmayan adlar kaldırılacağı için liste giderek küçülür ve siz seçimlerden birini çok daha rahat kullanabilirsiniz. </para
+></listitem>
+<listitem
+><para
+>İmleci dosya kapsamında konumlandırmak (&ie; herhangi bir işlev/sınıf beyanının veya tanımının dışında konumlandırmak) ve <guilabel
+>Kod Tarayıcısı</guilabel
+> aracını açmak: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-16.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Bu ayrıca, size geçerli dosyada neler olup bittiğine dair bir ana hat sunar ve nereye atlamak istediğinizi seçmenize olanak tanır. </para
+></listitem>
+<listitem
+><para
+>Açık dosyalardan birinin sekmesinin üzerine fareyi getirdiğinizde, o sekmedeki dosyanın ana hatları da görüntülenir. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+>Kaynak dosyaları, işlev beyanları veya tanımlarının bir listesi olarak düzenlenir. <keycombo
+>&Alt;&Ctrl;<keycap
+>Sayfa Yukarı</keycap
+></keycombo
+> ve <keycombo
+>&Alt;&Ctrl;<keycap
+>Sayfa Aşağı</keycap
+></keycombo
+> düğmelerine basmak, bu dosyadaki önceki veya sonraki işlev tanımına atlar. </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-and-session-scope-navigation--semantic-navigation"
+><title
+>Proje ve oturum kapsamında dolaşım: Anlamsal dolaşım</title>
+<para
+>Diğer yerlerde belirtildiği gibi, &kdevelop; genellikle tek tek kaynak dosyalarını dikkate almaz, bunun yerine projeleri bir bütün olarak (veya daha doğrusu, geçerli oturumun parçası olan tüm projeleri) ele alır. Sonuç olarak, tüm projelerde dolaşmak için birçok olasılık sunar. Bunlardan bazıları <link linkend="exploring-source-code"
+>kaynak koda göz atmak</link
+> bölümünde daha önce açıkladığımız şeylerden türetilmiştir, diğerleri ise gerçekten farklıdır. Ortak tema, bu gezinme özelliklerinin kodun <emphasis
+>anlamsal anlayışına</emphasis
+> dayanmasıdır; yani size tüm projeleri ayrıştırmayı ve verileri bağlamayı gerektiren bir şey sunarlar. Aşağıdaki liste, potansiyel olarak çok sayıda dosyaya dağılmış kaynak kodunda gezinmenin bazı yollarını gösterir:</para>
+<itemizedlist>
+<listitem
+><para
+><link linkend="exploring-source-code"
+>Kaynak koda göz atmak</link
+> bölümünde görüldüğü üzere, fareyle üzerine gelerek veya &Alt; düğmesini bir süre basılı tutarak bireysel ad alanları, sınıf, işlev veya değişken adlarını açıklayan bir araç ipucu gösterebilirsiniz. Bir örnek için: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-14.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> </mediaobject
+> </screenshot
+> Bir sembolün beyanı için bağlantılara tıklamak veya kullanım listesini genişletmek, gerekirse ilgili dosyayı açıp imleci ilgili konuma yerleştirmek suretiyle bu konumlara atlamanızı sağlar. Benzer bir etki, daha önce tartışılan <guilabel
+>Kod Tarayıcısı</guilabel
+> araç görünümü kullanılarak da elde edilebilir. </para
+></listitem>
+<listitem
+><para
+>Araç ipucundaki bağlantılara tıklamak zorunda kalmadan bir sembolün beyanına atlamanın daha tez bir yolu da <guilabel
+>Kaynak Tarama Kipi</guilabel
+> kipini &Alt; veya &Ctrl; düğmelerine basılı tutarak geçici olarak etkinleştirmektir. Bu kipte, bir sembolün beyanına doğrudan atlamak için üzerine tıklamak yeterlidir. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Tez Aç</guilabel
+>: Diğer dosyalara veya konumlara atlamanın çok güçlü bir yolu, &kdevelop; yazılımındaki çeşitli <emphasis
+>tez aç</emphasis
+> yöntemlerini kullanmaktır. Bunların dört sürümü vardır: <itemizedlist>
+<listitem
+><para
+><guilabel
+>Tez Sınıf Aç</guilabel
+> (<menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Tez Sınıf Aç</guimenuitem
+></menuchoice
+> veya <keycombo
+>&Alt;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>): Bu oturumda tüm sınıfların bir listesini alırsınız. Bir sınıfın adını (bir kısmını) yazmaya başlayın ve liste yalnızca şu ana kadar yazdıklarınızla gerçekten eşleşenlere doğru azalmayı sürdürecektir. Liste yeterince kısaysa yukarı ve aşağı düğmelerini kullanarak bir öge seçin ve &kdevelop; sizi sınıfın beyan edildiği yere götürecektir. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Tez İşlev aç</guilabel
+> (<menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Tez İşlev Aç</guimenuitem
+></menuchoice
+> veya <keycombo
+>&Alt;&Ctrl;<keycap
+>M</keycap
+></keycombo
+>): Geçerli oturumdaki projelerin parçası olan tüm (üye) işlevlerin bir listesini alırsınız ve yukarıdakiyle aynı biçimde seçim yapabilirsiniz. Bu listenin hem işlev beyanlarını hem de tanımlarını içerebileceğini unutmayın. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Tez Dosya Aç</guilabel
+> (<menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Tez Dosya Aç</guimenuitem
+></menuchoice
+> veya <keycombo
+>&Alt;&Ctrl;<keycap
+>O</keycap
+></keycombo
+>): Geçerli oturumdaki projelerin parçası olan tüm dosyaların bir listesini alırsınız ve yukarıda belirtildiği gibi bunlardan seçim yapabilirsiniz. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Evrensel Tez Aç</guilabel
+> (<menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Tez Aç</guimenuitem
+></menuchoice
+> veya <keycombo
+>&Alt;&Ctrl;<keycap
+>Q</keycap
+></keycombo
+>): Yukarıdaki komutlardan hangisinin hangi düğme inasyonuna bağlı olduğunu unutursanız bu bir evrensel İsviçre çakısıdır &mdash; size seçebileceğiniz tüm dosyaların, işlevlerin, sınıfların ve diğer şeylerin birleştirilmiş bir listesini sunar. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Beyana/Tanıma Git</guilabel
+>: Bir (üye) işlevi uygularken; örneğin işlev argümanlarının listesini beyan ve tanım arasında eşzamanlı tutmak veya belgelendirmeyi güncellemek için sıklıkla işlevin beyan edildiği noktaya geri dönmek gerekir. Bunu yapmak için imleci işlev adına yerleştirin ve işlevin beyan edildiği yere atlamak için <menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Beyana Git</guimenuitem
+></menuchoice
+> ögesini seçin (veya <keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+> kombinasyonunu kullanın). Özgün konuma geri gitmek için birçok yol vardır: <itemizedlist>
+<listitem
+><para
+><menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Tanıma Git</guimenuitem
+></menuchoice
+> (veya <keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+> kombinasyonunu kullanın). </para
+></listitem>
+<listitem
+><para
+><menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Önceki Bakılan Bağlam</guimenuitem
+></menuchoice
+> (veya <keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Sol Ok Düğmesi</keycap
+></keycombo
+>), aşağıda açıklandığı üzere. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Bir sembolün beyanına atlamak, yalnızca imleci şu anda uyguladığınız işlevin adına yerleştirdiğinizde işe yarayan bir şey değildir. Aksine, diğer semboller için de işe yarar: İmleci bir (yerel, global veya üye) değişkenin üzerine koymak ve beyanına atlamak sizi beyanın konumuna da götürür. Benzer şekilde, imleci bir sınıfın adına, örneğin bir işlev beyanının değişkenine yerleştirebilir ve beyanın konumuna atlayabilirsiniz.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Şuna Geç: Tanım/Beyan</guilabel
+>: Yukarıdaki örnekte, geçerli işlevin beyanının yapıldığı yere gitmek için öncelikle imleci işlev adının üzerine getirmeniz gerekmektedir. Bu adımdan kaçınmak için imlecin üzerinde olduğu işlevin beyanına atlamak üzere <menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Şuna Geç: Tanım/Beyan</guimenuitem
+></menuchoice
+> ögesini seçebilirsiniz (veya <keycombo
+>&Shift;&Ctrl;<keycap
+>C</keycap
+></keycombo
+> kombinasyonunu kullanın). Aynı menü girdisini ikinci kez seçtiğinizde işlevin tanımlandığı yere geri dönersiniz. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Önceki/Sonraki Kullanım</guilabel
+>: İmleci bir yerel değişkenin adının üzerine koymak ve <menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Sonraki Kullanım</guimenuitem
+></menuchoice
+> ögesini seçmek (veya <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Sağ Ok Düğmesi</keycap
+></keycombo
+>) sizi bu değişkenin koddaki sonraki kullanımına götürür (Bunun yalnızca değişken adının bir sonraki oluşunu aramadığını, aynı ada sahip; ancak farklı kapsamlardaki değişkenlerin farklı olduğunu da hesaba kattığını unutmayın). Aynısı işlev adları için de geçerlidir. <menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Önceki Kullanım</guimenuitem
+></menuchoice
+> (veya <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Sol Ok Düğmesi</keycap
+></keycombo
+>) sizi bu değişkenin koddaki önceki kullanımına götürür. </para
+></listitem>
+</itemizedlist>
+<para
+><note
+><para
+>Bu komutların döngü içinde geçtiği tüm ad kullanımlarının listesini görmek için imleci üzerine getirin ve <guilabel
+>Kod Tarayıcısı</guilabel
+> araç görünümünü açın veya &Alt; düğmesine basılı tutun. Bu, <link linkend="file-scope-information"
+>Koda göz atmak</link
+> bölümünde ayrıntılı olarak açıklanmıştır.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Bağlam Listesi</guilabel
+>: Web tarayıcılarında en son ziyaret edilen web sayfalarının listesinde ileri ve geri gidebilmenizi sağlayan bir özellik bulunmaktadır. &kdevelop; yazılımında da aynı özellik bulunur; ancak web siteleri yerine  <emphasis
+>bağlamları</emphasis
+> ziyaret edersiniz. Bağlam, imlecin geçerli konumudur ve imleç komutları dışında herhangi bir şey kullanarak imleci uzaklaştırarak onu değiştirebilirsiniz; örneğin, <guilabel
+>Kod Tarayıcısı</guilabel
+> araç görünümünde, <guilabel
+>Dolaşım</guilabel
+> menüsünde verilen seçeneklerden birinde veya başka herhangi bir dolaşım komutunda bir araç ipucu tarafından sağlanan bir konuma tıklayarak. <menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Önceki Bakılan Bağlam</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Sol Ok Düğmesi</keycap
+></keycombo
+>) ve <menuchoice
+><guimenu
+>Dolaşım</guimenu
+><guimenuitem
+>Sonraki Bakılan Bağlam</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Sağ Ok Düğmesi</keycap
+></keycombo
+>) sizi aynı web tarayıcılarının <guilabel
+>ileri</guilabel
+> ve <guilabel
+>geri</guilabel
+> düğmelerini tıkladığınızda yaptığı gibi bağlamlar arasında getirir ve götürür. </para
+></listitem>
+<listitem
+><para
+>Son olarak, kod tabanınızdaki farklı yerlere gitmenize olanak tanıyan araç görünümleri vardır. Örneğin, <guilabel
+>Sınıflar</guilabel
+> aracı size geçerli oturumun tüm projelerinde bulunan tüm ad alanlarının ve sınıfların bir listesini sağlar ve bu listeyi genişleterek bu sınıfların her birinin üye işlevlerini ve değişkenlerini görmenize olanak tanır: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-17.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Bir ögeye çift tıklamak (veya sağ fare düğmesiyle bağlam menüsünde dolanmak) ögenin beyanının konumuna atlamanıza olanak tanır. Diğer araçlar da benzer şeylere olanak tanırlar; örneğin, <guilabel
+>Projeler</guilabel
+> araç görünümü, bir oturumun parçası olan dosyaların bir listesini sağlar: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-13.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Yine, bir dosyaya çift tıklamak onu açar. </para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="writing-source-code"
+><title
+>Kaynak kodu yazmak</title>
+<para
+>&kdevelop; projelerinizin kaynak kodunu anladığı için daha fazla kod yazmanıza yardımcı olabilir. Aşağıda bunu yapmanın bazı yolları özetlenmektedir.</para>
+<sect2 id="auto-completion"
+><title
+>Kendiliğinden tamamlama</title>
+<para
+>Büyük olasılıkla yeni kod yazarken tüm özellikler arasında en kullanışlı olanı kendiliğinden tamamlamadır. Örneğin, aşağıdaki kod parçasını düşünün:</para>
+<para
+><programlisting
+>class Car {
+  // …
+  public:
+    std::string get_color () const;
+};
+void foo()
+{
+  Car my_ride;
+  // bu değişkenle bir şeyler yap
+  std::string color = my_ride.ge
+</programlisting
+></para>
+<para
+>Son satırdaki <varname
+>my_ride</varname
+> ögesinin <varname
+>Car</varname
+> türünün bir değişkeni olduğunu anımsar ve hem <varname
+>ge</varname
+> ögesini <varname
+>get_color()</varname
+> olarak tamamlamayı önerir; çünkü bu, <varname
+>Car</varname
+> sınıfında böyle başlayan tek değişkendir. Yazmayı sürdürmek yerine tam sözcüğü almak için yalnızca &Enter; düğmesine basın; bu size zaman kazandırır; yanlış yazımları önler ve büyük projelerdeki yüzlerce veya binlerce değişkeni veya sınıfı ezberlemekten sizi kurtarır.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Dönüş türü ve genel olup olmadığı dışında işlev hakkında daha fazla bilgi almak için araç ipucuna tıklayabileceğinizi unutmayın:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-43.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Kendiliğinden tamamlama özelliği, projenizde uzun değişken ve işlev adları kullanıyorsanız sizi çok fazla yazmaktan kurtarabilir; ayrıca, adların yanlış yazılmasını (ve bunun sonucunda derleyici hatalarını) önler ve işlevlerin tam adlarını hatırlamayı çok daha basit hale getirir; örneğin, tüm alıcılarınız <varname
+>get_</varname
+> ile başlıyorsa kendiliğinden tamamlama özelliği yalnızca ilk dört harfi yazdığınızda size olası alıcıların bir listesini sunabilir ve büyük olasılıkla bu süreçte size hangi işlevin doğru olduğunu hatırlatır. Kendiliğinden tamamlamanın çalışması için ne <varname
+>Car</varname
+> sınıfının ne de <varname
+>my_ride</varname
+> değişkeninin bildiriminin şu anda kod yazdığınız yerle aynı dosyada olması gerekmediğini unutmayın. &kdevelop; yalnızca bu sınıfların ve değişkenlerin bağlantılı olduğunu bilmelidir; &ie; bu bağlantıların yapıldığı dosyaların şu anda üzerinde çalıştığınız projenin bir parçası olması gerekir.</para>
+<para
+><note
+><para
+>&kdevelop; kod tamamlama konusunda size ne zaman yardımcı olacağını her zaman bilemez. Kendiliğinden tamamlama araç ipucu kendiliğinden açılmazsa tamamlamaların listesini elle açmak için <keycombo
+>&Ctrl;<keycap
+>Space</keycap
+></keycombo
+> düğmelerine basın. Genel olarak, kendiliğinden tamamlamanın çalışması için &kdevelop; yazılımının kaynak dosyalarınızı ayrıştırması gerekir. Bu, &kdevelop; yazılımını başlattıktan sonra geçerli oturumun projelerinin bir parçası olan tüm dosyalar için arka planda ve ayrıca bir saniyenin bir kısmı için yazmayı bıraktıktan sonra gerçekleşir (gecikme yapılandırılabilir).</para
+></note
+></para>
+<para
+><note
+><para
+>&kdevelop;, yalnızca dosyanın MIME türüne göre kaynak kod olarak kabul ettiği dosyaları ayrıştırır. Bu tür, bir dosya ilk kez kaydedilmeden önce ayarlanmaz; sonuç olarak, yeni bir dosya oluşturmak ve içine kod yazmaya başlamak, ilk kez kaydedilene kadar kendiliğinden tamamlama için ayrıştırmayı tetiklemeyecektir.</para
+></note
+></para>
+<para
+><note
+><para
+>Önceki notta olduğu gibi, kendiliğinden tamamlamanın çalışması için &kdevelop; üstbilgi dosyalarındaki bildirimleri bulabilmelidir. Bunun için bir dizi öntanımlı yolda arama yapar. Kendiliğinden bir üstbilgi dosyası bulamazsa bir üstbilgi dosyasının adının altını kırmızıyla çizecektir; bu durumda, &kdevelop; yazılımına bu dosyaları ve sağladıkları bilgileri nerede bulacağını açıkça söylemek için üzerine sağ tıklayın.</para
+></note
+></para>
+<para
+><note
+><para
+>Kendiliğinden tamamlamayı yapılandırma hakkında bilgiyi <link linkend="customizing-code-auto-completion"
+>kılavuzun bu bölümünde</link
+> bulabilirsiniz.</para
+></note
+></para>
+</sect2>
+<sect2 id="adding-new-classes-and-implementing-member-functions"
+><title
+>Yeni sınıflar eklemek ve üye işlevler gerçeklemek</title>
+<para
+>&kdevelop;, yeni sınıflar eklemek için bir yardımcıya sahiptir. Prosedür, <link linkend="creating-a-new-class"
+>Yeni bir sınıf oluşturmak</link
+> bölümünde açıklanmıştır. <filename
+>Class</filename
+> kategorisinden Temel C++ şablonu seçilerek basit bir C++ sınıfı oluşturulabilir. Yardımcıda, önceden tanımlanmış bazı üye işlevleri seçebiliriz; örneğin, boş bir yapıcı, bir kopya yapıcısı ve bir yıkıcı. </para>
+<para
+>Yardımcıyı tamamladıktan sonra, yeni dosyalar oluşturulur ve düzenleyicide açılır. Üstbilgi dosyası halihazırda include korumalarına sahiptir ve yeni sınıf seçtiğimiz tüm üye işlevlere sahiptir. Sonraki iki adım, sınıfı ve üye işlevleri belgelemek ve bunları uygulamak olacaktır. Sınıfları ve işlevleri belgelendirmeye yönelik yardımcıları aşağıda tartışacağız. Eklenmiş olan özel işlevleri uygulamak için işlevlerin iskeletinin zaten sağlanmış olduğu <guilabel
+>bus.cpp</guilabel
+> sekmesine gitmeniz yeterlidir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-30.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Yeni üye işlevler eklemek için <guilabel
+>bus.h</guilabel
+> sekmesine geri dönün ve bir işlevin adını ekleyin. Örneğin, şunu ekleyelim:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-31.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Uygulamaya nasıl başladığıma dikkat edin. Ancak, birçok kodlama tarzında, işlev üstbilgi dosyasında değil, ilgili .cpp dosyasında uygulanmalıdır. Bu amaçla, imleci işlevin adının üzerine getirin ve <menuchoice
+><guimenu
+>Kod</guimenu
+><guimenuitem
+>Kaynağa Taşı</guimenuitem
+></menuchoice
+> seçeneğini seçin veya <keycombo
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+> düğmelerine basın. Bu, süslü ayraçlar arasındaki kodu üstbilgi dosyasından kaldırır (ve işlev beyanını sonlandırmak için gerektiği şekilde noktalı virgülle değiştirir) ve kaynak dosyaya taşır:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-32.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Yazmaya nasıl başladığıma ve <varname
+>students</varname
+> değişkeninin büyük olasılıkla <varname
+>Bus</varname
+> sınıfının bir üye değişkeni olması gerektiğini; ancak henüz eklemediğimi ima etmek istediğime dikkat edin. Ayrıca &kdevelop; yazılımının değişken hakkında hiçbir şey bilmediğini açıkça belirtmek için nasıl altını çizdiğine dikkat edin. Ancak bu sorun çözülebilir: Değişken adına tıklandığında aşağıdaki araç ipucu görüntülenir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-33.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>(Aynısı üzerine sağ tıklayarak veya <guilabel
+>Çöz: Şöyle Beyan Et</guilabel
+> seçilerek yapılabilir.) <quote
+>3 — private unsigned int</quote
+> seçmeme (ya fareyle ya da <keycombo
+>&Alt;<keycap
+>3</keycap
+></keycombo
+> düğmelerine basarak) ve üstbilgi dosyasında nasıl olduğuna bakmama izin verin:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-34.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Şunu belirtmek gerekir ki &kdevelop; beyan edilecek değişkenin türünü, onu ilklendirmek için kullanılan ifadeden çıkarır. Örneğin, eklemeyi aşağıdaki oldukça şüpheli şekilde yazmış olsaydık, değişkeni <varname
+>double</varname
+> türünde bildirmeyi önerecekti:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-35.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Son bir nokta olarak: <menuchoice
+><guimenu
+>Kod</guimenu
+><guimenuitem
+>Kaynağa Taşı</guimenuitem
+></menuchoice
+> kullanan yöntem, yeni üye işlevi her zaman istediğiniz yere yerleştirmez. Örneğin, <varname
+>inline</varname
+> olarak imlenmesini ve üstbilgi dosyasının en altına yerleştirilmesini isteyebilirsiniz. Böyle bir durumda, beyanı yapın ve işlevin tanımını yazmaya şu şekilde başlayın:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-36.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; buraya gelebilecek tüm olası tamamlamaları kendiliğinden sunar. İki <varname
+>add_students</varname
+> girdisinden biri seçildiğinde, argüman listesinin tamamını dolduran aşağıdaki kod ortaya çıkar:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-37.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Örnekte, kendiliğinden tamamlama aracının sunduğu seçeneklerden birini kabul etmek doğru imzayı verir; ancak ne yazık ki zaten yazılmış olan <varname
+>inline</varname
+> imleyicisini siler. Bu, <ulink url="https://bugs.kde.org/show_bug.cgi?id=274245"
+>&kdevelop; 274245</ulink
+> numaralı hatada bildirilmiştir.</para
+></note
+></para>
+</sect2>
+<sect2 id="documenting-declarations"
+><title
+>Beyanları belgelendirmek</title>
+<para
+>İyi kod, hem işlevlerdeki algoritmaların uygulanması düzeyinde hem de arayüz düzeyinde iyi belgelendirilmiş koddur &mdash; yani sınıflar, (üye ve global) işlevler ve (üye veya global) değişkenler, amaçlarını, argümanların olası değerlerini, ön ve son koşullarını açıklamak için belgelendirilmelidir. Arayüzün belgelendirilmesi söz konusu olduğunda, <ulink url="http://www.doxygen.org"
+>doxygen</ulink
+>, daha sonra çıkarılabilen ve aranabilir web sayfalarında görüntülenebilen yorumları biçimlendirmek için fiili standart haline gelmiştir.</para>
+<para
+>&kdevelop;, bir sınıfı veya üye işlevi belgelendiren yorumların çerçevesini oluşturmak için kısa bir yol sağlayarak bu tarz yorumları destekler. Örneğin, bu kodu halihazırda yazdığınızı varsayalım:</para>
+<para
+><programlisting
+>class Car {
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>Şimdi hem sınıfa hem de üye işleve belgelendirme eklemek istersiniz. Bu amaçla, imleci ilk satıra getirin ve <menuchoice
+><guimenu
+>Kod</guimenu
+><guimenuitem
+>Beyanı Belgelendir</guimenuitem
+></menuchoice
+> seçeneğini kullanın veya <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+> düğmelerine basın. &kdevelop; aşağıdakiyle yanıt verecektir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-23.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>İmleç, bu sınıfın kısa açıklamasını (<varname
+>@brief</varname
+> doxygen anahtar sözcüğünden sonra) doldurmanız için halihazırda gri renkli alandadır. Daha sonra bu bölüme sınıfın ne yaptığına dair daha ayrıntılı bir genel bakış sağlayan belgelendirme eklemeyi sürdürebilirsiniz:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-24.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Düzenleyici yorumun içindeyken, yorum metni yeşil renkte vurgulanır (imleci yorumun dışına taşıdığınızda vurgulama kaybolur). Bir satırın sonuna geldiğinizde, &Enter; düğmesine basın ve &kdevelop; kendiliğinden yıldız işaretiyle başlayan yeni bir satır başlatacak ve imleci bir karakter girintili olarak yerleştirecektir.</para>
+<para
+>Şimdi işlevi beyanın olduğu satıra koyup <menuchoice
+><guimenu
+>Kod</guimenu
+><guimenuitem
+>Beyanı Belgelendir</guimenuitem
+></menuchoice
+> seçerek veya <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+> düğmelerine basarak üye işlevi belgelendirelim:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-25.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Yine &kdevelop;, işlevin kendisi için belgelendirmenin yanı sıra geri dönüş türünü de içeren bir yorumun iskeletini kendiliğinden oluşturur. Geçerli durumda, işlevin adı hemen hemen kendini açıklayıcıdır; ancak çoğu zaman işlev argümanları olmayabilir ve ayrı ayrı belgelendirilmelidir. Bunu göstermek için biraz daha ilginç bir işlevin ve &kdevelop; yazılımının kendiliğinden oluşturduğu yorumu ele alalım:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-26.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Burada, önerilen yorum, örneğin bireysel parametreler için tüm doxygen alanlarını halihazırda içerir.</para>
+</sect2>
+<sect2 id="renaming-variables-functions-and-classes"
+><title
+>Değişkenleri, işlevleri ve sınıfları yeniden adlandırmak</title>
+<para
+>Bazen bir işlevi, sınıfı veya değişkeni yeniden adlandırmak isteyebilirsiniz. Örneğin, halihazırda şöyle bir kodumuz olduğunu varsayalım:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-38.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Daha sonra <varname
+>remove_students</varname
+> adından memnun olmadığımızı ve örneğin <varname
+>throw_out_students</varname
+> demeyi tercih ettiğimizi fark ederiz. Ad için bir arama–değiştirme yapabiliriz; ancak bunun iki dezavantajı vardır:</para>
+<itemizedlist>
+<listitem
+><para
+>İşlev birden fazla dosyada kullanılabilir. </para
+></listitem>
+<listitem
+><para
+>Özünde yalnızca bu işlevi yeniden adlandırmak istiyoruz ve aynı ada sahip olabilecek; ancak başka sınıflarda veya ad alanlarında bildirilmiş işlevlere dokunmuyoruz. </para
+></listitem>
+</itemizedlist>
+<para
+>Bu iki sorun da, imleci işlevin adının herhangi bir oluşuna taşıyıp <menuchoice
+><guimenu
+>Kod</guimenu
+><guimenuitem
+>Beyanı Yeniden Adlandır</guimenuitem
+></menuchoice
+> seçerek (veya ada sağ tıklayarak veya <guilabel
+>Yeniden Adlandır: Bus::remove_students</guilabel
+>) çözülebilir. Bu, işlevin yeni adını girebileceğiniz ve işlevin gerçekten kullanıldığı tüm yerleri görebileceğiniz bir iletişim kutusu getirir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-39.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="code-snippets"
+><title
+>Kod parçacıkları</title>
+<para
+>Çoğu projede kaynak kodda sıklıkla yazılması gereken kod parçaları vardır. Örnekler şunlardır: Derleyici yazarları için tüm komutlar üzerinde bir döngü; kullanıcı arayüzü yazarları için kullanıcı girdisinin geçerli olup olmadığını denetlemek ve değilse bir hata kutusu açmak; bu satırların yazarının projesinde ise aşağıdaki türden bir kod olacaktır:</para>
+<para
+><programlisting
+>for (typename Triangulation::active_cell_iterator
+       cell = triangulation.begin_active();
+     cell != triangulation.end(); ++cell)
+  … cell ile bir şeyler yap …
+</programlisting>
+</para>
+<para
+>Bu tür bir metni sürekli baştan yazmak yerine (bu tür şeylerde yanlış yazmak pek kolaydır), &kdevelop; yazılımının <guilabel
+>Kod Parçacıkları</guilabel
+> aracını kullanmak yardımcı olabilir. Bunu yapmak için araç görünümünü açın (ilgili düğme görünümünüzde yoksa <link linkend="tools-and-views"
+>Araçlar ve Görünümler</link
+> bölümüne bakın). Sonrasında <quote
+>Depo Ekle</quote
+> düğmesine tıklayın (adı biraz garip gelebilir &mdash; bu, belirli bir tür kaynak dosyalar için; örneğin C++ kaynakları için belirli bir tür parçacık kataloğu eklemenize izin verir) ve boş bir depo oluşturun. Sonrasında bir parçacık eklemek için <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> düğmesine tıklayın ve şöyle bir iletişim kutusu göreceksiniz:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-40.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Bir kod parçacığı adında boşluk veya diğer özel karakterler bulunmayabilir; çünkü normal bir işlev veya değişken adı gibi görünmelidir (bir sonraki paragrafta açıklığa kavuşacak nedenlerden dolayı).</para
+></note
+></para>
+<para
+>Bu şekilde tanımlanmış bir kod parçacığını kullanmak için kodu düzenlerken, herhangi bir işlev veya değişken adını yazdığınız gibi kod parçacığının adını yazabilirsiniz. Bu ad, kendiliğinden tamamlama için kullanılabilir hale gelecektir &mdash;yani yukarıdaki gibi bir kod parçacığı için uzun ve açıklayıcı bir ad kullanmanın hiçbir zararı yoktur&mdash; ve kendiliğinden tamamlama araç ipucunun önerisini kabul ettiğinizde (örneğin yalnızca &Enter; düğmesine basarak), kod parçacığı adının önceden girilmiş kısmı parçacığın tam açılımı ile değiştirilecek ve düzgün bir şekilde girintilenecektir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-41.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bunun çalışması için <guilabel
+>Kod Parçacıkları</guilabel
+> araç görünümünün açık veya görünür olması gerekmediğini unutmayın: araç görünümüne yalnızca yeni kod parçacıkları tanımlamak için gereksinim duyarsınız. Bir parçacığı genişletmenin daha az kullanışlı olsa da alternatif bir yolu, ilgili araç görünümünde üzerine tıklamaktır.</para>
+<para
+><note
+><para
+>Kod parçacıkları, burada anlatılanlardan çok daha güçlüdür. Onlarla yapabileceklerinizin tam bir listesi için <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
+>ayrıntılı belgelendirmeye</ulink
+> bir göz atın.</para
+></note
+></para>
+</sect2>
+</sect1>
+<sect1 id="modes-and-working-sets"
+><title
+>Kipler ve çalışma kümeleri</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_noworkingset.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Buraya kadar geldiyseniz &kdevelop; ana penceresinin sağ üst kısmına bir göz atın: Resimde gösterildiği üzere, &kdevelop; yazılımının içinde olabileceği üç <guilabel
+>kip</guilabel
+> vardır: <guilabel
+>Kod</guilabel
+> (kaynak kodu ile çalışma konusunda geçerli bölümde tartıştığımız kip), <guilabel
+>Hata Ayıkla</guilabel
+> (<link linkend="debugging-programs-in-kdevelop"
+>Programlarda hata ayıklamak</link
+> bölümüne bakın) ve <guilabel
+>Gözden Geçir</guilabel
+> (<link linkend="working-with-version-control-systems"
+>Sürüm denetim sistemleriyle çalışmak</link
+> bölümüne bakın).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_sessionsprojectsworkingsets.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Her kipin çevresinde yığılmış kendi araç kümeleri vardır ve her kip aynı zamanda o anda açık olan dosya ve belgelerden oluşan bir <emphasis
+>çalışma kümesine</emphasis
+> sahiptir. Ayrıca, bu çalışma kümelerinin her biri geçerli bir oturumla ilişkilidir; &ie; yukarıda gösterilen ilişkiye sahibiz. Çalışma kümesindeki dosyaların aynı oturumdan geldiğini; ancak aynı oturumun parçası olan farklı projelerden gelebileceğini unutmayın.</para>
+<para
+>Eğer &kdevelop; programını ilk kez açıyorsanız çalışma kümesi boştur &mdash; açık dosya yoktur. Ancak düzenleme (veya hata ayıklama veya diğer kiplerde gözden geçirme) için dosya açtıkça çalışma kümeniz büyür. Çalışma kümenizin boş olmadığı, aşağıda gösterildiği gibi sekmede bir sembolle gösterilir. Ne zaman &kdevelop; programını kapatıp daha sonra yeniden başlatırsanız çalışma kümesinin kaydedildiğini ve geri yüklendiğini fark edeceksiniz; &ie; aynı açık dosya kümesine sahip olursunuz.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-10.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Farenizi çalışma kümesi sembolünün üzerine getirirseniz bu çalışma kümesinde o anda hangi dosyaların açık olduğunu gösteren bir araç ipucu alırsınız (burada: <varname
+>step-32.cc</varname
+> ve <varname
+>step-1.cc</varname
+> dosyaları). Kırmızı eksi işaretine tıklandığında ilgili dosyanın sekmesi kapatılır. Belki daha da önemlisi, ilgili düğmeye tıklamak, tüm çalışma kümesini bir kerede <guilabel
+>kapatmanıza</guilabel
+> olanak tanır (&ie; o anda açık olan tüm dosyaları kapatmak için). Bununla birlikte, bir çalışma kümesini kapatmak, yalnızca tüm dosyaları kapatmakla kalmaz, aslında çalışma kümesini kaydeder ve yeni, henüz boş olan bir tane açar. Bunu şurada görebilirsiniz:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-11.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Üç kip sekmesinin solundaki iki sembole dikkat edin (kalp ve solundaki tanımlanamayan sembol). Bu iki sembolün her biri, o anda açık olan çalışma kümesine ek olarak kaydedilmiş bir çalışma kümesini temsil eder. Farenizi kalp sembolünün üzerine getirirseniz buna benzer bir şey görürsünüz:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-12.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>İlgili çalışma kümesinin iki dosya ve bunlara karşılık gelen proje adlarını içerdiğini gösterir: <varname
+>Makefile</varname
+> ve <varname
+>changes.h</varname
+>. <guilabel
+>Yükle</guilabel
+> seçeneğine tıklamak geçerli çalışma kümesini (burada gösterildiği gibi <varname
+>tria.h</varname
+> ve <varname
+>tria.cc</varname
+> dosyaları açıktır) kapatıp kaydedecek ve bunun yerine seçilen çalışma kümesini açacaktır. Ayrıca bir çalışma kümesini kalıcı olarak silebilirsiniz, bu da onu kayıtlı çalışma kümelerinden kaldırır.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts"
+><title
+>Bazı kullanışlı klavye kısayolları</title>
+<para
+>&kdevelop; programının düzenleyicisi, tüm olağan düzenleme işlemleri için standart klavye kısayollarını takip eder. Bununla birlikte, kaynak kodu düzenlerken bazıları belirli düğme kombinasyonlarına bağlı olan bir dizi daha gelişmiş işlemi de destekler. Aşağıdakiler sıklıkla özellikle yararlıdır:</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Kodda gezinmek</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>O</keycap
+></keycombo
+></entry>
+    <entry
+>Tez Dosya Aç: Bir dosya adının bir kısmını girin ve geçerli oturumun projelerinin dizin ağaçlarında diziyle eşleşen tüm dosyalar arasından seçim yapın; dosya daha sonra açılacaktır.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>C</keycap
+></keycombo
+></entry>
+    <entry
+>Tez Sınıf Aç: Bir sınıf adının bir kısmını girin ve eşleşen tüm sınıf adları arasından seçim yapın; imleç daha sonra sınıf beyanına atlayacaktır.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>M</keycap
+></keycombo
+></entry>
+    <entry
+>Tez İşlev Aç: Bir (üye) işlev adının bir kısmını girin ve eşleşen tüm adlar arasından seçim yapın; listenin hem beyanları hem de tanımları gösterdiğine ve imlecin seçilen ögeye atlayacağına dikkat edin.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Q</keycap
+></keycombo
+></entry>
+    <entry
+>Evrensel Tez Aç: Herhangi bir şey yazın (dosya adı, sınıf adı, işlev adı) ve aralarından seçim yapabileceğiniz eşleşenlerin bir listesini alın.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>N</keycap
+></keycombo
+></entry>
+    <entry
+>Ana Hat: Bu dosyada olan her şeyin bir listesini sağlar; örneğin sınıf beyanları ve işlev tanımları.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+></entry>
+    <entry
+>İmleç o anda bir işlev beyanı üzerindeyse işlevin tanımına atlar.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+></entry>
+    <entry
+>İmleç o anda bir işlev tanımındaysa bir işlevin veya değişkenin beyanına atlayın.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Sayfa Aşağı</keycap
+></keycombo
+></entry>
+    <entry
+>Sonraki işleve atla</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Sayfa Yukarı</keycap
+></keycombo
+></entry>
+    <entry
+>Önceki işleve atla</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>G</keycap
+></keycombo
+></entry>
+    <entry
+>Satıra git</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Ara ve değiştir</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Bul</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F3</keycap
+></entry>
+    <entry
+>Sonrakini bul</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+></entry>
+    <entry
+>Değiştir</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Birden çok dosyada bul ve değiştir</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Diğer şeyler</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>_</keycap
+></keycombo
+></entry>
+    <entry
+>Bir düzey daralt: Örneğin bir işlev içindeki büyük resme odaklanmak istiyorsanız bu bloğu görünümden kaldırın.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>+</keycap
+></keycombo
+></entry>
+    <entry
+>Bir düzey genişlet: Daraltmayı geri alın.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Seçili metni veya geçerli satırı yorum yapın.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Seçilen metindeki veya geçerli satırdaki yorumu kaldırın.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Geçerli işlevi belgelendirin. İmleç bir işlev veya sınıf beyanı üzerindeyse bu düğmeye basıldığında tüm parametrelerin, dönüş değerlerinin vb. listesiyle önceden doldurulmuş doxygen tarzı bir yorum oluşturulur;</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+></entry>
+    <entry
+>İmlecin üzerindeki ve bir önceki karakterin yerini değiştirin.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>K</keycap
+></keycombo
+></entry>
+    <entry
+>Geçerli satırı silin (not: bu yalnızca emacs’in <quote
+>buradan satır sonuna kadar silme işlemi</quote
+> değildir).</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="code-generation-with-templates"
+><title
+>Şablonlar ile kod üretimi</title>
+<para
+>&kdevelop; kaynak kodu dosyaları oluşturmak ve aynı kod sürekli yazmaktan kaçınmak için şablonlar kullanır. </para>
+<sect1 id="creating-a-new-class"
+><title
+>Yeni bir sınıf oluşturmak</title>
+<para
+>Kod üretimi için en yaygın kullanım büyük olasılıkla yeni sınıflar yazmaktır. Var olan bir projede yeni bir sınıf oluşturmak için bir proje klasörüne sağ tıklayın ve <guilabel
+>Şablondan Oluştur…</guilabel
+> ögesini seçin. Aynı iletişim kutusu <menuchoice
+><guimenu
+>Dosya</guimenu
+><guimenuitem
+>Şablondan Yeni…</guimenuitem
+></menuchoice
+> ile de çağrılabilir; ancak bir proje klasörü kullanmanın yararı, çıktı dosyaları için bir taban URL belirleyebilmektir. Kategori seçimi görünümünde <filename
+>Sınıf</filename
+> seçimini yapın ve sonraki iki görünümde istenen dili ve şablonu seçin. Bir sınıf şablonu seçtikten sonra yeni sınıfın ayrıntılarını belirtmeniz gerekir. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-selection.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Öncelikle yeni sınıf için bir tanımlayıcı belirtmeniz gerekir. Bu basit bir ad (<varname
+>Bus</varname
+> gibi) veya ad alanlarıyla birlikte tam bir tanımlayıcı (<varname
+>Transportation::Bus</varname
+> gibi) olabilir. İkinci durumda, &kdevelop; tanımlayıcıyı ayrıştıracak ve ad alanlarını gerçek addan doğru bir biçimde ayıracaktır. Aynı sayfada, yeni sınıf için temel sınıflar ekleyebilirsiniz. Bazı şablonların kendi başlarına bir temel sınıf seçtiklerini fark edebilirsiniz, bunu kaldırmakta ve/veya başka temel sınıflar eklemekte özgürsünüz. C++ için <varname
+>public QObject</varname
+>, PHP için <varname
+>extends SomeClass</varname
+> veya Python için yalnızca sınıfın adı gibi dile bağlı olan tam kalıtım ifadesini buraya yazmalısınız. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-inheritance.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Bir sonraki sayfada, miras alınan tüm sınıflardan sanal yöntemlerin yanı sıra bazı öntanımlı kurucular, yıkıcılar ve işleçleren oluşan bir seçki sunulur. Bir yöntem imzasının yanındaki onay kutusunu işaretlemek, bu yöntemi yeni sınıfta uygulayacaktır. </para>
+<para
+><guilabel
+>Sonraki</guilabel
+> düğmesine tıkladığınızda, sınıfa üye ekleyebileceğiniz bir sayfa açılır. Seçilen şablona bağlı olarak, bunlar yeni sınıfta üye değişkenler olarak görünebilir veya şablon bunlar için ayarlayıcıları ve alıcıları olan özellikler oluşturabilir. C++ gibi değişken türlerinin bildirilmesi gereken bir dilde, üyenin hem türünü hem de adını belirtmeniz gerekir, örneğin <varname
+>int number</varname
+> veya <varname
+>QString name</varname
+> gibi. Diğer dillerde, türü belirtmeyebilirsiniz; ancak yine de girmek iyi bir uygulamadır; çünkü seçilen şablon yine de bunu kullanabilir. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-members.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>İlerleyen sayfalarda, yeni sınıfınız için bir lisans seçebilir, seçili şablonun gerektirdiği özel seçenekleri ayarlayabilir ve oluşturulan tüm dosyalar için çıktı konumlarını yapılandırabilirsiniz. <guilabel
+>Bitir</guilabel
+> seçeneğine tıklayarak yardımcıyı tamamlar ve yeni sınıfı oluşturursunuz. Üretilen dosyalar düzenleyicide açılacaktır, böylece hemen kod eklemeye başlayabilirsiniz. </para>
+<para
+>Yeni bir C++ sınıfı oluşturduktan sonra, sınıfı bir proje hedefine ekleme seçeneği sunulacaktır. İletişim sayfasından bir hedef seçin veya sayfayı kapatın ve dosyaları elle bir hedefe ekleyin. </para>
+<para
+><filename
+>Qt Nesnesi</filename
+> şablonunu seçtiyseniz öntanımlı yöntemlerden bazılarını işaretlediyseniz ve iki üye değişken eklediyseniz çıktı aşağıdaki resimdeki gibi görünmelidir. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-result.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Veri üyelerinin, erişimci işlevler ve Q_PROPERTY makroları ile Qt özelliklerine dönüştürüldüğünü görebilirsiniz. Hatta ayarlayıcı işlevlerine argümanlar, uygun olan yerlerde const-reference ile aktarılır. Ek olarak, özel bir sınıf bildirilir ve Q_DECLARE_PRIVATE ile özel bir işaretçi oluşturulur. Bütün bunlar şablon tarafından yapılır, ilk adımda farklı bir şablon seçmek çıktıyı tümüyle değiştirebilir. </para>
+</sect1>
+<sect1 id="creating-a-new-unit-test"
+><title
+>Yeni bir birim testi oluşturmak</title>
+<para
+>Çoğu test çatıları, her testin aynı zamanda bir sınıf olmasını gerektirse de, &kdevelop; birim testlerinin oluşturulmasını basitleştirmek için bir yöntem içerir. Yeni bir test oluşturmak için bir proje klasörüne sağ tıklayın ve <guilabel
+>Şablondan Oluştur…</guilabel
+> seçeneğini seçin. Şablon seçim sayfasında, kategori olarak <filename
+>Test</filename
+> seçin, ardından programlama dilinizi ve şablonunuzu belirledikten sonra <guilabel
+>Sonraki</guilabel
+> düğmesine tıklayın. </para>
+<para
+>Test adı ve test senaryolarının bir listesi istenecektir. Test senaryoları için yalnızca bir ad listesi belirtmeniz gerekir. PyUnit ve PHPUnit gibi bazı birim test çerçeveleri, test senaryolarının özel bir önekle başlamasını gerektirir. &kdevelop; içinde, şablon öneki eklemekten sorumludur, bu nedenle burada test senaryolarına önek eklemeniz gerekmez. <guilabel
+>Sonraki</guilabel
+> düğmesine tıkladıktan sonra, üretilen dosyalar için lisans ve çıktı konumlarını belirtin ve test oluşturulacaktır. </para>
+<para
+>Bu şekilde oluşturulan birim testleri kendiliğinden herhangi bir hedefe eklenmeyecektir. CTest veya başka bir test çatısı kullanıyorsanız yeni dosyaları bir hedefe eklediğinizden emin olun. </para>
+</sect1>
+<sect1 id="other-files"
+><title
+>Diğer dosyalar</title>
+<para
+>Şablonlardan kod üretirken sınıflar ve birim testleri özel ilgi görse de, aynı yöntem her türlü kaynak kod dosyası için kullanılabilir. Örneğin, bir CMake Find modülü veya bir .desktop dosyası için bir şablon kullanılabilir. Bu, <guilabel
+>Şablondan Oluştur…</guilabel
+> seçilerek ve istenen kategori ve şablon seçilerek yapılabilir. Seçilen kategori ne <filename
+>Sınıf</filename
+> ne de <filename
+>Test</filename
+> ise yalnızca lisansı, şablon tarafından belirtilen özel seçenekleri ve çıktı dosyası konumlarını seçme seçeneğiniz olacaktır. Sınıflar ve testlerde olduğu gibi, yardımcıyı tamamlamak dosyaları oluşturacak ve düzenleyicide açacaktır. </para>
+</sect1>
+<sect1 id="managing-templates"
+><title
+>Şablonları yönetmek</title>
+<para
+><menuchoice
+><guimenu
+>Dosya</guimenu
+><guimenuitem
+>Şablondan Yeni…</guimenuitem
+></menuchoice
+> yardımcısından, <guilabel
+>Daha Fazla Şablon Al…</guilabel
+> düğmesine tıklayarak ek dosya şablonları da indirebilirsiniz. Bu, ek şablonları kurabileceğiniz, güncelleyebileceğiniz veya kaldırabileceğiniz bir Yeni Şeyler Al iletişim kutusunu açar. Ayrıca şablonlar için <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guisubmenu
+>&kdevelop; Uygulamasını Yapılandır</guisubmenu
+><guimenuitem
+>Şablonlar</guimenuitem
+></menuchoice
+> düğmesine tıklayarak ulaşabileceğiniz bir yapılandırma modülü de bulunmaktadır. Buradan hem dosya şablonlarını (yukarıda açıklanmıştır) hem de proje şablonlarını (yeni projeler oluşturmak için kullanılır) yönetebilirsiniz. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-manager.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Elbette, kullanılabilir şablonlardan hiçbiri projenize uygun değilse her zaman yenilerini oluşturabilirsiniz. En kolay yol büyük olasılıkla var olan bir şablonu kopyalayıp değiştirmektir; ancak kısa bir <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
+>öğretici</ulink
+> ve daha uzun bir <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
+>belirtim belgesi</ulink
+> size yardımcı olmak için oradadır. Kurulu bir şablonu kopyalamak için <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guisubmenu
+>K Geliştir Uygulamasını Yapılandır…</guisubmenu
+><guimenuitem
+>Şablonlar</guimenuitem
+></menuchoice
+> ögesine tıklayarak şablon yöneticisini açın, kopyalamak istediğiniz şablonu seçin ve ardından <guilabel
+>Şablonu Çıkar</guilabel
+> düğmesine tıklayın. Bir hedef klasör seçin, ardından <guilabel
+>Tamam</guilabel
+> düğmesine tıklayın; şablonun içeriği seçilen klasöre çıkarılacaktır. Artık çıkarılan dosyaları açıp değiştirerek şablonu düzenleyebilirsiniz. İşiniz bittikten sonra, şablon yöneticisini açıp uygun sekmeyi (<guilabel
+>Proje Şablonları</guilabel
+> veya <guilabel
+>Dosya Şablonları</guilabel
+>) etkinleştirerek ve <guilabel
+>Şablonu Yükle</guilabel
+> seçeneğine tıklayarak yeni şablonunuzu &kdevelop; uygulamasına aktarabilirsiniz. <varname
+>.kdevtemplate</varname
+> veya <varname
+>.desktop</varname
+> sonekine sahip olan şablon açıklama dosyasını açın. &kdevelop; dosyaları bir şablon arşivine sıkıştıracak ve şablonu içe aktaracaktır. </para>
+<para
+><note
+><para
+>Var olan bir şablonu kopyalarken, yeniden içe aktarmadan önce yeniden adlandırdığınızdan emin olun. Aksi takdirde, ya eski şablonun üzerine yazarsınız ya da aynı ada sahip iki şablon elde edersiniz. Bir şablonu yeniden adlandırmak için açıklama dosyasını benzersiz bir adla yeniden adlandırın (ancak soneki koruyun) ve açıklama dosyasındaki <filename
+>Ad</filename
+> girişini değiştirin. </para
+></note>
+</para>
+<para
+>Sıfırdan bir şablon yazmak istiyorsanız <link linkend="creating-projects-from-scratch"
+>yeni bir proje</link
+> oluşturarak ve <filename
+>K Geliştir</filename
+> kategorisindeki <filename
+>C++ Sınıfı Şablonu</filename
+> projesini seçerek örnek bir C++ sınıfı şablonuyla başlayabilirsiniz. </para>
+</sect1>
+</chapter>
+<chapter id="building-compiling-projects-with-custom-makefiles"
+><title
+>Özel Makefiles ile proje yapmak (derlemek)</title>
+<para
+>Birçok proje, <guilabel
+>make</guilabel
+> programı tarafından yorumlanan Make dosyalarını kullanarak kaynak dosyalarının nasıl derlenmesi gerektiğini (ve bir kaynak veya üstbilgi dosyası değiştiğinde hangi dosyaların yeniden derlenmesi gerektiğini) açıklar (örneğin, bkz. <ulink url="https://www.gnu.org/software/make/"
+>GNU make</ulink
+>). Basit projeler için böyle bir dosyayı elle oluşturmak genellikle çok kolaydır. Daha büyük projeler genellikle Make dosyalarını <guilabel
+>GNU autotools</guilabel
+> (autoconf, autoheader, automake) ile tümleştirirler. Bu bölümde, projeniz için bir Makefile olduğunu ve &kdevelop; yazılımına bununla nasıl etkileşimde bulunacağını öğretmek istediğinizi varsayalım.</para>
+<para
+><note
+><para
+>&kdevelop; 4.x, bu bölüm yazıldığı sırada <guilabel
+>GNU autotools</guilabel
+> hakkında bilgi sahibi değildir. Eğer projeniz bunları kullanıyorsa <varname
+>./configure</varname
+> veya diğer ilgili komutları komut satırında elle çalıştırmanız gerekecektir. Bunu &kdevelop; içinde yapmak istiyorsanız size bir kabuk penceresi görünümü veren <guilabel
+>Konsole</guilabel
+> aracını açın (gerekirse <menuchoice
+><guimenu
+>Pencereler</guimenu
+><guimenuitem
+>Araç Görünümü Ekle</guimenuitem
+></menuchoice
+> menüsünü kullanarak ana pencerenin çevresine ekleyin) ve bu görünümde komut satırından <varname
+>./configure</varname
+> komutunu çalıştırın.</para
+></note
+></para>
+<para
+>İlk adım &kdevelop; yazılımına, Makefile dosyalarınızdaki hedefleri öğretmektir. Bunu yapmanın iki yolu vardır: Makefile hedeflerini tek tek seçmek ve sık sık oluşturmak isteyebileceğiniz bir hedef kümesi seçmek. Her iki yaklaşım için de, &kdevelop; yazılımının ana penceresinin çevresindeki <guilabel
+>Projeler</guilabel
+> düğmesine tıklayarak <guilabel
+>Projeler</guilabel
+> aracını açın (bu düğmeye sahip değilseniz yukarıda bir aracın düğmesini nasıl ekleyeceğinize bakın). <guilabel
+>Projeler</guilabel
+> araç penceresi iki bölümden oluşur: <guilabel
+>Projeler</guilabel
+> &mdash; başlıklı üst yarı&mdash; tüm projelerinizi listeler ve altta yatan dizin ağaçlarını genişletmenize izin verir. <guilabel
+>Proje Seçimi</guilabel
+> &mdash; başlıklı alt yarı, <menuchoice
+><guimenu
+>Proje</guimenu
+><guimenuitem
+>Seçimi Yap</guimenuitem
+></menuchoice
+> menü ögesini seçerseniz veya <keycap
+>F8</keycap
+> düğmesine basarsanız yapılacak projelerin bir alt kümesini listeler; bu kısma aşağıda geri döneceğiz.</para>
+<sect1 id="building-individual-makefile-targets"
+><title
+>Bireysel Makefile hedeflerini yapmak</title>
+<para
+>Proje görünümünün üst kısmında, bir proje için diyelim ki belirli bir Makefile hedefini çalıştırmak istediğiniz proje için alt ağacı genişletin. Bu size (i) bu proje altındaki dizinler, (ii) bu proje için üst düzey dizindeki dosyalar, (iii) &kdevelop; yazılımının tanımlayabileceği Makefile hedefleri için simgeler verecektir. Bu kategoriler sağdaki resimde gösterilmektedir. Unutmayın ki &kdevelop;, <emphasis
+>Makefile sözdizimini belirli bir dereceye kadar anlar</emphasis
+> ve bu nedenle size bu Makefile içinde tanımlanan hedefleri sunabilir (ancak hedefler oluşturulmuşsa veya örtükse bu anlayışın sınırları vardır).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-1a.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Burada listelenen hedeflerden herhangi birini yapmak için farenin sağ düğmesiyle üzerine tıklayın ve <guilabel
+>Yap</guilabel
+> seçeneğini seçin. Örneğin, bunu <quote
+>clean</quote
+> hedefi ile yapmak basitçe <quote
+>make clean</quote
+> komutunu çalıştıracaktır. Bunun gerçekleştiğini açılan ve komutu ve çıktıyı gösteren <guilabel
+>Yap</guilabel
+> başlıklı alt pencerede görebilirsiniz. (Bu pencere <guilabel
+>Yap</guilabel
+> aracına karşılık gelir, bu nedenle ana pencerenin çevresindeki <guilabel
+>Yap</guilabel
+> araç düğmesini kullanarak pencereyi kapatabilir ve daha sonra yeniden açabilirsiniz. Resmin sağ alt kısmında gösterilmektedir).</para>
+</sect1>
+<sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"
+><title
+>Sürekli yapı için bir Makefile hedefleri koleksiyonu seçmek</title>
+<para
+>Bir şey yapmak istediğiniz her zaman tek tek Makefile hedeflerine sağ tıklamak sizi yoracaktır. Bunun yerine, oturumdaki bir veya daha fazla proje için çok fazla fare çalışması yapmadan sürekli olarak oluşturabileceğimiz bireysel hedeflere sahip olmak isteriz. İşte bu noktada <quote
+>Hedef Seçimlerini Yap</quote
+> kavramı devreye girer: Üstteki düğme listesinde <guilabel
+>Seçimi Yap</guilabel
+> düğmesine bastığınızda, <menuchoice
+><guimenu
+>Proje</guimenu
+><guimenuitem
+>Seçimi Yap</guimenuitem
+></menuchoice
+> menü ögesini seçtiğinizde veya <keycap
+>F8</keycap
+> işlev tuşuna bastığınızda birbiri ardına oluşturulan Makefile hedeflerinin bir koleksiyonudur.</para>
+<para
+>Seçili Makefile hedeflerinin listesi <guilabel
+>Projeler</guilabel
+> araç görünümünün alt yarısında gösterilir.</para>
+<para
+>Öntanımlı olarak seçim tüm projeleri içerir; ancak bunu değiştirebilirsiniz. Örneğin, proje listeniz üç proje içeriyorsa (bir temel kitaplık L ve iki uygulama A ve B), ancak şu anda yalnızca A projesi üzerinde çalışıyorsanız B projesini seçimde vurgulayarak ve <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> düğmesine basarak seçimden kaldırmak isteyebilirsiniz. Ayrıca, büyük olasılıkla listenin sağındaki düğmeleri kullanarak seçimdeki girdileri yukarı ve aşağı hareket ettirerek L kütüphanesinin A projesinden önce yapıldığından emin olmak istersiniz. Ayrıca, belirli bir Makefile hedefine sağ tıklayıp <guilabel
+>Yapı Kümesine Ekle</guilabel
+> seçeneğini seçerek veya yalnızca vurgulayıp <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> düğmesine basarak seçimde içerebilirsiniz.</para>
+<para
+>&kdevelop; seçimi oluşturduğunuzda ne yapacağınızı yapılandırmanıza olanak tanır. Bu amaçla, <menuchoice
+><guimenu
+>Proje</guimenu
+><guimenuitem
+>Yapılandırmayı Aç</guimenuitem
+></menuchoice
+> menü ögesini kullanın. Burada; örneğin <quote
+>make</quote
+>komutunun yürütmesi gereken eşzamanlı iş sayısını seçebilirsiniz &mdash; bilgisayarınızda örneğin 8 işlemci çekirdeği varsa, bu alana 8 girmek yararlı bir seçim olacaktır. Bu iletişim kutusunda, <guilabel
+>Öntanımlı make hedefi</guilabel
+>, seçimdeki <emphasis
+>tüm</emphasis
+> hedefler için kullanılan bir Makefile hedefidir.</para>
+</sect1>
+<sect1 id="what-to-do-with-error-messages"
+><title
+>Hata iletileri ile ne yapmalı</title>
+<para
+>Derleyici bir hata iletisiyle karşılaşırsa hata iletisinin bulunduğu satıra tıklamanız yeterlidir; düzenleyici, hatanın rapor edildiği satıra (ve varsa sütuna) atlayacaktır. Hata iletisine bağlı olarak &kdevelop;, size hatayı düzeltmek için birkaç olası eylem de sunabilir; örneğin bilinmeyen bir sembol bulunursa daha önce bildirilmemiş bir değişkeni bildirerek.</para>
+</sect1>
+</chapter>
+<chapter id="running-programs-in-kdevelop"
+><title
+>&kdevelop; içinde programlar çalıştırmak</title>
+<para
+>Bir program yaptıktan sonra, onu çalıştırmak isteyeceksiniz. Bunu yapmak üzere projeleriniz için <emphasis
+>Başlatmalar</emphasis
+> seçeneğini yapılandırmanız gerekir. Bir <emphasis
+>Başlat</emphasis
+>, bir yürütülebilir dosyanın adı, bir dizi komut satırı parametresi ve bir yürütme ortamından (<quote
+>bu programı bir kabukta çalıştır</quote
+> veya <quote
+>bu programı hata ayıklayıcısında çalıştır</quote
+> gibi) oluşur.</para>
+<sect1 id="setting-up-launches-in-kdevelop"
+><title
+>&kdevelop; içinde başlatmaları ayarlamak</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-2.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bunu ayarlamak için <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Başlatmaları Yapılandır</guimenuitem
+></menuchoice
+> menü ögesine gidin, başlatma eklemek istediğiniz projeyi vurgulayın ve <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> düğmesine tıklayın. Ardından yürütülebilir dosyanın adını ve programı çalıştırmak istediğiniz yolu girin. Yürütülebilir dosyanın çalıştırılması önce yürütülebilir dosyanın ve/veya diğer kitaplıklarıtn yapılmasına bağlıysa bunları alttaki listeye eklemek isteyebilirsiniz: Açılır menüden <guilabel
+>Yap</guilabel
+> ögesini seçin, ardından metin kutusunun sağındaki <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-folder.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> simgesine basın ve yapılmasını istediğiniz hedefi seçin. Yukarıdaki örnekte, program gerçekten çalıştırılmadan önce hem temel kitaplığın hem de uygulama programının derlendiğinden ve güncel olduğundan emin olmak için <replaceable
+>1.deal.II</replaceable
+> projesinden <guilabel
+>tümü</guilabel
+> ve <replaceable
+>1.step-32</replaceable
+> projesinden <replaceable
+>step-32</replaceable
+> hedeflerini seçtim. Hazır oradayken, <guilabel
+>Hata Ayıkla</guilabel
+> sembolüne tıklayarak ve hata ayıklayıcısı programın adını ekleyerek bir hata ayıklama başlatması da yapılandırabilirsiniz; bu sistemin öntanımlı hata ayıklayıcısıysa (&eg; &Linux; üzerinde <application
+>gdb</application
+>), bu adımı atmanıza gerek yoktur.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-3.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Şimdi programı çalıştırmayı deneyebilirsiniz: &kdevelop; yazılımının ana pencere menüsünden <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Başlatmayı Yürüt</guimenuitem
+></menuchoice
+> seçeneğini seçin (veya <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+>) ve programınız &kdevelop; içindeki ayrı bir alt pencerede çalışacaktır. Yukarıdaki resim sonucu gösterir: Yeni <guilabel
+>Çalıştır</guilabel
+> araç alt penceresi, çalıştırılan programın çıktısını (bu durumda <replaceable
+>step-32</replaceable
+>) gösterir.</para>
+<para
+><note
+><para
+>Birden fazla başlatma yapılandırdıysanız <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+> düğmesine bastığınızda hangisinin çalışacağını <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Geçerli Başlatma Yapılandırması</guimenuitem
+></menuchoice
+> seçeneğine giderek seçebilirsiniz. Bununla birlikte, bir yapılandırmanın adını düzenlemenin açık olmayan bir yolu vardır: <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Geçerli Başlatma Yapılandırması</guimenuitem
+></menuchoice
+> ögesini seçtiğinizde aldığınız iletişim kutusunda, soldaki ağaç görünümünde yapılandırmanın adına çift tıklayın, bu da yapılandırmanın adını düzenlemenize olanak tanır.</para
+></note
+></para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts0"
+><title
+>Bazı kullanışlı klavye kısayolları</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Bir program çalıştırmak</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F8</keycap
+></entry>
+    <entry
+>Yap (make programını çağır)</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Çalıştır</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Programı hata ayıklayıcısında çalıştırın; önceden kesme noktaları ayarlamak isteyebilirsiniz; örneğin kaynak koddaki belirli bir satıra fareyle sağ tıklayarak.</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="debugging-programs-in-kdevelop"
+><title
+>&kdevelop; içinde programlarda hata ayıklamak</title>
+<sect1 id="running-a-program-in-the-debugger"
+><title
+>Bir programı hata ayıklayıcısında çalıştırmak</title>
+<para
+>Bir başlatmayı yapılandırdığınızda (bkz. <link linkend="running-programs-in-kdevelop"
+>Programlar Çalıştırmak</link
+>), aynı zamanda onu bir hata ayıklayıcısında da çalıştırabilirsiniz: <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Başlatma Hatalarını Ayıkla</guimenuitem
+></menuchoice
+> seçin veya <keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+> kısayolunu kullanın. <application
+>gdb</application
+> uygulamasına aşinaysanız bu, <application
+>gdb</application
+> uygulamasını yapılandırmada belirtilen yürütülebilirle başlatmakla ve <varname
+>Çalıştır</varname
+> yapmakla aynı şeydir. Bu, program bir yerde <varname
+>abort()</varname
+> çağrısı yaparsa (&eg; başarısız bir doğrulamaya denk gelirseniz) veya bir segmentasyon hatası varsa hata ayıklayıcısının duracağı anlamına gelir. Öte yandan, program sonuna kadar çalışırsa (doğru şeyi yaparak veya yapmadan), hata ayıklayıcı program bitmeden kendi kendine durmayacaktır. İkinci durumda, hata ayıklama başlatmasını çalıştırmadan önce hata ayıklayıcısının durmasını istediğiniz kod tabanınızın tüm satırlarında bir kesme noktası ayarlamak isteyeceksiniz. Bunu, imleci böyle bir satırın üzerine getirip <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Kesme Noktasını Aç/Kapat</guimenuitem
+></menuchoice
+> menü ögesini seçerek veya bir satıra sağ tıklayıp bağlam menüsünden <guilabel
+>Kesme Noktasını Aç/Kapat</guilabel
+> ile yapabilirsiniz.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-4.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bir programı hata ayıklayıcısında çalıştırmak &kdevelop; yazılımını farklı bir kipe sokacaktır: Ana pencerenin çevresindeki tüm <quote
+>Araç</quote
+> düğmelerini düzenleme kipi yerine hata ayıklama için uygun olanlarla değiştirecektir. Pencerenin sağ üst kısmına bakarak hangi kipte olduğunuzu görebilirsiniz: <guilabel
+>Gözden Geçir</guilabel
+>, <guilabel
+>Hata Ayıkla</guilabel
+> ve <guilabel
+>Kod</guilabel
+> adında sekmeler vardır; bunlara tıklamak üç kip arasında geçiş yapmanızı sağlar; her kipin kendine ait bir dizi araç görünümü vardır ve bunları <link linkend="tools-and-views"
+>Araçlar ve Görünümler</link
+> bölümünde <guilabel
+>Kod</guilabel
+> araçlarını yapılandırdığımız şekilde yapılandırabilirsiniz.</para>
+<para
+>Hata ayıklayıcısı durduğunda (bir kesme noktasında veya <varname
+>abort()</varname
+> yönteminin çağrıldığı bir noktada) programınız hakkında çeşitli bilgileri inceleyebilirsiniz. Örneğin, yukarıdaki resimde, altta <guilabel
+>Çerçeve Yığını</guilabel
+> aracını seçtik (kabaca <application
+>gdb</application
+> uygulamasının <quote
+>backtrace</quote
+> ve <quote
+>info threads</quote
+> komutlarına eşdeğerdir), bu araç solda programınızda o anda çalışmakta olan çeşitli iş parçacıklarını (burada toplam 8) ve sağda yürütmenin geçerli durma noktasına nasıl geldiğini gösterir (burada: <varname
+>main()</varname
+> <varname
+>run()</varname
+> yöntemini çağırdı; <varname
+>run()</varname
+> yönteminin kendisi tarafından çağrılan bir işlevde dursaydık liste daha uzun olurdu). Sol tarafta, geçerli nesne (<varname
+>this</varname
+> değişkeninin işaret ettiği nesne) dahil olmak üzere yerel değişkenleri inceleyebiliriz.</para>
+<para
+>Buradan itibaren yapabileceğiniz çeşitli olasılıklar vardır: Geçerli satırı yürütebilir (<keycap
+>F10</keycap
+>, <application
+>gdb</application
+> uygulamasının <quote
+>next</quote
+> komutu), işlevlere adım atabilir (<keycap
+>F11</keycap
+>, <application
+>gdb</application
+> uygulamasının <quote
+>step</quote
+> komutu) veya işlevi sonuna kadar çalıştırabilirsiniz (<keycap
+>F12</keycap
+>, <application
+>gdb</application
+> uygulamasının <quote
+>finish</quote
+> komutu). Her aşamada, &kdevelop; solda gösterilen değişkenleri geçerli değerlerine günceller. Ayrıca fareyi kodunuzdaki bir sembolün üzerine getirebilirsiniz, &eg; bir değişken; &kdevelop; daha sonra bu sembolün geçerli değerini gösterecek ve bu değişkenin değeri bir dahaki zamnda değiştiğinde programı yürütme sırasında durdurmayı teklif edecektir. Eğer <application
+>gdb</application
+> biliyorsanız alttaki <guilabel
+>GDB</guilabel
+> araç düğmesine de tıklayabilir ve örneğin bir değişkenin değerini değiştirmek için <application
+>gdb</application
+> komutlarını girme olanağına sahip olabilirsiniz (bunun için şu anda başka bir yol yok gibi görünüyor).</para>
+</sect1>
+<sect1 id="attaching-the-debugger-to-a-running-process"
+><title
+>Hata ayıklayıcısını çalışan bir sürece iliştirmek</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-9.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bazen, halihazırda çalışmakta olan bir programda hata ayıklamak istenebilir. Bunun için bir senaryo, <ulink url="https://computing.llnl.gov/tutorials/mpi/"
+>MPI</ulink
+> kullanarak paralel programlarda hata ayıklamak veya uzun süredir çalışan bir arka plan işleminde hata ayıklamaktır. Bunu yapmak için <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Sürece İliştir</guimenuitem
+></menuchoice
+> menü girdisine gidin, bu da yukarıdaki gibi bir pencere açacaktır. Şu anda &kdevelop; içinde açık olan projenizle eşleşen programı seçmek isteyeceksiniz — benim durumumda bu step-32 programı olacaktır.</para>
+<para
+>Bu program listesi kafa karıştırıcı olabilir; çünkü burada gösterilen durumda olduğu gibi genellikle uzundur. Pencerenin sağ üst köşesindeki açılır kutuya giderek hayatınızı biraz daha kolaylaştırabilirsiniz. Öntanımlı değer <guilabel
+>Kullanıcı Süreçleri</guilabel
+>, &ie; bu makinede oturum açmış olan herhangi bir kullanıcı tarafından çalıştırılan tüm programlar (bu sizin masaüstü veya dizüstü bilgisayarınızsa, root ve çeşitli hizmet hesapları dışında büyük olasılıkla tek kullanıcı sizsiniz); ancak liste root kullanıcısı tarafından çalıştırılan süreçleri içermez. <guilabel
+>Öz Süreçler</guilabel
+> seçeneğini seçerek listeyi sınırlayabilir ve diğer kullanıcılar tarafından çalıştırılan tüm programları kaldırabilirsiniz. Ya da daha iyisi: <guilabel
+>Yalnızca Programlar</guilabel
+> seçeneğini seçerek resmi olarak sizin adınız altında çalışan; ancak pencere yöneticisi, arka plan görevleri gibi genellikle etkileşimde bulunmadığınız ve hata ayıklama için olası adaylar olmayan birçok işlemi kaldırabilirsiniz.</para>
+<para
+>Bir süreci seçtikten sonra, ona bağlanmak sizi &kdevelop; uygulamasının hata ayıklama kipine sokacak, tüm olağan hata ayıklayıcısı araç görünümlerini açacak ve programı ona bağlandığınızda olduğu konumda durduracaktır. Daha sonra kesme noktaları, görünüm noktaları ya da gerekli olan her şeyi ayarlamak ve <menuchoice
+><guimenu
+>Çalıştır</guimenu
+><guimenuitem
+>Sürdür</guimenuitem
+></menuchoice
+> menü ögesine giderek programı yürütmeyı sürdürmek isteyebilirsiniz.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts1"
+><title
+>Bazı kullanışlı klavye kısayolları</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Hata ayıklamak</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F10</keycap
+></entry>
+    <entry
+>Üzerinden atla (gdb’nin <quote
+>next</quote
+> işlevi)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F11</keycap
+></entry>
+    <entry
+>İçeri adım (gdb’nin <quote
+>step</quote
+> işlevi)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F12</keycap
+></entry>
+    <entry
+>Dışarı adım (gdb’s <quote
+>finish</quote
+> işlevi)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="working-with-version-control-systems"
+><title
+>Sürüm denetim sistemi ile çalışmak</title>
+<para
+>Daha büyük projelerle çalışıyorsanız kaynak kodun <ulink url="https://subversion.apache.org/"
+>subversion</ulink
+> veya <ulink url="https://git-scm.com/"
+>git</ulink
+> gibi bir sürüm denetim sistemi tarafından yönetiliyor olması olasıdır. Aşağıdaki açıklama <guilabel
+>subversion</guilabel
+> göz önünde bulundurularak yazılmıştır; ancak <guilabel
+>git</guilabel
+> veya desteklenen başka bir sürüm denetim sistemi kullanıyorsanız da aynı şekilde geçerli olacaktır.</para>
+<para
+>İlk olarak, bir projenin bulunduğu dizin sürüm denetimi altındaysa &kdevelop; bunu kendiliğinden fark edecektir. Başka bir deyişle: Projenizi kurarken &kdevelop; uygulamasına bir kopyasını kendisinin denetlemesini söylemenize gerek yoktur; &kdevelop; uygulamasını daha önce depodan bir kopyasını çıkış yaptığınız bir dizine yönlendirmenizde bir sakınca yoktur. Sürüm denetimi altında böyle bir dizininiz varsa <guilabel
+>Projeler</guilabel
+> araç görünümünü açın. Daha sonra yapabileceğiniz birkaç şey vardır:</para>
+<itemizedlist>
+<listitem
+><para
+>Dizininiz güncelliğini yitirmişse depodan güncelleyebilirsiniz: Farenin sağ düğmesiyle proje adına tıklayın, <guilabel
+>Subversion</guilabel
+> menüsüne gidin ve <guilabel
+>Güncelle</guilabel
+> seçeneğini seçin. Bu, bu projeye ait tüm dosyaları depoya göre güncel hale getirecektir </para
+></listitem>
+<listitem
+><para
+>Bu eylemi tek tek alt dizinlerle veya dosyalarla sınırlamak istiyorsanız bu projenin ağaç görünümünü istediğiniz düzeye genişletin ve bir alt dizine veya dosya adına sağ tıklayın, ardından yukarıdaki işlemin aynısını yapın. </para
+></listitem>
+</itemizedlist>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-8.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<itemizedlist>
+<listitem
+><para
+>Bir veya daha fazla dosyayı düzenlediyseniz bu projenin görünümünü bu dosyaların bulunduğu dizine genişletin ve dizine sağ tıklayın. Bu size farklı seçenekler sunan <guilabel
+>Subversion</guilabel
+> menü ögesini verir. Düzenlediğiniz sürüm ile daha önce çıkış yaptığınız depodaki sürüm (<quote
+>base</quote
+> revizyonu) arasındaki farkları görmek için <guilabel
+>Taban ile Karşılaştır</guilabel
+> ögesini seçin. Ortaya çıkan görünüm bu dizindeki tüm dosyalar için <quote
+>farkları</quote
+> gösterecektir. </para
+></listitem>
+<listitem
+><para
+>Yalnızca tek bir dosyayı düzenlediyseniz proje görünümünde ilgili dosya adına sağ tıklayarak bu dosya için <guilabel
+>Subversion</guilabel
+> menüsünü de elde edebilirsiniz. Daha da basit olarak, bu dosyayı açtığınız <guilabel
+>Düzenleyici</guilabel
+> görünümüne sağ tıklamak da size bu menü seçeneğini verecektir. </para
+></listitem>
+<listitem
+><para
+>Düzenlenmiş bir veya daha fazla dosyayı denetlemek istiyorsanız tek bir dosyaya, alt dizine veya tüm projeye sağ tıklayın ve <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>İşle</guimenuitem
+></menuchoice
+> ögesini seçin. Bu sizi &kdevelop; ana penceresinin sağ üst köşesinde görebileceğiniz gibi <guilabel
+>Kod</guilabel
+> ve <guilabel
+>Hata Ayıkla</guilabel
+> kiplerinin yanındaki üçüncü kip olan <guilabel
+>Gözden Geçir</guilabel
+> kipine geçirecektir. Sağdaki resim size bunun nasıl göründüğünü göstermektedir. <guilabel
+>Gözden Geçir</guilabel
+> kipinde, üst kısım size tüm alt dizin/proje ve değişiklikleri vurgulanmış her bir değiştirilmiş dosya için farkları gösterir (pencerenin bu kısmındaki çeşitli sekmelere bakın). Öntanımlı olarak, değiştirilen tüm dosyalar işlemek üzere olduğunuz değişiklik kümesinde yer alır; ancak değişiklikleri işlemek istediğiniz şeyle ilgisizse bazı dosyaların seçimini kaldırabilirsiniz. Örneğin, sağdaki örnekte <varname
+>step-32.cc</varname
+> ve <varname
+>step-32.prm</varname
+> dosyalarının seçimini kaldırdım; çünkü bu dosyalardaki değişikliklerin bu projede yaptığım diğer değişikliklerle hiçbir ilgisi yok ve bunları henüz denetlemek istemiyorum (daha sonra bunu ayrı bir işleme ile yapmak isteyebilirim). Değişiklikleri gözden geçirdikten sonra metin kutusuna bir işleme iletisi girebilir ve sağdaki <guilabel
+>İşle</guilabel
+> düğmesine basarak işleyebilirsiniz. </para
+></listitem>
+<listitem
+><para
+>Farklılıkları görmede olduğu gibi, tek bir dosyayı denetlemek istiyorsanız <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>İşle</guimenuitem
+></menuchoice
+> menü ögesini almak için düzenleyici penceresine sağ tıklayabilirsiniz. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="customizing-kdevelop"
+><title
+>&kdevelop; yazılımını özelleştirmek</title>
+<para
+>Örneğin farklı klavye kısayollarına alışkın olduğunuz için veya projeniz kaynak kod için farklı bir girinti biçemi gerektirdiği için &kdevelop; yazılımının öntanımlı görünüşünü veya davranışını değiştirmek istediğiniz zamanlar olabilir. Aşağıdaki bölümlerde, &kdevelop; yazılımının bu tür gereksinimler için nasıl özelleştirilebileceğinin çeşitli yollarını kısaca açıklıyoruz.</para>
+<sect1 id="customizing-the-editor"
+><title
+>Düzenleyiciyi özelleştirmek</title>
+<para
+>&kdevelop; uygulamasının yerleşik düzenleyicisi içinde ve çevresinde yapılandırılabilecek bir dizi yararlı şey vardır. Daha evrensel kullanım için <menuchoice
+><guimenu
+>Düzenleyici</guimenu
+><guisubmenu
+>Görünüm</guisubmenu
+><guimenuitem
+>Satır Numaralarını Göster</guimenuitem
+></menuchoice
+> menü girdisini kullanarak satır numaralandırmayı açmak, derleyici hata iletilerini veya hata ayıklama iletilerini koddaki konumlarla eşleştirmeyi kolaylaştırır. Aynı alt menüde <emphasis
+>Simge Kenarlığı</emphasis
+> özelliğini de açmak isteyebilirsiniz — &kdevelop;, kodunuzun solunda, geçerli satırda bir kesme noktası olup olmadığı gibi simgeleri gösterecek bir sütun gösterir.</para>
+</sect1>
+<sect1 id="customizing-code-indentation"
+><title
+>Kod girintilemesini özelleştirmek</title>
+<para
+>Çoğumuz kodun belirli bir şekilde biçimlendirilmesini isteriz. Birçok proje de belirli bir girinti biçemini zorunlu kılar. Her ikisi de &kdevelop; uygulamasının girintileme biçemiyle eşleşmeyebilir. Ancak, bu özelleştirilebilirdir: <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guimenuitem
+>&kdevelop; Uygulamasını Özelleştir</guimenuitem
+></menuchoice
+> menü ögesine gidin, ardından soldaki <guilabel
+>Kaynak Biçimlendiricisi</guilabel
+> ögesine tıklayın. Yaygın olarak kullanılan önceden tanımlanmış girintileme biçemlerinden birini seçebilir veya yeni bir biçem ekleyip düzenleyerek kendi biçeminizi tanımlayabilirsiniz. Projenizin kaynaklarının geçmişte girintilendiği biçemi tam olarak yeniden oluşturmanın bir yolu olmayabilir; ancak yeni bir biçem için ayarları kullanarak yaklaşabilirsiniz; aşağıdaki iki resimde bir örnek gösterilmektedir.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-5.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-6.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+><guilabel
+>&kdevelop; 4.2.2</guilabel
+> ile belirli bir MIME türü için yeni bir biçem oluşturabilirsiniz (&eg; C++ başlık dosyaları için); ancak bu biçem diğer MIME türleri için olası biçemler listesinde görünmez (&eg; C++ kaynak dosyaları için); ancak elbette her iki dosya türü için de aynı biçemi kullanmak yararlı olacaktır. Bu nedenle, biçemi bir kez üstbilgi ve bir kez de kaynak dosyaları için olmak üzere iki kez tanımlamanız gerekecektir. Bu durum <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
+>272335 numaralı</ulink
+> hata raporunda bildirilmiştir.</para
+></note
+></para>
+</sect1>
+<sect1 id="customizing-keyboard-shortcuts"
+><title
+>Klavye kısayollarını özelleştirmek</title>
+<para
+>&kdevelop;, <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guimenuitem
+>Kısayolları Yapılandır</guimenuitem
+></menuchoice
+> menüsü aracılığıyla zevkinize göre değiştirebileceğiniz neredeyse sınırsız bir klavye kısayolları listesine sahiptir (bazıları bu kılavuzdaki çeşitli bölümlerin <quote
+>Kullanışlı klavye kısayolları</quote
+> bölümünde listelenmiştir). İletişim kutusunun üst kısmında bir arama sözcüğü girebilirsiniz ve yalnızca eşleşen komutları gösterir; daha sonra bu komuta hangi düğme kombinasyonunun bağlı olduğunu düzenleyebilirsiniz.</para>
+<para
+>Değiştirilmesi çok faydalı bulunan iki tanesi <guilabel
+>Hizala</guilabel
+> özelliğini &Tab; düğmesine ayarlamaktır (birçok kişi genellikle sekmeleri elle girmez ve düzenleyicinin kodun yerleşimini seçmesini tercih eder; değiştirilen kısayolla, &Tab; düğmesine basmak &kdevelop; kodunu girintili/çıkıntılı/hizalı hale getirir). İkincisi ise <keycombo
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+> üzerine <guilabel
+>Kesme Noktasını Aç/Kapat</guilabel
+> koymaktır; çünkü bu oldukça sık yapılan bir işlemdir.</para>
+</sect1>
+<sect1 id="customizing-code-auto-completion"
+><title
+>Kodu kendiliğinden tamamlamayı özelleştirmek</title>
+<para
+>Kod tamamlama <link linkend="auto-completion"
+>bu kılavuzun kaynak kodu yazma bölümünde ele alınmıştır</link
+>. &kdevelop; yazılımında bu, iki kaynaktan gelir: Düzenleyici ve ayrıştırma işletkesi. Düzenleyici (&kate;) daha geniş KDE ortamının bir bileşenidir ve aynı belgenin diğer bölümlerinde daha önce gördüğü sözcüklere dayalı kendiliğinden tamamlama sunar. Bu tür kendiliğinden tamamlamalar araç ipucunda kendisinden önce gelen simge ile tanımlanabilir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-20.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Düzenleyicinin kod tamamlama özelliği <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guisubmenu
+>Düzenleyiciyi Yapılandır</guisubmenu
+><guimenuitem
+>Düzenleme</guimenuitem
+><guimenuitem
+>Kendiliğinden Tamamlama</guimenuitem
+></menuchoice
+> aracılığıyla özelleştirilebilir. Özellikle, kendiliğinden tamamlama devreye girmeden önce bir sözcükte kaç karakter yazmanız gerektiğini seçebilirsiniz.</para>
+<para
+>Öte yandan, &kdevelop; yazılımının öz kendiliğinden tamamlaması, bağlamla ilgili anlamsal bilgileri dikkate aldığı için çok daha güçlüdür. Örneğin, burada gösterildiği gibi <varname
+>object.</varname
+>, &etc; yazdığınızda hangi üye işlevleri sunacağını bilir:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Bu bağlam bilgisi, belirli bir dosya kaydedildikten sonra kullanılabilen çeşitli dil desteği eklentilerinden gelir (böylece dosya türünü denetlenebilir ve doğru dil desteğini kullanabilir).</para>
+<para
+>&kdevelop; yazılımının tamamlanması, bir şeyi tamamlayabileceği hemen hemen her yerde, siz yazarken görünecek şekilde ayarlanmıştır. Bu, <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guisubmenu
+>&kdevelop; Uygulamasını Yapılandır</guisubmenu
+><guimenuitem
+>Dil Desteği</guimenuitem
+></menuchoice
+> içinde yapılandırılabilir. Halihazırda ayarlanmamışsa (öntanımlı olarak olması gerektiği gibi) <guilabel
+>Kendiliğinden Çağırmayı Etkinleştir</guilabel
+> seçeneğinin ayarlandığından emin olun.</para>
+<para
+>&kdevelop; içinde bir tamamlamayı göstermenin iki yolu vardır: <guilabel
+>Minimal Kendiliğinden Tamamlama</guilabel
+> tamamlama araç ipuçlarında yalnızca temel bilgileri gösterir (&ie; ad alanı, sınıf, işlev veya değişken adı). Bu, &kate; tamamlamasına benzer görünecektir (simgeler dışında).</para>
+<para
+>Öte yandan <guilabel
+>Tam Tamamlama</guilabel
+>, ek olarak her girdinin türünü ve işlevler söz konusu olduğunda aldıkları argümanları da gösterecektir. Ayrıca, o anda bir işlevin argümanlarını dolduruyorsanız tam tamamlama imlecin üzerinde üzerinde çalıştığınız geçerli argümanı gösteren ek bir bilgi kutusuna sahip olacaktır.</para>
+<para
+>&kdevelop; yazılımının kod tamamlaması ayrıca <quote
+>en iyi eşleşmeler</quote
+> olarak bilinen, hem minimal hem de tam tamamlamada o anda beklenen türle eşleşen tamamlama ögelerini en üste getirmeli ve yeşil renkle vurgulamalıdır.</para>
+<para
+>Yapılandırma iletişim kutusundaki tamamlama düzeyi için üç olası seçenek vardır:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Her zaman minimal tamamlama</guilabel
+>: Hiçbir zaman <quote
+>tam tamamlamayı</quote
+> gösterme </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Minimal kendiliğinden tamamlama</guilabel
+>: <quote
+>Tam tamamlamayı</quote
+> yalnızca kendiliğinden tamamlama elle tetiklendiğinde göster (&ie;, <keycombo
+>&Ctrl;<keycap
+>Boşluk</keycap
+></keycombo
+> kombinasyonunu kullandığınızda) </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Her zaman tam tamamlma</guilabel
+>: Her zaman <quote
+>tam tamamlamayı</quote
+> göster </para
+></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<!--userbase-content-->
+<chapter id="credits">
+<title
+>Emeği Geçenler ve Lisanslar</title>
+    <para
+>Belgelendirme telif hakkı için UserBase <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
+>KDevelop4/Kılavuz</ulink
+> sayfası geçmişine bakın.</para>
+    <para
+>Çeviri: Emir SARI <email
+>emir_sari@icloud.com</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>
