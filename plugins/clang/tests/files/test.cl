@@ -22,21 +22,17 @@ void kernel testFloatTypes() {
   double4 vectorDouble;
 }
 
-/// "isVirtual" : false
 void kernel testFlatImageTys(image1d_t img1d, image2d_t img2d, image3d_t img3d) {
 }
 
-/// "isVirtual" : false
 void kernel testImageArrays(image1d_array_t img1d, image2d_array_t img2d, image2d_array_depth_t img2da,
                             image2d_array_msaa_t img2dmsaa, image2d_array_msaa_depth_t img2damd) {
 }
 
-/// "isVirtual" : false
 void kernel testOtherImageTys(image1d_buffer_t img1d, image2d_depth_t img2ddepth,
                               image2d_msaa_t msaa, image2d_msaa_depth_t img2ddepthmsaa) {
 }
 
-/// "isVirtual" : false
 void kernel testOpaqueTys(sampler_t samplerTy) {
     event_t eventTy;
 

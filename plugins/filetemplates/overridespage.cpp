@@ -137,25 +137,11 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
         //For this internal context get all the function declarations inside the class
         const auto localDeclarations = context->localDeclarations();
         for (Declaration* childDeclaration : localDeclarations) {
-            if (auto * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration))
-            {
-                if (func->isVirtual())
-                {
-                    // Its a virtual function, add it to the list unless it's a destructor
-                    auto* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
-                    if (cFunc && !cFunc->isDestructor())
-                    {
-                        addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
-                    }
-                }
-                else if (directBases.contains(baseClass))
-                {
-                    // add ctors of direct parents
-                    auto* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
-                    if (cFunc && cFunc->isConstructor())
-                    {
-                        addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
-                    }
+            if (const auto* const classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration)) {
+                if ((classFunction->isVirtual() && !classFunction->isDestructor()) // virtual and not destructor
+                    || (directBases.contains(baseClass) && classFunction->isConstructor()) // direct base constructor
+                ) {
+                    addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
                 }
             }
         }

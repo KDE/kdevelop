@@ -21,7 +21,8 @@ enum ClassFunctionFlag
     FunctionSignalFlag = 1 <<  1,
     FunctionSlotFlag = 1 << 2,
     AbstractFunctionFlag = 1 << 3,
-    FinalFunctionFlag = 1 << 4
+    FinalFunctionFlag = 1 << 4,
+    VirtualFunctionFlag = 1 << 5,
 };
 Q_DECLARE_FLAGS(ClassFunctionFlags, ClassFunctionFlag)
 
@@ -83,6 +84,9 @@ public:
     ///Whether this function is final
     bool isFinal() const;
     void setIsFinal(bool);
+
+    [[nodiscard]] bool isVirtual() const;
+    void setIsVirtual(bool);
 
     virtual bool isConstructor() const;
     virtual bool isDestructor() const;

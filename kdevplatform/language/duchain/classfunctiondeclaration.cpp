@@ -172,6 +172,17 @@ void ClassFunctionDeclaration::setIsSlot(bool isSlot)
                                                                       d_func()->m_functionFlags);
 }
 
+bool ClassFunctionDeclaration::isVirtual() const
+{
+    return d_func()->m_functionFlags & VirtualFunctionFlag;
+}
+
+void ClassFunctionDeclaration::setIsVirtual(bool isVirtual)
+{
+    d_func_dynamic()->m_functionFlags =
+        (ClassFunctionFlags)setFlag(isVirtual, VirtualFunctionFlag, d_func()->m_functionFlags);
+}
+
 bool ClassFunctionDeclaration::isConversionFunction() const
 {
     return identifier() == conversionIdentifier();

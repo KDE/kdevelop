@@ -17,16 +17,6 @@ AbstractFunctionDeclaration::~AbstractFunctionDeclaration()
 {
 }
 
-bool AbstractFunctionDeclaration::isVirtual() const
-{
-    return data()->m_isVirtual;
-}
-
-void AbstractFunctionDeclaration::setVirtual(bool isVirtual)
-{
-    dynamicData()->m_isVirtual = isVirtual;
-}
-
 bool AbstractFunctionDeclaration::isInline() const
 {
     return data()->m_isInline;
@@ -51,7 +41,6 @@ void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers speci
 {
     dynamicData()->m_isInline = specifiers & InlineSpecifier;
     dynamicData()->m_isExplicit = specifiers & ExplicitSpecifier;
-    dynamicData()->m_isVirtual = specifiers & VirtualSpecifier;
 }
 
 IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index) const

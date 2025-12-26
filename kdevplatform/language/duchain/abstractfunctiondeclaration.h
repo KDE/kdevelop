@@ -20,13 +20,12 @@ class IndexedString;
 class AbstractFunctionDeclarationData
 {
 public:
-    AbstractFunctionDeclarationData() : m_isVirtual(false)
-        , m_isInline(false)
+    AbstractFunctionDeclarationData()
+        : m_isInline(false)
         , m_isExplicit(false)
     {
     }
     IndexedDUContext m_functionContext;
-    bool m_isVirtual : 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
     bool m_isInline : 1;
     bool m_isExplicit : 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
 };
@@ -41,9 +40,8 @@ public:
     virtual ~AbstractFunctionDeclaration();
 
     enum FunctionSpecifier {
-        VirtualSpecifier  = 0x1 /**< indicates a virtual function */,
-        InlineSpecifier   = 0x2 /**< indicates a inline function */,
-        ExplicitSpecifier = 0x4 /**< indicates a explicit function */
+        InlineSpecifier = 0x1 /**< indicates an inline function */,
+        ExplicitSpecifier = 0x2 /**< indicates an explicit function */,
     };
     Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
@@ -51,10 +49,6 @@ public:
 
     bool isInline() const;
     void setInline(bool isInline);
-
-    ///Only used for class-member function declarations(see ClassFunctionDeclaration)
-    bool isVirtual() const;
-    void setVirtual(bool isVirtual);
 
     ///Only used for class-member function declarations(see ClassFunctionDeclaration)
     bool isExplicit() const;

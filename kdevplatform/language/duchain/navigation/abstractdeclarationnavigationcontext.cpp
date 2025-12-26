@@ -836,11 +836,11 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
             details << QStringLiteral("inline");
         if (function->isExplicit())
             details << QStringLiteral("explicit");
-        if (function->isVirtual())
-            details << QStringLiteral("virtual");
 
         const auto* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
         if (classFunDecl) {
+            if (classFunDecl->isVirtual())
+                details << QStringLiteral("virtual");
             if (classFunDecl->isSignal())
                 details << QStringLiteral("signal");
             if (classFunDecl->isSlot())

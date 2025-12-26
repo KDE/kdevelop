@@ -70,13 +70,15 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
   }
 
   if (const auto* function = dynamic_cast<const AbstractFunctionDeclaration*>(dec)) {
-    p |= CodeCompletionModel::Function;
-    if (function->isVirtual())
-      p |= CodeCompletionModel::Virtual;
-    if (function->isInline())
-      p |= CodeCompletionModel::Inline;
-    if (function->isExplicit())
-      {}//TODO
+      p |= CodeCompletionModel::Function;
+      if (function->isInline())
+          p |= CodeCompletionModel::Inline;
+      if (function->isExplicit()) { } //TODO
+
+      if (const auto* const classFunction = dynamic_cast<const ClassFunctionDeclaration*>(function)) {
+          if (classFunction->isVirtual())
+              p |= CodeCompletionModel::Virtual;
+      }
   }
 
   if( dec->isTypeAlias() )

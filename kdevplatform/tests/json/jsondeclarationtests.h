@@ -201,12 +201,11 @@ DeclarationTest(isAtomic)
 ///@returns whether the (function) declaration's isVirtual matches the given value
 DeclarationTest(isVirtual)
 {
-    const QString NOT_A_FUNCTION = QStringLiteral("Non-function declaration cannot be virtual.");
-    auto* absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
-    if (!absFuncDecl)
-        return NOT_A_FUNCTION;
+    const auto* const classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (!classFuncDecl)
+        return QStringLiteral("Non-class-function declaration cannot be virtual.");
 
-    return compareValues(absFuncDecl->isVirtual(), value, QStringLiteral("Declaration's isVirtual"));
+    return compareValues(classFuncDecl->isVirtual(), value, QStringLiteral("Declaration's isVirtual"));
 }
 
 ///JSON type: bool
