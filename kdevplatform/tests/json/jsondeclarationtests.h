@@ -244,7 +244,7 @@ DeclarationTest(isAbstract)
     return compareValues(absFuncDecl->isAbstract(), value, QStringLiteral("Declaration's isAbstract"));
 }
 ///JSON type: bool
-///@returns whether the (function) declaration's isAbstract matches the given value
+///@returns whether the (function) declaration's isFinal matches the given value
 DeclarationTest(isFinal)
 {
     const QString NOT_A_FUNCTION = QStringLiteral("Non-class-function declaration cannot be final.");
