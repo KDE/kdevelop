@@ -27,20 +27,9 @@ void AbstractFunctionDeclaration::setInline(bool isInline)
     dynamicData()->m_isInline = isInline;
 }
 
-bool AbstractFunctionDeclaration::isExplicit() const
-{
-    return data()->m_isExplicit;
-}
-
-void AbstractFunctionDeclaration::setExplicit(bool isExplicit)
-{
-    dynamicData()->m_isExplicit = isExplicit;
-}
-
 void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
 {
     dynamicData()->m_isInline = specifiers & InlineSpecifier;
-    dynamicData()->m_isExplicit = specifiers & ExplicitSpecifier;
 }
 
 IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index) const

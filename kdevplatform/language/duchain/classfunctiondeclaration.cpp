@@ -183,6 +183,17 @@ void ClassFunctionDeclaration::setIsVirtual(bool isVirtual)
         (ClassFunctionFlags)setFlag(isVirtual, VirtualFunctionFlag, d_func()->m_functionFlags);
 }
 
+bool ClassFunctionDeclaration::isExplicit() const
+{
+    return d_func()->m_functionFlags & ExplicitFunctionFlag;
+}
+
+void ClassFunctionDeclaration::setIsExplicit(bool isExplicit)
+{
+    d_func_dynamic()->m_functionFlags =
+        (ClassFunctionFlags)setFlag(isExplicit, ExplicitFunctionFlag, d_func()->m_functionFlags);
+}
+
 bool ClassFunctionDeclaration::isConversionFunction() const
 {
     return identifier() == conversionIdentifier();

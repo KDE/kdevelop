@@ -834,11 +834,11 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
     if (function) {
         if (function->isInline())
             details << QStringLiteral("inline");
-        if (function->isExplicit())
-            details << QStringLiteral("explicit");
 
         const auto* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
         if (classFunDecl) {
+            if (classFunDecl->isExplicit())
+                details << QStringLiteral("explicit");
             if (classFunDecl->isVirtual())
                 details << QStringLiteral("virtual");
             if (classFunDecl->isSignal())

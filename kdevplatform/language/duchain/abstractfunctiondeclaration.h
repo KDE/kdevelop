@@ -22,12 +22,10 @@ class AbstractFunctionDeclarationData
 public:
     AbstractFunctionDeclarationData()
         : m_isInline(false)
-        , m_isExplicit(false)
     {
     }
     IndexedDUContext m_functionContext;
     bool m_isInline : 1;
-    bool m_isExplicit : 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
 };
 
 /**
@@ -41,7 +39,6 @@ public:
 
     enum FunctionSpecifier {
         InlineSpecifier = 0x1 /**< indicates an inline function */,
-        ExplicitSpecifier = 0x2 /**< indicates an explicit function */,
     };
     Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
@@ -49,10 +46,6 @@ public:
 
     bool isInline() const;
     void setInline(bool isInline);
-
-    ///Only used for class-member function declarations(see ClassFunctionDeclaration)
-    bool isExplicit() const;
-    void setExplicit(bool isExplicit);
 
     ///Return the DUContext::Function type ducontext (the function parameter context) of this function
     ///Same as internalContext if the function has no definition

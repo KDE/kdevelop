@@ -73,11 +73,11 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
       p |= CodeCompletionModel::Function;
       if (function->isInline())
           p |= CodeCompletionModel::Inline;
-      if (function->isExplicit()) { } //TODO
 
       if (const auto* const classFunction = dynamic_cast<const ClassFunctionDeclaration*>(function)) {
           if (classFunction->isVirtual())
               p |= CodeCompletionModel::Virtual;
+          if (classFunction->isExplicit()) { } // TODO
       }
   }
 

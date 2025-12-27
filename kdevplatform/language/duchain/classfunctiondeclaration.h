@@ -23,6 +23,7 @@ enum ClassFunctionFlag
     AbstractFunctionFlag = 1 << 3,
     FinalFunctionFlag = 1 << 4,
     VirtualFunctionFlag = 1 << 5,
+    ExplicitFunctionFlag = 1 << 6,
 };
 Q_DECLARE_FLAGS(ClassFunctionFlags, ClassFunctionFlag)
 
@@ -87,6 +88,9 @@ public:
 
     [[nodiscard]] bool isVirtual() const;
     void setIsVirtual(bool);
+
+    [[nodiscard]] bool isExplicit() const;
+    void setIsExplicit(bool);
 
     virtual bool isConstructor() const;
     virtual bool isDestructor() const;
