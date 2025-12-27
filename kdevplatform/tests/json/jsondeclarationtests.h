@@ -42,6 +42,7 @@
  *   isAbstract : bool
  *   isMutable : bool
  *   isVirtual : bool
+ *   isExplicit : bool
  *   isStatic : bool
  *   declaration : DeclTestObject
  *   definition : DeclTestObject
@@ -206,6 +207,17 @@ DeclarationTest(isVirtual)
         return QStringLiteral("Non-class-function declaration cannot be virtual.");
 
     return compareValues(classFuncDecl->isVirtual(), value, QStringLiteral("Declaration's isVirtual"));
+}
+
+///JSON type: bool
+///@returns whether the (function) declaration's isExplicit matches the given value
+DeclarationTest(isExplicit)
+{
+    const auto* const classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (!classFuncDecl)
+        return QStringLiteral("Non-class-function declaration cannot be explicit.");
+
+    return compareValues(classFuncDecl->isExplicit(), value, QStringLiteral("Declaration's isExplicit"));
 }
 
 ///JSON type: bool

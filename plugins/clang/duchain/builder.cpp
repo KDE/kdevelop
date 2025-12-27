@@ -1218,6 +1218,9 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
     decl->setIsAbstract(clang_CXXMethod_isPureVirtual(cursor));
     decl->setStatic(clang_CXXMethod_isStatic(cursor));
     decl->setIsVirtual(clang_CXXMethod_isVirtual(cursor));
+#if CINDEX_VERSION_MINOR >= 64
+    decl->setIsExplicit(clang_CXXMethod_isExplicit(cursor));
+#endif
 
     // TODO: Set flags in one go? (needs new API in kdevplatform)
     const auto attributes = ClangUtils::specialAttributes(cursor);
