@@ -112,7 +112,7 @@ QVector<KDevelopSessionData> SessionFilesTracker::readSessionDataList() const
     QVector<KDevelopSessionData> sessions;
 
     QDir sessionBaseDir(m_sessionDir);
-    const auto dirEntries = sessionBaseDir.entryList(QDir::Dirs);
+    const auto dirEntries = sessionBaseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     sessions.reserve(dirEntries.size());
     for (const QString& sessionDirName : dirEntries) {
         if (QUuid(sessionDirName).isNull()) {
