@@ -16,6 +16,7 @@
         "Description[fi]": "Määrittää, mitä tyyliä projektissa tulisi käyttää lähdekoodin muotoiluun.",
         "Description[fr]": "Configurer le style de formatage du code source dans les projets.",
         "Description[gl]": "Configurar o estilo para usar para formatar o código fonte nun proxecto.",
+        "Description[he]": "הגדרת הסגנון שישמש אותך לעיצוב קוד המקור במיזם.",
         "Description[it]": "Configura lo stile che sarà usato per formattare il codice sorgente in un progetto.",
         "Description[ka]": "მოირგეთ, რომელიც სტილი იქნება გამოყენებული პროექტის პროგრამული კოდის დაფორმატებისას.",
         "Description[ko]": "프로젝트 소스 코드에 적용할 스타일 형식을 설정합니다.",
