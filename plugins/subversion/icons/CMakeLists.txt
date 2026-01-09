@@ -1,4 +1,4 @@
 
-ecm_install_icons(ICONS 16-apps-subversion.png 32-apps-subversion.png 64-apps-subversion.png sc-apps-subversion.svg
+ecm_install_icons(ICONS 16-apps-kdevsubversion.png 32-apps-kdevsubversion.png 64-apps-kdevsubversion.png sc-apps-kdevsubversion.svg
                   DESTINATION ${KDE_INSTALL_ICONDIR}
                   THEME hicolor)

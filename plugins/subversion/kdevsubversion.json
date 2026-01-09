@@ -71,7 +71,7 @@
         "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop.",
         "Description[zh_CN]": "此插件将 Subversion 整合到 KDevelop。",
         "Description[zh_TW]": "此外掛程式將 Subversion 整合進 KDevelop 內",
-        "Icon": "subversion",
+        "Icon": "kdevsubversion",
         "License": "GPL",
         "Name": "Subversion Support",
         "Name[ar]": "دعم Subversion",
