@@ -658,7 +658,7 @@ msgstr "跳转到光标处(&J)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
-msgstr "将执行指针设置为当前光标位置。"
+msgstr "将执行指针设置为当前指针位置。"
 
 #: widgets/disassemblewidget.cpp:140
 #, kde-format
