@@ -1,0 +1,305 @@
+# Copyright (C) 2026 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# SPDX-FileCopyrightText: 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-11-17 14:39+0000\n"
+"PO-Revision-Date: 2026-01-10 20:36+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
+"2 : 3);\n"
+"X-Generator: Lokalize 25.12.1\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "טלאי מותאם אישית"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "טלאי"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr "תיקיית בסיס:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr "/path/to/patch/base"
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, kde-format
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "מקובץ"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr "/path/to/patch"
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "מפקודה"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr "נא למלא פקודה ממנה ללכוד את הפלט…"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "הטלאי כבר חל על הגרסה המקומית"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, kde-format
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "כבר חל"
+
+#: patchhighlighter.cpp:80
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">סתירה</span></b><br/>"
+
+#: patchhighlighter.cpp:88
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "חל.<br/>"
+
+#: patchhighlighter.cpp:91 patchhighlighter.cpp:106
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "הוספה<br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:103
+#, kde-format
+msgid "Removal<br/>"
+msgstr "הסרה<br/>"
+
+#: patchhighlighter.cpp:95
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "הקודם:<br/>"
+
+#: patchhighlighter.cpp:100
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "הוחזר אחורה.<br/>"
+
+#: patchhighlighter.cpp:108
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "חלופה:<br/>"
+
+#: patchhighlighter.cpp:199
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr "לא ניתן להחיל את השינוי: הטקסט אמור להיות „%1”, אבל הוא „%2”."
+
+#: patchhighlighter.cpp:409 patchhighlighter.cpp:416
+#, kde-format
+msgctxt "@item"
+msgid "Insertion"
+msgstr "הוספה"
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, kde-format
+msgctxt "@item"
+msgid "Removal"
+msgstr "הסרה"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, kde-format
+msgctxt "@item"
+msgid "Change"
+msgstr "שינוי"
+
+#: patchreview.cpp:294 patchreview.cpp:296
+#, kde-format
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "עדכון מודל של Kompare"
+
+#: patchreview.cpp:455
+#, kde-format
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "סקירה"
+
+#: patchreview.cpp:460 patchreview.cpp:535
+#, kde-format
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "סקירת טלאי"
+
+#: patchreview.cpp:467
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr "תיקיית הבסיס של הטלאי חייבת להיות תיקייה מוחלטת."
+
+#: patchreview.cpp:499 patchreview.cpp:524
+#, kde-format
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "סיום סקירה"
+
+#: patchreview.cpp:606
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "סקירת טלאי"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "הקובץ הקודם"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "ההבדל הקודם"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:41
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "ההבדל הבא"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:51
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "הקובץ הבא"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Update"
+msgstr "עדכון"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:87
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "הרצת בדיקות"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:120
+#, kde-format
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "ייצוא הבדלים…"
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:136
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "ביטול סקירה"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:149
+#, kde-format
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "סיום סקירה"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:168
+#, kde-format
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "שינויים"
+
+#: patchreviewtoolview.cpp:83
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (גוש אחד)"
+msgstr[1] "%2 (שני גושים)"
+msgstr[2] "%2 (%1 גושים)"
+msgstr[3] "%2 (%1 גושים)"
+
+#: patchreviewtoolview.cpp:223
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr "<qt>אפשר למצוא את הבקשה החדשה תחת:<br /><a href='%1'>%1</a> </qt>"
+
+#: patchreviewtoolview.cpp:226
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+"לא ניתן לייצא את הטלאי.\n"
+"%1"
+
+#: patchreviewtoolview.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "Select All"
+msgstr "בחירה בהכול"
+
+#: patchreviewtoolview.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "ביטול בחירה"
+
+#: patchreviewtoolview.cpp:557
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "בדיקות רצות: %p%"
+
+#: patchreviewtoolview.cpp:585
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "בדיקה עברה"
+msgstr[1] "כל שתי הבדיקות עברו"
+msgstr[2] "כל %1 הבדיקות עברו"
+msgstr[3] "כל %1 הבדיקות עברו"
+
+#: patchreviewtoolview.cpp:589
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "תוצאות בדיקות: %1 עברו, %2 נכשלו, %3 עם שגיאה"
