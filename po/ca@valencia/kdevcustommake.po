@@ -56,7 +56,7 @@ msgstr "El nom de fitxer %1 pareix estar amb format incorrecte"
 #: makefileresolver/makefileresolver.cpp:472
 #, kde-format
 msgid "Failed to extract new working directory"
-msgstr "Ha fallat mentre s'extragué el directori de treball nou"
+msgstr "Ha fallat mentre s'extreia el directori de treball nou"
 
 #: makefileresolver/makefileresolver.cpp:472
 #: makefileresolver/makefileresolver.cpp:501

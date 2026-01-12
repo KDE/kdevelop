@@ -4303,7 +4303,7 @@ msgstr "Lletra en negreta per a les declaracions:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr "Problemes en mostrar com a notes incloses:"
+msgstr "Problemes mentre es mostrava com a notes incloses:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304

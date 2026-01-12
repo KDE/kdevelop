@@ -543,7 +543,7 @@ msgstr "Nivell desconegut"
 #: job.cpp:201
 #, kde-format
 msgid "Failed to start Clazy analysis process."
-msgstr "No s'ha pogut iniciar el procés d'anàlisi de Clazy."
+msgstr "Ha fallat mentre s'iniciava el procés d'anàlisi de Clazy."
 
 #: job.cpp:206
 #, kde-format
@@ -558,12 +558,12 @@ msgstr "S'ha esgotat el temps durant el procés d'anàlisi de Clazy."
 #: job.cpp:215
 #, kde-format
 msgid "Write to Clazy analysis process failed."
-msgstr "No s'ha pogut escriure en el procés d'anàlisi de Clazy."
+msgstr "Ha fallat mentre s'escrivia al procés d'anàlisi de Clazy."
 
 #: job.cpp:219
 #, kde-format
 msgid "Read from Clazy analysis process failed."
-msgstr "No s'ha pogut llegir des del procés d'anàlisi de Clazy."
+msgstr "Ha fallat mentre es llegia des del procés d'anàlisi de Clazy."
 
 #: job.cpp:229
 #, kde-format
