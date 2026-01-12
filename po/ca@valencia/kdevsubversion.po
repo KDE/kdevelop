@@ -277,7 +277,7 @@ msgid ""
 "Error executing Job:\n"
 "%1"
 msgstr ""
-"S'ha produït un error en executar la tasca:\n"
+"S'ha produït un error mentre s'executava la tasca:\n"
 "%1"
 
 #: svnlogjob.cpp:105
@@ -406,7 +406,7 @@ msgid ""
 "There were errors validating the server certificate.\n"
 "Do you want to trust this certificate?"
 msgstr ""
-"Han ocorregut errors en validar el certificat del servidor.\n"
+"Han ocorregut errors mentre es validava el certificat del servidor.\n"
 "Voleu confiar en este certificat?"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)

@@ -37,7 +37,7 @@ msgid ""
 "Error while loading man pages:\n"
 "%1"
 msgstr ""
-"S'ha produït un error en carregar les pàgines «man»:\n"
+"S'ha produït un error mentre es carregaven les pàgines «man»:\n"
 "%1"
 
 #: manpageplugin.cpp:53

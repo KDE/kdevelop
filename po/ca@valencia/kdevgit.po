@@ -50,7 +50,8 @@ msgstr "Revertix les edicions sense marcar"
 #: committoolview.cpp:473
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
-msgstr "No s'ha pogut cometre. Vegeu la vista d'eina del Control de versions."
+msgstr ""
+"Ha fallat mentre es cometia. Vegeu la vista d'eina del Control de versions."
 
 #: diffviewsctrl.cpp:50
 #, kde-format

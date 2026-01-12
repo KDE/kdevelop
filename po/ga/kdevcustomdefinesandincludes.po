@@ -1,150 +1,144 @@
-# Translation of kdevcustomdefinesandincludes.po to Catalan (Valencian)
-# Copyright (C) 2016-2024 This_file_is_part_of_KDE
-# This file is distributed under the license LGPL version 2.1 or
-# version 3 or later versions approved by the membership of KDE e.V.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# SPDX-FileCopyrightText: 2016, 2017, 2020, 2021 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Josep M. Ferrer <txemaq@gmail.com>
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-15 00:41+0000\n"
-"PO-Revision-Date: 2024-07-31 12:03+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
-"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
-"Language: ca@valencia\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 24.05.2\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
 msgctxt "@item no compiler"
 msgid "None"
-msgstr "Cap"
+msgstr ""
 
 #: compilerprovider/widget/compilersmodel.cpp:117
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #: compilerprovider/widget/compilersmodel.cpp:117
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
-msgstr "Tipus"
+msgstr ""
 
 #: compilerprovider/widget/compilersmodel.cpp:119
 #, kde-format
 msgctxt "@item"
 msgid "Auto-detected"
-msgstr "Detectat automàticament"
+msgstr ""
 
 #: compilerprovider/widget/compilersmodel.cpp:120
 #, kde-format
 msgctxt "@item"
 msgid "Manual"
-msgstr "Manual"
+msgstr ""
 
 #: compilerprovider/widget/compilerswidget.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Delete Compiler"
-msgstr "Suprimix el compilador"
+msgstr ""
 
 #: compilerprovider/widget/compilerswidget.cpp:202
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Compilers"
-msgstr "Compiladors de C/C++"
+msgstr ""
 
 #: compilerprovider/widget/compilerswidget.cpp:207
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Compilers"
-msgstr "Configura els compiladors de C/C++"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: compilerprovider/widget/compilerswidget.ui:25
 #, kde-format
 msgctxt "@action:button"
 msgid "&Add"
-msgstr "Afi&g"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #: compilerprovider/widget/compilerswidget.ui:35
 #, kde-format
 msgctxt "@action:button"
 msgid "&Remove"
-msgstr "&Elimina"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: compilerprovider/widget/compilerswidget.ui:66
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "Nom:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: compilerprovider/widget/compilerswidget.ui:76
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Compiler executable:"
-msgstr "Executable del compilador:"
+msgstr ""
 
 #: kcm_widget/definesandincludesconfigpage.cpp:70
 #, kde-format
 msgctxt "@title:tab"
 msgid "Language Support"
-msgstr "Implementació del llenguatge"
+msgstr ""
 
 #: kcm_widget/definesandincludesconfigpage.cpp:75
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Language Support"
-msgstr "Configura la implementació del llenguatge"
+msgstr ""
 
 #: kcm_widget/definesmodel.cpp:31
 #, kde-format
 msgid "Double-click here to insert a new define to be used for the path"
 msgstr ""
-"Feu doble clic ací per a inserir una definició nova que s'utilitzarà per al "
-"camí"
 
 #: kcm_widget/definesmodel.cpp:67
 #, kde-format
 msgctxt "@title:column"
 msgid "Define"
-msgstr "Establix"
+msgstr ""
 
 #: kcm_widget/definesmodel.cpp:69
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
-msgstr "Valor"
+msgstr ""
 
 #: kcm_widget/defineswidget.cpp:29
 #, kde-format
 msgctxt "@action"
 msgid "Delete Define"
-msgstr "Suprimix la definició"
+msgstr ""
 
 #: kcm_widget/includeswidget.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Delete Include Path"
-msgstr "Suprimix el camí cap als «include»"
+msgstr ""
 
 #: kcm_widget/includeswidget.cpp:138
 #, kde-format
 msgctxt "%1 is an include path"
 msgid "%1 does not exist"
-msgstr "%1 no existix"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, includePathRequester)
 #: kcm_widget/includeswidget.ui:31
@@ -154,8 +148,6 @@ msgid ""
 "Add the currently displayed URL to the list of includes if it is not in the "
 "list yet."
 msgstr ""
-"Afig l'URL que es mostra actualment a la llista dels «include» si encara no "
-"es troba en la llista."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
 #: kcm_widget/includeswidget.ui:34
@@ -163,22 +155,20 @@ msgstr ""
 msgctxt "@info:placeholder"
 msgid "A new include path/file to use for parsing files under given directory"
 msgstr ""
-"Un camí/fitxer nou per als «include» que s'utilitzarà per a analitzar els "
-"fitxers davall el directori indicat"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addIncludePath)
 #: kcm_widget/includeswidget.ui:44
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new include path entry from this URL"
-msgstr "Crea una entrada nova de camí cap als «include» des d'este URL"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
 #: kcm_widget/includeswidget.ui:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current include path entry"
-msgstr "Suprimix l'entrada de camí pels «include»"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:20
@@ -189,23 +179,20 @@ msgid ""
 "parsed in plain C mode. By default they are parsed as C++ headers.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Marqueu-la si voleu que les capçaleres <code>*.h</"
-"code> siguen analitzades en el mode C normal. De manera predeterminada, "
-"seran analitzades com a capçaleres de C++.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:23
 #, kde-format
 msgctxt "@option:check"
 msgid "Parse *.h headers in plain C"
-msgstr "Analitza les capçaleres *.h en C pla"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: kcm_widget/parserwidget.ui:36
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C++ profi&le:"
-msgstr "Perfi&l de C++:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
@@ -219,9 +206,6 @@ msgid ""
 "<html><head/><body><p>Choose language profile. </p><p>Use &quot;Custom&quot; "
 "profile to modify parser command-line arguments</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Trieu el perfil del llenguatge. </p><p>Utilitzeu el "
-"perfil «Personalitza» per a modificar els arguments de la línia d'ordres de "
-"l'analitzador</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)
@@ -232,90 +216,90 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox language standard"
 msgid "Custom"
-msgstr "Personalitza"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel)
 #: kcm_widget/parserwidget.ui:99
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C++ co&mmand-line arguments:"
-msgstr "Arguments de la línia d'ordres de C++:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: kcm_widget/parserwidget.ui:125
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C profi&le:"
-msgstr "Perfi&l de C:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
 #: kcm_widget/parserwidget.ui:213
 #, kde-format
 msgctxt "@label:textbox"
 msgid "C co&mmand-line arguments:"
-msgstr "Arguments de la línia d'ordres de C:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: kcm_widget/parserwidget.ui:239
 #, kde-format
 msgctxt "@label:listbox"
 msgid "OpenCL C &profile:"
-msgstr "&Perfil de C d'OpenCL:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_3)
 #: kcm_widget/parserwidget.ui:282
 #, kde-format
 msgctxt "@label:textbox"
 msgid "OpenCL C comma&nd-line arguments:"
-msgstr "Argume&nts de la línia d'ordres de C d'OpenCL:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: kcm_widget/parserwidget.ui:308
 #, kde-format
 msgctxt "@label:listbox"
 msgid "CUDA C P&rofile:"
-msgstr "Pe&rfil de CUDA C:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, argumentsLabel_4)
 #: kcm_widget/parserwidget.ui:366
 #, kde-format
 msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
-msgstr "Arguments &de la línia d'ordres de CUDA C:"
+msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:168
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
-msgstr "Trieu el camí cap al projecte"
+msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:183
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
-msgstr "Segur que voleu suprimir la configuració per al camí «%1»?"
+msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
-msgstr "Suprimix la configuració del camí"
+msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:223
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
-msgstr "Edita els directoris/fitxers «include»"
+msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:231
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
-msgstr "Edita les macros definides"
+msgstr ""
 
 #: kcm_widget/projectpathswidget.cpp:287
 #, kde-format
 msgid "Configure C/C++ parser"
-msgstr "Configura l'analitzador de C/C++"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, configureLabel)
 #: kcm_widget/projectpathswidget.cpp:291 kcm_widget/projectpathswidget.ui:20
@@ -324,8 +308,6 @@ msgid ""
 "Configure which macros and include directories/files will be added to the "
 "parser during project parsing:"
 msgstr ""
-"Configura quines macros i directoris/fitxers per als «include» s'afegiran a "
-"l'analitzador durant l'anàlisi del projecte:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:29
@@ -333,15 +315,13 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Check this if you want the project to be reparsed to apply the changes."
 msgstr ""
-"Marqueu-la si voleu que el projecte siga tornat a analitzar per a aplicar "
-"els canvis."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
 #: kcm_widget/projectpathswidget.ui:32
 #, kde-format
 msgctxt "@option:check"
 msgid "Reparse the project"
-msgstr "Torna a analitzar el projecte"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, compiler)
@@ -352,85 +332,82 @@ msgid ""
 "<html><head/><body><p>Select compiler that will be used to retrieve standard "
 "include directories and defined macros.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Trieu el compilador que s'utilitzarà per a recuperar "
-"els directoris «include» estàndard i les macros definides.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: kcm_widget/projectpathswidget.ui:73
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Compiler for path:"
-msgstr "Compilador per al camí:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchEdit)
 #: kcm_widget/projectpathswidget.ui:90
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit multiple includes/defines at the same time."
-msgstr "Edita múltiples «include»/definicions alhora."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, batchEdit)
 #: kcm_widget/projectpathswidget.ui:93
 #, kde-format
 msgctxt "@action:button"
 msgid "&Batch Edit..."
-msgstr "Edita per &lots…"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
 #: kcm_widget/projectpathswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new sub-project path entry."
-msgstr "Afig una entrada nova de camí cap al subprojecte."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removePath)
 #: kcm_widget/projectpathswidget.ui:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete current sub-project path entry."
-msgstr "Suprimix l'entrada actual del camí cap al subprojecte."
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
 #: kcm_widget/projectpathswidget.ui:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Includes/Imports"
-msgstr "Inclusions/Importacions"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, definesPage)
 #: kcm_widget/projectpathswidget.ui:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Defines"
-msgstr "Definicions"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, parserPage)
 #: kcm_widget/projectpathswidget.ui:199
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Parser"
-msgstr "Analitzador de C/C++"
+msgstr ""
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:24
 #, kde-format
 msgctxt "@title:window"
 msgid "Setup Custom Include Paths"
-msgstr "Configuració personalitzada dels camins cap als «include»"
+msgstr ""
 
 #: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"
-msgstr "Trieu un directori que s'haja d'incloure"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage Directory:"
-msgstr "Directori d'emmagatzematge:"
+msgstr ""
 
-# skip-rule: t-pu_sp
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, storageDirectory)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:25
 #, kde-format
@@ -439,15 +416,13 @@ msgid ""
 "The custom include-path will be stored in a special file called \"."
 "kdev_include_paths\" stored within a source directory."
 msgstr ""
-"El camí personalitzat per als «include» s'emmagatzema en un fitxer especial "
-"anomenat «.kdev_include_paths» al directori d'origen."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Custom include paths or #define's"
-msgstr "Personalitza els camins cap als «include» o «#define»"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45
@@ -457,26 +432,22 @@ msgid ""
 "The plain list of include paths. You may also define custom macros here by "
 "adding \"#define NAME VALUE\" lines."
 msgstr ""
-"La llista normal dels camins cap als «include». També hi podeu definir "
-"macros personalitzades afegint línies com «#define NOM VALOR»."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to include."
-msgstr "Trieu un directori que s'inclourà."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69
 #, kde-format
 msgctxt "@action:button"
 msgid "..."
-msgstr "…"
+msgstr ""
 
 #: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:155
 #, kde-format
 msgid "Failed to save custom include paths in directory: %1"
 msgstr ""
-"Ha fallat mentre es guardaven els camins «include» personalitzats en el "
-"directori: %1"

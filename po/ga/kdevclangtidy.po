@@ -1,202 +1,199 @@
-# Translation of kdevclangtidy.po to Catalan (Valencian)
-# Copyright (C) 2017-2022 This_file_is_part_of_KDE
-# This file is distributed under the license LGPL version 2.1 or
-# version 3 or later versions approved by the membership of KDE e.V.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# SPDX-FileCopyrightText: 2017, 2018, 2020, 2021 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2022 Josep M. Ferrer <txemaq@gmail.com>
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2022-05-08 17:21+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
-"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
-"Language: ca@valencia\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.12.0\n"
 
 #: analyzer.cpp:29
 #, kde-format
 msgid "Clang-Tidy"
-msgstr "Clang-Tidy"
+msgstr ""
 
 #: config/checklistfilterproxysearchline.cpp:23
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca…"
+msgstr ""
 
 #: config/checklistmodel.cpp:65
 #, kde-format
 msgctxt "@item"
 msgid "All checks"
-msgstr "Totes les comprovacions"
+msgstr ""
 
 #: config/checksetmanagewidget.cpp:89
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr "Introducció del nom del nou conjunt de comprovacions"
+msgstr ""
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "Nom:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/checksetmanagewidget.ui:31
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Check set:"
-msgstr "Conjunt de comprovacions:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add check set"
-msgstr "Afig un conjunt de comprovacions"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone check set"
-msgstr "Clona el conjunt de comprovacions"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove check set"
-msgstr "Elimina el conjunt de comprovacions"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "Establix com a predeterminat"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr "Edita el nom del conjunt de comprovacions"
+msgstr ""
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Custom"
-msgstr "Personalitzat"
+msgstr ""
 
 #: config/checksetselectioncombobox.cpp:30
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr "Utilitza el predeterminat (actualment: %1)"
+msgstr ""
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr "%1 (selecció predeterminada)"
+msgstr ""
 
 #: config/clangtidypreferences.cpp:60 config/clangtidyprojectconfigpage.cpp:55
 #, kde-format
 msgctxt "@title:tab"
 msgid "Clang-Tidy"
-msgstr "Clang-Tidy"
+msgstr ""
 
 #: config/clangtidypreferences.cpp:65
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clang-Tidy Settings"
-msgstr "Configura la configuració de Clang-Tidy"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/clangtidypreferences.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Paths"
-msgstr "Camins"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, clangtidyLabel)
 #: config/clangtidypreferences.ui:37
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Clang-&Tidy executable:"
-msgstr "Executable de Clang-&Tidy:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
 #: config/clangtidypreferences.ui:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The full path to the Clang-Tidy executable"
-msgstr "El camí complet cap a l'executable de Clang-Tidy"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/clangtidypreferences.ui:72
 #, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr "Executa els treballs d'anàlisi en paral·lel"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/clangtidypreferences.ui:81
 #, kde-format
 msgctxt "@option:check"
 msgid "Use all CPU cores"
-msgstr "Utilitza tots els nuclis de la CPU"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
 #: config/clangtidypreferences.ui:101
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr "Nombre màxim de fils:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useConfigFile)
 #: config/clangtidyprojectconfigpage.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "&Use .clang-tidy file(s)"
-msgstr "Utilit&za els fitxers «.clang-tidy»"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, checksTab)
 #: config/clangtidyprojectconfigpage.ui:43
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr "Comprovacions"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: config/clangtidyprojectconfigpage.ui:73
 #, kde-format
 msgctxt "@title:tab"
 msgid "Includes"
-msgstr "Inclusions"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: config/clangtidyprojectconfigpage.ui:79
 #, kde-format
 msgctxt "@option:check"
 msgid "&Check system headers:"
-msgstr "&Comprova les capçaleres del sistema:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/clangtidyprojectconfigpage.ui:92
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header fi&lter:"
-msgstr "Fi&ltre de capçaleres:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/clangtidyprojectconfigpage.ui:105
@@ -207,58 +204,54 @@ msgid ""
 "from. Diagnostics from the main file of each translation unit are always "
 "displayed. Can be used together with -line-filter."
 msgstr ""
-"Expressió regular que coincidix amb els noms de les capçaleres per a "
-"obtindre diagnòstics d'eixida. Sempre es mostraran els diagnòstics del "
-"fitxer principal de cada unitat de traducció. Es pot utilitzar juntament amb "
-"«-line-filter»."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119
 #, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
-msgstr "Paràmetres addicionals"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: config/clangtidyprojectconfigpage.ui:125
 #, kde-format
 msgctxt "@label.textbox"
 msgid "E&xtra parameters:"
-msgstr "Paràmetres a&ddicionals:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_additionalParameters)
 #: config/clangtidyprojectconfigpage.ui:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional command line options to pass to Clang-Tidy."
-msgstr "Opcions de línia d'ordres addicionals per a passar-les a Clang-Tidy."
+msgstr ""
 
 #: job.cpp:68
 #, kde-format
 msgid "Clang-Tidy Analysis"
-msgstr "Anàlisi de Clang-Tidy"
+msgstr ""
 
 #: job.cpp:142
 #, kde-format
 msgid "Failed to start Clang-Tidy process."
-msgstr "Ha fallat mentre s'iniciava el procés de Clang-Tidy."
+msgstr ""
 
 #: job.cpp:147
 #, kde-format
 msgid "Clang-Tidy crashed."
-msgstr "Clang-Tidy ha fallat."
+msgstr ""
 
 #: job.cpp:151
 #, kde-format
 msgid "Clang-Tidy process timed out."
-msgstr "El procés de Clang-Tidy ha excedit el temps."
+msgstr ""
 
 #: job.cpp:155
 #, kde-format
 msgid "Write to Clang-Tidy process failed."
-msgstr "No s'ha pogut fer l'escriptura en el procés de Clang-Tidy."
+msgstr ""
 
 #: job.cpp:159
 #, kde-format
 msgid "Read from Clang-Tidy process failed."
-msgstr "Ha fallat la lectura des del procés de Clang-Tidy."
+msgstr ""

@@ -608,7 +608,7 @@ msgstr "Canvia el nom de «%1» a «%2»"
 #: language/codegen/basicrefactoring.cpp:367
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr "No s'han pogut aplicar els canvis: %1"
+msgstr "Ha fallat mentre s'aplicaven els canvis: %1"
 
 #: language/assistant/renameassistant.cpp:108
 #, kde-format
@@ -1483,7 +1483,7 @@ msgstr "*** Avís: No s'ha pogut matar el procés ***"
 #: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
-msgstr "%1 ha fallat en iniciar"
+msgstr "%1 ha fallat mentre s'iniciava"
 
 #: outputview/outputexecutejob.cpp:339
 #, kde-format
@@ -4303,7 +4303,7 @@ msgstr "Lletra en negreta per a les declaracions:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr "Problemes en mostrar com a notes incloses:"
+msgstr "Problemes mentre es mostrava com a notes incloses:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304
@@ -5660,13 +5660,13 @@ msgstr "Ignora"
 #: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr "No s'ha pogut afegir permisos d'escriptura per a alguns fitxers."
+msgstr "Ha fallat mentre s'afegien permisos d'escriptura per a alguns fitxers."
 
 #: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
-msgstr "No s'han pogut establir els permisos"
+msgstr "Ha fallat mentre s'establien els permisos"
 
 #: util/shellutils.cpp:232
 #, kde-format

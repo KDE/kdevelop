@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: flatpakplugin.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Rebuild Environment"
+msgstr ""
+
+#: flatpakplugin.cpp:50
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Recompiles all dependencies for a fresh environment."
+msgstr ""
+
+#: flatpakplugin.cpp:55
+#, kde-format
+msgctxt "@action"
+msgid "Export Flatpak Bundle..."
+msgstr ""
+
+#: flatpakplugin.cpp:56
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Exports the current build into a 'bundle.flatpak' file."
+msgstr ""
+
+#: flatpakplugin.cpp:61
+#, kde-format
+msgctxt "@action"
+msgid "Send to Device..."
+msgstr ""
+
+#: flatpakplugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Export %1"
+msgstr ""
+
+#: flatpakplugin.cpp:113
+#, kde-format
+msgid "Flatpak Bundle (*.flatpak)"
+msgstr ""
+
+#: flatpakplugin.cpp:117
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export Bundle %1"
+msgstr ""
+
+#: flatpakplugin.cpp:237
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rebuild Flatpak Environment: %1"
+msgstr ""
+
+#: flatpakplugin.cpp:244
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Build Flatpak Environment %1 for %2"
+msgstr ""
+
+#: flatpakplugin.cpp:268
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr ""
+
+#: flatpakplugin.cpp:269
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Device hostname:"
+msgstr ""
+
+#: flatpakruntime.cpp:61
+#, kde-format
+msgctxt "@title:window"
+msgid "Flatpak"
+msgstr ""
+
+#: flatpakruntime.cpp:123
+#, kde-format
+msgctxt "%1 - application ID or name"
+msgid "Flatpak Create %1"
+msgstr ""
+
+#: flatpakruntime.cpp:227
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Finalize %1"
+msgstr ""
+
+#: flatpakruntime.cpp:233
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Export %1"
+msgstr ""
+
+#: flatpakruntime.cpp:236
+#, kde-format
+msgctxt "%1 - application ID"
+msgid "Flatpak Bundle %1"
+msgstr ""
+
+#: flatpakruntime.cpp:253
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Run %1 on %2"
+msgstr ""
+
+#: flatpakruntime.cpp:258
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer .flatpak to %1"
+msgstr ""
+
+#: flatpakruntime.cpp:260
+#, kde-format
+msgctxt "%1 - device host name"
+msgid "Transfer replicate.sh to %1"
+msgstr ""
+
+#: flatpakruntime.cpp:264
+#, kde-format
+msgctxt "%1 - application ID, %2 - device host name"
+msgid "Flatpak Install %1 to %2"
+msgstr ""

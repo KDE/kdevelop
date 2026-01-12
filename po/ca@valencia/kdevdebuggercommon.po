@@ -211,7 +211,7 @@ msgstr ""
 #: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
-msgstr "El procés ha fallat en iniciar"
+msgstr "El procés ha fallat mentre s'iniciava"
 
 #: midebugger.cpp:359
 #, kde-format
@@ -392,7 +392,7 @@ msgstr "<b>Ordre de depuració no vàlida</b><br>%1"
 #: midebugsession.cpp:1035
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>No s'ha pogut carregar el fitxer de nucli:</b><br />"
+msgstr "<b>Ha fallat mentre es carregava el fitxer de nucli:</b><br />"
 
 #: midebugsession.cpp:1124
 #, kde-format

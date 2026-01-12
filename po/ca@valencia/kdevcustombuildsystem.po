@@ -206,7 +206,7 @@ msgstr ""
 #: custombuildjob.cpp:166
 #, kde-format
 msgid "Failed to start command."
-msgstr "No s'ha pogut iniciar l'ordre."
+msgstr "Ha fallat mentre s'iniciava l'ordre."
 
 #: custombuildjob.cpp:169
 #, kde-format

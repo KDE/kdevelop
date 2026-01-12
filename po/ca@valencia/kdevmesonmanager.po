@@ -28,7 +28,7 @@ msgstr "    *** ERROR DE MESON ***\n"
 #: mesonbuilder.cpp:75
 #, kde-format
 msgid "Failed to set the internally used Ninja builder"
-msgstr "No s'ha pogut establir el constructor Ninja emprat internament"
+msgstr "Ha fallat mentre s'establia el constructor Ninja emprat internament"
 
 #: mesonbuilder.cpp:78
 #, kde-format
@@ -85,7 +85,7 @@ msgstr ""
 #: mesonbuilder.cpp:196 mesonbuilder.cpp:226
 #, kde-format
 msgid "Failed to create a new build directory"
-msgstr "No s'ha pogut crear el directori de construcció nou"
+msgstr "Ha fallat mentre es creava el directori de construcció nou"
 
 #: mesonjob.cpp:27 mesonjobprune.cpp:27
 #, kde-format
@@ -148,7 +148,7 @@ msgstr "El fitxer d'introspecció %1 no existix"
 #: mintro/mesonintrospectjob.cpp:119
 #, kde-format
 msgid "Failed to open introspection file '%1'"
-msgstr "No s'ha pogut obrir el fitxer d'introspecció «%1»"
+msgstr "Ha fallat mentre s'obria el fitxer d'introspecció «%1»"
 
 #: mintro/mesonintrospectjob.cpp:125
 #, kde-format
@@ -190,7 +190,7 @@ msgstr "Prova de Meson «%1»"
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
 msgid "Failed to create a temporary file."
-msgstr "No s'ha pogut crear un fitxer temporal."
+msgstr "Ha fallat mentre es creava un fitxer temporal."
 
 #: rewriter/mesonrewriterjob.cpp:74
 #, kde-format

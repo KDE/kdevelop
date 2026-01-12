@@ -1,44 +1,40 @@
-# Translation of kdevclang.po to Catalan (Valencian)
-# Copyright (C) 2016-2020 This_file_is_part_of_KDE
-# This file is distributed under the license LGPL version 2.1 or
-# version 3 or later versions approved by the membership of KDE e.V.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# SPDX-FileCopyrightText: 2016, 2017, 2018, 2019, 2020 Josep M. Ferrer <txemaq@gmail.com>
-# SPDX-FileCopyrightText: 2016, 2018, 2019, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-07-20 12:59+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
-"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
-"Language: ca@valencia\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 2.0\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
-msgstr "Ajudants de C/C++"
+msgstr ""
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:41
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
-msgstr "Configura els ajudants de C/C++"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: clangsettings/sessionsettings/sessionsettings.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr "Compleció de codi"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:35
@@ -48,36 +44,34 @@ msgid ""
 "If disabled, macros will not be included in the code completion results. "
 "This can improve the responsiveness of code completion in some cases."
 msgstr ""
-"Si està marcada, les macros no s'inclouran en els resultats de la compleció "
-"de codi. Açò pot millorar la resposta de la compleció de codi en algun cas."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:38
 #, kde-format
 msgctxt "@option:check"
 msgid "Add macros to code completion"
-msgstr "Afig les macros a la compleció de codi"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
 #: clangsettings/sessionsettings/sessionsettings.ui:51
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Look-ahead code completion"
-msgstr "Activa la compleció de codi anticipada"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: clangsettings/sessionsettings/sessionsettings.ui:64
 #, kde-format
 msgctxt "@title:group"
 msgid "Assistants"
-msgstr "Assistents"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
 #: clangsettings/sessionsettings/sessionsettings.ui:70
 #, kde-format
 msgctxt "@option:check"
 msgid "Forward declare assistant"
-msgstr "Assistent de declaració «forward»"
+msgstr ""
 
 #: clangsupport.cpp:171
 #, kde-format
@@ -87,79 +81,73 @@ msgid ""
 "this.\n"
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
-"El camí d'inclusions integrat de «clang» «%1» no és vàlid (falta la "
-"capçalera «cpuid.h»).\n"
-"Intenteu definir manualment la variable d'entorn KDEV_CLANG_BUILTIN_DIR per "
-"a solucionar-ho.\n"
-"Vegeu també: https://bugs.kde.org/show_bug.cgi?id=393779"
 
 #: clangsupport.cpp:278
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
-msgstr "Canvia el nom de la declaració"
+msgstr ""
 
 #: clangsupport.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"
-msgstr "Mou cap a dins del codi font"
+msgstr ""
 
 #: codecompletion/context.cpp:149
 #, kde-format
 msgid "Override %1"
-msgstr "Sobreescriu %1"
+msgstr ""
 
 #: codecompletion/context.cpp:346
 #, kde-format
 msgid "Implement %1"
-msgstr "Implementa %1"
+msgstr ""
 
 #: codecompletion/context.cpp:1408
 #, kde-format
 msgid "Special"
-msgstr "Especial"
+msgstr ""
 
 #: codecompletion/context.cpp:1409
 #, kde-format
 msgid "Look-ahead Matches"
-msgstr "Coincidències anticipades"
+msgstr ""
 
 #: codecompletion/context.cpp:1410
 #, kde-format
 msgid "Builtin"
-msgstr "Integrat"
+msgstr ""
 
 #: codecompletion/context.cpp:1411
 #, kde-format
 msgid "Macros"
-msgstr "Macros"
+msgstr ""
 
-# skip-rule: ff-abstract
 #: codecompletion/context.cpp:1454
 #, kde-format
 msgid "Abstract Override"
-msgstr "Sobreescriptura abstracta"
+msgstr ""
 
 #: codecompletion/context.cpp:1455
 #, kde-format
 msgid "Virtual Override"
-msgstr "Sobreescriu virtual"
+msgstr ""
 
 #: codecompletion/context.cpp:1470
 #, kde-format
 msgid "Implement Function"
-msgstr "Implementa funció"
+msgstr ""
 
 #: codegen/adaptsignatureaction.cpp:51
 #, kde-format
 msgid "Update declaration signature"
-msgstr "Actualitza una signatura de declaració"
+msgstr ""
 
 #: codegen/adaptsignatureaction.cpp:51
 #, kde-format
 msgid "Update definition signature"
-msgstr "Actualitza una signatura de definició"
+msgstr ""
 
 #: codegen/adaptsignatureaction.cpp:62
 #, kde-format
@@ -168,9 +156,6 @@ msgid ""
 "from: %1\n"
 "to: %2"
 msgstr ""
-"Actualitza una signatura de declaració\n"
-"des de: %1\n"
-"a: %2"
 
 #: codegen/adaptsignatureaction.cpp:63
 #, kde-format
@@ -179,111 +164,107 @@ msgid ""
 "from: %1\n"
 "to: %2"
 msgstr ""
-"Actualitza una signatura de definició\n"
-"des de: %1\n"
-"a: %2"
 
 #: codegen/adaptsignatureaction.cpp:113
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr "Ha fallat mentre s'aplicaven els canvis: %1"
+msgstr ""
 
 #: codegen/adaptsignatureassistant.cpp:76
 #, kde-format
 msgid "Adapt Signature"
-msgstr "Adapta la signatura"
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "Rename %1"
-msgstr "Canvia el nom de %1"
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:94
 #, kde-format
 msgid "Create separate definition for %1"
-msgstr "Crea una definició separada per a %1"
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:137
 #, kde-format
 msgid "No declaration under cursor"
-msgstr "No hi ha cap declaració baix el cursor"
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:145
 #, kde-format
 msgid "No source file available for %1."
-msgstr "El fitxer de codi font per a %1 no està disponible."
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:157
 #, kde-format
 msgid "Failed to update DUChain for %1."
-msgstr "Ha fallat mentre s'actualitzava la cadena DU per a %1."
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:161
 #, kde-format
 msgid "Declaration lost while updating."
-msgstr "S'ha perdut la declaració en actualitzar."
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:167
 #, kde-format
 msgid "Cannot create definition for this declaration."
-msgstr "No s'ha pogut crear la definició per a esta declaració."
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:174
 #, kde-format
 msgid "No document for %1"
-msgstr "No hi ha document per a %1"
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:205
 #, kde-format
 msgid "Insertion failed"
-msgstr "No s'ha pogut inserir"
+msgstr ""
 
 #: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
 #, kde-format
 msgid "Applying changes failed: %1"
-msgstr "Ha fallat mentre s'aplicaven els canvis: %1"
+msgstr ""
 
 #: duchain/clangproblem.cpp:204
 #, kde-format
 msgid "Fix-it Hints"
-msgstr "Suggeriments d'esmena"
+msgstr ""
 
 #: duchain/clangproblem.cpp:246
 #, kde-format
 msgid "Insert \"%1\" at line: %2, column: %3"
-msgstr "Inserix «%1» a la línia: %2, columna: %3"
+msgstr ""
 
 #: duchain/clangproblem.cpp:250
 #, kde-format
 msgid "Replace text at line: %1, column: %2 with: \"%3\""
-msgstr "Substituïx el text a la línia: %1, columna: %2 per: «%3»"
+msgstr ""
 
 #: duchain/clangproblem.cpp:253
 #, kde-format
 msgid "Replace \"%1\" with: \"%2\""
-msgstr "Substituïx «%1» per «%2»"
+msgstr ""
 
 #: duchain/clangproblem.cpp:256
 #, kde-format
 msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
 msgstr ""
-"Substituïx múltiples línies començant a la línia: %1, columna: %2 per: «%3»"
 
 #: duchain/headerguardassistant.cpp:45
 #, kde-format
 msgid "Add #pragma once"
-msgstr "Afig #pragma una vegada"
+msgstr ""
 
 #: duchain/headerguardassistant.cpp:46
 #, kde-format
 msgid "Add macro-based #ifndef/#define/#endif header guard"
-msgstr "Afig la guarda d'inclusions #ifndef/#define/#endif basada en macros"
+msgstr ""
 
 #: duchain/macrodefinition.cpp:112
 #, kde-format
 msgid "Macro %1"
-msgstr "Macro %1"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:64
 #, kde-format
@@ -291,58 +272,58 @@ msgctxt ""
 "%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
 "arguments"
 msgid "%1: %2"
-msgstr "%1: %2"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:65
 #, kde-format
 msgid "Function macro"
-msgstr "Macro de funció"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:65
 #, kde-format
 msgid "Macro"
-msgstr "Macro"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:68
 #, kde-format
 msgctxt "%1: the link to the definition"
 msgid "Defined in: %1"
-msgstr "Definit a: %1"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:72
 #, kde-format
 msgid "Show uses"
-msgstr "Mostra els usos"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:75
 #, kde-format
 msgid "Body: "
-msgstr "Cos: "
+msgstr ""
 
 #: duchain/missingincludepathproblem.cpp:35
 #, kde-format
 msgid "Add Custom Include Path"
-msgstr "Afig camí cap a una inclusió personalitzada"
+msgstr ""
 
 #: duchain/missingincludepathproblem.cpp:58
 #, kde-format
 msgid "Open Project"
-msgstr "Obri un projecte"
+msgstr ""
 
 #: duchain/parsesession.cpp:575
 #, kde-format
 msgid "Requested here: %1"
-msgstr "Sol·licitat ací: %1"
+msgstr ""
 
 #: duchain/parsesession.cpp:616
 #, kde-format
 msgid "In included file: %1"
-msgstr "En el fitxer inclòs: %1"
+msgstr ""
 
 #: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
-msgstr "La capçalera no està protegida contra múltiples inclusions"
+msgstr ""
 
 #: duchain/parsesession.cpp:640
 #, kde-format
@@ -350,26 +331,23 @@ msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
 "conventional #ifndef/#define/#endif macro guards or with #pragma once."
 msgstr ""
-"La capçalera indicada no està protegida contra múltiples inclusions, tant "
-"amb la macro de protecció convencional #ifndef/#define/#endif o amb la "
-"#pragma."
 
 #: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
 msgid "Insert '%1'"
-msgstr "Inserix «%1»"
+msgstr ""
 
 #: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
-msgstr "Declaració «forward» com a «class»"
+msgstr ""
 
 #: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
-msgstr "Declaració «forward» com a «struct»"
+msgstr ""
 
 #: util/clangutils.cpp:191
 #, kde-format
 msgid "<parse error>"
-msgstr "<error d'anàlisi>"
+msgstr ""

@@ -1,123 +1,119 @@
-# Translation of kdevexecuteplasmoid.po to Catalan (Valencian)
-# Copyright (C) 2013-2022 This_file_is_part_of_KDE
-# This file is distributed under the license LGPL version 2.1 or
-# version 3 or later versions approved by the membership of KDE e.V.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# SPDX-FileCopyrightText: 2013, 2015, 2017, 2022 Josep M. Ferrer <txemaq@gmail.com>
-# SPDX-FileCopyrightText: 2015, 2016, 2017 Antoni Bella Pérez <antonibella5@yahoo.com>
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2022-09-07 19:27+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
-"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
-"Language: ca@valencia\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
 
 #: plasmoidexecutionconfig.cpp:118
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
-msgstr "Configura l'execució de plasmoides"
+msgstr ""
 
 #: plasmoidexecutionconfig.cpp:128
 #, kde-format
 msgid "Display a plasmoid"
-msgstr "Mostra un plasmoide"
+msgstr ""
 
 #: plasmoidexecutionconfig.cpp:138 plasmoidexecutionconfig.cpp:217
 #, kde-format
 msgid "Plasmoid Launcher"
-msgstr "Iniciador de plasmoide"
+msgstr ""
 
 #: plasmoidexecutionconfig.cpp:180
 #, kde-format
 msgid "Could not resolve the dependency: %1"
-msgstr "No s'ha pogut resoldre la dependència: %1"
+msgstr ""
 
 #: plasmoidexecutionconfig.cpp:288
 #, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
-msgstr "Plasmoides"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
-msgstr "Plasmoide"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
-msgstr "Camí o nom:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
 #, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr "Comportament"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Form factor:"
-msgstr "Factor de format:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
-msgstr "Tema:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
-msgstr "Dependències"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plasmoidexecutionconfig.ui:132
 #, kde-format
 msgctxt "@label:chooser"
 msgid "&Targets:"
-msgstr "Objec&tius:"
+msgstr ""
 
 #: plasmoidexecutionjob.cpp:35
 #, kde-format
 msgid "Plasmoid Viewer"
-msgstr "Visor de plasmoides"
+msgstr ""
 
 #: plasmoidexecutionjob.cpp:70
 #, kde-format
 msgid "** Killed **"
-msgstr "** S'ha matat **"
+msgstr ""
 
 #: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
 #, kde-format
 msgid "*** Failed ***"
-msgstr "*** Ha fallat ***"
+msgstr ""
 
 #: plasmoidexecutionjob.cpp:85
 #, kde-format
 msgid "*** Finished ***"
-msgstr "*** Finalitzat ***"
+msgstr ""
 
 #: plasmoidexecutionjob.cpp:94
 #, kde-format
 msgid "Plasmoid failed to execute on %1"
-msgstr "El plasmoide ha fallat mentre s'executava a %1"
+msgstr ""

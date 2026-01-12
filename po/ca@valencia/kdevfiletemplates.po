@@ -107,8 +107,8 @@ msgstr ""
 #, kde-format
 msgid "Failed to write custom license template to file %1."
 msgstr ""
-"No s'ha pogut escriure la plantilla de llicència personalitzada en el fitxer "
-"%1."
+"Ha fallat mentre s'escrivia la plantilla de llicència personalitzada al "
+"fitxer %1."
 
 #: outputpage.cpp:117
 #, kde-format

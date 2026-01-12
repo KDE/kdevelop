@@ -84,7 +84,7 @@ msgstr ""
 #: cmakejob.cpp:63
 #, kde-format
 msgid "Failed to create build directory %1."
-msgstr "No s'ha pogut crear el directori de construcció %1."
+msgstr "Ha fallat mentre es creava el directori de construcció %1."
 
 #: cmakejob.cpp:139
 #, kde-format

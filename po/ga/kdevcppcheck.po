@@ -1,79 +1,75 @@
-# Translation of kdevcppcheck.po to Catalan (Valencian)
-# Copyright (C) 2014-2020 This_file_is_part_of_KDE
-# This file is distributed under the license LGPL version 2.1 or
-# version 3 or later versions approved by the membership of KDE e.V.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2016, 2017, 2018, 2020 Josep M. Ferrer <txemaq@gmail.com>
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-11-28 19:39+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
-"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
-"Language: ca@valencia\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 2.0\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
 msgctxt "@title:tab"
 msgid "Cppcheck"
-msgstr "Cppcheck"
+msgstr ""
 
 #: config/globalconfigpage.cpp:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Cppcheck Settings"
-msgstr "Configura la configuració de Cppcheck"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:20
 #, kde-format
 msgctxt "@title:group"
 msgid "Paths"
-msgstr "Camins"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
 #: config/globalconfigpage.ui:26
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Cppchec&k executable:"
-msgstr "Executable de Cppchec&k:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
 #: config/globalconfigpage.ui:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Output"
-msgstr "Eixida"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
 #: config/globalconfigpage.ui:51
 #, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
-msgstr "Oculta la vista de l'eixida durant la comprovació"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
 #: config/globalconfigpage.ui:58
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Cppcheck XML output in the output view"
-msgstr "Mostra l'eixida XML de «cppcheck» en la vista de l'eixida"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
 #: config/projectconfigpage.ui:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr "Comprovacions"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:47
@@ -83,15 +79,13 @@ msgid ""
 "Check for unused functions. It is recommend to only enable this when the "
 "whole program is scanned"
 msgstr ""
-"Comproveu si hi ha funcions sense utilitzar. Només es recomana permetre-ho "
-"quan s'escaneja tot el programa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Unused function"
-msgstr "Funció sense ús"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:60
@@ -102,30 +96,27 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
-"Permet que Cppcheck informe, tot i que l'anàlisi no és concloent. Hi ha "
-"falsos positius amb esta opció. Cada resultat ha de ser acuradament "
-"investigat abans de saber si és bo o roín."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
 #, kde-format
 msgctxt "@option:check"
 msgid "Inconclusive analysis"
-msgstr "Anàlisi no concloent"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable information messages"
-msgstr "Habilita els missatges informatius"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Information"
-msgstr "Informació"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:83
@@ -135,29 +126,27 @@ msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
 "config'"
 msgstr ""
-"Avisa si falta algun «include». Per a informació detallada utilitzeu «check-"
-"config»"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:86
 #, kde-format
 msgctxt "@option:check"
 msgid "Missing include"
-msgstr "Falta els «include»"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:96
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable performance messages"
-msgstr "Habilita els missatges de rendiment"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:99
 #, kde-format
 msgctxt "@option:check"
 msgid "Performance"
-msgstr "Rendiment"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:109
@@ -170,33 +159,27 @@ msgid ""
 "that is effective.<br/><br/>Be careful with using this option - it can "
 "dramatically slow checking.</p>"
 msgstr ""
-"<p>Força la comprovació dels fitxers que tenen una gran quantitat de "
-"configuracions. Es mostrarà un error si es troba un d'estos fitxers, de "
-"manera que no hi ha cap motiu per a emprar-lo de manera predeterminada. Si "
-"s'utilitza juntament amb «--max-configs=», l'última opció serà l'efectiva."
-"<br/><br/>Aneu amb compte amb l'ús d'esta opció -pot fer que la comprovació "
-"siga dràsticament lenta-.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112
 #, kde-format
 msgctxt "@option:check"
 msgid "Force checking"
-msgstr "Força la comprovació"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable portability messages"
-msgstr "Habilita els missatges de portabilitat"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:122
 #, kde-format
 msgctxt "@option:check"
 msgid "Portability"
-msgstr "Portabilitat"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:132
@@ -206,16 +189,13 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
-"Permet totes les comprovacions a l'estil de la codificació. Tots els "
-"missatges amb les severitats «estil», «rendiment» i «portabilitat» estan "
-"habilitats."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style"
-msgstr "Estil"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:145
@@ -225,22 +205,20 @@ msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
 "flag."
 msgstr ""
-"Comprova la configuració de Cppcheck. L'anàlisi normal del codi està "
-"desactivada per esta opció."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
 #, kde-format
 msgctxt "@option:check"
 msgid "Check config"
-msgstr "Comprova la configuració"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
 #: config/projectconfigpage.ui:158
 #, kde-format
 msgctxt "@title:tab"
 msgid "Include Directories"
-msgstr "Directoris «include»"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:164
@@ -250,16 +228,13 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
-"Afig els directoris «include» del projecte als arguments de Cppcheck. Esta "
-"opció només afig els camins relacionats amb l'arrel del projecte i els "
-"directoris de construcció."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'project' include dirs"
-msgstr "Utilitza els directoris «include» del projecte"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:180
@@ -269,23 +244,20 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
-"<p>Afig un altre, els directoris «include» del sistema als arguments de "
-"Cppcheck.<br/><br/>Aneu amb compte amb l'ús d'esta opció -pot fer que la "
-"comprovació siga dràsticament lenta-.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'system' include dirs"
-msgstr "Utilitza els directoris «include» del sistema"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/projectconfigpage.ui:198
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
-msgstr "Els «include» &ignorats:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
@@ -306,34 +278,20 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
-"<html>\n"
-"\n"
-"<p>Definix una llista separada per comes dels directoris «include» ignorats."
-"</p>\n"
-"\n"
-"<p>Podeu utilitzar les variables de substitució següents:</p>\n"
-"\n"
-"<p><b><tt>%p</tt></b> - És substituït per l'URL del directori arrel del "
-"projecte.</p>\n"
-"\n"
-"<p><b><tt>%b</tt></b> - És substituït per l'URL del directori de construcció "
-"del projecte.</p>\n"
-"\n"
-"</html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
 #: config/projectconfigpage.ui:241
 #, kde-format
 msgctxt "@title:tab"
 msgid "Extra Parameters"
-msgstr "Paràmetres addicionals"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, extraLabel)
 #: config/projectconfigpage.ui:254
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Ex&tra parameters:"
-msgstr "Paràmetres a&ddicionals:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
 #: config/projectconfigpage.ui:274
@@ -354,76 +312,62 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
-"<html>\n"
-"\n"
-"<p>Definix els paràmetres addicionals per a «cppcheck» (vegeu la "
-"documentació).</p>\n"
-"\n"
-"<p>Podeu utilitzar les variables de substitució següents:</p>\n"
-"\n"
-"<p><b><tt>%p</tt></b> - És substituït per l'URL del directori arrel del "
-"projecte.</p>\n"
-"\n"
-"<p><b><tt>%b</tt></b> - És substituït per l'URL del directori de construcció "
-"del projecte.</p>\n"
-"\n"
-"</html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: config/projectconfigpage.ui:308
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Line"
-msgstr "Línia d'ordres"
+msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
 #: config/projectconfigpage.ui:316
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Busca…"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
 #: config/projectconfigpage.ui:326
 #, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
-msgstr "Trenca les línies"
+msgstr ""
 
 #: job.cpp:42
 #, kde-format
 msgid "Cppcheck Analysis (%1)"
-msgstr "Anàlisi de Cppcheck (%1)"
+msgstr ""
 
 #: job.cpp:111 parser.cpp:250 problemmodel.cpp:40 problemmodel.cpp:85
 #, kde-format
 msgid "Cppcheck"
-msgstr "Cppcheck"
+msgstr ""
 
 #: job.cpp:150
 #, kde-format
 msgid "Failed to start Cppcheck from \"%1\"."
-msgstr "Ha fallat mentre s'iniciava «Cppcheck» des de «%1»."
+msgstr ""
 
 #: job.cpp:155
 #, kde-format
 msgid "Cppcheck crashed."
-msgstr "«cppcheck» ha fallat."
+msgstr ""
 
 #: job.cpp:160
 #, kde-format
 msgid "Cppcheck process timed out."
-msgstr "El procés «cppcheck» ha excedit el temps."
+msgstr ""
 
 #: job.cpp:164
 #, kde-format
 msgid "Write to Cppcheck process failed."
-msgstr "No s'ha pogut fer l'escriptura en el procés de «cppcheck»."
+msgstr ""
 
 #: job.cpp:168
 #, kde-format
 msgid "Read from Cppcheck process failed."
-msgstr "Ha fallat la lectura des del procés de «cppcheck»."
+msgstr ""
 
 #: parameters.cpp:145
 #, kde-format
@@ -435,55 +379,48 @@ msgid ""
 "'XX' value can be found in any project's moc-generated file or in the "
 "<QtCore/qobjectdefs.h> header file."
 msgstr ""
-"Pareix que este projecte utilitza les biblioteques de les Qt. Perquè "
-"«cppcheck» treballe correctament, haureu de definir el valor de "
-"Q_MOC_OUTPUT_REVISION. Per desgràcia, el connector no pot trobar este valor "
-"de forma automàtica -l'haureu de configurar manualment mitjançant l'addició "
-"de «-DQ_MOC_OUTPUT_REVISION=XX» als paràmetres addicionals. El valor «XX» es "
-"pot trobar a qualsevol fitxer generat pels «moc» a qualsevol projecte o en "
-"el fitxer de capçalera <QtCore/qobjectdefs.h>."
 
 #: parser.cpp:220
 #, kde-format
 msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
-msgstr "Anàlisi XML de Cppcheck: error a la línia %1, columna %2: %3"
+msgstr ""
 
 #: plugin.cpp:51
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current File with Cppcheck"
-msgstr "Analitza el fitxer actual amb Cppcheck"
+msgstr ""
 
 #: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Cppcheck"
-msgstr "Cppcheck"
+msgstr ""
 
 #: plugin.cpp:62
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current Project with Cppcheck"
-msgstr "Analitza el projecte actual amb Cppcheck"
+msgstr ""
 
 #: problemmodel.cpp:117
 #, kde-format
 msgid "Analysis completed, no problems detected."
-msgstr "S'ha completat l'anàlisi, sense detectar cap problema."
+msgstr ""
 
 #: problemmodel.cpp:143
 #, kde-format
 msgid "Analysis started..."
-msgstr "S'ha iniciat l'anàlisi…"
+msgstr ""
 
 #: problemmodel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
-msgstr "Torna a executar l'última anàlisi de Cppcheck (%1)"
+msgstr ""
 
 #: problemmodel.cpp:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
-msgstr "Torna a executar l'última anàlisi de Cppcheck"
+msgstr ""
