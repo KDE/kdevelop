@@ -14,16 +14,17 @@
 #include "abstractfunctiondeclaration.h"
 #include "classmemberdeclarationdata.h"
 
+#include <QFlag>
+
 namespace KDevelop {
-enum ClassFunctionFlag
-{
-    FunctionFlagNormal = 0,
-    FunctionSignalFlag = 1 <<  1,
-    FunctionSlotFlag = 1 << 2,
-    AbstractFunctionFlag = 1 << 3,
-    FinalFunctionFlag = 1 << 4,
-    VirtualFunctionFlag = 1 << 5,
-    ExplicitFunctionFlag = 1 << 6,
+enum class ClassFunctionFlag {
+    None = 0,
+    Signal = 1 << 0,
+    Slot = 1 << 1,
+    Abstract = 1 << 2,
+    Final = 1 << 3,
+    Virtual = 1 << 4,
+    Explicit = 1 << 5,
 };
 Q_DECLARE_FLAGS(ClassFunctionFlags, ClassFunctionFlag)
 
@@ -37,7 +38,7 @@ public:
     ClassFunctionDeclarationData()
     {
         initializeAppendedLists();
-        m_functionFlags = FunctionFlagNormal;
+        m_functionFlags = ClassFunctionFlag::None;
     }
     ClassFunctionDeclarationData(const ClassFunctionDeclarationData& rhs)
         : ClassMemberDeclarationData(rhs)

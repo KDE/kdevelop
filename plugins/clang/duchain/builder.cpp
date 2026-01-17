@@ -1224,9 +1224,9 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 
     // TODO: Set flags in one go? (needs new API in kdevplatform)
     const auto attributes = ClangUtils::specialAttributes(cursor);
-    decl->setIsSignal(attributes & FunctionSignalFlag);
-    decl->setIsSlot(attributes & FunctionSlotFlag);
-    decl->setIsFinal(attributes & FinalFunctionFlag);
+    decl->setIsSignal(attributes.testFlag(ClassFunctionFlag::Signal));
+    decl->setIsSlot(attributes.testFlag(ClassFunctionFlag::Slot));
+    decl->setIsFinal(attributes.testFlag(ClassFunctionFlag::Final));
 }
 
 template<CXCursorKind CK>

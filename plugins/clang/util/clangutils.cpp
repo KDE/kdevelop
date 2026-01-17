@@ -384,14 +384,14 @@ KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
             case CXCursor_AnnotateAttr: {
                 ClangString attribute(clang_getCursorDisplayName(cursor));
                 if (attribute.c_str() == QByteArrayLiteral("qt_signal")) {
-                    flags |= FunctionSignalFlag;
+                    flags.setFlag(ClassFunctionFlag::Signal);
                 } else if (attribute.c_str() == QByteArrayLiteral("qt_slot")) {
-                    flags |= FunctionSlotFlag;
+                    flags.setFlag(ClassFunctionFlag::Slot);
                 }
                 break;
             }
             case CXCursor_CXXFinalAttr:
-                flags |= FinalFunctionFlag;
+                flags.setFlag(ClassFunctionFlag::Final);
                 break;
             default:
                 break;

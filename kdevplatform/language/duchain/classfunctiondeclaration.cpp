@@ -120,78 +120,64 @@ QString ClassFunctionDeclaration::toString() const
    return true;
    }*/
 
-uint setFlag(bool enable, uint flag, uint flags)
-{
-    if (enable)
-        return flags | flag;
-    else
-        return flags & (~flag);
-}
-
 bool ClassFunctionDeclaration::isAbstract() const
 {
-    return d_func()->m_functionFlags & AbstractFunctionFlag;
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Abstract);
 }
 
-void ClassFunctionDeclaration::setIsAbstract(bool abstract)
+void ClassFunctionDeclaration::setIsAbstract(bool isAbstract)
 {
-    d_func_dynamic()->m_functionFlags = ( ClassFunctionFlags )setFlag(abstract, AbstractFunctionFlag,
-                                                                      d_func()->m_functionFlags);
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Abstract, isAbstract);
 }
 
 bool ClassFunctionDeclaration::isFinal() const
 {
-    return d_func()->m_functionFlags & FinalFunctionFlag;
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Final);
 }
 
-void ClassFunctionDeclaration::setIsFinal(bool final)
+void ClassFunctionDeclaration::setIsFinal(bool isFinal)
 {
-    d_func_dynamic()->m_functionFlags = ( ClassFunctionFlags )setFlag(final, FinalFunctionFlag,
-                                                                      d_func()->m_functionFlags);
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Final, isFinal);
 }
 
 bool ClassFunctionDeclaration::isSignal() const
 {
-    return d_func()->m_functionFlags & FunctionSignalFlag;
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Signal);
 }
 
 void ClassFunctionDeclaration::setIsSignal(bool isSignal)
 {
-    d_func_dynamic()->m_functionFlags = ( ClassFunctionFlags )setFlag(isSignal, FunctionSignalFlag,
-                                                                      d_func()->m_functionFlags);
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Signal, isSignal);
 }
 
 bool ClassFunctionDeclaration::isSlot() const
 {
-    return d_func()->m_functionFlags & FunctionSlotFlag;
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Slot);
 }
 
 void ClassFunctionDeclaration::setIsSlot(bool isSlot)
 {
-    d_func_dynamic()->m_functionFlags = ( ClassFunctionFlags )setFlag(isSlot, FunctionSlotFlag,
-                                                                      d_func()->m_functionFlags);
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Slot, isSlot);
 }
 
 bool ClassFunctionDeclaration::isVirtual() const
 {
-    return d_func()->m_functionFlags & VirtualFunctionFlag;
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Virtual);
 }
 
 void ClassFunctionDeclaration::setIsVirtual(bool isVirtual)
 {
-    d_func_dynamic()->m_functionFlags =
-        (ClassFunctionFlags)setFlag(isVirtual, VirtualFunctionFlag, d_func()->m_functionFlags);
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Virtual, isVirtual);
 }
 
 bool ClassFunctionDeclaration::isExplicit() const
 {
-    return d_func()->m_functionFlags & ExplicitFunctionFlag;
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Explicit);
 }
 
 void ClassFunctionDeclaration::setIsExplicit(bool isExplicit)
 {
-    d_func_dynamic()->m_functionFlags =
-        (ClassFunctionFlags)setFlag(isExplicit, ExplicitFunctionFlag, d_func()->m_functionFlags);
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Explicit, isExplicit);
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const
