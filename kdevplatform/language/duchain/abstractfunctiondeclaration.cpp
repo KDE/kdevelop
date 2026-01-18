@@ -19,17 +19,17 @@ AbstractFunctionDeclaration::~AbstractFunctionDeclaration()
 
 bool AbstractFunctionDeclaration::isInline() const
 {
-    return data()->m_isInline;
+    return data()->m_specifiers.testFlag(FunctionSpecifier::Inline);
 }
 
 void AbstractFunctionDeclaration::setInline(bool isInline)
 {
-    dynamicData()->m_isInline = isInline;
+    dynamicData()->m_specifiers.setFlag(FunctionSpecifier::Inline, isInline);
 }
 
 void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
 {
-    dynamicData()->m_isInline = specifiers & InlineSpecifier;
+    dynamicData()->m_specifiers = specifiers;
 }
 
 IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index) const

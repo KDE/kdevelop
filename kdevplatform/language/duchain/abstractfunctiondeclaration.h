@@ -13,19 +13,27 @@
 #include <language/languageexport.h>
 #include <util/namespacedoperatorbitwiseorworkaroundqtbug.h>
 
+#include <QFlag>
+
 namespace KDevelop {
 class DUContext;
 class IndexedString;
+
+enum class FunctionSpecifier {
+    None = 0,
+    Inline = 1 << 0,
+};
+Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
 class AbstractFunctionDeclarationData
 {
 public:
     AbstractFunctionDeclarationData()
-        : m_isInline(false)
+        : m_specifiers(FunctionSpecifier::None)
     {
     }
     IndexedDUContext m_functionContext;
-    bool m_isInline : 1;
+    FunctionSpecifiers m_specifiers;
 };
 
 /**
@@ -36,11 +44,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractFunctionDeclaration
 {
 public:
     virtual ~AbstractFunctionDeclaration();
-
-    enum FunctionSpecifier {
-        InlineSpecifier = 0x1 /**< indicates an inline function */,
-    };
-    Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
     void setFunctionSpecifiers(FunctionSpecifiers specifiers);
 
@@ -72,8 +75,6 @@ private:
     virtual const AbstractFunctionDeclarationData* data() const = 0;
     virtual AbstractFunctionDeclarationData* dynamicData() = 0;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractFunctionDeclaration::FunctionSpecifiers)
 
 ///Use this to merge AbstractFunctionDeclaration into the class hierarchy. Base must be the base-class
 ///in the hierarchy, and Data must be the Data class of the following Declaration, and must be based on AbstractFunctionDeclarationData
