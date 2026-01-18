@@ -77,6 +77,7 @@ FunctionDescription::FunctionDescription(const QString& name, const VariableDesc
     : name(name)
     , arguments(arguments)
     , returnArguments(returnArguments)
+    , isNoexcept(false)
     , isConstructor(false)
     , isDestructor(false)
     , isVirtual(false)
@@ -99,11 +100,13 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         DUChainPointer<FunctionDeclaration> function = declaration.dynamicCast<FunctionDeclaration>();
         if (function) {
             context = DUChainUtils::argumentContext(declaration.data());
+            isNoexcept = function->isNoexcept();
         }
 
         DUChainPointer<ClassFunctionDeclaration> method = declaration.dynamicCast<ClassFunctionDeclaration>();
 
         if (method) {
+            isNoexcept = method->isNoexcept();
             isConstructor = method->isConstructor();
             isDestructor = method->isDestructor();
             isVirtual = method->isVirtual();

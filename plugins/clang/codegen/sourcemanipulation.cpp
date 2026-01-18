@@ -213,6 +213,9 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
         returnType = nullptr;
     }
     signature.returnType = IndexedType(returnType);
+    if (const auto* const functionDeclaration = dynamic_cast<const AbstractFunctionDeclaration*>(declaration)) {
+        signature.isNoexcept = functionDeclaration->isNoexcept();
+    }
     signature.isConst = funcType->modifiers() & AbstractType::ConstModifier;
 
     QString decl = CodegenHelper::makeSignatureString(declaration, signature, true);

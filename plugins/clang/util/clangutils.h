@@ -17,6 +17,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 
 #include <functional>
+#include <optional>
 
 namespace ClangUtils
 {
@@ -127,6 +128,13 @@ namespace ClangUtils
      */
     bool isExplicitlyDefaultedOrDeleted(CXCursor cursor);
 
+    /**
+     * @return the noexcept-specification of the cursor, if available
+     *
+     * @note Do not overwrite the current value of isNoexcept if this function returns @c std::nullopt:
+     *       if the exception specification of @p cursor was available before, it probably remains the same.
+     */
+    [[nodiscard]] std::optional<bool> isCursorNoexcept(CXCursor cursor);
 
     /**
      * @brief run clang_visitChildren using given visitor function

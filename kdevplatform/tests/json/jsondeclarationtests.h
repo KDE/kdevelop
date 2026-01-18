@@ -39,6 +39,7 @@
  *   targetType : TypeTestObject
  *   returnType : TypeTestObject
  *   isAtomic : bool
+ *   isNoexcept : bool
  *   isAbstract : bool
  *   isMutable : bool
  *   isVirtual : bool
@@ -196,6 +197,17 @@ DeclarationTest(isAtomic)
     AbstractType::Ptr type = TypeUtils::targetType(decl->abstractType(), decl->topContext());
 
     return compareValues((type->modifiers() & AbstractType::AtomicModifier) != 0, value, QStringLiteral("Declaration's atomic modifier"));
+}
+
+///JSON type: bool
+///@returns whether the (function) declaration's isNoexcept matches the given value
+DeclarationTest(isNoexcept)
+{
+    const auto* const funcDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+    if (!funcDecl)
+        return QStringLiteral("Non-function declaration cannot be noexcept.");
+
+    return compareValues(funcDecl->isNoexcept(), value, QStringLiteral("Declaration's isNoexcept"));
 }
 
 ///JSON type: bool

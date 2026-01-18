@@ -28,6 +28,7 @@ struct FuncOverrideInfo
     QString returnType;
     QString name;
     FuncParameterList params;
+    bool isNoexcept = false;
     bool isPureVirtual = false;
     bool isConst = false;
     /// Returns true if equal, isPureVirtual & parameter ids are ignored

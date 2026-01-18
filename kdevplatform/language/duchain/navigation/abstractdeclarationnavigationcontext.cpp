@@ -832,6 +832,8 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
     if (function) {
         if (function->isInline())
             details << QStringLiteral("inline");
+        if (function->isNoexcept())
+            details << QStringLiteral("noexcept");
 
         const auto* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
         if (classFunDecl) {

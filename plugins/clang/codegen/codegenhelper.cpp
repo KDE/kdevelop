@@ -443,6 +443,9 @@ QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Sig
     if (signature.isConst) {
         ret += QLatin1String(" const");
     }
+    if (signature.isNoexcept) {
+        ret += QLatin1String(" noexcept");
+    }
     return ret;
 }
 

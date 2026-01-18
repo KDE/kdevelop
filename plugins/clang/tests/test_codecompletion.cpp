@@ -731,6 +731,11 @@ void TestCodeCompletion::testVirtualOverride_data()
            "class Bar : Foo \n{void overridden(const int b) const override;\n}"
         << CompletionItems{{3, 1}, {"foo(const int b) const"}};
 
+    QTest::newRow("noexcept_member") << "class Foo { virtual void foo() noexcept; virtual void foo(char c);"
+                                        "virtual char foo(char c, int i, double d); };\n"
+                                        "class Bar : Foo \n{void foo(char c) override;\n}"
+                                     << CompletionItems{{3, 1}, {"foo() noexcept", "foo(char c, int i, double d)"}};
+
     QTest::newRow("dont-override")
         << R"(class A {
                   virtual void something() = 0;
@@ -960,9 +965,10 @@ void TestCodeCompletion::testImplement_data()
         << "class Foo { int bar() const; };"
         << CompletionItems{{3, 1}, {"Foo::bar() const"}};
 
-    QTest::newRow("noexcept")
-        << "class Foo { int bar() noexcept; };"
-        << CompletionItems{{3, 1}, {"Foo::bar() noexcept"}};
+    QTest::newRow("noexcept_member") << "class Foo { int bar() noexcept; };"
+                                     << CompletionItems{{3, 1}, {"Foo::bar() noexcept"}};
+
+    QTest::newRow("noexcept_function") << "void foo() noexcept;\n" << CompletionItems{{3, 1}, {"foo() noexcept"}};
 
     QTest::newRow("throw()")
         << "class Foo { int bar() throw(); };"
@@ -1656,6 +1662,17 @@ void TestCodeCompletion::testCompleteFunction_data()
         << CompletionItems({5, 0}, {"Test", "Test<X, B>::bar(B a)"})
         << "Test<X, B>::bar(B a)"
         << "template <template<class, int> class X, typename B>\nclass Test {\npublic:\nvoid bar(B a);\n};\ntemplate<template<typename, int> class X, typename B> void Test<X, B>::bar(B a)\n{\n}\n";
+
+    QTest::newRow("noexcept_member")
+        << "class Foo{public:void bar() const noexcept;};\n"
+        << CompletionItems({1, 0}, {"Foo", "Foo::bar() const noexcept"}) << "Foo::bar() const noexcept"
+        << "class Foo{public:void bar() const noexcept;};\nvoid Foo::bar() const noexcept\n{\n}\n";
+
+    QTest::newRow("noexcept_function")
+        << "void foo() noexcept; void foo(char c);\n"
+           "void foo(char c){}\n"
+        << CompletionItems({2, 0}, {"foo() noexcept"}) << "foo() noexcept"
+        << "void foo() noexcept; void foo(char c);\nvoid foo(char c){}\nvoid foo() noexcept\n{\n}\n";
 
     QTest::newRow("replace-leading-return-type")
         << "void foo(int x);\nvoid "

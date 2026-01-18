@@ -108,6 +108,9 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
     fp.returnType = retType;
     fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
     fp.params =  params;
+    if (const auto optionalIsNoexcept = ClangUtils::isCursorNoexcept(cursor)) {
+        fp.isNoexcept = *optionalIsNoexcept;
+    }
     fp.isPureVirtual = clang_CXXMethod_isPureVirtual(cursor);
     fp.isConst = clang_CXXMethod_isConst(cursor);
 
@@ -336,8 +339,11 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 
 bool FuncOverrideInfo::operator==(const FuncOverrideInfo& rhs) const
 {
-    return std::make_tuple(returnType, name, params, isConst)
-    == std::make_tuple(rhs.returnType, rhs.name, rhs.params, rhs.isConst);
+    // If all other data members compared below are equal, isNoexcept is guaranteed to
+    // compare equal too (at least in C++26 and earlier). Compare isNoexcept anyway -
+    // in case overloading based on noexcept-specification becomes allowed eventually.
+    return std::tie(returnType, name, params, isConst, isNoexcept)
+        == std::tie(rhs.returnType, rhs.name, rhs.params, rhs.isConst, rhs.isNoexcept);
 }
 
 CompletionHelper::CompletionHelper()

@@ -363,6 +363,31 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
     return false;
 }
 
+std::optional<bool> ClangUtils::isCursorNoexcept(CXCursor cursor)
+{
+    // The libclang API only exposes the EST, and not canThrow(...), so computed noexcept doesn't work.
+    // A fixme comment in libclang's CXType.cpp says that they should expose the canThrow(...) result.
+    switch (clang_getCursorExceptionSpecificationType(cursor)) {
+    case CXCursor_ExceptionSpecificationKind_BasicNoexcept:
+    case CXCursor_ExceptionSpecificationKind_DynamicNone:
+    case CXCursor_ExceptionSpecificationKind_NoThrow:
+        return true;
+    case CXCursor_ExceptionSpecificationKind_None:
+    case CXCursor_ExceptionSpecificationKind_Dynamic:
+    case CXCursor_ExceptionSpecificationKind_MSAny:
+    case CXCursor_ExceptionSpecificationKind_ComputedNoexcept:
+        return false;
+    case CXCursor_ExceptionSpecificationKind_Unevaluated:
+    case CXCursor_ExceptionSpecificationKind_Uninstantiated:
+    case CXCursor_ExceptionSpecificationKind_Unparsed:
+        // Report the value of isNoexcept as unknown because it is likely unchanged (not sure if this can happen).
+    default:
+        // Out of enum range, probably the cursor is not a function declaration.
+        break;
+    }
+    return std::nullopt;
+}
+
 void ClangUtils::visitChildren(CXCursor parent, std::function<CXChildVisitResult(CXCursor, CXCursor)> visitor)
 {
     static constexpr CXCursorVisitor cVisitor = [](CXCursor cursor, CXCursor parent, CXClientData client_data)

@@ -1,28 +1,40 @@
 class Base
 {
 public:
+    /// "isNoexcept" : false,
     /// "isStatic" : false,
     /// "isVirtual" : true,
     /// "isAbstract" : false
     virtual void bla() {}
+    /// "isNoexcept" : false,
     /// "isStatic" : false,
     /// "isVirtual" : true,
     /// "isAbstract" : false
     virtual void bar();
+    /// "isNoexcept" : false,
     /// "isStatic" : true,
     /// "isVirtual" : false,
     /// "isAbstract" : false
     static void bla2() {}
+    /// "isNoexcept" : false,
     /// "isStatic" : true,
     /// "isVirtual" : false,
     /// "isAbstract" : false
     static void bar2();
 
+    /// "isNoexcept" : false,
     /// "isStatic" : false,
     /// "isVirtual" : true,
     /// "isAbstract" : true,
     /// "isFinal" : false
     virtual void bar3() = 0;
+
+    /// "isNoexcept" : true,
+    /// "isStatic" : false,
+    /// "isVirtual" : false,
+    /// "isAbstract" : false,
+    /// "isFinal" : false
+    void bar4() noexcept;
 
     /// "type" : { "toString"  : "function void () const", "isConst" : true }
     void constMethod() const;
@@ -33,12 +45,18 @@ public:
 class Derived : public Base
 {
 public:
+    /// "isNoexcept" : false,
     /// "isStatic" : false,
     /// "isVirtual" : true,
     /// "isAbstract" : false,
     /// "isFinal" : true
     void bar3() final;
 };
+
+/// "isNoexcept" : false
+void bar1() {}
+/// "isNoexcept" : true
+void bar2() noexcept {}
 
 /// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 1 } }
 void someFunc(int a);

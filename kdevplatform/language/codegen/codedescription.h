@@ -127,6 +127,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
     QString access;
 
     /**
+     * Specifies whether this function is noexcept
+     **/
+    bool isNoexcept : 1;
+    /**
      * Specifies whether this function is a class constructor
      **/
     bool isConstructor : 1;

@@ -22,6 +22,7 @@ struct Signature
     QVector<ParameterItem> parameters;
     QList<QString> defaultParams;
     KDevelop::IndexedType returnType;
+    bool isNoexcept = false;
     bool isConst = false;
 };
 

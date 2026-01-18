@@ -22,6 +22,7 @@ class IndexedString;
 enum class FunctionSpecifier {
     None = 0,
     Inline = 1 << 0,
+    Noexcept = 1 << 1,
 };
 Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
@@ -49,6 +50,9 @@ public:
 
     bool isInline() const;
     void setInline(bool isInline);
+
+    [[nodiscard]] bool isNoexcept() const;
+    void setNoexcept(bool isNoexcept);
 
     ///Return the DUContext::Function type ducontext (the function parameter context) of this function
     ///Same as internalContext if the function has no definition

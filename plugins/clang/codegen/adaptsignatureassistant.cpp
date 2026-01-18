@@ -34,12 +34,6 @@ Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUr
     return context->type() == DUContext::Function ? context->owner() : nullptr;
 }
 
-bool isConstructor(const Declaration *functionDecl)
-{
-    auto classFun = dynamic_cast<const ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(const_cast<Declaration*>(functionDecl)));
-    return classFun && classFun->isConstructor();
-}
-
 Signature getDeclarationSignature(const Declaration *functionDecl, const DUContext *functionCtxt, bool includeDefaults)
 {
     ENSURE_CHAIN_READ_LOCKED
@@ -55,9 +49,15 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
         signature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
         ++pos;
     }
+
+    if (abstractFunDecl) {
+        signature.isNoexcept = abstractFunDecl->isNoexcept();
+    }
+
     signature.isConst = functionDecl->abstractType() && functionDecl->abstractType()->modifiers() & AbstractType::ConstModifier;
 
-    if (!isConstructor(functionDecl)) {
+    auto functionDeclaration = DUChainUtils::declarationForDefinition(const_cast<Declaration*>(functionDecl));
+    if (DUChainUtils::shouldPrintReturnType(functionDeclaration)) {
         if (auto funType = functionDecl->type<FunctionType>()) {
             signature.returnType = IndexedType(funType->returnType());
         }
@@ -191,6 +191,9 @@ bool AdaptSignatureAssistant::getSignatureChanges(const Signature& newSignature,
     }
 
     if (newSignature.parameters.size() != m_oldSignature.parameters.size()) {
+        changed = true;
+    }
+    if (newSignature.isNoexcept != m_oldSignature.isNoexcept) {
         changed = true;
     }
     if (newSignature.isConst != m_oldSignature.isConst) {

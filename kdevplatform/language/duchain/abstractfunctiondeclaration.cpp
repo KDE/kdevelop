@@ -27,6 +27,16 @@ void AbstractFunctionDeclaration::setInline(bool isInline)
     dynamicData()->m_specifiers.setFlag(FunctionSpecifier::Inline, isInline);
 }
 
+bool AbstractFunctionDeclaration::isNoexcept() const
+{
+    return data()->m_specifiers.testFlag(FunctionSpecifier::Noexcept);
+}
+
+void AbstractFunctionDeclaration::setNoexcept(bool isNoexcept)
+{
+    dynamicData()->m_specifiers.setFlag(FunctionSpecifier::Noexcept, isNoexcept);
+}
+
 void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
 {
     dynamicData()->m_specifiers = specifiers;

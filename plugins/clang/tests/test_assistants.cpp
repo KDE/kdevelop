@@ -439,6 +439,20 @@ void TestAssistants::testSignatureAssistant_data()
         << "class Foo {\nvoid bar(const Foo&);\n};"
         << "void Foo::bar(const Foo&)\n{}";
 
+    QTest::newRow("change_member_noexceptness")
+        << "class Foo {\nvoid bar(const Foo&) noexcept;\n};"
+        << "void Foo::bar(const Foo&) noexcept\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 25, 0, 34), QString(), SHOULD_ASSIST))
+        << "class Foo {\nvoid bar(const Foo&);\n};"
+        << "void Foo::bar(const Foo&)\n{}";
+
+    QTest::newRow("change_function_noexceptness")
+        << "void foo(int a) noexcept;"
+        << "void foo(int a) noexcept\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0, 15, 0, 24), QString(), SHOULD_ASSIST))
+        << "void foo(int a);"
+        << "void foo(int a)\n{}";
+
     // see https://bugs.kde.org/show_bug.cgi?id=356179
     QTest::newRow("keep_static_cpp")
         << "class Foo { static void bar(int i); };"
@@ -540,6 +554,12 @@ void TestAssistants::testSignatureAssistant()
             QEXPECT_FAIL("change_function_type", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't parse the code...", Abort);
             QEXPECT_FAIL("change_return_type_impl", "Clang sees that return type of out-of-line definition differs from that in the declaration and won't include the function's AST and thus we never get updated about the new return type...", Abort);
 #endif
+            QEXPECT_FAIL("change_member_noexceptness",
+                         "Clang still sees the noexcept from the definition even though the declaration changed.",
+                         Abort);
+            QEXPECT_FAIL("change_function_noexceptness",
+                         "Clang still sees the noexcept from the definition even though the declaration changed.",
+                         Abort);
             QVERIFY(problem);
             QVERIFY(assistant);
             QVERIFY(!assistant->actions().empty());
