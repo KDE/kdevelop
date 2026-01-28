@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 00:41+0000\n"
+"POT-Creation-Date: 2026-01-28 00:43+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -383,35 +383,35 @@ msgid ""
 msgstr ""
 "<b>Príkaz gdb odoslaný, keď ladiaci program nebeží</b><br>Príkaz bol:<br> %1"
 
-#: midebugsession.cpp:955
+#: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Neplatný príkaz ladenia</b><br>%1"
 
-#: midebugsession.cpp:1035
+#: midebugsession.cpp:1019
 #, fuzzy, kde-format
 #| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Nepodarilo sa spustiť ladiaci program:</b><br />"
 
-#: midebugsession.cpp:1124
+#: midebugsession.cpp:1108
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Ukončené s návratovým kódom: %1"
 
-#: midebugsession.cpp:1126
+#: midebugsession.cpp:1110
 #, kde-format
 msgid "Exited normally"
 msgstr "Ukončené normálne"
 
-#: midebugsession.cpp:1135
+#: midebugsession.cpp:1119
 #, fuzzy, kde-format
 #| msgid "Exited on signal %1"
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Ukončené na signáli %1"
 
-#: midebugsession.cpp:1137
+#: midebugsession.cpp:1121
 #, fuzzy, kde-format
 #| msgid "Exited on signal %1"
 msgctxt ""
@@ -419,14 +419,14 @@ msgctxt ""
 msgid "Exited on signal %1 (%2)"
 msgstr "Ukončené na signáli %1"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1157
 #, fuzzy, kde-format
 #| msgid "Program received signal %1 (%2)"
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
 msgstr "Program obdržal signál %1 (%2)"
 
-#: midebugsession.cpp:1175
+#: midebugsession.cpp:1159
 #, fuzzy, kde-format
 #| msgid "Program received signal %1 (%2)"
 msgctxt ""
@@ -434,7 +434,7 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "Program obdržal signál %1 (%2)"
 
-#: midebugsession.cpp:1294
+#: midebugsession.cpp:1278
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -442,7 +442,7 @@ msgstr[0] "1 príkaz vo fronte\n"
 msgstr[1] "%1 príkazy vo fronte\n"
 msgstr[2] "%1 príkazov vo fronte\n"
 
-#: midebugsession.cpp:1295
+#: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -451,12 +451,12 @@ msgstr[0] "1 príkaz jel spracovaný s gdb\n"
 msgstr[1] "%1 príkazy sú spracovávané s gdb\n"
 msgstr[2] "%1 príkazov je spracovávaných s gdb\n"
 
-#: midebugsession.cpp:1296
+#: midebugsession.cpp:1280
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Stav ladiaceho programu: %1\n"
 
-#: midebugsession.cpp:1299
+#: midebugsession.cpp:1283
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -467,7 +467,7 @@ msgstr ""
 "Text aktuálneho príkazu: '%2'\n"
 "Pôvodný text aktuálneho príkazu: '%3'\n"
 
-#: midebugsession.cpp:1324
+#: midebugsession.cpp:1308
 #, fuzzy, kde-format
 #| msgid "Debugger error"
 msgid "<b>Debugger error:</b><br />"

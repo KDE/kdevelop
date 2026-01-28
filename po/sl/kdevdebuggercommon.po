@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 00:41+0000\n"
+"POT-Creation-Date: 2026-01-28 00:43+0000\n"
 "PO-Revision-Date: 2025-11-22 08:57+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -381,53 +381,53 @@ msgstr ""
 "<b>Ukaz gdb je bil poslan, ko razhroščevalnik ni bil zagnan</b><br>Ukaz je "
 "bil:<br> %1"
 
-#: midebugsession.cpp:955
+#: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Neveljaven ukaz razhroščevalnika</b><br>%1"
 
-#: midebugsession.cpp:1035
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Ni bilo mogoče naložiti datoteke jedra:</b><br />"
 
-#: midebugsession.cpp:1124
+#: midebugsession.cpp:1108
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Končano z izhodno kodo: %1"
 
-#: midebugsession.cpp:1126
+#: midebugsession.cpp:1110
 #, kde-format
 msgid "Exited normally"
 msgstr "Končano normalno"
 
-#: midebugsession.cpp:1135
+#: midebugsession.cpp:1119
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Izhod ob signalu %1"
 
-#: midebugsession.cpp:1137
+#: midebugsession.cpp:1121
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
 msgstr "Izhod ob signalu %1 (%2)"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1157
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
 msgstr "Program je prejel signal %1"
 
-#: midebugsession.cpp:1175
+#: midebugsession.cpp:1159
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
 msgstr "Program je prejel signal %1 (%2)"
 
-#: midebugsession.cpp:1294
+#: midebugsession.cpp:1278
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -436,7 +436,7 @@ msgstr[1] "%1 ukaz v vrsti\n"
 msgstr[2] "%1 ukaza v vrsti\n"
 msgstr[3] "%1 ukazi v vrsti\n"
 
-#: midebugsession.cpp:1295
+#: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -446,12 +446,12 @@ msgstr[1] "gdb obdeluje %1 ukaz\n"
 msgstr[2] "gdb obdeluje %1 ukaza\n"
 msgstr[3] "gdb obdeluje %1 ukaze\n"
 
-#: midebugsession.cpp:1296
+#: midebugsession.cpp:1280
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Stanje razhroščevalnika: %1\n"
 
-#: midebugsession.cpp:1299
+#: midebugsession.cpp:1283
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -462,7 +462,7 @@ msgstr ""
 "Trenutno besedilo ukaza: '%2'\n"
 "Trenutno izvorno besedilo ukaza: '%3'\n"
 
-#: midebugsession.cpp:1324
+#: midebugsession.cpp:1308
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>Napaka razhroščevalnika:</b><br />"

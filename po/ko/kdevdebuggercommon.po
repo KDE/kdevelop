@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 00:41+0000\n"
+"POT-Creation-Date: 2026-01-28 00:43+0000\n"
 "PO-Revision-Date: 2025-10-09 00:46+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -375,34 +375,34 @@ msgid ""
 "%1"
 msgstr "<b>디버거가 실행 중이 아닐 때 GDB 명령을 보냄</b><br>명령:<br>%1"
 
-#: midebugsession.cpp:955
+#: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>잘못된 디버거 명령</b><br>%1"
 
-#: midebugsession.cpp:1035
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
 msgstr ""
 
-#: midebugsession.cpp:1124
+#: midebugsession.cpp:1108
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "종료됨, 반환 코드: %1"
 
-#: midebugsession.cpp:1126
+#: midebugsession.cpp:1110
 #, kde-format
 msgid "Exited normally"
 msgstr "정상적으로 종료됨"
 
-#: midebugsession.cpp:1135
+#: midebugsession.cpp:1119
 #, fuzzy, kde-format
 #| msgid "Exited on signal %1"
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "시그널 %1와(과) 함께 종료됨"
 
-#: midebugsession.cpp:1137
+#: midebugsession.cpp:1121
 #, fuzzy, kde-format
 #| msgid "Exited on signal %1"
 msgctxt ""
@@ -410,14 +410,14 @@ msgctxt ""
 msgid "Exited on signal %1 (%2)"
 msgstr "시그널 %1와(과) 함께 종료됨"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1157
 #, fuzzy, kde-format
 #| msgid "Program received signal %1 (%2)"
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
 msgstr "프로그램에서 시그널 %1(%2)을(를) 받음"
 
-#: midebugsession.cpp:1175
+#: midebugsession.cpp:1159
 #, fuzzy, kde-format
 #| msgid "Program received signal %1 (%2)"
 msgctxt ""
@@ -425,25 +425,25 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "프로그램에서 시그널 %1(%2)을(를) 받음"
 
-#: midebugsession.cpp:1294
+#: midebugsession.cpp:1278
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "대기열에 명령 %1개 있음\n"
 
-#: midebugsession.cpp:1295
+#: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "GDB에서 명령 %1개 이미 저리 중\n"
 
-#: midebugsession.cpp:1296
+#: midebugsession.cpp:1280
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "디버거 상태: %1\n"
 
-#: midebugsession.cpp:1299
+#: midebugsession.cpp:1283
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -454,7 +454,7 @@ msgstr ""
 "현재 명령 텍스트: '%2'\n"
 "현재 명령 원래 텍스트: '%3'\n"
 
-#: midebugsession.cpp:1324
+#: midebugsession.cpp:1308
 #, fuzzy, kde-format
 #| msgid "Debugger Toolbar"
 msgid "<b>Debugger error:</b><br />"

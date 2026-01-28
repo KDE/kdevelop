@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 00:41+0000\n"
+"POT-Creation-Date: 2026-01-28 00:43+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -365,71 +365,71 @@ msgid ""
 "%1"
 msgstr "<b>在调试器运行前发送了 GDB 命令</b><br>命令为：<br> %1"
 
-#: midebugsession.cpp:955
+#: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>无效的调试器命令</b><br>%1"
 
-#: midebugsession.cpp:1035
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>无法加载内核转储文件：</b><br />"
 
-#: midebugsession.cpp:1124
+#: midebugsession.cpp:1108
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "退出并返回代码：%1"
 
-#: midebugsession.cpp:1126
+#: midebugsession.cpp:1110
 #, kde-format
 msgid "Exited normally"
 msgstr "正常退出"
 
-#: midebugsession.cpp:1135
+#: midebugsession.cpp:1119
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr ""
 
-#: midebugsession.cpp:1137
+#: midebugsession.cpp:1121
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
 msgstr ""
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1157
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
 msgstr ""
 
-#: midebugsession.cpp:1175
+#: midebugsession.cpp:1159
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
 msgstr ""
 
-#: midebugsession.cpp:1294
+#: midebugsession.cpp:1278
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "队列中有 %1 条命令\n"
 
-#: midebugsession.cpp:1295
+#: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "gdb 已经处理了 %1 条命令\n"
 
-#: midebugsession.cpp:1296
+#: midebugsession.cpp:1280
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "调试器状态：%1\n"
 
-#: midebugsession.cpp:1299
+#: midebugsession.cpp:1283
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -440,7 +440,7 @@ msgstr ""
 "当前命令文本：“%2”\n"
 "当前命令的原文：“%3”\n"
 
-#: midebugsession.cpp:1324
+#: midebugsession.cpp:1308
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>调试器错误：</b><br />"

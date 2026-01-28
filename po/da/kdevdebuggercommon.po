@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 00:41+0000\n"
+"POT-Creation-Date: 2026-01-28 00:43+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -402,35 +402,35 @@ msgstr ""
 "<b>GDB-kommando sendt mens fejlsøgeren ikke kører</b><br>Kommandoen var:<br> "
 "\"%1\""
 
-#: midebugsession.cpp:955
+#: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ugyldig fejlsøgerkommando</b><br>%1"
 
-#: midebugsession.cpp:1035
+#: midebugsession.cpp:1019
 #, fuzzy, kde-format
 #| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Kunne ikke starte fejlsøgeren:</b><br />"
 
-#: midebugsession.cpp:1124
+#: midebugsession.cpp:1108
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Afsluttede med returkode: %1"
 
-#: midebugsession.cpp:1126
+#: midebugsession.cpp:1110
 #, kde-format
 msgid "Exited normally"
 msgstr "Afsluttede normalt"
 
-#: midebugsession.cpp:1135
+#: midebugsession.cpp:1119
 #, fuzzy, kde-format
 #| msgid "Exited on signal %1"
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Afsluttede med signal %1"
 
-#: midebugsession.cpp:1137
+#: midebugsession.cpp:1121
 #, fuzzy, kde-format
 #| msgid "Exited on signal %1"
 msgctxt ""
@@ -438,14 +438,14 @@ msgctxt ""
 msgid "Exited on signal %1 (%2)"
 msgstr "Afsluttede med signal %1"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1157
 #, fuzzy, kde-format
 #| msgid "Program received signal %1 (%2)"
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
 msgstr "Programmet modtog signal %1 (%2)"
 
-#: midebugsession.cpp:1175
+#: midebugsession.cpp:1159
 #, fuzzy, kde-format
 #| msgid "Program received signal %1 (%2)"
 msgctxt ""
@@ -453,14 +453,14 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "Programmet modtog signal %1 (%2)"
 
-#: midebugsession.cpp:1294
+#: midebugsession.cpp:1278
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 kommando i køen\n"
 msgstr[1] "%1 kommandoer i køen\n"
 
-#: midebugsession.cpp:1295
+#: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -468,12 +468,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 kommando bliver behandlet af gdb\n"
 msgstr[1] "%1 kommandoer bliver behandlet af gdb\n"
 
-#: midebugsession.cpp:1296
+#: midebugsession.cpp:1280
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Fejlsøgertilstand: %1\n"
 
-#: midebugsession.cpp:1299
+#: midebugsession.cpp:1283
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -484,7 +484,7 @@ msgstr ""
 "Aktuel kommandotekst: \"%2\"\n"
 "Originaltekst for aktuel kommando: \"%3\"\n"
 
-#: midebugsession.cpp:1324
+#: midebugsession.cpp:1308
 #, fuzzy, kde-format
 #| msgid "Debugger error"
 msgid "<b>Debugger error:</b><br />"

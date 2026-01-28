@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 00:41+0000\n"
+"POT-Creation-Date: 2026-01-28 00:43+0000\n"
 "PO-Revision-Date: 2025-11-22 15:15+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -384,53 +384,53 @@ msgstr ""
 "<b>Було надіслано команду gdb у той час коли зневадник не було запущено</"
 "b><br>Ця команда:<br> %1"
 
-#: midebugsession.cpp:955
+#: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Некоректна команда зневаднику</b><br>%1"
 
-#: midebugsession.cpp:1035
+#: midebugsession.cpp:1019
 #, kde-format
 msgid "<b>Failed to load core file:</b><br />"
 msgstr "<b>Не вдалося завантажити файл ядра:</b><br />"
 
-#: midebugsession.cpp:1124
+#: midebugsession.cpp:1108
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Завершення з повернутим кодом: %1"
 
-#: midebugsession.cpp:1126
+#: midebugsession.cpp:1110
 #, kde-format
 msgid "Exited normally"
 msgstr "Нормальне завершення"
 
-#: midebugsession.cpp:1135
+#: midebugsession.cpp:1119
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Вихід за сигналом %1"
 
-#: midebugsession.cpp:1137
+#: midebugsession.cpp:1121
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
 msgstr "Вихід за сигналом %1 (%2)"
 
-#: midebugsession.cpp:1173
+#: midebugsession.cpp:1157
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
 msgstr "Програма отримала сигнал %1"
 
-#: midebugsession.cpp:1175
+#: midebugsession.cpp:1159
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
 msgstr "Програма отримала сигнал %1 (%2)"
 
-#: midebugsession.cpp:1294
+#: midebugsession.cpp:1278
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -439,7 +439,7 @@ msgstr[1] "У черзі %1 команди\n"
 msgstr[2] "У черзі %1 команд\n"
 msgstr[3] "У черзі %1 команда\n"
 
-#: midebugsession.cpp:1295
+#: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -449,12 +449,12 @@ msgstr[1] "%1 команди обробляється у gdb\n"
 msgstr[2] "%1 команд обробляється у gdb\n"
 msgstr[3] "%1 команда обробляється у gdb\n"
 
-#: midebugsession.cpp:1296
+#: midebugsession.cpp:1280
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Стан зневадника: %1\n"
 
-#: midebugsession.cpp:1299
+#: midebugsession.cpp:1283
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -465,7 +465,7 @@ msgstr ""
 "Текст поточної команди: '%2'\n"
 "Початковий текст поточної команди: '%3'\n"
 
-#: midebugsession.cpp:1324
+#: midebugsession.cpp:1308
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>Помилка засобу діагностики:</b><br />"
