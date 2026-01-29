@@ -62,6 +62,7 @@ Comment[sv]=En Dockerfile är ett textdokument som innehåller alla kommandon en
 Comment[tr]=Dockerfile, kullanıcının bir kalıp oluşturması için komut satırında ayarlayabileceği tüm komutları içeren bir metin belgesidir
 Comment[uk]=Dockerfile — текстовий документ, який містить усі команди, які користувач може віддавати у командному рядку для збирання образу
 Comment[zh_CN]=Dockerfile 是一个包含构建镜像时用户可以在命令行调用的所有命令的文本文档
+Comment[zh_TW]=Dockerfile 是包含用來建構映像檔的所有指令的文字文件
 Category=Docker/Dockerfile
 Language=JSON
 Language[ar]=جسون

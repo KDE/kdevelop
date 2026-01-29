@@ -60,5 +60,6 @@ Comment[sv]=Inställning av KDevelop filmall som paketeras med användning av CM
 Comment[tr]=CMake kullanılarak paketlenen bir K Geliştir Dosya Şablonu ayarı
 Comment[uk]=Налаштування для шаблона файла KDevelop, який пакується за допомогою CMake
 Comment[zh_CN]=使用 CMake 打包的 KDevelop 文件模板设置
+Comment[zh_TW]=KDevelop 檔案樣本的設定，用 CMake 進行打包
 Category=KDevelop/Template
 ShowFilesAfterGeneration=%{APPNAMELC}/%{APPNAMELC}.desktop

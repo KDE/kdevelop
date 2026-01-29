@@ -48,6 +48,7 @@ Comment[sv]=En enkel version med ett prefix och en fil.
 Comment[tr]=Bir önek ve bir dosya ile temel bir sürüm.
 Comment[uk]=Проста версія з одним префіксом і одним файлом.
 Comment[zh_CN]=一个带有单一前缀和单一文件的简单版本。
+Comment[zh_TW]=簡單版本，有一個前綴和一個檔案。
 Category=C++/Qt
 Language=C++
 Language[ar]=سي++
