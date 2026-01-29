@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the kdevelop package.
 #
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2024-08-03 14:09+0900\n"
+"PO-Revision-Date: 2026-01-28 20:43+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 26.03.70\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -40,21 +40,23 @@ msgid ""
 "Note: each custom script style requires a certain tool executable to be "
 "installed. Otherwise, code will not be formatted."
 msgstr ""
+"請注意：各個自訂文稿風格有自己需要的工具執行檔，如果它們沒有安裝，程式碼排版"
+"就不會進行。"
 
 #: customscript_plugin.cpp:227
 #, kde-format
 msgid "Gnu Indent: GNU"
-msgstr "Gnu Indent: GNU 式縮排"
+msgstr "Gnu Indent：GNU 式縮排"
 
 #: customscript_plugin.cpp:238
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
-msgstr "Gnu Indent: Kernighan & Ritchie 式縮排"
+msgstr "Gnu Indent：Kernighan & Ritchie 式縮排"
 
 #: customscript_plugin.cpp:249
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
-msgstr "Gnu Indent：原始的 Berkeley 式縮排"
+msgstr "Gnu Indent：原版 Berkeley 式縮排"
 
 #: customscript_plugin.cpp:260
 #, kde-format
@@ -62,12 +64,7 @@ msgid "Clang Format"
 msgstr "Clang 格式"
 
 #: customscript_plugin.cpp:263
-#, fuzzy, kde-format
-#| msgid ""
-#| "Description:<br /><br /><b>clang-format</b> is an automatic source "
-#| "formater by the LLVM project. It supports a variety of formatting style "
-#| "options via a <b>.clang-format</b> configuration file, usually located in "
-#| "the project root directory."
+#, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formatter "
 "by the LLVM project. It supports a variety of formatting style options via a "
@@ -137,16 +134,7 @@ msgid "Style: %1"
 msgstr "樣式： %1"
 
 #: customscript_plugin.cpp:583
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
-#| ">The code will be written into the file, the temporary <br />file will be "
-#| "substituted into that position, and the result <br />will be read out of "
-#| "that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
-#| "original file. <br />The contents of the file must not be modified, "
-#| "changes are allowed <br />only in $TMPFILE.<br /><br /><b>${PROJECT_NAME}"
-#| "</b> will be replaced by the path of <br />the currently open project "
-#| "with the matching name."
+#, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
 ">The code will be written into the file, the temporary <br />file will be "
@@ -159,10 +147,9 @@ msgid ""
 msgstr ""
 "<b>$TMPFILE</b> 會被取代成暫存檔路徑。<br /> 源碼會被寫入檔案，暫存檔則會取代"
 "到該位置，結果<br /> 會從檔案中讀出。<br /><br /> <b>$FILE</b> 會被取代成原始"
-"檔案路徑。<br />\n"
-"檔案的內容不能被變更。要變更只能在 $TMPFILE 中。<br /><br /> <b>"
-"${PROJECT_NAME}</b> 會被取代為目前開啟專案<br />\n"
-"的路徑。"
+"檔案路徑。<br />檔案的內容不能被變更。要變更只能在 $TMPFILE 中。<br /><br /> "
+"<b>${{&lt;專案名稱&gt;}</b> 會被取代為名稱為 &lt;專案名稱&gt; 且目前已開啟的"
+"專案<br />的路徑。"
 
 #: customscript_plugin.cpp:595
 #, kde-format
