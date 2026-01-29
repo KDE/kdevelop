@@ -1,20 +1,20 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 00:41+0000\n"
-"PO-Revision-Date: 2025-05-03 15:32+0900\n"
+"PO-Revision-Date: 2026-01-28 20:31+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 26.03.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: controllers/framestackmodel.cpp:86
@@ -39,6 +39,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"無法偵測到您的 <code>lldb-mi</code> 所使用的 LLDB 版本。<br />您的 "
+"<code>lldb-mi</code> 在呼叫 CLI <code>version</code> 指令時回傳了以下回應："
+"<br />"
 
 #: debugsession.cpp:356
 #, kde-format
@@ -46,6 +49,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"您的 <code>lldb-mi</code> 必須使用 LLDB %1 或較新版本。<br />它目前使用 LLDB "
+"%2 版本"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19

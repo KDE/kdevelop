@@ -488,7 +488,7 @@ msgstr "&Copia valor"
 #: debugger/variable/variablewidget.cpp:259
 #, kde-format
 msgid "&Stop on Change"
-msgstr "A&tura en canviar"
+msgstr "&Para en canviar"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42

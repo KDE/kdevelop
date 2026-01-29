@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-08-03 14:13+0900\n"
+"PO-Revision-Date: 2026-01-28 20:57+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 26.03.70\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -25,6 +25,9 @@ msgid ""
 "white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
+"<b>Artistic Style</b> 是 C、C++、C# 與 Java 程式語言用的原始碼縮排、排版與美"
+"化工具。<p style='margin-top:0;white-space:pre'>首頁：<a href=\"http://"
+"astyle.sourceforge.net/\">http://astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -62,6 +65,8 @@ msgid ""
 "Number of spaces that will be converted to a tab.\n"
 "The number of spaces per tab is controlled by the editor."
 msgstr ""
+"會轉換成 Tab 的空格數量。\n"
+"每個 Tab 對應的空格數量是取決於編輯器的。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:104
@@ -82,7 +87,7 @@ msgstr "將空格轉換成 Tab 字元(&V)"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fill empty lines with the white space of their previous lines."
-msgstr ""
+msgstr "用前一行的空白填滿空白的行。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:117
@@ -267,14 +272,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Attach"
-msgstr ""
+msgstr "附加"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:353
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Break"
-msgstr ""
+msgstr "斷行"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:358
@@ -311,7 +316,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Blocks"
-msgstr ""
+msgstr "區塊"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:401
@@ -432,14 +437,14 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr ""
+msgstr "在"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:500
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pad parenthesis:"
-msgstr ""
+msgstr "括號間隔："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
@@ -448,21 +453,21 @@ msgctxt "@info:tooltip"
 msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
-msgstr ""
+msgstr "在括號標頭（像是 'if'、'for'、'while' 等等）後面插入空格間隔"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
 #, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr ""
+msgstr "在括號標頭之後加入空格(&H)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
 #, kde-format
 msgctxt "@title:group"
 msgid "One Liners"
-msgstr ""
+msgstr "單行程式"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:529
@@ -471,21 +476,21 @@ msgctxt "@info:tooltip"
 msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
-msgstr ""
+msgstr "不要將包含多個陳述式的行數斷成多個只有一個陳述式的行。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532
 #, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
-msgstr ""
+msgstr "保留單行陳述式(&K)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:539
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Do not break blocks residing completely on one line."
-msgstr ""
+msgstr "不要為完全位於單行的區塊斷行。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:542
@@ -506,7 +511,7 @@ msgstr "其他"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pointer Alignment:"
-msgstr ""
+msgstr "指標對齊："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:566
@@ -527,11 +532,11 @@ msgstr "名稱"
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Middle"
-msgstr ""
+msgstr "中間"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
 #: astyle_preferences.ui:581
 #, kde-format
 msgctxt "@item:inlistbox pointer alignment"
 msgid "Type"
-msgstr "類型"
+msgstr "型態"
