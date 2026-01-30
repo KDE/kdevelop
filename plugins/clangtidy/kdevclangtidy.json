@@ -105,6 +105,7 @@
         "Description[tr]": "clang-tidy, biçem ve arayüz yanlış kullanımları veya durgun çözümleme ile bulunabilecek tipik programlama hatalarını tanılamak ve düzeltmek için geniş bir çatı sağlar. https://clang.llvm.org/extra/clang-tidy/",
         "Description[uk]": "clang-tidy — розширена оболонка діагностування та виправлення типових помилок у програмах, зокрема порушень стилю, помилкового використання інтерфейсу та вад, які можна виявити за допомогою статичного аналізу. https://clang.llvm.org/extra/clang-tidy/",
         "Description[zh_CN]": "clang-tidy 提供了一个可扩展的框架，用于诊断和修复典型的编程错误，例如样式违规，接口滥用或可以通过静态分析推断出的错误。https://clang.llvm.org/extra/clang-tidy/",
+        "Description[zh_TW]": "clang-tidy 提供診斷與修正寫程式時常見錯誤的可擴展框架，可以幫助避免違反風格指南、介面誤用、或是靜態分析即可判斷的程式錯誤。https://clang.llvm.org/extra/clang-tidy/",
         "Icon": "dialog-ok",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
