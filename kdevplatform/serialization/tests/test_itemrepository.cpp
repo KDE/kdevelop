@@ -291,7 +291,7 @@ private Q_SLOTS:
         std::iota(originalItemIds.begin(), originalItemIds.end(), 0);
 
         QMutex mutex;
-        ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
+        auto repository = std::make_unique<ItemRepository<TestItem, TestItemRequest> >(QStringLiteral("TestItemRepository"), &mutex);
 
         // repeat the below for multiple hashes
         for (auto hash : {1235u, 1236u}) {
@@ -311,17 +311,22 @@ private Q_SLOTS:
                         std::unique_ptr<TestItem[]> item(createItem(hash, itemSizes[itemId]));
                         const auto itemRequest = TestItemRequest(*item.get(), true);
 
-                        QVERIFY(!repository.findIndex(itemRequest));
+                        QVERIFY(!repository->findIndex(itemRequest));
 
                         for (const auto& otherItem : items)
                             QVERIFY(!otherItem.get()->equals(item.get()));
 
-                        auto index = repository.index(itemRequest);
+                        auto index = repository->index(itemRequest);
                         QVERIFY(index);
-                        QCOMPARE(repository.findIndex(itemRequest), index);
+                        QCOMPARE(repository->findIndex(itemRequest), index);
 
                         items.push_back(std::move(item));
                         repoIndices.push_back(index);
+                    }
+
+                    if (hash == 1236u) {
+                        repository->store();
+                        repository = std::make_unique<ItemRepository<TestItem, TestItemRequest> >(QStringLiteral("TestItemRepository"), &mutex);
                     }
 
                     // delete items
@@ -330,12 +335,100 @@ private Q_SLOTS:
                         const auto itemRequest = TestItemRequest(*item.get(), true);
                         const auto index = repoIndices[itemId];
 
-                        QCOMPARE(repository.findIndex(itemRequest), index);
-                        repository.deleteItem(index);
-                        QCOMPARE(repository.findIndex(itemRequest), 0);
+                        QCOMPARE(repository->findIndex(itemRequest), index);
+                        repository->deleteItem(index);
+                        QCOMPARE(repository->findIndex(itemRequest), 0);
                     }
+
                 } while (std::next_permutation(itemIdsToDelete.begin(), itemIdsToDelete.end()));
             } while (std::next_permutation(itemIdsToCreate.begin(), itemIdsToCreate.end()));
+        }
+
+        repository->store();
+    }
+    void loadAndUpdateRepoWithBucketAndMonsterBucket()
+    {
+        QMutex mutex;
+
+        // Construct a bucket chain for hash 1235 that has a monster bucket in the second position and
+        // another item that follows that (item 1 -> item 2 -> item4). Delete item 2 again and store and
+        // reload the repository to add another item.
+
+        std::unique_ptr<TestItem[]> item1(createItem(1235, ItemRepositoryBucketSize / 2));
+        const auto itemRequest1 = TestItemRequest(*item1.get(), true);
+        // does not fit into a normal bucket, requires monster bucket that is extended by 1 bucket
+        std::unique_ptr<TestItem[]> item2(createItem(1235, ItemRepositoryBucketSize));
+        const auto itemRequest2 = TestItemRequest(*item2.get(), true);
+        std::unique_ptr<TestItem[]> item3(createItem(1236, ItemRepositoryBucketSize / 2));
+        const auto itemRequest3 = TestItemRequest(*item3.get(), true);
+
+        std::unique_ptr<TestItem[]> item4(createItem(1235, ItemRepositoryBucketSize / 2 + 1));
+        const auto itemRequest4 = TestItemRequest(*item4.get(), true);
+
+        // Some other item that will fit in the space that is freed by later deleting item 2
+        std::unique_ptr<TestItem[]> item5(createItem(1237, ItemRepositoryBucketSize));
+        const auto itemRequest5 = TestItemRequest(*item5.get(), true);
+
+        unsigned int index1, index2, index3, index5, index4;
+
+        {
+            ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
+
+            index1 = repository.index(itemRequest1);
+            QVERIFY(index1);
+            index2 = repository.index(itemRequest2);
+            QVERIFY(index2);
+            index3 = repository.index(itemRequest3);
+            QVERIFY(index3);
+            index4 = repository.index(itemRequest4);
+            QVERIFY(index4);
+            QCOMPARE(repository.findIndex(itemRequest1), index1);
+            QCOMPARE(repository.findIndex(itemRequest2), index2);
+            QCOMPARE(repository.findIndex(itemRequest3), index3);
+            QCOMPARE(repository.findIndex(itemRequest4), index4);
+
+            // remove item 2 to free space for two buckets
+            repository.deleteItem(index2);
+
+            repository.store();
+            repository.statistics();
+        }
+
+        {
+            ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
+
+            QCOMPARE(index1, repository.findIndex(itemRequest1));
+            QVERIFY(!repository.findIndex(itemRequest2));
+            QCOMPARE(index3, repository.findIndex(itemRequest3));
+            QCOMPARE(index4, repository.findIndex(itemRequest4));
+
+            // item 5 will fit in the space between item 1 and item 3, after it did not fit into a single bucket
+            // after item 4. The space where it fits will be memory mapped before conversion, making that space write-protected.
+            index5 = repository.index(itemRequest5);
+            QCOMPARE(index5, index2);
+
+            repository.deleteItem(index3);
+
+            repository.store();
+            repository.statistics();
+        }
+
+        {
+            ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
+
+            QCOMPARE(index1, repository.findIndex(itemRequest1));
+            QVERIFY(!repository.findIndex(itemRequest2));
+            QVERIFY(!repository.findIndex(itemRequest3));
+            QCOMPARE(index4, repository.findIndex(itemRequest4));
+            QCOMPARE(index5, repository.findIndex(itemRequest5));
+
+            repository.deleteItem(index1);
+            repository.deleteItem(index5);
+            repository.deleteItem(index4);
+
+            repository.store();
+
+            qDebug() << repository.printStatistics();
         }
     }
     void usePermissiveModuloWhenRemovingClashLinks()

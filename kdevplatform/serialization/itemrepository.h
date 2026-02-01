@@ -731,7 +731,7 @@ public:
             // mmapped data, we need to copy the next bucket hash
             auto ret = std::make_unique<short unsigned int[]>(NextBucketHashSize);
             std::copy_n(m_nextBucketHash, NextBucketHashSize, ret.get());
-            std::fill_n(m_nextBucketHash, NextBucketHashSize, 0);
+            m_nextBucketHash = nullptr;
             return ret;
         }
 
