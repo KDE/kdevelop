@@ -432,7 +432,6 @@ bool MIDebugSession::examineCoreFile(const QUrl &debugee, const QUrl &coreFile)
     }
 
     loadCoreFile(coreFile.toLocalFile());
-    raiseEvent(program_state_changed);
 
     return true;
 }
@@ -1010,6 +1009,7 @@ void MIDebugSession::askDebuggerAboutSelectedFrame()
 
 void MIDebugSession::coreFileLoaded()
 {
+    raiseEvent(program_state_changed);
     askDebuggerAboutSelectedFrame();
     setDebuggerStateOn(s_programExited | s_core);
 }
