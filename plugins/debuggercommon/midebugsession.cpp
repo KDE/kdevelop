@@ -193,7 +193,6 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     connect(m_debugger, &MIDebugger::debuggerInternalOutput, this, &MIDebugSession::debuggerInternalOutput);
 
     // state signals
-    connect(m_debugger, &MIDebugger::programStopped, this, &MIDebugSession::inferiorStopped);
     connect(m_debugger, &MIDebugger::programRunning, this, &MIDebugSession::inferiorRunning);
 
     // internal handlers
@@ -1179,6 +1178,8 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         askDebuggerAboutSelectedFrame();
     }
 
+    emit inferiorStopped(r);
+
     setDebuggerStateOff(s_interruptSent);
     if (!wasInterrupt)
         setDebuggerStateOff(s_automaticContinue);
@@ -1229,6 +1230,10 @@ void MIDebugSession::reloadProgramState()
 void MIDebugSession::programNoApp(const QString& msg)
 {
     qCDebug(DEBUGGERCOMMON) << msg;
+
+    // Allow MIVariableController to clean up the possible return value variable.
+    const MI::AsyncRecord stopexited(MI::AsyncRecord::Subkind::Exec, QLatin1String("stopped"));
+    emit inferiorStopped(stopexited);
 
     setDebuggerState(s_appNotStarted | s_programExited | (m_debuggerState & s_shuttingDown));
 
