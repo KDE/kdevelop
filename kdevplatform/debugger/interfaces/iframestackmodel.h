@@ -58,7 +58,17 @@ public:
 
     virtual FrameItem frame(const QModelIndex &index) = 0;
 
+    /**
+     * Update the list of threads.
+     * @note Implementer of this method must assume return values other than -1 from the
+     *       currentThread() and currentFrame() methods are invalid.
+     */
     virtual void fetchThreads() = 0;
+    /**
+     * Update the list of frames for thread @p threadNumber.
+     * @note Implementer of this method must assume return values other than -1 from the
+     *       currentThread() and currentFrame() methods are invalid.
+     */
     virtual void fetchFrames(int threadNumber, int from, int to) = 0;
     virtual void fetchMoreFrames() = 0;
 

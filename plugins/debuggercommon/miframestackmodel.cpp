@@ -155,6 +155,10 @@ void MIFrameStackModel::fetchFrames(int threadNumber, int from, int to)
     auto c = session()->createCommand(StackListFrames, arg);
     c->setHandler(new FrameListHandler(this, threadNumber, to));
     c->setThread(threadNumber);
+    // The --frame parameter must be valid for the threadNumber. However, the command would be sent
+    // using currentFrame() which is not up-to-date. On GDB/MI and LLDB-MI the --frame has no
+    // effect for StackListFrames, so set it to zero.
+    c->setFrame(0);
     session()->addCommand(std::move(c));
 }
 
