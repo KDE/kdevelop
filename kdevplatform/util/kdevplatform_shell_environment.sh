@@ -55,13 +55,17 @@ function checkToolsInPath {
 checkToolsInPath sed ls cut dirname mktemp basename readlink hostname
 
 # special handling for qdbus variants
-_qdbus=qdbus-qt5
-if ! command -v $_qdbus &> /dev/null; then
-    _qdbus=qdbus
-    if ! command -v $_qdbus &> /dev/null; then
-        echo "Error: The qdbus (or qdbus-qt5) utility is missing."
-        exit 7
+_qdbus=
+_qdbus_list=(qdbus-qt5 qdbus)
+for _qdbus_candidate in "${_qdbus_list[@]}"; do
+    if command -v "$_qdbus_candidate" &> /dev/null; then
+        _qdbus="$_qdbus_candidate"
+        break
     fi
+done
+if [ -z "$_qdbus" ]; then
+    echo "Error: The qdbus (${_qdbus_list[*]}) utility is missing."
+    exit 7
 fi
 
 if ! [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
