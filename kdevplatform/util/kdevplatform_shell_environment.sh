@@ -59,7 +59,8 @@ _qdbus=qdbus-qt5
 if ! command -v $_qdbus &> /dev/null; then
     _qdbus=qdbus
     if ! command -v $_qdbus &> /dev/null; then
-        echo "The utility qdbus (or qdbus-qt5) is not in your path, the shell integration will not work properly."
+        echo "Error: The qdbus (or qdbus-qt5) utility is missing."
+        exit 7
     fi
 fi
 

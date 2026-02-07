@@ -43,12 +43,6 @@ if [ "$(echo $KDEV_ATTACHED_PID | wc -w | sed 's/ //g')" != 1 ]; then
     exit 6
 fi
 
-# find qdbus, try also alternative name qdbus-qt5
-if ! $(command -v qdbus-qt5 &> /dev/null) && ! $(command -v qdbus &> /dev/null); then
-    echo "Error: The qdbus (or qdbus-qt5) utility is missing."
-    exit 7
-fi
-
 export KDEV_DBUS_ID="org.kdevelop.kdevelop-$KDEV_ATTACHED_PID"
 
 case $(basename $SHELL) in
