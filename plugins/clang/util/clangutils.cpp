@@ -402,7 +402,7 @@ KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
     // check for our injected attributes to detect Qt signals and slots
     // see also the contents of wrappedQtHeaders/QtCore/qobjectdefs.h
     ClassFunctionFlags flags = {};
-    if (cursor.kind == CXCursor_CXXMethod) {
+    if (cursor.kind == CXCursor_CXXMethod || cursor.kind == CXCursor_ConversionFunction) {
         clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) -> CXChildVisitResult {
             auto& flags = *static_cast<ClassFunctionFlags*>(data);
             switch (cursor.kind) {

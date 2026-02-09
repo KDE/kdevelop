@@ -52,6 +52,7 @@ public:
 
     /// "isNoexcept" : true,
     /// "isAbstract" : true,
+    /// "isFinal" : false,
     /// "isVirtual" : true,
     /// "isExplicit" : true,
     /// "isConversionFunction": true,
@@ -66,3 +67,16 @@ public:
 des::~des()
 {
 }
+
+class des2 : public des
+{
+public:
+    /// "isNoexcept" : true,
+    /// "isAbstract" : false,
+    /// "isFinal" : true,
+    /// "isVirtual" : true,
+    /// "isExplicit" : true,
+    /// "isConversionFunction": true,
+    /// "isDefinition" : true
+    explicit operator bool() const noexcept final {return true;}
+};
