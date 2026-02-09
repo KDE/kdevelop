@@ -25,6 +25,7 @@ enum class ClassFunctionFlag {
     Final = 1 << 3,
     Virtual = 1 << 4,
     Explicit = 1 << 5,
+    Conversion = 1 << 6,
 };
 Q_DECLARE_FLAGS(ClassFunctionFlags, ClassFunctionFlag)
 
@@ -96,6 +97,7 @@ public:
     virtual bool isConstructor() const;
     virtual bool isDestructor() const;
 
+    void setIsConversionFunction(bool);
     bool isConversionFunction() const;
 
     bool isFunctionDeclaration() const override;

@@ -54,6 +54,7 @@ public:
     /// "isAbstract" : true,
     /// "isVirtual" : true,
     /// "isExplicit" : true,
+    /// "isConversionFunction": true,
     /// "isDefinition" : false
     virtual explicit operator bool() const noexcept = 0;
 

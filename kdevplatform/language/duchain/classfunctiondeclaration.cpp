@@ -14,11 +14,6 @@
 #include <debug.h>
 
 namespace KDevelop {
-static Identifier& conversionIdentifier()
-{
-    static Identifier conversionIdentifierObject(QStringLiteral("operator{...cast...}"));
-    return conversionIdentifierObject;
-}
 
 REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
 
@@ -180,9 +175,14 @@ void ClassFunctionDeclaration::setIsExplicit(bool isExplicit)
     d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Explicit, isExplicit);
 }
 
+void ClassFunctionDeclaration::setIsConversionFunction(bool isConversionFunc)
+{
+    d_func_dynamic()->m_functionFlags.setFlag(ClassFunctionFlag::Conversion, isConversionFunc);
+}
+
 bool ClassFunctionDeclaration::isConversionFunction() const
 {
-    return identifier() == conversionIdentifier();
+    return d_func()->m_functionFlags.testFlag(ClassFunctionFlag::Conversion);
 }
 
 bool ClassFunctionDeclaration::isConstructor() const

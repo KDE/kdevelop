@@ -1226,6 +1226,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 #if CINDEX_VERSION_MINOR >= 64
     decl->setIsExplicit(clang_CXXMethod_isExplicit(cursor));
 #endif
+    decl->setIsConversionFunction(clang_getCursorKind(cursor) == CXCursor_ConversionFunction);
 
     // TODO: Set flags in one go? (needs new API in kdevplatform)
     const auto attributes = ClangUtils::specialAttributes(cursor);
