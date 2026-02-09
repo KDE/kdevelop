@@ -655,6 +655,7 @@ void MIDebugSession::interruptDebugger()
     // Explicitly send the interrupt in case something went wrong with the usual
     // ensureGdbListening logic.
     m_debugger->interrupt();
+    setDebuggerStateOn(s_userInterruptSent);
     addCommand(ExecInterrupt, QString(), CmdInterrupt);
 }
 
@@ -1161,26 +1162,28 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
         }
     }
 
-    // FIXME: we should immediately update the current thread and
-    // frame in the framestackmodel, so that any user actions
-    // are in that thread. However, the way current framestack model
-    // is implemented, we can't change thread id until we refresh
-    // the entire list of threads -- otherwise we might set a thread
-    // id that is not already in the list, and it will be upset.
-    if (r.hasField(QStringLiteral("frame"))) {
-        setCurrentPositionToFrameFieldOf(r);
-        reloadProgramState();
-    } else {
-        qCDebug(DEBUGGERCOMMON) << "a non-exited *stopped MI output record does not have a field \"frame\"";
-        // Ask about selected frame after reloading the program state so that correct values
-        // of the --thread and --frame arguments are added to the command -stack-info-frame.
-        reloadProgramState();
-        askDebuggerAboutSelectedFrame();
+    if (!wasInterrupt || debuggerStateIsOn(s_userInterruptSent)) {
+        // FIXME: we should immediately update the current thread and
+        // frame in the framestackmodel, so that any user actions
+        // are in that thread. However, the way current framestack model
+        // is implemented, we can't change thread id until we refresh
+        // the entire list of threads -- otherwise we might set a thread
+        // id that is not already in the list, and it will be upset.
+        if (r.hasField(QStringLiteral("frame"))) {
+            setCurrentPositionToFrameFieldOf(r);
+            reloadProgramState();
+        } else {
+            qCDebug(DEBUGGERCOMMON) << "a non-exited *stopped MI output record does not have a field \"frame\"";
+            // Ask about selected frame after reloading the program state so that correct values
+            // of the --thread and --frame arguments are added to the command -stack-info-frame.
+            reloadProgramState();
+            askDebuggerAboutSelectedFrame();
+        }
+
+        emit inferiorStopped(r);
     }
 
-    emit inferiorStopped(r);
-
-    setDebuggerStateOff(s_interruptSent);
+    setDebuggerStateOff(s_interruptSent | s_userInterruptSent);
     if (!wasInterrupt)
         setDebuggerStateOff(s_automaticContinue);
 }

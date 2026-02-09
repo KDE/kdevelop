@@ -34,11 +34,13 @@ enum DBGStateFlag
     /// while the inferior is running
     s_dbgNotListening   = 1 << 10,
     s_interruptSent     = 1 << 11,
+    /// Set by interruptDebugger() to disambiguate the sent interrupt from ensureDebuggerListening()
+    s_userInterruptSent = 1 << 12,
     /// Once GDB is completely idle, send an automatic ExecContinue to resume from an interruption
     /// by CmdImmediately commands
-    s_automaticContinue = 1 << 12,
+    s_automaticContinue = 1 << 13,
     /// Set when the debugger failed to start
-    s_dbgFailedStart    = 1 << 13,
+    s_dbgFailedStart = 1 << 14,
 };
 Q_ENUM_NS(DBGStateFlag)
 Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
