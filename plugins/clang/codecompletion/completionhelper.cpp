@@ -330,6 +330,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     }
     DeclarationPointer declaration = ClangHelpers::findDeclaration(clang_getCursorLocation(cursor), QualifiedIdentifier(), top);
     data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor, kind == CXCursor_Destructor,
+                                               kind == CXCursor_ConversionFunction,
                                                data->templatePrefix + templatePrefix, returnType, rest, declaration});
 
     return CXChildVisit_Continue;

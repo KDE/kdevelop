@@ -39,6 +39,7 @@ struct FuncImplementInfo
 {
     bool isConstructor;
     bool isDestructor;
+    bool isConversion;
     QString templatePrefix;
     QString returnType;
     QString prototype;

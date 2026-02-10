@@ -334,7 +334,7 @@ public:
     static QString replacement(const FuncImplementInfo& info)
     {
         QString replacement = info.templatePrefix;
-        if (!info.isDestructor && !info.isConstructor) {
+        if (!info.isDestructor && !info.isConstructor && !info.isConversion) {
             replacement += info.returnType + QLatin1Char(' ');
         }
         replacement += info.prototype + QLatin1String("\n{\n}\n");
@@ -343,10 +343,12 @@ public:
 
     explicit ImplementsItem(const FuncImplementInfo& item)
         : DeclarationItem(item.declaration.data(), item.prototype,
-            i18n("Implement %1", item.isConstructor ? QStringLiteral("<constructor>") :
-                                   item.isDestructor ? QStringLiteral("<destructor>") : item.returnType),
-            replacement(item)
-          )
+                          i18n("Implement %1",
+                               item.isConstructor      ? QStringLiteral("<constructor>")
+                                   : item.isDestructor ? QStringLiteral("<destructor>")
+                                   : item.isConversion ? QStringLiteral("<conversion>")
+                                                       : item.returnType),
+                          replacement(item))
     {
     }
 

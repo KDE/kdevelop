@@ -40,7 +40,9 @@ bool DUChainUtils::shouldPrintReturnType(const Declaration* functionDeclaration)
              == DUChainUtils::declarationForDefinition(const_cast<Declaration*>(functionDeclaration)));
 
     const auto classFunction = dynamic_cast<const ClassFunctionDeclaration*>(functionDeclaration);
-    return !(classFunction && (classFunction->isConstructor() || classFunction->isDestructor()));
+    return !(
+        classFunction
+        && (classFunction->isConstructor() || classFunction->isDestructor() || classFunction->isConversionFunction()));
 }
 
 CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(const Declaration* dec)

@@ -430,7 +430,7 @@ KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
 
 bool ClangUtils::shouldPrintReturnType(CXCursorKind kind) noexcept
 {
-    return kind != CXCursor_Constructor && kind != CXCursor_Destructor;
+    return kind != CXCursor_Constructor && kind != CXCursor_Destructor && kind != CXCursor_ConversionFunction;
 }
 
 unsigned int ClangUtils::skipTopCommentBlock(CXTranslationUnit unit, CXFile file)
