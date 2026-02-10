@@ -19,13 +19,10 @@ class RenameAction;
 using ParameterItem = QPair<KDevelop::IndexedType, QString>;
 struct Signature
 {
-    Signature()
-        : isConst(false)
-        {}
     QVector<ParameterItem> parameters;
     QList<QString> defaultParams;
     KDevelop::IndexedType returnType;
-    bool isConst;
+    bool isConst = false;
 };
 
 class AdaptSignatureAction
