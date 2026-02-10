@@ -686,6 +686,12 @@ void TestCodeCompletion::testVirtualOverride_data()
             "class Bar : Foo \n{void foo(char c) override;\n}"
         << CompletionItems{{3, 1}, {"foo()", "foo(char c, int i, double d)"}};
 
+    QTest::newRow("conversion_function") << "class Foo { virtual void foo(); virtual operator bool() const; virtual "
+                                            "char foo(char c, int i, double d); };\n"
+                                            "class Bar : Foo \n{void foo() override;\n}"
+                                         << CompletionItems{{3, 1},
+                                                            {"foo(char c, int i, double d)", "operator bool() const"}};
+
     QTest::newRow("template")
         << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); virtual T2 overridden(T1 a); } ;\n"
            "class Bar : Foo<char, double> \n{double overridden(char a) override;\n}"

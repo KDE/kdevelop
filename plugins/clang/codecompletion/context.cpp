@@ -164,7 +164,13 @@ public:
 
     void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
-        QString replacement = m_returnType + QLatin1Char(' ') + m_display.replace(QRegularExpression(QStringLiteral("\\s*=\\s*0")), QString());
+        static const auto regex = QRegularExpression(QStringLiteral("\\s*=\\s*0"));
+        QString replacement;
+        if (m_returnType.isEmpty()) {
+            replacement = m_display.replace(regex, QString());
+        } else {
+            replacement = m_returnType + QLatin1Char(' ') + m_display.replace(regex, QString());
+        }
 
         bool appendSpecifer = true;
         if (const auto* project =

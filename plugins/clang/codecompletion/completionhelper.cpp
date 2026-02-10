@@ -105,7 +105,8 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
         retType = *templateTypeIt;
     }
 
-    fp.returnType = retType;
+    if (ClangUtils::shouldPrintReturnType(clang_getCursorKind(cursor)))
+        fp.returnType = retType;
     fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
     fp.params =  params;
     if (const auto optionalIsNoexcept = ClangUtils::isCursorNoexcept(cursor)) {
@@ -156,6 +157,7 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor parent, CXClientDa
         processBaseClass(cursor, parent, info->functions);
         return CXChildVisit_Continue;
     case CXCursor_CXXMethod:
+    case CXCursor_ConversionFunction:
         if (clang_CXXMethod_isVirtual(cursor)) {
             auto methodInfo = processCXXMethod(cursor, info);
             const int methodIndex = info->functions->indexOf(methodInfo);
