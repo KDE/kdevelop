@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-10 00:42+0000\n"
+"POT-Creation-Date: 2026-02-11 00:43+0000\n"
 "PO-Revision-Date: 2009-07-05 19:31+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -154,7 +154,7 @@ msgid "&Bookmark"
 msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:436
-#: debugger/variable/variablecollection.cpp:407
+#: debugger/variable/variablecollection.cpp:422
 #: debugger/variable/variabletooltip.cpp:79
 #, fuzzy, kde-format
 msgid "Type"
@@ -346,35 +346,35 @@ msgstr ""
 msgid "Delete"
 msgstr "Padam"
 
-#: debugger/variable/variablecollection.cpp:208
+#: debugger/variable/variablecollection.cpp:221
 #: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
 #, fuzzy, kde-format
 msgid "Error"
 msgstr "ralat"
 
-#: debugger/variable/variablecollection.cpp:232
+#: debugger/variable/variablecollection.cpp:243
 #, kde-format
 msgid "Auto"
 msgstr ""
 
+#: debugger/variable/variablecollection.cpp:418
+#, kde-format
+msgid "Locals"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, configName)
-#: debugger/variable/variablecollection.cpp:407
+#: debugger/variable/variablecollection.cpp:422
 #: debugger/variable/variabletooltip.cpp:79
 #: shell/launchconfigurationdialog.ui:110
 #, fuzzy, kde-format
 msgid "Name"
 msgstr "Nama"
 
-#: debugger/variable/variablecollection.cpp:407
+#: debugger/variable/variablecollection.cpp:422
 #: debugger/variable/variabletooltip.cpp:79
 #, fuzzy, kde-format
 msgid "Value"
 msgstr "Nilai"
-
-#: debugger/variable/variablecollection.cpp:500
-#, kde-format
-msgid "Locals"
-msgstr ""
 
 #: debugger/variable/variabletooltip.cpp:115
 #, kde-format
@@ -386,18 +386,18 @@ msgstr ""
 msgid "Stop on Change"
 msgstr "Batal"
 
-#: debugger/variable/variablewidget.cpp:82
+#: debugger/variable/variablewidget.cpp:87
 #, kde-format
 msgid "Debugger Variables"
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:100
+#: debugger/variable/variablewidget.cpp:105
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:116
+#: debugger/variable/variablewidget.cpp:121
 #, kde-format
 msgid ""
 "<b>Variable tree</b>The variable tree allows you to see the values of local "
@@ -410,54 +410,60 @@ msgid ""
 "of a variable or an expression, click on the value.<br />"
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:130
+#: debugger/variable/variablewidget.cpp:135
 #, kde-format
 msgid "<b>Expression entry</b>Type in expression to watch."
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:207
+#: debugger/variable/variablewidget.cpp:212
 #, fuzzy, kde-format
 msgid "&Format"
 msgstr "Format"
 
-#: debugger/variable/variablewidget.cpp:212
+#: debugger/variable/variablewidget.cpp:217
 #, kde-format
 msgid "&Natural"
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:217
+#: debugger/variable/variablewidget.cpp:222
 #, fuzzy, kde-format
 msgid "&Binary"
 msgstr "Perduaan"
 
-#: debugger/variable/variablewidget.cpp:222
+#: debugger/variable/variablewidget.cpp:227
 #, kde-format
 msgid "&Octal"
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:227
+#: debugger/variable/variablewidget.cpp:232
 #, fuzzy, kde-format
 msgid "&Decimal"
 msgstr "Perpuluhan"
 
-#: debugger/variable/variablewidget.cpp:232
+#: debugger/variable/variablewidget.cpp:237
 #, fuzzy, kde-format
 msgid "&Hexadecimal"
 msgstr "Perenambelasan"
 
-#: debugger/variable/variablewidget.cpp:247
+#: debugger/variable/variablewidget.cpp:252
 #, kde-format
 msgid "Remove Watch Variable"
 msgstr ""
 
-#: debugger/variable/variablewidget.cpp:254
+#: debugger/variable/variablewidget.cpp:259
 #, fuzzy, kde-format
 msgid "&Copy Value"
 msgstr "Nilai"
 
-#: debugger/variable/variablewidget.cpp:259
+#: debugger/variable/variablewidget.cpp:264
 #, kde-format
 msgid "&Stop on Change"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:287
+#, kde-format
+msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
+msgid "%1 (last function return value)"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -1768,111 +1774,111 @@ msgctxt "@title:window"
 msgid "No Plugins Found"
 msgstr ""
 
-#: shell/debugcontroller.cpp:74
-#, fuzzy, kde-format
-msgid "Debugger"
-msgstr "Nyahpepijat"
-
-#: shell/debugcontroller.cpp:104
-#, kde-format
-msgctxt "@title:window"
-msgid "Frame Stack"
-msgstr ""
-
-#: shell/debugcontroller.cpp:109
-#, fuzzy, kde-format
-msgctxt "@title:window"
-msgid "Breakpoints"
-msgstr "Hidupkan"
-
-#: shell/debugcontroller.cpp:114
+#: shell/debugcontroller.cpp:51
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Variabel"
 
-#: shell/debugcontroller.cpp:182
+#: shell/debugcontroller.cpp:83
+#, fuzzy, kde-format
+msgid "Debugger"
+msgstr "Nyahpepijat"
+
+#: shell/debugcontroller.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Frame Stack"
+msgstr ""
+
+#: shell/debugcontroller.cpp:118
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Breakpoints"
+msgstr "Hidupkan"
+
+#: shell/debugcontroller.cpp:191
 #, fuzzy, kde-format
 msgid "&Restart"
 msgstr "&Mula semula"
 
-#: shell/debugcontroller.cpp:183
+#: shell/debugcontroller.cpp:192
 #, kde-format
 msgid "Restart program"
 msgstr ""
 
-#: shell/debugcontroller.cpp:184
+#: shell/debugcontroller.cpp:193
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr ""
 
-#: shell/debugcontroller.cpp:190
+#: shell/debugcontroller.cpp:199
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Ganggu"
 
-#: shell/debugcontroller.cpp:191
+#: shell/debugcontroller.cpp:200
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Ganggu"
 
-#: shell/debugcontroller.cpp:192
+#: shell/debugcontroller.cpp:201
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr ""
 
-#: shell/debugcontroller.cpp:196
+#: shell/debugcontroller.cpp:205
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr ""
 
-#: shell/debugcontroller.cpp:197
+#: shell/debugcontroller.cpp:206
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr ""
 
-#: shell/debugcontroller.cpp:198
+#: shell/debugcontroller.cpp:207
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr ""
 
-#: shell/debugcontroller.cpp:203
+#: shell/debugcontroller.cpp:212
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr ""
 
-#: shell/debugcontroller.cpp:204
+#: shell/debugcontroller.cpp:213
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr ""
 
-#: shell/debugcontroller.cpp:205
+#: shell/debugcontroller.cpp:214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr ""
 
-#: shell/debugcontroller.cpp:209
+#: shell/debugcontroller.cpp:218
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr ""
 
-#: shell/debugcontroller.cpp:211
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr ""
 
-#: shell/debugcontroller.cpp:212
+#: shell/debugcontroller.cpp:221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1881,37 +1887,37 @@ msgid ""
 "at the line following the function call."
 msgstr ""
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr ""
 
-#: shell/debugcontroller.cpp:221
+#: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr ""
 
-#: shell/debugcontroller.cpp:222
+#: shell/debugcontroller.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr ""
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:236
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr ""
 
-#: shell/debugcontroller.cpp:229
+#: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr ""
 
-#: shell/debugcontroller.cpp:230
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1919,106 +1925,109 @@ msgid ""
 "function then execution will stop after the function has been entered."
 msgstr ""
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr ""
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr ""
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr ""
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:252
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr ""
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr ""
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:256
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
 "completed. The debugger will then display the line after the original call "
 "to that function. If program execution is in the outermost frame (i.e. in "
-"main()) then this operation has no effect."
+"<code>main()</code>) then this operation has no effect.<br>After stepping "
+"out of a non-<code>void</code> function, its return value and type are "
+"displayed in a variable named <code>%1</code> in a section <i>%2</i> of '%3' "
+"tool view."
 msgstr ""
 
-#: shell/debugcontroller.cpp:254
+#: shell/debugcontroller.cpp:269
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Hidupkan"
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:270
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr ""
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:271
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Hidupkan"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:276
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr ""
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr ""
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:291
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Semakan"
 
-#: shell/debugcontroller.cpp:482 shell/runcontroller.cpp:473
+#: shell/debugcontroller.cpp:497 shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr ""
 
-#: shell/debugcontroller.cpp:484 shell/runcontroller.cpp:476
+#: shell/debugcontroller.cpp:499 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr ""
 
-#: shell/debugcontroller.cpp:485 shell/runcontroller.cpp:477
+#: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2026,19 +2035,19 @@ msgid ""
 "configuration inside a Debugger."
 msgstr ""
 
-#: shell/debugcontroller.cpp:489
+#: shell/debugcontroller.cpp:504
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "Sa&mbung"
 
-#: shell/debugcontroller.cpp:491
+#: shell/debugcontroller.cpp:506
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr ""
 
-#: shell/debugcontroller.cpp:492
+#: shell/debugcontroller.cpp:507
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
