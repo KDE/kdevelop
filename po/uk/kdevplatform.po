@@ -3,13 +3,13 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-09-07 15:04+0300\n"
+"PO-Revision-Date: 2026-02-11 11:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -493,7 +493,7 @@ msgstr "З&упинитися на зміні"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (останнє повернуте функцією значення)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2038,13 +2038,7 @@ msgid "Step out of the current function"
 msgstr "Вийти з поточної функції"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2058,7 +2052,10 @@ msgstr ""
 "Продовжує виконання програми до завершення виконання поточної функції. Після "
 "цього зневадник зупиниться на рядку наступному за рядком, звідки було "
 "викликано функцію. Якщо програма виконується у зовнішньому блоці (тобто у "
-"функції main()), ця операція не призведе до видимих наслідків."
+"функції <code>main()</code>), ця операція не призведе до видимих наслідків."
+"<br>Після виходу з не-<code>void</code> функції повернуте нею значення і тип "
+"буде показано у змінній з назвою <code>%1</code> у розділі <i>%2</i> панелі "
+"інструментів «%3»."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format

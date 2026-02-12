@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-12-10 06:19+0100\n"
+"PO-Revision-Date: 2026-02-11 06:17+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -493,7 +493,7 @@ msgstr "&შეცვლისას გაჩერება"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (ბოლო ფუნქციის დაბრუნებული მნიშვნელობა)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2025,13 +2025,7 @@ msgid "Step out of the current function"
 msgstr "მიმდინარე ფუნქციიდან გამობიჯება"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2044,8 +2038,11 @@ msgid ""
 msgstr ""
 "გაუშვებს აპლიკაციას, სანამ ამჟამად გაშვებული ფუნქცია არ დასრულდება. შემდეგ "
 "გამმართველი აჩვენებს ხაზს ფუნქციის საწყისი გამოძახების შემდეგ. თუ პროგრამის "
-"გაშვება ბოლო კადრშია (ანუ, ფუნქციაში main()), მაშინ ამ ოპერაციას ეფექტი "
-"შედეგ არ ექნება."
+"გაშვება ბოლო კადრშია (ანუ, ფუნქციაში <code>main()</code>), მაშინ ამ "
+"ოპერაციას ეფექტი შედეგ არ ექნება.<br>მას შემდეგ, რაც მოხდება გამოსვლა არა-"
+"<code>void</code> ფუნქციიდან, მისი დაბრუნებული მნიშვნელობა და ტიპი ნაჩვენები "
+"იქნება ცვლადში სახელით <code>%1</code> სექციაში <i>%2</i> '%3' ხელსაწყოს "
+"ხედში."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format

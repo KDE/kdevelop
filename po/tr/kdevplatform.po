@@ -5,21 +5,21 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-09-07 21:17+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
-"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"PO-Revision-Date: 2026-02-11 16:42+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -490,7 +490,7 @@ msgstr "&Değişimde Durdur"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (son işlev dönüş değeri)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2022,13 +2022,7 @@ msgid "Step out of the current function"
 msgstr "Geçerli işlevden dışarı çık"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2041,8 +2035,11 @@ msgid ""
 msgstr ""
 "Şu anda yürütülen işlev tamamlanana kadar uygulamayı yürütür. Sonrasında, "
 "hata ayıklayıcısı, işleve olan özgün çağrıdan sonraki satırı "
-"görüntüleyecektir. Program yürütmesi en dış çerçevedeyse (örn. main() "
-"içinde) bu işlemin bir etkisi olmayacaktır."
+"görüntüleyecektir. Program yürütmesi en dış çerçevedeyse (örn. <code>main()</"
+"code> içinde) bu işlemin bir etkisi olmayacaktır.<br><code>void</code> "
+"olmayan bir işlevden dışarı çıkıldığında, onun dönüş değeri ve türü, “%3” "
+"araç görünümünün <i>%2</i> bölümündeki <code>%1</code> adında bir değişkende "
+"görüntülenir."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
@@ -6326,16 +6323,3 @@ msgstr "Önceki ile Farkı"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Revizyonlar arasındaki fark"
-
-#~ msgctxt "@title:window"
-#~ msgid "Debug"
-#~ msgstr "Hata Ayıkla"
-
-#~ msgctxt "@option:check"
-#~ msgid "Recursive"
-#~ msgstr "Özyineli"
-
-#~ msgid "%2"
-#~ msgid_plural "%2 (repeated %1 times)"
-#~ msgstr[0] "%2"
-#~ msgstr[1] "%2 (%1 kez yinelendi)"

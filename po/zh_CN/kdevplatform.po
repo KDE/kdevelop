@@ -1982,13 +1982,7 @@ msgid "Step out of the current function"
 msgstr "单步跳出当前函数"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -1999,9 +1993,6 @@ msgid ""
 "displayed in a variable named <code>%1</code> in a section <i>%2</i> of '%3' "
 "tool view."
 msgstr ""
-"执行应用程序，直到当前正在执行的函数完成。然后，调试器将在对该函数的原始调用"
-"之后显示该行。如果程序执行在最外层框架中 (即在 main () 中)，则此操作不起作"
-"用。"
 
 #: shell/debugcontroller.cpp:269
 #, kde-format

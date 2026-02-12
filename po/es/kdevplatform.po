@@ -1,21 +1,21 @@
 # Spanish translations for kdevplatform.po package.
-# Copyright (C) 2008-2025 This file is copyright:
+# Copyright (C) 2008-2026 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-09-07 12:41+0100\n"
+"PO-Revision-Date: 2026-02-11 18:54+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -491,7 +491,7 @@ msgstr "Detener &si hay cambios"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (valor de retorno de la última función)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2028,13 +2028,7 @@ msgid "Step out of the current function"
 msgstr "Avanza fuera de la función actual"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2048,7 +2042,10 @@ msgstr ""
 "Ejecuta la aplicación hasta que se complete la función que está siendo "
 "ejecutada actualmente. El depurador mostrará la línea siguiente tras la "
 "llamada original a esta función. Si la ejecución del programa está en el "
-"marco más exterior (es decir, en main()), esta operación no tiene efecto."
+"marco más exterior (es decir, en <code>main()</code>), esta operación no "
+"tiene efecto.<br>Tras salir de una función que no sea de tipo <code>void</"
+"code>, su valor de retorno y su tipo se muestran en una variable con el "
+"nombre <code>%1</code> en una sección <i>%2</i> de la herramienta «%3»."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format

@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2017.
-# SPDX-FileCopyrightText: 2022, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2022, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-10-05 21:20+0400\n"
+"PO-Revision-Date: 2026-02-11 20:24+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -484,7 +484,7 @@ msgstr "&توقف عند التغيير"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (قيمة إرجاع الدالة الأخيرة)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2030,13 +2030,7 @@ msgid "Step out of the current function"
 msgstr "اخرج من الدالة الحالية"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2049,7 +2043,9 @@ msgid ""
 msgstr ""
 "ينفّذ التطبيق حتى اكتمال الدالة التي تنفّذ حاليًا. بعد ذلك سيعرض مصحح الأخطاء "
 "السطر الذي يلي الاستدعاء الأصلي لتلك الدالة. إذا كان تنفيذ البرنامج في "
-"الإطار الأبعد (أي في main()) فليس لهذه العملية أي تأثير."
+"الإطار الأبعد (أي في <code>main()</code>) فليس لهذه العملية أي تأثير.<br>بعد "
+"الخروج من دالة غير <code>void</code>، تُعرض قيمة الإرجاع ونوعها في متغير باسم "
+"<code>%1</code> في قسم <i>%2</i> من عرض أداة ’%3‘."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format

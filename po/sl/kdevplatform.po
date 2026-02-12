@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-09-07 10:18+0200\n"
+"PO-Revision-Date: 2026-02-11 06:29+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -492,7 +492,7 @@ msgstr "Zau&stavi ob spremembi"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (vrnjena vrednost zadnje funkcije)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2035,13 +2035,7 @@ msgid "Step out of the current function"
 msgstr "Izstopi iz trenutne funkcije"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2052,10 +2046,13 @@ msgid ""
 "displayed in a variable named <code>%1</code> in a section <i>%2</i> of '%3' "
 "tool view."
 msgstr ""
-"Izvede program, dokler se trenutno izvajajoča funkcija ne zaključi. "
-"Razhroščevalnik bo nato prikazal vrstico za prvotnim klicem funkcije. Če je "
-"izvajanje programa v povsem zunanjem okviru (npr. v main()), to dejanje nima "
-"učinka."
+"Izvaja aplikacijo, dokler se trenutno izvajajoča funkcija ne zaključi. "
+"Razhroščevalnik bo nato prikazal vrstico po prvotnem klicu te funkcije. Če "
+"se izvajanje programa odvija v najbolj zunanjem okviru (tj. v <code>main()</"
+"code>), potem ta operacija nima učinka.<br>Po izstopu iz funkcije, ki ni "
+"<code>void</code>, se njena vrnjena vrednost in tip prikažeta v "
+"spremenljivki z imenom <code>%1</code> v razdelku <i>%2</i> pogleda orodja "
+"'%3'."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format

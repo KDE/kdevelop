@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Kristof Bal <kristof.bal@gmail.com>, 2008.
-# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Freek de Kruijf <freekdekruijf@kde.nl>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2025-09-08 22:45+0200\n"
+"PO-Revision-Date: 2026-02-11 12:02+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Freek de Kruijf - 2012 t/m 2025"
+msgstr "Freek de Kruijf - 2012 t/m 2026"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -491,7 +491,7 @@ msgstr "Bij wijziging &stoppen"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (laatste functie geeft waarde terug)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2028,13 +2028,7 @@ msgid "Step out of the current function"
 msgstr "Spring uit de huidige functie"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2046,9 +2040,12 @@ msgid ""
 "tool view."
 msgstr ""
 "Voert het programma uit tot aan het einde van de huidige functie. De "
-"debugger toont de regel na de oorspronkelijke functieaanroep. Als u zich bij "
-"aanvang in de aanroeplijst bevindt (dus main()), dan heeft deze handeling "
-"geen effect."
+"debugger toont de regel na de oorspronkelijke functie-aanroep. Als u zich "
+"bij aanvang in de aanroeplijst bevindt (dus <code>main()</code>), dan heeft "
+"deze handeling geen effect.<br>Na het uit een niet-<code>void</code>-functie "
+"stappen, worden de teruggegeven waarde en type getoond in een variabele "
+"genaamd <code>%1</code> in een sectie <i>%2</i> van de hulpmiddelweergave "
+"'%3'."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
