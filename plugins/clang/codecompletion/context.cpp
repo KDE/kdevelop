@@ -1441,9 +1441,9 @@ void ClangCodeCompletionContext::addOverwritableItems()
         }
         QString nameAndParams = info.name + QLatin1Char('(') + params.join(QLatin1String(", ")) + QLatin1Char(')');
         if(info.isConst)
-            nameAndParams = nameAndParams + QLatin1String(" const");
+            nameAndParams += QLatin1String(" const");
         if(info.isPureVirtual)
-            nameAndParams = nameAndParams + QLatin1String(" = 0");
+            nameAndParams += QLatin1String(" = 0");
 
         auto item = CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
         if (info.isPureVirtual)
