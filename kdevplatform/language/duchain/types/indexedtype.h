@@ -25,6 +25,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType
     : public ReferenceCountManager
 {
 public:
+    IndexedType() = default;
     IndexedType(const IndexedType& rhs);
     /**
      * Construct an indexed type from the @p type
@@ -39,7 +40,7 @@ public:
         : IndexedType(type.data())
     {
     }
-    explicit IndexedType(uint index = 0);
+    explicit IndexedType(uint index);
 
     ~IndexedType();
 
@@ -107,7 +108,7 @@ public:
 
 private:
     ///This class must _never_ hold more than one unsigned integer
-    uint m_index;
+    uint m_index = 0;
 };
 
 inline size_t qHash(const IndexedType& type)
