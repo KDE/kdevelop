@@ -6,21 +6,22 @@
 # Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2016.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
 # Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
+# SPDX-FileCopyrightText: 2026 Alexander Yavorskiy <kekcuha@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2023-04-25 11:06+0300\n"
-"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
-"Language-Team: Basealt Translation Team\n"
+"PO-Revision-Date: 2026-02-12 22:49+0200\n"
+"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.12.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -206,6 +207,8 @@ msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
 msgstr ""
+"Невозможно добавить точку останова в документ без названия. Сначала "
+"сохраните документ."
 
 #: debugger/breakpoint/breakpointwidget.cpp:59
 #, kde-format
@@ -907,7 +910,7 @@ msgstr "элемент перечисления "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[зависит от значения]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, kde-format
@@ -2112,12 +2115,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "Переходит к строке выполнения в редакторе."
 
 #: shell/debugcontroller.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Удалить текущий сеанс..."
+msgstr "Прервать текущий сеанс"
 
 #: shell/debugcontroller.cpp:497 shell/runcontroller.cpp:473
 #, kde-format
@@ -2408,26 +2409,29 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"Следующие языки гораздо лучше поддерживаются специализированными модулями "
+"KDevelop, поэтому они отключены в модуле %1 во избежание конфликтов: <var>"
+"%2</var>. Чтобы сравнить уровни поддержки или обойти серьёзные ошибки, "
+"отключите специализированные модули KDevelop и установите переменную "
+"окружения <var>%3</var> (<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "задано"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "не задано"
 
 #: shell/ktexteditorpluginintegration.cpp:492
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Сообщение"
+msgstr "Сообщения"
 
 #: shell/launchconfigurationdialog.cpp:47
 #, kde-format
@@ -2808,10 +2812,10 @@ msgid "Lock the Panel from Hiding"
 msgstr "Заблокировать скрытие панели"
 
 #: shell/openprojectdialog.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "Проект %1"
+msgstr "Все файлы проектов"
 
 # Источник, из которого будет браться исходный код (SVN, Git, CVS или KDE) --aspotashev
 #: shell/openprojectdialog.cpp:141
@@ -3664,9 +3668,7 @@ msgid "Delete Session"
 msgstr "Удаление сеанса"
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
 msgstr "Начать новый сеанс"
@@ -3710,20 +3712,16 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr "Запустить новый экземпляр KDevelop и начать в нём новый сеанс"
 
 #: shell/sessioncontroller.cpp:281
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Начать новый сеанс"
+msgstr "Начать новый именованный сеанс…"
 
 #: shell/sessioncontroller.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Start a new KDevelop instance with an empty session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Запустить новый экземпляр KDevelop и начать в нём новый сеанс"
+msgstr "Запустить новый экземпляр KDevelop с пустой именованной сессией"
 
 #: shell/sessioncontroller.cpp:288
 #, kde-format
@@ -3956,13 +3954,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Переключить видимость предварительного просмотра для этого стиля.\n"
+"Предварительный просмотр следует отключить для стилей, форматирование "
+"которых зависит от пути к файлу."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Предпросмотр"
+msgstr "Предварительный просмотр"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4417,14 +4417,14 @@ msgstr "Минимальный размер проекта для упрощён
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "Хранение и использование памяти"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Сохранять скомпилированные преамбулы в:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4442,20 +4442,32 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>Предкомпилированные преамбулы остаются во временном каталоге после "
+"аварийного завершения KDevelop и удаляются только при повторном запуске той "
+"же сессии.<br>\n"
+"При хранении преамбул в памяти они гарантированно исчезают при выходе, даже "
+"если KDevelop завершился аварийно.<br>\n"
+"Выбор хранения во временном каталоге сессии имеет смысл в системах с "
+"ограниченным объёмом ОЗУ, где временный каталог не использует tmpfs, "
+"поскольку файлы преамбул могут занимать гигабайты пространства.<br>\n"
+"Изменение этого параметра вступает в силу после перезапуска KDevelop.<br>\n"
+"Этот параметр действует только если KDevelop собран с Clang версии 17 или "
+"выше.\n"
+"</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "Память"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Временный каталог сеанса"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -5081,7 +5093,7 @@ msgstr "Язык:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "Как настроить стили форматирования"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5100,6 +5112,18 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Выберите языки, которые вы используете, по одному из выпадающего списка "
+"<i>Язык</i> ниже, укажите желаемый форматер и стиль для каждого. <i>Ctrl"
+"+щелчок</i> по выбранному стилю отменяет его выбор.</p>\n"
+"<p>Правильная настройка форматера и стиля для каждого используемого языка "
+"очень важна: это влияет не только на явные действия <i>Переформатировать "
+"исходный код</i>/<i>Строку</i>/<i>Файлы…i>, но и на форматирование "
+"автосоздаваемого, автореструктурируемого или автоисправляемого кода "
+"(например, действие <i>Переименовать</i> из контекстного меню).</p>\n"
+"<p>Обратите внимание, что KDevelop форматирует все файлы <i>*.h</i> с "
+"помощью преобразователя и стиля, настроенных для языка <i>C</i>, даже "
+"заголовки C++, принадлежащие чисто C++-проектам. Это происходит потому, что "
+"преобразователь исходного кода сопоставляет MIME-типы с языками.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5112,7 +5136,7 @@ msgstr "Преобразователь:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Описание выбранного преобразователя"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -5550,7 +5574,7 @@ msgstr ""
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Выводить родительские контексты при дампе контекстов"
 
 #: util/duchainify/main.cpp:300
 #, kde-format
@@ -5664,6 +5688,7 @@ msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
 msgstr ""
+"Ошибка экранирования в %1 для конфигурации запуска «%2». Запуск отменён."
 
 #: util/shellutils.cpp:238
 #, kde-format
@@ -5674,6 +5699,8 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
+"В %1 конфигурации запуска «%2» обнаружен метасимвол оболочки.Данная функция "
+"пока не поддерживается. Запуск прерван."
 
 #: util/shellutils.cpp:247
 #, kde-format
@@ -5684,6 +5711,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"KShell::splitArgs(<the %1>) сообщил о неизвестном коде ошибки %2 для "
+"конфигурации запуска «%3». Запуск отменён."
 
 #: util/shellutils.cpp:274
 #, kde-format
@@ -5694,6 +5723,8 @@ msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
 msgstr ""
+"Разбор %1 для конфигурации запуска «%2» даёт пустой список.Прерывание "
+"запуска."
 
 #: util/shellutils.cpp:291
 #, kde-format
@@ -5701,7 +5732,7 @@ msgctxt ""
 "%1 - entry name, e.g. 'external terminal command' or 'interpreter command'; "
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
-msgstr ""
+msgstr "Для конфигурации запуска «%2» указан пустой %1. Запуск прерван."
 
 #: util/shellutils.cpp:306
 #, kde-format
@@ -5710,7 +5741,7 @@ msgctxt ""
 "configuration name"
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
-msgstr ""
+msgstr "Не указан корректный %1 для конфигурации запуска «%2». Запуск прерван."
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
@@ -5742,11 +5773,9 @@ msgid "Command exited with value %1."
 msgstr "Команда завершилась с результатом %1."
 
 #: vcs/dvcs/dvcsjob.cpp:370
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "error"
+#, kde-format
 msgid "error: %1"
-msgstr "ошибка"
+msgstr "ошибка: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
