@@ -34,6 +34,15 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
+bool DUChainUtils::shouldPrintReturnType(const Declaration* functionDeclaration)
+{
+    Q_ASSERT(functionDeclaration
+             == DUChainUtils::declarationForDefinition(const_cast<Declaration*>(functionDeclaration)));
+
+    const auto classFunction = dynamic_cast<const ClassFunctionDeclaration*>(functionDeclaration);
+    return !(classFunction && (classFunction->isConstructor() || classFunction->isDestructor()));
+}
+
 CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(const Declaration* dec)
 {
   CodeCompletionModel::CompletionProperties p;

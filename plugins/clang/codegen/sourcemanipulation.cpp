@@ -16,6 +16,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/types/functiontype.h>
 
@@ -208,10 +209,8 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
 
     auto funcType = declaration->type<FunctionType>();
     auto returnType = funcType->returnType();
-    if (auto classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(declaration)) {
-        if (classFunDecl->isConstructor() || classFunDecl->isDestructor()) {
-            returnType = nullptr;
-        }
+    if (!DUChainUtils::shouldPrintReturnType(declaration)) {
+        returnType = nullptr;
     }
     signature.returnType = IndexedType(returnType);
     signature.isConst = funcType->modifiers() & AbstractType::ConstModifier;

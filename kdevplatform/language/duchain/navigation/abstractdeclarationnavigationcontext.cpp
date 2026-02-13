@@ -388,15 +388,13 @@ void AbstractDeclarationNavigationContext::htmlFunction()
         dynamic_cast<const AbstractFunctionDeclaration*>(d->m_declaration.data());
     Q_ASSERT(function);
 
-    const auto* classFunDecl =
-        dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
     const auto type = d->m_declaration->abstractType().dynamicCast<FunctionType>();
     if (!type) {
         modifyHtml() += errorHighlight(QStringLiteral("Invalid type<br />"));
         return;
     }
 
-    if (!classFunDecl || (!classFunDecl->isConstructor() && !classFunDecl->isDestructor())) {
+    if (DUChainUtils::shouldPrintReturnType(d->m_declaration.data())) {
         // only print return type for global functions and non-ctor/dtor methods
         eventuallyMakeTypeLinks(type->returnType());
     }

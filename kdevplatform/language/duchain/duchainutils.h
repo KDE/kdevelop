@@ -34,6 +34,12 @@ class IndexedDeclaration;
  * A namespace which contains convenience utilities for navigating definition-use chains.
  */
 namespace DUChainUtils {
+/** @param functionDeclaration a declaration of a (possibly member) function
+ *  @return whether the return type of @p functionDeclaration should be
+ *  spelled out (e.g. @c false for a constructor declaration)
+ */
+[[nodiscard]] KDEVPLATFORMLANGUAGE_EXPORT bool shouldPrintReturnType(const Declaration* functionDeclaration);
+
 KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(
     const Declaration* dec);
 KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
