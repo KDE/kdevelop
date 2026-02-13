@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2026-02-10 21:23+0200\n"
+"PO-Revision-Date: 2026-02-12 22:33+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -97,53 +97,47 @@ msgstr "Выбор файла дампа"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Недопустимое имя исполняемого файла"
 
 #: dialogs/selectcoredialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgid "Executable file does not exist"
-msgstr "Приложение не существует"
+msgstr "Исполняемый файл не существует"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "Исполняемый файл не является файлом"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Исполняемый файл недоступен для чтения"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Исследовать дамп памяти"
+msgstr "Пустое имя основного файла"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
-msgstr "Исследовать дамп памяти"
+msgstr "Недопустимое имя файла дампа памяти"
 
 #: dialogs/selectcoredialog.cpp:80
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgid "Core file does not exist"
-msgstr "Приложение не существует"
+msgstr "Файл дампа не существует"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Файл дампа:"
+msgstr "Файл дампа не является файлом"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Файл дампа памяти недоступен для чтения"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -160,20 +154,22 @@ msgid "Core file:"
 msgstr "Файл дампа:"
 
 #: mibreakpointcontroller.cpp:810
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<br>Старое значение: %1"
+msgstr ""
+"\n"
+"Старое значение: %1"
 
 #: mibreakpointcontroller.cpp:813
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>Новое значение: %1"
+msgstr ""
+"\n"
+"Новое значение: %1"
 
 #: midebugger.cpp:319
 #, kde-format
@@ -337,16 +333,13 @@ msgid "Debug process %1"
 msgstr "Отладка процесса %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
-"Отладка программы уже выполняется. Прервать текущий сеанс отладки и "
-"продолжить?"
+"Программа уже отлаживается. Прервать текущий сеанс отладки и продолжить "
+"запуск?"
 
 #: midebugsession.cpp:256
 #, kde-format
@@ -403,10 +396,9 @@ msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Неверная команда отладчика</b><br>%1"
 
 #: midebugsession.cpp:1013
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>Не удалось запустить отладчик:</b><br />"
+msgstr "<b>Не удалось загрузить файл дампа памяти:</b><br />"
 
 #: midebugsession.cpp:1102
 #, kde-format
@@ -464,10 +456,9 @@ msgstr ""
 "Исходный текст выполняемой команды: «%3»\n"
 
 #: midebugsession.cpp:1292
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "Ошибка отладчика"
+msgstr "<b>Ошибка отладчика:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -589,18 +580,13 @@ msgid "Can't create a temporary file"
 msgstr "Не удалось создать временный файл"
 
 #: stty.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#| "do sleep 3600;done\""
+#, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
 "accepts these arguments: %2"
 msgstr ""
-"Не удалось получить %1 tty/pty. Проверьте, является ли %1 терминалом и "
-"принимает ли терминал эти аргументы: -e sh -c \"tty> %2 ;exec<&-;exec>&-;"
-"while :;do sleep 3600;done\""
+"Не удалось получить tty/pty %1. Убедитесь, что %1 является терминалом и "
+"принимает следующие аргументы: %2"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
