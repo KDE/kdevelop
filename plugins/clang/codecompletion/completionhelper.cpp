@@ -313,7 +313,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     QString signature = ClangUtils::getCursorSignature(cursor, scope);
 
     QString returnType, rest;
-    if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {
+    if (ClangUtils::shouldPrintReturnType(kind)) {
         int spaceIndex = signature.indexOf(QLatin1Char(' '));
         returnType = signature.left(spaceIndex);
         rest = signature.mid(spaceIndex + 1);

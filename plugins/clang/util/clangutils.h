@@ -158,6 +158,11 @@ namespace ClangUtils
     KDevelop::ClassFunctionFlags specialAttributes(CXCursor cursor);
 
     /**
+     * Returns whether the return type of the @kind is interesting for IDE operations.
+     */
+    [[nodiscard]] bool shouldPrintReturnType(CXCursorKind kind) noexcept;
+
+    /**
      * @return the top most line in a file skipping any comment block
      */
     unsigned int skipTopCommentBlock(CXTranslationUnit unit, CXFile file);

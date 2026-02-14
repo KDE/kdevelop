@@ -223,7 +223,7 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
     QString ret;
     ret.reserve(128);
     QTextStream stream(&ret);
-    if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {
+    if (shouldPrintReturnType(kind)) {
         stream << ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString()
                << ' ';
     }
@@ -426,6 +426,11 @@ KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
         }, &flags);
     }
     return flags;
+}
+
+bool ClangUtils::shouldPrintReturnType(CXCursorKind kind) noexcept
+{
+    return kind != CXCursor_Constructor && kind != CXCursor_Destructor;
 }
 
 unsigned int ClangUtils::skipTopCommentBlock(CXTranslationUnit unit, CXFile file)
