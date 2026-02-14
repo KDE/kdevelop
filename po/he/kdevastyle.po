@@ -1,13 +1,13 @@
 # Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2025-12-30 18:29+0200\n"
+"PO-Revision-Date: 2026-02-13 13:49+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -465,7 +465,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "One Liners"
-msgstr ""
+msgstr "חדי־שורה"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:529
@@ -475,6 +475,8 @@ msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
 msgstr ""
+"לא לשבור שורות שמכילות כמה הכרזות לכמה שורות עם\n"
+"הכרזה אחת בכל שורה."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532
