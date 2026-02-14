@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-01-16 13:29+0200\n"
+"PO-Revision-Date: 2026-02-13 17:33+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: grepdialog.cpp:55
 #, kde-format
@@ -52,10 +52,10 @@ msgstr "בחירת תיקייה לחיפוש"
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%2 ועוד פריט"
+msgstr[1] "%2 ועוד שני פריטים"
+msgstr[2] "%2 ועוד %1 פריטים"
+msgstr[3] "%2 ועוד %1 פריטים"
 
 #: grepdialog.cpp:625
 #, kde-format
@@ -91,10 +91,10 @@ msgstr "אסור לכידות במחרוזת תבנית"
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "חיפוש אחר <b>%2</b> בקובץ אחד"
+msgstr[1] "חיפוש אחר <b>%2</b> בשני קבצים"
+msgstr[2] "חיפוש אחר <b>%2</b> ב־%1 קבצים"
+msgstr[3] "חיפוש אחר <b>%2</b> ב־%1 קבצים"
 
 #: grepjob.cpp:235
 #, kde-format
@@ -139,10 +139,10 @@ msgstr[3] "<b>%1</b> תוצאות"
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "קובץ <b>אחד</b>"
+msgstr[1] "<b>שני</b> קבצים"
+msgstr[2] "<b>%1</b> קבצים"
+msgstr[3] "<b>%1</b> קבצים"
 
 #: grepoutputmodel.cpp:403
 #, kde-format
@@ -165,112 +165,112 @@ msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
 "its row and column"
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
-msgstr ""
+msgstr "החלפת <b>%1</b> ב־<b>%2</b> ב־%3:%4:%5 נכשלה"
 
 #: grepoutputview.cpp:71
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
-msgstr ""
+msgstr "תצוגת פלט איתור/החלפה"
 
 #: grepoutputview.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
-msgstr ""
+msgstr "הפריט ה&קודם"
 
 #: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
-msgstr ""
+msgstr "הפריט ה&בא"
 
 #: grepoutputview.cpp:80
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
-msgstr ""
+msgstr "&צמצום של הכול"
 
 #: grepoutputview.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
-msgstr ""
+msgstr "ה&רחבה של הכול"
 
 #: grepoutputview.cpp:86
 #, kde-format
 msgctxt "@action"
 msgid "New &Search"
-msgstr ""
+msgstr "חיפוש &חדש"
 
 #: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
-msgstr ""
+msgstr "ריענון"
 
 #: grepoutputview.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
-msgstr ""
+msgstr "פינוי היסטוריית החיפוש"
 
 #: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
-msgstr ""
+msgstr "להחליף במחרוזת ריקה?"
 
 #: grepoutputview.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
-msgstr ""
+msgstr "התחלת החלפה"
 
 #: grepoutputview.cpp:326
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr ""
+msgstr "החלפה"
 
 #. i18n: ectx: property (text), widget (QLabel, replacementLabel)
 #: grepoutputview.ui:41
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Replacement &text:"
-msgstr ""
+msgstr "&טקסט החלפה:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
 #: grepoutputview.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr ""
+msgstr "נא למלא את תבנית ההחלפה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr ""
+msgstr "החלת ההחלפה על הפריטים הנבחרים"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
 #, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
-msgstr ""
+msgstr "ה&חלפה"
 
 #: grepviewplugin.cpp:79
 #, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
-msgstr ""
+msgstr "איתור/החלפה ב&קבצים…"
 
 #: grepviewplugin.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr ""
+msgstr "חיפוש ביטויים על פני מספר קבצים"
 
 #: grepviewplugin.cpp:84
 #, kde-format
@@ -286,20 +286,20 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr ""
+msgstr "איתור/החלפה בתיקייה הזאת…"
 
 #: grepviewplugin.cpp:143
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
-msgstr ""
+msgstr "איתור/החלפה ב&קבצים…"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr ""
+msgstr "נא למלא את הביטוי הרגולרי לחיפוש"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
@@ -395,14 +395,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Template:"
-msgstr ""
+msgstr "תבנית:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
 #: grepwidget.ui:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
-msgstr ""
+msgstr "זאת תבנית ביטוי רגולרי."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
 #: grepwidget.ui:85
@@ -418,27 +418,27 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr ""
+msgstr "בחירת מקום מסדרה של תיקיות במהירות."
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
 #, kde-format
 msgctxt "@action:button"
 msgid "Quick Select"
-msgstr ""
+msgstr "בחירה מהירה"
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Depth:"
-msgstr ""
+msgstr "עומק:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "הרמה המרבית של חדירת תת־תיקיות"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -455,42 +455,42 @@ msgstr ""
 #, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
-msgstr ""
+msgstr "מלא"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:134
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
-msgstr ""
+msgstr "תבנית:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: grepwidget.ui:147
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
-msgstr ""
+msgstr "קבצים:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:160
 #, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
-msgstr ""
+msgstr "תלוי רישיות:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
 #: grepwidget.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
-msgstr ""
+msgstr "חיפוש תלוי רישיות."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: grepwidget.ui:192
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr ""
+msgstr "מקום/מקומות:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
@@ -513,14 +513,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
-msgstr ""
+msgstr "החרגה:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr ""
+msgstr "תבנית קבצים להחרגה"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:237
@@ -538,35 +538,35 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
-msgstr ""
+msgstr "ביטוי רגולרי:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
 #: grepwidget.ui:330
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr ""
+msgstr "הפעלה או כיבוי של ביטוי רגולרי."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr ""
+msgstr "הגבלה לקובצי מיזם:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr ""
+msgstr "מילוי תבנית ההחלפה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:379
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
-msgstr ""
+msgstr "תבנית החלפה:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
 #: grepwidget.ui:392

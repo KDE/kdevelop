@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2026-02-12 22:49+0200\n"
+"PO-Revision-Date: 2026-02-13 16:37+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -504,7 +504,7 @@ msgstr "О&станов при изменении"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (последнее возвращаемое значение функции)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -2051,13 +2051,7 @@ msgid "Step out of the current function"
 msgstr "Выйти из текущей функции"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2068,10 +2062,13 @@ msgid ""
 "displayed in a variable named <code>%1</code> in a section <i>%2</i> of '%3' "
 "tool view."
 msgstr ""
-"Выполняет код приложения до выхода из функции, выполняемой в данный момент. "
-"Затем отладчик показывает строку сразу за предшествовавшим вызовом функции. "
-"Если программа выполнялась на самом верхнем уровне (то есть в main()), "
-"останова не произойдёт."
+"Выполняет приложение до завершения текущей выполняемой функции. Отладчик "
+"затем перейдёт к строке, следующую за исходным вызовом этой функции. Если "
+"выполнение программы находится во внешнем фрейме (например, в <code>main()</"
+"code>), эта операция не имеет эффекта.<br>После выхода из функции, "
+"возвращающей значение (не <code>void</code>), её возвращаемое значение и тип "
+"отображаются в переменной с именем <code>%1</code> в разделе <i>%2</i> "
+"панели инструментов «%3»."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
