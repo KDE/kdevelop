@@ -634,7 +634,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr ""
+msgstr "删除选中的分支"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:36

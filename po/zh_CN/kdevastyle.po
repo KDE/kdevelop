@@ -25,6 +25,9 @@ msgid ""
 "white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
+"<b>Artistic Style</b> 是用于 C、C++、C# 和 Java 编程语言的源代码缩进器、格式"
+"化器和美化器。<br />主页：<a href=\"http://astyle.sourceforge.net/\">http://"
+"astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -301,7 +304,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
-msgstr ""
+msgstr "将括号添加到无括号的单行条件语句(例如：“if”、“for”、“while”)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374

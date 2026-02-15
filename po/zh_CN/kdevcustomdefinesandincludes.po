@@ -281,13 +281,13 @@ msgstr "选择工程路径"
 #: kcm_widget/projectpathswidget.cpp:183
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
-msgstr ""
+msgstr "您确认要删除路径“%1”的配置吗？"
 
 #: kcm_widget/projectpathswidget.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
-msgstr ""
+msgstr "删除配置"
 
 #: kcm_widget/projectpathswidget.cpp:223
 #, kde-format

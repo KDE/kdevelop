@@ -224,7 +224,7 @@ msgstr "<br /><em>缓存文档：</em>%1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "无效的 CMake 文件 API 项目数据"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -240,6 +240,9 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
+"配置项目 '%1' 的 CMake 数据过时。这可能导致 KDevelop 的代码理解有误。\n"
+"\n"
+"要解决这个问题，请右键单击项目工具视图中的项目项目，然后点击“重新加载”。"
 
 #: cmakemanager.cpp:676
 #, kde-format
@@ -369,12 +372,14 @@ msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
+"%1 目录即将从 KDevelop 的列表中删除。\n"
+"您想让 KDevelop 同时从文件系统中删除它吗？"
 
 #: settings/cmakepreferences.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "不删除"
 
 #: settings/cmakepreferences.cpp:352
 #, kde-format
