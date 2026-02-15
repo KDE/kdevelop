@@ -35,49 +35,49 @@ msgstr "附加到进程"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "搜索"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr ""
+msgstr "列表显示"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr ""
+msgstr "树状显示"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "自有进程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "用户进程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "系统进程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "所有进程"
 
 #: dialogs/selectcoredialog.cpp:20
 #, kde-format
@@ -389,27 +389,27 @@ msgstr "正常退出"
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
-msgstr ""
+msgstr "以信号 %1 退出"
 
 #: midebugsession.cpp:1121
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr ""
+msgstr "以信号 %1(%2)退出"
 
 #: midebugsession.cpp:1157
 #, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr ""
+msgstr "程序收到了信号 %1"
 
 #: midebugsession.cpp:1159
 #, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
-msgstr ""
+msgstr "程序收到了信号 %1(%2)"
 
 #: midebugsession.cpp:1278
 #, kde-format
