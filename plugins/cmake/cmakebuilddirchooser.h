@@ -47,6 +47,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         KDevelop::Path buildFolder() const;
         QString buildType() const;
         QString extraArguments() const;
+        bool autoConfigureOnCMakeListsChanges() const;
         int alreadyUsedIndex() const;
         bool reuseBuilddir();
 
@@ -59,6 +60,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         void setAlreadyUsed(const QStringList& used);
         void setStatus(const QString& message, bool canApply);
         void setExtraArguments(const QString& args);
+        void setAutoConfigureOnCMakeListsChanges(bool enabled);
         void setShowAvailableBuildDirs(bool show);
 
     private Q_SLOTS:

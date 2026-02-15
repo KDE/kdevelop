@@ -23,6 +23,7 @@ inline constexpr const char* projectRootRelativeKey = "ProjectRootRelative";
 inline QString globalBuildDirIndexKey() { return QStringLiteral("Current Build Directory Index"); }
 inline constexpr const char* buildDirOverrideIndexKey = "Temporary Build Directory Index";
 inline constexpr const char* buildDirCountKey = "Build Directory Count";
+inline constexpr const char* autoConfigureOnCMakeListsChangesKey = "Auto Configure on CMakeLists Changes";
 
 //the used builddir will change for every runtime
 inline QString buildDirIndexKey()

@@ -178,11 +178,14 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         bd.setAlreadyUsed( builddirs );
         bd.setShowAvailableBuildDirs(!builddirs.isEmpty());
         bd.setCMakeExecutable(currentCMakeExecutable(project));
+        bd.setAutoConfigureOnCMakeListsChanges(CMake::autoConfigureOnCMakeListsChanges(project));
 
         if( !bd.exec() )
         {
             return false;
         }
+
+        CMake::setAutoConfigureOnCMakeListsChanges(project, bd.autoConfigureOnCMakeListsChanges());
 
         if (bd.reuseBuilddir())
         {
@@ -388,6 +391,11 @@ QString currentEnvironment(KDevelop::IProject* project, int builddir)
     return readBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, QString(), builddir );
 }
 
+bool autoConfigureOnCMakeListsChanges(KDevelop::IProject* project)
+{
+    return baseGroup(project).readEntry(Config::autoConfigureOnCMakeListsChangesKey, true);
+}
+
 int currentBuildDirIndex( KDevelop::IProject* project )
 {
     KConfigGroup baseGrp = baseGroup(project);
@@ -409,6 +417,11 @@ void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex )
 void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment )
 {
     writeBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, environment );
+}
+
+void setAutoConfigureOnCMakeListsChanges(KDevelop::IProject* project, bool enabled)
+{
+    baseGroup(project).writeEntry(Config::autoConfigureOnCMakeListsChangesKey, enabled);
 }
 
 void initBuildDirConfig( KDevelop::IProject* project )

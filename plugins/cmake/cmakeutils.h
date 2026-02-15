@@ -141,6 +141,7 @@ namespace CMake
      * @returns the environment configuration for a @p project
      */
     KDEVCMAKECOMMON_EXPORT QString currentEnvironment( KDevelop::IProject* project, int builddir = -1 );
+    KDEVCMAKECOMMON_EXPORT bool autoConfigureOnCMakeListsChanges(KDevelop::IProject* project);
 
     /**
      * Sets the current install dir for the given project.
@@ -228,6 +229,7 @@ namespace CMake
      * Sets the environment configuration for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment );
+    KDEVCMAKECOMMON_EXPORT void setAutoConfigureOnCMakeListsChanges(KDevelop::IProject* project, bool enabled);
 
     /**
      * Removes current build directory (overridden or not) from the project configuration.

@@ -70,6 +70,7 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
             this, &CMakePreferences::changed);
     connect(m_prefsUi->cMakeExecutable, &KUrlRequester::textChanged,
             this, &CMakePreferences::changed);
+    connect(m_prefsUi->autoConfigureOnCMakeListsChanges, &QCheckBox::toggled, this, &CMakePreferences::changed);
 
     showInternal(m_prefsUi->showInternal->checkState());
     m_subprojFolder = Path(options.projectTempFile).parent();
@@ -102,6 +103,7 @@ void CMakePreferences::initAdvanced()
     setBuildType(CMake::currentBuildType(m_project));
     m_prefsUi->extraArguments->setEditText(CMake::currentExtraArguments(m_project));
     m_prefsUi->cMakeExecutable->setText(CMake::currentCMakeExecutable(m_project).toLocalFile());
+    m_prefsUi->autoConfigureOnCMakeListsChanges->setChecked(CMake::autoConfigureOnCMakeListsChanges(m_project));
 }
 
 void CMakePreferences::setBuildType(const QString& buildType)
@@ -140,19 +142,30 @@ void CMakePreferences::apply()
     // the build directory list is incrementally maintained through createBuildDir() and removeBuildDir().
     // We won't rewrite it here based on the data from m_prefsUi->buildDirs.
     CMake::removeOverrideBuildDirIndex( m_project, true ); // save current selection
+    CMake::setAutoConfigureOnCMakeListsChanges(m_project, m_prefsUi->autoConfigureOnCMakeListsChanges->isChecked());
     int savedBuildDir = CMake::currentBuildDirIndex(m_project);
     if (savedBuildDir < 0) {
         // no build directory exists: skip any writing to config file as well as configuring
         return;
     }
 
-    CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
+    const QString oldEnvironment = CMake::currentEnvironment(m_project);
+    const Path oldInstallDir = CMake::currentInstallDir(m_project);
+    const QString oldBuildType = CMake::currentBuildType(m_project);
+    const QString oldExtraArguments = CMake::currentExtraArguments(m_project);
+    const Path oldCMakeExecutable = CMake::currentCMakeExecutable(m_project);
 
-    CMake::setCurrentInstallDir( m_project, Path(m_prefsUi->installationPrefix->text()) );
-    const QString buildType = m_prefsUi->buildType->currentText();
-    CMake::setCurrentBuildType(m_project, buildType);
-    CMake::setCurrentExtraArguments( m_project, m_prefsUi->extraArguments->currentText() );
-    CMake::setCurrentCMakeExecutable( m_project, Path(m_prefsUi->cMakeExecutable->text()) );
+    const QString newEnvironment = m_prefsUi->environment->currentProfile();
+    const Path newInstallDir(m_prefsUi->installationPrefix->text());
+    const QString newBuildType = m_prefsUi->buildType->currentText();
+    const QString newExtraArguments = m_prefsUi->extraArguments->currentText();
+    const Path newCMakeExecutable(m_prefsUi->cMakeExecutable->text());
+
+    CMake::setCurrentEnvironment(m_project, newEnvironment);
+    CMake::setCurrentInstallDir(m_project, newInstallDir);
+    CMake::setCurrentBuildType(m_project, newBuildType);
+    CMake::setCurrentExtraArguments(m_project, newExtraArguments);
+    CMake::setCurrentCMakeExecutable(m_project, newCMakeExecutable);
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     qCDebug(CMAKE) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
@@ -160,6 +173,17 @@ void CMakePreferences::apply()
     qCDebug(CMAKE) << "writing to cmake config: build type " << CMake::currentBuildType(m_project);
     qCDebug(CMAKE) << "writing to cmake config: cmake executable " << CMake::currentCMakeExecutable(m_project);
     qCDebug(CMAKE) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
+
+    const bool hasUnconfiguredBuildDir =
+        !QFile::exists(Path(CMake::currentBuildDir(m_project), QStringLiteral("CMakeCache.txt")).toLocalFile());
+    const bool hasChangedCacheValues = m_currentModel && !m_currentModel->changedValues().isEmpty();
+    const bool hasChangedConfigureInputs = oldEnvironment != newEnvironment || oldInstallDir != newInstallDir
+        || oldBuildType != newBuildType || oldExtraArguments != newExtraArguments
+        || oldCMakeExecutable != newCMakeExecutable;
+
+    if (!hasUnconfiguredBuildDir && !hasChangedCacheValues && !hasChangedConfigureInputs) {
+        return;
+    }
 
     //We run cmake on the builddir to generate it
     configure();
@@ -294,6 +318,7 @@ void CMakePreferences::createBuildDir()
     QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
     bdCreator.setCMakeExecutable(Path(CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile()));
+    bdCreator.setAutoConfigureOnCMakeListsChanges(CMake::autoConfigureOnCMakeListsChanges(m_project));
 
     if(bdCreator.exec())
     {
@@ -316,6 +341,8 @@ void CMakePreferences::createBuildDir()
         CMake::setCurrentBuildType( m_project, bdCreator.buildType() );
         CMake::setCurrentCMakeExecutable(m_project, bdCreator.cmakeExecutable());
         CMake::setCurrentEnvironment( m_project, QString() );
+        CMake::setAutoConfigureOnCMakeListsChanges(m_project, bdCreator.autoConfigureOnCMakeListsChanges());
+        m_prefsUi->autoConfigureOnCMakeListsChanges->setChecked(bdCreator.autoConfigureOnCMakeListsChanges());
 
         QString newbuilddir = bdCreator.buildFolder().toLocalFile();
         m_prefsUi->buildDirs->addItem( newbuilddir );

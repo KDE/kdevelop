@@ -199,6 +199,16 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="1">
+   <widget class="QCheckBox" name="autoConfigureOnCMakeListsChanges">
+    <property name="text">
+      <string comment="@option:check">Automatically reconfigure when CMake project files change</string>
+    </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

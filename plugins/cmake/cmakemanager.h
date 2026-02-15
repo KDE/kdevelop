@@ -28,6 +28,7 @@ struct CMakeProjectData;
 class QObject;
 class CMakeHighlighting;
 class CMakeDocumentation;
+class ChooseCMakeInterfaceJob;
 
 namespace KDevelop
 {
@@ -110,6 +111,11 @@ private Q_SLOTS:
     void projectClosing(KDevelop::IProject*);
 
 private:
+    enum class ReloadMode {
+        ImportOnly,
+        ReconfigureAndImport
+    };
+
     void reloadProjects();
     CMakeFile fileInformation(KDevelop::ProjectBaseItem* item) const;
     CMakeTarget targetInformation(KDevelop::ProjectTargetItem* item) const;
@@ -123,7 +129,8 @@ private:
     void showConfigureStatusMessage(const KDevelop::IProject& project, const QString& messageText,
                                     Sublime::Message::MessageType messageType);
 
-    KJob* createImportJob(KDevelop::ProjectFolderItem* item, bool forceConfigure);
+    bool reloadProject(KDevelop::ProjectFolderItem* folder, ReloadMode reloadMode);
+    KJob* createImportJob(KDevelop::ProjectFolderItem* item, ReloadMode reloadMode);
 
 private:
     struct PerProjectData
@@ -138,8 +145,8 @@ private:
     // project's status message must be stored to remove it once obsolete. Thus a separate QHash for the messages.
     QHash<const KDevelop::IProject*, QPointer<Sublime::Message>> m_configureStatusMessages;
     KDevelop::ICodeHighlighting* m_highlight;
+
+    friend class ::ChooseCMakeInterfaceJob;
 };
 
 #endif
-
-

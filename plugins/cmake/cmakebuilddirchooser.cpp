@@ -333,4 +333,14 @@ QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType-
 
 QString CMakeBuildDirChooser::extraArguments() const { return m_chooserUi->extraArguments->currentText(); }
 
+bool CMakeBuildDirChooser::autoConfigureOnCMakeListsChanges() const
+{
+    return m_chooserUi->autoConfigureOnCMakeListsChanges->isChecked();
+}
+
+void CMakeBuildDirChooser::setAutoConfigureOnCMakeListsChanges(bool enabled)
+{
+    m_chooserUi->autoConfigureOnCMakeListsChanges->setChecked(enabled);
+}
+
 #include "moc_cmakebuilddirchooser.cpp"

@@ -115,11 +115,12 @@ class ChooseCMakeInterfaceJob : public ExecuteCompositeJob
 {
     Q_OBJECT
 public:
-    ChooseCMakeInterfaceJob(IProject* project, CMakeManager* manager, bool forceConfigure)
+    ChooseCMakeInterfaceJob(IProject* project, CMakeManager* manager, CMakeManager::ReloadMode reloadMode)
         : ExecuteCompositeJob(manager, {})
         , project(project)
         , manager(manager)
-        , forceConfigure(forceConfigure)
+        , reloadMode(reloadMode)
+        , autoConfigureOnCMakeListsChanges(CMake::autoConfigureOnCMakeListsChanges(project))
     {
     }
 
@@ -128,7 +129,7 @@ public:
             qCDebug(CMAKE) << "Using cmake-file-api for import of" << project->path();
 
             // try to import the data directly, if possible and not outdated
-            if (forceConfigure) {
+            if (reloadMode == CMakeManager::ReloadMode::ReconfigureAndImport) {
                 reconfigureThenImport();
             } else {
                 tryDirectImport();
@@ -195,17 +196,21 @@ private:
     void tryDirectImport()
     {
         auto* importJob = new CMake::FileApi::ImportJob(project, this);
-        importJob->setInvalidateOutdatedData();
         importJob->setEmitInvalidData();
+        if (autoConfigureOnCMakeListsChanges) {
+            importJob->setInvalidateOutdatedData();
+        }
         connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this](const CMakeProjectData& data) {
             if (!data.compilationData.isValid) {
+                qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is invalid";
+                reconfigureThenImport();
+            } else if (data.isOutdated && autoConfigureOnCMakeListsChanges) {
                 qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is outdated";
                 reconfigureThenImport();
             } else {
-                Q_ASSERT_X(!data.isOutdated, Q_FUNC_INFO,
-                           "ImportJob::setInvalidateOutdatedData() failed to mark outdated data invalid.");
                 qCDebug(CMAKE) << "skipping configure project" << project->name()
-                               << "because project data is up to date";
+                               << (data.isOutdated ? "because project auto-configure on CMakeLists changes is disabled"
+                                                   : "because project data is up to date");
                 fileImportDone(data);
             }
         });
@@ -221,16 +226,17 @@ private:
     QSharedPointer<CMakeServer> server;
     IProject* const project;
     CMakeManager* const manager;
-    const bool forceConfigure;
+    const CMakeManager::ReloadMode reloadMode;
+    const bool autoConfigureOnCMakeListsChanges;
 };
 
-KJob* CMakeManager::createImportJob(ProjectFolderItem* item, bool forceConfigure)
+KJob* CMakeManager::createImportJob(ProjectFolderItem* item, ReloadMode reloadMode)
 {
     auto project = item->project();
 
     delete m_configureStatusMessages.value(project); // discard now-obsolete message from the previous configuration
 
-    auto job = new ChooseCMakeInterfaceJob(project, this, forceConfigure);
+    auto job = new ChooseCMakeInterfaceJob(project, this, reloadMode);
     connect(job, &KJob::result, this, [this, job, project]() {
         if (job->error() != 0) {
             qCWarning(CMAKE) << "couldn't load project successfully" << project->name() << job->error()
@@ -253,7 +259,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item, bool forceConfigure
 
 KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 {
-    return createImportJob(item, false);
+    return createImportJob(item, ReloadMode::ImportOnly);
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
@@ -361,6 +367,11 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
+    return reloadProject(folder, ReloadMode::ReconfigureAndImport);
+}
+
+bool CMakeManager::reloadProject(KDevelop::ProjectFolderItem* folder, ReloadMode reloadMode)
+{
     qCDebug(CMAKE) << "reloading" << folder->path();
 
     IProject* project = folder->project();
@@ -369,7 +380,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         return false;
     }
 
-    KJob* job = createImportJob(folder, true);
+    KJob* job = createImportJob(folder, reloadMode);
     project->setReloadJob(job);
     ICore::self()->runController()->registerJob( job );
     if (folder == project->projectItem()) {
@@ -508,7 +519,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
     // is shown here (earlier), the user can follow the advice and manage to reload the project
     // before the current import finishes. Then KDevelop would print a kdevelop.plugins.cmake.debug
     // message "the project is being reloaded, aborting reload!" and ignore the reload request.
-    if (data.isOutdated) {
+    if (data.isOutdated && CMake::autoConfigureOnCMakeListsChanges(project)) {
         showConfigureOutdatedMessage(*project);
     }
 
@@ -543,7 +554,9 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         reloadTimer->setSingleShot(true);
         reloadTimer->setInterval(1000);
         connect(reloadTimer, &QTimer::timeout, this, [project, this]() {
-            reload(project->projectItem());
+            const auto reloadMode = CMake::autoConfigureOnCMakeListsChanges(project) ? ReloadMode::ReconfigureAndImport
+                                                                                     : ReloadMode::ImportOnly;
+            reloadProject(project->projectItem(), reloadMode);
         });
         connect(projectWatcher(project), &KDirWatch::dirty, reloadTimer, [this, project, reloadTimer](const QString &strPath) {
             const auto it = m_projects.constFind(project);
@@ -786,7 +799,7 @@ void CMakeManager::reloadProjects()
     for (IProject* project : projects) {
         if (project->buildSystemManager() == this) {
             CMake::checkForNeedingConfigure(project);
-            reload(project->projectItem());
+            reloadProject(project->projectItem(), ReloadMode::ReconfigureAndImport);
         }
     }
 }
