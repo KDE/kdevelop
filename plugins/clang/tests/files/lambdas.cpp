@@ -10,7 +10,9 @@ void foo()
         l1();
     };
     /// "useCount": 0
-    auto l3 = [lambda = l2]() {
+    auto l3 = [
+        /// "useCount" : 1
+        lambda = l2]() {
         lambda();
     };
 }
