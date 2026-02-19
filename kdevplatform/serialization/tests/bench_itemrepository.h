@@ -17,6 +17,7 @@ class BenchItemRepository
 private Q_SLOTS:
     void insert();
     void remove();
+    void reinsert();
     void removeDisk();
     void lookupKey();
     void lookupValue();

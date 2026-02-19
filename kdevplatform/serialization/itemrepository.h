@@ -1303,15 +1303,13 @@ public:
 
         if (!pickedBucketInChain) {
             //Try finding an existing bucket with deleted space to store the data into
-            for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
-                MyBucket* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
-                Q_ASSERT(bucketPtr->largestFreeSize());
+            auto it = std::upper_bound(m_freeSpaceBuckets.begin(), m_freeSpaceBuckets.end(), size,
+                                       [&](uint size, uint index){
+                                           return bucketForIndex(index)->canAllocateItem(size);
 
-                if (bucketPtr->canAllocateItem(size)) {
-                    //The item fits into the bucket.
-                    useBucket = m_freeSpaceBuckets[a];
-                    break;
-                }
+                                       });
+            if (it != m_freeSpaceBuckets.end()) {
+                useBucket = *it;
             }
         }
 

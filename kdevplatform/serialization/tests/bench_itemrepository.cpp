@@ -154,6 +154,25 @@ void BenchItemRepository::remove()
     QCOMPARE(repo.statistics().totalItems, 0u);
 }
 
+void BenchItemRepository::reinsert()
+{
+    QMutex mutex;
+    TestDataRepository repo("TestDataRepositoryReinsert", &mutex);
+    const QVector<QString> data = generateData();
+    QVector<uint> indices = insertData(data, repo);
+    std::shuffle(indices.begin(), indices.end(), std::default_random_engine(0));
+    indices.resize((indices.size() * 2) / 3);
+    for (uint index : indices) {
+        repo.deleteItem(index);
+    }
+    QBENCHMARK_ONCE {
+        indices = insertData(data, repo);
+        repo.store();
+    }
+    Q_ASSERT(indices.size() == data.size());
+    QCOMPARE(repo.statistics().totalItems, uint(data.size()));
+}
+
 void BenchItemRepository::removeDisk()
 {
     const QVector<QString> data = generateData();
