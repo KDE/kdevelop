@@ -50,41 +50,19 @@ msgstr ""
 "shábháil?"
 
 #: oktetadocument.cpp:131
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
-msgstr "Dún an Cháipéis"
+msgstr ""
 
 #: oktetaplugin.cpp:94
-#, fuzzy, kde-format
-#| msgid "Hex Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
-msgstr "Eagarthóir Heics"
+msgstr ""
 
 #: oktetawidget.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
 msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#~ msgid "Designer Layout Toolbar"
-#~ msgstr "Barra Uirlisí Leagain Amach le haghaidh Designer"
-
-#~ msgid "Okteta Plugin for KDevelop"
-#~ msgstr "Breiseán Okteta le haghaidh KDevelop"
-
-#~ msgid "Provides simple Hex Editing"
-#~ msgstr "Eagarthóireacht shimplí Heics"
-
-#~ msgid "Open As Byte Array"
-#~ msgstr "Oscail mar eagar beart"

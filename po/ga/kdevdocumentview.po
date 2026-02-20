@@ -23,18 +23,16 @@ msgid "Documents"
 msgstr "Cáipéisí"
 
 #: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
-#, fuzzy, kde-format
-#| msgid "Documents"
+#, kde-format
 msgctxt "@title:window"
 msgid "Documents"
-msgstr "Cáipéisí"
+msgstr ""
 
 #: kdevdocumentview.cpp:211
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
-msgstr "Athluchtaigh"
+msgstr ""
 
 #: kdevdocumentview.cpp:217
 #, kde-format
@@ -43,38 +41,7 @@ msgid "Close"
 msgstr ""
 
 #: kdevdocumentview.cpp:218
-#, fuzzy, kde-format
-#| msgid "Close Other Files"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr "Dún Gach Comhad Eile"
-
-#~ msgid "Display document categories (mimetypes) in the view"
-#~ msgstr "Taispeáin catagóir (cineál MIME) na gcáipéisí san amharc"
-
-#~ msgid ""
-#~ "If this option is set, the Document View will organize documents\n"
-#~ "        by their mimetype."
-#~ msgstr ""
-#~ "Leis an rogha seo, eagróidh an tAmharc na cáipéisí de réir a\n"
-#~ "        gcineálacha MIME."
-
-#, fuzzy
-#~| msgid "Display document &categories"
-#~ msgctxt "@option:check"
-#~ msgid "Display document &categories"
-#~ msgstr "Taispeáin &catagóir na gcáipéisí"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#~ msgid "Document View"
-#~ msgstr "Amharc Cáipéise"
-
-#~ msgid "A list of opened documents"
-#~ msgstr "Liosta de cháipéisí oscailte"
+msgstr ""

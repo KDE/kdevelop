@@ -42,18 +42,16 @@ msgid "Close all other output views"
 msgstr ""
 
 #: outputwidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "Previous"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Output"
-msgstr "Siar"
+msgstr ""
 
 #: outputwidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Previous"
+#, kde-format
 msgctxt "@action"
 msgid "Next Output"
-msgstr "Siar"
+msgstr ""
 
 #: outputwidget.cpp:99
 #, kde-format
@@ -74,32 +72,28 @@ msgid "Word Wrap"
 msgstr ""
 
 #: outputwidget.cpp:119
-#, fuzzy, kde-format
-#| msgid "Next"
+#, kde-format
 msgctxt "@action"
 msgid "First Item"
-msgstr "Ar Aghaidh"
+msgstr ""
 
 #: outputwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Previous"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Item"
-msgstr "Siar"
+msgstr ""
 
 #: outputwidget.cpp:127
-#, fuzzy, kde-format
-#| msgid "Next"
+#, kde-format
 msgctxt "@action"
 msgid "Next Item"
-msgstr "Ar Aghaidh"
+msgstr ""
 
 #: outputwidget.cpp:131
-#, fuzzy, kde-format
-#| msgid "Next"
+#, kde-format
 msgctxt "@action"
 msgid "Last Item"
-msgstr "Ar Aghaidh"
+msgstr ""
 
 #: outputwidget.cpp:144
 #, kde-format
@@ -188,23 +182,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr ""
-
-#~ msgctxt "@title:window"
-#~ msgid "Test"
-#~ msgstr "Tástáil"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Navigation"
-#~ msgstr "Nascleanúint"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#~ msgctxt "@title:menu"
-#~ msgid "View"
-#~ msgstr "Amharc"

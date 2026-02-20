@@ -38,11 +38,10 @@ msgid "No build directory configured, cannot configure"
 msgstr ""
 
 #: cmakebuilderpreferences.cpp:44
-#, fuzzy, kde-format
-#| msgid "CMake"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
-msgstr "CMake"
+msgstr ""
 
 #: cmakebuilderpreferences.cpp:49
 #, kde-format
@@ -59,11 +58,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
-#, fuzzy, kde-format
-#| msgid "Generator"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
-msgstr "Gineadóir"
+msgstr ""
 
 #: cmakejob.cpp:38 prunejob.cpp:25
 #, kde-format
@@ -109,17 +107,3 @@ msgstr ""
 #, kde-format
 msgid "** Prune failed: %1 **"
 msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#~ msgid "Job failed"
-#~ msgstr "Theip ar an jab"
-
-#~ msgid "CMake Binary:"
-#~ msgstr "Clár Inrite CMake:"

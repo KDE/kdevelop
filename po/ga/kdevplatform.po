@@ -28,19 +28,16 @@ msgid "Your emails"
 msgstr "kscanne@gmail.com"
 
 #: debugger/breakpoint/breakpoint.cpp:195
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
-msgstr "Earráid"
+msgstr ""
 
 #: debugger/breakpoint/breakpoint.cpp:201
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "dirty"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
-msgstr "salach"
+msgstr ""
 
 #: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
@@ -49,19 +46,16 @@ msgid "Pending"
 msgstr ""
 
 #: debugger/breakpoint/breakpoint.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "clean"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr "glan"
+msgstr ""
 
 #: debugger/breakpoint/breakpoint.cpp:238
-#, fuzzy, kde-format
-#| msgid "<b>%1</b> (%2)"
+#, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
-msgstr "<b>%1</b> (%2)"
+msgstr ""
 
 #: debugger/breakpoint/breakpointdetails.cpp:48
 #: debugger/breakpoint/breakpointdetails.cpp:127
@@ -100,9 +94,6 @@ msgid "Hit %1 time"
 msgid_plural "Hit %1 times"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: debugger/breakpoint/breakpointdetails.cpp:129
 #, kde-format
@@ -132,10 +123,9 @@ msgid "Breakpoint"
 msgstr "Brisphointe"
 
 #: debugger/breakpoint/breakpointmodel.cpp:378
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgid "Breakpoint not found"
-msgstr "Brisphointe"
+msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
@@ -143,10 +133,9 @@ msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:384
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgid "&Breakpoint"
-msgstr "Brisphointe"
+msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
@@ -213,22 +202,19 @@ msgid ""
 msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:86
-#, fuzzy, kde-format
-#| msgid "Breakpoints"
+#, kde-format
 msgid "Breakpoint Details"
-msgstr "Brisphointí"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:95
-#, fuzzy, kde-format
-#| msgid "Toggle breakpoint"
+#, kde-format
 msgid "New code breakpoint ..."
-msgstr "Scoránaigh brisphointe"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:96
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgid "Enter condition ..."
-msgstr "Oscail Cumraíocht..."
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:124
 #, kde-format
@@ -243,28 +229,22 @@ msgid "&Code"
 msgstr "&Cód"
 
 #: debugger/breakpoint/breakpointwidget.cpp:136
-#, fuzzy, kde-format
-#| msgctxt "Data breakpoint"
-#| msgid "Data &write"
+#, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
-msgstr "&Scríobh sonraí"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:139
-#, fuzzy, kde-format
-#| msgctxt "Data read breakpoint"
-#| msgid "Data &read"
+#, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
-msgstr "&Léamh sonraí"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:142
-#, fuzzy, kde-format
-#| msgctxt "Data access breakpoint"
-#| msgid "Data &access"
+#, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
-msgstr "&Rochtain sonraí"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:147
 #, kde-format
@@ -272,29 +252,25 @@ msgid "&Delete"
 msgstr "&Scrios"
 
 #: debugger/breakpoint/breakpointwidget.cpp:156
-#, fuzzy, kde-format
-#| msgid "Disable &all"
+#, kde-format
 msgid "Disable &All"
-msgstr "Díchumasaigh &uile"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:157
-#, fuzzy, kde-format
-#| msgid "&Enable all"
+#, kde-format
 msgid "&Enable All"
-msgstr "&Cumasaigh uile"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:158
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgid "&Remove All"
-msgstr "Bain Uile"
+msgstr ""
 
 #: debugger/framestack/framestackmodel.cpp:187
-#, fuzzy, kde-format
-#| msgid "%1 has crashed"
+#, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
-msgstr "Thuairteáil %1"
+msgstr ""
 
 #: debugger/framestack/framestackmodel.cpp:189
 #, kde-format
@@ -400,16 +376,14 @@ msgid "Value"
 msgstr "Luach"
 
 #: debugger/variable/variabletooltip.cpp:115
-#, fuzzy, kde-format
-#| msgid "Match case"
+#, kde-format
 msgid "Watch This"
-msgstr "Comhoiriúnaigh an cás"
+msgstr ""
 
 #: debugger/variable/variabletooltip.cpp:117
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgid "Stop on Change"
-msgstr "Athraigh"
+msgstr ""
 
 #: debugger/variable/variablewidget.cpp:87
 #, kde-format
@@ -493,11 +467,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Find:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
-msgstr "Aimsigh:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
 #: documentation/documentationfindwidget.ui:56
@@ -515,11 +488,10 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Match case"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
-msgstr "Comhoiriúnaigh an cás"
+msgstr ""
 
 #: documentation/documentationview.cpp:38
 #: shell/settings/documentationpreferences.cpp:25
@@ -528,34 +500,30 @@ msgid "Documentation"
 msgstr "Doiciméadú"
 
 #: documentation/documentationview.cpp:69
-#, fuzzy, kde-format
-#| msgid "Back"
+#, kde-format
 msgctxt "@action go back"
 msgid "Back"
-msgstr "Siar"
+msgstr ""
 
 #: documentation/documentationview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Forward"
+#, kde-format
 msgctxt "@action go forward"
 msgid "Forward"
-msgstr "Ar Aghaidh"
+msgstr ""
 
 #: documentation/documentationview.cpp:79
-#, fuzzy, kde-format
-#| msgid "Home"
+#, kde-format
 msgctxt "@action go to start page"
 msgid "Home"
-msgstr "Baile"
+msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:585
 #: vcs/dvcs/ui/branchmanager.ui:143
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Cuardaigh"
+msgstr ""
 
 #: documentation/documentationview.cpp:111
 #, kde-format
@@ -570,11 +538,10 @@ msgid "Find in text of current documentation page"
 msgstr ""
 
 #: interfaces/contextmenuextension.cpp:133
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
-msgstr "Dífhabhtaigh"
+msgstr ""
 
 #: interfaces/contextmenuextension.cpp:134
 #, kde-format
@@ -602,10 +569,9 @@ msgid ""
 msgstr ""
 
 #: language/assistant/renameaction.cpp:69
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgid "Rename \"%1\" to \"%2\""
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #: language/assistant/renameaction.cpp:109
 #: language/assistant/renamefileaction.cpp:77
@@ -617,10 +583,9 @@ msgid "Failed to apply changes: %1"
 msgstr ""
 
 #: language/assistant/renameassistant.cpp:108
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgid "Rename"
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #: language/assistant/renamefileaction.cpp:50
 #, kde-format
@@ -628,10 +593,9 @@ msgid "Rename file from \"%1\" to \"%2\"."
 msgstr ""
 
 #: language/backgroundparser/backgroundparser.cpp:309
-#, fuzzy, kde-format
-#| msgid "Kind: %1 "
+#, kde-format
 msgid "Parsing: %1"
-msgstr "Cineál: %1 "
+msgstr ""
 
 #: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
@@ -677,9 +641,6 @@ msgid "Process 1 file in %2"
 msgid_plural "Process %1 files in %2"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: language/classmodel/allclassesfolder.cpp:22
 #, kde-format
@@ -697,10 +658,9 @@ msgid "Derived classes"
 msgstr ""
 
 #: language/classmodel/projectfolder.cpp:18
-#, fuzzy, kde-format
-#| msgid "Loading Project %1"
+#, kde-format
 msgid "Classes in project %1"
-msgstr "Tionscadal %1 á Luchtú"
+msgstr ""
 
 #: language/codecompletion/codecompletionitem.cpp:126
 #, kde-format
@@ -708,11 +668,10 @@ msgid "not implemented"
 msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:91
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
@@ -725,11 +684,10 @@ msgid "Declaration is located in non-writable file %1."
 msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:296
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:300
 #, kde-format
@@ -738,11 +696,10 @@ msgid "Uses"
 msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:302
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
-msgstr "Fógra"
+msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:309
 #, kde-format
@@ -751,19 +708,17 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename"
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, newNameLabel)
 #: language/codegen/basicrefactoring.ui:22
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&New name:"
-msgstr "Ainm:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
@@ -775,11 +730,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
@@ -882,16 +836,14 @@ msgid "Import %1 as %2"
 msgstr ""
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgid "Import %1"
-msgstr "Iompórtáil"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgid "lost declaration"
-msgstr "Fógra"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
@@ -909,22 +861,19 @@ msgid " :[value-dependent]"
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
-#, fuzzy, kde-format
-#| msgid "Namespace"
+#, kde-format
 msgid "namespace %1 "
-msgstr "Ainmspás"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
-#, fuzzy, kde-format
-#| msgid "enumerator "
+#, kde-format
 msgid "enumeration %1 "
-msgstr "áiritheoir "
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
-#, fuzzy, kde-format
-#| msgid "( resolved forward-declaration: "
+#, kde-format
 msgid "(resolved forward-declaration: "
-msgstr "( fógra-ar-aghaidh réitithe: "
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
 #, kde-format
@@ -987,10 +936,9 @@ msgid "Deprecated"
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Status: %1 "
-msgstr "Stádas"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
 #, kde-format
@@ -1110,9 +1058,6 @@ msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
@@ -1120,15 +1065,11 @@ msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
-#, fuzzy, kde-format
-#| msgid "Loading Project %1"
+#, kde-format
 msgid "offset in parent: %1"
-msgstr "Tionscadal %1 á Luchtú"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
@@ -1221,16 +1162,14 @@ msgid "Problem"
 msgstr "Fadhb"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:114
-#, fuzzy, kde-format
-#| msgid "Problem in <b>%1</b>:<br/>"
+#, kde-format
 msgid "Problem in <i>%1</i>"
-msgstr "Fadhb i <b>%1</b>:<br/>"
+msgstr ""
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgid "Location: "
-msgstr "Suíomh"
+msgstr ""
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:156
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
@@ -1244,10 +1183,9 @@ msgid " in "
 msgstr ""
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:194
-#, fuzzy, kde-format
-#| msgid "configuring"
+#, kde-format
 msgid "Solution (%1)"
-msgstr "á chumrú"
+msgstr ""
 
 #: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
@@ -1272,12 +1210,10 @@ msgstr "Líne <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:211
 #: language/duchain/navigation/useswidget.cpp:218
-#, fuzzy, kde-format
-#| msgctxt "refers to a line in source code"
-#| msgid "Line <b>%1</b>:"
+#, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr "Líne <b>%1</b>:"
+msgstr ""
 
 #: language/duchain/navigation/useswidget.cpp:413
 #, kde-format
@@ -1313,9 +1249,6 @@ msgid "%2: 1 use"
 msgid_plural "%2: %1 uses"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: language/duchain/navigation/useswidget.cpp:518
 #: language/duchain/navigation/useswidget.cpp:559
@@ -1336,9 +1269,6 @@ msgid "1 use found"
 msgid_plural "%1 uses found"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: language/duchain/navigation/useswidget.cpp:642
 #, kde-format
@@ -1351,10 +1281,9 @@ msgid "Collapse all"
 msgstr "Laghdaigh uile"
 
 #: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
-#, fuzzy, kde-format
-#| msgid "Show warnings"
+#, kde-format
 msgid "Warning"
-msgstr "Taispeáin rabhaidh"
+msgstr ""
 
 #: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
 #, kde-format
@@ -1421,10 +1350,9 @@ msgstr ""
 
 #: language/duchain/types/containertypes.cpp:84
 #: language/duchain/types/containertypes.cpp:85
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "unknown"
-msgstr "Anaithnid"
+msgstr ""
 
 #: language/duchain/types/containertypes.cpp:87
 #, kde-format
@@ -1499,10 +1427,9 @@ msgid "Failed to specify program to start: %1"
 msgstr ""
 
 #: outputview/outputexecutejob.cpp:283
-#, fuzzy, kde-format
-#| msgid "*** Aborted ***"
+#, kde-format
 msgid "*** %1 ***"
-msgstr "*** Tobscortha ***"
+msgstr ""
 
 #: outputview/outputexecutejob.cpp:309
 #, kde-format
@@ -1563,11 +1490,10 @@ msgid ""
 msgstr ""
 
 #: project/abstractfilemanagerplugin.cpp:328
-#, fuzzy, kde-format
-#| msgid "Project import canceled."
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
-msgstr "Cealaíodh iompórtáil an tionscadail."
+msgstr ""
 
 #: project/abstractfilemanagerplugin.cpp:354
 #, kde-format
@@ -1661,18 +1587,16 @@ msgid "Path"
 msgstr "Conair"
 
 #: project/projectchangesmodel.cpp:317
-#, fuzzy, kde-format
-#| msgid "New branch"
+#, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
-msgstr "Brainse nua"
+msgstr ""
 
 #: project/projectchangesmodel.cpp:318
-#, fuzzy, kde-format
-#| msgid "<b>%1</b> (%2)"
+#, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
-msgstr "<b>%1</b> (%2)"
+msgstr ""
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
@@ -1681,18 +1605,16 @@ msgid "Enter the path to an item from the projects tree..."
 msgstr ""
 
 #: project/projectitemlineedit.cpp:160
-#, fuzzy, kde-format
-#| msgid "Select..."
+#, kde-format
 msgctxt "@action"
 msgid "Select..."
-msgstr "Roghnaigh..."
+msgstr ""
 
 #: project/projectitemlineedit.cpp:187
-#, fuzzy, kde-format
-#| msgid "Select an item..."
+#, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr "Roghnaigh mír..."
+msgstr ""
 
 #: project/projectitemlineedit.cpp:197
 #, kde-format
@@ -1764,15 +1686,11 @@ msgid "Failed writing to %1, probably the disk is full"
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:75
-#, fuzzy, kde-format
-#| msgid "Session crashed"
+#, kde-format
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
-msgstr[0] "Thuairteáil an seisiún"
-msgstr[1] "Thuairteáil an seisiún"
-msgstr[2] "Thuairteáil an seisiún"
-msgstr[3] "Thuairteáil an seisiún"
-msgstr[4] "Thuairteáil an seisiún"
+msgstr[0] ""
+msgstr[1] ""
 
 #: serialization/itemrepositoryregistry.cpp:77
 #, kde-format
@@ -1781,11 +1699,10 @@ msgid "Clear cache"
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:78
-#, fuzzy, kde-format
-#| msgid "Session crashed"
+#, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
-msgstr "Thuairteáil an seisiún"
+msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:79
 #, kde-format
@@ -1803,11 +1720,10 @@ msgid "Clear Cache"
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:82
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr "&Lean ar aghaidh"
+msgstr ""
 
 #: shell/areadisplay.cpp:44
 #, kde-format
@@ -1824,12 +1740,10 @@ msgid "Back to Code"
 msgstr ""
 
 #: shell/configdialog.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "@info:status"
-#| msgid "configure"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
-msgstr "cumraigh"
+msgstr ""
 
 #: shell/configdialog.cpp:84
 #, kde-format
@@ -1854,38 +1768,33 @@ msgid ""
 msgstr ""
 
 #: shell/core.cpp:191
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr "Breiseáin Luchtaithe"
+msgstr ""
 
 #: shell/debugcontroller.cpp:51
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@title:window"
 msgid "Variables"
-msgstr "Athróga"
+msgstr ""
 
 #: shell/debugcontroller.cpp:83
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgid "Debugger"
-msgstr "Dífhabhtóir:"
+msgstr ""
 
 #: shell/debugcontroller.cpp:113
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
-msgstr "Cruach Fhráma"
+msgstr ""
 
 #: shell/debugcontroller.cpp:118
-#, fuzzy, kde-format
-#| msgid "Breakpoints"
+#, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
-msgstr "Brisphointí"
+msgstr ""
 
 #: shell/debugcontroller.cpp:191
 #, kde-format
@@ -1903,18 +1812,16 @@ msgid "Restarts applications from the beginning."
 msgstr ""
 
 #: shell/debugcontroller.cpp:199
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@action"
 msgid "Interrupt"
-msgstr "Idirbhriseadh"
+msgstr ""
 
 #: shell/debugcontroller.cpp:200
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
-msgstr "Idirbhriseadh"
+msgstr ""
 
 #: shell/debugcontroller.cpp:201
 #, kde-format
@@ -1923,18 +1830,16 @@ msgid "Interrupts the debugged process or current debugger command."
 msgstr ""
 
 #: shell/debugcontroller.cpp:205
-#, fuzzy, kde-format
-#| msgid "Run to &Cursor"
+#, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
-msgstr "Rith go dtí an &Cúrsóir"
+msgstr ""
 
 #: shell/debugcontroller.cpp:206
-#, fuzzy, kde-format
-#| msgid "Run to cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
-msgstr "Rith go dtí an cúrsóir"
+msgstr ""
 
 #: shell/debugcontroller.cpp:207
 #, kde-format
@@ -1949,11 +1854,10 @@ msgid "Set E&xecution Position to Cursor"
 msgstr ""
 
 #: shell/debugcontroller.cpp:213
-#, fuzzy, kde-format
-#| msgid "Run to cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
-msgstr "Rith go dtí an cúrsóir"
+msgstr ""
 
 #: shell/debugcontroller.cpp:214
 #, kde-format
@@ -1962,11 +1866,10 @@ msgid "Continue execution from the current cursor position."
 msgstr ""
 
 #: shell/debugcontroller.cpp:218
-#, fuzzy, kde-format
-#| msgid "Step O&ut"
+#, kde-format
 msgctxt "@action"
 msgid "Step &Over"
-msgstr "C&éimnigh Amach"
+msgstr ""
 
 #: shell/debugcontroller.cpp:220
 #, kde-format
@@ -2002,11 +1905,10 @@ msgid "Steps over the next assembly instruction."
 msgstr ""
 
 #: shell/debugcontroller.cpp:236
-#, fuzzy, kde-format
-#| msgid "Step &Into"
+#, kde-format
 msgctxt "@action"
 msgid "Step &Into"
-msgstr "Céimnigh &Isteach"
+msgstr ""
 
 #: shell/debugcontroller.cpp:238
 #, kde-format
@@ -2041,11 +1943,10 @@ msgid "Steps into the next assembly instruction."
 msgstr ""
 
 #: shell/debugcontroller.cpp:252
-#, fuzzy, kde-format
-#| msgid "Step O&ut"
+#, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
-msgstr "C&éimnigh Amach"
+msgstr ""
 
 #: shell/debugcontroller.cpp:254
 #, kde-format
@@ -2067,11 +1968,10 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:269
-#, fuzzy, kde-format
-#| msgid "Toggle Breakpoint"
+#, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
-msgstr "Scoránaigh Brisphointe"
+msgstr ""
 
 #: shell/debugcontroller.cpp:270
 #, kde-format
@@ -2079,11 +1979,10 @@ msgid "Ctrl+Alt+B"
 msgstr ""
 
 #: shell/debugcontroller.cpp:271
-#, fuzzy, kde-format
-#| msgid "Toggle breakpoint"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
-msgstr "Scoránaigh brisphointe"
+msgstr ""
 
 #: shell/debugcontroller.cpp:272
 #, kde-format
@@ -2092,11 +1991,10 @@ msgid "Toggles the breakpoint at the current line in editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:276
-#, fuzzy, kde-format
-#| msgid "Show Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
-msgstr "Taispeáin Doiciméadú"
+msgstr ""
 
 #: shell/debugcontroller.cpp:277
 #, kde-format
@@ -2111,11 +2009,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:291
-#, fuzzy, kde-format
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Scrios an Seisiún Reatha..."
+msgstr ""
 
 #: shell/debugcontroller.cpp:497 shell/runcontroller.cpp:473
 #, kde-format
@@ -2138,11 +2035,10 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:504
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action"
 msgid "&Continue"
-msgstr "&Lean ar aghaidh"
+msgstr ""
 
 #: shell/debugcontroller.cpp:506
 #, kde-format
@@ -2166,18 +2062,16 @@ msgid "Debugger Toolbar"
 msgstr "Barra Uirlisí an Dífhabhtóra"
 
 #: shell/documentationcontroller.cpp:114
-#, fuzzy, kde-format
-#| msgid "Show Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Show Documentation"
-msgstr "Taispeáin Doiciméadú"
+msgstr ""
 
 #: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Documentation"
-msgstr "Doiciméadú"
+msgstr ""
 
 #: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:59
 #, kde-format
@@ -2185,11 +2079,10 @@ msgid "Untitled"
 msgstr "Gan Teideal"
 
 #: shell/documentcontroller.cpp:118
-#, fuzzy, kde-format
-#| msgid "Open File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open File"
-msgstr "Oscail Comhad"
+msgstr ""
 
 #: shell/documentcontroller.cpp:119
 #, kde-format
@@ -2222,18 +2115,16 @@ msgid "Do Not Open"
 msgstr ""
 
 #: shell/documentcontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid "&Open..."
+#, kde-format
 msgctxt "@action"
 msgid "&Open..."
-msgstr "&Oscail..."
+msgstr ""
 
 #: shell/documentcontroller.cpp:612
-#, fuzzy, kde-format
-#| msgid "Open file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
-msgstr "Oscail comhad"
+msgstr ""
 
 #: shell/documentcontroller.cpp:613
 #, kde-format
@@ -2242,31 +2133,24 @@ msgid "Opens a file for editing."
 msgstr ""
 
 #: shell/documentcontroller.cpp:617
-#, fuzzy, kde-format
-#| msgid ""
-#| "This lists files which you have opened recently, and allows you to easily "
-#| "open them again."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This lists files which you have opened recently, and allows you to easily "
 "open them again."
 msgstr ""
-"Taispeánann sé seo na comhaid a d'oscail tú le déanaí, agus ceadaíonn duit "
-"iad a oscailt arís gan stró."
 
 #: shell/documentcontroller.cpp:622
-#, fuzzy, kde-format
-#| msgid "Save Al&l"
+#, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
-msgstr "Sábháil Uile"
+msgstr ""
 
 #: shell/documentcontroller.cpp:624
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
-msgstr "Dún gach uile cháipéis oscailte"
+msgstr ""
 
 #: shell/documentcontroller.cpp:625
 #, kde-format
@@ -2276,18 +2160,16 @@ msgid ""
 msgstr ""
 
 #: shell/documentcontroller.cpp:631
-#, fuzzy, kde-format
-#| msgid "Reload All"
+#, kde-format
 msgctxt "@action"
 msgid "Reload All"
-msgstr "Athluchtaigh Uile"
+msgstr ""
 
 #: shell/documentcontroller.cpp:633
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
-msgstr "Dún gach uile cháipéis oscailte"
+msgstr ""
 
 #: shell/documentcontroller.cpp:634
 #, kde-format
@@ -2296,39 +2178,34 @@ msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 
 #: shell/documentcontroller.cpp:640
-#, fuzzy, kde-format
-#| msgid "&Close"
+#, kde-format
 msgctxt "@action"
 msgid "&Close"
-msgstr "&Dún"
+msgstr ""
 
 #: shell/documentcontroller.cpp:642
-#, fuzzy, kde-format
-#| msgid "Close All Files"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
-msgstr "Dún Gach Comhad"
+msgstr ""
 
 #: shell/documentcontroller.cpp:643
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
-msgstr "Dún an Cháipéis"
+msgstr ""
 
 #: shell/documentcontroller.cpp:648
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
-msgstr "Dún Uil&e"
+msgstr ""
 
 #: shell/documentcontroller.cpp:650
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
-msgstr "Dún gach uile cháipéis oscailte"
+msgstr ""
 
 #: shell/documentcontroller.cpp:651
 #, kde-format
@@ -2339,18 +2216,16 @@ msgid ""
 msgstr ""
 
 #: shell/documentcontroller.cpp:657
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
-msgstr "Dún Gac&h Rud Eile"
+msgstr ""
 
 #: shell/documentcontroller.cpp:659
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
-msgstr "Dún gach uile cháipéis oscailte"
+msgstr ""
 
 #: shell/documentcontroller.cpp:660
 #, kde-format
@@ -2367,11 +2242,10 @@ msgid "Show Annotate on Current Document"
 msgstr ""
 
 #: shell/documentcontroller.cpp:666
-#, fuzzy, kde-format
-#| msgid "Annotation..."
+#, kde-format
 msgctxt "@action"
 msgid "Annotate"
-msgstr "Anótáil..."
+msgstr ""
 
 #: shell/documentcontroller.cpp:1288
 #, kde-format
@@ -2381,24 +2255,21 @@ msgid ""
 msgstr ""
 
 #: shell/editorconfigpage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
-msgstr "Eagar"
+msgstr ""
 
 #: shell/editorconfigpage.cpp:54
-#, fuzzy, kde-format
-#| msgid "Configure Editor..."
+#, kde-format
 msgid "Configure Text Editor"
-msgstr "Cumraigh an tEagarthóir..."
+msgstr ""
 
 #: shell/environmentconfigurebutton.cpp:73
-#, fuzzy, kde-format
-#| msgid "Environment"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
-msgstr "Timpeallacht"
+msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:330
 #, kde-format
@@ -2427,18 +2298,16 @@ msgid "currently unset"
 msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:492
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "Teachtaireacht"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Launch Configurations"
+#, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
-msgstr "Tosaigh Cumraíochtaí"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:57
 #, kde-format
@@ -2459,18 +2328,16 @@ msgid ""
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Rename configuration"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
-msgstr "Athainmnigh cumraíocht"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Delete configuration"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
-msgstr "Scrios cumraíocht"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:252
 #, kde-format
@@ -2479,11 +2346,10 @@ msgid ""
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:253
-#, fuzzy, kde-format
-#| msgid "Unsaved Changes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
-msgstr "Athruithe gan sábháil"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:325
 #, kde-format
@@ -2504,51 +2370,45 @@ msgid "Editing %2: <b>%1</b>"
 msgstr "%2 á chur in eagar: <b>%1</b>"
 
 #: shell/launchconfigurationdialog.cpp:710
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
-msgstr "Ainm"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:713
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
 msgid "Type"
-msgstr "Cineál"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: shell/launchconfigurationdialog.ui:29
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr "Cuir Leis"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr "Bain"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
-msgstr "Dífhabhtóir:"
+msgstr ""
 
 #: shell/loadedpluginsdialog.cpp:279
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
-msgstr "Breiseáin Luchtaithe"
+msgstr ""
 
 #: shell/loadedpluginsdialog.cpp:285
 #, kde-format
@@ -2561,12 +2421,10 @@ msgid " (read only)"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:224
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:225
 #, kde-format
@@ -2575,19 +2433,16 @@ msgid "Lets you customize %1."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:228
-#, fuzzy, kde-format
-#| msgid "Configure Notifications..."
+#, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr "Cumraigh Fógairt..."
+msgstr ""
 
 #: shell/mainwindow_p.cpp:229
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Notifications"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
-msgstr "Cumraigh Fógairt"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:230
 #, kde-format
@@ -2596,11 +2451,10 @@ msgid "Shows a dialog that lets you configure notifications."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:234
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@action"
 msgid "Loaded Plugins"
-msgstr "Breiseáin Luchtaithe"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:235
 #, kde-format
@@ -2615,11 +2469,10 @@ msgid "Shows a dialog with information about all loaded plugins."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:239
-#, fuzzy, kde-format
-#| msgid "&Next Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Window"
-msgstr "A&n chéad fhuinneog eile"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:242
 #, kde-format
@@ -2634,11 +2487,10 @@ msgid "Switches to the next window."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:247
-#, fuzzy, kde-format
-#| msgid "&Previous Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
-msgstr "An &fhuinneog roimhe seo"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:250
 #, kde-format
@@ -2665,19 +2517,16 @@ msgid "Jump to Previous Outputmark"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:268
-#, fuzzy, kde-format
-#| msgid "Split View &Top/Bottom"
+#, kde-format
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
-msgstr "Scoilt an tAmharc &Barr/Bun"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:271
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Split Horizontal"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
-msgstr "Roinn go Cothrománach"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:272
 #, kde-format
@@ -2686,19 +2535,16 @@ msgid "Splits the current view horizontally."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:276
-#, fuzzy, kde-format
-#| msgid "Split View &Left/Right"
+#, kde-format
 msgctxt "@action"
 msgid "Split View &Left/Right"
-msgstr "Scoilt an tAmharc C&lé/Deas"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:279
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Split Vertical"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
-msgstr "Roinn go hIngearach"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:280
 #, kde-format
@@ -2707,18 +2553,16 @@ msgid "Splits the current view vertically."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:283
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr "An Chéad Amharc Uirlise Eile"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:286
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
-msgstr "An Chéad Amharc Uirlise Eile"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:287
 #, kde-format
@@ -2727,18 +2571,16 @@ msgid "Switches to the next split view."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:291
-#, fuzzy, kde-format
-#| msgid "Previous Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
-msgstr "Amharc Uirlise Roimhe Seo"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:294
-#, fuzzy, kde-format
-#| msgid "Previous Tool View"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
-msgstr "Amharc Uirlise Roimhe Seo"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:295
 #, kde-format
@@ -2747,26 +2589,22 @@ msgid "Switches to the previous split view."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:303
-#, fuzzy, kde-format
-#| msgid "&New"
+#, kde-format
 msgctxt "@action new file"
 msgid "&New"
-msgstr "&Nua"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:304
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
-msgstr "Nua"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:306
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "New File"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "New file"
-msgstr "Comhad Nua"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:307
 #, kde-format
@@ -2775,18 +2613,16 @@ msgid "Creates an empty file."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:312
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "Amhairc Uirlisí"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:314
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
-msgstr "Amhairc Uirlisí"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:315
 #, kde-format
@@ -2800,46 +2636,40 @@ msgid "&Window Color Scheme"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:354
-#, fuzzy, kde-format
-#| msgid "Split View Top/Bottom"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
-msgstr "Scoilt an tAmharc Barr/Bun"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:357
-#, fuzzy, kde-format
-#| msgid "Split View Left/Right"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
-msgstr "Scoilt an tAmharc Clé/Deas"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:361
-#, fuzzy, kde-format
-#| msgid "New File"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
-msgstr "Comhad Nua"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:367
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
-msgstr "Athluchtaigh"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:370
-#, fuzzy, kde-format
-#| msgid "Reload All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
-msgstr "Athluchtaigh Uile"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:410
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
-msgstr "Amhairc Uirlisí"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:433
 #, kde-format
@@ -2848,18 +2678,16 @@ msgid "Lock the Panel from Hiding"
 msgstr ""
 
 #: shell/openprojectdialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "Tionscadal %1"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:141
-#, fuzzy, kde-format
-#| msgid "Select the source"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
-msgstr "Roghnaigh an fhoinse"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:149
 #, kde-format
@@ -2869,24 +2697,21 @@ msgid ""
 msgstr ""
 
 #: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
-#, fuzzy, kde-format
-#| msgid "Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
-msgstr "Tionscadal"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:165
-#, fuzzy, kde-format
-#| msgid "Project information"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
-msgstr "Eolas faoin tionscadal"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:228
-#, fuzzy, kde-format
-#| msgid "open %1 as project"
+#, kde-format
 msgid "Open \"%1\" as project"
-msgstr "oscail %1 mar thionscadal"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:232
 #, kde-format
@@ -2894,11 +2719,10 @@ msgid "Selected URL is invalid"
 msgstr ""
 
 #: shell/openprojectdialog.cpp:277
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
-msgstr "Oscail Comhad Atá Ann"
+msgstr ""
 
 #: shell/partcontroller.cpp:228
 #, kde-format
@@ -2934,10 +2758,9 @@ msgid "Overwrite External Changes"
 msgstr ""
 
 #: shell/problem.cpp:40
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgid "Plugin"
-msgstr "Breiseáin Luchtaithe"
+msgstr ""
 
 #: shell/problem.cpp:80
 #, kde-format
@@ -2956,95 +2779,82 @@ msgid "Hint"
 msgstr ""
 
 #: shell/problem.cpp:168
-#, fuzzy, kde-format
-#| msgid "Show warnings"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Warning"
-msgstr "Taispeáin rabhaidh"
+msgstr ""
 
 #: shell/problem.cpp:169
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Error"
-msgstr "Earráid"
+msgstr ""
 
 #: shell/problemmodel.cpp:37
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
-msgstr "Dún gach uile cháipéis oscailte"
+msgstr ""
 
 #: shell/problemmodel.cpp:323
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
-msgstr "Foinse"
+msgstr ""
 
 #: shell/problemmodel.cpp:325
-#, fuzzy, kde-format
-#| msgid "Problem"
+#, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
-msgstr "Fadhb"
+msgstr ""
 
 #: shell/problemmodel.cpp:327
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
-msgstr "Comhad"
+msgstr ""
 
 #: shell/problemmodel.cpp:329
-#, fuzzy, kde-format
-#| msgid "Line"
+#, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
-msgstr "Líne"
+msgstr ""
 
 #: shell/problemmodel.cpp:331
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
-msgstr "Colún"
+msgstr ""
 
 #: shell/progresswidget/progressdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Cancel this operation."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr "Cealaigh an oibríocht seo."
+msgstr ""
 
 #: shell/progresswidget/progressmanager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Aborting..."
+#, kde-format
 msgctxt "@info"
 msgid "Aborting..."
-msgstr "Á Thobscor..."
+msgstr ""
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Open detailed progress dialog"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
-msgstr "Oscail an dialóg mhionsonraithe dul chun cinn"
+msgstr ""
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
-#, fuzzy, kde-format
-#| msgid "Hide detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
-msgstr "Folaigh an fhuinneog mhionsonraithe dul chun cinn"
+msgstr ""
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
-#, fuzzy, kde-format
-#| msgid "Show detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
-msgstr "Taispeáin an fhuinneog mhionsonraithe dul chun cinn"
+msgstr ""
 
 #: shell/project.cpp:99
 #, kde-format
@@ -3094,10 +2904,9 @@ msgid ""
 msgstr ""
 
 #: shell/project.cpp:402
-#, fuzzy, kde-format
-#| msgid "Could not open file '%1'"
+#, kde-format
 msgid "Could not open project."
-msgstr "Níorbh fhéidir comhad '%1' a oscailt"
+msgstr ""
 
 #: shell/project.cpp:560
 #, kde-format
@@ -3107,11 +2916,10 @@ msgid ""
 msgstr ""
 
 #: shell/projectcontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
-msgstr "Cumraigh Tionscadal %1"
+msgstr ""
 
 #: shell/projectcontroller.cpp:300
 #, kde-format
@@ -3124,11 +2932,10 @@ msgid "Already opening %1, not opening again"
 msgstr ""
 
 #: shell/projectcontroller.cpp:467
-#, fuzzy, kde-format
-#| msgid "Override"
+#, kde-format
 msgctxt "@action:button"
 msgid "Override"
-msgstr "Sáraigh"
+msgstr ""
 
 #: shell/projectcontroller.cpp:468
 #, kde-format
@@ -3138,11 +2945,10 @@ msgid ""
 msgstr ""
 
 #: shell/projectcontroller.cpp:469
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
-msgstr "Oscail Comhad Atá Ann"
+msgstr ""
 
 #: shell/projectcontroller.cpp:470
 #, kde-format
@@ -3151,11 +2957,10 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 
 #: shell/projectcontroller.cpp:472
-#, fuzzy, kde-format
-#| msgid "Could not open file '%1'"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
-msgstr "Níorbh fhéidir comhad '%1' a oscailt"
+msgstr ""
 
 #: shell/projectcontroller.cpp:475
 #, kde-format
@@ -3193,12 +2998,10 @@ msgid "Open / Import Project..."
 msgstr "Oscail / Iompórtáil Tionscadal..."
 
 #: shell/projectcontroller.cpp:553
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open / Import Project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
-msgstr "Oscail / Iompórtáil Tionscadal"
+msgstr ""
 
 #: shell/projectcontroller.cpp:554
 #, kde-format
@@ -3218,12 +3021,10 @@ msgid "Fetch Project..."
 msgstr "Faigh Tionscadal..."
 
 #: shell/projectcontroller.cpp:567
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Fetch Project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
-msgstr "Faigh Tionscadal"
+msgstr ""
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3245,41 +3046,34 @@ msgid "Closes all currently selected projects"
 msgstr "Dún gach tionscadal atá roghnaithe faoi láthair"
 
 #: shell/projectcontroller.cpp:591
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr "Oscail Cumraíocht..."
+msgstr ""
 
 #: shell/projectcontroller.cpp:597
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr "Cumraigh Tionscadal %1"
+msgstr ""
 
 #: shell/projectcontroller.cpp:598
-#, fuzzy, kde-format
-#| msgid "Commit..."
+#, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "Cuir i bhfeidhm..."
+msgstr ""
 
 #: shell/projectcontroller.cpp:609
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open recent project"
+#, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
-msgstr "Oscail tionscadal le déanaí"
+msgstr ""
 
 #: shell/projectcontroller.cpp:610
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open recent project"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
-msgstr "Oscail tionscadal le déanaí"
+msgstr ""
 
 #: shell/projectcontroller.cpp:615
 #, kde-format
@@ -3317,11 +3111,10 @@ msgid "Add project to current session"
 msgstr ""
 
 #: shell/projectcontroller.cpp:860
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr "Athainmnigh Seisiún"
+msgstr ""
 
 #: shell/projectcontroller.cpp:921
 #, kde-format
@@ -3329,12 +3122,10 @@ msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 
 #: shell/projectcontroller.cpp:1225
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open recent project"
+#, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr "Oscail tionscadal le déanaí"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
@@ -3346,12 +3137,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Project Management"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Project manager:"
-msgstr "Bainistíocht Tionscadal"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
@@ -3363,18 +3152,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "Ainm:"
+msgstr ""
 
 #: shell/projectsourcepage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Format Files"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
-msgstr "Formáidigh Comhaid"
+msgstr ""
 
 #: shell/projectsourcepage.cpp:179
 #, kde-format
@@ -3405,72 +3192,63 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Source:"
-msgstr "Foinse"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
-#, fuzzy, kde-format
-#| msgid "Destination"
+#, kde-format
 msgctxt "@title:group"
 msgid "Destination"
-msgstr "Sprioc"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
-#, fuzzy, kde-format
-#| msgid "directory"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
-msgstr "comhadlann"
+msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
-#, fuzzy, kde-format
-#| msgid "Select the project"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr "Roghnaigh an tionscadal"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:group"
 msgid "Source"
-msgstr "Foinse"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, get)
 #: shell/projectsourcepage.ui:105
-#, fuzzy, kde-format
-#| msgid "Get"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get"
-msgstr "Faigh"
+msgstr ""
 
 #: shell/runcontroller.cpp:89
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "launch mode"
 msgid "Debug"
-msgstr "Dífhabhtaigh"
+msgstr ""
 
 #: shell/runcontroller.cpp:98
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "launch mode"
 msgid "Profile"
-msgstr "Próifíl"
+msgstr ""
 
 #: shell/runcontroller.cpp:107
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "launch mode"
 msgid "Execute"
-msgstr "Rith"
+msgstr ""
 
 #: shell/runcontroller.cpp:438
 #, kde-format
@@ -3478,12 +3256,10 @@ msgid "The current launch configuration does not support the '%1' mode."
 msgstr ""
 
 #: shell/runcontroller.cpp:458
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr "Cumraigh %1"
+msgstr ""
 
 #: shell/runcontroller.cpp:461
 #, kde-format
@@ -3500,18 +3276,16 @@ msgid ""
 msgstr ""
 
 #: shell/runcontroller.cpp:465
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
-msgstr "Rith"
+msgstr ""
 
 #: shell/runcontroller.cpp:466
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
-msgstr "Rith"
+msgstr ""
 
 #: shell/runcontroller.cpp:468
 #, kde-format
@@ -3528,11 +3302,10 @@ msgid ""
 msgstr ""
 
 #: shell/runcontroller.cpp:475
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
-msgstr "Dífhabhtaigh"
+msgstr ""
 
 #. i18n("Profile Launch"), this);
 #. profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
@@ -3588,18 +3361,16 @@ msgid "List of jobs that can be stopped individually."
 msgstr ""
 
 #: shell/runcontroller.cpp:508
-#, fuzzy, kde-format
-#| msgid "Launch Configurations"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
-msgstr "Tosaigh Cumraíochtaí"
+msgstr ""
 
 #: shell/runcontroller.cpp:509
-#, fuzzy, kde-format
-#| msgid "Launch Configurations"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
-msgstr "Tosaigh Cumraíochtaí"
+msgstr ""
 
 #: shell/runcontroller.cpp:510
 #, kde-format
@@ -3608,11 +3379,10 @@ msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 
 #: shell/runcontroller.cpp:623
-#, fuzzy, kde-format
-#| msgid "<%1> Unnamed job"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
-msgstr "<%1> Jab gan ainm"
+msgstr ""
 
 #: shell/runcontroller.cpp:1006
 #, kde-format
@@ -3620,11 +3390,10 @@ msgid "New %1 Launcher"
 msgstr ""
 
 #: shell/runcontroller.cpp:1043
-#, fuzzy, kde-format
-#| msgid "%1 As..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
-msgstr "%1 Mar..."
+msgstr ""
 
 #: shell/runtimecontroller.cpp:27
 #, kde-format
@@ -3642,11 +3411,10 @@ msgid "Runtime: %1"
 msgstr ""
 
 #: shell/savedialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Save Modified Files?"
+#, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
-msgstr "Sábháil Comhaid Athraithe?"
+msgstr ""
 
 #: shell/savedialog.cpp:52
 #, kde-format
@@ -3654,11 +3422,10 @@ msgid "The following files have been modified. Save them?"
 msgstr ""
 
 #: shell/savedialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Save &None"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
-msgstr "&Ná Sábháil Dada"
+msgstr ""
 
 #: shell/savedialog.cpp:71
 #, kde-format
@@ -3672,26 +3439,22 @@ msgid "(no projects)"
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Delete session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
-msgstr "Scrios seisiún"
+msgstr ""
 
 #: shell/sessionchooserdialog.cpp:49
-#, fuzzy, kde-format
-#| msgid "Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
-msgstr "Seisiún"
+msgstr ""
 
 #: shell/sessionchooserdialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "Run"
+#, kde-format
 msgctxt "@action:button"
 msgid "Run"
-msgstr "Rith"
+msgstr ""
 
 #: shell/sessionchooserdialog.cpp:94
 #, kde-format
@@ -3707,12 +3470,10 @@ msgid "Running"
 msgstr "Ag Rith"
 
 #: shell/sessionchooserdialog.cpp:191
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Cannot Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
-msgstr "Níorbh fhéidir an seisiún a scriosadh"
+msgstr ""
 
 #: shell/sessionchooserdialog.cpp:192
 #, kde-format
@@ -3735,27 +3496,22 @@ msgid ""
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:204
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Delete Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
-msgstr "Scrios Seisiún"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "Tosaigh Seisiún Nua"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "New Session Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr "Ainm Nua ar an Seisiún"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3765,17 +3521,15 @@ msgid ""
 msgstr ""
 
 #: shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
-msgstr "Athainmnigh Seisiún"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:260
-#, fuzzy, kde-format
-#| msgid "Session crashed"
+#, kde-format
 msgid "Session Manager"
-msgstr "Thuairteáil an seisiún"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:272
 #, kde-format
@@ -3790,12 +3544,10 @@ msgid "Start a new KDevelop instance with an empty session"
 msgstr ""
 
 #: shell/sessioncontroller.cpp:281
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Tosaigh Seisiún Nua"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:282
 #, kde-format
@@ -3804,25 +3556,22 @@ msgid "Start a new KDevelop instance with an empty named session"
 msgstr ""
 
 #: shell/sessioncontroller.cpp:288
-#, fuzzy, kde-format
-#| msgid "Rename Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "Athainmnigh an Seisiún Reatha..."
+msgstr ""
 
 #: shell/sessioncontroller.cpp:294
-#, fuzzy, kde-format
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
-msgstr "Scrios an Seisiún Reatha..."
+msgstr ""
 
 #: shell/sessioncontroller.cpp:298
-#, fuzzy, kde-format
-#| msgid "Quit"
+#, kde-format
 msgctxt "@action"
 msgid "Quit"
-msgstr "Scoir"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:518
 #, kde-format
@@ -3830,39 +3579,34 @@ msgid "Copy of %1"
 msgstr ""
 
 #: shell/sessioncontroller.cpp:608
-#, fuzzy, kde-format
-#| msgid "Identity"
+#, kde-format
 msgctxt "@title:column"
 msgid "Identity"
-msgstr "Aitheantas"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid "Contents"
+#, kde-format
 msgctxt "@title:column"
 msgid "Contents"
-msgstr "Clár Ábhair"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:610
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@title:column"
 msgid "State"
-msgstr "Staid"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:611
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr "Ainm"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:617
-#, fuzzy, kde-format
-#| msgid "Filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
-msgstr "Scagaire:"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:649
 #, kde-format
@@ -3919,12 +3663,10 @@ msgid "Retry Startup"
 msgstr ""
 
 #: shell/sessionlock.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Choose another session"
+#, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
-msgstr "Roghnaigh seisiún eile"
+msgstr ""
 
 #: shell/sessionlock.cpp:202
 #, kde-format
@@ -3944,11 +3686,9 @@ msgid "Analyzers"
 msgstr ""
 
 #: shell/settings/analyzerspreferences.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Analyzers"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #: shell/settings/bgpreferences.cpp:73
 #, kde-format
@@ -3982,19 +3722,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
-#, fuzzy, kde-format
-#| msgid "Delay"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
-msgstr "Moill"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
-#, fuzzy, kde-format
-#| msgid " ms"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
-msgstr " ms"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
@@ -4021,11 +3759,9 @@ msgid " threads"
 msgstr ""
 
 #: shell/settings/documentationpreferences.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Notifications"
+#, kde-format
 msgid "Configure Documentation"
-msgstr "Cumraigh Fógairt"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:42
@@ -4038,32 +3774,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "Réamhamharc"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
 #: shell/settings/editstyledialog.ui:69
 #: shell/sourceformatterselectionedit.ui:112
-#, fuzzy, kde-format
-#| msgid "Preview:"
+#, kde-format
 msgctxt "@label"
 msgid "Preview:"
-msgstr "Réamhamharc:"
+msgstr ""
 
 #: shell/settings/environmentpreferences.cpp:79
-#, fuzzy, kde-format
-#| msgid "Environment"
+#, kde-format
 msgid "Environment"
-msgstr "Timpeallacht"
+msgstr ""
 
 #: shell/settings/environmentpreferences.cpp:84
-#, fuzzy, kde-format
-#| msgid "Environment"
+#, kde-format
 msgid "Configure Environment Variables"
-msgstr "Timpeallacht"
+msgstr ""
 
 #: shell/settings/environmentprofilelistmodel.cpp:48
 #, kde-format
@@ -4071,32 +3803,28 @@ msgid "%1 (default profile)"
 msgstr ""
 
 #: shell/settings/environmentprofilemodel.cpp:91
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@title:column"
 msgid "Variable"
-msgstr "Athróg"
+msgstr ""
 
 #: shell/settings/environmentprofilemodel.cpp:93
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
-msgstr "Luach"
+msgstr ""
 
 #: shell/settings/environmentwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "&Remove all"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr "&Bain uile"
+msgstr ""
 
 #: shell/settings/environmentwidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Environment"
+#, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Environment Profile"
-msgstr "Timpeallacht"
+msgstr ""
 
 #: shell/settings/environmentwidget.cpp:233
 #, kde-format
@@ -4106,35 +3834,31 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
-#, fuzzy, kde-format
-#| msgid "Environment"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr "Timpeallacht"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
-#, fuzzy, kde-format
-#| msgid "Close All Files"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "Dún Gach Comhad"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Close All Files"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "Dún Gach Comhad"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
-#, fuzzy, kde-format
-#| msgid "&Remove all"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove profile"
-msgstr "&Bain uile"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
 #: shell/settings/environmentwidget.ui:69
@@ -4145,11 +3869,10 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
-#, fuzzy, kde-format
-#| msgid "&Remove all"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
-msgstr "&Bain uile"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
 #: shell/settings/environmentwidget.ui:130
@@ -4159,23 +3882,17 @@ msgid "Batch edit mode"
 msgstr ""
 
 #: shell/settings/languagepreferences.cpp:34
-#, fuzzy, kde-format
-#| msgid " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
-msgstr[0] " comhad"
-msgstr[1] " comhad"
-msgstr[2] " comhad"
-msgstr[3] " comhad"
-msgstr[4] " comhad"
+msgstr[0] ""
+msgstr[1] ""
 
 #: shell/settings/languagepreferences.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Language Support"
+#, kde-format
 msgid "Language Support"
-msgstr "Tacaíocht Teanga"
+msgstr ""
 
 #: shell/settings/languagepreferences.cpp:87
 #, kde-format
@@ -4184,11 +3901,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr "Comhlánú Cóid"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
@@ -4243,19 +3959,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
-msgstr "Comhlánú Cóid"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
-msgstr "Riamh"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:106
@@ -4266,11 +3980,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
-#, fuzzy, kde-format
-#| msgid "Always"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr "I gcónaí"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
@@ -4324,10 +4037,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
-#, fuzzy, kde-format
-#| msgid "Global"
+#, kde-format
 msgid "Global colors:"
-msgstr "Comhchoiteann"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4390,11 +4102,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
-#, fuzzy, kde-format
-#| msgid "( resolved forward-declaration: "
+#, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr "( fógra-ar-aghaidh réitithe: "
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
@@ -4412,11 +4123,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
-msgstr "Earráid"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:314
@@ -4456,11 +4166,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
-#, fuzzy, kde-format
-#| msgid "Project Parsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr "Parsáil an Tionscadail"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4593,17 +4302,14 @@ msgid "Other"
 msgstr "Eile"
 
 #: shell/settings/pluginpreferences.h:27
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgid "Plugins"
-msgstr "Breiseáin Luchtaithe"
+msgstr ""
 
 #: shell/settings/pluginpreferences.h:28
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Plugins"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:11
@@ -4646,16 +4352,14 @@ msgid ""
 msgstr ""
 
 #: shell/settings/projectpreferences.cpp:44
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgid "Projects"
-msgstr "Tionscadal %1"
+msgstr ""
 
 #: shell/settings/projectpreferences.cpp:49
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgid "Configure Projects"
-msgstr "Cumraigh Tionscadal %1"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
@@ -4668,11 +4372,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Projects base directory:"
-msgstr "Comhadlann Fhoinse:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:47
@@ -4708,18 +4411,15 @@ msgid "Runtimes"
 msgstr ""
 
 #: shell/settings/runtimespreferences.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Runtimes"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgid "Source Formatter"
-msgstr "Comhadlann Fhoinse:"
+msgstr ""
 
 #: shell/settings/sourceformattersettings.cpp:80
 #, kde-format
@@ -4728,11 +4428,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgctxt "@title:group"
 msgid "General"
-msgstr "Ginearálta"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:26
@@ -4767,11 +4466,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Format Files"
+#, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr "Formáidigh Comhaid"
+msgstr ""
 
 #: shell/settings/templateconfig.cpp:39
 #, kde-format
@@ -4779,19 +4477,15 @@ msgid "Templates"
 msgstr ""
 
 #: shell/settings/templateconfig.cpp:44
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Templates"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #: shell/settings/templatepage.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
@@ -4802,12 +4496,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"
-msgstr "Cumraigh %1"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
 #: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:46
@@ -4856,37 +4548,32 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
-#, fuzzy, kde-format
-#| msgid "Left Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr "Duga Ar Chlé"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr "Bun"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
-#, fuzzy, kde-format
-#| msgid "Right Dock"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr "Duga Ar Dheis"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
-#, fuzzy, kde-format
-#| msgid "Tabbed Browsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
-msgstr "Brabhsáil le Cluaisíní"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
@@ -4929,11 +4616,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
-#, fuzzy, kde-format
-#| msgid "Show tabs"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
-msgstr "Taispeáin cluaisíní"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:129
@@ -4975,31 +4661,27 @@ msgid "Color widgets based on the project affiliation"
 msgstr ""
 
 #: shell/settings/uipreferences.cpp:56
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgid "Configure User Interface"
-msgstr "Comhéadan Úsáideora"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:226
-#, fuzzy, kde-format
-#| msgid "&Reformat Source"
+#, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr "Athfho&rmáidigh Foinse"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:234
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
@@ -5028,11 +4710,10 @@ msgid ""
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:619
-#, fuzzy, kde-format
-#| msgid "Reformat source using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr "Athfhormáidigh foinse le hAStyle"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:622
 #, kde-format
@@ -5057,11 +4738,10 @@ msgid ""
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:630
-#, fuzzy, kde-format
-#| msgid "Reformat source using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr "Athfhormáidigh foinse le hAStyle"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:632
 #, kde-format
@@ -5072,11 +4752,10 @@ msgid ""
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:867
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:868
 #, kde-format
@@ -5084,34 +4763,27 @@ msgid "Reformat all files in the selected folder?"
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:872
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: shell/sourceformatterjob.cpp:36
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgid "Reformatting"
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: shell/sourceformatterjob.cpp:47
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgid "Reformat Files"
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: shell/sourceformatterjob.cpp:58
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] "Athfhormáidigh Líne"
-msgstr[1] "Athfhormáidigh Líne"
-msgstr[2] "Athfhormáidigh Líne"
-msgstr[3] "Athfhormáidigh Líne"
-msgstr[4] "Athfhormáidigh Líne"
+msgstr[0] ""
+msgstr[1] ""
 
 #: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
@@ -5122,11 +4794,10 @@ msgid ""
 msgstr ""
 
 #: shell/sourceformatterselectionedit.cpp:1079
-#, fuzzy, kde-format
-#| msgid "New Style"
+#, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "Stíl Nua"
+msgstr ""
 
 #: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
@@ -5135,11 +4806,10 @@ msgstr "%1 Nua"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
-#, fuzzy, kde-format
-#| msgid "Language:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Language:"
-msgstr "Teanga:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:44
@@ -5167,11 +4837,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
-msgstr "&Formáid"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
 #: shell/sourceformatterselectionedit.ui:152
@@ -5181,38 +4850,34 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
-#, fuzzy, kde-format
-#| msgid "Style:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
-msgstr "Stíl:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:201
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button"
 msgid "New"
-msgstr "Nua"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
 #: shell/sourceformatterselectionedit.ui:208
-#, fuzzy, kde-format
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Eagar..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
 #. i18n: ectx: property (text), widget (QPushButton, deleteButton)
 #: shell/sourceformatterselectionedit.ui:215
 #: shell/workingsets/workingsettooltipwidget.cpp:94
 #: vcs/dvcs/ui/branchmanager.ui:44
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action:button"
 msgid "Delete"
-msgstr "Scrios"
+msgstr ""
 
 #: shell/textdocument.cpp:405
 #, kde-format
@@ -5234,32 +4899,28 @@ msgid " Line: %1 Col: %2 "
 msgstr " Líne: %1 Col: %2 "
 
 #: shell/uicontroller.cpp:81
-#, fuzzy, kde-format
-#| msgid "Code"
+#, kde-format
 msgctxt "area"
 msgid "Code"
-msgstr "Cód"
+msgstr ""
 
 #: shell/uicontroller.cpp:92
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "area"
 msgid "Debug"
-msgstr "Dífhabhtaigh"
+msgstr ""
 
 #: shell/uicontroller.cpp:101
-#, fuzzy, kde-format
-#| msgid "Review"
+#, kde-format
 msgctxt "area"
 msgid "Review"
-msgstr "Athbhreithnigh"
+msgstr ""
 
 #: shell/uicontroller.cpp:500
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
-msgstr "An Chéad Amharc Uirlise Eile"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:75
 #, kde-format
@@ -5278,18 +4939,16 @@ msgid "Remove this working set. The contained documents are not affected."
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:121
-#, fuzzy, kde-format
-#| msgid "Documents:"
+#, kde-format
 msgctxt "@label"
 msgid "Documents:"
-msgstr "Cáipéisí:"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:129
-#, fuzzy, kde-format
-#| msgid "Add All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add All"
-msgstr "Cuir Uile Leis"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:130
 #, kde-format
@@ -5300,11 +4959,10 @@ msgid ""
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
-msgstr "Bain Uile"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:138
 #, kde-format
@@ -5339,11 +4997,10 @@ msgid "Stash"
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:320
-#, fuzzy, kde-format
-#| msgid "Load"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load"
-msgstr "Luchtaigh"
+msgstr ""
 
 #: sublime/container.cpp:345
 #, kde-format
@@ -5351,11 +5008,10 @@ msgid "Line: 00000 Col: 000"
 msgstr "Líne: 00000 Col: 000"
 
 #: sublime/container.cpp:379
-#, fuzzy, kde-format
-#| msgid "Close all open documents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
-msgstr "Dún gach uile cháipéis oscailte"
+msgstr ""
 
 #: sublime/container.cpp:391
 #, kde-format
@@ -5364,32 +5020,28 @@ msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
 #: sublime/container.cpp:772
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #: sublime/container.cpp:775
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
-msgstr "Dún"
+msgstr ""
 
 #: sublime/container.cpp:777
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr "Dún Gac&h Rud Eile"
+msgstr ""
 
 #: sublime/container.cpp:779
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr "Dún Uil&e"
+msgstr ""
 
 #: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
@@ -5404,11 +5056,10 @@ msgid "Right click to add new tool views."
 msgstr ""
 
 #: sublime/idealcontroller.cpp:88
-#, fuzzy, kde-format
-#| msgid "Ru&nner Toolbar"
+#, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
-msgstr "Barra Uirlisí an Fheidh&mitheora"
+msgstr ""
 
 #: sublime/idealcontroller.cpp:381
 #, kde-format
@@ -5426,35 +5077,28 @@ msgid "Bottom Button Bar"
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:121
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
-msgstr "Amhairc Uirlisí"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:125
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Left"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
-msgstr "Ar Chlé"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:126
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
-msgstr "Bun"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Right"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
-msgstr "Ar Dheis"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:128
 #, kde-format
@@ -5475,11 +5119,10 @@ msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:154
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
-msgstr "An Chéad Amharc Uirlise Eile"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:166
 #, kde-format
@@ -5488,11 +5131,10 @@ msgid "Assign Shortcut For '%1' Tool View"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:49
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
-msgstr "Doiciméadú"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:51
 #, kde-format
@@ -5501,18 +5143,16 @@ msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:60
-#, fuzzy, kde-format
-#| msgid "Left Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr "Duga Ar Chlé"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:64
-#, fuzzy, kde-format
-#| msgid "Right Dock"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr "Duga Ar Dheis"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:68
 #, kde-format
@@ -5533,45 +5173,34 @@ msgid "Hide/Restore Docks"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:82
-#, fuzzy, kde-format
-#| msgid "Next Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
-msgstr "An Chéad Amharc Uirlise Eile"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:88
-#, fuzzy, kde-format
-#| msgid "Previous Tool View"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr "Amharc Uirlise Roimhe Seo"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:94
-#, fuzzy, kde-format
-#| msgid "Tool Views"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr "Amhairc Uirlisí"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:644
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action"
 msgid "Close"
-msgstr "Dún"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:645
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "With message:\n"
-#| " %1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
 msgstr ""
-"\n"
-"Le teachtaireacht:\n"
-" %1"
 
 #: util/duchainify/main.cpp:268
 #, kde-format
@@ -5589,10 +5218,9 @@ msgid "(c) 2009 David Nolden"
 msgstr "© 2009 David Nolden"
 
 #: util/duchainify/main.cpp:276
-#, fuzzy, kde-format
-#| msgid "directory"
+#, kde-format
 msgid "file or directory"
-msgstr "comhadlann"
+msgstr ""
 
 #: util/duchainify/main.cpp:279
 #, kde-format
@@ -5671,11 +5299,10 @@ msgid "Recursively dump errors from imported contexts."
 msgstr ""
 
 #: util/environmentselectionmodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "@title:column"
 msgid "Profile"
-msgstr "Próifíl"
+msgstr ""
 
 #: util/environmentselectionmodel.cpp:51
 #, kde-format
@@ -5713,19 +5340,16 @@ msgid "Some Files are Write-Protected"
 msgstr ""
 
 #: util/shellutils.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Start New Session"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "Tosaigh Seisiún Nua"
+msgstr ""
 
 #: util/shellutils.cpp:180
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
-msgstr "Déan neamhaird de"
+msgstr ""
 
 #: util/shellutils.cpp:192
 #, kde-format
@@ -5823,11 +5447,9 @@ msgid "Command exited with value %1."
 msgstr ""
 
 #: vcs/dvcs/dvcsjob.cpp:370
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "error"
+#, kde-format
 msgid "error: %1"
-msgstr "earráid"
+msgstr ""
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -5836,11 +5458,10 @@ msgid "Branches..."
 msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:40
-#, fuzzy, kde-format
-#| msgid "Session crashed"
+#, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
-msgstr "Thuairteáil an seisiún"
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:114
 #, kde-format
@@ -5849,18 +5470,16 @@ msgid ""
 msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
-#, fuzzy, kde-format
-#| msgid "New branch"
+#, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
-msgstr "Brainse nua"
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
-#, fuzzy, kde-format
-#| msgid "Name of the new branch:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
-msgstr "Ainm an bhrainse nua:"
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:126
 #, kde-format
@@ -5877,10 +5496,9 @@ msgid ""
 msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:147
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
+#, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr "An bhfuil tú cinnte go dteastaíonn uait brainse '%1' a scriosadh?"
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
 #, kde-format
@@ -5905,24 +5523,21 @@ msgid "Could not create a patch for the current version."
 msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:269
-#, fuzzy, kde-format
-#| msgid "Unable to get difference."
+#, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
-msgstr "Ní féidir difríochtaí a fháil."
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:276
-#, fuzzy, kde-format
-#| msgid "There are no differences."
+#, kde-format
 msgid "There are no committed differences."
-msgstr "Níl aon difríochtaí ann."
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:277 vcs/vcspluginhelper.cpp:279
-#, fuzzy, kde-format
-#| msgid "VCS support"
+#, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
-msgstr "Tacaíocht VCS"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:31
@@ -5933,11 +5548,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button new branch"
 msgid "New"
-msgstr "Nua"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
 #: vcs/dvcs/ui/branchmanager.ui:41
@@ -5948,11 +5562,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@action:button"
 msgid "Rename"
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:77
@@ -5965,11 +5578,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
-#, fuzzy, kde-format
-#| msgid "Compare to Base..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
-msgstr "Cuir i gComparáid leis an mBun..."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
@@ -5980,11 +5592,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
-#, fuzzy, kde-format
-#| msgid "Checkout"
+#, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr "Seiceáil Amach"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
@@ -5995,26 +5606,18 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "Comhadlann Fhoinse:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
 #: vcs/widgets/vcsdiffpatchsources.cpp:49
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "With message:\n"
-#| " %1"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr ""
-"\n"
-"Le teachtaireacht:\n"
-" %1"
 
 #: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
@@ -6028,70 +5631,55 @@ msgstr ""
 "An bhfuil tú cinnte gur mhaith leat an t-ainm a athrú ó \"%1\" go \"%2\"?"
 
 #: vcs/models/vcsannotationmodel.cpp:116
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgid "Author:"
-msgstr "Údar"
+msgstr ""
 
 #: vcs/models/vcsannotationmodel.cpp:117
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgid "Date:"
-msgstr "Dáta"
+msgstr ""
 
 #: vcs/models/vcsannotationmodel.cpp:118
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "With message:\n"
-#| " %1"
+#, kde-format
 msgid "Commit message:"
 msgstr ""
-"\n"
-"Le teachtaireacht:\n"
-" %1"
 
 #: vcs/models/vcseventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Revision"
-msgstr "Leasú"
+msgstr ""
 
 #: vcs/models/vcseventmodel.cpp:90
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:column"
 msgid "Message"
-msgstr "Teachtaireacht"
+msgstr ""
 
 #: vcs/models/vcseventmodel.cpp:92
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgctxt "@title:column"
 msgid "Author"
-msgstr "Údar"
+msgstr ""
 
 #: vcs/models/vcseventmodel.cpp:94
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgctxt "@title:column"
 msgid "Date"
-msgstr "Dáta"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:32
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item file was added to versioncontrolsystem"
 msgid "Added"
-msgstr "Cruthaithe"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:34
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item file was deleted from versioncontrolsystem"
 msgid "Deleted"
-msgstr "Scriosta"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:36
 #, kde-format
@@ -6100,11 +5688,10 @@ msgid "Has Conflicts"
 msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item version controlled file was modified"
 msgid "Modified"
-msgstr "Athraithe"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:40
 #, kde-format
@@ -6113,54 +5700,46 @@ msgid "Up To Date"
 msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:43
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "@item file is not known to versioncontrolsystem"
 msgid "Unknown"
-msgstr "Anaithnid"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "Unknown VCS file status, probably a backend error"
-#| msgid "?"
+#, kde-format
 msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
-msgstr "?"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:137
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:column"
 msgid "Filename"
-msgstr "Ainm Comhaid"
+msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:138
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
-msgstr "Stádas"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:46
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item"
 msgid "Added"
-msgstr "Cruthaithe"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:48
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item"
 msgid "Deleted"
-msgstr "Scriosta"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:50
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item"
 msgid "Modified"
-msgstr "Athraithe"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:52
 #, kde-format
@@ -6181,102 +5760,88 @@ msgid ", "
 msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:85
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Location"
-msgstr "Suíomh"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:86
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title:column"
 msgid "Actions"
-msgstr "Gníomhartha"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Location"
-msgstr "Suíomh"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
-msgstr "Leasú"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:83
-#, fuzzy, kde-format
-#| msgid "Commit..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
-msgstr "Cuir i bhfeidhm..."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:84
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
-msgstr "Nuashonraigh"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:85
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
-msgstr "Cuir Leis"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:86
-#, fuzzy, kde-format
-#| msgid "Show Differences..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
-msgstr "Taispeáin Difríochtaí..."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:87
-#, fuzzy, kde-format
-#| msgid "Revert"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
-msgstr "Fill"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:456
-#, fuzzy, kde-format
-#| msgid "History..."
+#, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
-msgstr "Stair..."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:89
-#, fuzzy, kde-format
-#| msgid "Annotation..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
-msgstr "Anótáil..."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:90
-#, fuzzy, kde-format
-#| msgid "Show Differences..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
-msgstr "Taispeáin Difríochtaí..."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:91
-#, fuzzy, kde-format
-#| msgid "Show Differences..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
-msgstr "Taispeáin Difríochtaí..."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:92
-#, fuzzy, kde-format
-#| msgid "Push"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
-msgstr "Brúigh"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:93
 #, kde-format
@@ -6290,19 +5855,16 @@ msgid "There are no differences."
 msgstr "Níl aon difríochtaí ann."
 
 #: vcs/vcspluginhelper.cpp:285
-#, fuzzy, kde-format
-#| msgid "Unable to get difference."
+#, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
-msgstr "Ní féidir difríochtaí a fháil."
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:356
-#, fuzzy, kde-format
-#| msgctxt "%1: path or URL, %2: name of a version control system"
-#| msgid "%2 History (%1)"
+#, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
-msgstr "%2 Stair (%1)"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:420
 #, kde-format
@@ -6325,18 +5887,16 @@ msgstr ""
 "%1"
 
 #: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Copy Revision"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
-msgstr "Cóipeáil an Leasú"
+msgstr ""
 
 #: vcs/widgets/standardvcslocationwidget.cpp:23
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr "Oscail Cumraíocht..."
+msgstr ""
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format
@@ -6345,9 +5905,6 @@ msgid "%1 year"
 msgid_plural "%1 years"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:63
 #, kde-format
@@ -6356,9 +5913,6 @@ msgid "%1 month"
 msgid_plural "%1 months"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:67
 #, kde-format
@@ -6367,9 +5921,6 @@ msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
@@ -6392,11 +5943,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Reformat Line"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
-msgstr "Athfhormáidigh Líne"
+msgstr ""
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
@@ -6409,10 +5959,9 @@ msgid "For more detailed information please see the Version Control tool view."
 msgstr ""
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
-#, fuzzy, kde-format
-#| msgid "Unable to write to %1"
+#, kde-format
 msgid "Unable to commit"
-msgstr "Ní féidir %1 a scríobh"
+msgstr ""
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
@@ -6477,694 +6026,3 @@ msgstr ""
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Debug"
-#~ msgctxt "@title:window"
-#~ msgid "Debug"
-#~ msgstr "Dífhabhtaigh"
-
-#, fuzzy
-#~| msgid "Recursive"
-#~ msgctxt "@option:check"
-#~ msgid "Recursive"
-#~ msgstr "Athchúrsach"
-
-#, fuzzy
-#~| msgid "Running"
-#~ msgctxt "@info:progress"
-#~ msgid "Running %1"
-#~ msgstr "Ag Rith"
-
-#~ msgid "New Style"
-#~ msgstr "Stíl Nua"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "Sloinn Is Déanaí"
-
-#~ msgid "Remove All"
-#~ msgstr "Bain Uile"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "Athluacháil Uile"
-
-#~ msgid "Remember Value"
-#~ msgstr "Meabhraigh an Luach"
-
-#~ msgid "Watch Variable"
-#~ msgstr "Déan Faire ar Athróg"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "Athluacháil an Slonn"
-
-#~ msgid "Remove Expression"
-#~ msgstr "Bain Slonn"
-
-#~ msgid "Data write breakpoint"
-#~ msgstr "Brisphointe scríofa sonraí"
-
-#, fuzzy
-#~| msgctxt "%1 = application name"
-#~| msgid "Configure %1"
-#~ msgctxt "@action:button"
-#~ msgid "Share Templates"
-#~ msgstr "Cumraigh %1"
-
-#, fuzzy
-#~| msgid "Reformat source using AStyle"
-#~ msgctxt "@info:tooltip"
-#~ msgid "Reformat source using AStyle"
-#~ msgstr "Athfhormáidigh foinse le hAStyle"
-
-#, fuzzy
-#~| msgid "Launch Configurations"
-#~ msgid "Current launch Configuration"
-#~ msgstr "Tosaigh Cumraíochtaí"
-
-#, fuzzy
-#~| msgid "Search"
-#~ msgid "Search..."
-#~ msgstr "Cuardaigh"
-
-#~ msgctxt "Name of the Launch Configurations"
-#~ msgid "Name"
-#~ msgstr "Ainm"
-
-#~ msgctxt ""
-#~ "The type of the Launch Configurations (i.e. Python Application, C++ "
-#~ "Application)"
-#~ msgid "Type"
-#~ msgstr "Cineál"
-
-#~ msgctxt "Shorter Text for 'New File' shown in the toolbar"
-#~ msgid "New"
-#~ msgstr "Nua"
-
-#~ msgid "Close Document"
-#~ msgstr "Dún an Cháipéis"
-
-#, fuzzy
-#~| msgid "Execute"
-#~ msgctxt "Short text for 'Execute launch' used in the toolbar"
-#~ msgid "Execute"
-#~ msgstr "Rith"
-
-#, fuzzy
-#~| msgid "Debug"
-#~ msgctxt "Short text for 'Debug launch' used in the toolbar"
-#~ msgid "Debug"
-#~ msgstr "Dífhabhtaigh"
-
-#~ msgid "Search"
-#~ msgstr "Cuardaigh"
-
-#, fuzzy
-#~| msgid "Reformat Line"
-#~ msgid "Reformat files?"
-#~ msgstr "Athfhormáidigh Líne"
-
-#~ msgctxt "file was added to versioncontrolsystem"
-#~ msgid "Added"
-#~ msgstr "Curtha Leis"
-
-#~ msgctxt "file was deleted from versioncontrolsystem"
-#~ msgid "Deleted"
-#~ msgstr "Scriosta"
-
-#~ msgctxt "version controlled file was modified"
-#~ msgid "Modified"
-#~ msgstr "Athraithe"
-
-#~ msgctxt "file is not known to versioncontrolsystem"
-#~ msgid "Unknown"
-#~ msgstr "Anaithnid"
-
-#, fuzzy
-#~| msgid "Copyright 2004-2012, The KDevelop developers"
-#~ msgid "Copyright 2004-%1, The KDevelop developers"
-#~ msgstr "© 2004-2012, Forbróirí KDevelop"
-
-#~ msgid "Andreas Pakulat"
-#~ msgstr "Andreas Pakulat"
-
-#~ msgid ""
-#~ "Architecture, VCS Support, Project Management Support, QMake "
-#~ "Projectmanager"
-#~ msgstr ""
-#~ "Ailtireacht, Tacaíocht VCS, Tacaíocht Bainisteoireachta Tionscadail, "
-#~ "Bainisteoir Tionscadal QMake"
-
-#~ msgid "Alexander Dymo"
-#~ msgstr "Alexander Dymo"
-
-#~ msgid "Architecture, Sublime UI, Ruby support"
-#~ msgstr "Ailtireacht, Comhéadan Sublime, tacaíocht Ruby"
-
-#~ msgid "David Nolden"
-#~ msgstr "David Nolden"
-
-#~ msgid "Definition-Use Chain, C++ Support"
-#~ msgstr "Slabhra Sainmhíniú-Úsáid, Tacaíocht C++"
-
-#~ msgid "Aleix Pol Gonzalez"
-#~ msgstr "Aleix Pol Gonzalez"
-
-#, fuzzy
-#~| msgid "Co-Maintainer, CMake Support, Run Support, Kross Support"
-#~ msgid "CMake Support, Run Support, Kross Support"
-#~ msgstr "Comhchothaitheoir, Tacaíocht CMake, Tacaíocht Run, Tacaíocht Kross"
-
-#~ msgid "Vladimir Prus"
-#~ msgstr "Vladimir Prus"
-
-#~ msgid "GDB integration"
-#~ msgstr "Comhtháthú GDB"
-
-#~ msgid "Hamish Rodda"
-#~ msgstr "Hamish Rodda"
-
-#~ msgid "Text editor integration, definition-use chain"
-#~ msgstr "Comhtháthú d'eagarthóirí, slabhra sainmhíniú-úsáid"
-
-#~ msgid "Matt Rogers"
-#~ msgstr "Matt Rogers"
-
-#~ msgid "Cédric Pasteur"
-#~ msgstr "Cédric Pasteur"
-
-#~ msgid "astyle and indent support"
-#~ msgstr "Tacaíocht astyle agus indent"
-
-#~ msgid "Evgeniy Ivanov"
-#~ msgstr "Evgeniy Ivanov"
-
-#~ msgid "Distributed VCS, Git, Mercurial"
-#~ msgstr "VCS dáilte, Git, Mercurial"
-
-#~ msgid "Robert Gruber"
-#~ msgstr "Robert Gruber"
-
-#~ msgid "SnippetPart, debugger and usability patches"
-#~ msgstr "SnippetPart, dífhabhtóir agus paistí inúsáidteachta"
-
-#~ msgid "Dukju Ahn"
-#~ msgstr "Dukju Ahn"
-
-#~ msgid "Subversion plugin, Custom Make Manager, Overall improvements"
-#~ msgstr ""
-#~ "Breiseán Subversion, Bainisteoir Make Saincheaptha, feabhsúcháin "
-#~ "ghinearálta"
-
-#~ msgid "Niko Sams"
-#~ msgstr "Niko Sams"
-
-#~ msgid "Milian Wolff"
-#~ msgstr "Milian Wolff"
-
-#~ msgid "Import"
-#~ msgstr "Iompórtáil"
-
-#, fuzzy
-#~| msgid "Copy Revision"
-#~ msgid "Copy revision number"
-#~ msgstr "Cóipeáil an Leasú"
-
-#~ msgid "Find"
-#~ msgstr "Aimsigh"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Next"
-#~ msgstr "Ar Aghaidh"
-
-#~ msgid "Previous"
-#~ msgstr "Siar"
-
-#~ msgid "Documentation Tool Bar"
-#~ msgstr "Barra Uirlisí Doiciméadaithe"
-
-#~ msgid "Close Other Files"
-#~ msgstr "Dún Gach Comhad Eile"
-
-#~ msgid "Close All Files"
-#~ msgstr "Dún Gach Comhad"
-
-#~ msgid "&Delete Breakpoint"
-#~ msgstr "&Scrios Brisphointe"
-
-#~ msgid "Folder %1"
-#~ msgstr "Fillteán %1"
-
-#~ msgid "Project %1"
-#~ msgstr "Tionscadal %1"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Rith"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Session"
-#~ msgstr "Seisiún"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Edit"
-#~ msgstr "Eagar"
-
-#, fuzzy
-#~| msgid "<b>%1</b> (%2)"
-#~ msgctxt "a copy of the existing environment was created"
-#~ msgid "%1 (Cloned %2)"
-#~ msgstr "<b>%1</b> (%2)"
-
-#, fuzzy
-#~| msgid "Add group"
-#~ msgid "Add Group"
-#~ msgstr "Grúpa nua"
-
-#, fuzzy
-#~| msgid "Remove group"
-#~ msgid "Clone Group"
-#~ msgstr "Bain grúpa"
-
-#, fuzzy
-#~| msgid "Remove group"
-#~ msgid "Remove Group"
-#~ msgstr "Bain grúpa"
-
-#, fuzzy
-#~| msgid "Remove selected"
-#~ msgid "Remove Selected"
-#~ msgstr "Bain na cinn roghnaithe"
-
-#~ msgid "Revision Graph..."
-#~ msgstr "Graf Leasuithe..."
-
-#~ msgctxt "Refers to a line in source code"
-#~ msgid "Line <b>%1</b>"
-#~ msgstr "Líne <b>%1</b>"
-
-#, fuzzy
-#~| msgid "Scope: %1 "
-#~ msgid "Solve: %1"
-#~ msgstr "Scóip: %1 "
-
-#~ msgid "Solve"
-#~ msgstr "Réitigh"
-
-#~ msgid "Hide"
-#~ msgstr "Folaigh"
-
-#~ msgid "Clone"
-#~ msgstr "Clón"
-
-#~ msgid "Make Active"
-#~ msgstr "Gníomhachtaigh"
-
-#, fuzzy
-#~| msgid "&Format"
-#~ msgid "Form"
-#~ msgstr "&Formáid"
-
-#, fuzzy
-#~| msgid "compiling"
-#~ msgctxt "compiling a file: %1 file %2 compiler"
-#~ msgid "compiling %1 (%2)"
-#~ msgstr "á thiomsú"
-
-#, fuzzy
-#~| msgid "enumerator "
-#~ msgctxt "generating a file: %1 file %2 generator tool"
-#~ msgid "generating %1 (%2)"
-#~ msgstr "áiritheoir "
-
-#, fuzzy
-#~| msgid "<b>%1</b> (%2)"
-#~ msgctxt ""
-#~ "Linking object files into a library or executable: %1 target, %2 linker"
-#~ msgid "linking %1 (%2)"
-#~ msgstr "<b>%1</b> (%2)"
-
-#, fuzzy
-#~| msgid "<b>%1</b> (%2)"
-#~ msgctxt ""
-#~ "Linking object files into a library or executable: %1 file, %2 linker"
-#~ msgid "linking %1 (%2)"
-#~ msgstr "<b>%1</b> (%2)"
-
-#, fuzzy
-#~| msgid "<b>%1</b> (%2)"
-#~ msgctxt ""
-#~ "Linking object files into a library or executable: %1 file, %2 compiler"
-#~ msgid "linking %1 (%2)"
-#~ msgstr "<b>%1</b> (%2)"
-
-#, fuzzy
-#~| msgid "built"
-#~ msgctxt "finished building a target: %1 target name"
-#~ msgid "built %1"
-#~ msgstr "tógtha"
-
-#, fuzzy
-#~| msgctxt "Linking object files into a library or executable"
-#~| msgid "linking"
-#~ msgctxt "Linking object files into a library or executable: %1 target"
-#~ msgid "linking %1"
-#~ msgstr "á nascadh"
-
-#, fuzzy
-#~| msgid "installing"
-#~ msgctxt "installing a file: %1 file"
-#~ msgid "installing %1"
-#~ msgstr "á shuiteáil"
-
-#, fuzzy
-#~| msgid "generating"
-#~ msgctxt "creating a folder: %1 path"
-#~ msgid "creating %1"
-#~ msgstr "á ghiniúint"
-
-#, fuzzy
-#~| msgid "enumerator "
-#~ msgctxt "change directory: %1: path"
-#~ msgid "entering %1 (%2)"
-#~ msgstr "áiritheoir "
-
-#, fuzzy
-#~| msgid "Debugger Variables"
-#~ msgid "Add Multiple Variables"
-#~ msgstr "Athróga Dífhabhtóra"
-
-#, fuzzy
-#~| msgid "generating"
-#~ msgctxt ""
-#~ msgid "generating"
-#~ msgstr "á ghiniúint"
-
-#~ msgid "Save &Selected"
-#~ msgstr "&Sábháil Comhaid Roghnaithe"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Saves all selected files"
-#~ msgstr "Sábháil gach comhad roghnaithe"
-
-#~ msgid "Example 1"
-#~ msgstr "Sampla 1"
-
-#~ msgid "(c) 2007, Alexander Dymo"
-#~ msgstr "© 2007, Alexander Dymo"
-
-#~ msgid "Example 2"
-#~ msgstr "Sampla 2"
-
-#~ msgid "(c) 2009"
-#~ msgstr "© 2009"
-
-#~ msgid "&Username:"
-#~ msgstr "&Ainm Úsáideora:"
-
-#~ msgid "Publi&c key:"
-#~ msgstr "Eo&chair phoiblí:"
-
-#~ msgid "P&rivate key:"
-#~ msgstr "Eochair ph&ríobháideach:"
-
-#~ msgid "Select keys"
-#~ msgstr "Roghnaigh eochracha"
-
-#~ msgid "Projects Settings"
-#~ msgstr "Socruithe Tionscadal"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid "Configure various aspects of this editor."
-#~ msgstr "Cumraigh gnéithe éagsúla den eagarthóir seo."
-
-#~ msgid ""
-#~ "A KDE text-editor component could not be found.\n"
-#~ "Please check your KDE installation."
-#~ msgstr ""
-#~ "Níor aimsíodh comhpháirt eagarthóra KDE.\n"
-#~ "Seiceáil do shuiteáil KDE le do thoil."
-
-#~ msgid "User Interface Settings"
-#~ msgstr "Socruithe an Chomhéadain"
-
-#~ msgid "Unable to read %1"
-#~ msgstr "Ní féidir %1 a léamh"
-
-#~ msgid "Unable to write to %1"
-#~ msgstr "Ní féidir %1 a scríobh"
-
-#~ msgid "Modifiers: %1 "
-#~ msgstr "Mionathraitheoirí: %1 "
-
-#~ msgid "TODO"
-#~ msgstr "LE DÉANAMH"
-
-#~ msgctxt "toolview position"
-#~ msgid "Top"
-#~ msgstr "Barr"
-
-#~ msgid "duchaintokross"
-#~ msgstr "duchaintokross"
-
-#~ msgid "(c) 2008, The KDevelop developers"
-#~ msgstr "© 2008, Forbróirí KDevelop"
-
-#, fuzzy
-#~| msgid ""
-#~| "Cannot execute annotate action because the document was not found, or "
-#~| "was not a text document:\n"
-#~| "%1"
-#~ msgid ""
-#~ "Cannot execute annotate action because the document was not found, it was "
-#~ "not versioned or it was not a text document:\n"
-#~ "%1"
-#~ msgstr ""
-#~ "Ní féidir an gníomh anótála a chur i bhfeidhm toisc nár aimsíodh an "
-#~ "cháipéis, nó ní cáipéis téacs é:\n"
-#~ "%1"
-
-#~ msgid "&Remove all"
-#~ msgstr "&Bain uile"
-
-#~ msgid "Edit Document"
-#~ msgstr "Cuir Cáipéis in Eagar"
-
-#~ msgid "Text"
-#~ msgstr "Téacs"
-
-#~ msgid "Action"
-#~ msgstr "Gníomh"
-
-#~ msgid "Insert"
-#~ msgstr "Ionsáigh"
-
-#, fuzzy
-#~| msgid "<b>%1</b> (%2)"
-#~ msgid "%1 (%2 hidden)"
-#~ msgstr "<b>%1</b> (%2)"
-
-#~ msgid "Events:"
-#~ msgstr "Imeachtaí:"
-
-#~ msgid "Message:"
-#~ msgstr "Teachtaireacht:"
-
-#~ msgid "Show text"
-#~ msgstr "Taispeáin téacs"
-
-#~ msgid "Disable"
-#~ msgstr "Díchumasaigh"
-
-#~ msgid "Enable"
-#~ msgstr "Cumasaigh"
-
-#~ msgid "Do not obtain"
-#~ msgstr "Ná faigh"
-
-#~ msgid "Open Recent"
-#~ msgstr "Oscail Tionscadal Le Déanaí"
-
-#~ msgid "Working Directory:"
-#~ msgstr "Comhadlann Oibre:"
-
-#, fuzzy
-#~| msgid "Annotation..."
-#~ msgid "Hide annotation"
-#~ msgstr "Anótáil..."
-
-#~ msgid "<i>Solve:</i> %1"
-#~ msgstr "<i>Réitigh:</i> %1"
-
-#~ msgctxt "The term for commit (not action)"
-#~ msgid "Commit"
-#~ msgstr "Cur i bhFeidhm"
-
-#~ msgid "Log"
-#~ msgstr "Logáil"
-
-#~ msgid "Git"
-#~ msgstr "Git"
-
-#~ msgid "DVCS"
-#~ msgstr "DVCS"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
-#~ msgstr ""
-#~ "<b>Oscail tionscadal le déanaí</b><p>Oscail tionscadal a osclaíodh le "
-#~ "déanaí.</p>"
-
-#~ msgctxt "Short text for 'Execute Launch' used in the toolbar"
-#~ msgid "Execute"
-#~ msgstr "Rith"
-
-#~ msgid "<a href='open'>Line <b>%1</b></a> %2"
-#~ msgstr "<a href='open'>Líne <b>%1</b></a> %2"
-
-#~ msgid "Context"
-#~ msgstr "Comhthéacs"
-
-#~ msgid "Level"
-#~ msgstr "Leibhéal"
-
-#~ msgid "License"
-#~ msgstr "Ceadúnas"
-
-#~ msgid "Output"
-#~ msgstr "Aschur"
-
-#~ msgid "Public"
-#~ msgstr "Poiblí"
-
-#~ msgid "Protected"
-#~ msgstr "Cosanta"
-
-#~ msgid "Private"
-#~ msgstr "Príobháideach"
-
-#~ msgid "Save License"
-#~ msgstr "Sábháil an Ceadúnas"
-
-#~ msgid "Move Up"
-#~ msgstr "Bog Suas"
-
-#~ msgid "Move Down"
-#~ msgstr "Bog Síos"
-
-#~ msgid "&Header:"
-#~ msgstr "&Ceanntásc:"
-
-#~ msgid "Access"
-#~ msgstr "Rochtain"
-
-#~ msgid "Signal"
-#~ msgstr "Comhartha"
-
-#~ msgid "Slot"
-#~ msgstr "Sliotán"
-
-#~ msgid "Select &All"
-#~ msgstr "Roghnaigh &Uile"
-
-#~ msgid "&Deselect All"
-#~ msgstr "&Díroghnaigh Uile"
-
-#~ msgid "New %1 Configuration"
-#~ msgstr "Cumraíocht Nua %1"
-
-#~ msgid "Launch Configurations:"
-#~ msgstr "Cumraíochtaí Tosaithe:"
-
-#~ msgid "New Class"
-#~ msgstr "Aicme Nua"
-
-#~ msgid "Compare to Head..."
-#~ msgstr "Cuir i gComparáid leis an gCeann..."
-
-#~ msgid "Navigation"
-#~ msgstr "Nascleanúint"
-
-#~ msgid "Help"
-#~ msgstr "Cabhair"
-
-#~ msgid "Unlock"
-#~ msgstr "Díghlasáil"
-
-#~ msgid "Character"
-#~ msgstr "Carachtar"
-
-#~ msgid "&Add"
-#~ msgstr "C&uir Leis"
-
-#~ msgid "&Remove"
-#~ msgstr "&Bain"
-
-#~| msgid "New Window"
-#~ msgid "Undo"
-#~ msgstr "Fuinneog Nua"
-
-#~ msgid "Please enter a name for the new style"
-#~ msgstr "Iontráil an t-ainm ar an stíl nua"
-
-#~ msgid "Custom Style"
-#~ msgstr "Stíl Shaincheaptha"
-
-#~ msgid "Arguments"
-#~ msgstr "Argóintí"
-
-#~ msgid "Target"
-#~ msgstr "Sprioc"
-
-#~ msgid "Behavior"
-#~ msgstr "Oibriú"
-
-#~ msgid "Up"
-#~ msgstr "Suas"
-
-#~ msgid "Down"
-#~ msgstr "Síos"
-
-#~ msgid "Close All Projects"
-#~ msgstr "Dún Gach Tionscadal"
-
-#~ msgid ""
-#~ "<b>Close all projects</b><p>Closes all of the currently open projects.</p>"
-#~ msgstr ""
-#~ "<b>Dún gach tionscadal</b><p>Dún gach tionscadal atá oscailte faoi "
-#~ "láthair.</p>"
-
-#~ msgid "&New Window"
-#~ msgstr "Fuinneog &Nua"
-
-#~ msgid "Show &Status Bar"
-#~ msgstr "Taispeáin an Barra &Stádais"
-
-#~ msgid "Show status bar"
-#~ msgstr "Taispeáin an barra stádais"
-
-#~ msgid "Manuel Breugelmanns"
-#~ msgstr "Manuel Breugelmanns"
-
-#~ msgid "Test Name"
-#~ msgstr "Ainm na Teiste"
-
-#~ msgid "Line Number"
-#~ msgstr "Líne-Uimhir"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Deselect Item"
-#~ msgstr "Díroghnaigh Mír"
-
-#~ msgid "QxRunner"
-#~ msgstr "QxRunner"
-
-#~ msgid "&Start"
-#~ msgstr "&Tosaigh"
-
-#~ msgid "E&xit"
-#~ msgstr "&Scoir"
-
-#~ msgid "Execute program"
-#~ msgstr "Rith clár"

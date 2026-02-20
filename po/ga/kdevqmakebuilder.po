@@ -18,11 +18,10 @@ msgstr ""
 "3 : 4\n"
 
 #: qmakebuilderpreferences.cpp:80
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgctxt "@title:tab"
 msgid "QMake"
-msgstr "QMake: %1"
+msgstr ""
 
 #: qmakebuilderpreferences.cpp:139
 #, kde-format
@@ -50,11 +49,10 @@ msgid "Build Settings"
 msgstr ""
 
 #: qmakejob.cpp:32
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "QMake"
-msgstr "QMake: %1"
+msgstr ""
 
 #: qmakejob.cpp:43
 #, kde-format
@@ -65,29 +63,3 @@ msgstr "Níor sonraíodh tionscadal."
 #, kde-format
 msgid "QMake: %1"
 msgstr "QMake: %1"
-
-#~ msgid "Configure error"
-#~ msgstr "Earráid cumraíochta"
-
-#~ msgid "Add"
-#~ msgstr "Cuir Leis"
-
-#~ msgid "Remove"
-#~ msgstr "Bain"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#~ msgid "QMake Builder"
-#~ msgstr "Tógálaí QMake"
-
-#~ msgid "Support for building QMake projects"
-#~ msgstr "Tacaíocht le tionscadail QMake a thógáil"
-
-#~ msgid "QMake Binary:"
-#~ msgstr "Clár Inrite QMake:"
