@@ -24,39 +24,34 @@ msgid "Other..."
 msgstr ""
 
 #: openwithplugin.cpp:242
-#, fuzzy, kde-format
-#| msgid "Open With"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
-msgstr "Oscail Le"
+msgstr ""
 
 #: openwithplugin.cpp:247
-#, fuzzy, kde-format
-#| msgid "Embedded Editors"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
-msgstr "Eagarthóirí Leabaithe"
+msgstr ""
 
 #: openwithplugin.cpp:251
-#, fuzzy, kde-format
-#| msgid "External Applications"
+#, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
-msgstr "Feidhmchláir Sheachtracha"
+msgstr ""
 
 #: openwithplugin.cpp:258
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
-msgstr "Oscail"
+msgstr ""
 
 #: openwithplugin.cpp:292
-#, fuzzy, kde-format
-#| msgid "Default Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
-msgstr "Eagarthóir Réamhshocraithe"
+msgstr ""
 
 #: openwithplugin.cpp:411
 #, kde-format
@@ -66,35 +61,19 @@ msgstr ""
 "An bhfuil fonn ort gach comhad '%1' a oscailt le %2 de réir réamhshocraithe?"
 
 #: openwithplugin.cpp:413
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
-msgstr "Úsáid mar réamhshocrú?"
+msgstr ""
 
 #: openwithplugin.cpp:414
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr "Úsáid mar réamhshocrú?"
+msgstr ""
 
 #: openwithplugin.cpp:415
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
 msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#, fuzzy
-#~| msgid "Open files with external applications."
-#~ msgid ""
-#~ "This plugin allows to open files with associated external applications."
-#~ msgstr "Oscail comhaid le feidhmchláir sheachtracha."

@@ -19,25 +19,22 @@ msgstr ""
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
-#, fuzzy, kde-format
-#| msgid "Document Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
-msgstr "Doiciméadaigh Fógra"
+msgstr ""
 
 #: codeutilsplugin.cpp:50
-#, fuzzy, kde-format
-#| msgid "Alt+Shift+d"
+#, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
-msgstr "Alt+Shift+d"
+msgstr ""
 
 #: codeutilsplugin.cpp:52
-#, fuzzy, kde-format
-#| msgid "Add Doxygen skeleton for declaration under cursor."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add Doxygen skeleton for declaration under cursor."
-msgstr "Cruthaigh creatlach Doxygen le haghaidh an fhógra faoin chúrsóir."
+msgstr ""
 
 #: codeutilsplugin.cpp:55
 #, kde-format
@@ -51,32 +48,3 @@ msgstr ""
 #, kde-format
 msgid "..."
 msgstr "..."
-
-#~ msgctxt "@title:menu"
-#~ msgid "Code"
-#~ msgstr "Cód"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#, fuzzy
-#~| msgid "Code Utilities"
-#~ msgid "Code Utils"
-#~ msgstr "Uirlisí Ríomhchláraithe"
-
-#~ msgid "Milian Wolff"
-#~ msgstr "Milian Wolff"
-
-#~ msgid "Author"
-#~ msgstr "Údar"
-
-#~ msgid "Various utilities that help you code faster."
-#~ msgstr "Uirlisí éagsúla a chabhraíonn leat ríomhchlárú níos tapúla."
-
-#~ msgid "Defaults to %1."
-#~ msgstr "Réamhshocrú: %1."

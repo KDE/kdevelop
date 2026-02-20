@@ -18,27 +18,22 @@ msgstr ""
 "3 : 4\n"
 
 #: appwizarddialog.cpp:23
-#, fuzzy, kde-format
-#| msgid "Create New Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
-msgstr "Cruthaigh Tionscadal Nua"
+msgstr ""
 
 #: appwizarddialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "Page for general configuration options"
-#| msgid "General"
+#, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
-msgstr "Ginearálta"
+msgstr ""
 
 #: appwizarddialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
-msgstr "Rialú Leaganacha"
+msgstr ""
 
 #: appwizardplugin.cpp:69
 #, kde-format
@@ -47,32 +42,23 @@ msgid "New from Template..."
 msgstr ""
 
 #: appwizardplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Generate a new project from a template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
-msgstr "Gin tionscadal nua ó theimpléad"
+msgstr ""
 
 #: appwizardplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
-#| "you to generate a skeleton for your application from a set of templates.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
-"<b>Tionscadal nua</b><p>Tosóidh sé seo treoraí feidhmchláir KDevelop. "
-"Cabhróidh an treoraí leat creatlach d'fheidhmchláir a chruthú as tacar "
-"teimpléad.</p>"
 
 #: appwizardplugin.cpp:106
-#, fuzzy, kde-format
-#| msgid "Could not create project from template\n"
+#, kde-format
 msgid "Could not create project from template."
-msgstr "Níorbh fhéidir tionscadal nua a chruthú ó theimpléad.\n"
+msgstr ""
 
 #: appwizardplugin.cpp:134
 #, kde-format
@@ -80,12 +66,10 @@ msgid "Please see the Version Control tool view."
 msgstr ""
 
 #: appwizardplugin.cpp:136
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr "Rialú Leaganacha"
+msgstr ""
 
 #: appwizardplugin.cpp:152
 #, kde-format
@@ -93,10 +77,9 @@ msgid "Could not initialize DVCS repository"
 msgstr ""
 
 #: appwizardplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Could not checkout imported project"
+#, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr "Níorbh fhéidir an tionscadal iompórtáilte a sheiceáil amach"
+msgstr ""
 
 #: appwizardplugin.cpp:174
 #, kde-format
@@ -134,25 +117,22 @@ msgid "Project Templates"
 msgstr "Teimpléid Tionscadail"
 
 #: projectselectionpage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgctxt "@title:column"
 msgid "Category"
-msgstr "Catagóir"
+msgstr ""
 
 #: projectselectionpage.cpp:60
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
-msgstr "Teimpléid Tionscadail"
+msgstr ""
 
 #: projectselectionpage.cpp:70
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr "Teimpléid Tionscadail"
+msgstr ""
 
 #: projectselectionpage.cpp:77
 #, kde-format
@@ -205,65 +185,34 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:group"
 msgid "Properties"
-msgstr "Airíonna"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Project"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
-msgstr "Tionscadal"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
-msgstr "Suíomh:"
+msgstr ""
 
 #: projectvcspage.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "No Version Control Support chosen"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
-msgstr "Neamhní"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
-msgstr "Rialú Leaganacha"
-
-#~ msgid "Failed to create project"
-#~ msgstr "Níorbh fhéidir tionscadal nua a chruthú"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Project"
-#~ msgstr "Tionscadal"
-
-#, fuzzy
-#~| msgid "Application Name:"
-#~ msgid "Application Wizard"
-#~ msgstr "Ainm an Fheidhmchláir:"
-
-#~ msgid "KSqueezedTextLabel"
-#~ msgstr "KSqueezedTextLabel"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
+msgstr ""

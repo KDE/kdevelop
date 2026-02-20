@@ -71,11 +71,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qmakebuilddirchooser.ui:46
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
-msgstr "Cineál &tógála:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62
@@ -86,11 +85,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@labal:listbox"
 msgid "Build &type:"
-msgstr "Cineál &tógála:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
 #: qmakebuilddirchooser.ui:115
@@ -107,11 +105,10 @@ msgid "Extra arguments:"
 msgstr ""
 
 #: qmakebuilddirchooserdialog.cpp:22
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory"
-msgstr "Cineál &tógála:"
+msgstr ""
 
 #: qmakejob.cpp:33
 #, kde-format
@@ -134,40 +131,7 @@ msgid "*** Crashed with return code: %1 ***"
 msgstr ""
 
 #: qmakemanager.cpp:75
-#, fuzzy, kde-format
-#| msgid "Run QMake in %1"
+#, kde-format
 msgctxt "@action"
 msgid "Run QMake"
-msgstr "Rith QMake i %1"
-
-#, fuzzy
-#~| msgid "QMake Manager"
-#~ msgid "QMake &binary:"
-#~ msgstr "Bainisteoir QMake"
-
-#~ msgid "qmake-parser"
-#~ msgstr "qmake-parser"
-
-#~ msgid "Parse QMake project files"
-#~ msgstr "Parsáil comhaid tionscadail QMake"
-
-#~ msgid "Enable output of the debug AST"
-#~ msgstr "Cumasaigh aschur an AST dífhabhtaithe"
-
-#~ msgid "QMake project files"
-#~ msgstr "Comhaid tionscadail QMake"
-
-#~ msgid "QMake Manager"
-#~ msgstr "Bainisteoir QMake"
-
-#~ msgid "Support for managing QMake projects"
-#~ msgstr "Tacaíocht bainisteoireachta le haghaidh tionscadal QMake"
-
-#~ msgid "QMake: %1"
-#~ msgstr "QMake: %1"
-
-#~ msgid "Configure error"
-#~ msgstr "Earráid cumraíochta"
-
-#~ msgid "%{APPNAME}"
-#~ msgstr "%{APPNAME}"
+msgstr ""

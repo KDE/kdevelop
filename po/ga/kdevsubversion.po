@@ -18,18 +18,16 @@ msgstr ""
 "3 : 4\n"
 
 #: kdevsvnplugin.cpp:334
-#, fuzzy, kde-format
-#| msgid "Copy..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
-msgstr "Cóipeáil..."
+msgstr ""
 
 #: kdevsvnplugin.cpp:341
-#, fuzzy, kde-format
-#| msgid "Move..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
-msgstr "Bog..."
+msgstr ""
 
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
@@ -37,11 +35,10 @@ msgid "Please select only one item for this operation"
 msgstr ""
 
 #: kdevsvnplugin.cpp:370
-#, fuzzy, kde-format
-#| msgid "Destination file/directory"
+#, kde-format
 msgctxt "@label"
 msgid "Destination file/directory"
-msgstr "Sprioc-chomhad(lann)"
+msgstr ""
 
 #: kdevsvnplugin.cpp:382
 #, kde-format
@@ -94,10 +91,9 @@ msgid "Not enough information to checkout"
 msgstr ""
 
 #: svncommitjob.cpp:108
-#, fuzzy, kde-format
-#| msgid "Subversion Checkout"
+#, kde-format
 msgid "Subversion Commit"
-msgstr "Seiceáil Amach Subversion"
+msgstr ""
 
 #: svncommitjob.cpp:119
 #, kde-format
@@ -316,11 +312,10 @@ msgid "Not enough information to execute revert"
 msgstr ""
 
 #: svnssldialog.cpp:28
-#, fuzzy, kde-format
-#| msgid "SSL Server Certificate"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
-msgstr "Teastas freastalaí SSL"
+msgstr ""
 
 #: svnssldialog.cpp:30
 #, kde-format
@@ -335,11 +330,10 @@ msgid "Trust Temporarily"
 msgstr ""
 
 #: svnssldialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "SSL Server Certificate"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
-msgstr "Teastas freastalaí SSL"
+msgstr ""
 
 #: svnstatusjob.cpp:117
 #, kde-format
@@ -363,27 +357,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
-#, fuzzy, kde-format
-#| msgid "Source directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "Comhadlann fhoinseach:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
-msgstr "Stór:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
-msgstr "Stór:"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
@@ -415,19 +406,17 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ui/ssltrustdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Certificate Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
-msgstr "Eolas Faoin Teastas"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
-#, fuzzy, kde-format
-#| msgid "Hostname:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
-msgstr "Óstainm:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, hostname)
 #: ui/ssltrustdialog.ui:77
@@ -450,11 +439,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/ssltrustdialog.ui:104
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
-msgstr "Bailí go dtí:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, validFrom)
 #: ui/ssltrustdialog.ui:117
@@ -464,132 +452,26 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: ui/ssltrustdialog.ui:124
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
-msgstr "Bailí go dtí:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, validUntil)
 #: ui/ssltrustdialog.ui:137
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgid "validuntil"
-msgstr "Bailí go dtí:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/ssltrustdialog.ui:144
-#, fuzzy, kde-format
-#| msgid "Fingerprint:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
-msgstr "Méarlorg:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, fingerprint)
 #: ui/ssltrustdialog.ui:157
-#, fuzzy, kde-format
-#| msgid "Fingerprint:"
+#, kde-format
 msgid "fingerprint"
-msgstr "Méarlorg:"
-
-#, fuzzy
-#~| msgid "Select Revision"
-#~ msgid "Start Revision"
-#~ msgstr "Roghnaigh Athchóiriú"
-
-#, fuzzy
-#~| msgid "Select Revision"
-#~ msgid "End Revision"
-#~ msgstr "Roghnaigh Athchóiriú"
-
-#~ msgid "Checkout"
-#~ msgstr "Seiceáil Amach"
-
-#, fuzzy
-#~| msgid "Repository:"
-#~ msgid "Repository Url:"
-#~ msgstr "Stór:"
-
-#, fuzzy
-#~| msgid "Destination"
-#~ msgid "Destination Path:"
-#~ msgstr "Sprioc"
-
-#~ msgid "Recursive:"
-#~ msgstr "Athchúrsach:"
-
-#~ msgid "Source"
-#~ msgstr "Foinse"
-
-#, fuzzy
-#~| msgid "Select Revision"
-#~ msgid "Source revision"
-#~ msgstr "Roghnaigh Athchóiriú"
-
-#~ msgid "Destination"
-#~ msgstr "Sprioc"
-
-#~ msgid "Target Url"
-#~ msgstr "URL sprice"
-
-#, fuzzy
-#~| msgid "Recursive"
-#~ msgid "Non Recursive"
-#~ msgstr "Athchúrsach"
-
-#, fuzzy
-#~| msgid "Ignore external items"
-#~ msgid "Ignore contents type"
-#~ msgstr "Déan neamhaird de mhíreanna seachtracha"
-
-#~ msgid "Subversion Log View Options"
-#~ msgstr "Roghanna Logchomhaid Subversion"
-
-#~ msgid "Select"
-#~ msgstr "Roghnaigh"
-
-#~ msgid "Text Status"
-#~ msgstr "Stádas an Téacs"
-
-#, fuzzy
-#~| msgid "Text Status"
-#~ msgid "Prop Status"
-#~ msgstr "Stádas an Téacs"
-
-#~ msgid "Recursive"
-#~ msgstr "Athchúrsach"
-
-#, fuzzy
-#~| msgid "Select Revision"
-#~ msgid "Specify revision"
-#~ msgstr "Roghnaigh Athchóiriú"
-
-#, fuzzy
-#~| msgid "Recursive"
-#~ msgid "Non recursive"
-#~ msgstr "Athchúrsach"
-
-#~ msgid "Do not ignore svn:ignore"
-#~ msgstr "Ná déan neamhaird de svn:ignore"
-
-#~ msgid "Ignore external items"
-#~ msgstr "Déan neamhaird de mhíreanna seachtracha"
-
-#, fuzzy
-#~| msgid "Ignore external items"
-#~ msgid "Ignore external entries"
-#~ msgstr "Déan neamhaird de mhíreanna seachtracha"
-
-#~ msgid "Select Revision"
-#~ msgstr "Roghnaigh Athchóiriú"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#~ msgid "Subversion Log (%1)"
-#~ msgstr "Logchomhad Subversion (%1)"
+msgstr ""
