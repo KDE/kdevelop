@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2015, 2016.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
-# SPDX-FileCopyrightText: 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2024, 2026 Tommi Nieminen <translator@legisign.org>
 # KDE Finnish translation sprint participants:
 # Author: Artnay
 # Author: Lliehu
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-11-17 16:56+0200\n"
+"PO-Revision-Date: 2026-02-09 17:30+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -20,15 +20,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "&Parametrit:"
+msgstr "argumentit"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -36,19 +34,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "Riippuvuuden %1 selvittäminen epäonnistui"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "Ohjelmatiedosto"
+msgstr "ohjelmatiedoston sijainti"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "Käytä ulkoista päätettä:"
+msgstr "ulkoinen päätekomento"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -74,6 +68,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Huom! <code>gnome-terminal</code>ia tuetaan sen rajoitusten vuoksi vain "
+"osin.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -223,6 +219,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Määritä ulkoisena pääte-emulaattorina suoritettava komento.<br>\n"
+"Ohjelmatiedoston sijainti argumentteineen lisätään tähän komentoon."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238

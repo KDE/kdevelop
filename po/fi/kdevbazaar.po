@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Tommi Nieminen <translator@legisign.org>, 2015, 2023.
+# SPDX-FileCopyrightText: 2015, 2023, 2026 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2023-04-17 13:22+0300\n"
+"PO-Revision-Date: 2026-02-09 17:33+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: bazaarplugin.cpp:37
 #, kde-format
@@ -25,7 +26,7 @@ msgstr ""
 #: bazaarplugin.cpp:84
 #, kde-format
 msgid "No files selected to commit"
-msgstr ""
+msgstr "Ei toimitettavaksi valittuja tiedostoja"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

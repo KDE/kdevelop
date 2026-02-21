@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the kdevelop package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
-# SPDX-FileCopyrightText: 2023, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2023, 2024, 2026 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 00:41+0000\n"
-"PO-Revision-Date: 2024-11-17 17:09+0200\n"
+"PO-Revision-Date: 2026-02-09 18:44+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
@@ -29,23 +29,14 @@ msgstr "GDB"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Tracing Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Tracing Configuration"
-msgstr "Seurannan asetukset"
+msgstr "Seuranta-asetukset"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
 #: debuggertracingdialog.ui:26
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<b>Custom format string</b>\n"
-#| "<p>Specify a C-style format string that will be used when printing the "
-#| "chosen expression. For example:\n"
-#| "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
-#| "If custom format string is not enabled, names and values of all "
-#| "expressions will be printed, using \"%d\" as format specifier for all "
-#| "expressions."
+#, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Custom format string</b>\n"
@@ -55,30 +46,24 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
-"<b>Mukautettu muotomerkkijono</b>\n"
+"<b>Mukautettu muotoilujono</b>\n"
 "<p>Määrittelee C-tyylisen muotomerkkijonon, jota käytetään tulostamaan "
 "valittu lauseke. Esimerkiksi:\n"
 "<p align=\"center\"> <tt>Seurantapiste 1: g = %d</tt></p>\n"
-"Jos mukautettu muotomerkkijono ei ole otettu käyttöön, kaikkien lausekkeiden "
-"nimet ja arvot tulostetaan käyttäen ”%d” muotomääritteenä kaikille "
-"lausekkeille."
+"Ellei mukautettua muotoilujonoa ole otettu käyttöön, kaikkien lausekkeiden "
+"nimet ja arvot tulostetaan käyttäen kaikille lausekkeille muotomääritteenä "
+"”%d”."
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
-#, fuzzy, kde-format
-#| msgid "Expressions to print:"
+#, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
-msgstr "Tulostettavat lauseet:"
+msgstr "Tulostettavat lausekkeet:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Enable tracing</b>\n"
-#| "<p>Tracing is a mechanism to automatically print values of the chosen "
-#| "expressions and continue execution when breakpoint is hit. You can think "
-#| "of it as printf debugging that does not require modifying the source.</p>"
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "<b>Enable tracing</b>\n"
@@ -86,40 +71,35 @@ msgid ""
 "expressions and continue execution when breakpoint is hit. You can think of "
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
-"<b>Ota käyttöön seuranta</b>\n"
+"<b>Käytä seurantaa</b>\n"
 "<p>Seuranta on mekanismi, joka automaattisesti tulostaa valitun lausekkeen "
-"arvoja ja jatkaa suoritusta kun keskeytyskohta löytyy. Voit ajatella sitä "
+"arvoja ja jatkaa suoritusta, kun keskeytyskohta löytyy. Sitä voi ajatella "
 "printf-virheenpaikannustulostuskäskynä, joka ei vaadi lähdekoodin "
 "muuttamista.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
-#, fuzzy, kde-format
-#| msgid "Enable tracing"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable tracing"
-msgstr "Ota käyttöön seuranta"
+msgstr "Käytä seurantaa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
 #: debuggertracingdialog.ui:60
-#, fuzzy, kde-format
-#| msgid "Custom format string"
+#, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
-msgstr "Mukautettu muotomerkkijono"
+msgstr "Mukautettu muotoilujono"
 
 # Run configuration tarkoittaa tässä samaa kuin launch configuration.
 #: debugsession.cpp:162
-#, fuzzy, kde-format
-#| msgid ""
-#| "No environment group specified, looks like a broken configuration, please "
-#| "check run configuration '%1'. Using default environment group."
+#, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
-"Ympäristöryhmää ei ole määritetty. Näyttää rikkoutuneelta määritykseltä, "
-"tarkista käynnistysmääritys ”%1”. Käytetään oletusympäristöryhmää."
+"Ympäristöprofiilia ei ole määritetty, joten määritys vaikuttaa vialliselta. "
+"Tarkista käynnistysmääritys ”%1”. Käytetään oletusympäristöprofiilia."
 
 #: debugsession.cpp:253
 #, kde-format
@@ -144,26 +124,23 @@ msgid "GDB Configuration"
 msgstr "GDB-asetukset"
 
 #: gdbconfigpage.cpp:99
-#, fuzzy, kde-format
-#| msgid "Executes a Native application in GDB"
+#, kde-format
 msgid "Executes a native application in GDB"
-msgstr "Suorittaa kotoperäisen sovelluksen GDB:ssä"
+msgstr "Suorittaa GDB:ssä natiivin sovelluksen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: gdbconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Debugger"
+#, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
 msgstr "Virheenpaikannin"
 
 #. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
 #: gdbconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "Debugger e&xecutable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
-msgstr "&Virheenpaikantimen ohjelmatiedosto:"
+msgstr "Virheenpaikantimen &ohjelmatiedosto:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
@@ -174,13 +151,7 @@ msgstr "Gdb-ohjelmatiedosto"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:51
-#, fuzzy, kde-format
-#| msgid ""
-#| "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
-#| "gdb, for example, for a different architecture, enter the executable name "
-#| "here. You can either run gdb from $PATH, but with a different name (say, "
-#| "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
-#| "executable."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
@@ -189,12 +160,11 @@ msgid ""
 "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
 "executable."
 msgstr ""
-"Jätä tämä kenttä tyhjäksi binaaritiedoston ”gdb” suorittamiseksi polusta "
-"$PATH. Kirjoita suoritettavan tiedoston nimi tänne mukautetun gdb-ohjelman "
-"suorittamiseksi, esimerkiksi eri arkkitehtuurissa. Voit suorittaa gdb-"
-"ohjelman joko $PATH-polusta, mutta eri nimellä (sanotaan, ”arm-gdb”) "
-"kirjoittamalla nimen tänne, tai määrittämällä täydellisen tiedostopolun "
-"suoritettavaan gdb-tiedostoon."
+"Suorita gdb-ohjelmatiedosto $PATH-hakupolusta jättämällä tämä kenttä "
+"tyhjäksi. Mukautetun (esim. eri arkkitehtuurin) GDB:n suorittamiseksi "
+"kirjoita ohjelmatiedoston nimi tähän. GDB:n voi suorittaa $PATHista mutta "
+"eri nimellä (kuten ”arm-gdb”) kirjoittamalla tähän nimen tai määrittämällä "
+"täydellisen tiedostopolun suoritettavaan GDB-tiedostoon."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
@@ -206,14 +176,7 @@ msgstr "Ohita gdb-ohjelmatiedoston sijainti…"
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
 #: gdbconfigpage.ui:61 gdbconfigpage.ui:77
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want gdb to be executed by a special shell "
-#| "script, which for example properly sets the library path, insert it here "
-#| "e.g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
-#| "invoked like this: /path/to/script.sh --scriptArguments debugger --"
-#| "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
-#| "span> invoke \"debugger\" executable manually.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>If you want gdb to be executed by a special shell "
@@ -223,18 +186,17 @@ msgid ""
 "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
 "span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Jos haluat, että gdb:n käynnistää "
-"komentotulkkiskripti, joka esimerkiksi asettaa kirjastopolut, kirjoita se "
-"tähän. Esimerkiksi: /polku/skriptiin/skripti.sh --skriptinArgumentit</"
-"p><p>Huomaa: skriptiä kutsutaan näin: /polku/skriptiin/skripti.sh --"
-"skriptinArgumentit virheenpaikannin --virheenpaikantimenArgumentit. Skripti."
-"sh:n <span style=\" font-weight:600;\">täytyy</span> siis käynnistää "
-"”virheenpaikannin” itse.</p></body></html>"
+"<html><head/><body><p>Jos GDB tulisi käynnistää erityisellä skriptillä, joka "
+"esimerkiksi asettaa kirjastopolut oikein, lisä se tähän. Esimerkiksi: /polku/"
+"skriptiin/skripti.sh --skriptinArgumentit</p><p>Huom! Skriptiä kutsutaan "
+"näin: /polku/skriptiin/skripti.sh --skriptinArgumentit virheenpaikannin --"
+"virheenpaikantimenArgumentit. Skripti.sh:n <span style=\" font-weight:600;"
+"\">täytyy</span> siis käynnistää virheenpaikantimen ohjelmatiedosto.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
-#, fuzzy, kde-format
-#| msgid "She&ll script:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "She&ll script:"
 msgstr "Komentotulkki&skripti:"
@@ -248,22 +210,14 @@ msgstr "Valinnat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: gdbconfigpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Display static &members:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Display static &members:"
-msgstr "&Näytä staattiset jäsenet:"
+msgstr "Näytä staattiset &jäsenet:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
 #: gdbconfigpage.ui:111
-#, fuzzy, kde-format
-#| msgid ""
-#| "Displaying static members makes GDB slower in\n"
-#| "producing data within KDE and Qt.\n"
-#| "It may change the \"signature\" of the data\n"
-#| "which QString and friends rely on,\n"
-#| "but if you need to debug into these values then\n"
-#| "check this option."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Displaying static members makes GDB slower in\n"
@@ -273,45 +227,38 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
-"Staattisten jäsenten näyttäminen tekee GDB:n hitaammaksi\n"
-"tietojen tuottamisessa KDE:n ja Qt:n sisällä.\n"
-"Se voi vaihtaa sitä tietojen ”allekirjoitusta”, \n"
-"joista QString ja ystävät ovat riippuvaisia, mutta\n"
-"jos sinun on paikannettava virheitä näihin arvoihin,\n"
-"valitse silloin tämä valitsin."
+"Staattisten jäsenten näyttäminen hidastaa GDB:ta\n"
+"tuotettaessa tietoa Qt-pohjaisesta koodista.\n"
+"Se voi muuttaa tietojen ”allekirjoitusta”, josta\n"
+"QString ym. ovat riippuvaisia, mutta jos virheitä on\n"
+"paikannettava näihin arvoihin, valitse tämä."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
-#, fuzzy, kde-format
-#| msgid "Display &demangled names:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
-msgstr "Näytä &runtelemattomat nimet:"
+msgstr "Näytä &sekoittamattomat nimet:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "When displaying the disassembled code you\n"
-#| "can select to see the methods' mangled names.\n"
-#| "However, non-mangled names are easier to read."
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "When displaying the disassembled code you\n"
 "can select to see the methods' mangled names.\n"
 "However, non-mangled names are easier to read."
 msgstr ""
-"Kun näytetään purettua binaarikoodia, voit\n"
-"valita metodien runneltujen nimien näkemisen.\n"
-"Runtelettomat nimet on kuitenkin helpompi lukea."
+"Disassembler-koodia näytettäessä voi valita\n"
+"metodien sekoitetut nimet Sekoittamattomia on\n"
+"kuitenkin helpompi lukea."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
-#, fuzzy, kde-format
-#| msgid "S&tart Debugger with:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "S&tart debugger with:"
-msgstr "Kä&ynnistä virheenpaikannin näkymällä:"
+msgstr "&Virheenpaikannuksen aloitusnäkymä:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
@@ -336,13 +283,7 @@ msgstr "Kehyspino"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:178
-#, fuzzy, kde-format
-#| msgid ""
-#| "This script is intended for the actual commands needed to connect to a "
-#| "remotely running executable.\n"
-#| "\tshell sleep 5\twait for remote program to start\n"
-#| "\ttarget remote ...\tconnect to the remote debugger\n"
-#| "\tcontinue\t[optional] run debugging to the first breakpoint"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This script is intended for the actual commands needed to connect to a "
@@ -351,17 +292,16 @@ msgid ""
 "\ttarget remote ...\tconnect to the remote debugger\n"
 "\tcontinue\t[optional] run debugging to the first breakpoint"
 msgstr ""
-"Tämä skripti on tarkoitettu todellisille komennoille, joita tarvitaan "
-"etäkoneella käynnissä olevaan ohjelmatiedostoon yhdistämiseen.\n"
+"Tämä skripti on tarkoitettu nimenomaisille komennoille, joita tarvitaan "
+"etäkoneella käynnissä olevaan ohjelmatiedostoon yhdistämiseksi.\n"
 "\tshell sleep 5\todota etäohjelman käynnistymistä\n"
 "\ttarget remote …\tyhdistä etävirheenpaikantimeen\n"
-"\tcontinue\t[optional] suorita ohjelmaa virheenpaikannustilassa ensimmäiseen "
+"\tcontinue\t[optional] suorita virheenpaikannusta ensimmäiseen "
 "keskeytyskohtaan asti."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
-#, fuzzy, kde-format
-#| msgid "Remote Debugging"
+#, kde-format
 msgctxt "@title:group"
 msgid "Remote Debugging"
 msgstr "Etävirheenpaikannus"
@@ -369,15 +309,7 @@ msgstr "Etävirheenpaikannus"
 #. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
 #: gdbconfigpage.ui:187 gdbconfigpage.ui:203
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Script to start remote application</p><p></"
-#| "p><p>This shell script is run after the Gdb Config script has been "
-#| "sourced by gdb.</p><p>It's purpose is to actually start the remote "
-#| "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
-#| "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
-#| "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
-#| "\"application\" on target.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Script to start remote application</p><p></p><p>This "
@@ -388,18 +320,16 @@ msgid ""
 "contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Skripti etäsovelluksen käynnistämiseen</p><p></"
-"p><p>Tämä komentotulkkiskripti suoritetaan, kun gdb on lukenut gdb:n "
-"asetusskriptin.</p><p>Sen tarkoituksena on käynnistää etäprosessi.</p><p>1) "
-"Löydä tapa suorittaa etäkomento – rsh, ssh, telnet, …</p><p>2a) Suorita "
-"”gdbserver … sovellus” kohteessa.</p><p>Tai jos ohjelmatiedosto sisältää gdb-"
-"tyngän,</p><p>2b) suorita ”sovellus” kohteessa.</p></body></html>"
+"<html><head/><body><p>Skripti etäsovelluksen käynnistämiseksi</p><p></"
+"p><p>Tämä komentotulkkiskripti suoritetaan GDB:n luettua asetusskriptinsä.</"
+"p><p>Sen tarkoituksena on käynnistää etäprosessi.</p><p>1) Etsi tapa "
+"etäkomennon suorittamiseksi – rsh, ssh, telnet…</p><p>2a) Suorita kohteessa "
+"”gdbserver … sovellus”.</p><p>Tai jos ohjelmatiedosto sisältää GDB-tyngän,</"
+"p><p>2b) suorita kohteessa ”sovellus”.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
-#, fuzzy, kde-format
-#| msgctxt "Shell script to be executed at run time"
-#| msgid "R&un shell script:"
+#, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
 msgstr "S&uorita komentotulkkiskripti:"
@@ -407,33 +337,22 @@ msgstr "S&uorita komentotulkkiskripti:"
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
 #: gdbconfigpage.ui:210 gdbconfigpage.ui:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>This script is sourced by gdb when the debugging "
-#| "starts.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This script is sourced by gdb when the debugging starts."
-msgstr ""
-"<html><head/><body><p>Tämän skriptin lähde on gdb, kun virheenpaikannus "
-"alkaa.</p></body></html>"
+msgstr "GDB lukee tämän skriptin virheenpaikannuksen alkaessa."
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
-#, fuzzy, kde-format
-#| msgid "Gdb &config script:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Gdb &config script:"
-msgstr "Gdb-&asetusskripti:"
+msgstr "GDB-&asetusskripti:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
 #. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:226 gdbconfigpage.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Script to connect with remote application</p><p>For "
-#| "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
-#| "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
-#| "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<html><head/><body><p>Script to connect with remote application</p><p>For "
@@ -441,20 +360,18 @@ msgid ""
 "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
 "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Skripti etäsovellukseen yhdistämiseen</"
+"<html><head/><body><p>Skripti etäsovellukseen yhdistämiseksi</"
 "p><p>Esimerkiksi:</p><p>\tshell sleep 5\t #odota etäohjelman käynnistymistä</"
 "p><p>\ttarget remote …\t#yhdistä etävirheenpaikantimeen</p><p>\tcontinue"
-"\t#[valinnainen] suorita ohjelmaa ensimmäiseen keskeytyskohtaan saakka.</p></"
-"body></html>"
+"\t#[valinnainen] suorita virheenpaikannusta ensimmäiseen keskeytyskohtaan "
+"saakka.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
-#, fuzzy, kde-format
-#| msgctxt "Gdb script to be executed at run time."
-#| msgid "Run &gdb script:"
+#, kde-format
 msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
-msgstr "Suorita &gdb-skripti:"
+msgstr "Suorita &GDB-skripti:"
 
 #: gdboutputwidget.cpp:50
 #, kde-format
@@ -463,31 +380,26 @@ msgid "GDB Output"
 msgstr "GDB-tuloste"
 
 #: gdboutputwidget.cpp:51
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
-#| "issue any other gdb command while debugging.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
 "issue any other GDB command while debugging.</p>"
 msgstr ""
-"<b>GDB-tuloste</b><p>Näyttää kaikki suoritettavat gdb-komennot. Voit myös "
-"julkaista kaikkia muita gdb-komentoja virheenpaikannuksen aikana.</p>"
+"<b>GDB-tuloste</b><p>Näyttää kaikki suoritettavat GDB-komennot. Komentoja "
+"voi antaa myös virheenpaikannuksen aikana.</p>"
 
 #: gdboutputwidget.cpp:64
-#, fuzzy, kde-format
-#| msgid "&GDB cmd:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
 msgstr "&GDB-komento:"
 
 #: gdboutputwidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "Pause execution of the app to enter gdb commands"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
-msgstr "Tauota sovelluksen suorittaminen gdb-komentojen kirjoittamiseksi"
+msgstr "Keskeytä sovelluksen suoritus GDB-komentojen kirjoittamiseksi"
 
 #: gdboutputwidget.cpp:383
 #, kde-format
@@ -496,20 +408,16 @@ msgid "Show Internal Commands"
 msgstr "Näytä sisäiset komennot"
 
 #: gdboutputwidget.cpp:389
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls if commands issued internally by KDevelop will be shown or not."
-#| "<br>This option will affect only future commands, it will not add or "
-#| "remove already issued commands from the view."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Controls if commands issued internally by KDevelop will be shown or not."
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
-"Ohjaa, jos KDevelop-ohjelman sisäisesti julkaisemat komennot näytetään vai "
-"ei.<br />Tämä valitsin vaikuttaa vain tuleviin käskyihin, se ei lisää tai "
-"poista jo julkaistuja komentoja näkymästä."
+"Valitsee, näytetäänkö KDevelop-ohjelman sisäisesti julkaisemat komennot vai "
+"ei.<br>Valinta vaikuttaa vain tuleviin käskyihin: se ei lisää tai poista "
+"näkymästä jo annettuja komentoja."
 
 #: gdboutputwidget.cpp:394
 #, kde-format
@@ -525,11 +433,10 @@ msgstr "Virheenpaikannustyökalurivi"
 
 # Tarkoittaa näytettävän muistialueen alkukohtaa.
 #: memviewdlg.cpp:68
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
-msgstr "Alku"
+msgstr "Alku:"
 
 #: memviewdlg.cpp:71
 #, kde-format
@@ -538,8 +445,7 @@ msgid "Amount:"
 msgstr "Määrä:"
 
 #: memviewdlg.cpp:94
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Muistinäkymä"
@@ -552,15 +458,13 @@ msgstr[0] "%2 (1 tavu)"
 msgstr[1] "%2 (%1 tavua)"
 
 #: memviewdlg.cpp:267
-#, fuzzy, kde-format
-#| msgid "&Reload"
+#, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
-msgstr "&Päivitä"
+msgstr "Lataa &uudelleen"
 
 #: memviewdlg.cpp:275
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "&Muoto"
@@ -590,64 +494,55 @@ msgid "&Hexadecimal"
 msgstr "&Heksadesimaali"
 
 #: memviewdlg.cpp:307
-#, fuzzy, kde-format
-#| msgid "&Grouping"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
 msgstr "&Ryhmittely"
 
 #: memviewdlg.cpp:310
-#, fuzzy, kde-format
-#| msgid "&0"
+#, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
 #: memviewdlg.cpp:315
-#, fuzzy, kde-format
-#| msgid "&1"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
 #: memviewdlg.cpp:320
-#, fuzzy, kde-format
-#| msgid "&2"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
 #: memviewdlg.cpp:325
-#, fuzzy, kde-format
-#| msgid "&4"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
 #: memviewdlg.cpp:330
-#, fuzzy, kde-format
-#| msgid "&8"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
 #: memviewdlg.cpp:335
-#, fuzzy, kde-format
-#| msgid "1&6"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
 
 #: memviewdlg.cpp:348
-#, fuzzy, kde-format
-#| msgid "Write changes"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
 msgstr "Kirjoita muutokset"
 
 #: memviewdlg.cpp:352
-#, fuzzy, kde-format
-#| msgid "Change memory range"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
 msgstr "Vaihda muistialuetta"
@@ -659,23 +554,19 @@ msgid "Close View"
 msgstr "Sulje näkymä"
 
 #: memviewdlg.cpp:407
-#, fuzzy, kde-format
-#| msgid "Memory viewer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
 msgstr "Muistikatselin"
 
 #: memviewdlg.cpp:411
-#, fuzzy, kde-format
-#| msgid "New memory viewer"
+#, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
 msgstr "Uusi muistikatselin"
 
 #: memviewdlg.cpp:412
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Open a new memory viewer."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
 msgstr "Avaa uusi muistikatselin"

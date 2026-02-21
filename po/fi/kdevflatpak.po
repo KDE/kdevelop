@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2026 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Tommi Nieminen <translator@legisign.org>, 2022.
+# SPDX-FileCopyrightText: 2022, 2026 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2022-08-19 16:43+0300\n"
+"PO-Revision-Date: 2026-02-09 17:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -58,27 +59,22 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak-paketti (*.flatpak)"
 
 #: flatpakplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export Bundle %1"
-msgstr "Flatpak-paketti (*.flatpak)"
+msgstr "Flatpak-vientipaketti %1"
 
 #: flatpakplugin.cpp:237
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Koosta ympäristö uudelleen"
+msgstr "Koosta Flatpak-ympäristö uudelleen: %1"
 
 #: flatpakplugin.cpp:244
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
-msgstr "Koosta Flatpak %1 kohteelle %2"
+msgstr "Koosta Flatpak-ympäristö %1 koneelle %2"
 
 #: flatpakplugin.cpp:268
 #, kde-format
@@ -93,8 +89,7 @@ msgid "Device hostname:"
 msgstr "Laitteen konenimi:"
 
 #: flatpakruntime.cpp:61
-#, fuzzy, kde-format
-#| msgid "Flatpak"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
@@ -103,56 +98,49 @@ msgstr "Flatpak"
 #, kde-format
 msgctxt "%1 - application ID or name"
 msgid "Flatpak Create %1"
-msgstr ""
+msgstr "Flatpak – Luo %1"
 
 #: flatpakruntime.cpp:227
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Finalize %1"
-msgstr ""
+msgstr "Flatpak – Viimeistele %1"
 
 #: flatpakruntime.cpp:233
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export %1"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export %1"
-msgstr "Vie %1"
+msgstr "Flatpak-vienti %1"
 
 #: flatpakruntime.cpp:236
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Bundle %1"
-msgstr "Flatpak-paketti (*.flatpak)"
+msgstr "Flatpak-paketti %1"
 
 #: flatpakruntime.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Run %1 on %2"
-msgstr "Koosta Flatpak %1 kohteelle %2"
+msgstr "Flatpak-suoritus %1 koneella %2"
 
 #: flatpakruntime.cpp:258
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer .flatpak to %1"
-msgstr ""
+msgstr "Lähetä .flatpak koneelle %1"
 
 #: flatpakruntime.cpp:260
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer replicate.sh to %1"
-msgstr ""
+msgstr "Lähetä replicate.sh koneelle %1"
 
 #: flatpakruntime.cpp:264
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Install %1 to %2"
-msgstr "Koosta Flatpak %1 kohteelle %2"
+msgstr "Flatpak-asennus %1 koneelle %2"
 
 #~ msgid "Bundling"
 #~ msgstr "Pakataan"

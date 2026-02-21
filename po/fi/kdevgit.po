@@ -1,7 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2016.
-# SPDX-FileCopyrightText: 2022, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2022, 2024, 2026 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-11-17 17:08+0200\n"
+"PO-Revision-Date: 2026-02-09 19:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
@@ -350,9 +350,7 @@ msgid "Unstaged changes"
 msgstr "Vaiheistamattomat muutokset"
 
 #: repostatusmodel.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Ristiriidat"
@@ -386,9 +384,7 @@ msgid "Files with changes"
 msgstr "Muuttuneet tiedostot"
 
 #: repostatusmodel.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "Files in a vcs which have unresolved (merge) conflits"
-#| msgid "Conflicts"
+#, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
 msgstr "Ristiriidat"
@@ -700,8 +696,7 @@ msgstr "Luo uuden haaran, tuo siihen kätköstä muutokset ja hylkää kätkön.
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Haara"

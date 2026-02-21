@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# SPDX-FileCopyrightText: 2021, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2021, 2024, 2026 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 00:41+0000\n"
-"PO-Revision-Date: 2024-11-15 15:20+0200\n"
+"PO-Revision-Date: 2026-02-09 19:10+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
@@ -39,6 +39,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"<code>lldb-mi</code>:n käyttämää LLDB-versiota ei saatu selville.<br /"
+"><code>lldb-mi</code> lähetti komentorivikomentoon <code>version</code> "
+"seuraavan vastauksen:<br />"
 
 #: debugsession.cpp:356
 #, kde-format
@@ -46,6 +49,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"<code>lldb-mi</code>:n tulisi käyttää LLDB:n versiota %1 tai uudempaa,<br /"
+">mutta nykyisellään se käyttää versiota %2"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19

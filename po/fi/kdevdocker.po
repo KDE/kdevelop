@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2026 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Tommi Nieminen <translator@legisign.org>, 2023.
+# SPDX-FileCopyrightText: 2023, 2026 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2023-09-29 10:17+0300\n"
+"PO-Revision-Date: 2026-02-09 17:28+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: dockerplugin.cpp:133
 #, kde-format
@@ -34,8 +35,7 @@ msgid "Tag name for '%1':"
 msgstr "Luokitusnimi kohteelle ”%1”:"
 
 #: dockerplugin.cpp:145
-#, fuzzy, kde-format
-#| msgid "docker build '%1'"
+#, kde-format
 msgctxt "%1 - Docker tag name"
 msgid "Docker Build \"%1\""
 msgstr "Docker-kooste ”%1”"

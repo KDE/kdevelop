@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2026 This file is copyright:
 # This file is distributed under the same license as the kdev-clang-tidy package.
-# Tommi Nieminen <translator@legisign.org>, 2018, 2023.
+# SPDX-FileCopyrightText: 2018, 2023, 2026 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdev-clang-tidy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2023-07-27 15:12+0300\n"
+"PO-Revision-Date: 2026-02-09 18:25+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: analyzer.cpp:29
 #, kde-format
@@ -123,8 +124,7 @@ msgstr "Clang-Tidyn asetukset"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/clangtidypreferences.ui:29
-#, fuzzy, kde-format
-#| msgid "Paths"
+#, kde-format
 msgctxt "@title:group"
 msgid "Paths"
 msgstr "Sijainnit"
