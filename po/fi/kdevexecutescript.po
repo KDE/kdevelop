@@ -1,7 +1,7 @@
 # Copyright © 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013.
-# SPDX-FileCopyrightText: 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2024, 2026 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2024-11-17 13:45+0200\n"
+"PO-Revision-Date: 2026-02-09 17:30+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -19,14 +19,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: executescriptplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Script Application"
+#, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr "Skriptisovellus"
+msgstr "skriptin sijainti"
 
 #: executescriptplugin.cpp:78
 #, kde-format
@@ -36,19 +35,15 @@ msgstr ""
 "keskeytetään."
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "Parametrit:"
+msgstr "argumentit"
 
 #: executescriptplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Interpreter"
+#, kde-format
 msgid "interpreter command"
-msgstr "Komentotulkki"
+msgstr "tulkkikomento"
 
 #: scriptappconfig.cpp:83
 #, kde-format

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the extragear-kdevelop package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2013.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
+# SPDX-FileCopyrightText: 2026 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -11,48 +12,43 @@ msgstr ""
 "Project-Id-Version: kdevcodeutils\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2013-12-22 13:53+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
-"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"PO-Revision-Date: 2026-02-09 17:25+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
-#, fuzzy, kde-format
-#| msgid "Document Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
-msgstr "Dokumentoi esittely"
+msgstr "Asiakirjan esittely"
 
 #: codeutilsplugin.cpp:50
-#, fuzzy, kde-format
-#| msgid "Alt+Shift+d"
+#, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
 msgstr "Alt+Vaihto+d"
 
 #: codeutilsplugin.cpp:52
-#, fuzzy, kde-format
-#| msgid "Add Doxygen skeleton for declaration under cursor."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add Doxygen skeleton for declaration under cursor."
 msgstr "Lisää esittelyn Doxygen-rungon kohdistimen kohdalle."
 
 #: codeutilsplugin.cpp:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "Adds a basic Doxygen comment skeleton in front of the declaration under "
-#| "the cursor, e.g. with all the parameter of a function."
+#, kde-format
 msgctxt "@info:whatthis"
 msgid ""
 "Adds a basic Doxygen comment skeleton in front of the declaration under the "
 "cursor, e.g. with all the parameter of a function."
 msgstr ""
-"Lisää perus-Doxygen-kommenttirungon kohdistimen kohdalla olevan esittelyn "
+"Lisää Doxygen-peruskommenttirungon kohdistimen kohdalla olevan esittelyn "
 "eteen, esim. funktion kaikkine parametreineen."
 
 #: codeutilsplugin.cpp:85

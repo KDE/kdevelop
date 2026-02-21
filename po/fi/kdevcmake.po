@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the kdevelop package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015.
-# Tommi Nieminen <translator@legisign.org>, 2022.
+# SPDX-FileCopyrightText: 2022, 2026 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Karvjorm
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2022-08-30 14:17+0300\n"
+"PO-Revision-Date: 2026-02-09 17:27+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -230,7 +231,7 @@ msgstr "<br /><em>Välimuistidokumentaatio:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "virheellinen CMake-tiedosto-APIn projektitieto"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -238,15 +239,7 @@ msgid "CMake Content Page"
 msgstr "CMake-sisältösivu"
 
 #: cmakemanager.cpp:665
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to configure project '%1' (error message: %2). As a result, "
-#| "KDevelop's code understanding will likely be broken.\n"
-#| "\n"
-#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
-#| "are correct, and KDevelop is configured to use the correct CMake version "
-#| "and settings. Then right-click the project item in the projects tool view "
-#| "and click 'Reload'."
+#, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
 "code understanding may be wrong.\n"
@@ -254,13 +247,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
-"Projektia ”%1” ei voitu määrittää (virheviesti: %2). Tämän seurauksena "
-"KDevelop ei luultavasti ymmärrä koodia.\n"
+"Määritettiin projekti ”%1”, jonka CMake-tieto on vanhentunut. Sen tuloksena "
+"KDevelop voi ymmärtää koodin väärin.\n"
 "\n"
-"Ongelman korjaamiseksi varmista, että projektin CMakeLists.txt-tiedostot "
-"ovat oikein ja että KDevelop on asetettu käyttämään oikeaa CMaken versiota "
-"oikein asetuksin. Napsauta sitten hiiren oikealla painikkeella "
-"projektityökalunäkymässä projektitietuetta ja valitse ”Lataa uudelleen”."
+"Korjaa ongelma napsauttamalla ensin projektia projektityökalunäkymässä ja "
+"sitten ”Lataa uudelleen”."
 
 #: cmakemanager.cpp:676
 #, kde-format
