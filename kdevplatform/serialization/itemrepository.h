@@ -172,11 +172,9 @@ void writeList(QIODevice* file, const QVector<T>& from)
  * @see indexedstring.h
  */
 
-enum {
-    ItemRepositoryBucketSize = 1 << 16,
-    ItemRepositoryBucketLimit = 1 << 16,
-    ItemRepositoryBucketLinearGrowthFactor = 10,
-};
+const constexpr auto ItemRepositoryBucketSize = 1 << 16;
+const constexpr auto ItemRepositoryBucketLimit = 1 << 16;
+const constexpr auto ItemRepositoryBucketLinearGrowthFactor = 10;
 
 /**
  * Buckets are the memory-units that are used to store the data in an ItemRepository.
@@ -189,25 +187,30 @@ template <class Item, class ItemRequest, bool markForReferenceCounting, uint fix
 class Bucket
 {
 public:
-    enum {
-        AdditionalSpacePerItem = 2
-    };
-    enum {
-        ObjectMapSize = ((ItemRepositoryBucketSize / ItemRequest::AverageSize) * 3) / 2 + 1,
-        MaxFreeItemsForHide = 0, //When less than this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
-        MaxFreeSizeForHide = fixedItemSize ? fixedItemSize : 0, //Only when the largest free size is smaller then this, the bucket is taken from the free list
-        MinFreeItemsForReuse = 10,//When this count of free items in one bucket is reached, consider re-assigning them to new requests
-        MinFreeSizeForReuse = ItemRepositoryBucketSize / 20 //When the largest free item is bigger then this, the bucket is automatically added to the free list
-    };
-    enum {
-        NextBucketHashSize = ObjectMapSize, //Affects the average count of bucket-chains that need to be walked in ItemRepository::index. Must be a multiple of ObjectMapSize
-        DataSize = sizeof(char) + sizeof(unsigned int) * 3 + ItemRepositoryBucketSize + sizeof(short unsigned int) *
-                   (ObjectMapSize + NextBucketHashSize + 1)
-    };
-    enum {
-        CheckStart = 0xff00ff1,
-        CheckEnd = 0xfafcfb
-    };
+    static const constexpr int AdditionalSpacePerItem = 2;
+
+    static const constexpr int ObjectMapSize = ((ItemRepositoryBucketSize / ItemRequest::AverageSize) * 3) / 2 + 1;
+
+    //When less than this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
+    static const constexpr int MaxFreeItemsForHide = 0;
+
+    //Only when the largest free size is smaller then this, the bucket is taken from the free list
+    static const constexpr int MaxFreeSizeForHide = fixedItemSize ? fixedItemSize : 0;
+
+    //When this count of free items in one bucket is reached, consider re-assigning them to new requests
+    static const constexpr int MinFreeItemsForReuse = 10;
+
+    //When the largest free item is bigger then this, the bucket is automatically added to the free list
+    static const constexpr int MinFreeSizeForReuse = ItemRepositoryBucketSize / 20;
+
+    //Affects the average count of bucket-chains that need to be walked in ItemRepository::index. Must be a multiple of ObjectMapSize
+    static const constexpr int NextBucketHashSize = ObjectMapSize;
+
+    static const constexpr int DataSize = sizeof(char) + sizeof(unsigned int) * 3 + ItemRepositoryBucketSize
+        + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1);
+
+    static const constexpr int CheckStart = 0xff00ff1;
+    static const constexpr int CheckEnd = 0xfafcfb;
     Bucket()
     {
     }
@@ -1206,15 +1209,13 @@ class ItemRepository : public AbstractItemRepository
 {
     using MyBucket = Bucket<Item, ItemRequest, markForReferenceCounting, fixedItemSize>;
 
-    enum {
-        //Must be a multiple of Bucket::ObjectMapSize, so Bucket::hasClashingItem can be computed
-        //Must also be a multiple of Bucket::NextBucketHashSize, for the same reason.(Currently those are same)
-        bucketHashSize = (targetBucketHashSize / MyBucket::ObjectMapSize) * MyBucket::ObjectMapSize
-    };
+    //Must be a multiple of Bucket::ObjectMapSize, so Bucket::hasClashingItem can be computed
+    //Must also be a multiple of Bucket::NextBucketHashSize, for the same reason.(Currently those are same)
+    static const constexpr uint bucketHashSize =
+        (targetBucketHashSize / MyBucket::ObjectMapSize) * MyBucket::ObjectMapSize;
 
-    enum {
-        BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
-    };
+    //Position in the data where the bucket array starts
+    static const constexpr uint BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize;
 
     Q_DISABLE_COPY_MOVE(ItemRepository)
 public:
