@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2020-07-24 12:24+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -131,17 +131,17 @@ msgstr "Inbyggd"
 msgid "Macros"
 msgstr "Makron"
 
-#: codecompletion/context.cpp:1454
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "Abstrakt överskriden"
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "Virtuellt överskriden"
 
-#: codecompletion/context.cpp:1470
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "Implementera funktion"

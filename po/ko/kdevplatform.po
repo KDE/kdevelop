@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-11 00:43+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2025-10-09 00:53+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -991,83 +991,83 @@ msgstr "사용하는 곳 표시"
 msgid "Show documentation for "
 msgstr "다음의 문서 표시:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:473
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
 msgstr "<익명>"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
 msgstr "재정의:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:518
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
 msgstr "함수"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:493
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:521
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
 #, kde-format
 msgid " from "
 msgstr " 원본: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:517
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
 msgstr "숨김:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:541
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
 msgstr "다음에서 재정의됨:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:558
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
 msgid "Overriders possible, show all"
 msgstr "재정의하는 곳 있음, 모두 표시"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
 #, kde-format
 msgid "More overriders possible, show all"
 msgstr "더 많은 재정의하는 곳 있음, 모두 표시"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:569
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
 #, kde-format
 msgid "Inherited by "
 msgstr "상속: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:584
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
 #, kde-format
 msgid "Inheriters possible, show all"
 msgstr "상속하는 곳 있음, 모두 표시"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:585
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
 #, kde-format
 msgid "More inheriters possible, show all"
 msgstr "더 많은 상속하는 곳 있음, 모두 표시"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:792
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
 msgstr "정의"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:823
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
 msgstr "전방"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:828
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"

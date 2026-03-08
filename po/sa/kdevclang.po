@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2024-12-13 19:10+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -129,17 +129,17 @@ msgstr "बिल्टिन्"
 msgid "Macros"
 msgstr "मैक्रोस्"
 
-#: codecompletion/context.cpp:1454
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "अमूर्त ओवरराइड"
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "वर्चुअल् ओवरराइड्"
 
-#: codecompletion/context.cpp:1470
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "कार्यान्वितम् कार्यम्"

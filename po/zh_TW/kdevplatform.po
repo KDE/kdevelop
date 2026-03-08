@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-11 00:43+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2025-05-03 15:33+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -989,83 +989,83 @@ msgstr "顯示使用"
 msgid "Show documentation for "
 msgstr "顯示文件給"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:473
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
 msgstr "<匿名>"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
 msgstr "覆寫"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:518
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
 msgstr "函式"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:493
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:521
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
 #, kde-format
 msgid " from "
 msgstr "從"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:517
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
 msgstr "隱藏"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:541
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
 msgstr "被覆寫於"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:558
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
 msgid "Overriders possible, show all"
 msgstr "可能的覆寫者，全部顯示"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
 #, kde-format
 msgid "More overriders possible, show all"
 msgstr "可能更多的覆寫者，全部顯示"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:569
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
 #, kde-format
 msgid "Inherited by "
 msgstr "繼承者："
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:584
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
 #, kde-format
 msgid "Inheriters possible, show all"
 msgstr "可能的繼承者，全部顯示"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:585
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
 #, kde-format
 msgid "More inheriters possible, show all"
 msgstr "可能更多的繼承者，全部顯示"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:792
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
 msgstr "未知"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
 msgstr "定義"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:823
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
 msgstr "向前"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:828
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"

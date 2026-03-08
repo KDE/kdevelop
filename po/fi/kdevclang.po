@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2022-08-19 14:42+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -123,17 +123,17 @@ msgstr ""
 msgid "Macros"
 msgstr "Makrot"
 
-#: codecompletion/context.cpp:1454
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr ""
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr ""
 
-#: codecompletion/context.cpp:1470
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr ""

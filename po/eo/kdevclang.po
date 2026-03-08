@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -132,17 +132,17 @@ msgstr "Enkonstruita"
 msgid "Macros"
 msgstr "Makrooj"
 
-#: codecompletion/context.cpp:1454
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "Abstrakta Override"
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "Virtuala Override"
 
-#: codecompletion/context.cpp:1470
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "Realigi Funkcion"

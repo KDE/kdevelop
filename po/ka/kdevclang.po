@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2022-04-24 19:23+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -132,17 +132,17 @@ msgstr "ჩაშენებული"
 msgid "Macros"
 msgstr "მაკროები"
 
-#: codecompletion/context.cpp:1454
+#: codecompletion/context.cpp:1456
 #, kde-format
 msgid "Abstract Override"
 msgstr "აბსტრაქტის გადაძალვა"
 
-#: codecompletion/context.cpp:1455
+#: codecompletion/context.cpp:1457
 #, kde-format
 msgid "Virtual Override"
 msgstr "ვირტუალის გადაძალვა"
 
-#: codecompletion/context.cpp:1470
+#: codecompletion/context.cpp:1472
 #, kde-format
 msgid "Implement Function"
 msgstr "ფუნქციის იმპლემენტაცია"

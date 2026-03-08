@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-11 00:43+0000\n"
+"POT-Creation-Date: 2026-03-08 00:42+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -1038,83 +1038,83 @@ msgstr "Пайдалануларды көрсету"
 msgid "Show documentation for "
 msgstr "Мынаның құжаттамасын көрсету: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:473
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:490
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
 msgstr "Мынаны жаңадан анықтайды: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:518
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
 msgstr "функция"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:493
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:521
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
 #, kde-format
 msgid " from "
 msgstr " мынадан: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:517
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
 msgstr "Мынаны жасырады: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:541
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
 msgstr "Мынада қайта анықталған: "
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:558
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
 msgid "Overriders possible, show all"
 msgstr "Қайта анықтамалар мүмкін, бүкілін көрсету"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
 #, kde-format
 msgid "More overriders possible, show all"
 msgstr "Тағы қайта анықтамалар мүмкін, бүкілін көрсету"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:569
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
 #, kde-format
 msgid "Inherited by "
 msgstr "Мынау мұралаған:"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:584
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
 #, kde-format
 msgid "Inheriters possible, show all"
 msgstr "Мұралағандар мүмкін, бүкілін көрсету"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:585
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
 #, kde-format
 msgid "More inheriters possible, show all"
 msgstr "Тағы мұралағандар мүмкін, бүкілін көрсету"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:792
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
 msgstr "Беймәлім"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
 msgstr "анықтама"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:823
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
 msgstr "алдын ала"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:828
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
