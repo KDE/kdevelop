@@ -843,7 +843,7 @@ msgstr "حدّد جلسة تودّ استخدامها"
 #, kde-format
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
-msgstr "حدّد التّنفيذيّ الّذي تريد تنقيحه."
+msgstr "حدّد التّنفيذيّ الذي تريد تنقيحه."
 
 #: main.cpp:641
 #, kde-format

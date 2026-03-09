@@ -23,13 +23,13 @@ msgstr ""
 #: kdevkonsoleview.cpp:107
 #, kde-format
 msgid "Terminal"
-msgstr "الطّرفيّة"
+msgstr "الطرفية"
 
 #: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
-msgstr "الطّرفيّة"
+msgstr "الطرفية"
 
 #: kdevkonsoleviewplugin.cpp:48
 #, kde-format
