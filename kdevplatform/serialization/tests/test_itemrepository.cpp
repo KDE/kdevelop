@@ -540,6 +540,53 @@ private Q_SLOTS:
          * be done correctly using only Bucket::hasClashingItem as of now.
          */
     }
+
+    void testFreeBucketOrdering()
+    {
+        QMutex mutex;
+        ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("ordering"), &mutex);
+
+        // All buckets are empty, they're ordered by bucket id
+        QVERIFY(std::is_sorted(repository.m_freeSpaceBuckets.cbegin(), repository.m_freeSpaceBuckets.cend()));
+        QVERIFY(std::is_sorted(repository.m_freeSpaceBuckets.cbegin(), repository.m_freeSpaceBuckets.cend(),
+                               [&](int left, int right) {
+                                   return repository.compareFreeSpaceBucketsIndex(left, right) == -1;
+                               }));
+
+        // Item in 1st bucket, 524 bytes left empty
+        TestItem* item = new TestItem(1, 65000);
+        repository.index(TestItemRequest(*item));
+
+        // Item in 2nd bucket, 1524 bytes left empty
+        item = new TestItem(2, 64000);
+        repository.index(TestItemRequest(*item));
+
+        // Item in 3rd bucket, 224 bytes left empty
+        item = new TestItem(3, 65300);
+        repository.index(TestItemRequest(*item));
+
+        // Item in 4th bucket, 524 bytes left empty
+        item = new TestItem(4, 65000);
+        repository.index(TestItemRequest(*item));
+
+        // Item in 5th bucket, monster bucket. Removes 5 and 6 from free space
+        item = new TestItem(5, 66000);
+        repository.index(TestItemRequest(*item));
+
+        // Item in 7th bucket, 124 bytes left empty
+        item = new TestItem(6, 65400);
+        repository.index(TestItemRequest(*item));
+
+        // Ordering is by empty space, then by bucket id.
+        // Buckets 8+ (completely empty) remain at end, sorted by bucket id.
+        // sorting by free size of non empty buckets results in 7,3,1,4,2
+        const QList<unsigned int> check = {7, 3, 1, 4, 2, 8, 9};
+        QCOMPARE(repository.m_freeSpaceBuckets, check);
+        QVERIFY(std::is_sorted(repository.m_freeSpaceBuckets.cbegin(), repository.m_freeSpaceBuckets.cend(),
+                               [&](int left, int right) {
+                                   return repository.compareFreeSpaceBucketsIndex(left, right) == -1;
+                               }));
+    }
 };
 
 #include "test_itemrepository.moc"

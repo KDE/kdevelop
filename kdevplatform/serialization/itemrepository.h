@@ -1688,16 +1688,9 @@ public:
         }
 
 #ifdef DEBUG_MONSTERBUCKETS
-        for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
-            if (a > 0) {
-                uint prev = a - 1;
-                uint prevLargestFree = bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeSize();
-                uint largestFree = bucketForIndex(m_freeSpaceBuckets[a])->largestFreeSize();
-                Q_ASSERT((prevLargestFree < largestFree) || (prevLargestFree == largestFree &&
-                                                             m_freeSpaceBuckets[prev] < m_freeSpaceBuckets[a]));
-            }
-        }
-
+        Q_ASSERT(std::is_sorted(m_freeSpaceBuckets.cbegin(), m_freeSpaceBuckets.cend(), [&](int left, int right) {
+            return compareFreeSpaceBucketsIndex(left, right) == -1;
+        }));
 #endif
         ret.hashSize = bucketHashSize;
         ret.hashUse = 0;
@@ -2104,23 +2097,17 @@ private:
             while (1) {
                 int prev = index - 1;
                 int next = index + 1;
-                if (prev >= 0 && (bucketForIndex(freeSpaceBuckets[prev])->largestFreeSize() > largestFreeSize ||
-                                  (bucketForIndex(freeSpaceBuckets[prev])->largestFreeSize() == largestFreeSize &&
-                                   freeSpaceBuckets[index] < freeSpaceBuckets[prev]))
-                ) {
+                if (prev >= 0
+                    && compareFreeSpaceBucketsIndex(freeSpaceBuckets[index], freeSpaceBuckets[prev])
+                        == -1 ) {
                     //This item should be behind the successor, either because it has a lower largestFreeSize, or because the index is lower
-                    uint oldPrevValue = freeSpaceBuckets[prev];
-                    freeSpaceBuckets[prev] = freeSpaceBuckets[index];
-                    freeSpaceBuckets[index] = oldPrevValue;
+                    std::swap(freeSpaceBuckets[prev], freeSpaceBuckets[index]);
                     index = prev;
                 } else if (next < m_freeSpaceBuckets.size()
-                           && (bucketForIndex(freeSpaceBuckets[next])->largestFreeSize() < largestFreeSize
-                               || (bucketForIndex(freeSpaceBuckets[next])->largestFreeSize() == largestFreeSize
-                                   && freeSpaceBuckets[index] > freeSpaceBuckets[next]))) {
+                           && compareFreeSpaceBucketsIndex(freeSpaceBuckets[next], freeSpaceBuckets[index])
+                               == -1) {
                     //This item should be behind the successor, either because it has a higher largestFreeSize, or because the index is higher
-                    uint oldNextValue = freeSpaceBuckets[next];
-                    freeSpaceBuckets[next] = freeSpaceBuckets[index];
-                    freeSpaceBuckets[index] = oldNextValue;
+                    std::swap(freeSpaceBuckets[index], freeSpaceBuckets[next]);
                     index = next;
                 } else {
                     break;
@@ -2434,14 +2421,14 @@ private:
             //We only do it when a specific threshold of empty items is reached, because that way items can stay "somewhat" semantically ordered.
             Q_ASSERT(bucketPtr->largestFreeSize());
             int insertPos;
+            // Find the position in m_freeSpaceBuckets where to insert the bucket.
+            // NOTE: Using binary search is 10% slower.
             for (insertPos = 0; insertPos < m_freeSpaceBuckets.size(); ++insertPos) {
-                if (bucketForIndex(m_freeSpaceBuckets[insertPos])->largestFreeSize() > bucketPtr->largestFreeSize())
+                if (compareFreeSpaceBucketsIndex(bucket, m_freeSpaceBuckets[insertPos]) == -1)
                     break;
             }
-
             m_freeSpaceBuckets.insert(insertPos, bucket);
 
-            updateFreeSpaceOrder(insertPos);
         } else if (indexInFree != -1) {
             ///Re-order so the order in m_freeSpaceBuckets is correct(sorted by largest free item size)
             updateFreeSpaceOrder(indexInFree);
@@ -2500,6 +2487,16 @@ private:
         if (m_currentBucket == 0)
             m_currentBucket = 1;
     }
+
+    int compareFreeSpaceBucketsIndex(int Left, int Right) const
+    {
+        const auto lbucketSize = bucketForIndex(Left)->largestFreeSize();
+        const auto rbucketSize = bucketForIndex(Right)->largestFreeSize();
+        if (lbucketSize == rbucketSize) {
+            return (Left == Right) ? 0 : (Left < Right) ? -1 : 1;
+        }
+        return (lbucketSize < rbucketSize) ? -1 : 1;
+    };
 
     bool m_metaDataChanged = true;
     bool m_unloadingEnabled = true;
