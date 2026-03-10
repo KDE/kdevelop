@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevpatchreview.pot\n"
-"X-Crowdin-File-ID: 54582\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevpatchreview.pot\n"
+"X-Crowdin-File-ID: 54816\n"
 
 #: localpatchsource.cpp:34
 #, kde-format

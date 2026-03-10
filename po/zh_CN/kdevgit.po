@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevgit.pot\n"
-"X-Crowdin-File-ID: 54596\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevgit.pot\n"
+"X-Crowdin-File-ID: 54766\n"
 
 #: committoolview.cpp:197 committoolview.cpp:198
 #, kde-format
