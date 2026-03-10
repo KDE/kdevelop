@@ -56,7 +56,7 @@ checkToolsInPath sed ls cut dirname mktemp basename readlink hostname
 
 # special handling for qdbus variants
 _qdbus=
-_qdbus_list=(qdbus-qt5 qdbus)
+_qdbus_list=(qdbus-qt6 qdbus6 qdbus)
 for _qdbus_candidate in "${_qdbus_list[@]}"; do
     if command -v "$_qdbus_candidate" &> /dev/null; then
         _qdbus="$_qdbus_candidate"
