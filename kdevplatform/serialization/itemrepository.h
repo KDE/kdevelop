@@ -174,6 +174,8 @@ void writeList(QIODevice* file, const QVector<T>& from)
 
 const constexpr auto ItemRepositoryBucketSize = 1 << 16;
 const constexpr auto ItemRepositoryBucketLimit = 1 << 16;
+const constexpr auto ItemRepositoryMaxBucketIndex =
+    ItemRepositoryBucketLimit - 2; // max index is size - 1, and we reserve 0xffff
 const constexpr auto ItemRepositoryBucketLinearGrowthFactor = 10;
 
 using BucketId = std::uint16_t;
@@ -1350,21 +1352,23 @@ public:
             // note: the bucket may be empty and/or in the free list, but it might still be too small
             // for a monster bucket request
 
-            ++m_currentBucket;
-            Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
-            useBucket = m_currentBucket;
+            // Don't advance if we're at the max index.
+            if (m_currentBucket < ItemRepositoryMaxBucketIndex) {
+                useBucket = ++m_currentBucket;
+            } else {
+                useBucket = m_currentBucket + 1; // Increment useBucket anyway, so it explicitly overflows.
+            }
+            Q_ASSERT(m_currentBucket <= ItemRepositoryMaxBucketIndex);
         };
 
         //The item isn't in the repository yet, find a new bucket for it
         while (1) {
             if (useBucket >= m_buckets.size()) {
-                if (m_buckets.size() >= 0xfffe) { //We have reserved the last bucket index 0xffff for special purposes
-                    //the repository has overflown.
-                    qWarning() << "Found no room for an item in" << m_repositoryName << "size of the item:" <<
-                        request.itemSize();
+                if (allocateNextBuckets() == 0) {
+                    // No new free buckets after a resize attempt: the repository has overflown.
+                    qWarning() << "Found no room for an item in" << m_repositoryName
+                               << "size of the item:" << request.itemSize();
                     return createIndex();
-                } else {
-                    allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
                 }
             }
 
@@ -1477,6 +1481,7 @@ public:
                     updateFreeSpaceOrder(reOrderFreeSpaceBucketIndex);
 
                 Q_ASSERT(m_currentBucket < m_buckets.size());
+                Q_ASSERT(m_currentBucket <= ItemRepositoryMaxBucketIndex);
                 return createIndex(useBucket, indexInBucket);
             } else {
                 advanceToNextBucket();
@@ -1857,7 +1862,7 @@ private:
 
             Q_ASSERT(m_buckets.isEmpty());
             Q_ASSERT(m_freeSpaceBuckets.isEmpty());
-            allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
+            allocateNextBuckets();
 
             std::fill_n(m_firstBucketForHash, bucketHashSize, 0);
 
@@ -2238,6 +2243,9 @@ private:
         auto rangeStart = BucketId{std::numeric_limits<BucketId>::max()};
         auto rangeEnd = BucketId{std::numeric_limits<BucketId>::max()};
         const uint extent = MyBucket::calculateExtentSize(size);
+        const uint numberOfRequiredBuckets = extent + 1;
+        Q_ASSERT(extent);
+        uint selectedBuckets = 0;
         for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
             const auto* const bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
             if (bucketPtr->isEmpty()) {
@@ -2246,17 +2254,18 @@ private:
                 if (rangeEnd != index) {
                     rangeStart = index;
                     rangeEnd = index + 1;
+                    selectedBuckets = 0;
                 } else {
                     ++rangeEnd;
                 }
                 if (rangeStart != rangeEnd) {
-                    const uint currentExtentSize = rangeEnd - rangeStart - 1;
-                    if (currentExtentSize == extent) {
-                        Q_ASSERT(currentExtentSize);
+                    selectedBuckets = rangeEnd - rangeStart;
+                    if (selectedBuckets == numberOfRequiredBuckets) {
+                        // Found enough existing empty buckets, use those
+                        Q_ASSERT(selectedBuckets);
                         ///We can merge these buckets into one monster-bucket that can hold the data
-                        Q_ASSERT((uint)m_freeSpaceBuckets[a - currentExtentSize] == (uint)rangeStart);
+                        Q_ASSERT((uint)m_freeSpaceBuckets[a - (selectedBuckets - 1)] == (uint)rangeStart);
                         useBucket = rangeStart;
-                        convertMonsterBucket(rangeStart, extent);
                         break;
                     }
                 }
@@ -2264,22 +2273,26 @@ private:
         }
 
         if (!useBucket) {
-            //Create a new monster-bucket at the end of the data
-            int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
-            Q_ASSERT(needMonsterExtent);
-            const auto currentBucketIncrease = needMonsterExtent + 1;
+            // Not enough empty buckets were found, need to allocate some
+            Q_ASSERT(extent);
+            const uint minimumBucketIncrease = numberOfRequiredBuckets - selectedBuckets;
             Q_ASSERT(m_currentBucket);
-            if (m_currentBucket + currentBucketIncrease >= m_buckets.size()) {
-                allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor + currentBucketIncrease);
+            if (m_currentBucket + numberOfRequiredBuckets >= m_buckets.size()) {
+                if (allocateNextBuckets(minimumBucketIncrease) < minimumBucketIncrease) {
+                    qWarning() << "Found no room for an item in" << m_repositoryName
+                               << "size of the item:" << request.itemSize();
+                    return std::make_pair(0u, 0u);
+                }
             }
             useBucket = m_currentBucket;
-
-            convertMonsterBucket(useBucket, needMonsterExtent);
-            m_currentBucket += currentBucketIncrease;
-            Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
-            Q_ASSERT(m_buckets[useBucket]);
-            Q_ASSERT(m_buckets[useBucket]->monsterBucketExtent() == needMonsterExtent);
+            Q_ASSERT(m_currentBucket + numberOfRequiredBuckets - 1 <= ItemRepositoryMaxBucketIndex);
+            m_currentBucket = m_currentBucket + numberOfRequiredBuckets - 1;
         }
+
+        convertMonsterBucket(useBucket, extent);
+        Q_ASSERT(m_currentBucket <= ItemRepositoryMaxBucketIndex);
+        Q_ASSERT(m_buckets[useBucket]);
+        Q_ASSERT(m_buckets[useBucket]->monsterBucketExtent() == (int)extent);
         Q_ASSERT(useBucket);
         auto* const bucketPtr = bucketForIndex(useBucket);
 
@@ -2291,6 +2304,7 @@ private:
     MyBucket* bucketForIndex(unsigned short index) const
     {
         Q_ASSERT(index);
+        Q_ASSERT(index != 0xffff); // Reserved value
         MyBucket* bucketPtr = m_buckets.at(index);
         if (!bucketPtr) {
             bucketPtr = initializeBucket(index);
@@ -2498,16 +2512,20 @@ private:
         Q_UNUSED(index);
     }
 
-    void allocateNextBuckets(int numNewBuckets)
+    uint allocateNextBuckets(const int additionalBuckets = 0)
     {
-        Q_ASSERT(numNewBuckets > 0);
+        const int numNewBuckets = ItemRepositoryBucketLinearGrowthFactor + additionalBuckets;
         const auto oldSize = m_buckets.size();
-        m_buckets.resize(oldSize + numNewBuckets);
+        if (m_buckets.size() + numNewBuckets >= ItemRepositoryMaxBucketIndex + 1) {
+            m_buckets.resize(ItemRepositoryMaxBucketIndex + 1); // Size is max index + 1
+        } else {
+            m_buckets.resize(oldSize + numNewBuckets);
+        }
         m_monsterBucketTailMarker.resize(m_buckets.size());
 
         // the buckets we just created can by definition not yet exist and must be empty
         // meaning we can bypass loading from file _and_ we must add them to the freeSpaceBuckets too
-        for (int i = oldSize; i < (oldSize + numNewBuckets); ++i) {
+        for (int i = oldSize; i < m_buckets.size(); ++i) {
             if (i == 0) // see below, the zero bucket is reserved for special purposes
                 continue;
 
@@ -2521,6 +2539,7 @@ private:
             Q_ASSERT(!bucket->monsterBucketExtent());
             Q_ASSERT(!m_monsterBucketTailMarker[i]);
 
+            Q_ASSERT(i != 0xffff);
             putIntoFreeList(i, bucket);
             Q_ASSERT(m_freeSpaceBuckets.contains(i));
         }
@@ -2528,6 +2547,9 @@ private:
         // Skip the first bucket, we won't use it so we have the zero indices for special purposes
         if (m_currentBucket == 0)
             m_currentBucket = 1;
+
+        // Return the number of buckets allocated.
+        return m_buckets.size() - oldSize;
     }
 
     int compareFreeSpaceBucketsIndex(BucketId Left, BucketId Right) const
