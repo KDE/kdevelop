@@ -131,7 +131,9 @@ void ProjectModelItemDelegate::drawStyledBackground(QPainter* painter, const QSt
 {
     QStyleOptionViewItem opt(option);
     QStyle *style = opt.widget->style();
-    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, opt.widget);
+    const auto leftMargin = opt.widget->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+    opt.rect = opt.rect.marginsRemoved(QMargins(leftMargin, 0, 0, 0));
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
 }
 
 void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOptionViewItem& option,
