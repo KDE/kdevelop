@@ -56,11 +56,3 @@ msgstr "Actualitza la vista"
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"
 msgstr "Actualitza la vista de tots els projectes, en cas de qualsevol canvi"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Josep M. Ferrer"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "txemaq@gmail.com"

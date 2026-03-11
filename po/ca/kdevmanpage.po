@@ -44,6 +44,3 @@ msgstr ""
 #, kde-format
 msgid "Man Page"
 msgstr "Pàgina «man»"
-
-#~ msgid "Man pages loading error"
-#~ msgstr "Error en carregar les pàgines man"

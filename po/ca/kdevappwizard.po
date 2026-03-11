@@ -225,17 +225,3 @@ msgstr "Cap"
 msgctxt "@label:listbox"
 msgid "Version control system:"
 msgstr "Sistema de control de versions:"
-
-#~ msgid "Failed to create project"
-#~ msgstr "Ha fallat en crear el projecte"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Project"
-#~ msgstr "Projecte"
-
-#~| msgid "Application Name:"
-#~ msgid "Application Wizard"
-#~ msgstr "Assistent d'aplicació"
-
-#~ msgid "KSqueezedTextLabel"
-#~ msgstr "KSqueezedTextLabel"

@@ -146,27 +146,3 @@ msgstr "Desbloqueja la vista actual"
 #, kde-format
 msgid "Code Browser Toolbar"
 msgstr "Barra d'eines del navegador de codi"
-
-#~ msgid "Outline..."
-#~ msgstr "Esquema..."
-
-#~ msgctxt "@title:menu"
-#~ msgid "Navigation"
-#~ msgstr "Navegació"
-
-#~ msgid "Enable/disable source browse mode"
-#~ msgstr "Activa/desactiva el mode de navegació del codi font"
-
-#~ msgid ""
-#~ "When this is enabled, you can browse the source-code by clicking in the "
-#~ "editor."
-#~ msgstr ""
-#~ "Quan això està activat, podeu navegar pel codi font clicant a l'editor."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Manuel Tortosa Moreno"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "manutortosa@gmail.com"

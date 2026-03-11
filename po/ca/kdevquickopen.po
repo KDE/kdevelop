@@ -275,6 +275,3 @@ msgstr "&Àmbits:"
 msgctxt "@label:listbox"
 msgid "&Items:"
 msgstr "elements:"
-
-#~ msgid "Project %1"
-#~ msgstr "Projecte %1"

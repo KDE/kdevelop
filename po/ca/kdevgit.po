@@ -707,10 +707,3 @@ msgstr ""
 msgctxt "@action:button"
 msgid "Branch"
 msgstr "Branca"
-
-#~ msgctxt "Files in git which have unresolved (merge) conflits"
-#~ msgid "Conflicts"
-#~ msgstr "Conflictes"
-
-#~ msgid "error: %1"
-#~ msgstr "error: %1"

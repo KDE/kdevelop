@@ -208,11 +208,3 @@ msgstr "Mou amunt"
 msgctxt "@action:button"
 msgid "Move Down"
 msgstr "Mou avall"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Antoni Bella"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "antonibella5@yahoo.com"
