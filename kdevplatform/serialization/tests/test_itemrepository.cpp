@@ -739,7 +739,7 @@ private Q_SLOTS:
         // All buckets are empty, they're ordered by bucket id
         QVERIFY(std::is_sorted(repository.m_freeSpaceBuckets.cbegin(), repository.m_freeSpaceBuckets.cend()));
         QVERIFY(std::is_sorted(repository.m_freeSpaceBuckets.cbegin(), repository.m_freeSpaceBuckets.cend(),
-                               [&](int left, int right) {
+                               [&](BucketId left, BucketId right) {
                                    return repository.compareFreeSpaceBucketsIndex(left, right) == -1;
                                }));
 
@@ -770,10 +770,10 @@ private Q_SLOTS:
         // Ordering is by empty space, then by bucket id.
         // Buckets 8+ (completely empty) remain at end, sorted by bucket id.
         // sorting by free size of non empty buckets results in 7,3,1,4,2
-        const QList<unsigned int> check = {7, 3, 1, 4, 2, 8, 9};
+        const QList<BucketId> check = {7, 3, 1, 4, 2, 8, 9};
         QCOMPARE(repository.m_freeSpaceBuckets, check);
         QVERIFY(std::is_sorted(repository.m_freeSpaceBuckets.cbegin(), repository.m_freeSpaceBuckets.cend(),
-                               [&](int left, int right) {
+                               [&](BucketId left, BucketId right) {
                                    return repository.compareFreeSpaceBucketsIndex(left, right) == -1;
                                }));
     }

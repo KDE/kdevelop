@@ -92,7 +92,7 @@ public:
     void readArray(T** to, uint size)
     {
         Q_ASSERT(to);
-        static_assert(std::is_integral_v<T>);
+        static_assert(std::is_standard_layout_v<T>);
 
         *to = reinterpret_cast<T*>(m_data);
         m_data += sizeof(T) * size;
@@ -112,7 +112,7 @@ void readValues(QIODevice* file, uint numValues, T* to)
 {
     Q_ASSERT(file);
     Q_ASSERT(to);
-    static_assert(std::is_integral_v<T>);
+    static_assert(std::is_standard_layout_v<T>);
 
     file->read(reinterpret_cast<char*>(to), sizeof(T) * numValues);
 }
@@ -135,7 +135,7 @@ void writeValues(QIODevice* file, uint numValues, const T* from)
 {
     Q_ASSERT(file);
     Q_ASSERT(from);
-    static_assert(std::is_integral_v<T>);
+    static_assert(std::is_standard_layout_v<T>);
 
     file->write(reinterpret_cast<const char*>(from), sizeof(T) * numValues);
 }
@@ -176,6 +176,8 @@ const constexpr auto ItemRepositoryBucketSize = 1 << 16;
 const constexpr auto ItemRepositoryBucketLimit = 1 << 16;
 const constexpr auto ItemRepositoryBucketLinearGrowthFactor = 10;
 
+using BucketId = std::uint16_t;
+
 /**
  * Buckets are the memory-units that are used to store the data in an ItemRepository.
  *
@@ -207,7 +209,8 @@ public:
     static const constexpr int NextBucketHashSize = ObjectMapSize;
 
     static const constexpr int DataSize = sizeof(char) + sizeof(unsigned int) * 3 + ItemRepositoryBucketSize
-        + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1);
+        + sizeof(short unsigned int) * (ObjectMapSize) + sizeof(BucketId) * NextBucketHashSize
+        + sizeof(short unsigned int);
 
     static const constexpr int CheckStart = 0xff00ff1;
     static const constexpr int CheckEnd = 0xfafcfb;
@@ -224,7 +227,7 @@ public:
         }
     }
 
-    void initialize(int monsterBucketExtent, std::unique_ptr<short unsigned int[]> nextBucketHashToRestore = {})
+    void initialize(int monsterBucketExtent, std::unique_ptr<BucketId[]> nextBucketHashToRestore = {})
     {
         if (!m_data) {
             m_monsterBucketExtent = monsterBucketExtent;
@@ -241,7 +244,7 @@ public:
             if (nextBucketHashToRestore) {
                 m_nextBucketHash = nextBucketHashToRestore.release();
             } else {
-                m_nextBucketHash = new short unsigned int[NextBucketHashSize]();
+                m_nextBucketHash = new BucketId[NextBucketHashSize]();
             }
 
             m_changed = true;
@@ -313,7 +316,7 @@ public:
             bool dirty;
 
             short unsigned int* m = new short unsigned int[ObjectMapSize];
-            short unsigned int* h = new short unsigned int[NextBucketHashSize];
+            BucketId* h = new BucketId[NextBucketHashSize];
 
             readValue(file, &monsterBucketExtent);
             Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
@@ -735,18 +738,18 @@ public:
         return true;
     }
 
-    std::unique_ptr<short unsigned int[]> takeNextBucketHash()
+    std::unique_ptr<BucketId[]> takeNextBucketHash()
     {
         if (m_mappedData == m_data) {
             // mmapped data, we need to copy the next bucket hash
-            auto ret = std::make_unique<short unsigned int[]>(NextBucketHashSize);
+            auto ret = std::make_unique<BucketId[]>(NextBucketHashSize);
             std::copy_n(m_nextBucketHash, NextBucketHashSize, ret.get());
             m_nextBucketHash = nullptr;
             return ret;
         }
 
         // otherwise we can just take the pointer directly
-        return std::unique_ptr<short unsigned int[]>(std::exchange(m_nextBucketHash, nullptr));
+        return std::unique_ptr<BucketId[]>(std::exchange(m_nextBucketHash, nullptr));
     }
 
     uint available() const
@@ -810,13 +813,13 @@ public:
         return changed;
     }
 
-    unsigned short nextBucketForHash(uint hash) const
+    BucketId nextBucketForHash(uint hash) const
     {
         m_lastUsed = 0;
         return m_nextBucketHash[hash % NextBucketHashSize];
     }
 
-    void setNextBucketForHash(unsigned int hash, unsigned short bucket)
+    void setNextBucketForHash(unsigned int hash, BucketId bucket)
     {
         m_lastUsed = 0;
         prepareChange();
@@ -936,11 +939,11 @@ private:
     {
         if (m_mappedData == m_data) {
             short unsigned int* oldObjectMap = m_objectMap;
-            short unsigned int* oldNextBucketHash = m_nextBucketHash;
+            auto* const oldNextBucketHash = m_nextBucketHash;
 
             m_data = new char[dataSize()];
             m_objectMap = new short unsigned int[ObjectMapSize];
-            m_nextBucketHash = new short unsigned int[NextBucketHashSize];
+            m_nextBucketHash = new BucketId[NextBucketHashSize];
 
             std::copy_n(m_mappedData, dataSize(), m_data);
             std::copy_n(oldObjectMap, ObjectMapSize, m_objectMap);
@@ -1106,7 +1109,7 @@ private:
     short unsigned int m_largestFreeItem  = 0; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
     unsigned int m_freeItemCount  = 0;
 
-    unsigned short* m_nextBucketHash  = nullptr;
+    BucketId* m_nextBucketHash = nullptr;
 
     bool m_dirty = false; //Whether the data was changed since the last finalCleanup
     bool m_changed  = false; //Whether this bucket was changed since it was last stored to disk
@@ -1222,7 +1225,8 @@ class ItemRepository : public AbstractItemRepository
         (targetBucketHashSize / MyBucket::ObjectMapSize) * MyBucket::ObjectMapSize;
 
     //Position in the data where the bucket array starts
-    static const constexpr uint BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize;
+    static const constexpr uint BucketStartOffset = sizeof(uint) * 6 + sizeof(BucketId) /* m_currentBucket*/
+        + sizeof(BucketId) * bucketHashSize; /*m_firstBucketForHash*/
 
     Q_DISABLE_COPY_MOVE(ItemRepository)
 public:
@@ -1267,20 +1271,20 @@ public:
         const uint size = request.itemSize();
 
         // Bucket indexes tracked while walking the bucket chain for this request hash
-        unsigned short bucketInChainWithSpace = 0;
-        unsigned short lastBucketWalked = 0;
+        auto bucketInChainWithSpace = BucketId{0};
+        auto lastBucketWalked = BucketId{0};
 
-        const ushort foundIndexInBucket = walkBucketChain(hash, [&](ushort bucketIdx, const MyBucket* bucketPtr) {
-                lastBucketWalked = bucketIdx;
+        const ushort foundIndexInBucket = walkBucketChain(hash, [&](BucketId bucketIdx, const MyBucket* bucketPtr) {
+            lastBucketWalked = bucketIdx;
 
-                const ushort found = bucketPtr->findIndex(request);
+            const ushort found = bucketPtr->findIndex(request);
 
-                if (!found && !bucketInChainWithSpace && bucketPtr->canAllocateItem(size)) {
-                    bucketInChainWithSpace = bucketIdx;
-                }
+            if (!found && !bucketInChainWithSpace && bucketPtr->canAllocateItem(size)) {
+                bucketInChainWithSpace = bucketIdx;
+            }
 
-                return found;
-            });
+            return found;
+        });
 
         if (foundIndexInBucket) {
             // 'request' is already present, return the existing index
@@ -1306,15 +1310,14 @@ public:
 
         m_metaDataChanged = true;
 
-        const bool pickedBucketInChain = bucketInChainWithSpace;
-        int useBucket = bucketInChainWithSpace;
+        const bool pickedBucketInChain = bucketInChainWithSpace != 0;
+        auto useBucket = bucketInChainWithSpace;
 
         if (!pickedBucketInChain) {
             //Try finding an existing bucket with deleted space to store the data into
             auto it = std::upper_bound(m_freeSpaceBuckets.begin(), m_freeSpaceBuckets.end(), size,
-                                       [&](uint size, uint index){
+                                       [&](uint size, BucketId index) {
                                            return bucketForIndex(index)->canAllocateItem(size);
-
                                        });
             if (it != m_freeSpaceBuckets.end()) {
                 useBucket = *it;
@@ -1377,13 +1380,13 @@ public:
                 useBucket = 0;
                 //The item did not fit in, we need a monster-bucket(Merge consecutive buckets)
                 ///Step one: Search whether we can merge multiple empty buckets in the free-list into one monster-bucket
-                int rangeStart = -1;
-                int rangeEnd = -1;
+                auto rangeStart = BucketId{std::numeric_limits<BucketId>::max()};
+                auto rangeEnd = BucketId{std::numeric_limits<BucketId>::max()};
                 for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
-                    MyBucket* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+                    const auto* const bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
                     if (bucketPtr->isEmpty()) {
                         //This bucket is a candidate for monster-bucket merging
-                        int index = ( int )m_freeSpaceBuckets[a];
+                        const auto index = m_freeSpaceBuckets[a];
                         if (rangeEnd != index) {
                             rangeStart = index;
                             rangeEnd = index + 1;
@@ -1436,8 +1439,8 @@ public:
             if (indexInBucket) {
                 ++m_statItemCount;
 
-                const int previousBucketNumber = lastBucketWalked;
-                unsigned short* const bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
+                const auto previousBucketNumber = lastBucketWalked;
+                auto* const bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
 
                 if (!(*bucketHashPosition)) {
                     Q_ASSERT(!previousBucketNumber);
@@ -1448,13 +1451,12 @@ public:
                     ++m_statBucketHashClashes;
 
                     ///Debug: Detect infinite recursion
-                    ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, previousBucketNumber));
-                    )
+                    ifDebugInfiniteRecursion(
+                        Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, previousBucketNumber));)
 
                     //Find the position where the paths of useBucket and *bucketHashPosition intersect, and insert useBucket
                     //there. That way, we don't create loops.
-                    QPair<unsigned int, unsigned int> intersect = hashChainIntersection(*bucketHashPosition, useBucket,
-                                                                                        hash);
+                    const auto intersect = hashChainIntersection(*bucketHashPosition, useBucket, hash);
 
                     Q_ASSERT(m_buckets[previousBucketNumber]->nextBucketForHash(hash) == 0);
 
@@ -1498,7 +1500,7 @@ public:
 
                         ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(*bucketHashPosition, hash, useBucket)); )
                         ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(useBucket, hash, *bucketHashPosition)); )
-                        unsigned short oldStart = *bucketHashPosition;
+                        const auto oldStart = *bucketHashPosition;
 
                         *bucketHashPosition = useBucket;
 
@@ -1527,10 +1529,10 @@ public:
     ///Returns zero if the item is not in the repository yet
     unsigned int findIndex(const ItemRequest& request) const
     {
-        return walkBucketChain(request.hash(), [this, &request](ushort bucketIdx, const MyBucket* bucketPtr) {
-                const ushort indexInBucket = bucketPtr->findIndex(request);
-                return indexInBucket ? createIndex(bucketIdx, indexInBucket) : createIndex();
-            });
+        return walkBucketChain(request.hash(), [this, &request](BucketId bucketIdx, const MyBucket* bucketPtr) {
+            const ushort indexInBucket = bucketPtr->findIndex(request);
+            return indexInBucket ? createIndex(bucketIdx, indexInBucket) : createIndex();
+        });
     }
 
     /// Returns nullptr if the item is not in the repository yet
@@ -1554,9 +1556,8 @@ public:
 
         //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
         MyBucket* previousBucketPtr = nullptr;
-        MyBucket* const bucketPtr = walkBucketChain(hash,
-                                                    [bucket, &previousBucketPtr](ushort bucketIdx,
-                                                                                 MyBucket* bucketPtr) -> MyBucket* {
+        MyBucket* const bucketPtr =
+            walkBucketChain(hash, [bucket, &previousBucketPtr](BucketId bucketIdx, MyBucket* bucketPtr) -> MyBucket* {
                 if (bucket != bucketIdx) {
                     previousBucketPtr = bucketPtr;
                     return nullptr;
@@ -1578,12 +1579,12 @@ public:
         if (!previousBucketPtr) {
             // This bucket is linked in the m_firstBucketForHash array, find the next clashing bucket in the chain
             // There may be items in the chain that clash only with MyBucket::NextBucketHashSize, skipped here
-            m_firstBucketForHash[hash %
-                                 bucketHashSize] = walkBucketChain(hash, [hash](ushort bucketIdx, MyBucket* bucketPtr) {
+            m_firstBucketForHash[hash % bucketHashSize] =
+                walkBucketChain(hash, [hash](BucketId bucketIdx, MyBucket* bucketPtr) {
                     if (bucketPtr->hasClashingItem(hash, bucketHashSize)) {
                         return bucketIdx;
                     }
-                    return static_cast<ushort>(0);
+                    return BucketId{};
                 });
         } else if (!bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize)) {
             // TODO: Skip clashing items reachable from m_firstBucketForHash
@@ -1719,7 +1720,7 @@ public:
 
                 for (uint aa = 0; aa < MyBucket::NextBucketHashSize; ++aa) {
                     uint length = 0;
-                    uint next = bucket->nextBucketForHash(aa);
+                    auto next = bucket->nextBucketForHash(aa);
                     if (next) {
                         ++ret.totalBucketFollowerSlots;
                         while (next) {
@@ -1782,7 +1783,7 @@ public:
     template <class Visitor>
     void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const
     {
-        for (int a = 1; a <= m_currentBucket; ++a) {
+        for (BucketId a = 1; a <= m_currentBucket; ++a) {
             if (m_monsterBucketTailMarker[a]) {
                 continue;
             }
@@ -2013,7 +2014,7 @@ private:
     int finalCleanup() final
     {
         int changed = 0;
-        for (int a = 1; a <= m_currentBucket; ++a) {
+        for (BucketId a = 1; a <= m_currentBucket; ++a) {
             MyBucket* bucket = bucketForIndex(a);
             if (bucket && bucket->dirty()) { ///@todo Faster dirty check, without loading bucket
                 changed += bucket->finalCleanup(*this);
@@ -2040,7 +2041,7 @@ private:
     {
         return 0;
     }
-    uint createIndex(ushort bucketIndex, ushort indexInBucket) const
+    uint createIndex(BucketId bucketIndex, ushort indexInBucket) const
     {
         //Combine the index in the bucket, and the bucket number into one index
         const uint index = (bucketIndex << 16) + indexInBucket;
@@ -2048,10 +2049,10 @@ private:
         return index;
     }
 
-    std::pair<std::uint16_t, std::uint16_t> parseIndex(uint index) const
+    std::pair<BucketId, std::uint16_t> parseIndex(uint index) const
     {
         verifyIndex(index);
-        unsigned short bucket = (index >> 16);
+        BucketId bucket = (index >> 16);
         unsigned short indexInBucket = index & 0xffff;
         return std::make_pair(bucket, indexInBucket);
     }
@@ -2061,10 +2062,10 @@ private:
      *
      * Will return the value returned by the lambda, returning early if truthy
      */
-    template <typename Visitor>
-    auto walkBucketChain(unsigned int hash, const Visitor& visitor) const->decltype(visitor(0, nullptr))
+    template<typename Visitor>
+    auto walkBucketChain(unsigned int hash, const Visitor& visitor) const -> decltype(visitor(BucketId{}, nullptr))
     {
-        unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
+        auto bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
 
         while (bucketIndex) {
             auto* bucketPtr = bucketForIndex(bucketIndex);
@@ -2081,14 +2082,14 @@ private:
 
     ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeSize has been changed for m_freeSpaceBuckets[index].
     ///If too few space is free within the given bucket, it is removed from m_freeSpaceBuckets.
-    void updateFreeSpaceOrder(uint index)
+    void updateFreeSpaceOrder(unsigned int freeBucketIndex)
     {
         m_metaDataChanged = true;
 
-        unsigned int* freeSpaceBuckets = m_freeSpaceBuckets.data();
+        auto* const freeSpaceBuckets = m_freeSpaceBuckets.data();
 
-        Q_ASSERT(index < static_cast<uint>(m_freeSpaceBuckets.size()));
-        MyBucket* bucketPtr = bucketForIndex(freeSpaceBuckets[index]);
+        Q_ASSERT(freeBucketIndex < m_freeSpaceBuckets.size());
+        MyBucket* bucketPtr = bucketForIndex(freeSpaceBuckets[freeBucketIndex]);
 
         unsigned short largestFreeSize = bucketPtr->largestFreeSize();
 
@@ -2096,23 +2097,22 @@ private:
             (bucketPtr->freeItemCount() <= MyBucket::MaxFreeItemsForHide &&
              largestFreeSize <= MyBucket::MaxFreeSizeForHide)) {
             //Remove the item from freeSpaceBuckets
-            m_freeSpaceBuckets.remove(index);
+            m_freeSpaceBuckets.remove(freeBucketIndex);
         } else {
             while (1) {
-                int prev = index - 1;
-                int next = index + 1;
+                int prev = freeBucketIndex - 1;
+                int next = freeBucketIndex + 1;
                 if (prev >= 0
-                    && compareFreeSpaceBucketsIndex(freeSpaceBuckets[index], freeSpaceBuckets[prev])
-                        == -1 ) {
+                    && compareFreeSpaceBucketsIndex(freeSpaceBuckets[freeBucketIndex], freeSpaceBuckets[prev]) == -1) {
                     //This item should be behind the successor, either because it has a lower largestFreeSize, or because the index is lower
-                    std::swap(freeSpaceBuckets[prev], freeSpaceBuckets[index]);
-                    index = prev;
+                    std::swap(freeSpaceBuckets[prev], freeSpaceBuckets[freeBucketIndex]);
+                    freeBucketIndex = prev;
                 } else if (next < m_freeSpaceBuckets.size()
-                           && compareFreeSpaceBucketsIndex(freeSpaceBuckets[next], freeSpaceBuckets[index])
+                           && compareFreeSpaceBucketsIndex(freeSpaceBuckets[next], freeSpaceBuckets[freeBucketIndex])
                                == -1) {
                     //This item should be behind the successor, either because it has a higher largestFreeSize, or because the index is higher
-                    std::swap(freeSpaceBuckets[index], freeSpaceBuckets[next]);
-                    index = next;
+                    std::swap(freeSpaceBuckets[freeBucketIndex], freeSpaceBuckets[next]);
+                    freeBucketIndex = next;
                 } else {
                     break;
                 }
@@ -2128,7 +2128,7 @@ private:
     ///@warning During conversion, all the touched buckets are deleted and re-created
     ///@param extent When this is zero, the bucket is converted from monster-bucket to normal bucket.
     ///              When it is nonzero, it is converted to a monster-bucket.
-    MyBucket* convertMonsterBucket(int bucketNumber, int extent)
+    MyBucket* convertMonsterBucket(BucketId bucketNumber, int extent)
     {
         m_metaDataChanged = true;
 
@@ -2160,7 +2160,7 @@ private:
                 Q_ASSERT(!bucket->monsterBucketExtent());
                 Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber + offset]);
                 // verify that the m_freeSpaceBuckets is ordered the way we expect it to
-                Q_ASSERT(m_freeSpaceBuckets[freeSpaceIndex + offset] == static_cast<uint>(bucketNumber + offset));
+                Q_ASSERT(m_freeSpaceBuckets[freeSpaceIndex + offset] == bucketNumber + offset);
             }
 #endif
 
@@ -2168,7 +2168,7 @@ private:
             // NOTE: we assert above that the order of the entries is correct
             m_freeSpaceBuckets.remove(freeSpaceIndex, extent + 1);
 
-            for (int index = monsterStart; index < monsterEnd; ++index)
+            for (BucketId index = monsterStart; index < monsterEnd; ++index)
                 deleteBucket(index);
 
             bucketPtr = new MyBucket();
@@ -2183,7 +2183,7 @@ private:
 
 #ifdef DEBUG_MONSTERBUCKETS
             // all following buckets are deleted and not marked as free anymore
-            for (int index = monsterStart + 1; index < monsterEnd; ++index) {
+            for (BucketId index = monsterStart + 1; index < monsterEnd; ++index) {
                 Q_ASSERT(!m_buckets[index]);
                 Q_ASSERT(!m_freeSpaceBuckets.contains(index));
 
@@ -2212,7 +2212,7 @@ private:
 
 #ifdef DEBUG_MONSTERBUCKETS
             // all buckets that are part of the monster are marked as such
-            for (int index = oldMonsterStart + 1; index < oldMonsterEnd; ++index) {
+            for (BucketId index = oldMonsterStart + 1; index < oldMonsterEnd; ++index) {
                 Q_ASSERT(m_monsterBucketTailMarker[index]);
             }
 #endif
@@ -2225,13 +2225,13 @@ private:
                       std::next(m_monsterBucketTailMarker.begin(), oldMonsterEnd), false);
 
             // recreate non-monster buckets
-            for (int index = oldMonsterStart; index < oldMonsterEnd; ++index) {
+            for (BucketId index = oldMonsterStart; index < oldMonsterEnd; ++index) {
                 auto& bucket = m_buckets[index];
                 Q_ASSERT(!bucket);
 
                 bucket = new MyBucket();
 
-                if (index == oldMonsterStart) {
+                if (oldMonsterStart == index) {
                     bucket->initialize(0, std::move(oldNextBucketHash));
                     bucketPtr = bucket;
                 } else {
@@ -2278,13 +2278,13 @@ private:
     {
         const uint hash = item->hash();
 
-        return walkBucketChain(hash, [=](ushort /*bucketIndex*/, const MyBucket* bucketPtr) {
+        return walkBucketChain(hash, [=](BucketId, const MyBucket* bucketPtr) {
             return bucketPtr->itemReachable(item, hash);
         });
     }
 
     // Returns true if all items in the given bucket are reachable through their hashes
-    bool allItemsReachable(unsigned short bucket)
+    bool allItemsReachable(BucketId bucket)
     {
         if (!bucket)
             return true;
@@ -2295,16 +2295,18 @@ private:
         return bucketPtr->visitAllItems(visitor);
     }
 
-    inline MyBucket* initializeBucket(int bucketNumber) const
+    inline MyBucket* initializeBucket(BucketId bucketNumber) const
     {
         using namespace ItemRepositoryUtils;
 
         Q_ASSERT(bucketNumber);
 #ifdef DEBUG_MONSTERBUCKETS
         // ensure that the previous N buckets are no monster buckets that overlap the requested bucket
-        for (int offset = 1; offset < 5; ++offset) {
-            int test = bucketNumber - offset;
-            if (test >= 0 && m_buckets[test]) {
+        for (BucketId offset = 1; offset < 5; ++offset) {
+            auto test = bucketNumber - offset;
+            if (test == 0 || test >= bucketNumber /*test underflow*/)
+                break;
+            if (m_buckets[test]) {
                 Q_ASSERT(m_buckets[test]->monsterBucketExtent() < offset);
             }
         }
@@ -2354,7 +2356,7 @@ private:
     }
 
     ///Can only be called on empty buckets
-    void deleteBucket(int bucketNumber)
+    void deleteBucket(BucketId bucketNumber)
     {
         // NOTE: use bucketForIndex in the assertions here, as the bucket may not be initialized
         //       we still want to verify that we only delete empty buckets though
@@ -2368,7 +2370,7 @@ private:
     }
 
     //m_file must be opened
-    void storeBucket(int bucketNumber) const
+    void storeBucket(BucketId bucketNumber) const
     {
         if (!m_file) {
             return;
@@ -2381,7 +2383,7 @@ private:
 
     /// If mustFindBucket is zero, the whole chain is just walked. This is good for debugging for infinite recursion.
     /// @return whether @p mustFindBucket was found
-    bool walkBucketLinks(uint checkBucket, uint hash, uint mustFindBucket = 0) const
+    bool walkBucketLinks(BucketId checkBucket, uint hash, BucketId mustFindBucket = 0) const
     {
         bool found = false;
         while (checkBucket) {
@@ -2396,10 +2398,10 @@ private:
     /// Computes the bucket where the chains opened by the buckets @p mainHead and @p intersectorHead
     /// with hash @p hash meet each other.
     /// @return <predecessor of first shared bucket in mainHead, first shared bucket>
-    QPair<unsigned int, unsigned int> hashChainIntersection(uint mainHead, uint intersectorHead, uint hash) const
+    QPair<BucketId, BucketId> hashChainIntersection(BucketId mainHead, BucketId intersectorHead, uint hash) const
     {
-        uint previous = 0;
-        uint current = mainHead;
+        BucketId previous{0};
+        BucketId current = mainHead;
         while (current) {
             ///@todo Make this more efficient
             if (walkBucketLinks(intersectorHead, hash, current))
@@ -2411,7 +2413,7 @@ private:
         return qMakePair(0u, 0u);
     }
 
-    void putIntoFreeList(unsigned short bucket, MyBucket* bucketPtr)
+    void putIntoFreeList(BucketId bucket, MyBucket* bucketPtr)
     {
         Q_ASSERT(bucket);
 
@@ -2446,7 +2448,7 @@ private:
     {
         // We don't use zero indices
         Q_ASSERT(index);
-        int bucket = (index >> 16);
+        BucketId bucket = (index >> 16);
         // nor zero buckets
         Q_ASSERT(bucket);
         Q_ASSERT_X(bucket < m_buckets.size(), Q_FUNC_INFO,
@@ -2492,7 +2494,7 @@ private:
             m_currentBucket = 1;
     }
 
-    int compareFreeSpaceBucketsIndex(int Left, int Right) const
+    int compareFreeSpaceBucketsIndex(BucketId Left, BucketId Right) const
     {
         const auto lbucketSize = bucketForIndex(Left)->largestFreeSize();
         const auto rbucketSize = bucketForIndex(Right)->largestFreeSize();
@@ -2507,19 +2509,20 @@ private:
     // an unused, empty repo has no bucket yet
     // on first use this will then get incremented directly as we never use the zero-bucket index
     // that value is reserved for special purposes instead
-    mutable int m_currentBucket = 0;
+    mutable BucketId m_currentBucket = 0;
 
-    //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
-    QVector<uint> m_freeSpaceBuckets;
+    // List of bucket indices that have free space available that can be assigned.
+    // Sorted by size: Smallest space first. Second order sorting: Bucket index
+    QList<BucketId> m_freeSpaceBuckets;
     // every bucket that is part of a monster bucket but not the "main" bucket gets marked in this list,
     // this allows us to ensure we don't try to put an entry into such a bucket later on, which would corrupt data
-    QVector<bool> m_monsterBucketTailMarker;
+    QList<bool> m_monsterBucketTailMarker;
     //List of hash map buckets that actually hold the data of the item repository
-    mutable QVector<MyBucket*> m_buckets;
+    mutable QList<MyBucket*> m_buckets;
     uint m_statBucketHashClashes = 0;
     uint m_statItemCount = 0;
     //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
-    short unsigned int m_firstBucketForHash[bucketHashSize] = { 0 };
+    BucketId m_firstBucketForHash[bucketHashSize] = {0};
 
     //File that contains the buckets
     QFile* m_file = nullptr;
