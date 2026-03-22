@@ -152,7 +152,7 @@
     <p xml:lang="fi">KDevelopilla on jäsennintaustajärjestelmä C:lle, C++:lle ja JavaScriptille/QML:lle, ja ulkoisten liitännäisten avulla tuetaan esim. PHP:tä ja Pythonia.</p>
     <p xml:lang="fr">KDevelop intègre des moteurs d'analyse pour le C, le C++ et Javascript/QML, avec, en plus, des modules externes pour prendre en charge PHP, Python, etc.</p>
     <p xml:lang="gl">KDevelop ten infraestruturas de análise para C, C++ e JavaScript/QML, con complementos externos adicionais que fornecen compatibilidade, por exemplo, con PHP e Python.</p>
-    <p xml:lang="he">ל־KDevelop יש מנגנוני פענוח ל־C,‏ C++‎,‏ JavaScript/QML, עם תוספים חיצוניים נוספים שתומכים למשל ב־PHP או ב־Python.</p>
+    <p xml:lang="he">ל־KDevelop יש מנגנוני פיענוח ל־C,‏ C++‎,‏ JavaScript/QML, עם תוספים חיצוניים נוספים שתומכים למשל ב־PHP או ב־Python.</p>
     <p xml:lang="hu">A KDevelop rendelkezik C, C++ és Javascript/QML feldolgozóval, és további külső bővítményekkel, amelyek támogatják például a PHP-t vagy a Pythont.</p>
     <p xml:lang="id">KDevelop memiliki pengurai backend untuk C, C++ dan Javascript/QML, dengan mendukung plugin eksternal lebih lanjut misal PHP atau Python.</p>
     <p xml:lang="it">KDevelop ha dei motori di analisi per C, C++ e JavaScript/QML, come ulteriori estensioni esterne che supportano, ad esempio, PHP o Python.</p>
