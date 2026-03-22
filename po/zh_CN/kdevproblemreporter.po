@@ -105,25 +105,25 @@ msgstr "显示全部工程中的问题"
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Path"
-msgstr ""
+msgstr "文档路径"
 
 #: problemsview.cpp:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in a specific path"
-msgstr ""
+msgstr "在特定路径中显示所有文件的问题"
 
 #: problemsview.cpp:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Current Path"
-msgstr ""
+msgstr "当前路径中的文档"
 
 #: problemsview.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in the path of the current document"
-msgstr ""
+msgstr "在当前文档路径中显示所有文件的问题"
 
 #: problemsview.cpp:78
 #, kde-format
@@ -141,7 +141,7 @@ msgstr "显示所有问题"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
-msgstr ""
+msgstr "路径过滤..."
 
 #: problemsview.cpp:132
 #, kde-format

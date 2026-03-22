@@ -214,7 +214,7 @@ msgstr "开始替换"
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr ""
+msgstr "替换"
 
 #. i18n: ectx: property (text), widget (QLabel, replacementLabel)
 #: grepoutputview.ui:41
@@ -504,7 +504,7 @@ msgstr "深度："
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "子目录递归的最大深度"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -514,6 +514,8 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"在每个搜索位置中，最多下探深度级别的目录。深度=0表示仅搜索所选搜索位置内的直"
+"接文件。完全深度表示没有递归限制。"
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)

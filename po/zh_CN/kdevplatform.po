@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
@@ -11,11 +12,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: kdeorg\n"
-"X-Crowdin-Project-ID: 269464\n"
-"X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevplatform.pot\n"
 "X-Crowdin-File-ID: 54814\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -186,7 +187,7 @@ msgstr "状态"
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
-msgstr ""
+msgstr "断点不能添加到无标题文档。请先保存文档。"
 
 #: debugger/breakpoint/breakpointwidget.cpp:59
 #, kde-format
@@ -399,7 +400,7 @@ msgstr "调试器变量"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "点击时自动调整列宽"
 
 #: debugger/variable/variablewidget.cpp:121
 #, kde-format
@@ -473,7 +474,7 @@ msgstr "更改时停止(&S)"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1 (最后一个函数返回值)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -1993,6 +1994,11 @@ msgid ""
 "displayed in a variable named <code>%1</code> in a section <i>%2</i> of '%3' "
 "tool view."
 msgstr ""
+"执行应用程序，直到当前正在执行的函数运行结束。调试器随后会显示原始函数调用之"
+"后的代码行。如果程序执行位于最外层框架 (例如即在 <code>main()</code> 函数"
+"中) ，此操作将不起作用。\n"
+"<br>在单步跳出非 <code>void</code> 函数后，函数的返回值及其类型将以变量名 "
+"<code>%1</code> 的形式显示在“%3”工具视图的 <i>%2</i> 部分。"
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
@@ -2139,13 +2145,13 @@ msgstr "无法找到编辑器"
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "打开纯文本文件"
 
 #: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "不打开"
 
 #: shell/documentcontroller.cpp:609
 #, kde-format
@@ -2672,7 +2678,7 @@ msgstr "将新的工具视图添加到此窗口。"
 #: shell/mainwindow_p.cpp:320
 #, kde-format
 msgid "&Window Color Scheme"
-msgstr ""
+msgstr "窗口配色方案(&W)"
 
 #: shell/mainwindow_p.cpp:354
 #, kde-format
@@ -2789,12 +2795,14 @@ msgid ""
 "process.\n"
 "Do you want to overwrite the external changes?"
 msgstr ""
+"文档 %1 有未保存的更改并且被外部进程修改了。\n"
+"您想要覆盖外部更改吗？"
 
 #: shell/partdocument.cpp:118 shell/textdocument.cpp:410
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "覆盖外部更改"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -3034,7 +3042,7 @@ msgstr "重新打开当前工程？"
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "重新打开"
 
 #: shell/projectcontroller.cpp:552
 #, kde-format
@@ -3058,6 +3066,9 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
+"打开已有的 KDevelop 工程或导入已有工程到 KDevelop 。此项允许选择 KDevelop 4 "
+"工程文件或者已有目录，在 KDevelop 中打开。当打开已有目录时切尚未有 KDevelop "
+"4 工程文件时，工程文件将被创建。"
 
 #: shell/projectcontroller.cpp:565
 #, kde-format
@@ -3076,7 +3087,7 @@ msgstr "获取工程"
 msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
-msgstr ""
+msgstr "引导用户了解工程获取和导入到 KDevelop 。"
 
 #: shell/projectcontroller.cpp:583
 #, kde-format
@@ -3598,13 +3609,13 @@ msgstr "以空会话启动新的 KDevelop 实例"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr ""
+msgstr "启动新会话..."
 
 #: shell/sessioncontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr ""
+msgstr "以空会话启动新的 KDevelop 实例"
 
 #: shell/sessioncontroller.cpp:288
 #, kde-format
@@ -3824,12 +3835,14 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"切换此样式的预览可见性。\n"
+"对于格式依赖文件路径进行格式化的样式，应禁用预览功能。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
 #, kde-format
 msgid "Show Preview"
-msgstr ""
+msgstr "显示预览"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -4076,24 +4089,28 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>默认情况下，类型、函数、命名空间等的全局颜色会根据所选编辑器主题和全局着色"
+"强度自动生成。如果您希望完全控制颜色，可以将编辑器主题作为颜色源。然后，您可"
+"以在“编辑器 &gt; 颜色主题 &gt; 高亮文本样式 &gt; KDevelop/语义颜色”设置中微调"
+"这些颜色。</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
 #, kde-format
 msgid "Auto-Generated"
-msgstr ""
+msgstr "自动生成"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:175
 #, kde-format
 msgid "From Editor Theme"
-msgstr ""
+msgstr "从编辑器主题"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
 #, kde-format
 msgid "Global colors:"
-msgstr ""
+msgstr "全局颜色："
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4255,14 +4272,14 @@ msgstr "简化解析的最小工程大小："
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "存储和内存使用"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "将预编译的序言文件存储于："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4280,20 +4297,28 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<p>预编译的序言文件在 KDevelop 崩溃后会保留在临时目录中，仅当同一会话再次启动"
+"时才会被删除。<br>\n"
+"若将序言文件存储在内存中，可确保即使在 KDevelop 崩溃时也能在退出时自动清理。"
+"<br>\n"
+"在内存有限且临时目录未使用 tmpfs 文件系统的环境下，选择“会话临时目录”存储更为"
+"合理，因为序言文件可能占用数GB空间。<br>\n"
+"修改此选项需重启 KDevelop 才能生效。<br>\n"
+"注意：此功能仅在 KDevelop 基于 Clang 17 或更高版本编译时有效。</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "内存"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "临时会话目录"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4753,19 +4778,19 @@ msgstr "重新格式化文件..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr ""
+msgstr "使用配置的代码格式化器格式化文件"
 
 #: shell/sourceformattercontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr ""
+msgstr "使用配置的代码格式化器功能。"
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "使用 <i>%1</i> 重新格式化选区或文件 (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4773,13 +4798,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
-msgstr ""
+msgstr "使用 <i>%1</i> 工具的 <b>%2</b> 样式重新格式化选中的文本或整个文件。"
 
 #: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "使用 <i>%1</i> 重新格式化当前行 (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:622
 #, kde-format
@@ -4787,13 +4812,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
-msgstr ""
+msgstr "使用的 <i>%1</i> 工具的 <b>%2</b> 样式重新格式化光标下方一行的源代码。"
 
 #: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
-msgstr ""
+msgstr "使用配置的代码格式化器重新格式化选区或文件"
 
 #: shell/sourceformattercontroller.cpp:628
 #, kde-format
@@ -4801,13 +4826,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
-msgstr ""
+msgstr "使用配置的代码格式化器重新格式化选中的文本或整个文件。"
 
 #: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr ""
+msgstr "使用配置的代码格式化器重新格式化当前行"
 
 #: shell/sourceformattercontroller.cpp:632
 #, kde-format
@@ -4815,7 +4840,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
-msgstr ""
+msgstr "使用配置的代码格式化器对光标下方一行进行重新格式化。"
 
 #: shell/sourceformattercontroller.cpp:867
 #, kde-format
@@ -4883,7 +4908,7 @@ msgstr "语言："
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr ""
+msgstr "如何配置格式化样式"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -4902,6 +4927,14 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"依次从下方<i>语言</i>下拉框中选择您要使用的语言，并为每种语言选择所需的格式器"
+"和样式。<i>Ctrl+ 点击</i>已选样式可取消选中。\n"
+"<p>为每种使用的语言正确配置格式器和样式至关重要：这不仅会影响显式的 "
+"<i>Reformat Source</i>/<i>Line</i>/<i>Files...</i> 等操作，也会影响自动生成"
+"的、自动重构或自动修复的代码格式 (例如<i>重命名</i>右键菜单操作) 。\n"
+"<p>请注意，KDevelop 会使用配置为 <i>C</i> 语言的格式化器和样式对所有 <i>*.h</"
+"i> 文件进行格式化，即使这些头文件属于纯 <i>C++</i> 项目。这是因为源码格式化器"
+"将 MIME 类型映射为语言类型。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -4914,7 +4947,7 @@ msgstr "格式化："
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "所选格式化器的描述"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -5416,7 +5449,7 @@ msgstr "某些文件有写保护"
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr ""
+msgstr "设置写入权限"
 
 #: util/shellutils.cpp:180
 #, kde-format
@@ -5573,11 +5606,13 @@ msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
+"目前处在分支“%1”上。\n"
+"要删除它的话，请更改到另一个分支上。"
 
 #: vcs/dvcs/ui/branchmanager.cpp:147
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr ""
+msgstr "您确定要不可逆转地移除分支 %1 吗？"
 
 #: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
 #, kde-format
