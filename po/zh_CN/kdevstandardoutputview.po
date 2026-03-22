@@ -69,7 +69,7 @@ msgstr "选择项目时将其作为焦点"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "自动换行"
 
 #: outputwidget.cpp:119
 #, kde-format
@@ -111,7 +111,7 @@ msgstr "搜索..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "配置 %1 输出"
 
 #: outputwidget.cpp:818
 #, kde-format
@@ -119,31 +119,31 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "在偏移量 %1 处检测到常规表达式模式错误：%2"
 
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "配置 %1 输出"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "限制输出视图数量"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "自动关闭最旧的输出视图"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "最大输出视图数量"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -151,7 +151,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
-msgstr ""
+msgstr "当视图数量超过此值时，最旧的输出视图将被关闭"
 
 #: standardoutputview.cpp:80
 #, kde-format
