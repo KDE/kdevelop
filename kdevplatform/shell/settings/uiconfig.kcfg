@@ -24,5 +24,8 @@
         <entry name="ColorizeByProject" key="ColorizeByProject" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="RecursiveProjectTreeCollapse" key="RecursiveProjectTreeCollapse" type="Bool">
+            <default>false</default>
+        </entry>
   </group>
 </kcfg>

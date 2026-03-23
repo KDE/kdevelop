@@ -16,9 +16,11 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QPainter>
+#include <QSignalBlocker>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 #include <project/projectmodel.h>
 #include <interfaces/contextmenuextension.h>
@@ -44,6 +46,12 @@ using namespace KDevelop;
 namespace {
 
 QString settingsConfigGroup() { return QStringLiteral("ProjectTreeView"); }
+
+bool recursiveCollapseEnabled()
+{
+    return KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("UiSettings"))
+        .readEntry("RecursiveProjectTreeCollapse", false);
+}
 
 QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*>& items)
 {
@@ -93,6 +101,20 @@ void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
     menu.addSeparator();
 }
 
+void collapseChildrenRecursively(QTreeView* view, const QModelIndex& parent)
+{
+    auto* const treeModel = view->model();
+    if (!treeModel) {
+        return;
+    }
+
+    const int rowCount = treeModel->rowCount(parent);
+    for (int row = 0; row < rowCount; ++row) {
+        const QModelIndex childIndex = treeModel->index(row, 0, parent);
+        collapseChildrenRecursively(view, childIndex);
+        view->collapse(childIndex);
+    }
+}
 }
 
 ProjectTreeView::ProjectTreeView( QWidget *parent )
@@ -115,6 +137,12 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
 
     connect( this, &ProjectTreeView::customContextMenuRequested, this, &ProjectTreeView::popupContextMenu );
     connect( this, &ProjectTreeView::activated, this, &ProjectTreeView::slotActivated );
+    connect( this, &QTreeView::collapsed, this, [this](const QModelIndex& index) {
+        if (recursiveCollapseEnabled()) {
+            const QSignalBlocker blocker(this);
+            collapseChildrenRecursively(this, index);
+        }
+    });
 
     connect( ICore::self(), &ICore::aboutToShutdown,
              this, &ProjectTreeView::aboutToShutdown);

@@ -162,6 +162,25 @@ For example, a header file will be opened next to the implementation file.</stri
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="projectTreeGroupBox">
+     <property name="title">
+      <string comment="@title:group">Project Tree</string>
+     </property>
+     <layout class="QVBoxLayout" name="projectTreeLayout">
+      <item>
+       <widget class="QCheckBox" name="kcfg_RecursiveProjectTreeCollapse">
+        <property name="toolTip">
+         <string comment="@info:tooltip">Collapse all child items whenever an item in the project tree is collapsed.</string>
+        </property>
+        <property name="text">
+         <string comment="@option:check">Collapse items recursively</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
