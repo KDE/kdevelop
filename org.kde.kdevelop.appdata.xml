@@ -205,6 +205,7 @@
       <caption xml:lang="sv">Huvudfönster med kodeditor, terminalintegrering och projektfiler</caption>
       <caption xml:lang="tr">Kod düzenleyicisi, uçbirim tümleştirmesi ve proje dosyalarını içeren ana pencere</caption>
       <caption xml:lang="uk">Головне вікно з редактором коду, інтегрованим терміналом та файлами проєкту</caption>
+      <caption xml:lang="zh-CN">包含代码编辑器、终端集成和项目文件的主窗口</caption>
       <caption xml:lang="zh-TW">主視窗，其中顯示程式碼編輯器、終端機整合、專案檔案</caption>
     </screenshot>
   </screenshots>
