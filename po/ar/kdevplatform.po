@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2026-02-11 20:24+0400\n"
+"PO-Revision-Date: 2026-03-24 11:15+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2634,7 +2634,7 @@ msgstr "افصل العرض إلى &يمين/يسار"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
-msgstr "اقسم رأسيًّا"
+msgstr "اقسم عموديًّا"
 
 #: shell/mainwindow_p.cpp:280
 #, kde-format

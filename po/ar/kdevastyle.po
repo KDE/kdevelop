@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "<b>النمط الفني (Artistic Style)</b> هي أداة مسافة بادئة، ومُنسّقة، ومُجمّلة "
 "للشيفرة المصدرية للغات البرمجة C و C++ و C# و Java.<p style='margin-top:0;"
-"white-space:pre'>الصفحة الرئيسية: <a href=\"http://astyle.sourceforge.net/"
+"white-space:pre'>الصفحة الرئيسة: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
