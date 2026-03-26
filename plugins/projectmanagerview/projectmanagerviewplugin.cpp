@@ -131,7 +131,9 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
     ProjectModel* model = ICore::self()->projectController()->projectModel();
     items.reserve(indexes.size());
     for (const auto& index : indexes) {
-        items += model->itemFromIndex(index);
+        if (auto* item = model->itemFromIndex(index)) {
+            items += item;
+        }
     }
     return items;
 }

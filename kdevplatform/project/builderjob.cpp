@@ -86,7 +86,10 @@ QString BuilderJobPrivate::buildTypeToString(BuilderJob::BuildType type) const
 
 void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
 {
-    Q_ASSERT(item);
+    if (!item) {
+        qCWarning(PROJECT) << "ignoring null item for build job";
+        return;
+    }
     qCDebug(PROJECT) << "adding build job for item:" << item->text();
     Q_ASSERT(item->project());
     qCDebug(PROJECT) << "project for item:" << item->project()->name();
