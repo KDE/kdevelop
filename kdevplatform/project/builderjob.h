@@ -10,6 +10,7 @@
 #include "projectexport.h"
 
 #include <util/executecompositejob.h>
+#include <project/interfaces/iprojectbuilder.h>
 
 namespace KDevelop
 {
@@ -49,6 +50,28 @@ public:
     BuilderJob();
 
     ~BuilderJob() override;
+
+    /**
+     * Sets the configure request context passed to IProjectBuilder::configure()
+     * for Configure actions added to this job.
+     *
+     * This is optional. Use it if the builder needs to distinguish an explicit
+     * Configure action from an automatic configure run inserted as a prerequisite
+     * for another action.
+     *
+     * For example, the CMake builder uses this to reload project metadata after a
+     * user-triggered Configure action, but not after an automatic pre-build
+     * configure run.
+     *
+     * The default is IProjectBuilder::ConfigureRequest::Automatic.
+     */
+    void setConfigureRequest(IProjectBuilder::ConfigureRequest request);
+
+    /**
+     * Returns the configure request context that will be passed to
+     * IProjectBuilder::configure() for Configure actions added to this job.
+     */
+    IProjectBuilder::ConfigureRequest configureRequest() const;
 
     /**
      * Allows to easily schedule building a couple of @p items using the

@@ -85,6 +85,13 @@ CMakeManager::CMakeManager(QObject* parent, const KPluginMetaData& metaData, con
     connect(ICore::self()->projectController(), &IProjectController::projectClosing, this, &CMakeManager::projectClosing);
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &CMakeManager::reloadProjects);
     connect(this, &KDevelop::AbstractFileManagerPlugin::folderAdded, this, &CMakeManager::folderAdded);
+    if (auto* builderPlugin = core()->pluginController()->pluginForExtension(
+            QStringLiteral("org.kdevelop.IProjectBuilder"), QStringLiteral("KDevCMakeBuilder"))) {
+        // KDevCMakeManager does not link against the CMake builder plugin binary, so a typed connect
+        // to CMakeBuilder would introduce a link-time dependency on that plugin's meta-object.
+        connect(builderPlugin, SIGNAL(configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest)),
+                this, SLOT(configureCompleted(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest)));
+    }
 }
 
 CMakeManager::~CMakeManager()
@@ -394,6 +401,13 @@ bool CMakeManager::reloadProject(KDevelop::ProjectFolderItem* folder, ReloadMode
     }
 
     return true;
+}
+
+void CMakeManager::configureCompleted(KDevelop::IProject* project, KDevelop::IProjectBuilder::ConfigureRequest request)
+{
+    if (request == KDevelop::IProjectBuilder::ConfigureRequest::Explicit && project && project->projectItem()) {
+        reloadProject(project->projectItem(), ReloadMode::ImportOnly);
+    }
 }
 
 static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets)

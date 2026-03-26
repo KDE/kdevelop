@@ -180,8 +180,9 @@ KJob* MesonBuilder::configure(IProject* project, const Meson::BuildDir& buildDir
     }
 }
 
-KJob* MesonBuilder::configure(KDevelop::IProject* project)
+KJob* MesonBuilder::configure(KDevelop::IProject* project, KDevelop::IProjectBuilder::ConfigureRequest request)
 {
+    Q_UNUSED(request);
     Q_ASSERT(project);
     auto buildDir = Meson::currentBuildDir(project);
     if (!buildDir.isValid()) {

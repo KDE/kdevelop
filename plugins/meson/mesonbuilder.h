@@ -38,7 +38,9 @@ public:
     KJob* install(KDevelop::ProjectBaseItem* dom, const QUrl& installPath) override;
     KJob* prune(KDevelop::IProject* project) override;
 
-    KJob* configure(KDevelop::IProject* project) override;
+    KJob* configure(KDevelop::IProject* project,
+                    KDevelop::IProjectBuilder::ConfigureRequest request =
+                        KDevelop::IProjectBuilder::ConfigureRequest::Automatic) override;
     KJob* configure(KDevelop::IProject* project, const Meson::BuildDir& buildDir, QStringList args,
                     DirectoryStatus status = ___UNDEFINED___);
 

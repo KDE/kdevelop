@@ -37,7 +37,9 @@ public:
     KJob* build(KDevelop::ProjectBaseItem *dom) override;
     KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl &installPrefix) override;
     KJob* clean(KDevelop::ProjectBaseItem *dom) override;
-    KJob* configure(KDevelop::IProject*) override;
+    KJob* configure(KDevelop::IProject*,
+                    KDevelop::IProjectBuilder::ConfigureRequest request =
+                        KDevelop::IProjectBuilder::ConfigureRequest::Automatic) override;
     KJob* prune(KDevelop::IProject*) override;
 
 	QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const override;
@@ -52,7 +54,10 @@ Q_SIGNALS:
     void failed(KDevelop::ProjectBaseItem*);
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
+    // I’m not sure whether the old variant is still used anywhere (external plugins?),
+    // so I kept both for backward compatibility
     void configured(KDevelop::IProject*);
+    void configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest request);
     void pruned(KDevelop::IProject*);
 
 private:
@@ -65,4 +70,3 @@ private:
 };
 
 #endif // CMAKEBUILDER_H
-

@@ -15,6 +15,7 @@
 
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
 #include <project/abstractfilemanagerplugin.h>
 #include <sublime/message.h>
 #include <language/interfaces/ilanguagesupport.h>
@@ -32,17 +33,16 @@ class ChooseCMakeInterfaceJob;
 
 namespace KDevelop
 {
-    class IProject;
-    class IProjectBuilder;
-    class ICodeHighlighting;
-    class ProjectFolderItem;
-    class ProjectBaseItem;
-    class ProjectFileItem;
-    class ProjectTargetItem;
-    class ParseJob;
-    class ContextMenuExtension;
-    class Context;
-    class IRuntime;
+class IProject;
+class ICodeHighlighting;
+class ProjectFolderItem;
+class ProjectBaseItem;
+class ProjectFileItem;
+class ProjectTargetItem;
+class ParseJob;
+class ContextMenuExtension;
+class Context;
+class IRuntime;
 }
 
 class CMakeFolderItem;
@@ -90,7 +90,7 @@ public:
 
     KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = nullptr) override;
     QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const override;
-    
+
     //LanguageSupport
     QString name() const override;
     KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url) override;
@@ -109,6 +109,7 @@ public:
 
 private Q_SLOTS:
     void projectClosing(KDevelop::IProject*);
+    void configureCompleted(KDevelop::IProject* project, KDevelop::IProjectBuilder::ConfigureRequest request);
 
 private:
     enum class ReloadMode {

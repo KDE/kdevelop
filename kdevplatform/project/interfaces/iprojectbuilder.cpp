@@ -13,8 +13,7 @@ IProjectBuilder::~IProjectBuilder()
 {
 }
 
-
-KJob* IProjectBuilder::configure(IProject*)
+KJob* IProjectBuilder::configure(IProject*, ConfigureRequest)
 {
     return nullptr;
 }
@@ -31,4 +30,3 @@ QList< IProjectBuilder* > IProjectBuilder::additionalBuilderPlugins( IProject* p
 }
 
 }
-

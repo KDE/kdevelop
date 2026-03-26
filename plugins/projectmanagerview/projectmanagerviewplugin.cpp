@@ -451,6 +451,9 @@ QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, const QList<ProjectBaseItem*>& items )
 {
     auto* builder = new BuilderJob;
+    if (type == BuilderJob::Configure) {
+        builder->setConfigureRequest(IProjectBuilder::ConfigureRequest::Explicit);
+    }
     builder->addItems( type, items );
     builder->updateJobName();
     ICore::self()->uiController()->registerStatus(new JobStatus(builder));

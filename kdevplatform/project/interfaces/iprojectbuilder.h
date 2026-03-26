@@ -36,6 +36,17 @@ completed successfully.
 class KDEVPLATFORMPROJECT_EXPORT IProjectBuilder
 {
 public:
+    /**
+     * Describes why a configure job was requested.
+     *
+     * This is intentionally separate from the configured action itself: both cases still call
+     * configure(), but an explicit user-triggered Configure action may require different follow-up
+     * from an automatic configure run inserted as a prerequisite for another action.
+     */
+    enum class ConfigureRequest {
+        Automatic, ///< Configure was requested as an internal prerequisite.
+        Explicit ///< Configure was requested directly by the user.
+    };
 
     virtual ~IProjectBuilder();
 
@@ -66,9 +77,12 @@ public:
      * on the implementation. After calling this a build() call should
      * succeed (given the code doesn't have errors).
      *
+     * @param request carries the request context for configure(). Implementations can use it to
+     * distinguish an implicit pre-build configure from an explicit user-triggered configure action.
+     *
      * This function is optional, the default implementation does nothing.
      */
-    virtual KJob* configure(IProject* project);
+    virtual KJob* configure(IProject* project, ConfigureRequest request = ConfigureRequest::Automatic);
 
     /**
      * Prunes the given @p project, exact behaviour depends

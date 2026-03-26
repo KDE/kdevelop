@@ -40,6 +40,7 @@ public:
     }
 
     BuilderJob* q;
+    IProjectBuilder::ConfigureRequest configureRequest = IProjectBuilder::ConfigureRequest::Automatic;
 
     void addJob( BuilderJob::BuildType, ProjectBaseItem* );
 
@@ -121,7 +122,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
             break;
         case BuilderJob::Configure:
             if (!hasJobForProject(t, item->project())) {
-                j = item->project()->buildSystemManager()->builder()->configure( item->project() );
+                j = item->project()->buildSystemManager()->builder()->configure(item->project(), q->configureRequest());
             }
             break;
     }
@@ -137,6 +138,18 @@ BuilderJob::BuilderJob()
 }
 
 BuilderJob::~BuilderJob() = default;
+
+void BuilderJob::setConfigureRequest(IProjectBuilder::ConfigureRequest request)
+{
+    Q_D(BuilderJob);
+    d->configureRequest = request;
+}
+
+IProjectBuilder::ConfigureRequest BuilderJob::configureRequest() const
+{
+    Q_D(const BuilderJob);
+    return d->configureRequest;
+}
 
 void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
 {

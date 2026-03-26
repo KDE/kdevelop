@@ -77,8 +77,9 @@ KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem* dom)
     return nullptr;
 }
 
-KJob* QMakeBuilder::configure(KDevelop::IProject* project)
+KJob* QMakeBuilder::configure(KDevelop::IProject* project, KDevelop::IProjectBuilder::ConfigureRequest request)
 {
+    Q_UNUSED(request);
     auto job = new QMakeJob(this);
     job->setProject(project);
     return job;

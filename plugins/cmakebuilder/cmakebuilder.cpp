@@ -202,7 +202,7 @@ KJob* CMakeBuilder::checkConfigureJob(KDevelop::IProject* project, bool& valid)
     return configure;
 }
 
-KJob* CMakeBuilder::configure( KDevelop::IProject* project )
+KJob* CMakeBuilder::configure(KDevelop::IProject* project, KDevelop::IProjectBuilder::ConfigureRequest request)
 {
     if( CMake::currentBuildDir( project ).isEmpty() )
     {
@@ -210,8 +210,11 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
     }
     auto* job = new CMakeJob(this);
     job->setProject(project);
-    connect(job, &KJob::result, this, [this, project] {
-        emit configured(project);
+    connect(job, &KJob::result, this, [this, project, job, request] {
+        if (!job->error()) {
+            emit configured(project);
+            emit configured(project, request);
+        }
     });
     return job;
 }

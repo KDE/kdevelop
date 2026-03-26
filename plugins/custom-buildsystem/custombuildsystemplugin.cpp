@@ -92,8 +92,9 @@ KJob* CustomBuildSystem::clean( ProjectBaseItem* dom )
     return new CustomBuildJob( this, dom, CustomBuildSystemTool::Clean );
 }
 
-KJob* CustomBuildSystem::configure( IProject* project )
+KJob* CustomBuildSystem::configure(IProject* project, KDevelop::IProjectBuilder::ConfigureRequest request)
 {
+    Q_UNUSED(request);
     return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Configure );
 }
 

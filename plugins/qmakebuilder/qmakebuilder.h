@@ -30,7 +30,9 @@ public:
     KJob* build(KDevelop::ProjectBaseItem *dom) override;
     KJob* clean(KDevelop::ProjectBaseItem *dom) override;
     KJob* install(KDevelop::ProjectBaseItem *dom, const QUrl& /* prefix */) override;
-    KJob* configure(KDevelop::IProject *dom) override;
+    KJob* configure(KDevelop::IProject* dom,
+                    KDevelop::IProjectBuilder::ConfigureRequest request =
+                        KDevelop::IProjectBuilder::ConfigureRequest::Automatic) override;
     KJob* prune(KDevelop::IProject *dom) override;
 
     int perProjectConfigPages() const override;
@@ -58,4 +60,3 @@ private:
 };
 
 #endif // QMAKEBUILDER_H
-

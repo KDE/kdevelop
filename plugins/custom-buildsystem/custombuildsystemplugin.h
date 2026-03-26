@@ -39,7 +39,9 @@ public:
 
     /// @p installPrefix will be passed as DESTDIR environment variable
     KJob* install( KDevelop::ProjectBaseItem* item, const QUrl &installPrefix ) override;
-    KJob* configure( KDevelop::IProject* ) override;
+    KJob* configure(KDevelop::IProject*,
+                    KDevelop::IProjectBuilder::ConfigureRequest request =
+                        KDevelop::IProjectBuilder::ConfigureRequest::Automatic) override;
 
     KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
 
