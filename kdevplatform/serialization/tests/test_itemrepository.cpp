@@ -14,12 +14,10 @@
 #include <serialization/indexedstring.h>
 #include <serialization/itemrepository.h>
 
-#include <cstdlib>
-#include <ctime>
-
 #include <algorithm>
 #include <memory>
 #include <numeric>
+#include <random>
 #include <utility>
 #include <vector>
 
@@ -168,19 +166,23 @@ private Q_SLOTS:
         uint totalInsertions = 0, totalDeletions = 0;
         uint maxSize = 0;
         uint totalSize = 0;
-        srand(12345);
+        std::minstd_rand rngsource(12345);
+
         uint highestSeenIndex = 0;
 
         for (uint a = 0; a < cycles; ++a) {
             {
                 //Insert an item
-                uint itemDecision = rand() % (smallItemsFraction + largeItemsFraction);
                 uint itemSize;
-                if (itemDecision < largeItemsFraction) {
+                std::uniform_int_distribution<uint> largeOrSmall(0, smallItemsFraction + largeItemsFraction - 1);
+                if (largeOrSmall(rngsource) < largeItemsFraction) {
                     //Create a large item: Up to 200kb
-                    itemSize = (rand() % 200000) + sizeof(TestItem);
-                } else
-                    itemSize = (rand() % 1000) + sizeof(TestItem);
+                    std::uniform_int_distribution<uint> sizedist(sizeof(TestItem), sizeof(TestItem) + 200000 - 1);
+                    itemSize = sizedist(rngsource);
+                } else {
+                    std::uniform_int_distribution<uint> sizedist(sizeof(TestItem), sizeof(TestItem) + 1000 - 1);
+                    itemSize = sizedist(rngsource);
+                }
                 TestItem* item = createItem(++itemId, itemSize);
                 Q_ASSERT(item->hash() == itemId);
                 QVERIFY(item->equals(item));
@@ -198,14 +200,16 @@ private Q_SLOTS:
 
             for (uint a = 0; a < checksPerCycle; ++a) {
                 //Check an item
-                uint pick = rand() % itemId;
+                std::uniform_int_distribution<uint> pickdist(0, itemId - 1);
+                uint pick = pickdist(rngsource);
                 if (realItemsById.contains(pick)) {
                     uint index = repository.findIndex(*realItemsById[pick]);
                     QVERIFY(index);
                     QVERIFY(realItemsByIndex.contains(index));
                     QVERIFY(realItemsByIndex[index]->equals(repository.itemFromIndex(index)));
 
-                    if (( uint ) (rand() % 100) < deletionProbability) {
+                    std::uniform_int_distribution<uint> deletiondist(0, 99);
+                    if (deletiondist(rngsource) < deletionProbability) {
                         ++totalDeletions;
                         //Delete the item
                         repository.deleteItem(index);
@@ -255,14 +259,16 @@ private Q_SLOTS:
         QVERIFY(stats.freeUnreachableSpace < stats.freeSpaceInBuckets / 100); // < 1% of the free space is unreachable
         QVERIFY(stats.freeSpaceInBuckets < stats.usedSpaceForBuckets); // < 20% free space
     }
+
     void testLeaks()
     {
-        srand(12345);
+        std::minstd_rand rngsource(12345);
         QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
         QList<TestItem*> items;
         for (int i = 0; i < 10000; ++i) {
-            TestItem* item = createItem(i, (rand() % 1000) + sizeof(TestItem));
+            std::uniform_int_distribution<uint> sizedist(sizeof(TestItem), sizeof(TestItem) + 1000 - 1);
+            TestItem* item = createItem(i, sizedist(rngsource));
             items << item;
             repository.index(TestItemRequest(*item));
         }
