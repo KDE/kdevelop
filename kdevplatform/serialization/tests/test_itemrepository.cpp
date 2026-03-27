@@ -126,6 +126,26 @@ TestItem* createItem(uint id, uint size)
     return ret;
 }
 
+void freeItem(TestItem* ptr)
+{
+    if (!ptr)
+        return;
+    // No op, but needed for correctness.
+    ptr->~TestItem();
+    // ptr was allocated with "new char[]", so we must use delete[] (char*) to free it.
+    delete[] reinterpret_cast<char*>(ptr);
+}
+
+struct TestItemDeleter
+{
+    void operator()(TestItem* ptr)
+    {
+        freeItem(ptr);
+    }
+};
+
+using TestItemPtr = std::unique_ptr<TestItem, TestItemDeleter>;
+
 ///@todo Add a test where the complete content is deleted again, and make sure the result has a nice structure
 ///@todo More consistency and lost-space tests, especially about monster-buckets. Make sure their space is re-claimed
 class TestItemRepository
@@ -205,7 +225,7 @@ private Q_SLOTS:
 #endif
                         repository.deleteItem(newIndex);
                         QVERIFY(!repository.findIndex(*realItemsById[pick]));
-                        delete[] realItemsById[pick];
+                        freeItem(realItemsById[pick]);
                         realItemsById.remove(pick);
                         realItemsByIndex.remove(index);
                     }
@@ -220,7 +240,7 @@ private Q_SLOTS:
         {
             for (auto it = realItemsByIndex.constBegin(); it != realItemsByIndex.constEnd(); ++it) {
                 repository.deleteItem(it.key());
-                delete[] it.value();
+                freeItem(it.value());
             }
 
             realItemsById.clear();
@@ -248,7 +268,7 @@ private Q_SLOTS:
         }
 
         for (auto item : std::as_const(items)) {
-            delete[] item;
+            freeItem(item);
         }
     }
     void testStringSharing()
@@ -303,12 +323,12 @@ private Q_SLOTS:
                 do {
                     std::vector<uint> repoIndices;
                     repoIndices.reserve(itemSizes.size());
-                    std::vector<std::unique_ptr<TestItem[]>> items;
+                    std::vector<TestItemPtr> items;
                     items.reserve(itemSizes.size());
 
                     // create items
                     for (auto itemId : itemIdsToCreate) {
-                        std::unique_ptr<TestItem[]> item(createItem(hash, itemSizes[itemId]));
+                        TestItemPtr item(createItem(hash, itemSizes[itemId]));
                         const auto itemRequest = TestItemRequest(*item.get(), true);
 
                         QVERIFY(!repository->findIndex(itemRequest));
@@ -354,19 +374,19 @@ private Q_SLOTS:
         // another item that follows that (item 1 -> item 2 -> item4). Delete item 2 again and store and
         // reload the repository to add another item.
 
-        std::unique_ptr<TestItem[]> item1(createItem(1235, ItemRepositoryBucketSize / 2));
+        TestItemPtr item1(createItem(1235, ItemRepositoryBucketSize / 2));
         const auto itemRequest1 = TestItemRequest(*item1.get(), true);
         // does not fit into a normal bucket, requires monster bucket that is extended by 1 bucket
-        std::unique_ptr<TestItem[]> item2(createItem(1235, ItemRepositoryBucketSize));
+        TestItemPtr item2(createItem(1235, ItemRepositoryBucketSize));
         const auto itemRequest2 = TestItemRequest(*item2.get(), true);
-        std::unique_ptr<TestItem[]> item3(createItem(1236, ItemRepositoryBucketSize / 2));
+        TestItemPtr item3(createItem(1236, ItemRepositoryBucketSize / 2));
         const auto itemRequest3 = TestItemRequest(*item3.get(), true);
 
-        std::unique_ptr<TestItem[]> item4(createItem(1235, ItemRepositoryBucketSize / 2 + 1));
+        TestItemPtr item4(createItem(1235, ItemRepositoryBucketSize / 2 + 1));
         const auto itemRequest4 = TestItemRequest(*item4.get(), true);
 
         // Some other item that will fit in the space that is freed by later deleting item 2
-        std::unique_ptr<TestItem[]> item5(createItem(1237, ItemRepositoryBucketSize));
+        TestItemPtr item5(createItem(1237, ItemRepositoryBucketSize));
         const auto itemRequest5 = TestItemRequest(*item5.get(), true);
 
         unsigned int index1, index2, index3, index5, index4;
@@ -449,24 +469,23 @@ private Q_SLOTS:
         const uint smallItemSize = ItemRepositoryBucketSize * 0.25 - 1;
 
         // Will get placed in bucket 1 (bucket zero is invalid), so the root bucket table at position 'clashValue' will be '1'
-        const QScopedArrayPointer<TestItem> firstChainFirstLink(createItem(clashValue, bigItemSize));
+        const TestItemPtr firstChainFirstLink(createItem(clashValue, bigItemSize));
         const uint firstChainFirstLinkIndex = repository.index(*firstChainFirstLink);
         QCOMPARE(bucketNumberForIndex(firstChainFirstLinkIndex), 1u);
 
         // Will also get placed in bucket 1, so root bucket table at position 'nextBucketHashSize + clashValue' will be '1'
-        const QScopedArrayPointer<TestItem> secondChainFirstLink(createItem(nextBucketHashSize + clashValue,
-                                                                            smallItemSize));
+        const TestItemPtr secondChainFirstLink(createItem(nextBucketHashSize + clashValue, smallItemSize));
         const uint secondChainFirstLinkIndex = repository.index(*secondChainFirstLink);
         QCOMPARE(bucketNumberForIndex(secondChainFirstLinkIndex), 1u);
 
         // Will get placed in bucket 2, so bucket 1's next hash table at position 'clashValue' will be '2'
-        const QScopedArrayPointer<TestItem> firstChainSecondLink(createItem(bucketHashSize + clashValue, bigItemSize));
+        const TestItemPtr firstChainSecondLink(createItem(bucketHashSize + clashValue, bigItemSize));
         const uint firstChainSecondLinkIndex = repository.index(*firstChainSecondLink);
         QCOMPARE(bucketNumberForIndex(firstChainSecondLinkIndex), 2u);
 
         // Will also get placed in bucket 2, reachable since bucket 1's next hash table at position 'clashValue' is '2'
-        const QScopedArrayPointer<TestItem> secondChainSecondLink(createItem(
-                bucketHashSize + nextBucketHashSize + clashValue, smallItemSize));
+        const TestItemPtr secondChainSecondLink(
+            createItem(bucketHashSize + nextBucketHashSize + clashValue, smallItemSize));
         const uint secondChainSecondLinkIndex = repository.index(*secondChainSecondLink);
         QCOMPARE(bucketNumberForIndex(secondChainSecondLinkIndex), 2u);
 
@@ -554,27 +573,27 @@ private Q_SLOTS:
                                }));
 
         // Item in 1st bucket, 524 bytes left empty
-        TestItem* item = new TestItem(1, 65000);
+        TestItemPtr item(createItem(1, 65000));
         repository.index(TestItemRequest(*item));
 
         // Item in 2nd bucket, 1524 bytes left empty
-        item = new TestItem(2, 64000);
+        item.reset(createItem(2, 64000));
         repository.index(TestItemRequest(*item));
 
         // Item in 3rd bucket, 224 bytes left empty
-        item = new TestItem(3, 65300);
+        item.reset(createItem(3, 65300));
         repository.index(TestItemRequest(*item));
 
         // Item in 4th bucket, 524 bytes left empty
-        item = new TestItem(4, 65000);
+        item.reset(createItem(4, 65000));
         repository.index(TestItemRequest(*item));
 
         // Item in 5th bucket, monster bucket. Removes 5 and 6 from free space
-        item = new TestItem(5, 66000);
+        item.reset(createItem(5, 66000));
         repository.index(TestItemRequest(*item));
 
         // Item in 7th bucket, 124 bytes left empty
-        item = new TestItem(6, 65400);
+        item.reset(createItem(6, 65400));
         repository.index(TestItemRequest(*item));
 
         // Ordering is by empty space, then by bucket id.
