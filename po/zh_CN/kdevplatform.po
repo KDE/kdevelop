@@ -5097,7 +5097,7 @@ msgstr "将此文件添加到当前工作集"
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "储藏"
+msgstr "暂存"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:320
 #, kde-format
