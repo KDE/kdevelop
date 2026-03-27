@@ -286,7 +286,7 @@ msgstr "有推迟的更改，您想要先暂存它们吗？"
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "暂存"
 
 #: gitplugin.cpp:904
 #, kde-format
@@ -634,7 +634,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr "删除选中的分支"
+msgstr "删除选中的暂存"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:36
