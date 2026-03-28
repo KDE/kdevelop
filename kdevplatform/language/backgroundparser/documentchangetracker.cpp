@@ -98,8 +98,12 @@ void DocumentChangeTracker::reset()
     VERIFY_FOREGROUND_LOCKED
 
     // We don't reset the insertion here, as it may continue
-        m_needUpdate = false;
+    m_needUpdate = false;
 
+    // Keep ModificationRevision in sync with the tracker after reload. Reload invalidation
+    // temporarily clears the editor revision cache, and parse jobs snapshot that cache when
+    // preparing parse inputs for open documents.
+    ModificationRevision::setEditorRevisionForFile(m_url, m_document->revision());
     m_revisionAtLastReset = acquireRevision(m_document->revision());
     Q_ASSERT(m_revisionAtLastReset);
 }

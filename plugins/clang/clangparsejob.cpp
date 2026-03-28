@@ -189,6 +189,16 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
 
     m_unsavedFiles = ClangUtils::unsavedFiles();
 
+    if (auto tracker = trackerForUrl(url)) {
+        // Reload invalidation clears the cached editor revision temporarily.
+        // Reset the active document tracker before snapshotting unsaved revisions so
+        // revisionForFile() sees the current editor revision for this document.
+        tracker->reset();
+        m_options |= ParseSessionData::OpenedInEditor;
+    } else if (tuUrl != url && trackerForUrl(tuUrl)) {
+        m_options |= ParseSessionData::OpenedInEditor;
+    }
+
     const auto documents = ICore::self()->documentController()->openDocuments();
     for (auto* document : documents) {
         auto textDocument = document->textDocument();
@@ -200,13 +210,6 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
             m_tuDocumentIsUnsaved = true;
         }
         m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
-    }
-
-    if (auto tracker = trackerForUrl(url)) {
-        tracker->reset();
-        m_options |= ParseSessionData::OpenedInEditor;
-    } else if (tuUrl != url && trackerForUrl(tuUrl)) {
-        m_options |= ParseSessionData::OpenedInEditor;
     }
 }
 
