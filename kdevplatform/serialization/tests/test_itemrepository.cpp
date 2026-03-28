@@ -1,6 +1,7 @@
 #include "itemrepositorytestbase.h"
 
 #include <QTest>
+#include <QElapsedTimer>
 
 // enable various debug facilities in the ItemRepository code
 // make sure to keep this block on the top, to ensure the include of itemrepository.h
@@ -18,6 +19,7 @@
 #include <memory>
 #include <numeric>
 #include <random>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -51,6 +53,11 @@ struct TestItem
         return rhs->m_hash == m_hash
                && itemSize() == rhs->itemSize()
                && memcmp(reinterpret_cast<const char*>(this), rhs, itemSize()) == 0;
+    }
+
+    std::string_view as_string_view() const
+    {
+        return std::string_view(reinterpret_cast<const char*>(this) + sizeof(*this), m_dataSize);
     }
 
     uint m_hash;
@@ -87,9 +94,10 @@ struct TestItemRequest
         memcpy(reinterpret_cast<void*>(item), &m_item, m_item.itemSize());
     }
 
-    static void destroy(TestItem* /*item*/, AbstractItemRepository&)
+    static void destroy(TestItem* item, AbstractItemRepository&)
     {
-        //Nothing to do
+        // Fill with zeros to speed up failures.
+        std::fill_n(reinterpret_cast<char*>(item), item->itemSize(), 0);
     }
 
     static bool persistent(const TestItem* /*item*/)
@@ -122,6 +130,27 @@ TestItem* createItem(uint id, uint size)
         data[sizeof(TestItem) + a] = ( char )(a + id);
 
     return ret;
+}
+
+template<typename Rng>
+TestItem* createRandomItem(Rng& rngsource)
+{
+    // Create a randomized item up to 128Kib. A normal bucket can fit 64Kib before it is
+    // converted to a monster bucket, so the generated item can span three buckets at most.
+    std::uniform_int_distribution<uint> sizedist(1, 1024 * 128);
+    uint size = sizeof(TestItem) + sizedist(rngsource);
+    char* data = new char[size];
+    uint dataSize = size - sizeof(TestItem);
+
+    // Generate a random payload consisting of a few ASCII letters.
+    std::uniform_int_distribution<int> gen(0, 16);
+    auto* payload = data + sizeof(TestItem);
+    std::generate_n(payload, dataSize, [&]() {
+        return 'A' + gen(rngsource);
+    });
+    // Compute a hash value.
+    auto hash = std::hash<std::string_view>()(std::string_view(payload, dataSize));
+    return new (data) TestItem(hash, dataSize);
 }
 
 void freeItem(TestItem* ptr)
@@ -260,6 +289,142 @@ private Q_SLOTS:
         QVERIFY(stats.freeSpaceInBuckets < stats.usedSpaceForBuckets); // < 20% free space
     }
 
+    void testItemRepositoryTorture()
+    {
+        /**
+         * Temporally comment the below QSKIP() to run the ItemRepository verifier/torture test.
+         * Set QTEST_FUNCTION_TIMEOUT environment variable to a large value: 1800000 (30 mins)
+         * and optionally build KDevelop in release mode with Q_ASSERT enabled.
+         *
+         * The test hammers the ItemRepository index(), findIndex(), and deleteItem() methods until
+         * a bug is detected, and will otherwise keep running forever. There is a 1/10000 chance
+         * the repository is stored and subsequently reloaded from disk.
+         */
+        QSKIP("ItemRepository torture test.");
+
+        QMutex mutex;
+        auto repository =
+            std::make_unique<ItemRepository<TestItem, TestItemRequest>>(QStringLiteral("TestItemRepository"), &mutex);
+
+        // calling statistics here does some extended tests and shouldn't crash or assert
+        repository->statistics();
+
+        // std::string_view refers to the payload data in TestItem, so this is actually a set.
+        QHash<std::string_view, TestItem*> verifyItems;
+        QHash<std::string_view, TestItem*>::key_value_iterator itr;
+
+        size_t loopCount = 0;
+        size_t totalInsertions = 0, totalDeletions = 0;
+        std::minstd_rand rngsource(12345);
+
+        // Measure loops per second.
+        QElapsedTimer elapsed;
+        elapsed.start();
+
+        while (true) {
+            bool didInsert = false;
+            bool deleteOnly = false;
+            TestItemPtr item;
+
+            /**
+             * Cap out at ~128KiB * 4096 max. When loopCount reaches 4096 * 4096 there is a
+             * high confidence that the ItemRepository basic operations are working as
+             * expected.
+             */
+            if (verifyItems.size() > 4096) {
+                // Pick a random item to be deleted.
+                std::uniform_int_distribution<ptrdiff_t> pickdist(0, verifyItems.size() - 1);
+                itr = verifyItems.keyValueBegin();
+                std::advance(itr, pickdist(rngsource));
+                item.reset(itr->second);
+                deleteOnly = true;
+            } else {
+                // Create a randomized item and try insert it.
+                item.reset(createRandomItem(rngsource));
+                std::tie(itr, didInsert) = verifyItems.try_emplace(item->as_string_view(), item.get());
+            }
+
+            if (didInsert) {
+                QCOMPARE(repository->findIndex(TestItemRequest(*item, true)), 0);
+                ++totalInsertions;
+                auto index = repository->index(TestItemRequest(*item, true));
+                QCOMPARE_NE(index, 0);
+                QCOMPARE(repository->findIndex(TestItemRequest(*item, true)), index);
+                // verifyItems owns the TestItem now.
+                item.release();
+            } else {
+                auto index = repository->findIndex(TestItemRequest(*item, true));
+                QCOMPARE_NE(index, 0);
+                ++totalDeletions;
+                repository->deleteItem(index);
+                QCOMPARE(repository->findIndex(TestItemRequest(*item, true)), 0);
+                auto ptr = itr->second;
+                verifyItems.remove(itr->first);
+                // Delete the duplicate item?
+                if (!deleteOnly) {
+                    item.reset(ptr);
+                }
+            }
+
+            if (loopCount % 1000 == 0) {
+                auto speed = 1000.0 / elapsed.elapsed();
+                qDebug() << "Loop:" << loopCount << "totalInsertions:" << totalInsertions
+                         << "totalDeletions:" << totalDeletions << speed <<"loops/ms";
+                if (loopCount % 10000 == 0) {
+                    for (auto line : repository->printStatistics().split(QLatin1Char('\n'))) {
+                        qDebug().noquote() << line;
+                    }
+                }
+                elapsed.restart();
+            }
+
+            std::uniform_int_distribution<int> reload(0, 10000);
+            if (reload(rngsource) == 0) {
+                qDebug() << "ItemRepository::store() to disk and reload";
+                repository->store();
+                repository = std::make_unique<ItemRepository<TestItem, TestItemRequest>>(
+                    QStringLiteral("TestItemRepository"), &mutex);
+            }
+
+            // ItemRepository contains a lot of Q_ASSERTs that usually fire before the below code would be useful.
+#if 0
+            // Exhaustively validate that none of the inserted items have "vanished" from the repository.
+            for (auto checkItem : std::as_const(verifyItems)) {
+                auto index = repository->findIndex(TestItemRequest(*checkItem, true));
+                if (!index) {
+                    qDebug() << "Loop:" << loopCount << "totalInsertions:" << totalInsertions << "totalDeletions:" << totalDeletions;
+                    qDebug() << repository->statistics();
+                    qDebug() << "TestItem" << checkItem << "with hash():" << checkItem->hash() << "itemSize():" << checkItem->itemSize() << "was not found!";
+                    if (!didInsert) {
+                        qDebug() << "deleteItem() or findIndex() has a bug!";
+                    } else {
+                        qDebug() << "index() or findIndex() has a bug!";
+                    }
+                }
+                QCOMPARE_NE(index, 0);
+            }
+#endif
+#if 0
+            // Reverse, only items in verifyItems can exist in the repository.
+            auto checker = [&](const TestItem* checkItem) {
+                Q_ASSERT(checkItem);
+                if (!verifyItems.contains(checkItem->as_string_view())) {
+                    qDebug() << "Loop:" << loopCount << "totalInsertions:" << totalInsertions << "totalDeletions:" << totalDeletions;
+                    qDebug() << repository->statistics();
+                    qDebug() << "TestItem" << checkItem << "with hash():" << checkItem->hash() << "itemSize():" << checkItem->itemSize() << "should not exist!";
+                    if (!didInsert) {
+                        qDebug() << "deleteItem() or findIndex() has a bug!";
+                    } else {
+                        qDebug() << "index() or findIndex() has a bug!";
+                    }
+                }
+                return true;
+            };
+            repository->visitAllItems(checker);
+#endif
+            ++loopCount;
+        }
+    }
     void testLeaks()
     {
         std::minstd_rand rngsource(12345);
