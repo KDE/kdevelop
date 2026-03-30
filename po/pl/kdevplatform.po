@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-30 00:42+0000\n"
 "PO-Revision-Date: 2025-09-06 06:15+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -1746,7 +1746,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Przesuwa wybraną zależność w dół na liście"
 
-#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1919
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "Nieudane zapisywanie do %1, prawdopodobnie dysk jest pełny"

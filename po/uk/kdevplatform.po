@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-30 00:42+0000\n"
 "PO-Revision-Date: 2026-02-11 11:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1739,7 +1739,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Пересунути вибрану залежність вниз списком"
 
-#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1919
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "Не вдалося виконати запис до %1, ймовірно диск переповнено"

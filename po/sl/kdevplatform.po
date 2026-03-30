@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-30 00:42+0000\n"
 "PO-Revision-Date: 2026-02-11 06:29+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1740,7 +1740,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Premakne izbrano odvisnost navzdol po seznamu"
 
-#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1919
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "Zapisovanje v %1 je spodletelo, verjetno je disk poln"

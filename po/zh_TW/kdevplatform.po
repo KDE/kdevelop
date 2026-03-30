@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-30 00:42+0000\n"
 "PO-Revision-Date: 2025-05-03 15:33+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -1702,7 +1702,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "將所選的相依性在清單中向下移動"
 
-#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1919
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "寫入 %1 時失敗，可能磁碟已滿"
