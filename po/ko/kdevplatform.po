@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-30 00:42+0000\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
 "PO-Revision-Date: 2025-10-09 00:53+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -831,7 +831,7 @@ msgstr "%1의 별명을 %2(으)로 지정"
 msgid "Lost alias %1"
 msgstr "별명 %1을(를) 잃어버림"
 
-#: language/duchain/classfunctiondeclaration.cpp:94
+#: language/duchain/classfunctiondeclaration.cpp:89
 #, kde-format
 msgid "invalid member-function %1 type %2"
 msgstr "잘못된 멤버 함수 %1 형식 %2"

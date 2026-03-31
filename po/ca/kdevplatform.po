@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-30 00:42+0000\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
 "PO-Revision-Date: 2026-02-11 09:11+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -850,7 +850,7 @@ msgstr "Àlies %1 com a %2"
 msgid "Lost alias %1"
 msgstr "Manca l'àlies %1"
 
-#: language/duchain/classfunctiondeclaration.cpp:94
+#: language/duchain/classfunctiondeclaration.cpp:89
 #, kde-format
 msgid "invalid member-function %1 type %2"
 msgstr "membre de funció no vàlid %1 tipus %2"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-30 00:42+0000\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
 "PO-Revision-Date: 2024-07-22 16:56+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -814,7 +814,7 @@ msgstr ""
 msgid "Lost alias %1"
 msgstr ""
 
-#: language/duchain/classfunctiondeclaration.cpp:94
+#: language/duchain/classfunctiondeclaration.cpp:89
 #, kde-format
 msgid "invalid member-function %1 type %2"
 msgstr ""

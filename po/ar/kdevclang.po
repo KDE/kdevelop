@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
 "PO-Revision-Date: 2025-10-05 14:56+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -105,42 +105,42 @@ msgstr "انقل إلى المصدر"
 msgid "Override %1"
 msgstr "تجاوز %1"
 
-#: codecompletion/context.cpp:346
+#: codecompletion/context.cpp:352
 #, kde-format
 msgid "Implement %1"
 msgstr "طبّق %1"
 
-#: codecompletion/context.cpp:1408
+#: codecompletion/context.cpp:1416
 #, kde-format
 msgid "Special"
 msgstr "خاصّ"
 
-#: codecompletion/context.cpp:1409
+#: codecompletion/context.cpp:1417
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "تطابقات النّظر إلى الأمام"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1418
 #, kde-format
 msgid "Builtin"
 msgstr "مُدْمَج"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1419
 #, kde-format
 msgid "Macros"
 msgstr "ماكروهات"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1464
 #, kde-format
 msgid "Abstract Override"
 msgstr "تجاوز مُجرَّد"
 
-#: codecompletion/context.cpp:1457
+#: codecompletion/context.cpp:1465
 #, kde-format
 msgid "Virtual Override"
 msgstr "تجاوز افتراضيّ"
 
-#: codecompletion/context.cpp:1472
+#: codecompletion/context.cpp:1480
 #, kde-format
 msgid "Implement Function"
 msgstr "طبّق الدّالة"

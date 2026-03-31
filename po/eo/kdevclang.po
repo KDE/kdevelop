@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
 "PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -107,42 +107,42 @@ msgstr "Ŝovi al Fonto"
 msgid "Override %1"
 msgstr "Anstataŭigi %1"
 
-#: codecompletion/context.cpp:346
+#: codecompletion/context.cpp:352
 #, kde-format
 msgid "Implement %1"
 msgstr "Realigi %1"
 
-#: codecompletion/context.cpp:1408
+#: codecompletion/context.cpp:1416
 #, kde-format
 msgid "Special"
 msgstr "Speciala"
 
-#: codecompletion/context.cpp:1409
+#: codecompletion/context.cpp:1417
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Antaŭrigardaj Matĉoj"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1418
 #, kde-format
 msgid "Builtin"
 msgstr "Enkonstruita"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1419
 #, kde-format
 msgid "Macros"
 msgstr "Makrooj"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1464
 #, kde-format
 msgid "Abstract Override"
 msgstr "Abstrakta Override"
 
-#: codecompletion/context.cpp:1457
+#: codecompletion/context.cpp:1465
 #, kde-format
 msgid "Virtual Override"
 msgstr "Virtuala Override"
 
-#: codecompletion/context.cpp:1472
+#: codecompletion/context.cpp:1480
 #, kde-format
 msgid "Implement Function"
 msgstr "Realigi Funkcion"

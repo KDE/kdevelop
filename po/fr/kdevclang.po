@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-08 00:42+0000\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
 "PO-Revision-Date: 2024-08-13 18:11+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -113,42 +113,42 @@ msgstr "Déplacer dans le code source"
 msgid "Override %1"
 msgstr "Écraser %1"
 
-#: codecompletion/context.cpp:346
+#: codecompletion/context.cpp:352
 #, kde-format
 msgid "Implement %1"
 msgstr "Implémenter %1"
 
-#: codecompletion/context.cpp:1408
+#: codecompletion/context.cpp:1416
 #, kde-format
 msgid "Special"
 msgstr "Spécial"
 
-#: codecompletion/context.cpp:1409
+#: codecompletion/context.cpp:1417
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Correspondances anticipées"
 
-#: codecompletion/context.cpp:1410
+#: codecompletion/context.cpp:1418
 #, kde-format
 msgid "Builtin"
 msgstr "Intégré"
 
-#: codecompletion/context.cpp:1411
+#: codecompletion/context.cpp:1419
 #, kde-format
 msgid "Macros"
 msgstr "Macros"
 
-#: codecompletion/context.cpp:1456
+#: codecompletion/context.cpp:1464
 #, kde-format
 msgid "Abstract Override"
 msgstr "Écrasement abstrait"
 
-#: codecompletion/context.cpp:1457
+#: codecompletion/context.cpp:1465
 #, kde-format
 msgid "Virtual Override"
 msgstr "Écrasement virtuel"
 
-#: codecompletion/context.cpp:1472
+#: codecompletion/context.cpp:1480
 #, kde-format
 msgid "Implement Function"
 msgstr "Implémenter la fonction"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-30 00:42+0000\n"
-"PO-Revision-Date: 2026-02-11 06:17+0100\n"
+"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"PO-Revision-Date: 2026-03-30 07:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -849,7 +849,7 @@ msgstr "%1-ის ალტერნატიული სახელი, რ�
 msgid "Lost alias %1"
 msgstr "%1 მეტსახელი დაიკარგა"
 
-#: language/duchain/classfunctiondeclaration.cpp:94
+#: language/duchain/classfunctiondeclaration.cpp:89
 #, kde-format
 msgid "invalid member-function %1 type %2"
 msgstr "არასწორი წევრი-ფუნქცია %1 ტიპით %2"
@@ -3126,7 +3126,11 @@ msgid ""
 "existing directory to open it in KDevelop. When opening an existing "
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
-msgstr "არსებული პროექტის გახსნა ან შემოტანა."
+msgstr ""
+"არსებული KDevelop-ის პროექტის გახსნა, ან არსებული პროექტის KDevelop-ში "
+"შემოტანა. ეს ჩანაწერი საშუალებას გაძლევთ, აირჩიოთ KDevelop-ის პროექტის "
+"ფაილი, ან არსებული საქაღალდე და ის KDevelop-ში გახსნათ. თუ ცდით, გახსნათ "
+"საქაღალდე, რომელიც KDevelop-ის პროექტის ფაილს ჯერ არ შეიცავს, ის შეიქმნება."
 
 #: shell/projectcontroller.cpp:565
 #, kde-format
