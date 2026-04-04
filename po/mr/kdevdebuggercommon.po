@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 00:43+0000\n"
+"POT-Creation-Date: 2026-04-04 00:43+0000\n"
 "PO-Revision-Date: 2013-04-02 15:22+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -186,7 +186,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "अंतर्गत त्रुटी"
 
-#: midebugger.cpp:337 midebugsession.cpp:528
+#: midebugger.cpp:337 midebugsession.cpp:526
 #, kde-format
 msgid "Process exited"
 msgstr ""
@@ -312,54 +312,54 @@ msgid ""
 "running debug session and continue with the launch?"
 msgstr ""
 
-#: midebugsession.cpp:281
+#: midebugsession.cpp:280
 #, kde-format
 msgid "Running program"
 msgstr ""
 
-#: midebugsession.cpp:354
+#: midebugsession.cpp:353
 #, kde-format
 msgid "Attaching to process %1"
 msgstr ""
 
-#: midebugsession.cpp:384
+#: midebugsession.cpp:383
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr ""
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:396
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr ""
 
-#: midebugsession.cpp:411
+#: midebugsession.cpp:410
 #, kde-format
 msgid "Examining core file %1"
 msgstr ""
 
-#: midebugsession.cpp:514
+#: midebugsession.cpp:512
 #, kde-format
 msgid "Debugger stopped"
 msgstr ""
 
-#: midebugsession.cpp:533
+#: midebugsession.cpp:531
 #, kde-format
 msgid "Application is running"
 msgstr ""
 
-#: midebugsession.cpp:538
+#: midebugsession.cpp:536
 #, kde-format
 msgid "Application is paused"
 msgstr ""
 
-#: midebugsession.cpp:843
+#: midebugsession.cpp:842
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr ""
 
-#: midebugsession.cpp:939
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr ""
@@ -405,14 +405,14 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr ""
 
-#: midebugsession.cpp:1278
+#: midebugsession.cpp:1286
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: midebugsession.cpp:1279
+#: midebugsession.cpp:1287
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -420,13 +420,13 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: midebugsession.cpp:1280
+#: midebugsession.cpp:1288
 #, fuzzy, kde-format
 #| msgid "Executable:"
 msgid "Debugger state: %1\n"
 msgstr "एक्जीक्यूटेबल :"
 
-#: midebugsession.cpp:1283
+#: midebugsession.cpp:1291
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -434,7 +434,7 @@ msgid ""
 "Current command original text: '%3'\n"
 msgstr ""
 
-#: midebugsession.cpp:1308
+#: midebugsession.cpp:1316
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr ""

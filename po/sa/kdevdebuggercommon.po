@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 00:43+0000\n"
+"POT-Creation-Date: 2026-04-04 00:43+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -191,7 +191,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "आन्तरिकं त्रुटिनिवारणदोषः"
 
-#: midebugger.cpp:337 midebugsession.cpp:528
+#: midebugger.cpp:337 midebugsession.cpp:526
 #, kde-format
 msgid "Process exited"
 msgstr "प्रक्रिया निर्गतवती"
@@ -333,48 +333,48 @@ msgstr ""
 "पूर्वमेव एकः कार्यक्रमः त्रुटिनिवारणं क्रियते । किं भवान् वर्तमानं चालितं त्रुटिनिवारणसत्रं "
 "निरस्तं कृत्वा निरन्तरं कर्तुम् इच्छति?"
 
-#: midebugsession.cpp:281
+#: midebugsession.cpp:280
 #, kde-format
 msgid "Running program"
 msgstr "कार्यक्रमं चालयति"
 
-#: midebugsession.cpp:354
+#: midebugsession.cpp:353
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "प्रक्रिया %1 सह संलग्नम्"
 
-#: midebugsession.cpp:384
+#: midebugsession.cpp:383
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:396
 #, fuzzy, kde-format
 #| msgid "<b>Could not attach debugger:</b><br />"
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>त्रुटिनिवारणं संलग्नं कर्तुं न शक्तवान्:</b><br />"
 
-#: midebugsession.cpp:411
+#: midebugsession.cpp:410
 #, kde-format
 msgid "Examining core file %1"
 msgstr "कोर सञ्चिकायाः परीक्षणं %1"
 
-#: midebugsession.cpp:514
+#: midebugsession.cpp:512
 #, kde-format
 msgid "Debugger stopped"
 msgstr "त्रुटिनिवारणकर्ता स्थगितवान्"
 
-#: midebugsession.cpp:533
+#: midebugsession.cpp:531
 #, kde-format
 msgid "Application is running"
 msgstr "अनुप्रयोगः प्रचलति"
 
-#: midebugsession.cpp:538
+#: midebugsession.cpp:536
 #, kde-format
 msgid "Application is paused"
 msgstr "अनुप्रयोगः विरामः भवति"
 
-#: midebugsession.cpp:843
+#: midebugsession.cpp:842
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -382,7 +382,7 @@ msgid ""
 msgstr ""
 "<b>यदा debugger न चाल्यते तदा Gdb आदेशः प्रेषितः</b><br> आदेशः आसीत् - १.<br> %1"
 
-#: midebugsession.cpp:939
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>अमान्यः त्रुटिनिवारणनिर्देशः</b><br> %1"
@@ -432,14 +432,14 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "कार्यक्रमः संकेतं प्राप्तवान् %1 (%2) ."
 
-#: midebugsession.cpp:1278
+#: midebugsession.cpp:1286
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "१ पङ्क्तौ आदेशः\n"
 msgstr[1] "%1 आदेशाः पङ्क्तौ\n"
 
-#: midebugsession.cpp:1279
+#: midebugsession.cpp:1287
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -447,12 +447,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "१ आदेशः gdb द्वारा संसाधितः भवति\n"
 msgstr[1] "%1 आदेशाः gdb द्वारा संसाधिताः भवन्ति\n"
 
-#: midebugsession.cpp:1280
+#: midebugsession.cpp:1288
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "त्रुटिनिवारणस्थितिः: %1\n"
 
-#: midebugsession.cpp:1283
+#: midebugsession.cpp:1291
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -463,7 +463,7 @@ msgstr ""
 "वर्तमान आदेशपाठः '%2' ।\n"
 "वर्तमान आदेशः मूलपाठः: '%3'.\n"
 
-#: midebugsession.cpp:1308
+#: midebugsession.cpp:1316
 #, fuzzy, kde-format
 #| msgid "<b>Could not attach debugger:</b><br />"
 msgid "<b>Debugger error:</b><br />"

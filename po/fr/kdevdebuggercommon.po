@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 00:43+0000\n"
+"POT-Creation-Date: 2026-04-04 00:43+0000\n"
 "PO-Revision-Date: 2025-11-22 18:15+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -198,7 +198,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Erreur interne du débogueur"
 
-#: midebugger.cpp:337 midebugsession.cpp:528
+#: midebugger.cpp:337 midebugsession.cpp:526
 #, kde-format
 msgid "Process exited"
 msgstr "Le processus s'est terminé"
@@ -344,47 +344,47 @@ msgstr ""
 "Un programme est déjà en cours de débogage. Voulez-vous arrêter la session "
 "avec le programme en cours de débogage et démarrer avec celui lancé ?"
 
-#: midebugsession.cpp:281
+#: midebugsession.cpp:280
 #, kde-format
 msgid "Running program"
 msgstr "Exécution du programme"
 
-#: midebugsession.cpp:354
+#: midebugsession.cpp:353
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Attachement au processus %1"
 
-#: midebugsession.cpp:384
+#: midebugsession.cpp:383
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Il est impossible d'attacher le débogueur :</b><br />"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:396
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Impossible de démarrer le débogueur :</b><br />"
 
-#: midebugsession.cpp:411
+#: midebugsession.cpp:410
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Examen du fichier « core » %1"
 
-#: midebugsession.cpp:514
+#: midebugsession.cpp:512
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Le débogueur est arrêté"
 
-#: midebugsession.cpp:533
+#: midebugsession.cpp:531
 #, kde-format
 msgid "Application is running"
 msgstr "L'application est en cours d'exécution"
 
-#: midebugsession.cpp:538
+#: midebugsession.cpp:536
 #, kde-format
 msgid "Application is paused"
 msgstr "L'application est en pause"
 
-#: midebugsession.cpp:843
+#: midebugsession.cpp:842
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -393,7 +393,7 @@ msgstr ""
 "<b>Commande « gdb » envoyée quand le débogueur n'est pas en cours "
 "d'exécution</b><br>La commande était :<br> %1"
 
-#: midebugsession.cpp:939
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Commande de débogueur non valable</b><br>%1"
@@ -439,14 +439,14 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "Le programme a reçu le signal %1 (%2)."
 
-#: midebugsession.cpp:1278
+#: midebugsession.cpp:1286
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 commande dans la file d'attente\n"
 msgstr[1] "%1 commandes dans la file d'attente\n"
 
-#: midebugsession.cpp:1279
+#: midebugsession.cpp:1287
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -454,12 +454,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "%1 commande est en cours de traitement par GDB\n"
 msgstr[1] "%1 commandes sont en cours de traitement par GDB\n"
 
-#: midebugsession.cpp:1280
+#: midebugsession.cpp:1288
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "État du débogueur : %1\n"
 
-#: midebugsession.cpp:1283
+#: midebugsession.cpp:1291
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -470,7 +470,7 @@ msgstr ""
 "Texte de la commande actuelle : « %2 »\n"
 "Texte original de la commande actuelle : « %3 »\n"
 
-#: midebugsession.cpp:1308
+#: midebugsession.cpp:1316
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>Erreur du débogueur :</b><br />"

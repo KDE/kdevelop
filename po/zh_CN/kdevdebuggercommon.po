@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 00:43+0000\n"
+"POT-Creation-Date: 2026-04-04 00:43+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -188,7 +188,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "内部调试器错误"
 
-#: midebugger.cpp:337 midebugsession.cpp:528
+#: midebugger.cpp:337 midebugsession.cpp:526
 #, kde-format
 msgid "Process exited"
 msgstr "进程已退出"
@@ -318,54 +318,54 @@ msgid ""
 "running debug session and continue with the launch?"
 msgstr "一个程序正在被调试。你想终止正在运行的调试会话并继续启动吗？"
 
-#: midebugsession.cpp:281
+#: midebugsession.cpp:280
 #, kde-format
 msgid "Running program"
 msgstr "程序正在运行"
 
-#: midebugsession.cpp:354
+#: midebugsession.cpp:353
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "正在附加到进程 %1"
 
-#: midebugsession.cpp:384
+#: midebugsession.cpp:383
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>无法附加调试器：</b><br />"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:396
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>无法启动调试器：</b><br />"
 
-#: midebugsession.cpp:411
+#: midebugsession.cpp:410
 #, kde-format
 msgid "Examining core file %1"
 msgstr "正在剖析核心文件 %1"
 
-#: midebugsession.cpp:514
+#: midebugsession.cpp:512
 #, kde-format
 msgid "Debugger stopped"
 msgstr "调试器已停止"
 
-#: midebugsession.cpp:533
+#: midebugsession.cpp:531
 #, kde-format
 msgid "Application is running"
 msgstr "应用程序正在运行"
 
-#: midebugsession.cpp:538
+#: midebugsession.cpp:536
 #, kde-format
 msgid "Application is paused"
 msgstr "应用程序已暂停"
 
-#: midebugsession.cpp:843
+#: midebugsession.cpp:842
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>在调试器运行前发送了 GDB 命令</b><br>命令为：<br> %1"
 
-#: midebugsession.cpp:939
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>无效的调试器命令</b><br>%1"
@@ -411,25 +411,25 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "程序收到了信号 %1(%2)"
 
-#: midebugsession.cpp:1278
+#: midebugsession.cpp:1286
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "队列中有 %1 条命令\n"
 
-#: midebugsession.cpp:1279
+#: midebugsession.cpp:1287
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "gdb 已经处理了 %1 条命令\n"
 
-#: midebugsession.cpp:1280
+#: midebugsession.cpp:1288
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "调试器状态：%1\n"
 
-#: midebugsession.cpp:1283
+#: midebugsession.cpp:1291
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -440,7 +440,7 @@ msgstr ""
 "当前命令文本：“%2”\n"
 "当前命令的原文：“%3”\n"
 
-#: midebugsession.cpp:1308
+#: midebugsession.cpp:1316
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>调试器错误：</b><br />"

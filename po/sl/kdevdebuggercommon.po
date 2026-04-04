@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 00:43+0000\n"
+"POT-Creation-Date: 2026-04-04 00:43+0000\n"
 "PO-Revision-Date: 2025-11-22 08:57+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -191,7 +191,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Notranja napaka razhroščevalnika"
 
-#: midebugger.cpp:337 midebugsession.cpp:528
+#: midebugger.cpp:337 midebugsession.cpp:526
 #, kde-format
 msgid "Process exited"
 msgstr "Opravilo končano"
@@ -332,47 +332,47 @@ msgstr ""
 "V programu se že odpravlja napake. Ali želite prekiniti trenutno sejo "
 "odpravljanja napak in nadaljevati z zagonom?"
 
-#: midebugsession.cpp:281
+#: midebugsession.cpp:280
 #, kde-format
 msgid "Running program"
 msgstr "Zaganjanje programa"
 
-#: midebugsession.cpp:354
+#: midebugsession.cpp:353
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Pripenjanje opravilu %1"
 
-#: midebugsession.cpp:384
+#: midebugsession.cpp:383
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Razhroščevalnika ni bilo mogoče pripeti:</b><br />"
 
-#: midebugsession.cpp:397
+#: midebugsession.cpp:396
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Razhroščevalnika ni bilo mogoče zagnati:</b><br />"
 
-#: midebugsession.cpp:411
+#: midebugsession.cpp:410
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Preučevanje jedrne datoteke %1"
 
-#: midebugsession.cpp:514
+#: midebugsession.cpp:512
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Razhroščevalnik zaustavljen"
 
-#: midebugsession.cpp:533
+#: midebugsession.cpp:531
 #, kde-format
 msgid "Application is running"
 msgstr "Program teče"
 
-#: midebugsession.cpp:538
+#: midebugsession.cpp:536
 #, kde-format
 msgid "Application is paused"
 msgstr "Program je v premoru"
 
-#: midebugsession.cpp:843
+#: midebugsession.cpp:842
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -381,7 +381,7 @@ msgstr ""
 "<b>Ukaz gdb je bil poslan, ko razhroščevalnik ni bil zagnan</b><br>Ukaz je "
 "bil:<br> %1"
 
-#: midebugsession.cpp:939
+#: midebugsession.cpp:938
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Neveljaven ukaz razhroščevalnika</b><br>%1"
@@ -427,7 +427,7 @@ msgctxt ""
 msgid "Program received signal %1 (%2)"
 msgstr "Program je prejel signal %1 (%2)"
 
-#: midebugsession.cpp:1278
+#: midebugsession.cpp:1286
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
@@ -436,7 +436,7 @@ msgstr[1] "%1 ukaz v vrsti\n"
 msgstr[2] "%1 ukaza v vrsti\n"
 msgstr[3] "%1 ukazi v vrsti\n"
 
-#: midebugsession.cpp:1279
+#: midebugsession.cpp:1287
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -446,12 +446,12 @@ msgstr[1] "gdb obdeluje %1 ukaz\n"
 msgstr[2] "gdb obdeluje %1 ukaza\n"
 msgstr[3] "gdb obdeluje %1 ukaze\n"
 
-#: midebugsession.cpp:1280
+#: midebugsession.cpp:1288
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Stanje razhroščevalnika: %1\n"
 
-#: midebugsession.cpp:1283
+#: midebugsession.cpp:1291
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -462,7 +462,7 @@ msgstr ""
 "Trenutno besedilo ukaza: '%2'\n"
 "Trenutno izvorno besedilo ukaza: '%3'\n"
 
-#: midebugsession.cpp:1308
+#: midebugsession.cpp:1316
 #, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "<b>Napaka razhroščevalnika:</b><br />"
