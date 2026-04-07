@@ -358,7 +358,11 @@ public:
     static constexpr uint modulo(uint hash)
     {
         static_assert(ObjectMapSize <= std::numeric_limits<unsigned short>::max());
-        return hash % ObjectMapSize;
+        if constexpr ((ObjectMapSize & (ObjectMapSize - 1)) == 0) {
+            return hash & (ObjectMapSize - 1);
+        } else {
+            return hash % ObjectMapSize;
+        }
     }
 
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
@@ -548,7 +552,7 @@ public:
         return insertedAt;
     }
 
-    /// @param bucket_modulo Returns whether this bucket contains an item with (bucket_hash % bucket_modulo) == (item.hash % modulo)
+    /// @param bucket_modulo Returns whether this bucket contains an item with (bucket_hash % bucket_modulo) == modulo(item.hash)
     ///        The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
     /// @note bucket_modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
     ///       This allows efficiently computing the clashes using the local object map hash.
