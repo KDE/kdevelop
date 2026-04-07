@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2026-01-30 08:03+0200\n"
+"PO-Revision-Date: 2026-04-06 09:25+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
@@ -160,51 +160,51 @@ msgstr "לא נמצא מודול, חלק מהטיפוסים או המאפיינ�
 #: duchain/declarationbuilder.cpp:1203
 #, kde-format
 msgid "Mismatch between the value type (%1) and the property type (%2)"
-msgstr ""
+msgstr "אין התאמה בין סוג הערך (%1) וסוג המאפיין (%2)"
 
 #: navigation/propertypreviewwidget.cpp:163
 #, kde-format
 msgid "Error loading QML file: %1"
-msgstr ""
+msgstr "שגיאה בטעינת קובץ QML‏: %1"
 
 #: navigation/propertywidgets/Duration.qml:21
 #, kde-format
 msgid "Duration in milliseconds"
-msgstr ""
+msgstr "משך הזמן במילישניות"
 
 #: navigation/propertywidgets/FontFamily.qml:30
 #: navigation/propertywidgets/FontSize.qml:39
 #, kde-format
 msgctxt "example text to test a font"
 msgid "The lazy dog jumps over<br>the quick brown fox."
-msgstr ""
+msgstr "דג סקרן שט לו בים זך<br>ולפתע מצא חבורה נחמדה."
 
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format
 msgid "Font family"
-msgstr ""
+msgstr "משפחת גופנים"
 
 #: navigation/propertywidgets/FontSize.qml:22
 #, kde-format
 msgid "Font size"
-msgstr ""
+msgstr "גודל כתב"
 
 #: navigation/propertywidgets/Height.qml:25
 #, kde-format
 msgid "Height of an item in pixels"
-msgstr ""
+msgstr "גובה פריט בפיקסלים"
 
 #: navigation/propertywidgets/Opacity.qml:21
 #, kde-format
 msgid "Opacity of an item"
-msgstr ""
+msgstr "אטימות פריט"
 
 #: navigation/propertywidgets/Spacing.qml:32
 #, kde-format
 msgid "Spacing between items"
-msgstr ""
+msgstr "ריווח בין פריטים"
 
 #: navigation/propertywidgets/Width.qml:24
 #, kde-format
 msgid "Width of an item in pixels"
-msgstr ""
+msgstr "רוחב הפריט בפיקסלים"
