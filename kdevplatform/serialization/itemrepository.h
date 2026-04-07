@@ -355,13 +355,18 @@ public:
         return ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize;
     }
 
+    static constexpr uint modulo(uint hash)
+    {
+        static_assert(ObjectMapSize <= std::numeric_limits<unsigned short>::max());
+        return hash % ObjectMapSize;
+    }
+
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
     unsigned short findIndex(const ItemRequest& request) const
     {
         m_lastUsed = 0;
 
-        unsigned short localHash = request.hash() % ObjectMapSize;
-        unsigned short index = m_objectMap[localHash];
+        unsigned short index = m_objectMap[modulo(request.hash())];
 
         unsigned short follower = 0;
         //Walk the chain of items with the same local hash
@@ -381,8 +386,8 @@ public:
     {
         m_lastUsed = 0;
 
-        unsigned short localHash = request.hash() % ObjectMapSize;
-        unsigned short index = m_objectMap[localHash];
+        const auto objectIndex = modulo(request.hash());
+        unsigned short index = m_objectMap[objectIndex];
         unsigned short insertedAt = 0;
 
         const auto createInsertedItem = [&]() {
@@ -415,8 +420,8 @@ public:
 
             insertedAt = AdditionalSpacePerItem;
             setFollowerIndex(insertedAt, 0);
-            Q_ASSERT(m_objectMap[localHash] == 0);
-            m_objectMap[localHash] = insertedAt;
+            Q_ASSERT(m_objectMap[objectIndex] == 0);
+            m_objectMap[objectIndex] = insertedAt;
             createInsertedItem();
             return insertedAt;
         }
@@ -505,14 +510,14 @@ public:
 
         Q_ASSERT(!index || !followerIndex(index));
 
-        Q_ASSERT(!m_objectMap[localHash] || index);
+        Q_ASSERT(!m_objectMap[objectIndex] || index);
 
         if (index)
             setFollowerIndex(index, insertedAt);
         setFollowerIndex(insertedAt, 0);
 
-        if (m_objectMap[localHash] == 0)
-            m_objectMap[localHash] = insertedAt;
+        if (m_objectMap[objectIndex] == 0)
+            m_objectMap[objectIndex] = insertedAt;
 
 #ifdef DEBUG_CREATEITEM_EXTENTS
         char* borderBehind = m_data + insertedAt + (totalSize - AdditionalSpacePerItem);
@@ -543,19 +548,19 @@ public:
         return insertedAt;
     }
 
-    /// @param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
-    ///               The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
-    /// @note modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
-    ///               This allows efficiently computing the clashes using the local object map hash.
-    bool hasClashingItem(uint hash, uint modulo)
+    /// @param bucket_modulo Returns whether this bucket contains an item with (bucket_hash % bucket_modulo) == (item.hash % modulo)
+    ///        The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
+    /// @note bucket_modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
+    ///       This allows efficiently computing the clashes using the local object map hash.
+    bool hasClashingItem(uint bucket_hash, uint bucket_modulo)
     {
-        Q_ASSERT(modulo % ObjectMapSize == 0);
+        Q_ASSERT(modulo(bucket_modulo) == 0);
 
         m_lastUsed = 0;
 
-        uint hashMod = hash % modulo;
-        unsigned short localHash = hash % ObjectMapSize;
-        unsigned short currentIndex = m_objectMap[localHash];
+        const uint hashMod = bucket_hash % bucket_modulo;
+        const auto objectIndex = modulo(bucket_hash);
+        unsigned short currentIndex = m_objectMap[objectIndex];
 
         if (currentIndex == 0)
             return false;
@@ -563,9 +568,9 @@ public:
         while (currentIndex) {
             uint currentHash = itemFromIndex(currentIndex)->hash();
 
-            Q_ASSERT(currentHash % ObjectMapSize == localHash);
+            Q_ASSERT(modulo(currentHash) == objectIndex);
 
-            if (currentHash % modulo == hashMod)
+            if (currentHash % bucket_modulo == hashMod)
                 return true; //Clash
             currentIndex = followerIndex(currentIndex);
         }
@@ -599,8 +604,7 @@ public:
     //Returns whether the given item is reachabe within this bucket, through its hash.
     bool itemReachable(const Item* item, uint hash) const
     {
-        unsigned short localHash = hash % ObjectMapSize;
-        unsigned short currentIndex = m_objectMap[localHash];
+        unsigned short currentIndex = m_objectMap[modulo(hash)];
 
         while (currentIndex) {
             if (itemFromIndex(currentIndex) == item)
@@ -621,8 +625,8 @@ public:
 
         unsigned int size = itemFromIndex(index)->itemSize();
         //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
-        unsigned short localHash = hash % ObjectMapSize;
-        unsigned short currentIndex = m_objectMap[localHash];
+        const auto objectIndex = modulo(hash);
+        unsigned short currentIndex = m_objectMap[objectIndex];
         unsigned short previousIndex = 0;
 
         //Fix the follower-link by setting the follower of the previous item to the next one, or updating m_objectMap
@@ -636,7 +640,7 @@ public:
 
         if (!previousIndex)
             //The item was directly in the object map
-            m_objectMap[localHash] = followerIndex(index);
+            m_objectMap[objectIndex] = followerIndex(index);
         else
             setFollowerIndex(previousIndex, followerIndex(index));
 
@@ -666,7 +670,7 @@ public:
 
             //Items are always inserted into monster-buckets at a fixed position
             Q_ASSERT(currentIndex == AdditionalSpacePerItem);
-            Q_ASSERT(m_objectMap[localHash] == 0);
+            Q_ASSERT(m_objectMap[objectIndex] == 0);
         } else {
             ///Put the space into the free-set
             setFreeSize(index, size);
@@ -688,8 +692,7 @@ public:
 #ifdef DEBUG_INCORRECT_DELETE
         //Make sure the item cannot be found any more
         {
-            unsigned short localHash = hash % ObjectMapSize;
-            unsigned short currentIndex = m_objectMap[localHash];
+            unsigned short currentIndex = m_objectMap[modulo(hash)];
 
             while (currentIndex && currentIndex != index) {
                 previousIndex = currentIndex;
@@ -1095,7 +1098,7 @@ private:
     unsigned int m_available = 0;
     char* m_data = nullptr; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
     char* m_mappedData  = nullptr; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
-    short unsigned int* m_objectMap  = nullptr; //Points to the first object in m_data with (hash % ObjectMapSize) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
+    short unsigned int* m_objectMap  = nullptr; //Points to the first object in m_data with modulo(hash) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
     short unsigned int m_largestFreeItem  = 0; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
     unsigned int m_freeItemCount  = 0;
 
