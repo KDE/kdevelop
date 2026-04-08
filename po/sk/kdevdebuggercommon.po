@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -34,19 +34,18 @@ msgstr "Pripojiť k procesu"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "Hľadať"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:35
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr ""
+msgstr "Display as List"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:57
-#, fuzzy, kde-format
-#| msgid "Display static &members:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
 msgstr "&Zobraziť statických členov:"
@@ -56,28 +55,28 @@ msgstr "&Zobraziť statických členov:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "Own Processes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "User Processes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "System Processes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "All Processes"
 
 #: dialogs/selectcoredialog.cpp:20
 #, kde-format
@@ -88,51 +87,47 @@ msgstr "Vybrať súbor jadra"
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Invalid executable file name"
 
 #: dialogs/selectcoredialog.cpp:55
 #, kde-format
 msgid "Executable file does not exist"
-msgstr ""
+msgstr "Executable file does not exist"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "Executable is not a file"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Executable file is not readable"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
 msgstr "Preskúmať súbor core"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
 msgstr "Preskúmať súbor core"
 
 #: dialogs/selectcoredialog.cpp:80
 #, kde-format
 msgid "Core file does not exist"
-msgstr ""
+msgstr "Core file does not exist"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
 msgstr "Súbor jadra:"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Core file is not readable"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -149,20 +144,22 @@ msgid "Core file:"
 msgstr "Súbor jadra:"
 
 #: mibreakpointcontroller.cpp:810
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<br>Stará hodnota: %1"
+msgstr ""
+"\n"
+"<br>Stará hodnota: %1"
 
 #: mibreakpointcontroller.cpp:813
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>Nová hodnota: %1"
+msgstr ""
+"\n"
+"<br>Nová hodnota: %1"
 
 #: midebugger.cpp:319
 #, kde-format
@@ -172,9 +169,9 @@ msgid ""
 "reply from the debugger. Please submit a bug report. The debug session will "
 "now end to prevent potential crash"
 msgstr ""
-"<p>Došlo k internej chybe komponentu ladiaceho programu pri spracovaní "
-"odpovede z gdb. Prosím zašlite správu o chybe. Toto sedenie sa teraz ukončí, "
-"aby sa zamedzilo pádu"
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
 
 #: midebugger.cpp:322
 #, kde-format
@@ -202,8 +199,8 @@ msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
-"<b>Nepodarilo sa spustiť ladiaci program.</b><p>Nepodarilo sa spustiť '%1'. "
-"Uistite sa, že názov cesty je zadaný správne."
+"<b>Could not start debugger.</b><p>Could not run '%1'. Uistite sa that the "
+"path name is specified correctly."
 
 #: midebugger.cpp:354
 #, kde-format
@@ -217,9 +214,9 @@ msgid ""
 "that the debug session has to be ended.<br>Try to reproduce the crash "
 "without KDevelop and report a bug.<br>"
 msgstr ""
-"<b>Ladič spadol.</b><p>Proces ladenia '%1' spadol.<br> Z tohto dôvodu musí "
-"byť ladiace sedenie ukončené.<br> Pokúste sa reprodukovať pád bez KDevelop a "
-"nahláste chybu.<br>"
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
 
 #: midebugger.cpp:364
 #, kde-format
@@ -324,10 +321,7 @@ msgid "Debug process %1"
 msgstr "Proces ladenia %1"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
@@ -348,12 +342,12 @@ msgstr "Pripojenie k procesu %1"
 #: midebugsession.cpp:384
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
-msgstr "<b>Nepodarilo sa pripojiť ladiaci program:</b><br />"
+msgstr "<b>Could not attach debugger:</b><br />"
 
 #: midebugsession.cpp:397
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "<b>Nepodarilo sa spustiť ladiaci program:</b><br />"
+msgstr "<b>Could not start debugger:</b><br />"
 
 #: midebugsession.cpp:411
 #, kde-format
@@ -381,18 +375,18 @@ msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr ""
-"<b>Príkaz gdb odoslaný, keď ladiaci program nebeží</b><br>Príkaz bol:<br> %1"
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
 
 #: midebugsession.cpp:939
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
-msgstr "<b>Neplatný príkaz ladenia</b><br>%1"
+msgstr "<b>Invalid debugger command</b><br>%1"
 
 #: midebugsession.cpp:1019
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>Nepodarilo sa spustiť ladiaci program:</b><br />"
+msgstr "<b>Nepodarilo sa load core file:</b><br />"
 
 #: midebugsession.cpp:1108
 #, kde-format
@@ -405,30 +399,26 @@ msgid "Exited normally"
 msgstr "Ukončené normálne"
 
 #: midebugsession.cpp:1119
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Ukončené na signáli %1"
 
 #: midebugsession.cpp:1121
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr "Ukončené na signáli %1"
+msgstr "Exited on signal %1 (%2)"
 
 #: midebugsession.cpp:1157
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr "Program obdržal signál %1 (%2)"
+msgstr "Program received signal %1"
 
 #: midebugsession.cpp:1159
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
@@ -438,18 +428,18 @@ msgstr "Program obdržal signál %1 (%2)"
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
-msgstr[0] "1 príkaz vo fronte\n"
-msgstr[1] "%1 príkazy vo fronte\n"
-msgstr[2] "%1 príkazov vo fronte\n"
+msgstr[0] "1 command in queue\n"
+msgstr[1] "%1 commands in queue\n"
+msgstr[2] "%1 commands in queue\n"
 
 #: midebugsession.cpp:1279
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
-msgstr[0] "1 príkaz jel spracovaný s gdb\n"
-msgstr[1] "%1 príkazy sú spracovávané s gdb\n"
-msgstr[2] "%1 príkazov je spracovávaných s gdb\n"
+msgstr[0] "1 command being processed by gdb\n"
+msgstr[1] "%1 commands being processed by gdb\n"
+msgstr[2] "%1 commands being processed by gdb\n"
 
 #: midebugsession.cpp:1280
 #, kde-format
@@ -468,8 +458,7 @@ msgstr ""
 "Pôvodný text aktuálneho príkazu: '%3'\n"
 
 #: midebugsession.cpp:1308
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
 msgstr "Chyba ladenia"
 
@@ -592,11 +581,7 @@ msgid "Can't create a temporary file"
 msgstr "Nemožno vytvoriť dočasný súbor"
 
 #: stty.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#| "do sleep 3600;done\""
+#, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
 "accepts these arguments: %2"
@@ -649,9 +634,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
-"Určuje, či príkazy vydané interne KDevelop sa ukážu alebo nie.<br>Táto voľba "
-"ovplyvní iba budúce príkazy, nepridá alebo odstráni už vydané príkazy z "
-"pohľadu."
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>Táto voľba will affect only future commands, it will not add or remove "
+"already issued commands from the view."
 
 #: widgets/debuggerconsoleview.cpp:139
 #, kde-format
@@ -765,10 +750,10 @@ msgid ""
 "instruction by instruction using the debuggers toolbar buttons of \"step over"
 "\" instruction and \"step into\" instruction."
 msgstr ""
-"<b>Zobrazenie strojového kódu</b><p>Strojový kód, ktorý je vidieť vo vašom "
-"bežiacom spustiteľnom súbore so zvýraznenou aktuálnou inštrukciou. Môžete "
-"krokovať inštrukciu za inštrukciou pomocou tlačidiel na paneli nástrojov "
-"ladiaceho programu \"krok cez\" inštrukciu a \"krok do\" inštrukcie."
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with aktuálny instruction highlighted. Môžete step instruction by "
+"instruction using the debuggers toolbar buttons of \"step over\" instruction "
+"and \"step into\" instruction."
 
 #: widgets/disassemblewidget.cpp:236
 #, kde-format

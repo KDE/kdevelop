@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: grepdialog.cpp:55
 #, kde-format
@@ -220,9 +220,7 @@ msgid "Start Replacement"
 msgstr "Spustiť náhradu"
 
 #: grepoutputview.cpp:326
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
 msgstr "&Vymeniť"
@@ -518,7 +516,7 @@ msgstr "Hĺbka:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "Maximálna úroveň rekurzie podpriečinkov"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -528,6 +526,9 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"Pre každé miesto hľadania zostúpiť maximálne o Hĺbka úrovní priečinkov. "
+"Hĺbka=0 znamená hľadanie iba v súboroch priamo vo vybraných miestach "
+"hľadania. Plná hĺbka znamená bez obmedzenia rekurzie."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
@@ -686,7 +687,6 @@ msgstr "Vyberte adresár na prehľadanie"
 #~ msgstr[2] "<big>%2 <i>(%1 zhôd)</i></big>"
 
 #, fuzzy
-#~| msgid "Find/Replace in Files"
 #~ msgid "Find/Replace"
 #~ msgstr "Hľadať/nahradiť v súboroch"
 

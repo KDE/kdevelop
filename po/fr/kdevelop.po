@@ -13,7 +13,7 @@
 # Vincent PINON <vpinon@kde.org>, 2014.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2015, 2017, 2018, 2020.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
-# SPDX-FileCopyrightText: 2021, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2021, 2023, 2024, 2025, 2026 Xavier Besnard <xavier.besnard@kde.org>
 #
 #
 msgid ""
@@ -21,9 +21,9 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-04-19 09:20+0200\n"
+"PO-Revision-Date: 2026-04-06 14:18+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <French <kde-francophone@kde.org>>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -275,7 +275,7 @@ msgstr "Olivier JG"
 #: main.cpp:394
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr "C++/Clang, DUChain, corrections de bogues"
+msgstr "C++ / Clang, DUChain, corrections de bogues"
 
 #: main.cpp:395
 #, kde-format

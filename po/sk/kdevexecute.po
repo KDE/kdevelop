@@ -13,13 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
 msgstr "Ar&gumenty:"
@@ -30,17 +28,13 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "Nemôžem vyriešiť závislosť: %1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
 msgstr "Súbor programu"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
 msgstr "Použiť externý terminál:"
 
@@ -68,6 +62,8 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Poznámka: <code>gnome-terminal</code> je podporovaný iba čiastočne kvôli "
+"jeho obmedzeniam.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -217,6 +213,9 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Definujte príkaz na spustenie externého emulátora terminálu.<br>\n"
+"Cesta k spustiteľnému súboru a jeho argumenty budú pripojené k tomuto "
+"príkazu."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
