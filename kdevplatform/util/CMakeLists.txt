@@ -77,6 +77,7 @@ install( FILES
     filesystemhelpers.h
     foregroundlock.h
     formattinghelpers.h
+    hash.h
     zoomcontroller.h
     wildcardhelpers.h
     kdevstringhandler.h

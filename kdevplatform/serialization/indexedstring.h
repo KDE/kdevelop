@@ -205,35 +205,6 @@ public:
         return m_index < rhs.m_index;
     }
 
-    /**
-     * Use this to construct a hash-value on-the-fly
-     *
-     * To read it, just use the hash member, and when a new string is started, call @c clear().
-     *
-     * This needs very fast performance(per character operation), so it must stay inlined.
-     */
-    struct RunningHash
-    {
-        enum {
-            HashInitialValue = 5381
-        };
-
-        RunningHash()
-        {
-        }
-        inline void append(const char c)
-        {
-            hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-        }
-        inline void clear()
-        {
-            hash = HashInitialValue;
-        }
-
-        /// We initialize the hash with zero, because we want empty strings to create a zero hash(invalid)
-        unsigned int hash = HashInitialValue;
-    };
-
     static unsigned int hashString(const char* str, unsigned short length);
 
     /**

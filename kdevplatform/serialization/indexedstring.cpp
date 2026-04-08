@@ -7,6 +7,8 @@
 
 #include "indexedstring.h"
 
+#include <util/hash.h>
+
 #include "itemrepository.h"
 #include "referencecounting.h"
 #include "repositorymanager.h"
@@ -43,14 +45,7 @@ struct IndexedStringData
 
     uint hash() const
     {
-        IndexedString::RunningHash running;
-        const char* str = reinterpret_cast<const char*>(this) + sizeof(IndexedStringData);
-        for (int a = length - 1; a >= 0; --a) {
-            running.append(*str);
-            ++str;
-        }
-
-        return running.hash;
+        return HashValue(reinterpret_cast<const char*>(this) + sizeof(IndexedStringData), length);
     }
 };
 
@@ -396,13 +391,7 @@ QByteArray IndexedString::byteArray() const
 
 uint IndexedString::hashString(const char* str, unsigned short length)
 {
-    RunningHash running;
-    for (int a = length - 1; a >= 0; --a) {
-        running.append(*str);
-        ++str;
-    }
-
-    return running.hash;
+    return HashValue(str, length);
 }
 
 uint IndexedString::indexForString(const char* str, short unsigned length, uint hash)

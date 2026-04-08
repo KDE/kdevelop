@@ -9,6 +9,8 @@
 
 #include <QString>
 
+#include <util/hash.h>
+
 #include "itemrepository.h"
 #include "indexedstring.h"
 
@@ -27,14 +29,7 @@ struct StringData
     }
     unsigned int hash() const
     {
-        IndexedString::RunningHash running;
-        const char* str = reinterpret_cast<const char*>(this) + sizeof(StringData);
-        for (int a = length - 1; a >= 0; --a) {
-            running.append(*str);
-            ++str;
-        }
-
-        return running.hash;
+        return HashValue(reinterpret_cast<const char*>(this) + sizeof(StringData), length);
     }
 };
 
