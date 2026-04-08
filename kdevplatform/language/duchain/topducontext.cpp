@@ -108,7 +108,8 @@ public:
         //Either we use some other contexts data and have no users, or we own the data and have users that share it.
         QMutexLocker lock(&importStructureMutex);
 
-        for (const DUContext::Import& import : std::as_const(m_importedContexts)) {
+        const auto importedContexts = m_importedContexts;
+        for (const DUContext::Import& import : importedContexts) {
             if (DUChain::self()->isInMemory(import.topContextIndex()) &&
                 dynamic_cast<TopDUContext*>(import.context(nullptr)))
                 dynamic_cast<TopDUContext*>(import.context(nullptr))->m_local->m_directImporters.remove(m_ctxt);
@@ -165,7 +166,8 @@ public:
 
         QSet<QPair<TopDUContext*, const TopDUContext*>> rebuild;
 
-        for (const DUContext::Import& import : std::as_const(m_importedContexts)) {
+        const auto importedContexts = m_importedContexts;
+        for (const DUContext::Import& import : importedContexts) {
             auto* top = dynamic_cast<TopDUContext*>(import.context(nullptr));
             if (top) {
                 top->m_local->m_directImporters.remove(m_ctxt);
