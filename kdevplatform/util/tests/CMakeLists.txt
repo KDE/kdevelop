@@ -50,3 +50,6 @@ ecm_add_test(
 
 ecm_add_test(test_formattinghelpers.cpp
     LINK_LIBRARIES Qt::Test KDev::Util)
+
+ecm_add_test(test_hashvalue.cpp
+    LINK_LIBRARIES Qt::Test KDev::Util)

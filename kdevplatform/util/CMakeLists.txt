@@ -7,6 +7,7 @@ set(KDevPlatformUtil_LIB_SRCS
     filesystemhelpers.cpp
     foregroundlock.cpp
     formattinghelpers.cpp
+    hash.cpp
     zoomcontroller.cpp
     wildcardhelpers.cpp
     kdevstringhandler.cpp
