@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -58,24 +58,19 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Balík Flatpak (*.flatpak)"
 
 #: flatpakplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export Bundle %1"
-msgstr "Balík Flatpak (*.flatpak)"
+msgstr "Flatpak Export Bundle %1"
 
 #: flatpakplugin.cpp:237
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Rebuild Environment"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebuild Flatpak Environment: %1"
-msgstr "Znovu zostaviť prostredie"
+msgstr "Rebuild Flatpak Environment: %1"
 
 #: flatpakplugin.cpp:244
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak %1 for %2"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak Environment %1 for %2"
 msgstr "Zostaviť flatpak %1 pre %2"
@@ -93,8 +88,7 @@ msgid "Device hostname:"
 msgstr "Názov hostiteľa zariadenia:"
 
 #: flatpakruntime.cpp:61
-#, fuzzy, kde-format
-#| msgid "Flatpak"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
@@ -103,53 +97,46 @@ msgstr "Flatpak"
 #, kde-format
 msgctxt "%1 - application ID or name"
 msgid "Flatpak Create %1"
-msgstr ""
+msgstr "Flatpak – vytvorenie %1"
 
 #: flatpakruntime.cpp:227
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Finalize %1"
-msgstr ""
+msgstr "Flatpak – dokončenie %1"
 
 #: flatpakruntime.cpp:233
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export %1"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export %1"
 msgstr "Exportovať %1"
 
 #: flatpakruntime.cpp:236
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Bundle %1"
-msgstr "Balík Flatpak (*.flatpak)"
+msgstr "Flatpak Bundle %1"
 
 #: flatpakruntime.cpp:253
-#, fuzzy, kde-format
-#| msgid "Running %1 on %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Run %1 on %2"
 msgstr "Beží %1 na %2"
 
 #: flatpakruntime.cpp:258
-#, fuzzy, kde-format
-#| msgid "Transferring flatpak to %1"
+#, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer .flatpak to %1"
 msgstr "Presúvam flatpak do %1"
 
 #: flatpakruntime.cpp:260
-#, fuzzy, kde-format
-#| msgid "Transferring replicate.sh to %1"
+#, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer replicate.sh to %1"
 msgstr "Presúvam replicate.sh do %1"
 
 #: flatpakruntime.cpp:264
-#, fuzzy, kde-format
-#| msgid "Installing %1 to %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Install %1 to %2"
 msgstr "Inštalujem %1 do %2"

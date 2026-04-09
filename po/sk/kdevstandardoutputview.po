@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -68,7 +68,7 @@ msgstr "Zamerať pri vybraní položky"
 #, kde-format
 msgctxt "@action"
 msgid "Word Wrap"
-msgstr ""
+msgstr "Zalamovanie riadkov"
 
 #: outputwidget.cpp:119
 #, kde-format
@@ -110,7 +110,7 @@ msgstr "Hľadať..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Nastaviť výstup %1"
 
 #: outputwidget.cpp:818
 #, kde-format
@@ -118,31 +118,31 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "Chyba vzoru regulárneho výrazu filtra na pozícii %1: %2"
 
 #: outputwidgetconfig.cpp:64
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Nastaviť výstup %1"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Obmedziť počet zobrazení výstupu"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Automaticky zavrieť najstaršie zobrazenia výstupu"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Maximálny počet zobrazení výstupu"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -151,6 +151,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"Najstaršie zobrazenie výstupu sa zavrie, keď\n"
+"počet zobrazení prekročí túto hodnotu"
 
 #: standardoutputview.cpp:80
 #, kde-format
@@ -174,7 +176,7 @@ msgstr "Ladiť"
 #, kde-format
 msgctxt "@title:window"
 msgid "Analyze"
-msgstr ""
+msgstr "Analyzovať"
 
 #: standardoutputview.cpp:92
 #, kde-format
