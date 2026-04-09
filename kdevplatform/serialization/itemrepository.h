@@ -1340,7 +1340,7 @@ public:
                     //the repository has overflown.
                     qWarning() << "Found no room for an item in" << m_repositoryName << "size of the item:" <<
                         request.itemSize();
-                    return 0;
+                    return createIndex();
                 } else {
                     allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
                 }
@@ -1521,7 +1521,7 @@ public:
         //We haven't found a bucket that already contains the item, so append it to the current bucket
 
         qWarning() << "Found no bucket for an item in" << m_repositoryName;
-        return 0;
+        return createIndex();
     }
 
     ///Returns zero if the item is not in the repository yet
@@ -1529,7 +1529,7 @@ public:
     {
         return walkBucketChain(request.hash(), [this, &request](ushort bucketIdx, const MyBucket* bucketPtr) {
                 const ushort indexInBucket = bucketPtr->findIndex(request);
-                return indexInBucket ? createIndex(bucketIdx, indexInBucket) : 0u;
+                return indexInBucket ? createIndex(bucketIdx, indexInBucket) : createIndex();
             });
     }
 
@@ -1546,12 +1546,11 @@ public:
     ///Deletes the item from the repository.
     void deleteItem(unsigned int index)
     {
-        verifyIndex(index);
-
+        ushort bucket,indexInBucket;
+        std::tie(bucket, indexInBucket) = parseIndex(index);
         m_metaDataChanged = true;
 
         const uint hash = itemFromIndex(index)->hash();
-        const ushort bucket = (index >> 16);
 
         //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
         MyBucket* previousBucketPtr = nullptr;
@@ -1627,13 +1626,9 @@ public:
     ///         and hold it until you're ready using/changing the data..
     MyDynamicItem dynamicItemFromIndex(unsigned int index)
     {
-        verifyIndex(index);
-
-        unsigned short bucket = (index >> 16);
-
+        const auto [bucket, indexInBucket] = parseIndex(index);
         auto* bucketPtr = bucketForIndex(bucket);
         bucketPtr->prepareChange();
-        unsigned short indexInBucket = index & 0xffff;
         return MyDynamicItem(const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket)),
                              bucketPtr->data(), bucketPtr->dataSize());
     }
@@ -1647,25 +1642,19 @@ public:
     ///         must use dynamicItemFromIndex(..) instead of dynamicItemFromIndexSimple(..)
     Item* dynamicItemFromIndexSimple(unsigned int index)
     {
-        verifyIndex(index);
-
-        unsigned short bucket = (index >> 16);
+        const auto [bucket, indexInBucket] = parseIndex(index);
 
         auto* bucketPtr = bucketForIndex(bucket);
         bucketPtr->prepareChange();
-        unsigned short indexInBucket = index & 0xffff;
         return const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket));
     }
 
     ///@param index The index. It must be valid(match an existing item), and nonzero.
     const Item* itemFromIndex(unsigned int index) const
     {
-        verifyIndex(index);
-
-        unsigned short bucket = (index >> 16);
+        const auto [bucket, indexInBucket] = parseIndex(index);
 
         const auto* bucketPtr = bucketForIndex(bucket);
-        unsigned short indexInBucket = index & 0xffff;
         Q_ASSERT(m_currentBucket);
         Q_ASSERT(m_currentBucket < m_buckets.size());
         return bucketPtr->itemFromIndex(indexInBucket);
@@ -2044,12 +2033,24 @@ private:
         return used;
     }
 
+    static constexpr uint createIndex()
+    {
+        return 0;
+    }
     uint createIndex(ushort bucketIndex, ushort indexInBucket) const
     {
         //Combine the index in the bucket, and the bucket number into one index
         const uint index = (bucketIndex << 16) + indexInBucket;
         verifyIndex(index);
         return index;
+    }
+
+    std::pair<std::uint16_t, std::uint16_t> parseIndex(uint index) const
+    {
+        verifyIndex(index);
+        unsigned short bucket = (index >> 16);
+        unsigned short indexInBucket = index & 0xffff;
+        return std::make_pair(bucket, indexInBucket);
     }
 
     /**
