@@ -82,7 +82,7 @@ public:
     void readValue(T* to)
     {
         Q_ASSERT(to);
-        static_assert(std::is_integral_v<T>);
+        static_assert(std::is_standard_layout_v<T>);
 
         *to = *reinterpret_cast<T*>(m_data);
         m_data += sizeof(T);
@@ -189,6 +189,8 @@ template <class Item, class ItemRequest, bool markForReferenceCounting, uint fix
 class Bucket
 {
 public:
+    using ItemId = std::uint16_t;
+
     static const constexpr int AdditionalSpacePerItem = 2;
 
     static const constexpr int ObjectMapSize = ((ItemRepositoryBucketSize / ItemRequest::AverageSize) * 3) / 2 + 1;
@@ -209,11 +211,12 @@ public:
     static const constexpr int NextBucketHashSize = ObjectMapSize;
 
     static const constexpr int DataSize = sizeof(char) + sizeof(unsigned int) * 3 + ItemRepositoryBucketSize
-        + sizeof(short unsigned int) * (ObjectMapSize) + sizeof(BucketId) * NextBucketHashSize
+        + sizeof(ItemId) * (ObjectMapSize) + sizeof(BucketId) * NextBucketHashSize
         + sizeof(short unsigned int);
 
     static const constexpr int CheckStart = 0xff00ff1;
     static const constexpr int CheckEnd = 0xfafcfb;
+
     Bucket()
     {
     }
@@ -239,7 +242,7 @@ public:
             //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
             // NOTE: the `()` at the end of `new int[...]()` ensures the data is zero-initialized, see e.g.:
             //       https://stackoverflow.com/questions/7546620/operator-new-initializes-memory-to-zero
-            m_objectMap = new short unsigned int[ObjectMapSize]();
+            m_objectMap = new ItemId[ObjectMapSize]();
 
             if (nextBucketHashToRestore) {
                 m_nextBucketHash = nextBucketHashToRestore.release();
@@ -369,13 +372,13 @@ public:
     }
 
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
-    unsigned short findIndex(const ItemRequest& request) const
+    ItemId findIndex(const ItemRequest& request) const
     {
         m_lastUsed = 0;
 
-        unsigned short index = m_objectMap[modulo(request.hash())];
+        auto index = m_objectMap[modulo(request.hash())];
 
-        unsigned short follower = 0;
+        auto follower = ItemId{0};
         //Walk the chain of items with the same local hash
         while (index && (follower = followerIndex(index)) && !(request.equals(itemFromIndex(index))))
             index = follower;
@@ -389,20 +392,20 @@ public:
 
     //Tries to get the index within this bucket, or returns zero. Will put the item into the bucket if there is room.
     //Created indices will never begin with 0xffff____, so you can use that index-range for own purposes.
-    unsigned short index(const ItemRequest& request, unsigned int itemSize)
+    ItemId index(const ItemRequest& request, unsigned int itemSize)
     {
         m_lastUsed = 0;
 
         const auto objectIndex = modulo(request.hash());
-        unsigned short index = m_objectMap[objectIndex];
-        unsigned short insertedAt = 0;
+        auto index = m_objectMap[objectIndex];
+        auto insertedAt = ItemId{0};
+        auto follower = ItemId{0};
 
         const auto createInsertedItem = [&]() {
             const OptionalDUChainReferenceCountingEnabler<markForReferenceCounting> optionalRc(m_data, dataSize());
             request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
         };
 
-        unsigned short follower = 0;
         //Walk the chain of items with the same local hash
         while (index && (follower = followerIndex(index)) && !(request.equals(itemFromIndex(index))))
             index = follower;
@@ -436,14 +439,14 @@ public:
         //The second condition is needed, else we can get problems with zero-length items and an overflow in insertedAt to zero
         if (totalSize > m_available || (!itemSize && totalSize == m_available)) {
             //Try finding the smallest freed item that can hold the data
-            unsigned short currentIndex = m_largestFreeItem;
-            unsigned short previousIndex = 0;
+            auto currentIndex = m_largestFreeItem;
+            auto previousIndex = ItemId{0};
 
             unsigned short freeChunkSize = 0;
 
             ///@todo Achieve this without full iteration
             while (currentIndex && freeSize(currentIndex) > itemSize) {
-                unsigned short follower = followerIndex(currentIndex);
+                auto follower = followerIndex(currentIndex);
                 if (follower && freeSize(follower) >= itemSize) {
                     //The item also fits into the smaller follower, so use that one
                     previousIndex = currentIndex;
@@ -488,7 +491,7 @@ public:
                 Q_ASSERT(freeChunkSize >= AdditionalSpacePerItem + 2);
                 unsigned short freeItemSize = freeChunkSize - AdditionalSpacePerItem;
 
-                unsigned short freeItemPosition;
+                auto freeItemPosition = ItemId{0};
                 //Insert the resulting free chunk into the list of free items, so we don't lose it
                 if (isBehindFreeSpace(currentIndex)) {
                     //Create the free item at the beginning of currentIndex, so it can be merged with the free space in front
@@ -567,7 +570,7 @@ public:
 
         const uint hashMod = bucket_hash % bucket_modulo;
         const auto objectIndex = modulo(bucket_hash);
-        unsigned short currentIndex = m_objectMap[objectIndex];
+        auto currentIndex = m_objectMap[objectIndex];
 
         if (currentIndex == 0)
             return false;
@@ -587,7 +590,7 @@ public:
     void countFollowerIndexLengths(uint& usedSlots, uint& lengths, uint& slotCount, uint& longestInBucketFollowerChain)
     {
         for (uint a = 0; a < ObjectMapSize; ++a) {
-            unsigned short currentIndex = m_objectMap[a];
+            auto currentIndex = m_objectMap[a];
             ++slotCount;
             uint length = 0;
 
@@ -611,7 +614,7 @@ public:
     //Returns whether the given item is reachabe within this bucket, through its hash.
     bool itemReachable(const Item* item, uint hash) const
     {
-        unsigned short currentIndex = m_objectMap[modulo(hash)];
+        auto currentIndex = m_objectMap[modulo(hash)];
 
         while (currentIndex) {
             if (itemFromIndex(currentIndex) == item)
@@ -622,8 +625,8 @@ public:
         return false;
     }
 
-    template <class Repository>
-    void deleteItem(unsigned short index, unsigned int hash, Repository& repository)
+    template<class Repository>
+    void deleteItem(ItemId index, unsigned int hash, Repository& repository)
     {
         ifDebugLostSpace(Q_ASSERT(!lostSpace()); )
 
@@ -633,8 +636,8 @@ public:
         unsigned int size = itemFromIndex(index)->itemSize();
         //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
         const auto objectIndex = modulo(hash);
-        unsigned short currentIndex = m_objectMap[objectIndex];
-        unsigned short previousIndex = 0;
+        auto currentIndex = m_objectMap[objectIndex];
+        auto previousIndex = ItemId{0};
 
         //Fix the follower-link by setting the follower of the previous item to the next one, or updating m_objectMap
         while (currentIndex != index) {
@@ -714,7 +717,7 @@ public:
     ///@warning The returned item may be in write-protected memory, so never try doing a const_cast and changing some data
     ///         If you need to change something, use dynamicItemFromIndex
     ///@warning When using multi-threading, mutex() must be locked as long as you use the returned data
-    inline const Item* itemFromIndex(unsigned short index) const
+    inline const Item* itemFromIndex(ItemId index) const
     {
         m_lastUsed = 0;
         return reinterpret_cast<Item*>(m_data + index);
@@ -792,7 +795,7 @@ public:
             m_dirty = false;
 
             for (uint a = 0; a < ObjectMapSize; ++a) {
-                uint currentIndex = m_objectMap[a];
+                auto currentIndex = m_objectMap[a];
                 while (currentIndex) {
                     //Get the follower early, so there is no problems when the current
                     //index is removed
@@ -834,7 +837,7 @@ public:
     short unsigned int totalFreeItemsSize() const
     {
         short unsigned int ret = 0;
-        short unsigned int currentIndex = m_largestFreeItem;
+        auto currentIndex = m_largestFreeItem;
         while (currentIndex) {
             ret += freeSize(currentIndex);
             currentIndex = followerIndex(currentIndex);
@@ -857,7 +860,7 @@ public:
 
     bool canAllocateItem(unsigned int size) const
     {
-        short unsigned int currentIndex = m_largestFreeItem;
+        auto currentIndex = m_largestFreeItem;
         while (currentIndex) {
             short unsigned int currentFree = freeSize(currentIndex);
             if (currentFree < size)
@@ -916,7 +919,7 @@ public:
         uint found = 0;
 
         for (uint a = 0; a < ObjectMapSize; ++a) {
-            uint currentIndex = m_objectMap[a];
+            auto currentIndex = m_objectMap[a];
             while (currentIndex) {
                 found += reinterpret_cast<const Item*>(m_data + currentIndex)->itemSize() + AdditionalSpacePerItem;
 
@@ -924,7 +927,7 @@ public:
             }
         }
 
-        uint currentIndex = m_largestFreeItem;
+        auto currentIndex = m_largestFreeItem;
         while (currentIndex) {
             found += freeSize(currentIndex) + AdditionalSpacePerItem;
 
@@ -938,7 +941,7 @@ private:
     void makeDataPrivate()
     {
         if (m_mappedData == m_data) {
-            short unsigned int* oldObjectMap = m_objectMap;
+            auto* const oldObjectMap = m_objectMap;
             auto* const oldNextBucketHash = m_nextBucketHash;
 
             m_data = new char[dataSize()];
@@ -954,12 +957,12 @@ private:
     ///Merges the given index item, which must have a freeSize() set, to surrounding free items, and inserts the result.
     ///The given index itself should not be in the free items chain yet.
     ///Returns whether the item was inserted somewhere.
-    void insertFreeItem(unsigned short index)
+    void insertFreeItem(ItemId index)
     {
         //If the item-size is fixed, we don't need to do any management. Just keep a list of free items. Items of other size will never be requested.
         if (!fixedItemSize) {
-            unsigned short currentIndex = m_largestFreeItem;
-            unsigned short previousIndex = 0;
+            auto currentIndex = m_largestFreeItem;
+            auto previousIndex = ItemId{0};
 
             while (currentIndex) {
                 Q_ASSERT(currentIndex != index);
@@ -1024,13 +1027,13 @@ private:
     }
 
     ///Only inserts the item in the correct position into the free chain. index must not be in the chain yet.
-    void insertToFreeChain(unsigned short index)
+    void insertToFreeChain(ItemId index)
     {
         if (!fixedItemSize) {
             ///@todo Use some kind of tree to find the correct position in the chain(This is very slow)
             //Insert the free item into the chain opened by m_largestFreeItem
-            unsigned short currentIndex = m_largestFreeItem;
-            unsigned short previousIndex = 0;
+            auto currentIndex = m_largestFreeItem;
+            auto previousIndex = ItemId{0};
 
             unsigned short size = freeSize(index);
 
@@ -1062,10 +1065,10 @@ private:
     }
 
     /// Returns true if the given index is right behind free space, and thus can be merged to the free space.
-    bool isBehindFreeSpace(unsigned short index) const
+    bool isBehindFreeSpace(ItemId index) const
     {
         // TODO: Without iteration!
-        unsigned short currentIndex = m_largestFreeItem;
+        auto currentIndex = m_largestFreeItem;
 
         while (currentIndex) {
             if (index == currentIndex + freeSize(currentIndex) + AdditionalSpacePerItem)
@@ -1077,36 +1080,41 @@ private:
     }
 
     /// @param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
-    inline unsigned short followerIndex(unsigned short index) const
+    inline ItemId followerIndex(ItemId index) const
     {
         Q_ASSERT(index >= 2);
-        return *reinterpret_cast<unsigned short*>(m_data + (index - 2));
+        return *reinterpret_cast<ItemId*>(m_data + (index - 2));
     }
 
-    void setFollowerIndex(unsigned short index, unsigned short follower)
+    void setFollowerIndex(ItemId index, ItemId follower)
     {
         Q_ASSERT(index >= 2);
-        *reinterpret_cast<unsigned short*>(m_data + (index - 2)) = follower;
+        *reinterpret_cast<ItemId*>(m_data + (index - 2)) = follower;
     }
     // Only returns the current value if the item is actually free
-    inline unsigned short freeSize(unsigned short index) const
+    inline unsigned short freeSize(ItemId index) const
     {
         return *reinterpret_cast<unsigned short*>(m_data + index);
     }
 
     //Convenience function to set the free-size, only for freed items
-    void setFreeSize(unsigned short index, unsigned short size)
+    void setFreeSize(ItemId index, unsigned short size)
     {
         *reinterpret_cast<unsigned short*>(m_data + index) = size;
     }
 
 private:
-    int m_monsterBucketExtent = 0; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
+    //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
+    int m_monsterBucketExtent = 0;
     unsigned int m_available = 0;
-    char* m_data = nullptr; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
-    char* m_mappedData  = nullptr; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
-    short unsigned int* m_objectMap  = nullptr; //Points to the first object in m_data with modulo(hash) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
-    short unsigned int m_largestFreeItem  = 0; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
+    //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
+    char* m_data = nullptr;
+    //Read-only memory-mapped data. If this equals m_data, m_data must not be written
+    char* m_mappedData = nullptr;
+    //Points to the first object in m_data with modulo(hash) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
+    ItemId* m_objectMap = nullptr;
+    //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
+    ItemId m_largestFreeItem = 0;
     unsigned int m_freeItemCount  = 0;
 
     BucketId* m_nextBucketHash = nullptr;
@@ -1367,7 +1375,7 @@ public:
                            request), Q_FUNC_INFO,
                        "found item in unexpected bucket, ensure your ItemRequest::equals method is correct. Note: For custom AbstractType's e.g. ensure you have a proper equals() override");
 
-            unsigned short indexInBucket = bucketPtr->index(request, size);
+            auto indexInBucket = bucketPtr->index(request, size);
 
             //If we could not allocate the item in an empty bucket, then we need to create a monster-bucket that
             //can hold the data.
@@ -2041,7 +2049,7 @@ private:
     {
         return 0;
     }
-    uint createIndex(BucketId bucketIndex, ushort indexInBucket) const
+    uint createIndex(BucketId bucketIndex, typename MyBucket::ItemId indexInBucket) const
     {
         //Combine the index in the bucket, and the bucket number into one index
         const uint index = (bucketIndex << 16) + indexInBucket;
@@ -2049,11 +2057,11 @@ private:
         return index;
     }
 
-    std::pair<BucketId, std::uint16_t> parseIndex(uint index) const
+    std::pair<BucketId, typename MyBucket::ItemId> parseIndex(uint index) const
     {
         verifyIndex(index);
         BucketId bucket = (index >> 16);
-        unsigned short indexInBucket = index & 0xffff;
+        typename MyBucket::ItemId indexInBucket = index & 0xffff;
         return std::make_pair(bucket, indexInBucket);
     }
 
