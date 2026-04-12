@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"POT-Creation-Date: 2026-04-12 00:42+0000\n"
 "PO-Revision-Date: 2025-12-12 22:01+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -1576,7 +1576,7 @@ msgctxt "@info:status"
 msgid "prune"
 msgstr "qısaldın"
 
-#: project/builderjob.cpp:232
+#: project/builderjob.cpp:235
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"

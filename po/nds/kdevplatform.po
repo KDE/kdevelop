@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"POT-Creation-Date: 2026-04-12 00:42+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1672,7 +1672,7 @@ msgctxt "@info:status"
 msgid "prune"
 msgstr ""
 
-#: project/builderjob.cpp:232
+#: project/builderjob.cpp:235
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
