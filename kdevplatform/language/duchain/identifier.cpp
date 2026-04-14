@@ -13,7 +13,7 @@
 #include "serialization/itemrepository.h"
 #include "serialization/itemrepositoryreferencecounting.h"
 #include <serialization/repositorymanager.h>
-#include "util/kdevhash.h"
+#include <util/hash.h>
 #include <debug.h>
 
 #include <serialization/indexedstring.h>
@@ -35,7 +35,6 @@ public:
         : m_unique(rhs.m_unique)
         , m_identifier(rhs.m_identifier)
         , m_refCount(0)
-        , m_hash(rhs.m_hash)
     {
         copyListsFrom(rhs);
     }
@@ -47,21 +46,15 @@ public:
 
     IdentifierPrivate& operator=(const IdentifierPrivate& rhs) = delete;
 
-    //Flags the stored hash-value invalid
-    void clearHash()
+    HashValue hash() const
     {
-        //This is always called on an object private to an Identifier, so there is no threading-problem.
-        Q_ASSERT(dynamic);
-        m_hash = 0;
-    }
-
-    uint hash() const
-    {
-        // Since this only needs reading and the data needs not to be private, this may be called by
-        // multiple threads simultaneously, so computeHash() must be thread-safe.
-        if (!m_hash && dynamic)
-            computeHash();
-        return m_hash;
+        // Caching the hashval is not possible because this may be called by multiple threads simultaneously.
+        // The hash must be determistic, so each thread can compute the same result.
+        auto hashval = m_identifier.hash() << m_unique;
+        FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier &templateIdentifier, templateIdentifiers) {
+            hashval << templateIdentifier.hash();
+        }
+        return hashval;
     }
 
     int m_unique = 0;
@@ -78,20 +71,6 @@ public:
     {
         return sizeof(IdentifierPrivate<false> ) + lastOffsetBehind();
     }
-
-    void computeHash() const
-    {
-        Q_ASSERT(dynamic);
-        //this must stay thread-safe(may be called by multiple threads at a time)
-        //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
-        auto hashval = m_identifier.hash() << m_unique;
-        FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier &templateIdentifier, templateIdentifiers) {
-            hashval << templateIdentifier.hash();
-        }
-        m_hash = hashval;
-    }
-
-    mutable uint m_hash = 0;
 };
 
 using DynamicIdentifierPrivate = IdentifierPrivate<true>;
@@ -102,7 +81,6 @@ struct IdentifierItemRequest
     IdentifierItemRequest(const DynamicIdentifierPrivate& identifier)
         : m_identifier(identifier)
     {
-        identifier.hash(); //Make sure the hash is valid by calling this
     }
 
     enum {
@@ -110,7 +88,7 @@ struct IdentifierItemRequest
     };
 
     //Should return the hash-value associated with this request(For example the hash of a string)
-    uint hash() const
+    HashValue hash() const
     {
         return m_identifier.hash();
     }
@@ -140,10 +118,8 @@ struct IdentifierItemRequest
     //Should return whether the here requested item equals the given item
     bool equals(const ConstantIdentifierPrivate* item) const
     {
-        return item->m_hash == m_identifier.m_hash
-               && item->m_unique == m_identifier.m_unique
-               && item->m_identifier == m_identifier.m_identifier
-               && m_identifier.listsEqual(*item);
+        return item->m_unique == m_identifier.m_unique && item->m_identifier == m_identifier.m_identifier
+            && m_identifier.listsEqual(*item);
     }
 
     const DynamicIdentifierPrivate& m_identifier;
@@ -196,7 +172,6 @@ public:
     QualifiedIdentifierPrivate()
         : m_explicitlyGlobal(false)
         , m_isExpression(false)
-
     {
     }
 
@@ -204,7 +179,6 @@ public:
     explicit QualifiedIdentifierPrivate(const QualifiedIdentifierPrivate<rhsDynamic>& rhs)
         : m_explicitlyGlobal(rhs.m_explicitlyGlobal)
         , m_isExpression(rhs.m_isExpression)
-        , m_hash(rhs.m_hash)
         , m_refCount(0)
     {
         copyListsFrom(rhs);
@@ -219,7 +193,6 @@ public:
 
     bool m_explicitlyGlobal : 1;
     bool m_isExpression : 1;
-    mutable uint m_hash = 0;
     uint m_refCount = 0;
 
     START_APPENDED_LISTS_STATIC(QualifiedIdentifierPrivate)
@@ -230,7 +203,8 @@ public:
 
     uint itemSize() const
     {
-        return sizeof(QualifiedIdentifierPrivate<false> ) + lastOffsetBehind();
+        // sizeof(QualifiedIdentifierPrivate<true>) != sizeof(QualifiedIdentifierPrivate<false>));
+        return sizeof(QualifiedIdentifierPrivate<false>) + lastOffsetBehind();
     }
 
     //Constructs m_identifiers
@@ -247,26 +221,15 @@ public:
         }
     }
 
-    inline void clearHash() const
+    HashValue hash() const
     {
-        m_hash = 0;
-    }
-
-    uint hash() const
-    {
-        if (m_hash == 0) {
-            KDevHash hash;
-
-            quint32 bitfields = static_cast<quint32>(m_explicitlyGlobal)
-                                | (m_isExpression << 1);
-            hash << bitfields << identifiersSize();
-            FOREACH_FUNCTION_STATIC(const IndexedIdentifier &identifier, identifiers) {
-                hash << identifier.index();
-            }
-
-            m_hash = hash;
+        HashValue hash(static_cast<quint32>(m_explicitlyGlobal) | (m_isExpression << 1));
+        hash << identifiersSize();
+        FOREACH_FUNCTION_STATIC(const IndexedIdentifier &identifier, identifiers) {
+            hash << identifier.index();
         }
-        return m_hash;
+
+        return hash;
     }
 };
 
@@ -278,7 +241,6 @@ struct QualifiedIdentifierItemRequest
     QualifiedIdentifierItemRequest(const DynamicQualifiedIdentifierPrivate& identifier)
         : m_identifier(identifier)
     {
-        identifier.hash(); //Make sure the hash is valid by calling this
     }
 
     enum {
@@ -323,9 +285,7 @@ struct QualifiedIdentifierItemRequest
     bool equals(const ConstantQualifiedIdentifierPrivate* item) const
     {
         return item->m_explicitlyGlobal == m_identifier.m_explicitlyGlobal
-               && item->m_isExpression == m_identifier.m_isExpression
-               && item->m_hash == m_identifier.m_hash
-               && m_identifier.listsEqual(*item);
+            && item->m_isExpression == m_identifier.m_isExpression && m_identifier.listsEqual(*item);
     }
 
     const DynamicQualifiedIdentifierPrivate& m_identifier;
@@ -660,8 +620,6 @@ void Identifier::prepareWrite()
         dd = new IdentifierPrivate<true>(*oldCc);
         m_index = 0;
     }
-
-    dd->clearHash();
 }
 
 bool QualifiedIdentifier::inRepository() const
@@ -964,6 +922,8 @@ uint QualifiedIdentifier::hash() const
         return dd->hash();
 }
 
+// TODO: replace below qHash() with std::hash<> specializations or remove them.
+
 size_t qHash(const IndexedTypeIdentifier& id)
 {
     return id.hash();
@@ -1142,8 +1102,6 @@ void QualifiedIdentifier::prepareWrite()
         dd = new DynamicQualifiedIdentifierPrivate(*oldCc);
         m_index = 0;
     }
-
-    dd->clearHash();
 }
 
 uint IndexedTypeIdentifier::hash() const
@@ -1154,7 +1112,7 @@ uint IndexedTypeIdentifier::hash() const
                         | (m_isVolatile << 3)
                         | (m_pointerDepth << 4)
                         | (m_pointerConstMask << 9);
-    return KDevHash() << m_identifier.index() << bitfields;
+    return HashValue(bitfields) << m_identifier.index();
 }
 
 bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const
