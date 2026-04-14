@@ -282,7 +282,7 @@ struct QualifiedIdentifierItemRequest
     }
 
     enum {
-        AverageSize = sizeof(QualifiedIdentifierPrivate<false> ) + 8
+        AverageSize = sizeof(ConstantQualifiedIdentifierPrivate) + 8
     };
 
     //Should return the hash-value associated with this request(For example the hash of a string)
@@ -656,12 +656,8 @@ void Identifier::makeConstant() const
 void Identifier::prepareWrite()
 {
     if (m_index) {
-        const IdentifierPrivate<false>* oldCc = cd;
-        dd = new IdentifierPrivate<true>;
-        dd->m_hash = oldCc->m_hash;
-        dd->m_unique = oldCc->m_unique;
-        dd->m_identifier = oldCc->m_identifier;
-        dd->copyListsFrom(*oldCc);
+        auto oldCc = cd;
+        dd = new IdentifierPrivate<true>(*oldCc);
         m_index = 0;
     }
 
@@ -748,7 +744,7 @@ QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
         cd = id.cd;
     } else {
         m_index = 0;
-        dd = new QualifiedIdentifierPrivate<true>(*id.dd);
+        dd = new DynamicQualifiedIdentifierPrivate(*id.dd);
     }
 }
 
@@ -1142,13 +1138,8 @@ void QualifiedIdentifier::makeConstant() const
 void QualifiedIdentifier::prepareWrite()
 {
     if (m_index) {
-        const QualifiedIdentifierPrivate<false>* oldCc = cd;
-        dd = new QualifiedIdentifierPrivate<true>;
-        dd->m_explicitlyGlobal = oldCc->m_explicitlyGlobal;
-        dd->m_isExpression = oldCc->m_isExpression;
-        dd->m_hash = oldCc->m_hash;
-
-        dd->copyListsFrom(*oldCc);
+        auto oldCc = cd;
+        dd = new DynamicQualifiedIdentifierPrivate(*oldCc);
         m_index = 0;
     }
 
