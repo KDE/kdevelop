@@ -26,3 +26,7 @@ target_link_libraries(KDevCMakeBuilder
     KDev::IMakeBuilder
     KF6::KIOWidgets
 )
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
