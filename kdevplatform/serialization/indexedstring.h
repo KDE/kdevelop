@@ -13,6 +13,8 @@
 #include <QStringView>
 #include <QUrl>
 
+#include <util/hash.h>
+
 #include "serializationexport.h"
 
 namespace KDevelop {
@@ -133,10 +135,7 @@ public:
      */
     QUrl toUrl() const;
 
-    inline unsigned int hash() const
-    {
-        return m_index;
-    }
+    HashValue hash() const;
 
     /**
      * The string is uniquely identified by this index. You can use it for comparison.

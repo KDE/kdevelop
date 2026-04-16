@@ -84,11 +84,11 @@ public:
         Q_ASSERT(dynamic);
         //this must stay thread-safe(may be called by multiple threads at a time)
         //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
-        KDevHash kdevhash;
-        kdevhash << m_identifier.hash() << m_unique;
-        FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier &templateIdentifier, templateIdentifiers)
-        kdevhash << templateIdentifier.hash();
-        m_hash = kdevhash;
+        auto hashval = m_identifier.hash() << m_unique;
+        FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier &templateIdentifier, templateIdentifiers) {
+            hashval << templateIdentifier.hash();
+        }
+        m_hash = hashval;
     }
 
     mutable uint m_hash = 0;

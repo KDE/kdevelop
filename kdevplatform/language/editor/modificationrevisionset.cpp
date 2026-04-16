@@ -10,6 +10,7 @@
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 #include <util/setrepository.h>
+#include <util/hash.h>
 
 //When uncommented, the reason for needed updates is printed
 // #define DEBUG_NEEDSUPDATE
@@ -26,10 +27,6 @@ struct FileModificationPair
     KDevelop::IndexedString file;
     KDevelop::ModificationRevision revision;
 
-    FileModificationPair()
-    {
-    }
-
     FileModificationPair(const KDevelop::IndexedString& _file, KDevelop::ModificationRevision _revision)
         : file(_file)
         , revision(_revision)
@@ -38,9 +35,9 @@ struct FileModificationPair
 
     FileModificationPair& operator=(const FileModificationPair& rhs) = delete;
 
-    unsigned int hash() const
+    HashValue hash() const
     {
-        return ((file.hash() + revision.modificationTime) * 17 + revision.revision) * 73;
+        return file.hash() << revision.modificationTime << revision.revision;
     }
 
     unsigned short int itemSize() const
@@ -56,11 +53,14 @@ struct FileModificationPair
 
 struct FileModificationPairRequest
 {
-    FileModificationPairRequest(const FileModificationPair& data) : m_data(data)
+    explicit FileModificationPairRequest(const FileModificationPair& data)
+        : m_data(data)
+        , m_hash(data.hash())
     {
     }
 
     const FileModificationPair& m_data;
+    const HashValue m_hash;
 
     enum {
         AverageSize = sizeof(FileModificationPair)
@@ -68,7 +68,7 @@ struct FileModificationPairRequest
 
     unsigned int hash() const
     {
-        return m_data.hash();
+        return m_hash;
     }
 
     uint itemSize() const
@@ -147,7 +147,8 @@ ModificationRevisionSet::ModificationRevisionSet(unsigned int index) : m_index(i
 
 uint ModificationRevisionSet::size() const
 {
-    Utils::Set set = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
+    // note: set.count() acquires the repository mutex and the ctor is thread-safe.
+    Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
     return set.count();
 }
 
@@ -165,11 +166,14 @@ void ModificationRevisionSet::clear()
 void ModificationRevisionSet::addModificationRevision(const IndexedString& url,
                                                       const KDevelop::ModificationRevision& revision)
 {
+    // do before taking the lock:
+    FileModificationPair item(url, revision);
+    FileModificationPairRequest request(item);
     QMutexLocker lock(modificationRevisionSetMutex());
 
     if (m_index == 0) {
         Utils::Set set = FileModificationSetRepositoryRepresenter::repository().createSet(
-            fileModificationPairRepository().index(FileModificationPair(url, revision)));
+            fileModificationPairRepository().index(request));
         set.staticRef();
         m_index = set.setIndex();
     } else {
@@ -177,7 +181,7 @@ void ModificationRevisionSet::addModificationRevision(const IndexedString& url,
         Utils::Set newModificationTimes = oldModificationTimes;
 
         Utils::Set tempSet = FileModificationSetRepositoryRepresenter::repository().createSet(
-            fileModificationPairRepository().index(FileModificationPair(url, revision)));
+            fileModificationPairRepository().index(request));
         tempSet.staticRef();
 
         newModificationTimes += tempSet;
@@ -192,6 +196,8 @@ void ModificationRevisionSet::addModificationRevision(const IndexedString& url,
 bool ModificationRevisionSet::removeModificationRevision(const IndexedString& url,
                                                          const KDevelop::ModificationRevision& revision)
 {
+    FileModificationPair item(url, revision);
+    FileModificationPairRequest request(item);
     QMutexLocker lock(modificationRevisionSetMutex());
 
     if (!m_index)
@@ -201,7 +207,7 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
     Utils::Set newModificationTimes = oldModificationTimes;
 
     Utils::Set tempSet = FileModificationSetRepositoryRepresenter::repository().createSet(
-        fileModificationPairRepository().index(FileModificationPair(url, revision)));
+        fileModificationPairRepository().index(request));
     tempSet.staticRef();
 
     newModificationTimes -= tempSet;
@@ -349,6 +355,7 @@ ModificationRevisionSet& ModificationRevisionSet::operator-=(const ModificationR
 
 void FileModificationSetRepository::itemRemovedFromSets(uint index)
 {
+    QMutexLocker lock(modificationRevisionSetMutex());
     fileModificationPairRepository().deleteItem(index);
     needsUpdateCache.remove(index);
 }

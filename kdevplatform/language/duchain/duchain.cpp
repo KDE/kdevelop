@@ -187,15 +187,16 @@ public:
 class EnvironmentInformationListItem
 {
 public:
-    EnvironmentInformationListItem()
+    explicit EnvironmentInformationListItem(const IndexedString& file)
+        : m_file(file)
     {
         initializeAppendedLists(true);
     }
 
     explicit EnvironmentInformationListItem(const EnvironmentInformationListItem& rhs, bool dynamic)
+        : m_file(rhs.m_file)
     {
         initializeAppendedLists(dynamic);
-        m_file = rhs.m_file;
         copyListsFrom(rhs);
     }
 
@@ -210,7 +211,8 @@ public:
     {
         //We only compare the declaration. This allows us implementing a map, although the item-repository
         //originally represents a set.
-        return m_file.hash();
+        // FIXME: This should return a hash value.
+        return m_file.index();
     }
 
     unsigned short int itemSize() const
@@ -236,13 +238,14 @@ class EnvironmentInformationListRequest
 public:
 
     ///This constructor should only be used for lookup
-    EnvironmentInformationListRequest(const IndexedString& file) : m_file(file)
+    explicit EnvironmentInformationListRequest(const IndexedString& file)
+        : m_file(file)
         , m_item(nullptr)
     {
     }
     ///This is used to actually construct the information in the repository
-    EnvironmentInformationListRequest(const IndexedString& file, const EnvironmentInformationListItem& item) : m_file(
-            file)
+    EnvironmentInformationListRequest(const IndexedString& file, const EnvironmentInformationListItem& item)
+        : m_file(file)
         , m_item(&item)
     {
     }
@@ -253,7 +256,8 @@ public:
 
     unsigned int hash() const
     {
-        return m_file.hash();
+        // FIXME: This should return a hash value.
+        return m_item ? m_item->hash() : m_file.index();
     }
 
     uint itemSize() const
@@ -1159,8 +1163,7 @@ private:
     ///Stores the environment-information for the given url
     void storeInformationList(const IndexedString& url)
     {
-        EnvironmentInformationListItem newItem;
-        newItem.m_file = url;
+        EnvironmentInformationListItem newItem(url);
 
         QSet<uint> newItems;
 

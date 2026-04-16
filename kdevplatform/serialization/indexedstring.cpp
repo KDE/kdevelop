@@ -43,7 +43,7 @@ struct IndexedStringData
         return sizeof(IndexedStringData) + length;
     }
 
-    uint hash() const
+    HashValue hash() const
     {
         return HashValue(reinterpret_cast<const char*>(this) + sizeof(IndexedStringData), length);
     }
@@ -322,6 +322,21 @@ QUrl IndexedString::toUrl() const
     QUrl ret = QUrl::fromUserInput(str());
     Q_ASSERT(!ret.isRelative());
     return ret;
+}
+
+HashValue IndexedString::hash() const
+{
+    if (!m_index) {
+        // No data, return a constant seed.
+        return HashValue(static_cast<char*>(nullptr), 0);
+    } else if (isSingleCharIndex(m_index)) {
+        return HashValue(indexToChar(m_index)); // One byte.
+    } else {
+        const uint index = m_index;
+        return LockedItemRepository::read<IndexedString>([index](const IndexedStringRepository& repo) {
+            return repo.itemFromIndex(index)->hash();
+        });
+    }
 }
 
 QString IndexedString::str() const
