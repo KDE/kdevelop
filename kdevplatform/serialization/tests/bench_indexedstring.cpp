@@ -117,6 +117,7 @@ void BenchIndexedString::bench_qhashIndexedString()
 
 void BenchIndexedString::bench_hashString()
 {
+    // Note: this used to benchmark IndexedString::hashString() which became an alias for HashValue.
     const QVector<QString> strings = generateData();
     QVector<QByteArray> byteArrays;
     byteArrays.reserve(strings.size());
@@ -127,7 +128,7 @@ void BenchIndexedString::bench_hashString()
     quint64 sum = 0;
     QBENCHMARK {
         for (const auto& array : std::as_const(byteArrays)) {
-            sum += IndexedString::hashString(array.constData(), array.length());
+            sum += HashValue(array.constData(), array.length());
         }
     }
     QVERIFY(sum > 0);

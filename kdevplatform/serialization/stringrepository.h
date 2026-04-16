@@ -27,7 +27,7 @@ struct StringData
     {
         return sizeof(StringData) + length;
     }
-    unsigned int hash() const
+    HashValue hash() const
     {
         return HashValue(reinterpret_cast<const char*>(this) + sizeof(StringData), length);
     }
@@ -36,7 +36,8 @@ struct StringData
 struct StringRepositoryItemRequest
 {
     //The text is supposed to be utf8 encoded
-    StringRepositoryItemRequest(const char* text, unsigned int hash, unsigned short length) : m_hash(hash)
+    StringRepositoryItemRequest(const char* text, unsigned short length)
+        : m_hash(text, length)
         , m_length(length)
         , m_text(text)
     {
@@ -46,10 +47,8 @@ struct StringRepositoryItemRequest
         AverageSize = 10 //This should be the approximate average size of an Item
     };
 
-    using HashType = unsigned int;
-
     //Should return the hash-value associated with this request(For example the hash of a string)
-    HashType hash() const
+    HashValue hash() const
     {
         return m_hash;
     }
@@ -83,7 +82,7 @@ struct StringRepositoryItemRequest
     {
         return item->length == m_length && (memcmp(++item, m_text, m_length) == 0);
     }
-    unsigned int m_hash;
+    HashValue m_hash;
     unsigned short m_length;
     const char* m_text;
 };

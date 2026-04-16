@@ -54,10 +54,8 @@ public:
     /**
      * @param str must be a utf8 encoded string, does not need to be 0-terminated.
      * @param length must be its length in bytes.
-     * @param hash must be a hash as constructed with the here defined hash functions.
-     *             If it is zero, it will be computed.
      */
-    explicit IndexedString(const char* str, unsigned short length, unsigned int hash = 0);
+    explicit IndexedString(const char* str, unsigned short length);
 
     /**
      * Needs a zero terminated string. When the information is already available,
@@ -204,14 +202,12 @@ public:
         return m_index < rhs.m_index;
     }
 
-    static unsigned int hashString(const char* str, unsigned short length);
-
     /**
      * Optimized function that only computes the index of a string
      * removes the overhead of the IndexedString ref counting
      */
-    static uint indexForString(const char* str, unsigned short length, uint hash = 0);
-    static uint indexForString(const QString& str, uint hash = 0);
+    static uint indexForString(const char* str, unsigned short length);
+    static uint indexForString(const QString& str);
     static uint indexForUrl(const QUrl& url);
 
 private:

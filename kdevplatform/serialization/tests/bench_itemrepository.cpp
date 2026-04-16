@@ -33,7 +33,7 @@ struct TestData
     uint hash() const
     {
         const char* str = reinterpret_cast<const char*>(this) + sizeof(TestData);
-        return IndexedString::hashString(str, length);
+        return HashValue(str, length);
     }
 };
 
@@ -43,7 +43,7 @@ struct TestDataRepositoryItemRequest
     TestDataRepositoryItemRequest(const char* text, uint length)
         : m_length(length)
         , m_text(text)
-        , m_hash(IndexedString::hashString(text, length))
+        , m_hash(HashValue(text, length))
     {
     }
 

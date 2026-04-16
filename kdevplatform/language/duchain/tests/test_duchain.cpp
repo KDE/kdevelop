@@ -426,8 +426,7 @@ void TestDUChain::testIndexedStrings()
         QByteArray array = testString.toUtf8();
         //qDebug() << "checking with" << testString;
         //qDebug() << "checking" << a;
-        IndexedString indexed(array.constData(), array.size(), IndexedString::hashString(array.constData(),
-                                                                                         array.size()));
+        IndexedString indexed(array.constData(), array.size());
 
         QCOMPARE(indexed.str(), testString);
         if (knownIndices.contains(testString)) {

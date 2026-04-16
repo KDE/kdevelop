@@ -189,8 +189,7 @@ void Declaration::setComment(const QByteArray& str)
         return;
     }
 
-    const auto request = Repositories::StringRepositoryItemRequest(
-        str.constData(), IndexedString::hashString(str.constData(), str.length()), str.length());
+    const auto request = Repositories::StringRepositoryItemRequest(str.constData(), str.length());
 
     d->m_comment = LockedItemRepository::write<DeclarationComment>(
         [&](Repositories::StringRepository& repo) { return repo.index(request); });

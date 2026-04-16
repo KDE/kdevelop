@@ -37,8 +37,8 @@ public:
      * @param hash must be a hash as constructed with the here defined hash functions.
      *             If it is zero, it will be computed.
      */
-    explicit IndexedStringView(const char* str, unsigned short length, uint hash = 0)
-        : m_index{IndexedString::indexForString(str, length, hash)}
+    explicit IndexedStringView(const char* str, unsigned short length)
+        : m_index{IndexedString::indexForString(str, length)}
     {
     }
 
@@ -47,8 +47,8 @@ public:
      *
      * @note This is expensive.
      */
-    explicit IndexedStringView(const QString& str, uint hash = 0)
-        : m_index{IndexedString::indexForString(str, hash)}
+    explicit IndexedStringView(const QString& str)
+        : m_index{IndexedString::indexForString(str)}
     {
     }
 

@@ -52,8 +52,8 @@ struct IndexedStringData
 struct IndexedStringRepositoryItemRequest
 {
     //The text is supposed to be utf8 encoded
-    IndexedStringRepositoryItemRequest(const char* text, uint hash, unsigned short length)
-        : m_hash(hash)
+    IndexedStringRepositoryItemRequest(const char* text, unsigned short length)
+        : m_hash(text, length)
         , m_length(length)
         , m_text(text)
     {
@@ -104,7 +104,7 @@ struct IndexedStringRepositoryItemRequest
         return item->length == m_length && (memcmp(++item, m_text, m_length) == 0);
     }
 
-    uint m_hash;
+    HashValue m_hash;
     unsigned short m_length;
     const char* m_text;
 };
@@ -209,14 +209,14 @@ inline void deref(unsigned index)
 
 ///@param str must be a utf8 encoded string, does not need to be 0-terminated.
 ///@param length must be its length in bytes.
-IndexedString::IndexedString(const char* str, unsigned short length, uint hash)
+IndexedString::IndexedString(const char* str, unsigned short length)
 {
     if (!length) {
         m_index = 0;
     } else if (length == 1) {
         m_index = charToIndex(str[0]);
     } else {
-        const auto request = IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length);
+        const auto request = IndexedStringRepositoryItemRequest(str, length);
         bool refcount = shouldDoDUChainReferenceCounting(this);
         m_index = LockedItemRepository::write<IndexedString>([request, refcount](IndexedStringRepository& repo) {
             auto index = repo.index(request);
@@ -404,29 +404,24 @@ QByteArray IndexedString::byteArray() const
     }
 }
 
-uint IndexedString::hashString(const char* str, unsigned short length)
-{
-    return HashValue(str, length);
-}
-
-uint IndexedString::indexForString(const char* str, short unsigned length, uint hash)
+uint IndexedString::indexForString(const char* str, short unsigned length)
 {
     if (!length) {
         return 0;
     } else if (length == 1) {
         return charToIndex(str[0]);
     } else {
-        const auto request = IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length);
+        const auto request = IndexedStringRepositoryItemRequest(str, length);
         return LockedItemRepository::write<IndexedString>([request](IndexedStringRepository& repo) {
             return repo.index(request);
         });
     }
 }
 
-uint IndexedString::indexForString(const QString& str, uint hash)
+uint IndexedString::indexForString(const QString& str)
 {
     const QByteArray array(str.toUtf8());
-    return indexForString(array.constBegin(), array.size(), hash);
+    return indexForString(array.constBegin(), array.size());
 }
 
 uint IndexedString::indexForUrl(const QUrl& url)
