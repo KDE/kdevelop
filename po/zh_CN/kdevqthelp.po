@@ -209,7 +209,7 @@ msgstr "无法找到任何“%1”的文档"
 #: qthelpdocumentation.cpp:478
 #, kde-format
 msgid "%1 Home Page"
-msgstr ""
+msgstr "%1 首页"
 
 #: qthelpqtdoc.cpp:172
 #, kde-format
