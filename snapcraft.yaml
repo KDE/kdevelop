@@ -63,6 +63,7 @@ parts:
     build-packages:
       - libglib2.0-dev
       - gettext
+      - meson
     stage-packages:
       - libglib2.0-0t64
   kdevelop-pg-qt:
