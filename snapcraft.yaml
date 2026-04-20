@@ -57,8 +57,8 @@ parts:
     source-branch: 2.4
     plugin: meson
     meson-parameters:
-      - -Dbuild-tools=off
-      - -Dbuild-tests=off
+      - -Dbuild-tools=false
+      - -Dbuild-tests=false
       - -Dprefix=/usr
     build-packages:
       - libglib2.0-dev
