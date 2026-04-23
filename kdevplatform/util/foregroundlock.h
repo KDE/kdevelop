@@ -9,8 +9,6 @@
 
 #include "utilexport.h"
 #include <QObject>
-#include <QMutex>
-#include <QWaitCondition>
 
 namespace KDevelop {
 
@@ -40,12 +38,17 @@ public:
 
     void unlock();
     void relock();
-    bool tryLock();
+    /**
+     * Try acquire the foreground lock.
+     * @warning This can never succeed if none of the non-main threads are not frequently
+     *          acquiring the lock the without tryLock(). Please do make loops that call tryLock() repeatedly.
+     */
+    [[nodiscard]] bool tryLock();
 
     /// Returns whether the current thread holds the foreground lock
-    static bool isLockedForThread();
+    [[nodiscard]] static bool isLockedForThread();
 
-    bool isLocked() const;
+    [[nodiscard]] bool isLocked() const;
 
 private:
     bool m_locked = false;
@@ -58,6 +61,7 @@ private:
  *
  * While this object is alive, you _must not_ access any non-threadsafe resources
  * that belong to the foreground, and you must not start an event-loop.
+ * All (recursively) acquired ForegroundLock(s) by the thread will temporarily be released.
  */
 class KDEVPLATFORMUTIL_EXPORT TemporarilyReleaseForegroundLock
 {
@@ -73,23 +77,15 @@ private:
 
 #define VERIFY_FOREGROUND_LOCKED Q_ASSERT(KDevelop::ForegroundLock::isLockedForThread());
 
-class KDEVPLATFORMUTIL_EXPORT DoInForeground : public QObject
+/**
+ * Implementation detail, do not use.
+ */
+class KDEVPLATFORMUTIL_EXPORT IForegroundReleaser : public QObject
 {
     Q_OBJECT
-
 public:
-    DoInForeground();
-    ~DoInForeground() override;
-
-    void doIt();
-
-private Q_SLOTS:
-    void doInternalSlot();
-
-private:
-    virtual void doInternal() = 0;
-    QMutex m_mutex;
-    QWaitCondition m_wait;
+    IForegroundReleaser() = default;
+    ~IForegroundReleaser() override;
 };
 
 }

@@ -90,8 +90,6 @@ void TestForegroundLock::testMainThreadLock()
     QCOMPARE(ForegroundLock::isLockedForThread(), true);
     {
         TemporarilyReleaseForegroundLock unlocker;
-        QEXPECT_FAIL("", "isLockedForThread() falsely reports ForegroundLock "
-                     "as acquired after TemporarilyReleaseForegroundLock", Continue);
         QCOMPARE(ForegroundLock::isLockedForThread(), false);
     }
     QCOMPARE(ForegroundLock::isLockedForThread(), true);
@@ -99,7 +97,6 @@ void TestForegroundLock::testMainThreadLock()
 
 void TestForegroundLock::testQueuedLock_data()
 {
-    QSKIP("due to dead-lock");
     QTest::addColumn<int>("numThreads");
     for (int i = 1; i <= 10; ++i) {
         QTest::newRow(qPrintable(QString::number(i))) << i;
@@ -183,7 +180,6 @@ void TestForegroundLock::testTryLock()
     }
 
     // TEST: unlocker drives the unlocking while the threads try loan the lock from it.
-    QSKIP("skipping rest of the test due to dead-lock");
     auto unlocker = std::make_unique<QueuedLockThread>();
     unlocker->start();
     for (auto& thread : threads) {
