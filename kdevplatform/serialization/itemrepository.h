@@ -1380,66 +1380,9 @@ public:
             //If we could not allocate the item in an empty bucket, then we need to create a monster-bucket that
             //can hold the data.
             if (bucketPtr->isEmpty() && !indexInBucket) {
-                ///@todo Move this compound statement into an own function
-                uint totalSize = size + MyBucket::AdditionalSpacePerItem;
-
-                Q_ASSERT((totalSize > ItemRepositoryBucketSize));
-
-                useBucket = 0;
-                //The item did not fit in, we need a monster-bucket(Merge consecutive buckets)
-                ///Step one: Search whether we can merge multiple empty buckets in the free-list into one monster-bucket
-                auto rangeStart = BucketId{std::numeric_limits<BucketId>::max()};
-                auto rangeEnd = BucketId{std::numeric_limits<BucketId>::max()};
-                for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
-                    const auto* const bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
-                    if (bucketPtr->isEmpty()) {
-                        //This bucket is a candidate for monster-bucket merging
-                        const auto index = m_freeSpaceBuckets[a];
-                        if (rangeEnd != index) {
-                            rangeStart = index;
-                            rangeEnd = index + 1;
-                        } else {
-                            ++rangeEnd;
-                        }
-                        if (rangeStart != rangeEnd) {
-                            uint extent = rangeEnd - rangeStart - 1;
-                            uint totalAvailableSpace = bucketForIndex(rangeStart)->available() +
-                                                       MyBucket::DataSize* (rangeEnd - rangeStart - 1);
-                            if (totalAvailableSpace > totalSize) {
-                                Q_ASSERT(extent);
-                                ///We can merge these buckets into one monster-bucket that can hold the data
-                                Q_ASSERT((uint)m_freeSpaceBuckets[a - extent] == (uint)rangeStart);
-                                useBucket = rangeStart;
-                                convertMonsterBucket(rangeStart, extent);
-
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (!useBucket) {
-                    //Create a new monster-bucket at the end of the data
-                    int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
-                    Q_ASSERT(needMonsterExtent);
-                    const auto currentBucketIncrease = needMonsterExtent + 1;
-                    Q_ASSERT(m_currentBucket);
-                    if (m_currentBucket + currentBucketIncrease >= m_buckets.size()) {
-                        allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor + currentBucketIncrease);
-                    }
-                    useBucket = m_currentBucket;
-
-                    convertMonsterBucket(useBucket, needMonsterExtent);
-                    m_currentBucket += currentBucketIncrease;
-                    Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
-                    Q_ASSERT(m_buckets[useBucket]);
-                    Q_ASSERT(m_buckets[useBucket]->monsterBucketExtent() == needMonsterExtent);
-                }
-                Q_ASSERT(useBucket);
-                bucketPtr = bucketForIndex(useBucket);
-
-                indexInBucket = bucketPtr->index(request, size);
-                Q_ASSERT(indexInBucket);
+                std::tie(useBucket, indexInBucket) = indexIntoMonsterBucket(request, size);
+                if (!useBucket)
+                    return createIndex();
             }
 
             Q_ASSERT(m_currentBucket);
@@ -2260,7 +2203,69 @@ private:
         return bucketPtr;
     }
 
-    MyBucket* bucketForIndex(short unsigned int index) const
+    std::pair<BucketId, typename MyBucket::ItemId> indexIntoMonsterBucket(const ItemRequest& request, uint size)
+    {
+        uint totalSize = size + MyBucket::AdditionalSpacePerItem;
+
+        Q_ASSERT((totalSize > ItemRepositoryBucketSize));
+
+        auto useBucket = BucketId{0};
+        auto rangeStart = BucketId{std::numeric_limits<BucketId>::max()};
+        auto rangeEnd = BucketId{std::numeric_limits<BucketId>::max()};
+        for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
+            const auto* const bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+            if (bucketPtr->isEmpty()) {
+                //This bucket is a candidate for monster-bucket merging
+                const auto index = m_freeSpaceBuckets[a];
+                if (rangeEnd != index) {
+                    rangeStart = index;
+                    rangeEnd = index + 1;
+                } else {
+                    ++rangeEnd;
+                }
+                if (rangeStart != rangeEnd) {
+                    uint extent = rangeEnd - rangeStart - 1;
+                    uint totalAvailableSpace =
+                        bucketForIndex(rangeStart)->available() + MyBucket::DataSize * (rangeEnd - rangeStart - 1);
+                    if (totalAvailableSpace > totalSize) {
+                        Q_ASSERT(extent);
+                        ///We can merge these buckets into one monster-bucket that can hold the data
+                        Q_ASSERT((uint)m_freeSpaceBuckets[a - extent] == (uint)rangeStart);
+                        useBucket = rangeStart;
+                        convertMonsterBucket(rangeStart, extent);
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!useBucket) {
+            //Create a new monster-bucket at the end of the data
+            int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
+            Q_ASSERT(needMonsterExtent);
+            const auto currentBucketIncrease = needMonsterExtent + 1;
+            Q_ASSERT(m_currentBucket);
+            if (m_currentBucket + currentBucketIncrease >= m_buckets.size()) {
+                allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor + currentBucketIncrease);
+            }
+            useBucket = m_currentBucket;
+
+            convertMonsterBucket(useBucket, needMonsterExtent);
+            m_currentBucket += currentBucketIncrease;
+            Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
+            Q_ASSERT(m_buckets[useBucket]);
+            Q_ASSERT(m_buckets[useBucket]->monsterBucketExtent() == needMonsterExtent);
+        }
+        Q_ASSERT(useBucket);
+        auto* const bucketPtr = bucketForIndex(useBucket);
+
+        auto indexInBucket = bucketPtr->index(request, size);
+        Q_ASSERT(indexInBucket);
+        return std::make_pair(useBucket, indexInBucket);
+    }
+
+    MyBucket* bucketForIndex(unsigned short index) const
     {
         Q_ASSERT(index);
         MyBucket* bucketPtr = m_buckets.at(index);
