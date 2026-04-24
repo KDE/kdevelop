@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-04-24 00:42+0000\n"
 "PO-Revision-Date: 2014-02-10 00:17+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -34,7 +34,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Svi otvoreni projekti"
 
-#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:620 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
@@ -55,7 +55,7 @@ msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Izaberi direktorij  za pretragu."
 
-#: grepdialog.cpp:609
+#: grepdialog.cpp:611
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
@@ -63,14 +63,14 @@ msgstr[0] "%2, i još %1 podatak"
 msgstr[1] "%2, i još %1 podatka"
 msgstr[2] "%2, i još %1 podataka"
 
-#: grepdialog.cpp:625
+#: grepdialog.cpp:627
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Traži \"%1\" u %2 (u momentu %3)"
 
-#: grepdialog.cpp:630
+#: grepdialog.cpp:632
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"

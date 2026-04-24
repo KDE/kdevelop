@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-04-24 00:42+0000\n"
 "PO-Revision-Date: 2024-09-20 13:56+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -33,7 +33,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Όλα τα ανοικτά έργα"
 
-#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:620 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
@@ -51,20 +51,20 @@ msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Επιλέξτε κατάλογο για αναζήτηση."
 
-#: grepdialog.cpp:609
+#: grepdialog.cpp:611
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2, και %1 παραπάνω αντικείμενο"
 msgstr[1] "%2, και %1 παραπάνω αντικείμενα"
 
-#: grepdialog.cpp:625
+#: grepdialog.cpp:627
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "Αναζήτηση «%1» στο %2"
 
-#: grepdialog.cpp:630
+#: grepdialog.cpp:632
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"

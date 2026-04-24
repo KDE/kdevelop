@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-04-24 00:42+0000\n"
 "PO-Revision-Date: 2025-09-11 09:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,32 +22,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
-#: committoolview.cpp:197 committoolview.cpp:198
+#: committoolview.cpp:200 committoolview.cpp:201
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr "Filtra per nom de fitxer o del projecte"
 
-#: committoolview.cpp:215
+#: committoolview.cpp:218
 #, kde-format
 msgid "Refresh"
 msgstr "Actualitza"
 
-#: committoolview.cpp:216
+#: committoolview.cpp:219
 #, kde-format
 msgid "Stage selected"
 msgstr "Marca el seleccionat"
 
-#: committoolview.cpp:218
+#: committoolview.cpp:221
 #, kde-format
 msgid "Unstage selected"
 msgstr "Desmarca el seleccionat"
 
-#: committoolview.cpp:220
+#: committoolview.cpp:223
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr "Revertix les edicions sense marcar"
 
-#: committoolview.cpp:473
+#: committoolview.cpp:474
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
@@ -73,67 +73,67 @@ msgstr "Revertix les línies o el fragment seleccionat"
 msgid "Go to line in source"
 msgstr "Ves fins a la línia en el codi font"
 
-#: diffviewsctrl.cpp:108
+#: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Desmarca les línies seleccionades"
 
-#: diffviewsctrl.cpp:109
+#: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Marca les línies seleccionades"
 
-#: diffviewsctrl.cpp:110
+#: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Revertix les línies seleccionades"
 
-#: diffviewsctrl.cpp:112
+#: diffviewsctrl.cpp:116
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Desmarca el fragment seleccionat"
 
-#: diffviewsctrl.cpp:113
+#: diffviewsctrl.cpp:117
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Marca el fragment seleccionat"
 
-#: diffviewsctrl.cpp:114
+#: diffviewsctrl.cpp:118
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Revertix el fragment seleccionat"
 
-#: diffviewsctrl.cpp:124 diffviewsctrl.cpp:130
+#: diffviewsctrl.cpp:128 diffviewsctrl.cpp:134
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:125 diffviewsctrl.cpp:131
+#: diffviewsctrl.cpp:129 diffviewsctrl.cpp:135
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:177
+#: diffviewsctrl.cpp:181
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (marcat)"
 
-#: diffviewsctrl.cpp:179
+#: diffviewsctrl.cpp:183
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Marcat (%1)"
 
-#: diffviewsctrl.cpp:181
+#: diffviewsctrl.cpp:185
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Sense marcar (%1)"
 
-#: diffviewsctrl.cpp:183
+#: diffviewsctrl.cpp:187
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (sense marcar)"
 
-#: diffviewsctrl.cpp:338
+#: diffviewsctrl.cpp:345
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -142,7 +142,7 @@ msgstr ""
 "Les línies seleccionades es revertiran i es perdran els canvis. Esta "
 "operació no es podrà desfer. Voleu continuar?"
 
-#: diffviewsctrl.cpp:340
+#: diffviewsctrl.cpp:347
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"

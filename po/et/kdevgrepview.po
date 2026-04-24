@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-04-24 00:42+0000\n"
 "PO-Revision-Date: 2020-01-15 14:38+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -32,7 +32,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Kõik avatud projektid"
 
-#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:620 grepviewplugin.cpp:94
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
@@ -53,21 +53,21 @@ msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Valimine, millises kataloogis otsida"
 
-#: grepdialog.cpp:609
+#: grepdialog.cpp:611
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2 ja veel %1 element"
 msgstr[1] "%2 ja veel %1 elementi"
 
-#: grepdialog.cpp:625
+#: grepdialog.cpp:627
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "\"%1\" otsimine asukohas %2"
 
-#: grepdialog.cpp:630
+#: grepdialog.cpp:632
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"

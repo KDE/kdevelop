@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-04-24 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -29,7 +29,7 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "全部打开的工程"
 
-#: grepdialog.cpp:260 grepdialog.cpp:618 grepviewplugin.cpp:94
+#: grepdialog.cpp:260 grepdialog.cpp:620 grepviewplugin.cpp:94
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
@@ -47,19 +47,19 @@ msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "选择要搜索的目录"
 
-#: grepdialog.cpp:609
+#: grepdialog.cpp:611
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2，还有 %1 个项目"
 
-#: grepdialog.cpp:625
+#: grepdialog.cpp:627
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "在 %2 中搜索“%1”"
 
-#: grepdialog.cpp:630
+#: grepdialog.cpp:632
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
