@@ -17,6 +17,9 @@ class TestForegroundLock : public QObject
 private Q_SLOTS:
     void initTestCase();
 
+    void testMainThreadLock();
+    void testQueuedLock_data();
+    void testQueuedLock();
     void testTryLock_data();
     void testTryLock();
 };
