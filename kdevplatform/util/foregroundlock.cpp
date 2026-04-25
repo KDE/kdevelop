@@ -6,6 +6,7 @@
 
 #include "foregroundlock.h"
 
+#include <QAtomicPointer>
 #include <QCoreApplication>
 #include <QMutex>
 #include <QSemaphore>
@@ -16,15 +17,21 @@ using namespace KDevelop;
 namespace {
 
 QRecursiveMutex foregroundMutex;
+QSemaphore waitToLock;
 
 const auto ForegroundEventType = static_cast<QEvent::Type>(QEvent::registerEventType());
+
+// Lock-free stack of threads blocked on foregroundMutex
+class ForegroundReleaser;
+QAtomicPointer<ForegroundReleaser> foregroundWaiters;
+
+bool handleForegroundLockWaiters();
 
 class ForegroundReleaser : public IForegroundReleaser
 {
 public:
-    // These semaphores synchronize the temporary unlocking of the foregroundMutex.
     QSemaphore waitToUnlock;
-    QSemaphore waitToLock;
+    QAtomicPointer<ForegroundReleaser> next;
 
     ForegroundReleaser()
     {
@@ -39,22 +46,34 @@ protected:
     {
         if (event->type() == ForegroundEventType) {
             VERIFY_FOREGROUND_LOCKED
-            releaseForegroundLock();
+            handleForegroundLockWaiters();
         }
         QObject::customEvent(event);
     }
-
-    void releaseForegroundLock()
-    {
-        // Now we release the foreground lock.
-        // note: this does nothing if foregroundMutex is not held.
-        TemporarilyReleaseForegroundLock release;
-        waitToUnlock.release();
-        // Wait for the requester thread to acquire the foreground mutex.
-        waitToLock.acquire();
-        // Block on the foreground mutex until it is released.
-    }
 };
+
+bool handleForegroundLockWaiters()
+{
+    auto current = foregroundWaiters.fetchAndStoreOrdered(nullptr);
+    if (!current) {
+        return false;
+    }
+    // Now we release the foreground lock.
+    // note: this does nothing if foregroundMutex is not held.
+    TemporarilyReleaseForegroundLock release;
+    // Release them all.
+    int numWaiters = 0;
+    while (current) {
+        auto waiter = current;
+        current = current->next.fetchAndStoreRelaxed(nullptr);
+        waiter->waitToUnlock.release();
+        ++numWaiters;
+    }
+    // Wait for all of the requester threads to acquire the foreground mutex.
+    waitToLock.acquire(numWaiters);
+    // Block on the foreground mutex until it is released.
+    return true;
+}
 
 class ThreadState
 {
@@ -86,8 +105,20 @@ public:
         if (!releaser) {
             releaser = new ForegroundReleaser();
         }
-        // Notify the main thread to unlock the foreground mutex.
-        QCoreApplication::postEvent(releaser, new QEvent(ForegroundEventType), Qt::LowEventPriority);
+
+        bool first = false;
+        Q_ASSERT(releaser->next == nullptr);
+        // note: because releaser is a unique value and there is only one per thread,
+        // the value doubles as the "ABA token" for the lock-free push():
+        auto head = reinterpret_cast<ForegroundReleaser*>(1);
+        while (!foregroundWaiters.testAndSetOrdered(head, releaser, head)) {
+            first |= head == nullptr;
+            releaser->next.storeRelaxed(head);
+        }
+        if (first) {
+            // We are the first thread, so notify the main thread to unlock the foreground mutex.
+            QCoreApplication::postEvent(releaser, new QEvent(ForegroundEventType), Qt::LowEventPriority);
+        }
         // Wait for this thread's turn.
         releaser->waitToUnlock.acquire();
         // Main thread released the foreground mutex.
@@ -95,7 +126,7 @@ public:
         foregroundMutex.lock();
         ++recursion;
         // Let the main thread continue once it acquires the foregroundMutex after us.
-        releaser->waitToLock.release();
+        waitToLock.release();
     }
 
     static ThreadState* get()
@@ -106,12 +137,6 @@ public:
     }
 };
 
-void lockForegroundMutexInternal(ThreadState* local = ThreadState::get())
-{
-    foregroundMutex.lock();
-    ++local->recursion;
-}
-
 bool tryLockForegroundMutexInternal(ThreadState* local = ThreadState::get())
 {
     if (foregroundMutex.tryLock()) {
@@ -120,6 +145,21 @@ bool tryLockForegroundMutexInternal(ThreadState* local = ThreadState::get())
     } else {
         return false;
     }
+}
+
+void lockForegroundMutexInternal(ThreadState* local = ThreadState::get())
+{
+    if (local->isMainThread) {
+        // The main thread must handle the blocked waiters, so we must spin.
+        while (!tryLockForegroundMutexInternal(local)) {
+            if (!handleForegroundLockWaiters()) {
+                QThread::yieldCurrentThread();
+            }
+        }
+        return;
+    }
+    foregroundMutex.lock();
+    ++local->recursion;
 }
 
 void unlockForegroundMutexInternal(ThreadState* local = ThreadState::get(), bool duringDestruction = false)
