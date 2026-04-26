@@ -106,21 +106,24 @@ public:
             releaser = new ForegroundReleaser();
         }
 
+        // avoid a __tls_get_addr call being emitted in the loop below.
+        auto* const entry = releaser;
+
         bool first = false;
-        Q_ASSERT(releaser->next == nullptr);
+        Q_ASSERT(entry->next == nullptr);
         // note: because releaser is a unique value and there is only one per thread,
         // the value doubles as the "ABA token" for the lock-free push():
         auto head = reinterpret_cast<ForegroundReleaser*>(1);
-        while (!foregroundWaiters.testAndSetOrdered(head, releaser, head)) {
+        while (!foregroundWaiters.testAndSetOrdered(head, entry, head)) {
             first |= head == nullptr;
-            releaser->next.storeRelaxed(head);
+            entry->next.storeRelaxed(head);
         }
         if (first) {
             // We are the first thread, so notify the main thread to unlock the foreground mutex.
-            QCoreApplication::postEvent(releaser, new QEvent(ForegroundEventType), Qt::LowEventPriority);
+            QCoreApplication::postEvent(entry, new QEvent(ForegroundEventType), Qt::LowEventPriority);
         }
         // Wait for this thread's turn.
-        releaser->waitToUnlock.acquire();
+        entry->waitToUnlock.acquire();
         // Main thread released the foreground mutex.
         // All threads except the main thread can now compete for the lock:
         foregroundMutex.lock();
