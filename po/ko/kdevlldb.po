@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2026 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Shinjo Park <kde@peremen.name>, 2019, 2020, 2022.
+# SPDX-FileCopyrightText: 2019, 2020, 2022, 2026 Shinjo Park <kde@peremen.name>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 00:41+0000\n"
-"PO-Revision-Date: 2022-07-13 13:06+0200\n"
+"PO-Revision-Date: 2026-04-26 21:39+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: controllers/framestackmodel.cpp:86
 #, kde-format
@@ -39,6 +39,9 @@ msgid ""
 "<br />Your <code>lldb-mi</code> sent the following reply to a CLI command "
 "<code>version</code>:<br />"
 msgstr ""
+"<code>lldb-mi</code>에서 사용하는 LLDB 버전을 감지할 수 없습니다.<br /"
+"><code>lldb-mi</code>에서 CLI 명령 <code>version</code>에 다음과 같이 응답했"
+"습니다:<br />"
 
 #: debugsession.cpp:356
 #, kde-format
@@ -46,6 +49,8 @@ msgid ""
 "Your <code>lldb-mi</code> must use LLDB version %1 or later.<br />But it is "
 "currently using LLDB version %2"
 msgstr ""
+"<code>lldb-mi</code>에서 LLDB 버전 %1 이상을 사용해야 합니다.<br />현재 사용 "
+"중인 LLDB 버전은 %2입니다"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
