@@ -406,9 +406,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
-"Určuje, či príkazy vydané interne KDevelop sa ukážu alebo nie.<br>Táto voľba "
-"ovplyvní iba budúce príkazy, nepridá alebo odstráni už vydané príkazy z "
-"pohľadu."
+"Riadi, či sa budú zobrazovať príkazy vydávané interne cez KDevelop.<br>Táto "
+"voľba ovplyvní iba budúce príkazy, nepridá ani neodstráni už vydané príkazy "
+"zo zobrazenia."
 
 #: gdboutputwidget.cpp:394
 #, kde-format
