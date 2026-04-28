@@ -633,9 +633,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
-"Určuje, či príkazy vydané interne KDevelop sa ukážu alebo nie.<br>Táto voľba "
-"ovplyvní iba budúce príkazy, nepridá alebo odstráni už vydané príkazy z "
-"pohľadu."
+"Riadi, či sa budú zobrazovať príkazy vydávané interne cez KDevelop.<br>Táto "
+"voľba ovplyvní iba budúce príkazy, nepridá ani neodstráni už vydané príkazy "
+"zo zobrazenia."
 
 #: widgets/debuggerconsoleview.cpp:139
 #, kde-format
@@ -749,10 +749,10 @@ msgid ""
 "instruction by instruction using the debuggers toolbar buttons of \"step over"
 "\" instruction and \"step into\" instruction."
 msgstr ""
-"<b>Zobrazenie strojového kódu</b><p>Strojový kód, ktorý je vidieť vo vašom "
-"bežiacom spustiteľnom súbore so zvýraznenou aktuálnou inštrukciou. Môžete "
-"krokovať inštrukciu za inštrukciou pomocou tlačidiel na paneli nástrojov "
-"ladiaceho programu \"krok cez\" inštrukciu a \"krok do\" inštrukcie."
+"<b>Zobrazenie strojového kódu</b><p>Pohľad na strojový kód vášho bežiaceho "
+"spustiteľného súboru s vyznačenou aktuálnou inštrukciou. Môžete prechádzať "
+"po inštrukciách pomocou tlačidiel panela nástrojov debuggera \"krok ponad\" "
+"inštrukciu a \"krok do\" inštrukcie."
 
 #: widgets/disassemblewidget.cpp:236
 #, kde-format
