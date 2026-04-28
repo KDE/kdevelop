@@ -38,6 +38,7 @@ set(KDevPlatformLanguage_LIB_SRCS
     duchain/specializationstore.cpp
     duchain/codemodel.cpp
     duchain/duchain.cpp
+    duchain/duchainprivate.cpp
     duchain/waitforupdate.cpp
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
