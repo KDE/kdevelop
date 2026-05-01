@@ -1232,7 +1232,7 @@ msgstr "%1 stále potrebuje aktualizáciu!"
 #: language/duchain/navigation/usesnavigationcontext.cpp:41
 #, kde-format
 msgid "Uses of "
-msgstr "Použitia"
+msgstr "Použitia "
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:46
 #, kde-format
@@ -1679,7 +1679,7 @@ msgstr "Zadajte závislosť na pridanie do zoznamu"
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr "Zadajte závislosť na pridanie do zoznamu"
+msgstr "Zadajte závislosť na pridanie do zoznamu..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
@@ -1834,7 +1834,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr "Moduly"
+msgstr "Žiadne moduly nenájdené"
 
 #: shell/debugcontroller.cpp:51
 #, kde-format
@@ -2087,7 +2087,7 @@ msgstr "Skočí na riadok vykonávania v editore."
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "Vymazať aktuálne sedenie..."
+msgstr "Prerušiť aktuálne sedenie"
 
 #: shell/debugcontroller.cpp:497 shell/runcontroller.cpp:473
 #, kde-format
@@ -2717,7 +2717,7 @@ msgstr "Vytvorí prázdny súbor."
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "Pridať nástrojový pohľad"
+msgstr "Pridať nástrojový pohľad..."
 
 #: shell/mainwindow_p.cpp:314
 #, kde-format
@@ -3186,7 +3186,7 @@ msgstr "Začleniť súčasný projekt..."
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "Potvrdiť"
+msgstr "Potvrdiť..."
 
 #: shell/projectcontroller.cpp:609
 #, kde-format
@@ -3686,13 +3686,13 @@ msgstr "Spustiť novú inštanciu KDevelop s prázdnym sedením"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr "Spustiť nové sedenie"
+msgstr "Spustiť nové pomenované sedenie"
 
 #: shell/sessioncontroller.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr "Spustiť novú inštanciu KDevelop s prázdnym sedením"
+msgstr "Spustiť novú inštanciu KDevelop s prázdnym pomenovaným sedením"
 
 #: shell/sessioncontroller.cpp:288
 #, kde-format
@@ -3906,7 +3906,7 @@ msgstr "Maximálny počet vlákien:"
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
-msgstr "Vlákien:"
+msgstr "vlákien"
 
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
@@ -4203,13 +4203,13 @@ msgstr "Auto-Generated"
 #: shell/settings/languagepreferences.ui:175
 #, kde-format
 msgid "From Editor Theme"
-msgstr "Editor zamerania"
+msgstr "Z témy editora"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
 #, kde-format
 msgid "Global colors:"
-msgstr "Globálna farebná intenzita:"
+msgstr "Globálne farby:"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4846,7 +4846,8 @@ msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
 msgstr ""
-"Povolí alebo zakáže zobrazenie panela záložiek v hornej časti okna editora."
+"Povolí alebo zakáže zobrazenie tlačidla zatvorenia v každej karte v paneli "
+"záložiek v hornej časti okna editora."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
@@ -4900,7 +4901,7 @@ msgstr "Preformátovať riadok"
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "Preformátovať súbory"
+msgstr "Preformátovať súbory..."
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
@@ -4981,7 +4982,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr "Preformátovať súbory"
+msgstr "Preformátovať súbory?"
 
 #: shell/sourceformattercontroller.cpp:868
 #, kde-format
@@ -5027,7 +5028,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "Štýly formátovania"
+msgstr "Odstrániť štýl"
 
 #: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
@@ -5159,7 +5160,7 @@ msgstr "Ladenie"
 #, kde-format
 msgctxt "area"
 msgid "Review"
-msgstr "Revízia"
+msgstr "Prehľad"
 
 #: shell/uicontroller.cpp:500
 #, kde-format
@@ -5417,7 +5418,7 @@ msgstr "Ukázať spodné dokovanie"
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
-msgstr "Editor zamerania"
+msgstr "Zamerať editor"
 
 #: sublime/mainwindow_p.cpp:77
 #, kde-format
@@ -5607,7 +5608,7 @@ msgstr "Niektoré súbory sú čiastočne chránené"
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "Zlyhalo nastavenie oprávnení"
+msgstr "Nastaviť oprávnenia na zápis"
 
 #: util/shellutils.cpp:180
 #, kde-format
@@ -5790,13 +5791,13 @@ msgid ""
 "Branch \"%1\" doesn't exists.\n"
 "Please, choose another name."
 msgstr ""
-"Vetva \"%1\" už existuje.\n"
+"Vetva \"%1\" neexistuje.\n"
 "Prosím, zvoľte iný názov."
 
 #: vcs/dvcs/ui/branchmanager.cpp:196
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
-msgstr "Pred vytvorením novej vetvy musíte vybrať základnú vetvu zo zoznamu."
+msgstr "Pred zlúčením do aktuálnej vetvy musíte vybrať vetvu zo zoznamu."
 
 #: vcs/dvcs/ui/branchmanager.cpp:234 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
@@ -6140,7 +6141,7 @@ msgstr "Nie sú žiadne rozdiely."
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
-msgstr "Nie je možné získať rozdiel."
+msgstr "Nie je možné získať rozdiely."
 
 #: vcs/vcspluginhelper.cpp:356
 #, kde-format
@@ -6291,7 +6292,7 @@ msgstr "Rozdiel medzi revíziou %1 a %2:"
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr "Rozdiel medzi revíziami"
+msgstr "Rozdiel medzi revíziami:"
 
 #: vcs/widgets/vcseventwidget.cpp:78
 #, kde-format
