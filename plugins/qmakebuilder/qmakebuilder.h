@@ -45,7 +45,9 @@ Q_SIGNALS:
     void failed(KDevelop::ProjectBaseItem*);
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
-    void configured(KDevelop::ProjectBaseItem*);
+    void configured(
+        KDevelop::ProjectBaseItem*,
+        KDevelop::IProjectBuilder::ConfigureRequest request = KDevelop::IProjectBuilder::ConfigureRequest::Automatic);
     void pruned(KDevelop::ProjectBaseItem*);
 
 private:

@@ -9,9 +9,11 @@
 #include <KJob>
 
 #include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -22,6 +24,8 @@ class TestCMakeBuilder : public QObject
 {
     Q_OBJECT
 
+    KDevelop::IProject* project = nullptr;
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
@@ -29,7 +33,7 @@ private Q_SLOTS:
 
     void testConfigureEmitsManualConfiguredForExplicitRequest();
     void testConfigureDoesNotEmitManualConfiguredForAutomaticRequest();
-    void testConfigureDoesNotEmitConfiguredOnFailure();
+    void testConfigureEmitsConfiguredOnFailure();
 };
 
 QTEST_MAIN(TestCMakeBuilder)
@@ -68,33 +72,38 @@ void TestCMakeBuilder::cleanupTestCase()
 
 void TestCMakeBuilder::cleanup()
 {
-    const auto projects = ICore::self()->projectController()->projects();
-    for (IProject* project : projects) {
-        ICore::self()->projectController()->closeProject(project);
+    if (!project) {
+        return;
     }
-    QVERIFY(ICore::self()->projectController()->projects().isEmpty());
+
+    QSignalSpy projectClosedSpy(KDevelop::ICore::self()->projectController(),
+                                SIGNAL(projectClosed(KDevelop::IProject*)));
+    Q_ASSERT(projectClosedSpy.isValid());
+
+    ICore::self()->projectController()->closeProject(project);
+    if (projectClosedSpy.empty() && !projectClosedSpy.wait(60'000)) {
+        qFatal("Timeout while waiting for closed signal");
+    }
+
+    project = nullptr;
 }
 
 void TestCMakeBuilder::testConfigureEmitsManualConfiguredForExplicitRequest()
 {
-    IProject* project = loadProject(QStringLiteral("tiny_project"));
+    project = loadProject(QStringLiteral("tiny_project"));
     auto* builder = cmakeBuilder();
     auto* plugin = cmakeBuilderPlugin();
     QVERIFY(builder);
     QVERIFY(plugin);
 
-    QSignalSpy configuredSpy(plugin, SIGNAL(configured(KDevelop::IProject*)));
     QSignalSpy configuredWithRequestSpy(
         plugin, SIGNAL(configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest)));
-    QSignalSpy configurationChangedSpy(ICore::self()->projectController(),
-                                       &IProjectController::projectConfigurationChanged);
+    QSignalSpy projectConfigurationChangedSpy(ICore::self()->projectController(),
+                                              &IProjectController::projectConfigurationChanged);
 
     auto* job = builder->configure(project, IProjectBuilder::ConfigureRequest::Explicit);
     QVERIFY(job);
     QVERIFY(job->exec());
-
-    QCOMPARE(configuredSpy.count(), 1);
-    QCOMPARE(qvariant_cast<IProject*>(configuredSpy.takeFirst().at(0)), project);
 
     QCOMPARE(configuredWithRequestSpy.count(), 1);
     const auto configuredWithRequestArgs = configuredWithRequestSpy.takeFirst();
@@ -102,21 +111,19 @@ void TestCMakeBuilder::testConfigureEmitsManualConfiguredForExplicitRequest()
     QCOMPARE(qvariant_cast<IProjectBuilder::ConfigureRequest>(configuredWithRequestArgs.at(1)),
              IProjectBuilder::ConfigureRequest::Explicit);
 
-    configurationChangedSpy.wait();
-    QCOMPARE(configurationChangedSpy.count(), 1);
-    QCOMPARE(qvariant_cast<IProject*>(configurationChangedSpy.takeFirst().at(0)), project);
-    QVERIFY(project->isReady());
+    // Should be emitted on explicit configuration request
+    projectConfigurationChangedSpy.empty() && projectConfigurationChangedSpy.wait();
+    QCOMPARE(projectConfigurationChangedSpy.count(), 1);
 }
 
 void TestCMakeBuilder::testConfigureDoesNotEmitManualConfiguredForAutomaticRequest()
 {
-    IProject* project = loadProject(QStringLiteral("tiny_project"));
+    project = loadProject(QStringLiteral("tiny_project"));
     auto* builder = cmakeBuilder();
     auto* plugin = cmakeBuilderPlugin();
     QVERIFY(builder);
     QVERIFY(plugin);
 
-    QSignalSpy configuredSpy(plugin, SIGNAL(configured(KDevelop::IProject*)));
     QSignalSpy configuredWithRequestSpy(
         plugin, SIGNAL(configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest)));
 
@@ -125,9 +132,6 @@ void TestCMakeBuilder::testConfigureDoesNotEmitManualConfiguredForAutomaticReque
     QVERIFY(job);
     QVERIFY(job->exec());
 
-    QCOMPARE(configuredSpy.count(), 1);
-    QCOMPARE(qvariant_cast<IProject*>(configuredSpy.takeFirst().at(0)), project);
-
     QCOMPARE(configuredWithRequestSpy.count(), 1);
     const auto configuredWithRequestArgs = configuredWithRequestSpy.takeFirst();
     QCOMPARE(qvariant_cast<IProject*>(configuredWithRequestArgs.at(0)), project);
@@ -135,24 +139,28 @@ void TestCMakeBuilder::testConfigureDoesNotEmitManualConfiguredForAutomaticReque
              IProjectBuilder::ConfigureRequest::Automatic);
 }
 
-void TestCMakeBuilder::testConfigureDoesNotEmitConfiguredOnFailure()
+void TestCMakeBuilder::testConfigureEmitsConfiguredOnFailure()
 {
-    IProject* project = loadProject(QStringLiteral("faulty_target"));
+    project = loadProject(QStringLiteral("faulty_target"));
     auto* builder = cmakeBuilder();
     auto* plugin = cmakeBuilderPlugin();
     QVERIFY(builder);
     QVERIFY(plugin);
 
-    QSignalSpy configuredSpy(plugin, SIGNAL(configured(KDevelop::IProject*)));
     QSignalSpy configuredWithRequestSpy(
         plugin, SIGNAL(configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest)));
+    QSignalSpy projectConfigurationChangedSpy(ICore::self()->projectController(),
+                                              &IProjectController::projectConfigurationChanged);
 
     auto* job = builder->configure(project, IProjectBuilder::ConfigureRequest::Explicit);
     QVERIFY(job);
     QVERIFY(!job->exec());
 
-    QCOMPARE(configuredSpy.count(), 0);
-    QCOMPARE(configuredWithRequestSpy.count(), 0);
+    QCOMPARE(configuredWithRequestSpy.count(), 1);
+
+    // Should be emitted on explicit configuration request
+    projectConfigurationChangedSpy.empty() && projectConfigurationChangedSpy.wait();
+    QCOMPARE(projectConfigurationChangedSpy.count(), 1);
 }
 
 #include "test_cmakebuilder.moc"

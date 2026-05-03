@@ -42,9 +42,9 @@ public:
                         KDevelop::IProjectBuilder::ConfigureRequest::Automatic) override;
     KJob* prune(KDevelop::IProject*) override;
 
-	QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const override;
+    QList<KDevelop::IProjectBuilder*> additionalBuilderPlugins(KDevelop::IProject* project) const override;
 
-//     bool updateConfig( KDevelop::IProject* project );
+    //     bool updateConfig( KDevelop::IProject* project );
 
     int configPages() const override;
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
@@ -54,9 +54,6 @@ Q_SIGNALS:
     void failed(KDevelop::ProjectBaseItem*);
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
-    // I’m not sure whether the old variant is still used anywhere (external plugins?),
-    // so I kept both for backward compatibility
-    void configured(KDevelop::IProject*);
     void configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest request);
     void pruned(KDevelop::IProject*);
 

@@ -121,7 +121,8 @@ Q_SIGNALS:
     /**
      * Emitted when the configure for the given item was finished
      */
-    void configured(IProject*);
+    void configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest request);
+
     /**
      * Emitted when the pruning for the given item was finished
      */

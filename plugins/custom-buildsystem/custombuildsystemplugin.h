@@ -50,7 +50,7 @@ Q_SIGNALS:
     void installed( KDevelop::ProjectBaseItem* );
     void cleaned( KDevelop::ProjectBaseItem* );
     void failed( KDevelop::ProjectBaseItem *dom );
-    void configured( KDevelop::IProject* );
+    void configured(KDevelop::IProject*, KDevelop::IProjectBuilder::ConfigureRequest request);
     void pruned( KDevelop::IProject* );
 
 // AbstractFileManagerPlugin API
