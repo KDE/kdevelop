@@ -8,6 +8,7 @@
 
 #include "languagepreferences.h"
 
+#include <KLocalization>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 
@@ -31,7 +32,8 @@ LanguagePreferences::LanguagePreferences(QWidget* parent)
 {
     preferencesDialog = new Ui::LanguagePreferences;
     preferencesDialog->setupUi(this);
-    preferencesDialog->kcfg_minFilesForSimplifiedParsing->setSuffix(ki18ncp("@item:valuesuffix", " file", " files"));
+    KLocalization::setupSpinBoxFormatString(preferencesDialog->kcfg_minFilesForSimplifiedParsing,
+                                            ki18ncp("@item:valuesuffix", "%v file", "%v files"));
 
     connect(preferencesDialog->kcfg_globalColorSource, qOverload<int>(&QComboBox::currentIndexChanged), this,
             [this](int index) {
