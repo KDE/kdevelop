@@ -46,7 +46,7 @@ endif()
 set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
 set(QT_MIN_VERSION "6.5.0")
-set(KF_MIN_VERSION "6.0.0")
+set(KF_MIN_VERSION "6.13.0")
 
 option(BUILD_DOC "Whether to build the documentation" ON)
 
