@@ -315,7 +315,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
 
     //Load themes
-    auto* const manager = new KColorSchemeManager(this);
+    auto* const manager = KColorSchemeManager::instance();
     auto* const colorSelectionMenu = KColorSchemeMenu::createMenu(manager, actionCollection());
     colorSelectionMenu->menu()->setTitle(i18n("&Window Color Scheme"));
     actionCollection()->addAction(QStringLiteral("colorscheme_menu"), colorSelectionMenu);
