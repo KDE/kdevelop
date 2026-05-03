@@ -45,7 +45,7 @@ public:
     template <typename T>
     inline KDevHash& operator<<(T value)
     {
-        m_hash = hash_combine(m_hash, qHash(value));
+        m_hash = hash_combine(m_hash, (uint)qHash(value));
         return *this;
     }
 
