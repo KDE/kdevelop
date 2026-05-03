@@ -187,7 +187,7 @@ double bar ()
 ></menuchoice
 > menü ögesini (veya bu &kdevelop; yazılımını ilk kullanımınızsa ilk açılıştaki boş oturumu) kullanın.</para>
 <para
->Şimdi bu oturumu, şu an için bir yerde halihazırda var olduğunu varsaydığımız projelerle doldurmak istiyoruz (projeleri sıfırdan başlatma durumu bu kılavuzun başka bir yerinde ele alınmıştır). Bunun için projenin sabit diskinizde bir yerde olup olmamasına veya bir sunucudan indirilmesi gerekip gerekmediğine bağlı olarak özünde iki yöntem vardır.</para>
+>Şimdi bu oturumu, şu an için bir yerde hâlihazırda var olduğunu varsaydığımız projelerle doldurmak istiyoruz (projeleri sıfırdan başlatma durumu bu kılavuzun başka bir yerinde ele alınmıştır). Bunun için projenin sabit diskinizde bir yerde olup olmamasına veya bir sunucudan indirilmesi gerekip gerekmediğine bağlı olarak özünde iki yöntem vardır.</para>
 <sect2 id="option-1--importing-a-project-from-a-version-control-system-server"
 ><title
 >1. seçenek: Bir sürüm denetim sistemi sunucusundan bir proje içe aktarmak</title>
@@ -300,9 +300,9 @@ double bar ()
 </sect2>
 <sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"
 ><title
->Seçenek 2: Halihazırda sabit diskinizde bulunan bir projeyi içe aktarmak</title>
+>Seçenek 2: Hâlihazırda sabit diskinizde bulunan bir projeyi içe aktarmak</title>
 <para
->Alternatif olarak, üzerinde çalışmak istediğiniz proje sabit diskinizde halihazırda bulunuyorsa (örneğin, internetten bir tar arşivi indirmiş olabilirsiniz, bir sürüm denetim sisteminden çıkış yapmış olabilirsiniz veya <emphasis
+>Alternatif olarak, üzerinde çalışmak istediğiniz proje sabit diskinizde hâlihazırda bulunuyorsa (örneğin, internetten bir tar arşivi indirmiş olabilirsiniz, bir sürüm denetim sisteminden çıkış yapmış olabilirsiniz veya <emphasis
 >yalnızca</emphasis
 > sizin sabit diskinizde bulunan bir proje de olabilir) o zaman <menuchoice
 ><guimenu
@@ -412,7 +412,7 @@ double bar ()
 <para
 >&kdevelop; yazılımını ilk kez çalıştırdığınızda, <guilabel
 >Projeler</guilabel
-> araç düğmesine halihazırda sahip olmalısınız. Üzerine tıklayın: Altta oturuma eklediğiniz projeleri gösteren bir alt pencere ve üstte projelerinizin dizinlerinin bir dosya sistemi görünümü açılacaktır.</para>
+> araç düğmesine hâlihazırda sahip olmalısınız. Üzerine tıklayın: Altta oturuma eklediğiniz projeleri gösteren bir alt pencere ve üstte projelerinizin dizinlerinin bir dosya sistemi görünümü açılacaktır.</para>
 <para
 >&kdevelop; ile kullanabileceğiniz birçok başka araç vardır; ancak bunların hepsi başlangıçta ortamda düğmeler olarak kullanılabilir değildir. Birkaç tane eklemek için <menuchoice
 ><guimenu
@@ -1269,7 +1269,7 @@ void foo()
 >Class</filename
 > kategorisinden Temel C++ şablonu seçilerek basit bir C++ sınıfı oluşturulabilir. Yardımcıda, önceden tanımlanmış bazı üye işlevleri seçebiliriz; örneğin, boş bir yapıcı, bir kopya yapıcısı ve bir yıkıcı. </para>
 <para
->Yardımcıyı tamamladıktan sonra, yeni dosyalar oluşturulur ve düzenleyicide açılır. Üstbilgi dosyası halihazırda include korumalarına sahiptir ve yeni sınıf seçtiğimiz tüm üye işlevlere sahiptir. Sonraki iki adım, sınıfı ve üye işlevleri belgelemek ve bunları uygulamak olacaktır. Sınıfları ve işlevleri belgelendirmeye yönelik yardımcıları aşağıda tartışacağız. Eklenmiş olan özel işlevleri uygulamak için işlevlerin iskeletinin zaten sağlanmış olduğu <guilabel
+>Yardımcıyı tamamladıktan sonra, yeni dosyalar oluşturulur ve düzenleyicide açılır. Üstbilgi dosyası hâlihazırda include korumalarına sahiptir ve yeni sınıf seçtiğimiz tüm üye işlevlere sahiptir. Sonraki iki adım, sınıfı ve üye işlevleri belgelemek ve bunları uygulamak olacaktır. Sınıfları ve işlevleri belgelendirmeye yönelik yardımcıları aşağıda tartışacağız. Eklenmiş olan özel işlevleri uygulamak için işlevlerin iskeletinin zaten sağlanmış olduğu <guilabel
 >bus.cpp</guilabel
 > sekmesine gitmeniz yeterlidir:</para>
 <para>
@@ -1493,7 +1493,7 @@ void foo()
 >doxygen</ulink
 >, daha sonra çıkarılabilen ve aranabilir web sayfalarında görüntülenebilen yorumları biçimlendirmek için fiili standart haline gelmiştir.</para>
 <para
->&kdevelop;, bir sınıfı veya üye işlevi belgelendiren yorumların çerçevesini oluşturmak için kısa bir yol sağlayarak bu tarz yorumları destekler. Örneğin, bu kodu halihazırda yazdığınızı varsayalım:</para>
+>&kdevelop;, bir sınıfı veya üye işlevi belgelendiren yorumların çerçevesini oluşturmak için kısa bir yol sağlayarak bu tarz yorumları destekler. Örneğin, bu kodu hâlihazırda yazdığınızı varsayalım:</para>
 <para
 ><programlisting
 >class Car {
@@ -1536,7 +1536,7 @@ void foo()
 <para
 >İmleç, bu sınıfın kısa açıklamasını (<varname
 >@brief</varname
-> doxygen anahtar sözcüğünden sonra) doldurmanız için halihazırda gri renkli alandadır. Daha sonra bu bölüme sınıfın ne yaptığına dair daha ayrıntılı bir genel bakış sağlayan belgelendirme eklemeyi sürdürebilirsiniz:</para>
+> doxygen anahtar sözcüğünden sonra) doldurmanız için hâlihazırda gri renkli alandadır. Daha sonra bu bölüme sınıfın ne yaptığına dair daha ayrıntılı bir genel bakış sağlayan belgelendirme eklemeyi sürdürebilirsiniz:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -1611,13 +1611,13 @@ void foo()
 </screenshot
 ></para>
 <para
->Burada, önerilen yorum, örneğin bireysel parametreler için tüm doxygen alanlarını halihazırda içerir.</para>
+>Burada, önerilen yorum, örneğin bireysel parametreler için tüm doxygen alanlarını hâlihazırda içerir.</para>
 </sect2>
 <sect2 id="renaming-variables-functions-and-classes"
 ><title
 >Değişkenleri, işlevleri ve sınıfları yeniden adlandırmak</title>
 <para
->Bazen bir işlevi, sınıfı veya değişkeni yeniden adlandırmak isteyebilirsiniz. Örneğin, halihazırda şöyle bir kodumuz olduğunu varsayalım:</para>
+>Bazen bir işlevi, sınıfı veya değişkeni yeniden adlandırmak isteyebilirsiniz. Örneğin, hâlihazırda şöyle bir kodumuz olduğunu varsayalım:</para>
 <para>
 <screenshot>
 <screeninfo
@@ -2857,7 +2857,7 @@ void foo()
 </screenshot
 ></para>
 <para
->Bazen, halihazırda çalışmakta olan bir programda hata ayıklamak istenebilir. Bunun için bir senaryo, <ulink url="https://computing.llnl.gov/tutorials/mpi/"
+>Bazen, hâlihazırda çalışmakta olan bir programda hata ayıklamak istenebilir. Bunun için bir senaryo, <ulink url="https://computing.llnl.gov/tutorials/mpi/"
 >MPI</ulink
 > kullanarak paralel programlarda hata ayıklamak veya uzun süredir çalışan bir arka plan işleminde hata ayıklamaktır. Bunu yapmak için <menuchoice
 ><guimenu
@@ -2873,7 +2873,7 @@ void foo()
 >Öz Süreçler</guilabel
 > seçeneğini seçerek listeyi sınırlayabilir ve diğer kullanıcılar tarafından çalıştırılan tüm programları kaldırabilirsiniz. Ya da daha iyisi: <guilabel
 >Yalnızca Programlar</guilabel
-> seçeneğini seçerek resmi olarak sizin adınız altında çalışan; ancak pencere yöneticisi, arka plan görevleri gibi genellikle etkileşimde bulunmadığınız ve hata ayıklama için olası adaylar olmayan birçok işlemi kaldırabilirsiniz.</para>
+> seçeneğini seçerek resmî olarak sizin adınız altında çalışan; ancak pencere yöneticisi, arka plan görevleri gibi genellikle etkileşimde bulunmadığınız ve hata ayıklama için olası adaylar olmayan birçok işlemi kaldırabilirsiniz.</para>
 <para
 >Bir süreci seçtikten sonra, ona bağlanmak sizi &kdevelop; uygulamasının hata ayıklama kipine sokacak, tüm olağan hata ayıklayıcısı araç görünümlerini açacak ve programı ona bağlandığınızda olduğu konumda durduracaktır. Daha sonra kesme noktaları, görünüm noktaları ya da gerekli olan her şeyi ayarlamak ve <menuchoice
 ><guimenu
@@ -3220,7 +3220,7 @@ void foo()
 ><guimenuitem
 >Dil Desteği</guimenuitem
 ></menuchoice
-> içinde yapılandırılabilir. Halihazırda ayarlanmamışsa (öntanımlı olarak olması gerektiği gibi) <guilabel
+> içinde yapılandırılabilir. Hâlihazırda ayarlanmamışsa (öntanımlı olarak olması gerektiği gibi) <guilabel
 >Kendiliğinden Çağırmayı Etkinleştir</guilabel
 > seçeneğinin ayarlandığından emin olun.</para>
 <para

@@ -11,20 +11,20 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 00:43+0000\n"
-"PO-Revision-Date: 2026-02-11 16:42+0300\n"
+"PO-Revision-Date: 2026-05-02 19:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
-"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Serdar Soytetir, Emir SARI"
+msgstr "Serdar SOYTETİR, Emir SARI"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -3080,7 +3080,7 @@ msgid ""
 "There already exists a project configuration file at %1.\n"
 "Do you want to override it or open the existing file?"
 msgstr ""
-"%1 konumunda bir proje yapılandırma dosyası halihazırda var.\n"
+"%1 konumunda bir proje yapılandırma dosyası hâlihazırda var.\n"
 "Onu geçersiz kılmak mı yoksa var olan dosyayı açmak mı istiyorsunuz?"
 
 #: shell/projectcontroller.cpp:478
@@ -3205,7 +3205,7 @@ msgstr "Geçerli Dosyanın Projesini Aç"
 #: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
-msgstr "Proje halihazırda açık: %1"
+msgstr "Proje hâlihazırda açık: %1"
 
 #: shell/projectcontroller.cpp:768
 #, kde-format
@@ -3216,7 +3216,7 @@ msgstr "Etkin belge yok"
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr "Proje Halihazırda Açık"
+msgstr "Proje Hâlihazırda Açık"
 
 #: shell/projectcontroller.cpp:852
 #, kde-format
@@ -3782,7 +3782,7 @@ msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr ""
-"<em>%1</em> oturumu kilitlenemedi, halihazırda %3 üzerinde %2 tarafından "
+"<em>%1</em> oturumu kilitlenemedi, hâlihazırda %3 üzerinde %2 tarafından "
 "kilitlenmiş (PID %4)."
 
 #: shell/sessionlock.cpp:179
@@ -5771,7 +5771,7 @@ msgid ""
 "Branch \"%1\" already exists.\n"
 "Please, choose another name."
 msgstr ""
-"“%1” dalı halihazırda var.\n"
+"“%1” dalı hâlihazırda var.\n"
 "Lütfen başka bir ad seçin."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
@@ -5792,7 +5792,7 @@ msgstr ""
 #: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr "Halihazırda “%1” dalında\n"
+msgstr "Hâlihazırda “%1” dalında\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:188
 #, kde-format
@@ -5915,7 +5915,7 @@ msgstr "İşleme iletisi:"
 #: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
 msgid "Branch \"%1\" already exists."
-msgstr "“%1” dalı halihazırda var."
+msgstr "“%1” dalı hâlihazırda var."
 
 #: vcs/models/brancheslistmodel.cpp:68
 #, kde-format

@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2014, 2015, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-11-10 17:28+0300\n"
+"PO-Revision-Date: 2026-05-02 18:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: appwizarddialog.cpp:23
 #, kde-format
@@ -174,7 +174,7 @@ msgstr "Geçersiz proje şablonu, lütfen bir sayfa ögesi seçin."
 #: projectselectionpage.cpp:247
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr "Yol halihazırda var ve dosyalar içeriyor. Bir proje açın."
+msgstr "Yol hâlihazırda var ve dosyalar içeriyor. Bir proje açın."
 
 #: projectselectionpage.cpp:294
 #, kde-format
@@ -182,7 +182,7 @@ msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
-"Belirtilen dizin halihazırda var ve dosyalar içeriyor. Sürdürmek "
+"Belirtilen dizin hâlihazırda var ve dosyalar içeriyor. Sürdürmek "
 "istediğinizden emin misiniz?"
 
 #: projectselectionpage.cpp:310
