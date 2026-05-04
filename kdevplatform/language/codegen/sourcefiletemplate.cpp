@@ -327,12 +327,10 @@ QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions
      * Copied from kconfig_compiler.kcfg
      */
     QDomDocument doc;
-    QString errorMsg;
-    int errorRow;
-    int errorCol;
-    if (!doc.setContent(file->data(), &errorMsg, &errorRow, &errorCol)) {
+    if (const QDomDocument::ParseResult parseResult = doc.setContent(file->data()); !parseResult) {
         qCDebug(LANGUAGE) << "Unable to load document.";
-        qCDebug(LANGUAGE) << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+        qCDebug(LANGUAGE) << "Parse error in line " << parseResult.errorLine << ", col " << parseResult.errorColumn
+                          << ": " << parseResult.errorMessage;
         return optionGroups;
     }
 
