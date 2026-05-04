@@ -139,12 +139,6 @@ void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOption
 {
     QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled)
                             ? QPalette::Normal : QPalette::Disabled;
-    if (option.state & QStyle::State_Editing) {
-        painter->save();
-        painter->setPen(option.palette.color(cg, QPalette::Text));
-        painter->drawRect(rect.adjusted(0, 0, -1, -1));
-        painter->restore();
-    }
 
     if(text.isEmpty()) {
         return;

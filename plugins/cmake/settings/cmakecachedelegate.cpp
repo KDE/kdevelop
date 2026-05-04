@@ -16,12 +16,10 @@
 CMakeCacheDelegate::CMakeCacheDelegate(QObject * parent)
     : QItemDelegate(parent)
 {
-    m_sample=new KUrlRequester();
 }
 
 CMakeCacheDelegate::~CMakeCacheDelegate()
 {
-    delete m_sample;
 }
 
 QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -135,22 +133,6 @@ void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
             return;
     }
     QItemDelegate::paint(painter, option, index);
-}
-
-QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const
-{
-//     qCDebug(CMAKE) << "calculant" << index << bool(option.state & QStyle::State_Editing);
-    QSize ret=QItemDelegate::sizeHint(option, index);
-    if(index.column()==2 && option.state & QStyle::State_Editing)
-    {
-        QModelIndex typeIdx=index.sibling(index.row(), 1);
-        QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type==QLatin1String("PATH"))
-        {
-            ret.setHeight(m_sample->sizeHint().height());
-        }
-    }
-    return ret;
 }
 
 void CMakeCacheDelegate::checkboxToggled()
