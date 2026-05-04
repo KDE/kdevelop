@@ -10,6 +10,14 @@
 
 #include <KLocalizedString>
 
+namespace {
+
+constexpr Qt::ItemDataRole operator+(Qt::ItemDataRole qt, KDevelop::FilterModel::Columns custom)
+{
+    return (Qt::ItemDataRole)(std::underlying_type_t<Qt::ItemDataRole>(qt)
+                              + std::underlying_type_t<KDevelop::FilterModel::Columns>(custom));
+}
+}
 using namespace KDevelop;
 
 FilterModel::FilterModel(QObject* parent)
