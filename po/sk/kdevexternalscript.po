@@ -137,7 +137,7 @@ msgid ""
 "<p>Defines whether the output of the script should be shown in a tool view.</"
 "p>"
 msgstr ""
-"<p>Definuje, či sa má výstup skriptu zobraziť v nástrojovom pohľade.</ p>"
+"<p>Definuje, či sa má výstup skriptu zobraziť v nástrojovom pohľade.</p>"
 
 #: editexternalscript.cpp:98
 #, kde-format

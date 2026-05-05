@@ -180,7 +180,7 @@ msgid ""
 "parsed in plain C mode. By default they are parsed as C++ headers.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Zaškrtnite, ak chcete hlavičky <code>*.h<code/> "
+"<html><head/><body><p>Zaškrtnite, ak chcete hlavičky <code>*.h</code> "
 "spracovať v čistom C režime. Predvolene sa spracujú ako C++ hlavičky.</p></"
 "body></html>"
 
