@@ -1,13 +1,13 @@
 # Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2025-2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-02-13 13:49+0200\n"
+"PO-Revision-Date: 2026-05-05 08:56+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -120,7 +120,7 @@ msgstr "סוגריים מרובעים"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Cases"
-msgstr ""
+msgstr "מקרים"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:168
@@ -155,7 +155,7 @@ msgstr "הנחיות מעבד קדם"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Switches"
-msgstr ""
+msgstr "מתגים"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMaxStatement)
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel2_2)
@@ -369,14 +369,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr ""
+msgstr "פירוק ביטויי ‚else if()‎’ (אם אז) לשתי שורות שונות."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
 #, kde-format
 msgctxt "@option:check break else if() into separate lines"
 msgid "Break i&f-else"
-msgstr ""
+msgstr "&פירוק if-else (אם-אז)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
 #: astyle_preferences.ui:445
@@ -458,7 +458,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr ""
+msgstr "להוסיף רווחים אחרי &כותרות סוגריים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
