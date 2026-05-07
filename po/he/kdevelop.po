@@ -7,14 +7,15 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-05 09:09+0300\n"
+"PO-Revision-Date: 2026-05-06 21:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
@@ -378,7 +379,7 @@ msgstr "הראלד פרננגל"
 #: main.cpp:411
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
-msgstr ""
+msgstr "הסבה ל־Qt 3, טלאים, תמיכה ב־valgrind, הבדלים ו־preforce"
 
 #: main.cpp:412
 #, kde-format
@@ -408,32 +409,32 @@ msgstr "תאגיד Nokia/חברת התוכנה Qt"
 #: main.cpp:414
 #, kde-format
 msgid "Designer code"
-msgstr ""
+msgstr "קןד המעצב"
 
 #: main.cpp:416
 #, kde-format
 msgid "Contributors to older versions:"
-msgstr ""
+msgstr "תורמים לגרסאות ישנות יותר:"
 
 #: main.cpp:417
 #, kde-format
 msgid "Bernd Gehrmann"
-msgstr ""
+msgstr "ברנד גרמן"
 
 #: main.cpp:417
 #, kde-format
 msgid "Initial idea, basic architecture, much initial source code"
-msgstr ""
+msgstr "הרעיון הראשוני, ארכיטקטורה בסיסי, הרבה מקוד המקור הראשוני"
 
 #: main.cpp:418
 #, kde-format
 msgid "Caleb Tennis"
-msgstr ""
+msgstr "קיילב טניס"
 
 #: main.cpp:418
 #, kde-format
 msgid "KTabBar, bugfixes"
-msgstr ""
+msgstr "KTabBar, תיקוני תקלות"
 
 #: main.cpp:419
 #, kde-format
@@ -533,7 +534,7 @@ msgstr ""
 #: main.cpp:428
 #, kde-format
 msgid "QMake projectmanager"
-msgstr ""
+msgstr "מנהל מיזמי QMake"
 
 #: main.cpp:429
 #, kde-format
@@ -570,12 +571,12 @@ msgstr "תוספי החלפה, סימניות, רשימת קבצים ו־CTags2.
 #: main.cpp:432
 #, kde-format
 msgid "Julian Rockey"
-msgstr ""
+msgstr "ג׳וליאן רוקי"
 
 #: main.cpp:432
 #, kde-format
 msgid "Filecreate part and other bits and patches"
-msgstr ""
+msgstr "חלק יצירת הקבצים וכל מיני דברים קטנים וטלאים"
 
 #: main.cpp:433
 #, kde-format
