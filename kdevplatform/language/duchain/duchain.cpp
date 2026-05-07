@@ -210,6 +210,12 @@ void DUChain::addDocumentChain(TopDUContext* chain)
 
     chain->setInDuChain(true);
 
+    // Remove this chain from m_loadingSet and m_pendingLoads.
+    sdDUChainPrivate->m_pendingLoads.removeIf([index = chain->ownIndex()](const auto& context) -> bool {
+        return index == context.index;
+    });
+    sdDUChainPrivate->m_loadingSet.remove(chain->ownIndex());
+
     l.unlock();
 
     addToEnvironmentManager(chain);
@@ -275,20 +281,7 @@ IndexedString DUChain::urlForIndex(uint index) const
 
 TopDUContext* DUChain::loadChain(uint index)
 {
-    QSet<uint> loaded;
-    sdDUChainPrivate->loadChain(index, loaded);
-
-    {
-        QMutexLocker lock(&chainsByIndexLock);
-
-        if (chainsByIndex.size() > index) {
-            TopDUContext* top = chainsByIndex[index];
-            if (top)
-                return top;
-        }
-    }
-
-    return nullptr;
+    return sdDUChainPrivate->loadChain(index);
 }
 
 TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document, bool proxyContext) const

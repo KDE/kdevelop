@@ -386,7 +386,19 @@ public:
 
     Definitions m_definitions;
     Uses m_uses;
-    QSet<uint> m_loading;
+    // Unique set of indices being loaded.
+    enum class LoadStatus : bool {
+        Pending = true,
+        Failed = false
+    };
+    QHash<uint, LoadStatus> m_loadingSet;
+    // The loading queue.
+    struct LoadChainOp
+    {
+        uint index;
+        TopDUContext* chain = nullptr;
+    };
+    QList<LoadChainOp> m_pendingLoads;
     bool m_cleanupDisabled;
 
     //List of available top-context indices, protected by m_chainsMutex
@@ -408,15 +420,17 @@ public:
     ///m_chainsMutex should _not_ be locked, because this may trigger I/O
     QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(const IndexedString& url);
 
-    ///Must be called _without_ the chainsByIndex spin-lock locked
+    ///Must be called _without_ the chainsByIndex locked
     static bool hasChainForIndex(uint index);
 
-    ///Must be called _without_ the chainsByIndex spin-lock locked. Returns the top-context if it is loaded.
+    ///Must be called _without_ the chainsByIndex locked. Returns the top-context if it is loaded.
     static TopDUContext* readChainForIndex(uint index);
 
-    ///Makes sure that the chain with the given index is loaded
+    ///Makes sure that the chain with the given index is loaded if possible.
+    ///Other chains than the requested one maybe loaded to cooperate with other threads.
     ///@warning m_chainsMutex must NOT be locked when this is called
-    void loadChain(uint index, QSet<uint>& loaded);
+    ///@return Returns the top-context or nullptr if it was not possible to load the given index.
+    [[nodiscard]] TopDUContext* loadChain(uint index);
 
     ///Stores all environment-information
     ///Also makes sure that all information that stays is referenced, so it stays alive.

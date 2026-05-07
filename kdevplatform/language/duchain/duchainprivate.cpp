@@ -7,6 +7,8 @@
 
 #include "duchainprivate.h"
 
+#include <util/foregroundlock.h>
+
 namespace KDevelop {
 
 //This thing is not actually used, but it's needed for compiling
@@ -248,14 +250,12 @@ DEFINE_LIST_MEMBER_HASH(EnvironmentInformationListItem, items, uint)
         return ret;
     }
 
-    ///Must be called _without_ the chainsByIndex spin-lock locked
     bool DUChainPrivate::hasChainForIndex(uint index)
     {
         QMutexLocker lock(&DUChain::chainsByIndexLock);
         return (DUChain::chainsByIndex.size() > index) && DUChain::chainsByIndex[index];
     }
 
-    ///Must be called _without_ the chainsByIndex spin-lock locked. Returns the top-context if it is loaded.
     TopDUContext* DUChainPrivate::readChainForIndex(uint index)
     {
         QMutexLocker lock(&DUChain::chainsByIndexLock);
@@ -265,49 +265,117 @@ DEFINE_LIST_MEMBER_HASH(EnvironmentInformationListItem, items, uint)
             return nullptr;
     }
 
-    ///Makes sure that the chain with the given index is loaded
-    ///@warning m_chainsMutex must NOT be locked when this is called
-    void DUChainPrivate::loadChain(uint index, QSet<uint>& loaded)
+    TopDUContext* DUChainPrivate::loadChain(uint index)
     {
         QMutexLocker l(&m_chainsMutex);
 
-        if (!hasChainForIndex(index)) {
-            if (!Algorithm::insert(m_loading, index).inserted) {
-                //It's probably being loaded by another thread. So wait until the load is ready
-                while (m_loading.contains(index)) {
+        if (auto chain = readChainForIndex(index)) {
+            // Already loaded.
+            return chain;
+        }
+
+        // Try place the index into the loading queue.
+        if (m_loadingSet.find(index) == m_loadingSet.end()) {
+            m_loadingSet.insert(index, LoadStatus::Pending);
+            m_pendingLoads.emplace_back(LoadChainOp{index});
+        }
+
+        auto checkIfDone = [this](uint index) -> QPair<bool, TopDUContext*> {
+            auto it = m_loadingSet.find(index);
+            auto chain = readChainForIndex(index);
+            if (it == m_loadingSet.end() && chain) {
+                // Success.
+                return {true, chain};
+            } else if (it != m_loadingSet.end() && it.value() == LoadStatus::Failed) {
+                // Failed to load.
+                m_pendingLoads.removeIf([index](const auto& context) -> bool {
+                    return index == context.index;
+                });
+                m_loadingSet.erase(it);
+                return {true, nullptr};
+            }
+            return {false, nullptr};
+        };
+
+        // Load top contexts until our chain appears in chainsByIndex and is removed from m_loadingSet.
+        for (;;) {
+            auto ready = checkIfDone(index);
+            if (ready.first) {
+                return ready.second;
+            }
+
+            while (m_pendingLoads.isEmpty()) {
+                l.unlock();
+                {
+                    // Release the foreground mutex while yielding.
+                    TemporarilyReleaseForegroundLock unlocker;
+                    QThread::yieldCurrentThread();
+                }
+                l.relock();
+
+                ready = checkIfDone(index);
+                if (ready.first) {
+                    return ready.second;
+                }
+            }
+
+            const auto context = m_pendingLoads.takeFirst();
+            if (context.chain) {
+                if (!hasChainForIndex(context.index)) {
                     l.unlock();
-                    qCDebug(LANGUAGE) << "waiting for another thread to load index" << index;
-                    QThread::usleep(50000);
+                    // Finally add the chain.
+                    context.chain->rebuildDynamicImportStructure();
+                    context.chain->setInDuChain(true);
+                    instance->addDocumentChain(context.chain);
+                    if (context.index == index) {
+                        // Task accomplished.
+                        return context.chain;
+                    }
                     l.relock();
                 }
-                loaded.insert(index);
-                return;
+                continue;
             }
-            loaded.insert(index);
 
             l.unlock();
-            qCDebug(LANGUAGE) << "loading top-context" << index;
-            TopDUContext* chain = TopDUContextDynamicData::load(index);
+
+            if (context.index != index) {
+                qCDebug(LANGUAGE) << "helping loading top-context" << context.index;
+            } else {
+                qCDebug(LANGUAGE) << "loading top-context" << index;
+            }
+
+            TopDUContext* chain = TopDUContextDynamicData::load(context.index);
             if (chain) {
                 chain->setParsingEnvironmentFile(loadInformation(chain->ownIndex()));
 
                 if (!chain->usingImportsCache()) {
                     //Eventually also load all the imported chains, so the import-structure is built
                     const auto importedParentContexts = chain->DUContext::importedParentContexts();
+                    l.relock();
                     for (const DUContext::Import& import : importedParentContexts) {
-                        if (!loaded.contains(import.topContextIndex())) {
-                            loadChain(import.topContextIndex(), loaded);
+                        const auto importIndex = import.topContextIndex();
+
+                        if (hasChainForIndex(importIndex)) {
+                            // Already loaded.
+                            continue;
+                        }
+
+                        if (m_loadingSet.find(importIndex) == m_loadingSet.end()) {
+                            m_loadingSet.insert(importIndex, LoadStatus::Pending);
+                            m_pendingLoads.emplace_back(LoadChainOp{importIndex});
                         }
                     }
+                    l.unlock();
                 }
-                chain->rebuildDynamicImportStructure();
-
-                chain->setInDuChain(true);
-                instance->addDocumentChain(chain);
+                // Eventually add the chain to chainsByIndex.
+                // Only one thread can succeed in this, but the request can be enqueued multiple times.
+                l.relock();
+                m_pendingLoads.emplace_back(LoadChainOp{context.index, chain});
+            } else {
+                l.relock();
+                // Failed to load.
+                m_loadingSet[context.index] = LoadStatus::Failed;
             }
-
-            l.relock();
-            m_loading.remove(index);
         }
     }
 

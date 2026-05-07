@@ -167,17 +167,7 @@ public:
         if (m_deleted)
             return nullptr;
 
-        {
-            QMutexLocker lock(&chainsByIndexLock);
-
-            if (chainsByIndex.size() > index) {
-                TopDUContext* top = chainsByIndex[index];
-                if (top)
-                    return top;
-            }
-        }
-
-        //Load the top-context
+        // Load or get the top-context
         return loadChain(index);
     }
 
@@ -283,10 +273,11 @@ private Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);
 
 private:
-    TopDUContext* loadChain(uint index);
+    [[nodiscard]] TopDUContext* loadChain(uint index);
     //These two are exported here so that the extremely frequently called chainForIndex(..) can be inlined
     static bool m_deleted;
     static std::vector<TopDUContext*> chainsByIndex;
+    // @warn while chainsByIndexLock is acquired DUChainPrivate::m_chainsMutex must not be released.
     static QMutex chainsByIndexLock;
 
     /// Increases the reference-count for the given top-context. The result: It will not be unloaded.
