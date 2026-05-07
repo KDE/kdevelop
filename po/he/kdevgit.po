@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2026-04-19 09:00+0300\n"
+"PO-Revision-Date: 2026-05-06 21:48+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: committoolview.cpp:200 committoolview.cpp:201
 #, kde-format
 msgid "Filter by filename/project name"
-msgstr ""
+msgstr "סינון לפי שם קובץ/מיזם"
 
 #: committoolview.cpp:218
 #, kde-format
@@ -178,21 +178,21 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
-msgstr ""
+msgstr "&שם:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gitnameemaildialog.ui:48
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Emai&l:"
-msgstr ""
+msgstr "&דוא״ל:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
 #: gitnameemaildialog.ui:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Write to global config"
-msgstr ""
+msgstr "כתיבה להגדרות המקיפות"
 
 #: gitplugin.cpp:190
 #, kde-format
@@ -208,46 +208,46 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
-msgstr ""
+msgstr "ביסוס מחדש"
 
 #: gitplugin.cpp:257
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
-msgstr ""
+msgstr "הטמנות Git"
 
 #: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
-msgstr ""
+msgstr "מנהל הטמנות"
 
 #: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
-msgstr ""
+msgstr "דחיפת הטמנה"
 
 #: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr ""
+msgstr "שליפת הטמנה"
 
 #: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
 msgid "Did not specify the list of files"
-msgstr ""
+msgstr "לא ציין את רשימת הקבצים"
 
 #: gitplugin.cpp:458
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
-msgstr ""
+msgstr "לא ניתן לאפס את השינויים (רשימת נתיבים ריקה)"
 
 #: gitplugin.cpp:492
 #, kde-format
 msgid "Could not revert changes"
-msgstr ""
+msgstr "לא ניתן להסיג שינויים"
 
 #: gitplugin.cpp:503
 #, kde-format
@@ -258,125 +258,125 @@ msgstr ""
 #: gitplugin.cpp:528
 #, kde-format
 msgid "No files or message specified"
-msgstr ""
+msgstr "לא צוינו קבצים או הודעה"
 
 #: gitplugin.cpp:532 gitplugin.cpp:551
 #, kde-format
 msgid "Email or name for Git not specified"
-msgstr ""
+msgstr "לא צוינו דוא״ל או שם ל־Git"
 
 #: gitplugin.cpp:548
 #, kde-format
 msgid "No message specified"
-msgstr ""
+msgstr "לא צוינה הודעה"
 
 #: gitplugin.cpp:622
 #, kde-format
 msgid "No files to remove"
-msgstr ""
+msgstr "אין קבצים להסרה"
 
 #: gitplugin.cpp:902
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
-msgstr ""
+msgstr "יש שינויים ממתינים, להטמין אותם קודם?"
 
 #: gitplugin.cpp:903
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "להטמין"
 
 #: gitplugin.cpp:904
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "להשאיר"
 
 #: rebasedialog.cpp:25
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Selection"
-msgstr ""
+msgstr "בחירת ענפים"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
 #: rebasedialog.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Rebase"
-msgstr ""
+msgstr "ביסוס מחדש"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rebasedialog.ui:20
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Base branch:"
-msgstr ""
+msgstr "ענף בסיס:"
 
 #. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
 #: rebasedialog.ui:40
 #, kde-format
 msgctxt "@action:button"
 msgid "Rebase"
-msgstr ""
+msgstr "ביסוס מחדש"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
 #: rebasedialog.ui:60
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel"
-msgstr ""
+msgstr "ביטול"
 
 #: repostatusmodel.cpp:78
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
-msgstr ""
+msgstr "שינויים מבוימים"
 
 #: repostatusmodel.cpp:81
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
-msgstr ""
+msgstr "שינויים לא מבוימים"
 
 #: repostatusmodel.cpp:84
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr ""
+msgstr "סתירות"
 
 #: repostatusmodel.cpp:86
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
-msgstr ""
+msgstr "קבצים לא במעקב"
 
 #: repostatusmodel.cpp:96
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "בבימוי"
 
 #: repostatusmodel.cpp:97
 #, kde-format
 msgid "Files with changes staged for commit"
-msgstr ""
+msgstr "קבצים עם שינויים שמבוימים לקיבוע"
 
 #: repostatusmodel.cpp:102
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
-msgstr ""
+msgstr "נערכו"
 
 #: repostatusmodel.cpp:104
 #, kde-format
 msgid "Files with changes"
-msgstr ""
+msgstr "קבצים עם שינויים"
 
 #: repostatusmodel.cpp:109
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr ""
+msgstr "סתירות"
 
 #: repostatusmodel.cpp:111
 #, kde-format
@@ -387,7 +387,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "לא במעקב"
 
 #: repostatusmodel.cpp:117
 #, kde-format
