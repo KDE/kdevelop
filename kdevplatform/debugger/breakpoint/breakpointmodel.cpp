@@ -138,18 +138,13 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
             &BreakpointModel::markContextMenuRequested);
 
     connect(textDocument, &KTextEditor::Document::aboutToReload, this, &BreakpointModel::aboutToReload);
+
+    // KTextEditor::Document emits aboutToClose after aboutToInvalidateMovingInterfaceContent in ~DocumentPrivate,
+    // when the data may already be unallocated.
     connect(textDocument, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
             &BreakpointModel::aboutToInvalidateMovingInterfaceContent);
     connect(textDocument, &KTextEditor::Document::reloaded, this, &BreakpointModel::reloaded);
 
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    // Since https://commits.kde.org/ktexteditor/6ca19934786fb808ab2b307d558967a74f87e4f4
-    // first included in KTextEditor version 6.9, KTextEditor::Document emits the signal
-    // aboutToInvalidateMovingInterfaceContent() instead of aboutToDeleteMovingInterfaceContent()
-    // from the destructor.
-    connect(textDocument, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
-            &BreakpointModel::aboutToInvalidateMovingInterfaceContent);
-#endif
 }
 
 void BreakpointModel::setupDocumentBreakpoints(KTextEditor::Document& document) const
@@ -263,22 +258,6 @@ void BreakpointModel::aboutToInvalidateMovingInterfaceContent(KTextEditor::Docum
                           << "due to moving interface content invalidation";
         detachDocumentBreakpoints(*document);
 
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
-        // Since https://commits.kde.org/ktexteditor/20a58cd2f989ca0001cedb6b149393e23d76e819
-        // first included in KTextEditor version 6.9, the document's URL cannot be empty here.
-        if (document->url().isEmpty()) {
-            // This happens when a document's file is deleted externally and the user presses the Close File button in
-            // the prompt that appears above the editor. In this case the KTextEditor::Document's URL is temporarily
-            // empty, because KTextEditor::DocumentPrivate::closeUrl() is called before its TextDocument is closed.
-            // A breakpoint mark's line can get out of sync with its associated moving cursor's tracked line as
-            // described in a comment about document line tracking in breakpoint.h. An out-of-sync breakpoint mark
-            // remains even after the detachDocumentBreakpoints() call above. Then
-            // KTextEditor::DocumentPrivate::clearMarks() removes the breakpoint mark and the assertion
-            // !document->url().isEmpty() in BreakpointModel::markChanged() fails. Work the assertion failure around
-            // by removing all remaining breakpoint marks from the document now.
-            removeBreakpointMarks(*document);
-        }
-#endif
         return;
     }
     if (d->reloadState != ReloadState::StartedReloading) {

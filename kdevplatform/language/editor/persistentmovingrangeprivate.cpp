@@ -31,14 +31,6 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker(bool shouldExpand)
     // TODO: map the range back to the last saved revision, and use that when the document is closed, e.g.:
     //       updateRangeFromMoving();
     //       m_range = m_tracker->diskRevision()->transformFromCurrentRevision(m_range).castToSimpleRange();
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    // Since https://commits.kde.org/ktexteditor/6ca19934786fb808ab2b307d558967a74f87e4f4
-    // first included in KTextEditor version 6.9, KTextEditor::Document emits the signal
-    // aboutToInvalidateMovingInterfaceContent() instead of aboutToDeleteMovingInterfaceContent()
-    // from the destructor.
-    connect(document, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
-            &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
-#endif
     connect(document, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
             &PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent);
 }

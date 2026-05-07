@@ -531,15 +531,6 @@ PatchHighlighter::PatchHighlighter(KompareDiff2::DiffModel* model, IDocument* kd
 
     connect(doc, &KTextEditor::Document::markToolTipRequested, this, &PatchHighlighter::markToolTipRequested);
     connect(doc, &KTextEditor::Document::markClicked, this, &PatchHighlighter::markClicked);
-
-#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    // Since https://commits.kde.org/ktexteditor/6ca19934786fb808ab2b307d558967a74f87e4f4
-    // first included in KTextEditor version 6.9, KTextEditor::Document emits the signal
-    // aboutToInvalidateMovingInterfaceContent() instead of aboutToDeleteMovingInterfaceContent()
-    // from the destructor.
-    connect(doc, &KTextEditor::Document::aboutToDeleteMovingInterfaceContent, this,
-            &PatchHighlighter::aboutToInvalidateMovingInterfaceContent);
-#endif
     connect(doc, &KTextEditor::Document::aboutToInvalidateMovingInterfaceContent, this,
             &PatchHighlighter::aboutToInvalidateMovingInterfaceContent);
 
