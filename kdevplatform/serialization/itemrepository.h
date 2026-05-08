@@ -1564,7 +1564,7 @@ public:
                 // but calling the below unconditionally leads to other issues...
                 bucketPtr->setNextBucketForHash(hash, 0);
             }
-            convertMonsterBucket(bucket, 0);
+            deleteMonsterBucket(bucket);
         } else {
             putIntoFreeList(bucket, bucketPtr);
         }
@@ -2075,14 +2075,11 @@ private:
         }
     }
 
-    ///Does conversion from monster-bucket to normal bucket and from normal bucket to monster-bucket
+    ///Does conversion from normal bucket to monster-bucket.
     ///The bucket @param bucketNumber must already be loaded and empty. the "extent" buckets behind must also be loaded,
     ///and also be empty.
-    ///The created buckets are not registered anywhere. When converting from monster-bucket to normal bucket,
-    ///oldExtent+1 normal buckets are created, that must be registered somewhere.
+    ///The created buckets are not registered anywhere.
     ///@warning During conversion, all the touched buckets are deleted and re-created
-    ///@param extent When this is zero, the bucket is converted from monster-bucket to normal bucket.
-    ///              When it is nonzero, it is converted to a monster-bucket.
     MyBucket* convertMonsterBucket(BucketId bucketNumber, int extent)
     {
         m_metaDataChanged = true;
@@ -2095,112 +2092,129 @@ private:
         // are guaranteed to _not_ have any next buckets, which is asserted in `deleteBucket`
         auto oldNextBucketHash = bucketPtr->takeNextBucketHash();
 
-        if (extent) {
-            //Convert to monster-bucket
-            Q_ASSERT(bucketPtr->isEmpty());
+        //Convert to monster-bucket
+        Q_ASSERT(bucketPtr->isEmpty());
 
-            const auto monsterStart = bucketNumber;
-            const auto monsterEnd = monsterStart + extent + 1;
+        const auto monsterStart = bucketNumber;
+        const auto monsterEnd = monsterStart + extent + 1;
 
-            // NOTE: see assertion below, when we get here then the entry for `bucketNumber in `m_freeSpaceBuckets`
-            //       will be followed by the entries for the following buckets, because they are all free and thus
-            //       the second level ordering by bucket index is all that matters
-            const auto freeSpaceIndex = m_freeSpaceBuckets.indexOf(bucketNumber);
-            Q_ASSERT(freeSpaceIndex != -1);
-
-#ifdef DEBUG_MONSTERBUCKETS
-            for (int offset = 0; offset < extent + 1; ++offset) {
-                auto bucket = bucketForIndex(bucketNumber + offset);
-                Q_ASSERT(bucket->isEmpty());
-                Q_ASSERT(!bucket->monsterBucketExtent());
-                Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber + offset]);
-                // verify that the m_freeSpaceBuckets is ordered the way we expect it to
-                Q_ASSERT(m_freeSpaceBuckets[freeSpaceIndex + offset] == bucketNumber + offset);
-            }
-#endif
-
-            // the following buckets are not free anymore, they get merged into the monster
-            // NOTE: we assert above that the order of the entries is correct
-            m_freeSpaceBuckets.remove(freeSpaceIndex, extent + 1);
-
-            for (BucketId index = monsterStart; index < monsterEnd; ++index)
-                deleteBucket(index);
-
-            bucketPtr = new MyBucket();
-            bucketPtr->initialize(extent, std::move(oldNextBucketHash));
-
-            Q_ASSERT(!m_buckets[bucketNumber]);
-            m_buckets[bucketNumber] = bucketPtr;
-
-            // mark the tail of the monster bucket
-            std::fill(std::next(m_monsterBucketTailMarker.begin(), monsterStart + 1),
-                      std::next(m_monsterBucketTailMarker.begin(), monsterEnd), true);
+        // NOTE: see assertion below, when we get here then the entry for `bucketNumber in `m_freeSpaceBuckets`
+        //       will be followed by the entries for the following buckets, because they are all free and thus
+        //       the second level ordering by bucket index is all that matters
+        const auto freeSpaceIndex = m_freeSpaceBuckets.indexOf(bucketNumber);
+        Q_ASSERT(freeSpaceIndex != -1);
 
 #ifdef DEBUG_MONSTERBUCKETS
-            // all following buckets are deleted and not marked as free anymore
-            for (BucketId index = monsterStart + 1; index < monsterEnd; ++index) {
-                Q_ASSERT(!m_buckets[index]);
-                Q_ASSERT(!m_freeSpaceBuckets.contains(index));
-
-                // all tail buckets are marked as part of the monster now
-                Q_ASSERT(m_monsterBucketTailMarker[index]);
-            }
+        for (int offset = 0; offset < extent + 1; ++offset) {
+            auto bucket = bucketForIndex(bucketNumber + offset);
+            Q_ASSERT(bucket->isEmpty());
+            Q_ASSERT(!bucket->monsterBucketExtent());
+            Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber + offset]);
+            // verify that the m_freeSpaceBuckets is ordered the way we expect it to
+            Q_ASSERT(m_freeSpaceBuckets[freeSpaceIndex + offset] == bucketNumber + offset);
+        }
 #endif
 
-            // but the new monster bucket is still free
-            Q_ASSERT(bucketPtr->isEmpty());
-            // and it itself is not marked as a tail, to allow us to still look things up in it directly
-            Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber]);
-            // monster buckets don't get put into the m_freeSpaceBuckets list
-            Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
-        } else {
-            const auto oldExtent = bucketPtr->monsterBucketExtent();
-            const auto oldMonsterStart = bucketNumber;
-            const auto oldMonsterEnd = oldMonsterStart + oldExtent + 1;
+        // the following buckets are not free anymore, they get merged into the monster
+        // NOTE: we assert above that the order of the entries is correct
+        m_freeSpaceBuckets.remove(freeSpaceIndex, extent + 1);
 
-            Q_ASSERT(bucketPtr->monsterBucketExtent());
-            Q_ASSERT(bucketPtr->isEmpty());
-            // while empty, a monster bucket never is put into the m_freeSpaceBuckets list
-            Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
-            // the monster itself is not a tail
-            Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber]);
+        for (BucketId index = monsterStart; index < monsterEnd; ++index)
+            deleteBucket(index);
+
+        bucketPtr = new MyBucket();
+        bucketPtr->initialize(extent, std::move(oldNextBucketHash));
+
+        Q_ASSERT(!m_buckets[bucketNumber]);
+        m_buckets[bucketNumber] = bucketPtr;
+
+        // mark the tail of the monster bucket
+        std::fill(std::next(m_monsterBucketTailMarker.begin(), monsterStart + 1),
+                  std::next(m_monsterBucketTailMarker.begin(), monsterEnd), true);
 
 #ifdef DEBUG_MONSTERBUCKETS
-            // all buckets that are part of the monster are marked as such
-            for (BucketId index = oldMonsterStart + 1; index < oldMonsterEnd; ++index) {
-                Q_ASSERT(m_monsterBucketTailMarker[index]);
-            }
+        // all following buckets are deleted and not marked as free anymore
+        for (BucketId index = monsterStart + 1; index < monsterEnd; ++index) {
+            Q_ASSERT(!m_buckets[index]);
+            Q_ASSERT(!m_freeSpaceBuckets.contains(index));
+
+            // all tail buckets are marked as part of the monster now
+            Q_ASSERT(m_monsterBucketTailMarker[index]);
+        }
 #endif
 
-            // delete the monster bucket
-            deleteBucket(bucketNumber);
+        // but the new monster bucket is still free
+        Q_ASSERT(bucketPtr->isEmpty());
+        // and it itself is not marked as a tail, to allow us to still look things up in it directly
+        Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber]);
+        // monster buckets don't get put into the m_freeSpaceBuckets list
+        Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
 
-            // remove markers for the tail of the monster bucket
-            std::fill(std::next(m_monsterBucketTailMarker.begin(), oldMonsterStart + 1),
-                      std::next(m_monsterBucketTailMarker.begin(), oldMonsterEnd), false);
+        Q_ASSERT(bucketPtr == m_buckets[bucketNumber]);
+        return bucketPtr;
+    }
 
-            // recreate non-monster buckets
-            for (BucketId index = oldMonsterStart; index < oldMonsterEnd; ++index) {
-                auto& bucket = m_buckets[index];
-                Q_ASSERT(!bucket);
+    ///Does conversion from monster bucket to normal bucket
+    ///oldExtent+1 normal buckets are created and registered in the free list.
+    ///@warning During conversion, all the touched buckets are deleted and re-created
+    MyBucket* deleteMonsterBucket(BucketId bucketNumber)
+    {
+        m_metaDataChanged = true;
 
-                bucket = new MyBucket();
+        Q_ASSERT(bucketNumber);
+        auto* bucketPtr = bucketForIndex(bucketNumber);
 
-                if (oldMonsterStart == index) {
-                    bucket->initialize(0, std::move(oldNextBucketHash));
-                    bucketPtr = bucket;
-                } else {
-                    bucket->initialize(0);
-                }
+        // the bucket may have encountered hash clashes in the past, we need to keep that data alive
+        // note that all following buckets that got merged with the first bucket to create the monster
+        // are guaranteed to _not_ have any next buckets, which is asserted in `deleteBucket`
+        auto oldNextBucketHash = bucketPtr->takeNextBucketHash();
 
-                Q_ASSERT(!bucket->monsterBucketExtent());
-                Q_ASSERT(!m_freeSpaceBuckets.contains(index));
+        const auto oldExtent = bucketPtr->monsterBucketExtent();
+        const auto oldMonsterStart = bucketNumber;
+        const auto oldMonsterEnd = oldMonsterStart + oldExtent + 1;
 
-                putIntoFreeList(index, bucket);
+        Q_ASSERT(bucketPtr->monsterBucketExtent());
+        Q_ASSERT(bucketPtr->isEmpty());
+        // while empty, a monster bucket never is put into the m_freeSpaceBuckets list
+        Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
+        // the monster itself is not a tail
+        Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber]);
 
-                Q_ASSERT(m_freeSpaceBuckets.contains(index));
-                Q_ASSERT(!m_monsterBucketTailMarker[index]);
+#ifdef DEBUG_MONSTERBUCKETS
+        // all buckets that are part of the monster are marked as such
+        for (BucketId index = oldMonsterStart + 1; index < oldMonsterEnd; ++index) {
+            Q_ASSERT(m_monsterBucketTailMarker[index]);
+        }
+#endif
+
+        // delete the monster bucket
+        deleteBucket(bucketNumber);
+
+        // remove markers for the tail of the monster bucket
+        std::fill(std::next(m_monsterBucketTailMarker.begin(), oldMonsterStart + 1),
+                  std::next(m_monsterBucketTailMarker.begin(), oldMonsterEnd), false);
+
+        // recreate non-monster buckets
+        for (BucketId index = oldMonsterStart; index < oldMonsterEnd; ++index) {
+            auto& bucket = m_buckets[index];
+            Q_ASSERT(!bucket);
+
+            bucket = new MyBucket();
+
+            if (oldMonsterStart == index) {
+                bucket->initialize(0, std::move(oldNextBucketHash));
+                bucketPtr = bucket;
+            } else {
+                bucket->initialize(0);
             }
+
+            Q_ASSERT(!bucket->monsterBucketExtent());
+            Q_ASSERT(!m_freeSpaceBuckets.contains(index));
+
+            putIntoFreeList(index, bucket);
+
+            Q_ASSERT(m_freeSpaceBuckets.contains(index));
+            Q_ASSERT(!m_monsterBucketTailMarker[index]);
         }
 
         Q_ASSERT(bucketPtr == m_buckets[bucketNumber]);
