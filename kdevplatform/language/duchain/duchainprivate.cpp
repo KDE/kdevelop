@@ -325,7 +325,6 @@ DEFINE_LIST_MEMBER_HASH(EnvironmentInformationListItem, items, uint)
                     l.unlock();
                     // Finally add the chain.
                     context.chain->rebuildDynamicImportStructure();
-                    context.chain->setInDuChain(true);
                     instance->addDocumentChain(context.chain);
                     if (context.index == index) {
                         // Task accomplished.

@@ -189,7 +189,6 @@ void DUChain::addDocumentChain(TopDUContext* chain)
 
 //   qCDebug(LANGUAGE) << "duchain: adding document" << chain->url().str() << " " << chain;
     Q_ASSERT(chain);
-
     Q_ASSERT(!sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
 
     {
@@ -199,14 +198,8 @@ void DUChain::addDocumentChain(TopDUContext* chain)
 
         DUChain::chainsByIndex[chain->ownIndex()] = chain;
     }
-    {
-        Q_ASSERT(DUChain::chainsByIndex[chain->ownIndex()]);
-    }
-    Q_ASSERT(sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
 
     sdDUChainPrivate->m_chainsByUrl.insert(chain->url(), chain);
-
-    Q_ASSERT(sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
 
     chain->setInDuChain(true);
 
