@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2026-05-06 21:45+0300\n"
+"PO-Revision-Date: 2026-05-07 10:33+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
@@ -2388,7 +2388,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: shell/launchconfigurationdialog.cpp:713
 #, kde-format
@@ -2396,128 +2396,128 @@ msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
 msgid "Type"
-msgstr ""
+msgstr "סוג"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: shell/launchconfigurationdialog.ui:29
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "הוספה"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "הסרה"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
-msgstr ""
+msgstr "מנפה שגיאות:"
 
 #: shell/loadedpluginsdialog.cpp:279
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
-msgstr ""
+msgstr "תוספים טעונים"
 
 #: shell/loadedpluginsdialog.cpp:285
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
-msgstr ""
+msgstr "<html><font size=\"4\">נטענו תוספים עבור <b>%1</b></font></html>"
 
 #: shell/mainwindow.cpp:476
 #, kde-format
 msgid " (read only)"
-msgstr ""
+msgstr " (לקריאה בלבד)"
 
 #: shell/mainwindow_p.cpp:224
 #, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
-msgstr ""
+msgstr "הגדרת %1"
 
 #: shell/mainwindow_p.cpp:225
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
-msgstr ""
+msgstr "מאפשר לך להתאים את %1 אישית."
 
 #: shell/mainwindow_p.cpp:228
 #, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr ""
+msgstr "הגדרת התראות…"
 
 #: shell/mainwindow_p.cpp:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
-msgstr ""
+msgstr "הגדרת התראות"
 
 #: shell/mainwindow_p.cpp:230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
-msgstr ""
+msgstr "הצגת חלונית שמאפשרת לך להגדיר התראות."
 
 #: shell/mainwindow_p.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Loaded Plugins"
-msgstr ""
+msgstr "תוספים טעונים"
 
 #: shell/mainwindow_p.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
-msgstr ""
+msgstr "הצגת רשימת כל התוספים הטעונים"
 
 #: shell/mainwindow_p.cpp:236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
-msgstr ""
+msgstr "הצגת חלונית עם פרטים על כל התוספים הטעונים."
 
 #: shell/mainwindow_p.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "&Next Window"
-msgstr ""
+msgstr "ה&חלון הבא"
 
 #: shell/mainwindow_p.cpp:242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next window"
-msgstr ""
+msgstr "החלון הבא"
 
 #: shell/mainwindow_p.cpp:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next window."
-msgstr ""
+msgstr "העברה לחלון הבא."
 
 #: shell/mainwindow_p.cpp:247
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
-msgstr ""
+msgstr "החלון ה&קודם"
 
 #: shell/mainwindow_p.cpp:250
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous window"
-msgstr ""
+msgstr "החלון הקודם"
 
 #: shell/mainwindow_p.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous window."
-msgstr ""
+msgstr "העברה לחלון הקודם."
 
 #: shell/mainwindow_p.cpp:255
 #, kde-format
@@ -2541,31 +2541,31 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
-msgstr ""
+msgstr "פיצול אופקי"
 
 #: shell/mainwindow_p.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
-msgstr ""
+msgstr "פיצול התצוגה הנוכחית אופקית."
 
 #: shell/mainwindow_p.cpp:276
 #, kde-format
 msgctxt "@action"
 msgid "Split View &Left/Right"
-msgstr ""
+msgstr "פיצול תצוגה ימינה/&שמאלה"
 
 #: shell/mainwindow_p.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split vertical"
-msgstr ""
+msgstr "פיצול אנכי"
 
 #: shell/mainwindow_p.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
-msgstr ""
+msgstr "פיצול התצוגה הנוכחית אנכית."
 
 #: shell/mainwindow_p.cpp:283
 #, kde-format
@@ -2607,43 +2607,43 @@ msgstr ""
 #, kde-format
 msgctxt "@action new file"
 msgid "&New"
-msgstr ""
+msgstr "&חדש"
 
 #: shell/mainwindow_p.cpp:304
 #, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
-msgstr ""
+msgstr "חדש"
 
 #: shell/mainwindow_p.cpp:306
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "New file"
-msgstr ""
+msgstr "קובץ חדש"
 
 #: shell/mainwindow_p.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
-msgstr ""
+msgstr "יצירת קובץ ריק."
 
 #: shell/mainwindow_p.cpp:312
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr ""
+msgstr "הוספת תצוגת &כלי…"
 
 #: shell/mainwindow_p.cpp:314
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
-msgstr ""
+msgstr "הוספת תצוגת כלי"
 
 #: shell/mainwindow_p.cpp:315
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
-msgstr ""
+msgstr "הוספת תצוגת כלי חדשה לחלון הזה."
 
 #: shell/mainwindow_p.cpp:320
 #, kde-format
@@ -2654,37 +2654,37 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
-msgstr ""
+msgstr "פיצול תצוגה מעלה/מטה"
 
 #: shell/mainwindow_p.cpp:357
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
-msgstr ""
+msgstr "פיצול תצוגה ימינה/שמאלה"
 
 #: shell/mainwindow_p.cpp:361
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
-msgstr ""
+msgstr "קובץ חדש"
 
 #: shell/mainwindow_p.cpp:367
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
-msgstr ""
+msgstr "ריענון"
 
 #: shell/mainwindow_p.cpp:370
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
-msgstr ""
+msgstr "ריענון של הכול"
 
 #: shell/mainwindow_p.cpp:410
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
-msgstr ""
+msgstr "הוספת תצוגת כלי"
 
 #: shell/mainwindow_p.cpp:433
 #, kde-format
@@ -2696,13 +2696,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr ""
+msgstr "כל קובצי המיזמים"
 
 #: shell/openprojectdialog.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
-msgstr ""
+msgstr "בחירת מקור"
 
 #: shell/openprojectdialog.cpp:149
 #, kde-format
@@ -2715,46 +2715,46 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
-msgstr ""
+msgstr "פתיחת מיזם"
 
 #: shell/openprojectdialog.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
-msgstr ""
+msgstr "פרטי מיזם"
 
 #: shell/openprojectdialog.cpp:228
 #, kde-format
 msgid "Open \"%1\" as project"
-msgstr ""
+msgstr "פתיחת „%1” כמיזם"
 
 #: shell/openprojectdialog.cpp:232
 #, kde-format
 msgid "Selected URL is invalid"
-msgstr ""
+msgstr "הכתובת הנבחרת שגויה"
 
 #: shell/openprojectdialog.cpp:277
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
-msgstr ""
+msgstr "פתיחת הקובץ הקיים „%1”"
 
 #: shell/partcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
-msgstr ""
+msgstr "השתמש בפקודה זו כדי להציג או להסתיר את שורת המצב של התצוגה."
 
 #: shell/partdocument.cpp:109
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
-msgstr ""
+msgstr "יש שינויים שלא נשמרו במסמך „%1”. לשמור אותם?"
 
 #: shell/partdocument.cpp:110 shell/partdocument.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
-msgstr ""
+msgstr "סגירת מסמך"
 
 #: shell/partdocument.cpp:114
 #, kde-format
@@ -2773,7 +2773,7 @@ msgstr ""
 #: shell/problem.cpp:40
 #, kde-format
 msgid "Plugin"
-msgstr ""
+msgstr "תוסף"
 
 #: shell/problem.cpp:80
 #, kde-format
@@ -2783,25 +2783,25 @@ msgstr ""
 #: shell/problem.cpp:82
 #, kde-format
 msgid "Todo"
-msgstr ""
+msgstr "מטלה"
 
 #: shell/problem.cpp:167
 #, kde-format
 msgctxt "@item problem severity"
 msgid "Hint"
-msgstr ""
+msgstr "רמז"
 
 #: shell/problem.cpp:168
 #, kde-format
 msgctxt "@item problem severity"
 msgid "Warning"
-msgstr ""
+msgstr "אזהרה"
 
 #: shell/problem.cpp:169
 #, kde-format
 msgctxt "@item problem severity"
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 #: shell/problemmodel.cpp:37
 #, kde-format
@@ -2813,31 +2813,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
-msgstr ""
+msgstr "מקור"
 
 #: shell/problemmodel.cpp:325
 #, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
-msgstr ""
+msgstr "בעיה"
 
 #: shell/problemmodel.cpp:327
 #, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
-msgstr ""
+msgstr "קובץ"
 
 #: shell/problemmodel.cpp:329
 #, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
-msgstr ""
+msgstr "שורה"
 
 #: shell/problemmodel.cpp:331
 #, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
-msgstr ""
+msgstr "עמודה"
 
 #: shell/progresswidget/progressdialog.cpp:144
 #, kde-format
@@ -2872,7 +2872,7 @@ msgstr ""
 #: shell/project.cpp:99
 #, kde-format
 msgid "Loading Project %1"
-msgstr ""
+msgstr "המיזם %1 נטען"
 
 #: shell/project.cpp:107
 #, kde-format
@@ -2919,7 +2919,7 @@ msgstr ""
 #: shell/project.cpp:402
 #, kde-format
 msgid "Could not open project."
-msgstr ""
+msgstr "לא ניתן לפתוח את המיזם."
 
 #: shell/project.cpp:560
 #, kde-format
@@ -2932,12 +2932,12 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
-msgstr ""
+msgstr "הגדרת המיזם %1"
 
 #: shell/projectcontroller.cpp:300
 #, kde-format
 msgid "Invalid Location: %1"
-msgstr ""
+msgstr "מקום שגוי: %1"
 
 #: shell/projectcontroller.cpp:310
 #, kde-format
@@ -2961,7 +2961,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
-msgstr ""
+msgstr "פתיחת קובץ קיים"
 
 #: shell/projectcontroller.cpp:470
 #, kde-format
@@ -2996,13 +2996,13 @@ msgstr ""
 #: shell/projectcontroller.cpp:510
 #, kde-format
 msgid "Reopen the current project?"
-msgstr ""
+msgstr "לפתוח את המיזם הנוכחי מחדש?"
 
 #: shell/projectcontroller.cpp:511
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "לפתוח מחדש"
 
 #: shell/projectcontroller.cpp:552
 #, kde-format
@@ -3031,13 +3031,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
-msgstr ""
+msgstr "משיכת מיזם…"
 
 #: shell/projectcontroller.cpp:567
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
-msgstr ""
+msgstr "משיכת מיזם"
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3062,31 +3062,31 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr ""
+msgstr "פתיחת הגדרות…"
 
 #: shell/projectcontroller.cpp:597
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr ""
+msgstr "קיבוע המיזם הנוכחי…"
 
 #: shell/projectcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr ""
+msgstr "קיבוע…"
 
 #: shell/projectcontroller.cpp:609
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
-msgstr ""
+msgstr "פתיחת המיזם האחרון"
 
 #: shell/projectcontroller.cpp:610
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
-msgstr ""
+msgstr "פתיחת המיזם האחרון שנפתח."
 
 #: shell/projectcontroller.cpp:615
 #, kde-format
@@ -3097,18 +3097,18 @@ msgstr ""
 #: shell/projectcontroller.cpp:764
 #, kde-format
 msgid "Project already open: %1"
-msgstr ""
+msgstr "המיזם כבר פתוח: %1"
 
 #: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
-msgstr ""
+msgstr "אין מסמך פעיל"
 
 #: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr ""
+msgstr "המיזם כבר פתוח"
 
 #: shell/projectcontroller.cpp:852
 #, kde-format
@@ -3121,13 +3121,13 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
-msgstr ""
+msgstr "הוספת מיזם להפעלה הנוכחית"
 
 #: shell/projectcontroller.cpp:860
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr ""
+msgstr "פתיחת ההפעלה %1"
 
 #: shell/projectcontroller.cpp:921
 #, kde-format
@@ -3153,7 +3153,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Project manager:"
-msgstr ""
+msgstr "מנהל מיזמים:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
@@ -3161,25 +3161,25 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Provide a name for the project"
-msgstr ""
+msgstr "נא לספק שם למיזם"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "שם:"
 
 #: shell/projectsourcepage.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
-msgstr ""
+msgstr "ממערכת קבצים"
 
 #: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
-msgstr ""
+msgstr "לא ניתן ליצור את התיקייה: %1"
 
 #: shell/projectsourcepage.cpp:208
 #, kde-format
@@ -3208,35 +3208,35 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Source:"
-msgstr ""
+msgstr "מקור:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
 #, kde-format
 msgctxt "@title:group"
 msgid "Destination"
-msgstr ""
+msgstr "יעד"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
-msgstr ""
+msgstr "תיקייה:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
 #: shell/projectsourcepage.ui:62
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr ""
+msgstr "בחירת התיקייה לשימוש…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
 #, kde-format
 msgctxt "@title:group"
 msgid "Source"
-msgstr ""
+msgstr "מקור"
 
 #. i18n: ectx: property (text), widget (QPushButton, get)
 #: shell/projectsourcepage.ui:105
@@ -3249,19 +3249,19 @@ msgstr ""
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
-msgstr ""
+msgstr "ניפוי שגיאות"
 
 #: shell/runcontroller.cpp:98
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
-msgstr ""
+msgstr "פרופיל"
 
 #: shell/runcontroller.cpp:107
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
-msgstr ""
+msgstr "הרצה"
 
 #: shell/runcontroller.cpp:438
 #, kde-format
@@ -3272,7 +3272,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr ""
+msgstr "הגדרת שיגורים…"
 
 #: shell/runcontroller.cpp:461
 #, kde-format
@@ -3353,13 +3353,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
-msgstr ""
+msgstr "עצירה"
 
 #: shell/runcontroller.cpp:502
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
-msgstr ""
+msgstr "עצירה"
 
 #: shell/runcontroller.cpp:503
 #, kde-format
@@ -3449,25 +3449,25 @@ msgstr ""
 #: shell/session.cpp:139 shell/session.cpp:162
 #, kde-format
 msgid "(no projects)"
-msgstr ""
+msgstr "(אין מיזמים)"
 
 #: shell/sessionchooserdialog.cpp:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
-msgstr ""
+msgstr "מחיקת הפעלה"
 
 #: shell/sessionchooserdialog.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
-msgstr ""
+msgstr "בחירת הפעלה"
 
 #: shell/sessionchooserdialog.cpp:62
 #, kde-format
 msgctxt "@action:button"
 msgid "Run"
-msgstr ""
+msgstr "הרצה"
 
 #: shell/sessionchooserdialog.cpp:94
 #, kde-format
@@ -3486,7 +3486,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
-msgstr ""
+msgstr "לא ניתן למחוק הפעלה"
 
 #: shell/sessionchooserdialog.cpp:192
 #, kde-format
@@ -3512,19 +3512,19 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
-msgstr ""
+msgstr "מחיקת הפעלה"
 
 #: shell/sessioncontroller.cpp:134
 #, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr ""
+msgstr "התחלת הפעלה חדשה"
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr ""
+msgstr "שם ההפעלה החדשה:"
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3537,18 +3537,18 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
-msgstr ""
+msgstr "שינוי שם הפעלה"
 
 #: shell/sessioncontroller.cpp:260
 #, kde-format
 msgid "Session Manager"
-msgstr ""
+msgstr "מנהל ההפעלות"
 
 #: shell/sessioncontroller.cpp:272
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Session"
-msgstr ""
+msgstr "התחלת הפעלה חדשה"
 
 #: shell/sessioncontroller.cpp:273
 #, kde-format
@@ -3572,59 +3572,59 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr ""
+msgstr "שינוי שם ההפעלה הנוכחית…"
 
 #: shell/sessioncontroller.cpp:294
 #, kde-format
 msgctxt "@action"
 msgid "Delete Current Session..."
-msgstr ""
+msgstr "מחיקת ההפעלה הנוכחית…"
 
 #: shell/sessioncontroller.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Quit"
-msgstr ""
+msgstr "יציאה"
 
 #: shell/sessioncontroller.cpp:518
 #, kde-format
 msgid "Copy of %1"
-msgstr ""
+msgstr "עותק של %1"
 
 #: shell/sessioncontroller.cpp:608
 #, kde-format
 msgctxt "@title:column"
 msgid "Identity"
-msgstr ""
+msgstr "זהות"
 
 #: shell/sessioncontroller.cpp:609
 #, kde-format
 msgctxt "@title:column"
 msgid "Contents"
-msgstr ""
+msgstr "תוכן"
 
 #: shell/sessioncontroller.cpp:610
 #, kde-format
 msgctxt "@title:column"
 msgid "State"
-msgstr ""
+msgstr "מצב"
 
 #: shell/sessioncontroller.cpp:611
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: shell/sessioncontroller.cpp:617
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
-msgstr ""
+msgstr "מסנן:"
 
 #: shell/sessioncontroller.cpp:649
 #, kde-format
 msgid "Create New Session"
-msgstr ""
+msgstr "יצירת הפעלה חדשה"
 
 #: shell/sessionlock.cpp:159
 #, kde-format
@@ -3738,14 +3738,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
-msgstr ""
+msgstr "השהיה:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
-msgstr ""
+msgstr " מ״ש"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
@@ -3762,19 +3762,19 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr ""
+msgstr "מספר התהליכונים המרבי:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:74
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
-msgstr ""
+msgstr " תהליכונים"
 
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
 msgid "Configure Documentation"
-msgstr ""
+msgstr "הגדרת תיעוד"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:42
@@ -3789,7 +3789,7 @@ msgstr ""
 #: shell/settings/editstyledialog.ui:45
 #, kde-format
 msgid "Show Preview"
-msgstr ""
+msgstr "הצגת תצוגה מקדימה"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -3798,116 +3798,116 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
-msgstr ""
+msgstr "תצוגה מקדימה:"
 
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
 msgid "Environment"
-msgstr ""
+msgstr "סביבה"
 
 #: shell/settings/environmentpreferences.cpp:84
 #, kde-format
 msgid "Configure Environment Variables"
-msgstr ""
+msgstr "הגדרת משתני סביבה"
 
 #: shell/settings/environmentprofilelistmodel.cpp:48
 #, kde-format
 msgid "%1 (default profile)"
-msgstr ""
+msgstr "%1 (פרופיל ברירת מחדל)"
 
 #: shell/settings/environmentprofilemodel.cpp:91
 #, kde-format
 msgctxt "@title:column"
 msgid "Variable"
-msgstr ""
+msgstr "משתנה"
 
 #: shell/settings/environmentprofilemodel.cpp:93
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
-msgstr ""
+msgstr "ערך"
 
 #: shell/settings/environmentwidget.cpp:81
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr ""
+msgstr "נא למלא משתנה…"
 
 #: shell/settings/environmentwidget.cpp:169
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Environment Profile"
-msgstr ""
+msgstr "נא למלא שם לפרופיל הסביבה החדש"
 
 #: shell/settings/environmentwidget.cpp:233
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr ""
+msgstr "מצב עריכה במרוכז"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr ""
+msgstr "פרופיל סביבה:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr ""
+msgstr "הוספת פרופיל…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr ""
+msgstr "שכפול פרופיל…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove profile"
-msgstr ""
+msgstr "הסרת פרופיל"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
 #: shell/settings/environmentwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "הגדרה כברירת מחדל"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
-msgstr ""
+msgstr "הסרת משתנה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
 #: shell/settings/environmentwidget.ui:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr ""
+msgstr "מצב עריכה במרוכז"
 
 #: shell/settings/languagepreferences.cpp:34
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " קובץ"
+msgstr[1] " קבצים"
+msgstr[2] " קבצים"
+msgstr[3] " קבצים"
 
 #: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Language Support"
-msgstr ""
+msgstr "תמיכה בשפה"
 
 #: shell/settings/languagepreferences.cpp:87
 #, kde-format
@@ -3919,7 +3919,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr ""
+msgstr "השלמת קוד"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
@@ -4134,28 +4134,28 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
-msgstr ""
+msgstr "שגיאות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:314
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Warnings and Errors"
-msgstr ""
+msgstr "אזהרות ושגיאות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:319
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Hints, Warnings and Errors"
-msgstr ""
+msgstr "רמזים, אזהרות ושגיאות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
@@ -4266,43 +4266,43 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Version Control"
-msgstr ""
+msgstr "בקרת גרסאות"
 
 #: shell/settings/pluginpreferences.cpp:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
-msgstr ""
+msgstr "עזרים"
 
 #: shell/settings/pluginpreferences.cpp:39
 #, kde-format
 msgctxt "@title:group"
 msgid "Documentation"
-msgstr ""
+msgstr "תיעוד"
 
 #: shell/settings/pluginpreferences.cpp:40
 #, kde-format
 msgctxt "@title:group"
 msgid "Language Support"
-msgstr ""
+msgstr "תמיכה בשפה"
 
 #: shell/settings/pluginpreferences.cpp:41
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugging"
-msgstr ""
+msgstr "ניפוי שגיאות"
 
 #: shell/settings/pluginpreferences.cpp:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
-msgstr ""
+msgstr "בדיקה"
 
 #: shell/settings/pluginpreferences.cpp:43
 #, kde-format
 msgctxt "@title:group"
 msgid "Analyzers"
-msgstr ""
+msgstr "מאבחנים"
 
 #: shell/settings/pluginpreferences.cpp:44
 #, kde-format
@@ -4314,17 +4314,17 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
-msgstr ""
+msgstr "אחר"
 
 #: shell/settings/pluginpreferences.h:27
 #, kde-format
 msgid "Plugins"
-msgstr ""
+msgstr "תוספים"
 
 #: shell/settings/pluginpreferences.h:28
 #, kde-format
 msgid "Configure Plugins"
-msgstr ""
+msgstr "הגדרת תוספים"
 
 #. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:11
@@ -4369,12 +4369,12 @@ msgstr ""
 #: shell/settings/projectpreferences.cpp:44
 #, kde-format
 msgid "Projects"
-msgstr ""
+msgstr "מיזמים"
 
 #: shell/settings/projectpreferences.cpp:49
 #, kde-format
 msgid "Configure Projects"
-msgstr ""
+msgstr "הגדרת מיזמים"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
@@ -4390,7 +4390,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Projects base directory:"
-msgstr ""
+msgstr "תיקיית בסיס מיזמים:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:47
@@ -4634,7 +4634,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
-msgstr ""
+msgstr "הצגת לשוניות"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:129
@@ -4657,7 +4657,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Coloring"
-msgstr ""
+msgstr "צביעה"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:151
@@ -4678,7 +4678,7 @@ msgstr ""
 #: shell/settings/uipreferences.cpp:56
 #, kde-format
 msgid "Configure User Interface"
-msgstr ""
+msgstr "הגדרת ממשק משתמש"
 
 #: shell/sourceformattercontroller.cpp:226
 #, kde-format
@@ -5011,18 +5011,18 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "להטמין"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:320
 #, kde-format
 msgctxt "@action:button"
 msgid "Load"
-msgstr ""
+msgstr "טעינה"
 
 #: sublime/container.cpp:345
 #, kde-format
 msgid "Line: 00000 Col: 000"
-msgstr ""
+msgstr "שורה: 00000 עמודה: 000"
 
 #: sublime/container.cpp:379
 #, kde-format
@@ -5034,31 +5034,31 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
-msgstr ""
+msgstr "(יש ללחוץ על Ctrl+Tab כדי להחליף)"
 
 #: sublime/container.cpp:772
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
-msgstr ""
+msgstr "העתקת שם קובץ"
 
 #: sublime/container.cpp:775
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
-msgstr ""
+msgstr "סגירה"
 
 #: sublime/container.cpp:777
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr ""
+msgstr "סגירת כל האחרים"
 
 #: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr ""
+msgstr "סגירה של הכול"
 
 #: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
@@ -5076,7 +5076,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
-msgstr ""
+msgstr "סרגל כלי %1"
 
 #: sublime/idealcontroller.cpp:381
 #, kde-format
@@ -5151,7 +5151,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
-msgstr ""
+msgstr "מצב ריכוז"
 
 #: sublime/mainwindow_p.cpp:51
 #, kde-format
@@ -5187,37 +5187,37 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
-msgstr ""
+msgstr "הסתרת/שחזור מעגנים"
 
 #: sublime/mainwindow_p.cpp:82
 #, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
-msgstr ""
+msgstr "תצוגת הכלי הבאה"
 
 #: sublime/mainwindow_p.cpp:88
 #, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr ""
+msgstr "תצוגת הכלי הקודמת"
 
 #: sublime/mainwindow_p.cpp:94
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr ""
+msgstr "תצוגות כלי"
 
 #: sublime/mainwindow_p.cpp:644
 #, kde-format
 msgctxt "@action"
 msgid "Close"
-msgstr ""
+msgstr "סגירה"
 
 #: sublime/mainwindow_p.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
-msgstr ""
+msgstr "הודעת סגירה"
 
 #: util/duchainify/main.cpp:268
 #, kde-format
@@ -5264,7 +5264,7 @@ msgstr ""
 #: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
-msgstr ""
+msgstr "מספר התהליכונים לשימוש"
 
 #: util/duchainify/main.cpp:292
 #, kde-format
@@ -5273,11 +5273,14 @@ msgid ""
 "declarations (default), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 msgstr ""
+"יכולות לבנייה. אפשרויות: empty, simplified-visible-declarations, visible-"
+"declarations (ברירת מחדל), all-declarations, all-declarations-and-uses, all-"
+"declarations-and-uses-and-AST"
 
 #: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
-msgstr ""
+msgstr "להציג את כל שרשרת ה־Definition-Use כשהפיענוח מצליח"
 
 #: util/duchainify/main.cpp:298
 #, kde-format
@@ -5319,29 +5322,29 @@ msgstr ""
 #, kde-format
 msgctxt "@title:column"
 msgid "Profile"
-msgstr ""
+msgstr "פרופיל"
 
 #: util/environmentselectionmodel.cpp:51
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr ""
+msgstr "להשתמש בפרופיל ברירת המחדל (נכון לעכשיו: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
-msgstr ""
+msgstr "%1 (לא קיים)"
 
 #: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
-msgstr ""
+msgstr "משימה בוטלה"
 
 #: util/projecttestjob.cpp:81
 #, kde-format
 msgid "Run all tests in %1"
-msgstr ""
+msgstr "הרצת כל הבדיקות ב־%1"
 
 #: util/shellutils.cpp:175
 #, kde-format
@@ -5349,6 +5352,7 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
+"אין לך הרשאות כתיבה לקבצים הבאים, להוסיף הרשאות כתיבה לבעלים לפני השמירה?"
 
 #: util/shellutils.cpp:178
 #, kde-format
@@ -5360,13 +5364,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr ""
+msgstr "הגדרת הרשאות כתיבה"
 
 #: util/shellutils.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
-msgstr ""
+msgstr "התעלמות"
 
 #: util/shellutils.cpp:192
 #, kde-format
@@ -5439,12 +5443,12 @@ msgstr ""
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
 msgid "Working Directory does not exist: %1"
-msgstr ""
+msgstr "תיקיית העבודה לא קיימת: %1"
 
 #: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
-msgstr ""
+msgstr "תיקיית עבודה לא מוחלטת: %1"
 
 #: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
@@ -5452,16 +5456,18 @@ msgid ""
 "Process '%1' exited with status %2\n"
 "%3"
 msgstr ""
+"התהליך ‚%1' יצא עם מצב %2\n"
+"%3"
 
 #: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
-msgstr ""
+msgstr "הפקודה הסתיימה עם השגיאה %1."
 
 #: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
-msgstr ""
+msgstr "הפקודה יצאה עם הערך %1."
 
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
@@ -5530,27 +5536,29 @@ msgid ""
 "Branch \"%1\" doesn't exists.\n"
 "Please, choose another name."
 msgstr ""
+"הענף „%1” לא קיים.\n"
+"נא לבחור שם אחר."
 
 #: vcs/dvcs/ui/branchmanager.cpp:196
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
-msgstr ""
+msgstr "חובה לבחור ענף למיזוג אל הנוכחי מהרשימה."
 
 #: vcs/dvcs/ui/branchmanager.cpp:234 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
-msgstr ""
+msgstr "לא ניתן ליצור טלאי לגרסה הנוכחית."
 
 #: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
-msgstr ""
+msgstr "לא ניתן למשוך הבדלים"
 
 #: vcs/dvcs/ui/branchmanager.cpp:276
 #, kde-format
 msgid "There are no committed differences."
-msgstr ""
+msgstr "אין הבדלים שקובעו."
 
 #: vcs/dvcs/ui/branchmanager.cpp:277 vcs/vcspluginhelper.cpp:279
 #, kde-format
