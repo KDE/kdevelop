@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-05 00:42+0000\n"
-"PO-Revision-Date: 2026-05-07 10:33+0300\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"PO-Revision-Date: 2026-05-09 10:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1516,37 +1516,37 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: project/builderjob.cpp:74
+#: project/builderjob.cpp:75
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr ""
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:77
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr ""
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:79
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr ""
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:81
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr ""
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:83
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr ""
 
-#: project/builderjob.cpp:235
+#: project/builderjob.cpp:248
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -1693,7 +1693,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr ""
 
-#: serialization/itemrepository.h:300 serialization/itemrepository.h:1927
+#: serialization/itemrepository.h:300 serialization/itemrepository.h:1909
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr ""
@@ -2571,19 +2571,19 @@ msgstr "פיצול התצוגה הנוכחית אנכית."
 #, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr ""
+msgstr "התצוגה המפוצלת ה&באה"
 
 #: shell/mainwindow_p.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
-msgstr ""
+msgstr "התצוגה המפוצלת הבאה"
 
 #: shell/mainwindow_p.cpp:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
-msgstr ""
+msgstr "מעבר לתצוגה המופצלת הבאה."
 
 #: shell/mainwindow_p.cpp:291
 #, kde-format

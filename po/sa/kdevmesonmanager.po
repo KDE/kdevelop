@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr "आन्तरिकरूपेण प्रयुक्तं नि�
 msgid "Failed to acquire the Ninja builder plugin"
 msgstr "निन्जा बिल्डर् प्लगिन् प्राप्तुं असफलम्"
 
-#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:266
 #, kde-format
 msgid "The current build directory for %1 is invalid"
 msgstr "%1 कृते वर्तमानं निर्माणनिर्देशिका अमान्यम् अस्ति"
@@ -69,12 +69,12 @@ msgstr ""
 "कृपया https://bugs.kde.org/ इत्यत्र दोषं सूचयन्तु ।\n"
 "FILE: %1:%2"
 
-#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#: mesonbuilder.cpp:192 mesonbuilder.cpp:222
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
 msgstr "आन्तरिकदोषः : buildsystem manager MesonManager नास्ति"
 
-#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#: mesonbuilder.cpp:197 mesonbuilder.cpp:227
 #, kde-format
 msgid "Failed to create a new build directory"
 msgstr "नूतनं निर्माणनिर्देशिकां निर्मातुं असफलम्"

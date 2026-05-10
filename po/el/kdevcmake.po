@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2024-09-20 13:49+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -137,6 +137,13 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "CMake &εκτελέσιμο:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, autoConfigureOnCMakeListsChanges)
+#: cmakebuilddirchooser.ui:205 settings/cmakebuildsettings.ui:232
+#, kde-format
+msgctxt "@option:check"
+msgid "Automatically reconfigure when CMake project files change"
+msgstr ""
+
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
@@ -242,7 +249,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr "Σελίδα περιεχομένου CMake"
 
-#: cmakemanager.cpp:665
+#: cmakemanager.cpp:692
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure the project (error message: %1). As a result, "
@@ -267,7 +274,7 @@ msgstr ""
 "και ρυθμίσεις του CMake. Έπειτα κάνετε δεξί κλικ στο αντικείμενο στην "
 "προβολή εργαλείων του έργου και κλικ στην 'Επαναφόρτωση'."
 
-#: cmakemanager.cpp:676
+#: cmakemanager.cpp:703
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure the project (error message: %1). As a result, "
@@ -358,7 +365,7 @@ msgid "Show advanced values"
 msgstr "Εμφάνιση προχωρημένων τιμών"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: settings/cmakebuildsettings.ui:235
+#: settings/cmakebuildsettings.ui:242
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
@@ -400,7 +407,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Συμβολοσειρές"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:370
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -412,24 +419,24 @@ msgstr ""
 "Ο κατάλογος %1 πρόκειται να αφαιρεθεί από τη λίστα του KDevelop.\n"
 "Επιθυμείτε την αφαίρεσή του από το σύστημα αρχείων επίσης;"
 
-#: settings/cmakepreferences.cpp:347
+#: settings/cmakepreferences.cpp:374
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:379
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Αδυναμία αφαίρεσης: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:425
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:430
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

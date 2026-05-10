@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2020-01-16 18:56+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -32,7 +32,7 @@ msgstr "Seesmiselt kasutatava Ninja ehitaja määramine nurjus"
 msgid "Failed to acquire the Ninja builder plugin"
 msgstr "Ninja ehitaja plugina hankimine nurjus"
 
-#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:266
 #, kde-format
 msgid "The current build directory for %1 is invalid"
 msgstr "%1 aktiivne ehitamiskataloog on vigane"
@@ -70,12 +70,12 @@ msgstr ""
 "Palun anna veast teada aadressil https://bugs.kde.org/\n"
 "FAIL: %1:%2"
 
-#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#: mesonbuilder.cpp:192 mesonbuilder.cpp:222
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
 msgstr "Sisemine tõrge: ehitamissüsteemi haldur ei ole Mesoni haldur"
 
-#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#: mesonbuilder.cpp:197 mesonbuilder.cpp:227
 #, kde-format
 msgid "Failed to create a new build directory"
 msgstr "Uus ehitamiskataloogi loomine nurjus"

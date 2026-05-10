@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2023-01-23 20:19+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -143,6 +143,13 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "&Exécutable « CMake » :"
 
+#. i18n: ectx: property (text), widget (QCheckBox, autoConfigureOnCMakeListsChanges)
+#: cmakebuilddirchooser.ui:205 settings/cmakebuildsettings.ui:232
+#, kde-format
+msgctxt "@option:check"
+msgid "Automatically reconfigure when CMake project files change"
+msgstr ""
+
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
@@ -248,7 +255,7 @@ msgstr "Données de projet « API » non valables dans le fichier « CMake �
 msgid "CMake Content Page"
 msgstr "Page de contenu de CMake"
 
-#: cmakemanager.cpp:665
+#: cmakemanager.cpp:692
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -264,7 +271,7 @@ msgstr ""
 "Pour corriger ce problème, veuillez vous effectuer un clic droit sur "
 "l'élément du projet dans la vue des projets et cliquer sur « Recharger »."
 
-#: cmakemanager.cpp:676
+#: cmakemanager.cpp:703
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -348,7 +355,7 @@ msgid "Show advanced values"
 msgstr "Afficher les valeurs avancées"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: settings/cmakebuildsettings.ui:235
+#: settings/cmakebuildsettings.ui:242
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
@@ -390,7 +397,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Chaînes"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:370
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -399,24 +406,24 @@ msgstr ""
 "Le dossier %1 est sur le point d'être supprimé de la liste de KDevelop.\n"
 "Voulez-vous que KDevelop le supprime également du système de fichiers ?"
 
-#: settings/cmakepreferences.cpp:347
+#: settings/cmakepreferences.cpp:374
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Ne pas supprimer"
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:379
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Impossible de supprimer : %1."
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:425
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:430
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

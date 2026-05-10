@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-05 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2026-02-11 11:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1560,37 +1560,37 @@ msgstr ""
 "фільтрування, отже її буде приховано.\n"
 "Виконати перейменування?"
 
-#: project/builderjob.cpp:74
+#: project/builderjob.cpp:75
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "збирання"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:77
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "спорожнення"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:79
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "налаштовування"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:81
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "встановлення"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:83
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "спрощення"
 
-#: project/builderjob.cpp:235
+#: project/builderjob.cpp:248
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -1739,7 +1739,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Пересунути вибрану залежність вниз списком"
 
-#: serialization/itemrepository.h:300 serialization/itemrepository.h:1927
+#: serialization/itemrepository.h:300 serialization/itemrepository.h:1909
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "Не вдалося виконати запис до %1, ймовірно диск переповнено"

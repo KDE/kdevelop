@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2025-05-16 03:44+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -33,7 +33,7 @@ msgstr "შიდა მოხმარებისთვის გამოყ�
 msgid "Failed to acquire the Ninja builder plugin"
 msgstr "Ninja ამგების დამატების მიღების შეცდომა"
 
-#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:266
 #, kde-format
 msgid "The current build directory for %1 is invalid"
 msgstr "აგების მიმდინარე საქაღალდე %1-სთვის არასწორია"
@@ -71,12 +71,12 @@ msgstr ""
 "შეავსეთ შეცდომის ანგარიში მისამართზე https://bugs.kde.org/\n"
 "ფაილი: %1:%2"
 
-#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#: mesonbuilder.cpp:192 mesonbuilder.cpp:222
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
 msgstr "შიდა შეცდომა: აგების სისტემის მმართველი MesonManager არაა"
 
-#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#: mesonbuilder.cpp:197 mesonbuilder.cpp:227
 #, kde-format
 msgid "Failed to create a new build directory"
 msgstr "აგების ახალი საქაღალდის შექმნის შეცდომა"

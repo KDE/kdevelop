@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2025-05-31 11:02+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -32,7 +32,7 @@ msgstr "Misslyckades ställa in det internt använda byggverktyget Ninja"
 msgid "Failed to acquire the Ninja builder plugin"
 msgstr "Misslyckades erhålla insticksprogram för byggverktyget Ninja"
 
-#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:266
 #, kde-format
 msgid "The current build directory for %1 is invalid"
 msgstr "Aktuell byggkatalog för %1 är ogiltig"
@@ -71,12 +71,12 @@ msgstr ""
 "Rapportera ett fel på https://bugs.kde.org/\n"
 "FIL: %1:%2"
 
-#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#: mesonbuilder.cpp:192 mesonbuilder.cpp:222
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
 msgstr "Internt fel: Byggsystemhanteraren är inte Meson-hanteraren"
 
-#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#: mesonbuilder.cpp:197 mesonbuilder.cpp:227
 #, kde-format
 msgid "Failed to create a new build directory"
 msgstr "Misslyckades skapa en ny byggkatalog"

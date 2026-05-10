@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2020-07-20 11:23+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -28,7 +28,7 @@ msgstr "Não foi possível definir o construtor do Ninja usado internamente"
 msgid "Failed to acquire the Ninja builder plugin"
 msgstr "Não foi possível adquirir o 'plugin' de compilação do Ninja"
 
-#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:266
 #, kde-format
 msgid "The current build directory for %1 is invalid"
 msgstr "A pasta de compilação actual do %1 é inválida"
@@ -67,12 +67,12 @@ msgstr ""
 "Por favor, comunique um erro em https://bugs.kde.org/\n"
 "FICHEIRO: %1:%2"
 
-#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#: mesonbuilder.cpp:192 mesonbuilder.cpp:222
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
 msgstr "Erro interno: O gestor de sistemas de compilação não é o MesonManager"
 
-#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#: mesonbuilder.cpp:197 mesonbuilder.cpp:227
 #, kde-format
 msgid "Failed to create a new build directory"
 msgstr "Não foi possível criar uma pasta de compilação"

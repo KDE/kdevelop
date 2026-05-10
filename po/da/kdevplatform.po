@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-05 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2014-08-24 21:50+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -1590,37 +1590,37 @@ msgstr ""
 "blive skjult.\n"
 "Vil du forsætte?"
 
-#: project/builderjob.cpp:74
+#: project/builderjob.cpp:75
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "byg"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:77
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "ryd op"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:79
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "konfigurér"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:81
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "installér"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:83
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "beskær"
 
-#: project/builderjob.cpp:235
+#: project/builderjob.cpp:248
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -1771,7 +1771,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr ""
 
-#: serialization/itemrepository.h:300 serialization/itemrepository.h:1927
+#: serialization/itemrepository.h:300 serialization/itemrepository.h:1909
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "Kunne ikke skrive til %1. Sandsynligvis er disken fuld"

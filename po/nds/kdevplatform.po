@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-05 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2012-02-02 07:34+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1638,41 +1638,41 @@ msgstr ""
 "Du wullt \"%1\" to \"%2\" ümnömen, man dat warrt filtert un versteken.\n"
 "Wullt Du redig wiedermaken?"
 
-#: project/builderjob.cpp:74
+#: project/builderjob.cpp:75
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@info:status"
 msgid "build"
 msgstr "Buen"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:77
 #, fuzzy, kde-format
 #| msgid "clean"
 msgctxt "@info:status"
 msgid "clean"
 msgstr "Goot"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:79
 #, fuzzy, kde-format
 #| msgid "Configure %1"
 msgctxt "@info:status"
 msgid "configure"
 msgstr "%1 instellen"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:81
 #, fuzzy, kde-format
 #| msgid "Build & Install"
 msgctxt "@info:status"
 msgid "install"
 msgstr "Buen un installeren"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:83
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr ""
 
-#: project/builderjob.cpp:235
+#: project/builderjob.cpp:248
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -1826,7 +1826,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr ""
 
-#: serialization/itemrepository.h:300 serialization/itemrepository.h:1927
+#: serialization/itemrepository.h:300 serialization/itemrepository.h:1909
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr ""

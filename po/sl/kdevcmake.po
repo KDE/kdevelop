@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2023-01-24 08:25+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -134,6 +134,13 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "Izv&edljiva datoteka CMake:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, autoConfigureOnCMakeListsChanges)
+#: cmakebuilddirchooser.ui:205 settings/cmakebuildsettings.ui:232
+#, kde-format
+msgctxt "@option:check"
+msgid "Automatically reconfigure when CMake project files change"
+msgstr ""
+
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
@@ -236,7 +243,7 @@ msgstr "neveljavna datoteka API CMake projektnih podatkov"
 msgid "CMake Content Page"
 msgstr "Stran vsebine CMake"
 
-#: cmakemanager.cpp:665
+#: cmakemanager.cpp:692
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -251,7 +258,7 @@ msgstr ""
 "Da bi odpravili to težavo, z desno tipko miške kliknite element projekta v "
 "pogledu orodja projektov in kliknite 'Ponovno naloži'."
 
-#: cmakemanager.cpp:676
+#: cmakemanager.cpp:703
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -334,7 +341,7 @@ msgid "Show advanced values"
 msgstr "Pokaži napredne vrednosti"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: settings/cmakebuildsettings.ui:235
+#: settings/cmakebuildsettings.ui:242
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
@@ -376,7 +383,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Nizi"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:370
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -385,24 +392,24 @@ msgstr ""
 "Mapa %1 bo pravkar odstranjena iz seznama KDevelopa.\n"
 "Ali želite da jo KDevelop odstrani tudi iz datotečnega sistema?"
 
-#: settings/cmakepreferences.cpp:347
+#: settings/cmakepreferences.cpp:374
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "Ne zbriši"
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:379
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Ni bilo mogoče odstraniti: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:425
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:430
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

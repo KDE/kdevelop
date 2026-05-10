@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-05 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2026-02-22 00:15+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1553,37 +1553,37 @@ msgstr ""
 "ezkutatu egingo da.\n"
 "Aurrera jarraitu nahi duzu?"
 
-#: project/builderjob.cpp:74
+#: project/builderjob.cpp:75
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
 msgstr "eraiki"
 
-#: project/builderjob.cpp:76
+#: project/builderjob.cpp:77
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
 msgstr "garbitu"
 
-#: project/builderjob.cpp:78
+#: project/builderjob.cpp:79
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
 msgstr "konfiguratu"
 
-#: project/builderjob.cpp:80
+#: project/builderjob.cpp:81
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
 msgstr "instalatu"
 
-#: project/builderjob.cpp:82
+#: project/builderjob.cpp:83
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
 msgstr "inausi"
 
-#: project/builderjob.cpp:235
+#: project/builderjob.cpp:248
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
@@ -1733,7 +1733,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Mugitu hautatutako menpekotasuna behera zerrendan"
 
-#: serialization/itemrepository.h:300 serialization/itemrepository.h:1927
+#: serialization/itemrepository.h:300 serialization/itemrepository.h:1909
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "%1(e)ra idazteak huts egin du, ziurrenik diskoa beteta dago"

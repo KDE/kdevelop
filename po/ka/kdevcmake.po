@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2024-07-20 05:20+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -133,6 +133,13 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "CMake-ის გამშვები ფაილი:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, autoConfigureOnCMakeListsChanges)
+#: cmakebuilddirchooser.ui:205 settings/cmakebuildsettings.ui:232
+#, kde-format
+msgctxt "@option:check"
+msgid "Automatically reconfigure when CMake project files change"
+msgstr ""
+
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
@@ -234,7 +241,7 @@ msgstr "cmake-ის ფაილის API-ის პროექტის მ�
 msgid "CMake Content Page"
 msgstr "CMake-is სარჩევის გვერდი"
 
-#: cmakemanager.cpp:665
+#: cmakemanager.cpp:692
 #, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
@@ -249,7 +256,7 @@ msgstr ""
 "ამ პრობლემის გასასწორებლად დააწკაპუნეთ თაგუნას მარჯვენა ღილაკით ელემენტზე "
 "პროექტის ხელსაწყოს ხედში და დააწკაპუნეთ 'თავიდან ჩატვირთვაზე'."
 
-#: cmakemanager.cpp:676
+#: cmakemanager.cpp:703
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -332,7 +339,7 @@ msgid "Show advanced values"
 msgstr "დამატებითი მნიშვნელობების ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: settings/cmakebuildsettings.ui:235
+#: settings/cmakebuildsettings.ui:242
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
@@ -374,7 +381,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "სტრიქონები"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:370
 #, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -383,24 +390,24 @@ msgstr ""
 "საქაღალდე %1 წაიშლება KDevelop-ის სიიდან.\n"
 "გნებავთ KDevelop-მა ის ფაილური სისტემიდანაც წაშალოს?"
 
-#: settings/cmakepreferences.cpp:347
+#: settings/cmakepreferences.cpp:374
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr "არ წაშალო"
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:379
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "%1-ის წაშლის შეცდომა"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:425
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:430
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

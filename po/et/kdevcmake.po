@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-05-10 00:42+0000\n"
 "PO-Revision-Date: 2020-01-21 19:51+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -146,6 +146,13 @@ msgctxt "@label:chooser"
 msgid "CMake &executable:"
 msgstr "CMak&e'i täitmisfail:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, autoConfigureOnCMakeListsChanges)
+#: cmakebuilddirchooser.ui:205 settings/cmakebuildsettings.ui:232
+#, kde-format
+msgctxt "@option:check"
+msgid "Automatically reconfigure when CMake project files change"
+msgstr ""
+
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
 msgid "INVALID"
@@ -259,7 +266,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr "CMake'i sisulehekülg"
 
-#: cmakemanager.cpp:665
+#: cmakemanager.cpp:692
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to configure project '%1' (error message: %2). As a result, "
@@ -284,7 +291,7 @@ msgstr ""
 "versiooni ja seadistusi. Seejärel tee projektivaates paremklõps "
 "projektikirjel ja vali \"Laadi uuesti\"."
 
-#: cmakemanager.cpp:676
+#: cmakemanager.cpp:703
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -376,7 +383,7 @@ msgid "Show advanced values"
 msgstr "Muude väärtuste näitamine"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: settings/cmakebuildsettings.ui:235
+#: settings/cmakebuildsettings.ui:242
 #, fuzzy, kde-format
 #| msgid "CMake executable:"
 msgctxt "@label:chooser"
@@ -425,7 +432,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Stringid"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:370
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -437,25 +444,25 @@ msgstr ""
 "%1 kataloog eemaldatakse KDevelopi nimekirjast.\n"
 "Kas KDevelop peaks selle eemaldama ka failisüsteemist?"
 
-#: settings/cmakepreferences.cpp:347
+#: settings/cmakepreferences.cpp:374
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:379
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Eemaldamine nurjus: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:425
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:430
 #, fuzzy, kde-format
 #| msgid "Configure CMake settings"
 msgctxt "@title:tab"
