@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2026-05-07 10:33+0300\n"
+"PO-Revision-Date: 2026-05-09 10:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2571,19 +2571,19 @@ msgstr "פיצול התצוגה הנוכחית אנכית."
 #, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr ""
+msgstr "התצוגה המפוצלת ה&באה"
 
 #: shell/mainwindow_p.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
-msgstr ""
+msgstr "התצוגה המפוצלת הבאה"
 
 #: shell/mainwindow_p.cpp:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
-msgstr ""
+msgstr "מעבר לתצוגה המופצלת הבאה."
 
 #: shell/mainwindow_p.cpp:291
 #, kde-format
