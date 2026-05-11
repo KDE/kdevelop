@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2023-01-24 08:25+0100\n"
+"PO-Revision-Date: 2026-05-10 08:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.9\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -139,7 +139,7 @@ msgstr "Izv&edljiva datoteka CMake:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatically reconfigure when CMake project files change"
-msgstr ""
+msgstr "Samodejno prekonfiguriraj, ko se datoteke projekta CMake spremenijo"
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
