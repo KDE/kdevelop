@@ -80,10 +80,7 @@ public:
         return m_topContext;
     }
 
-    inline uint hash() const
-    {
-        return ( uint )((( quint64 )m_topContext) * 37);
-    }
+    size_t hash() const;
 
 private:
     TopDUContext* m_topContext;

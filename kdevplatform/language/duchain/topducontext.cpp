@@ -28,6 +28,7 @@
 
 #include <language/interfaces/iastcontainer.h>
 
+#include <QHash>
 #include <QMutexLocker>
 #include <QRecursiveMutex>
 
@@ -75,6 +76,13 @@ ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUC
     if (m_topContext)
         DUChain::self()->refCountUp(m_topContext);
     return *this;
+}
+
+size_t ReferencedTopDUContext::hash() const
+{
+    // This must be based on a unique disk-persistent value of m_topContext and return a 64-bit hash.
+    Q_ASSERT(m_topContext);
+    return ::qHash(size_t(m_topContext->ownIndex()));
 }
 
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
