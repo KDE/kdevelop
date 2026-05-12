@@ -66,7 +66,7 @@ namespace {
 const int SOFT_CLEANUP_STEPS = 1;
 
 // seconds to wait before trying to cleanup the DUChain
-const uint cleanupEverySeconds = 200;
+constexpr uint cleanupEverySeconds = 60;
 }
 
 namespace KDevelop {
