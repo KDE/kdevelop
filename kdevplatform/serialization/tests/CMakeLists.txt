@@ -6,7 +6,7 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
-add_library(itemrepositorytestbase STATIC itemrepositorytestbase.cpp)
+add_library(itemrepositorytestbase STATIC itemrepositorytestbase.cpp itemrepositoryitem.cpp)
 target_link_libraries(itemrepositorytestbase PUBLIC
     Qt::Test KDev::Serialization KDev::Tests)
 

@@ -1,4 +1,5 @@
 #include "itemrepositorytestbase.h"
+#include "itemrepositoryitem.h"
 
 #include <QTest>
 #include <QElapsedTimer>
@@ -25,112 +26,11 @@
 
 using namespace KDevelop;
 
-struct TestItem
-{
-    TestItem(uint hash, uint dataSize) : m_hash(hash)
-        , m_dataSize(dataSize)
-    {
-    }
-
-    TestItem& operator=(const TestItem& rhs) = delete;
-
-    //Every item has to implement this function, and return a valid hash.
-    //Must be exactly the same hash value as ExampleItemRequest::hash() has returned while creating the item.
-    unsigned int hash() const
-    {
-        return m_hash;
-    }
-
-    //Every item has to implement this function, and return the complete size this item takes in memory.
-    //Must be exactly the same value as ExampleItemRequest::itemSize() has returned while creating the item.
-    unsigned int itemSize() const
-    {
-        return sizeof(TestItem) + m_dataSize;
-    }
-
-    bool equals(const TestItem* rhs) const
-    {
-        return rhs->m_hash == m_hash
-               && itemSize() == rhs->itemSize()
-               && memcmp(reinterpret_cast<const char*>(this), rhs, itemSize()) == 0;
-    }
-
-    std::string_view as_string_view() const
-    {
-        return std::string_view(reinterpret_cast<const char*>(this) + sizeof(*this), m_dataSize);
-    }
-
-    uint m_hash;
-    uint m_dataSize;
-};
-
-struct TestItemRequest
-{
-    TestItem& m_item;
-    bool m_compareData;
-
-    TestItemRequest(TestItem& item, bool compareData = false)
-        : m_item(item)
-        , m_compareData(compareData)
-    {
-    }
-    enum {
-        AverageSize = 700 //This should be the approximate average size of an Item
-    };
-
-    uint hash() const
-    {
-        return m_item.hash();
-    }
-
-    //Should return the size of an item created with createItem
-    uint itemSize() const
-    {
-        return m_item.itemSize();
-    }
-
-    void createItem(TestItem* item) const
-    {
-        memcpy(reinterpret_cast<void*>(item), &m_item, m_item.itemSize());
-    }
-
-    static void destroy(TestItem* item, AbstractItemRepository&)
-    {
-        // Fill with zeros to speed up failures.
-        std::fill_n(reinterpret_cast<char*>(item), item->itemSize(), 0);
-    }
-
-    static bool persistent(const TestItem* /*item*/)
-    {
-        return true;
-    }
-
-    //Should return whether the here requested item equals the given item
-    bool equals(const TestItem* item) const
-    {
-        return hash() == item->hash() && (!m_compareData || m_item.equals(item));
-    }
-};
-
 uint smallItemsFraction = 20; //Fraction of items between 0 and 1 kb
 uint largeItemsFraction = 1; //Fraction of items between 0 and 200 kb
 uint cycles = 10000;
 uint deletionProbability = 1; //Percentual probability that a checked item is deleted. Per-cycle probability must be multiplied with checksPerCycle.
 uint checksPerCycle = 10;
-
-TestItem* createItem(uint id, uint size)
-{
-    TestItem* ret;
-    char* data = new char[size];
-    uint dataSize = size - sizeof(TestItem);
-    ret = new (data) TestItem(id, dataSize);
-
-    //Fill in same random pattern
-    for (uint a = 0; a < dataSize; ++a)
-        data[sizeof(TestItem) + a] = ( char )(a + id);
-
-    return ret;
-}
 
 template<typename Rng>
 TestItem* createRandomItem(Rng& rngsource)
@@ -153,25 +53,6 @@ TestItem* createRandomItem(Rng& rngsource)
     return new (data) TestItem(hash, dataSize);
 }
 
-void freeItem(TestItem* ptr)
-{
-    if (!ptr)
-        return;
-    // No op, but needed for correctness.
-    ptr->~TestItem();
-    // ptr was allocated with "new char[]", so we must use delete[] (char*) to free it.
-    delete[] reinterpret_cast<char*>(ptr);
-}
-
-struct TestItemDeleter
-{
-    void operator()(TestItem* ptr)
-    {
-        freeItem(ptr);
-    }
-};
-
-using TestItemPtr = std::unique_ptr<TestItem, TestItemDeleter>;
 // Fill up repository to keep ItemRepositoryBucketLinearGrowthFactor (ie 10) buckets non-allocated
 // @returns next hash to insert
 int almostFillRepository(ItemRepository<TestItem, TestItemRequest>& repository, int additionalSpace)
@@ -272,7 +153,7 @@ private Q_SLOTS:
 #endif
                         repository.deleteItem(newIndex);
                         QVERIFY(!repository.findIndex(*realItemsById[pick]));
-                        freeItem(realItemsById[pick]);
+                        TestItem::freeItem(realItemsById[pick]);
                         realItemsById.remove(pick);
                         realItemsByIndex.remove(index);
                     }
@@ -287,7 +168,7 @@ private Q_SLOTS:
         {
             for (auto it = realItemsByIndex.constBegin(); it != realItemsByIndex.constEnd(); ++it) {
                 repository.deleteItem(it.key());
-                freeItem(it.value());
+                TestItem::freeItem(it.value());
             }
 
             realItemsById.clear();
@@ -453,7 +334,7 @@ private Q_SLOTS:
         }
 
         for (auto item : std::as_const(items)) {
-            freeItem(item);
+            TestItem::freeItem(item);
         }
     }
 
