@@ -373,6 +373,13 @@ public:
         }
     }
 
+    static constexpr int calculateExtentSize(int itemSize)
+    {
+        itemSize -= ItemRepositoryBucketSize + AdditionalSpacePerItem;
+        int extents = itemSize / DataSize + 1;
+        return extents;
+    }
+
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
     ItemId findIndex(const ItemRequest& request) const
     {
@@ -2230,6 +2237,7 @@ private:
         auto useBucket = BucketId{0};
         auto rangeStart = BucketId{std::numeric_limits<BucketId>::max()};
         auto rangeEnd = BucketId{std::numeric_limits<BucketId>::max()};
+        const uint extent = MyBucket::calculateExtentSize(size);
         for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
             const auto* const bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
             if (bucketPtr->isEmpty()) {
@@ -2242,16 +2250,13 @@ private:
                     ++rangeEnd;
                 }
                 if (rangeStart != rangeEnd) {
-                    uint extent = rangeEnd - rangeStart - 1;
-                    uint totalAvailableSpace =
-                        bucketForIndex(rangeStart)->available() + MyBucket::DataSize * (rangeEnd - rangeStart - 1);
-                    if (totalAvailableSpace > totalSize) {
-                        Q_ASSERT(extent);
+                    const uint currentExtentSize = rangeEnd - rangeStart - 1;
+                    if (currentExtentSize == extent) {
+                        Q_ASSERT(currentExtentSize);
                         ///We can merge these buckets into one monster-bucket that can hold the data
-                        Q_ASSERT((uint)m_freeSpaceBuckets[a - extent] == (uint)rangeStart);
+                        Q_ASSERT((uint)m_freeSpaceBuckets[a - currentExtentSize] == (uint)rangeStart);
                         useBucket = rangeStart;
                         convertMonsterBucket(rangeStart, extent);
-
                         break;
                     }
                 }
