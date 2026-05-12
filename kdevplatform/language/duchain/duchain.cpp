@@ -574,14 +574,6 @@ void DUChain::shutdown()
 
     QMutexLocker lock(&sdDUChainPrivate->cleanupMutex());
 
-    {
-        //Acquire write-lock of the repository, so when kdevelop crashes in that process, the repository is discarded
-        //Crashes here may happen in an inconsistent state, thus this makes sense, to protect the user from more crashes
-        globalItemRepositoryRegistry().lockForWriting();
-        sdDUChainPrivate->cleanupTopContexts();
-        globalItemRepositoryRegistry().unlockForWriting();
-    }
-
     sdDUChainPrivate->doMoreCleanup(); //Must be done _before_ finalCleanup, else we may be deleting yet needed data
 
     sdDUChainPrivate->m_openDocumentContexts.clear();

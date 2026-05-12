@@ -67,10 +67,6 @@ const int SOFT_CLEANUP_STEPS = 1;
 
 // seconds to wait before trying to cleanup the DUChain
 const uint cleanupEverySeconds = 200;
-
-///Approximate maximum count of top-contexts that are checked during final cleanup
-const uint maxFinalCleanupCheckContexts = 2000;
-const uint minimumFinalCleanupCheckContextsPercentage = 10; //Check at least n% of all top-contexts during cleanup
 }
 
 namespace KDevelop {
@@ -462,12 +458,7 @@ public:
     ///@warning no other mutexes should be locked, as that may lead to a dedalock
     ParsingEnvironmentFile* loadInformation(uint topContextIndex);
 
-    ///Will check a selection of all top-contexts for up-to-date ness, and remove them if out of date
-    void cleanupTopContexts();
-
 private:
-
-    void addContextsForRemoval(QSet<uint>& topContexts, IndexedTopDUContext top);
 
     ///Stores the environment-information for the given url
     void storeInformationList(const IndexedString& url);
