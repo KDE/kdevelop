@@ -1783,6 +1783,9 @@ public:
     void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const
     {
         for (int a = 1; a <= m_currentBucket; ++a) {
+            if (m_monsterBucketTailMarker[a]) {
+                continue;
+            }
             if (!onlyInMemory || m_buckets.at(a)) {
                 auto bucket = bucketForIndex(a);
                 if (bucket && !bucket->visitAllItems(visitor))
