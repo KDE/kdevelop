@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-06 21:24+0300\n"
+"PO-Revision-Date: 2026-05-12 22:01+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -244,7 +244,7 @@ msgstr "אוליבייה גופארט"
 #: main.cpp:394
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr ""
+msgstr "C++/Clang, DUChain, תיקוני תקלות"
 
 #: main.cpp:395
 #, kde-format
