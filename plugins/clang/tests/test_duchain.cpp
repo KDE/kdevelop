@@ -2102,6 +2102,9 @@ void TestDUChain::testFriendDeclaration()
             QEXPECT_FAIL("", "Your clang version is too old", Abort);
         }
         QCOMPARE(friendBar->uses().size(), 1);
+        if (QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(22, 0, 0)) {
+            QEXPECT_FAIL("", "clang commit 91cdd35008e9ab32dffb7e401cdd7313b3461892 broke this (github.com/llvm/llvm-project/pull/147835)", Abort);
+        }
         QCOMPARE(friendBar->uses().begin()->first(), RangeInRevision(3,25,3,34));
         QCOMPARE(friendBar->uses().begin()->last(), RangeInRevision(8,8,8,17));
     }
