@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2026-05-06 21:48+0300\n"
+"PO-Revision-Date: 2026-05-12 22:00+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -161,7 +161,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
-msgstr ""
+msgstr "הגדרת שם ודוא״ל ל־Git"
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: gitnameemaildialog.ui:23
@@ -253,7 +253,7 @@ msgstr "לא ניתן להסיג שינויים"
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
-msgstr ""
+msgstr "בקבצים הבאים יש שינויים שלא קובעו והם ילכו לאיבוד. להמשיך?"
 
 #: gitplugin.cpp:528
 #, kde-format
@@ -381,7 +381,7 @@ msgstr "סתירות"
 #: repostatusmodel.cpp:111
 #, kde-format
 msgid "Files with unresolved (merge) conflicts"
-msgstr ""
+msgstr "קבצים עם סתירות (מיזוג) לא פתורות"
 
 #: repostatusmodel.cpp:116
 #, kde-format
@@ -398,69 +398,69 @@ msgstr ""
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
-msgstr ""
+msgstr "נערך (לא בבימוי)"
 
 #: repostatusmodel.cpp:244
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
-msgstr ""
+msgstr "נמחק (לא בבימוי)"
 
 #: repostatusmodel.cpp:246
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
-msgstr ""
+msgstr "השם השתנה (לא בבימוי)"
 
 #: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
-msgstr ""
+msgstr "הועתק (לא בבימוי)"
 
 #: repostatusmodel.cpp:250
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
-msgstr ""
+msgstr "נערך (בבימוי)"
 
 #: repostatusmodel.cpp:252
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
-msgstr ""
+msgstr "נערך (שינויים שלא בבימוי)"
 
 #: repostatusmodel.cpp:254
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
-msgstr ""
+msgstr "נערך (מחיקה שלא בבימוי)"
 
 #: repostatusmodel.cpp:257
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
-msgstr ""
+msgstr "נוסף (שינויים לא בבימוי)"
 
 #: repostatusmodel.cpp:260
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
-msgstr ""
+msgstr "נוסף (מחיקה שירדה מבימוי)"
 
 #: repostatusmodel.cpp:263
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
-msgstr ""
+msgstr "נמחק (שינוי שם לא בבימוי)"
 
 #: repostatusmodel.cpp:266
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
-msgstr ""
+msgstr "נמחק (העתקה לא בבימוי)"
 
 #: repostatusmodel.cpp:268
 #, kde-format
