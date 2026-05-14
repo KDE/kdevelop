@@ -2268,24 +2268,28 @@ private:
                         useBucket = rangeStart;
                         break;
                     }
+                    if (rangeEnd == m_buckets.size()) {
+                        // Found empty buckets at end, but not enough
+                        // We'll need to allocate
+                        useBucket = rangeStart;
+                        Q_ASSERT(useBucket == m_currentBucket);
+                    }
                 }
             }
         }
 
-        if (!useBucket) {
+        if (selectedBuckets != numberOfRequiredBuckets) {
             // Not enough empty buckets were found, need to allocate some
             Q_ASSERT(extent);
             const uint minimumBucketIncrease = numberOfRequiredBuckets - selectedBuckets;
             Q_ASSERT(m_currentBucket);
-            if (m_currentBucket + numberOfRequiredBuckets >= m_buckets.size()) {
-                if (allocateNextBuckets(minimumBucketIncrease) < minimumBucketIncrease) {
-                    qWarning() << "Found no room for an item in" << m_repositoryName
-                               << "size of the item:" << request.itemSize();
-                    return std::make_pair(0u, 0u);
-                }
+            if (allocateNextBuckets(minimumBucketIncrease) < minimumBucketIncrease) {
+                qWarning() << "Found no room for an item in" << m_repositoryName
+                           << "size of the item:" << request.itemSize();
+                return std::make_pair(0u, 0u);
             }
-            useBucket = m_currentBucket;
             Q_ASSERT(m_currentBucket + numberOfRequiredBuckets - 1 <= ItemRepositoryMaxBucketIndex);
+            Q_ASSERT(m_currentBucket == rangeStart);
             m_currentBucket = m_currentBucket + numberOfRequiredBuckets - 1;
         }
 
