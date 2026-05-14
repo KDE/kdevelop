@@ -137,7 +137,7 @@ msgstr "Program CMake:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatically reconfigure when CMake project files change"
-msgstr ""
+msgstr "Automaticky znova konfigurovať pri zmene súborov projektu CMake"
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
