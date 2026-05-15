@@ -2246,11 +2246,15 @@ private:
         const uint numberOfRequiredBuckets = extent + 1;
         Q_ASSERT(extent);
         uint selectedBuckets = 0;
-        for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
-            const auto* const bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+        auto emptyBucket = std::upper_bound(m_freeSpaceBuckets.cbegin(), m_freeSpaceBuckets.cend(), nullptr,
+                                            [this](void*, const BucketId& i) {
+                                                return bucketForIndex(i)->isEmpty();
+                                            });
+        for (; emptyBucket != m_freeSpaceBuckets.cend(); ++emptyBucket) {
+            const auto* const bucketPtr = bucketForIndex(*emptyBucket);
             if (bucketPtr->isEmpty()) {
                 //This bucket is a candidate for monster-bucket merging
-                const auto index = m_freeSpaceBuckets[a];
+                const auto index = *emptyBucket;
                 if (rangeEnd != index) {
                     rangeStart = index;
                     rangeEnd = index + 1;
@@ -2264,7 +2268,7 @@ private:
                         // Found enough existing empty buckets, use those
                         Q_ASSERT(selectedBuckets);
                         ///We can merge these buckets into one monster-bucket that can hold the data
-                        Q_ASSERT((uint)m_freeSpaceBuckets[a - (selectedBuckets - 1)] == (uint)rangeStart);
+                        Q_ASSERT(*(emptyBucket - (selectedBuckets - 1)) == rangeStart);
                         useBucket = rangeStart;
                         break;
                     }
