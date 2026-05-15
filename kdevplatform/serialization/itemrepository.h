@@ -191,7 +191,7 @@ class Bucket
 public:
     using ItemId = std::uint16_t;
 
-    static const constexpr int AdditionalSpacePerItem = 2;
+    static const constexpr unsigned short AdditionalSpacePerItem = sizeof(ItemId);
 
     static const constexpr int ObjectMapSize = ((ItemRepositoryBucketSize / ItemRequest::AverageSize) * 3) / 2 + 1;
 
@@ -401,7 +401,7 @@ public:
         auto insertedAt = ItemId{0};
         auto follower = ItemId{0};
 
-        const auto createInsertedItem = [&]() {
+        const auto createInsertedItem = [this, &request](ItemId insertedAt) {
             const OptionalDUChainReferenceCountingEnabler<markForReferenceCounting> optionalRc(m_data, dataSize());
             request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
         };
@@ -432,7 +432,7 @@ public:
             setFollowerIndex(insertedAt, 0);
             Q_ASSERT(m_objectMap[objectIndex] == 0);
             m_objectMap[objectIndex] = insertedAt;
-            createInsertedItem();
+            createInsertedItem(insertedAt);
             return insertedAt;
         }
 
@@ -540,7 +540,7 @@ public:
 #endif
 
         //Last thing we do, because createItem may recursively do even more transformation of the repository
-        createInsertedItem();
+        createInsertedItem(insertedAt);
 
 #ifdef DEBUG_CREATEITEM_EXTENTS
         if (m_available >= 8) {
@@ -1082,14 +1082,14 @@ private:
     /// @param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
     inline ItemId followerIndex(ItemId index) const
     {
-        Q_ASSERT(index >= 2);
-        return *reinterpret_cast<ItemId*>(m_data + (index - 2));
+        Q_ASSERT(index >= sizeof(ItemId));
+        return *reinterpret_cast<ItemId*>(m_data + (index - sizeof(ItemId)));
     }
 
     void setFollowerIndex(ItemId index, ItemId follower)
     {
-        Q_ASSERT(index >= 2);
-        *reinterpret_cast<ItemId*>(m_data + (index - 2)) = follower;
+        Q_ASSERT(index >= sizeof(ItemId));
+        *reinterpret_cast<ItemId*>(m_data + (index - sizeof(ItemId))) = follower;
     }
     // Only returns the current value if the item is actually free
     inline unsigned short freeSize(ItemId index) const
