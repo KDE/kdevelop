@@ -188,6 +188,8 @@ using BucketId = std::uint16_t;
 template <class Item, class ItemRequest, bool markForReferenceCounting, uint fixedItemSize>
 class Bucket
 {
+    using FreeItemPayload = unsigned short;
+
 public:
     using ItemId = std::uint16_t;
 
@@ -456,14 +458,14 @@ public:
                     freeChunkSize = freeSize(currentIndex) - itemSize;
 
                     //We need 2 bytes to store the free size
-                    if (freeChunkSize != 0 && freeChunkSize < AdditionalSpacePerItem + 2) {
+                    if (freeChunkSize != 0 && freeChunkSize < AdditionalSpacePerItem + sizeof(FreeItemPayload)) {
                         //we can not manage the resulting free chunk as a separate item, so we cannot use this position.
                         //Just pick the biggest free item, because there we can be sure that
                         //either we can manage the split, or we cannot do anything at all in this bucket.
 
                         freeChunkSize = freeSize(m_largestFreeItem) - itemSize;
 
-                        if (freeChunkSize == 0 || freeChunkSize >= AdditionalSpacePerItem + 2) {
+                        if (freeChunkSize == 0 || freeChunkSize >= AdditionalSpacePerItem + sizeof(FreeItemPayload)) {
                             previousIndex = 0;
                             currentIndex = m_largestFreeItem;
                         } else {
@@ -488,7 +490,7 @@ public:
             )
 
             if (freeChunkSize) {
-                Q_ASSERT(freeChunkSize >= AdditionalSpacePerItem + 2);
+                Q_ASSERT(freeChunkSize >= AdditionalSpacePerItem + sizeof(FreeItemPayload));
                 unsigned short freeItemSize = freeChunkSize - AdditionalSpacePerItem;
 
                 auto freeItemPosition = ItemId{0};
@@ -501,7 +503,7 @@ public:
                     //Create the free item behind currentIndex
                     freeItemPosition = currentIndex + itemSize + AdditionalSpacePerItem;
                 }
-                setFreeSize(freeItemPosition, freeItemSize);
+                setFreeSize(freeItemPosition, FreeItemPayload{freeItemSize});
                 insertFreeItem(freeItemPosition);
             }
 
@@ -633,7 +635,7 @@ public:
         m_lastUsed = 0;
         prepareChange();
 
-        unsigned int size = itemFromIndex(index)->itemSize();
+        unsigned short size = itemFromIndex(index)->itemSize();
         //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
         const auto objectIndex = modulo(hash);
         auto currentIndex = m_objectMap[objectIndex];
@@ -683,7 +685,7 @@ public:
             Q_ASSERT(m_objectMap[objectIndex] == 0);
         } else {
             ///Put the space into the free-set
-            setFreeSize(index, size);
+            setFreeSize(index, FreeItemPayload{size});
 
             //Try merging the created free item to other free items around, else add it into the free list
             insertFreeItem(index);
@@ -866,7 +868,7 @@ public:
             if (currentFree < size)
                 return false;
             //Either we need an exact match, or 2 additional bytes to manage the resulting gap
-            if (size == currentFree || currentFree - size >= AdditionalSpacePerItem + 2)
+            if (size == currentFree || currentFree - size >= AdditionalSpacePerItem + sizeof(FreeItemPayload))
                 return true;
             currentIndex = followerIndex(currentIndex);
         }
@@ -986,7 +988,8 @@ private:
                     --m_freeItemCount; //One was removed
 
                     //currentIndex is directly behind index, touching its space. Merge them.
-                    setFreeSize(index, freeSize(index) + AdditionalSpacePerItem + freeSize(currentIndex));
+                    const unsigned short free = freeSize(index) + AdditionalSpacePerItem + freeSize(currentIndex);
+                    setFreeSize(index, FreeItemPayload{free});
 
                     //Recurse to do even more merging
                     insertFreeItem(index);
@@ -1008,7 +1011,8 @@ private:
                     --m_freeItemCount; //One was removed
 
                     //index is directly behind currentIndex, touching its space. Merge them.
-                    setFreeSize(currentIndex, freeSize(currentIndex) + AdditionalSpacePerItem + freeSize(index));
+                    const unsigned short free = freeSize(currentIndex) + AdditionalSpacePerItem + freeSize(index);
+                    setFreeSize(currentIndex, FreeItemPayload{free});
 
                     //Recurse to do even more merging
                     insertFreeItem(currentIndex);
@@ -1092,15 +1096,15 @@ private:
         *reinterpret_cast<ItemId*>(m_data + (index - sizeof(ItemId))) = follower;
     }
     // Only returns the current value if the item is actually free
-    inline unsigned short freeSize(ItemId index) const
+    inline FreeItemPayload freeSize(ItemId index) const
     {
-        return *reinterpret_cast<unsigned short*>(m_data + index);
+        return *reinterpret_cast<FreeItemPayload*>(m_data + index);
     }
 
     //Convenience function to set the free-size, only for freed items
-    void setFreeSize(ItemId index, unsigned short size)
+    void setFreeSize(ItemId index, FreeItemPayload size)
     {
-        *reinterpret_cast<unsigned short*>(m_data + index) = size;
+        *reinterpret_cast<FreeItemPayload*>(m_data + index) = size;
     }
 
 private:
