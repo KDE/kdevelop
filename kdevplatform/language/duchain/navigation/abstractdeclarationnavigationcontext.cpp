@@ -837,9 +837,13 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
 
         const auto* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
         if (classFunDecl) {
+            const bool isVirtual = classFunDecl->isVirtual();
+            const bool isAbstract = classFunDecl->isAbstract();
+            const bool isFinal = classFunDecl->isFinal();
             if (classFunDecl->isExplicit())
                 details << QStringLiteral("explicit");
-            if (classFunDecl->isVirtual())
+            // "abstract" and "final" already imply virtual.
+            if (isVirtual && !isAbstract && !isFinal)
                 details << QStringLiteral("virtual");
             if (classFunDecl->isSignal())
                 details << QStringLiteral("signal");
