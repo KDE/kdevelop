@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-05-14 09:51+0300\n"
+"PO-Revision-Date: 2026-05-15 13:13+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1467,12 +1467,12 @@ msgstr ""
 #: outputview/outputexecutejob.cpp:343
 #, kde-format
 msgid "Read error"
-msgstr ""
+msgstr "שגיאת כתיבה"
 
 #: outputview/outputexecutejob.cpp:347
 #, kde-format
 msgid "Write error"
-msgstr ""
+msgstr "שגיאת כתיבה"
 
 #: outputview/outputexecutejob.cpp:351
 #, kde-format
@@ -1482,7 +1482,7 @@ msgstr ""
 #: outputview/outputexecutejob.cpp:355
 #, kde-format
 msgid "Exit code %1"
-msgstr ""
+msgstr "קוד יציאה %1"
 
 #: outputview/outputexecutejob.cpp:362
 #, kde-format
@@ -1520,52 +1520,52 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status"
 msgid "build"
-msgstr ""
+msgstr "בנייה"
 
 #: project/builderjob.cpp:77
 #, kde-format
 msgctxt "@info:status"
 msgid "clean"
-msgstr ""
+msgstr "ניקוי"
 
 #: project/builderjob.cpp:79
 #, kde-format
 msgctxt "@info:status"
 msgid "configure"
-msgstr ""
+msgstr "הגדרה"
 
 #: project/builderjob.cpp:81
 #, kde-format
 msgctxt "@info:status"
 msgid "install"
-msgstr ""
+msgstr "התקנה"
 
 #: project/builderjob.cpp:83
 #, kde-format
 msgctxt "@info:status"
 msgid "prune"
-msgstr ""
+msgstr "סילוק"
 
 #: project/builderjob.cpp:248
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
-msgstr ""
+msgstr "מגוון פריטים"
 
 #: project/helper.cpp:67
 #, kde-format
 msgid "Cannot remove folder <i>%1</i>."
-msgstr ""
+msgstr "לא ניתן להסיר את התיקייה <i>%1</i>."
 
 #: project/helper.cpp:68
 #, kde-format
 msgid "Cannot remove file <i>%1</i>."
-msgstr ""
+msgstr "לא ניתן להסיר את הקובץ <i>%1</i>."
 
 #: project/helper.cpp:86
 #, kde-format
 msgid "The file <i>%1</i> already exists."
-msgstr ""
+msgstr "הקובץ <i>%1</i> כבר קיים."
 
 #: project/helper.cpp:96
 #, kde-format
@@ -1585,31 +1585,31 @@ msgstr ""
 #: project/importprojectjob.cpp:89
 #, kde-format
 msgid "Project import canceled."
-msgstr ""
+msgstr "ייבוא המיזם נכשל."
 
 #: project/projectbuildsetmodel.cpp:286
 #, kde-format
 msgctxt "@title:column buildset item name"
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: project/projectbuildsetmodel.cpp:288
 #, kde-format
 msgctxt "@title:column buildset item path"
 msgid "Path"
-msgstr ""
+msgstr "נתיב"
 
 #: project/projectchangesmodel.cpp:317
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
-msgstr ""
+msgstr "אין ענף"
 
 #: project/projectchangesmodel.cpp:318
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
@@ -1621,46 +1621,46 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Select..."
-msgstr ""
+msgstr "בחירה…"
 
 #: project/projectitemlineedit.cpp:187
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr ""
+msgstr "בחירת פריט"
 
 #: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
-msgstr ""
+msgstr "נא לבחור את הפריט לחילוץ הנתיב ממנו."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a dependency to add to the list"
-msgstr ""
+msgstr "נא למלא תלות להוספה לרשימה"
 
 #. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:35
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr ""
+msgstr "נא למלא תלות להוספה לרשימה…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add the listed target to the dependency list"
-msgstr ""
+msgstr "הוספת היעד שמפיע לרשימת התלויות"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "List of indirect dependent targets."
-msgstr ""
+msgstr "רשימת יעדים תלויים עקיפים."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:71
