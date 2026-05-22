@@ -72,6 +72,14 @@ ecm_add_test(test_duchain.cpp
         KDev::DefinesAndIncludesManager
 )
 
+ecm_add_test(test_navigationcontext.cpp
+    TEST_NAME test_navigationcontext
+    LINK_LIBRARIES
+        KDev::Tests
+        Qt::Test
+        KDevClangPrivate
+)
+
 ecm_add_test(test_refactoring.cpp
     TEST_NAME test_refactoring-clang
     LINK_LIBRARIES
