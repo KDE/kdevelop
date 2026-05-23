@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-05-20 13:31+0300\n"
+"PO-Revision-Date: 2026-05-22 12:46+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -123,12 +123,12 @@ msgstr ""
 #: debugger/breakpoint/breakpointmodel.cpp:119
 #, kde-format
 msgid "Breakpoint"
-msgstr ""
+msgstr "נקודת עצירה"
 
 #: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Breakpoint not found"
-msgstr ""
+msgstr "נקודת העצירה לא נמצאה"
 
 #: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
@@ -138,17 +138,17 @@ msgstr ""
 #: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
 msgid "&Breakpoint"
-msgstr ""
+msgstr "&נקודת עצירה"
 
 #: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
 msgid "&Disable Breakpoint"
-msgstr ""
+msgstr "ה&שבתת נקודת עצירה"
 
 #: debugger/breakpoint/breakpointmodel.cpp:391
 #, kde-format
 msgid "&Enable Breakpoint"
-msgstr ""
+msgstr "ה&פעלת נקודת עצירה"
 
 #: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
@@ -160,22 +160,22 @@ msgstr ""
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
-msgstr ""
+msgstr "סוג"
 
 #: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
 msgid "Location"
-msgstr ""
+msgstr "מקום"
 
 #: debugger/breakpoint/breakpointmodel.cpp:438
 #, kde-format
 msgid "Condition"
-msgstr ""
+msgstr "תנאי"
 
 #: debugger/breakpoint/breakpointmodel.cpp:442
 #, kde-format
 msgid "Active status"
-msgstr ""
+msgstr "מצב פעיל"
 
 #: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
@@ -217,57 +217,57 @@ msgstr ""
 #: debugger/breakpoint/breakpointwidget.cpp:96
 #, kde-format
 msgid "Enter condition ..."
-msgstr ""
+msgstr "נא למלא תנאי…"
 
 #: debugger/breakpoint/breakpointwidget.cpp:124
 #, kde-format
 msgctxt "New breakpoint"
 msgid "&New"
-msgstr ""
+msgstr "&חדש"
 
 #: debugger/breakpoint/breakpointwidget.cpp:128
 #, kde-format
 msgctxt "Code breakpoint"
 msgid "&Code"
-msgstr ""
+msgstr "&קוד"
 
 #: debugger/breakpoint/breakpointwidget.cpp:136
 #, kde-format
 msgctxt "Data breakpoint"
 msgid "Data &Write"
-msgstr ""
+msgstr "&כתיבת נתונים"
 
 #: debugger/breakpoint/breakpointwidget.cpp:139
 #, kde-format
 msgctxt "Data read breakpoint"
 msgid "Data &Read"
-msgstr ""
+msgstr "&קריאת נתונים"
 
 #: debugger/breakpoint/breakpointwidget.cpp:142
 #, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
-msgstr ""
+msgstr "&גישה לנתונים"
 
 #: debugger/breakpoint/breakpointwidget.cpp:147
 #, kde-format
 msgid "&Delete"
-msgstr ""
+msgstr "מ&חיקה"
 
 #: debugger/breakpoint/breakpointwidget.cpp:156
 #, kde-format
 msgid "Disable &All"
-msgstr ""
+msgstr "השבתה של ה&כול"
 
 #: debugger/breakpoint/breakpointwidget.cpp:157
 #, kde-format
 msgid "&Enable All"
-msgstr ""
+msgstr "ה&פעלה של הכול"
 
 #: debugger/breakpoint/breakpointwidget.cpp:158
 #, kde-format
 msgid "&Remove All"
-msgstr ""
+msgstr "ה&סרה של הכול"
 
 #: debugger/framestack/framestackmodel.cpp:187
 #, kde-format
@@ -284,18 +284,18 @@ msgstr ""
 #: debugger/framestack/framestackmodel.cpp:290
 #, kde-format
 msgid "Depth"
-msgstr ""
+msgstr "עומק"
 
 #: debugger/framestack/framestackmodel.cpp:292
 #: language/duchain/navigation/abstractnavigationcontext.cpp:522
 #, kde-format
 msgid "Function"
-msgstr ""
+msgstr "פונקציה"
 
 #: debugger/framestack/framestackmodel.cpp:294
 #, kde-format
 msgid "Source"
-msgstr ""
+msgstr "מקור"
 
 #: debugger/framestack/framestackwidget.cpp:68
 #, kde-format
@@ -309,7 +309,7 @@ msgstr ""
 #: debugger/framestack/framestackwidget.cpp:104
 #, kde-format
 msgid "Threads:"
-msgstr ""
+msgstr "תהליכונים:"
 
 #: debugger/framestack/framestackwidget.cpp:231
 #, kde-format
@@ -326,43 +326,43 @@ msgstr ""
 #: debugger/interfaces/ibreakpointcontroller.cpp:87
 #, kde-format
 msgid "Breakpoint hit: %1"
-msgstr ""
+msgstr "פגיעה בנקודת עצירה: %1"
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:93
 #, kde-format
 msgid "Watchpoint hit: %1"
-msgstr ""
+msgstr "פגיעה בנקודת מעקב: %1"
 
 #: debugger/util/pathmappings.cpp:86
 #, kde-format
 msgid "Remote Path"
-msgstr ""
+msgstr "נתיב מרוחק"
 
 #: debugger/util/pathmappings.cpp:88
 #, kde-format
 msgid "Local Path"
-msgstr ""
+msgstr "נתיב מקומי"
 
 #: debugger/util/pathmappings.cpp:217
 #, kde-format
 msgid "Delete"
-msgstr ""
+msgstr "מחיקה"
 
 #: debugger/variable/variablecollection.cpp:221
 #: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
 #, kde-format
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 #: debugger/variable/variablecollection.cpp:243
 #, kde-format
 msgid "Auto"
-msgstr ""
+msgstr "אוטו׳"
 
 #: debugger/variable/variablecollection.cpp:418
 #, kde-format
 msgid "Locals"
-msgstr ""
+msgstr "מקומיים"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:422
@@ -370,34 +370,34 @@ msgstr ""
 #: shell/launchconfigurationdialog.ui:110
 #, kde-format
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: debugger/variable/variablecollection.cpp:422
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Value"
-msgstr ""
+msgstr "ערך"
 
 #: debugger/variable/variabletooltip.cpp:115
 #, kde-format
 msgid "Watch This"
-msgstr ""
+msgstr "מעקב אחר זה"
 
 #: debugger/variable/variabletooltip.cpp:117
 #, kde-format
 msgid "Stop on Change"
-msgstr ""
+msgstr "עצירה בעת שינוי"
 
 #: debugger/variable/variablewidget.cpp:87
 #, kde-format
 msgid "Debugger Variables"
-msgstr ""
+msgstr "משתני מנפה שגיאות"
 
 #: debugger/variable/variablewidget.cpp:105
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "לשנות גודל עמודות אוטומטית בלחיצה"
 
 #: debugger/variable/variablewidget.cpp:121
 #, kde-format
@@ -455,7 +455,7 @@ msgstr ""
 #: debugger/variable/variablewidget.cpp:259
 #, kde-format
 msgid "&Copy Value"
-msgstr ""
+msgstr "ה&עתקת ערך"
 
 #: debugger/variable/variablewidget.cpp:264
 #, kde-format
@@ -473,21 +473,21 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
-msgstr ""
+msgstr "איתור:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
 #: documentation/documentationfindwidget.ui:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr ""
+msgstr "דילוג לתוצאה הבאה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr ""
+msgstr "דילוג לתוצאה הקודמת"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
@@ -500,25 +500,25 @@ msgstr ""
 #: shell/settings/documentationpreferences.cpp:25
 #, kde-format
 msgid "Documentation"
-msgstr ""
+msgstr "תיעוד"
 
 #: documentation/documentationview.cpp:69
 #, kde-format
 msgctxt "@action go back"
 msgid "Back"
-msgstr ""
+msgstr "אחורה"
 
 #: documentation/documentationview.cpp:74
 #, kde-format
 msgctxt "@action go forward"
 msgid "Forward"
-msgstr ""
+msgstr "קדימה"
 
 #: documentation/documentationview.cpp:79
 #, kde-format
 msgctxt "@action go to start page"
 msgid "Home"
-msgstr ""
+msgstr "בית"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:585
@@ -526,43 +526,43 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "חיפוש…"
 
 #: documentation/documentationview.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Find in Text..."
-msgstr ""
+msgstr "איתור טקסט…"
 
 #: documentation/documentationview.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr ""
+msgstr "איתור טקסט בעמוד התיעוד הנוכחי"
 
 #: interfaces/contextmenuextension.cpp:133
 #, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
-msgstr ""
+msgstr "ניפוי שגיאות"
 
 #: interfaces/contextmenuextension.cpp:134
 #, kde-format
 msgctxt "@title:menu"
 msgid "Refactor"
-msgstr ""
+msgstr "שכתוב"
 
 #: interfaces/contextmenuextension.cpp:136
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "ניתוח הקובץ הנוכחי עם"
 
 #: interfaces/contextmenuextension.cpp:137
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "ניתוח המיזם הנוכחי עם"
 
 #: interfaces/isourceformatter.cpp:221
 #, kde-format
@@ -570,11 +570,13 @@ msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
 "be executed. <br />The plugin will not work until you fix this problem."
 msgstr ""
+"אי אפשר למצוא את קובץ ההפעלה %1. נא לוודא שהוא מותקן ושאפשר להפעיל אותו.<br /"
+">התוסף לא יעבוד עד לתיקון הבעיה הזאת."
 
 #: language/assistant/renameaction.cpp:69
 #, kde-format
 msgid "Rename \"%1\" to \"%2\""
-msgstr ""
+msgstr "שינוי השם „%1” לשם „%2”"
 
 #: language/assistant/renameaction.cpp:109
 #: language/assistant/renamefileaction.cpp:77
@@ -583,12 +585,12 @@ msgstr ""
 #: language/codegen/basicrefactoring.cpp:367
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr ""
+msgstr "החלת השינויים נכשלה: %1"
 
 #: language/assistant/renameassistant.cpp:108
 #, kde-format
 msgid "Rename"
-msgstr ""
+msgstr "שינוי שם"
 
 #: language/assistant/renamefileaction.cpp:50
 #, kde-format
@@ -598,45 +600,45 @@ msgstr ""
 #: language/backgroundparser/backgroundparser.cpp:309
 #, kde-format
 msgid "Parsing: %1"
-msgstr ""
+msgstr "פיענוח: %1"
 
 #: language/backgroundparser/backgroundparser.cpp:615
 #: shell/settings/bgpreferences.cpp:68
 #, kde-format
 msgid "Background Parser"
-msgstr ""
+msgstr "מפענח רקע"
 
 #: language/backgroundparser/parsejob.cpp:313
 #, kde-format
 msgctxt "%1: filename"
 msgid "Skipped file that is too large: '%1'"
-msgstr ""
+msgstr "קובץ גדול מדי נפסח: ‚%1’"
 
 #: language/backgroundparser/parsejob.cpp:315
 #, kde-format
 msgctxt "%1: file size, %2: limit file size"
 msgid "The file is %1 and exceeds the limit of %2."
-msgstr ""
+msgstr "הקובץ %1 חורג ממגבלת %2."
 
 #: language/backgroundparser/parsejob.cpp:327
 #, kde-format
 msgid "Could not open file '%1'"
-msgstr ""
+msgstr "לא ניתן לפתוח את הקובץ ‚%1’"
 
 #: language/backgroundparser/parsejob.cpp:330
 #, kde-format
 msgid "File could not be read from disk."
-msgstr ""
+msgstr "אי אפשר לקרוא את הקובץ מהכונן."
 
 #: language/backgroundparser/parsejob.cpp:333
 #, kde-format
 msgid "File could not be opened."
-msgstr ""
+msgstr "לא ניתן לפתוח את הקובץ."
 
 #: language/backgroundparser/parsejob.cpp:336
 #, kde-format
 msgid "File could not be read from disk due to permissions."
-msgstr ""
+msgstr "אי אפשר לקרוא את הקובץ מהכונן עקב הרשאות חסרות."
 
 #: language/backgroundparser/parseprojectjob.cpp:74
 #, kde-format
@@ -650,38 +652,38 @@ msgstr[3] ""
 #: language/classmodel/allclassesfolder.cpp:22
 #, kde-format
 msgid "All projects classes"
-msgstr ""
+msgstr "כל מחלקות המיזמים"
 
 #: language/classmodel/classmodelnode.cpp:338
 #, kde-format
 msgid "Base classes"
-msgstr ""
+msgstr "מחלקות בסיס"
 
 #: language/classmodel/classmodelnode.cpp:369
 #, kde-format
 msgid "Derived classes"
-msgstr ""
+msgstr "מחלקות נגזרות"
 
 #: language/classmodel/projectfolder.cpp:18
 #, kde-format
 msgid "Classes in project %1"
-msgstr ""
+msgstr "מחלקות במיזם %1"
 
 #: language/codecompletion/codecompletionitem.cpp:126
 #, kde-format
 msgid "not implemented"
-msgstr ""
+msgstr "לא ממומש"
 
 #: language/codegen/basicrefactoring.cpp:91
 #, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr ""
+msgstr "שינוי השם „%1”…"
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
 msgid "No declaration under cursor"
-msgstr ""
+msgstr "אין הכרזה תחת הסמן"
 
 #: language/codegen/basicrefactoring.cpp:227
 #, kde-format
@@ -692,38 +694,38 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr ""
+msgstr "שינוי השם „%1”"
 
 #: language/codegen/basicrefactoring.cpp:300
 #, kde-format
 msgctxt "@title:tab"
 msgid "Uses"
-msgstr ""
+msgstr "שימושים"
 
 #: language/codegen/basicrefactoring.cpp:302
 #, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
-msgstr ""
+msgstr "פרטי הכרזה"
 
 #: language/codegen/basicrefactoring.cpp:309
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\""
-msgstr ""
+msgstr "השם „%1” משתנה לשם „%2”"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename"
-msgstr ""
+msgstr "שינוי שם"
 
 #. i18n: ectx: property (text), widget (QLabel, newNameLabel)
 #: language/codegen/basicrefactoring.ui:22
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&New name:"
-msgstr ""
+msgstr "שם &חדש:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
@@ -738,25 +740,25 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr ""
+msgstr "&שינוי שם"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
 #, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
-msgstr ""
+msgstr "&ביטול"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
-msgstr ""
+msgstr "%1:%2->%3:%4"
 
 #: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
-msgstr ""
+msgstr "לא ניתן לשנות את השם ‚%1’ לשם ‚%2’"
 
 #: language/codegen/documentchangeset.cpp:342
 #, kde-format
@@ -770,7 +772,7 @@ msgstr ""
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
-msgstr ""
+msgstr "לא ניתן להחליף טקסט במסמך: %1"
 
 #: language/codegen/documentchangeset.cpp:467
 #, kde-format
@@ -796,14 +798,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Refactoring"
-msgstr ""
+msgstr "מתבצע שכתוב"
 
 #. i18n: ectx: property (text), widget (QPushButton, abortButton)
 #: language/codegen/progressdialogs/refactoringdialog.ui:27
 #, kde-format
 msgctxt "@action:button"
 msgid "&Abort"
-msgstr ""
+msgstr "ביטול &גורף"
 
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
@@ -828,7 +830,7 @@ msgstr ""
 #: language/duchain/declarationid.cpp:207
 #, kde-format
 msgid "(missing)"
-msgstr ""
+msgstr "(חסר)"
 
 #: language/duchain/forwarddeclaration.cpp:50
 #, kde-format
@@ -838,27 +840,27 @@ msgstr ""
 #: language/duchain/namespacealiasdeclaration.cpp:94
 #, kde-format
 msgid "Import %1 as %2"
-msgstr ""
+msgstr "ייבוא %1 בתור %2"
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
 #, kde-format
 msgid "Import %1"
-msgstr ""
+msgstr "ייבוא %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
 #, kde-format
 msgid "lost declaration"
-msgstr ""
+msgstr "הכרזה שאבדה"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
 msgid "Back to %1<br />"
-msgstr ""
+msgstr "חזרה אל %1<br />"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:116
 #, kde-format
 msgid "enumerator "
-msgstr ""
+msgstr "מונה "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
@@ -868,12 +870,12 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, kde-format
 msgid "namespace %1 "
-msgstr ""
+msgstr "מרחב שם %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
 #, kde-format
 msgid "enumeration %1 "
-msgstr ""
+msgstr "מנייה %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
 #, kde-format
@@ -898,115 +900,115 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:214
 #, kde-format
 msgid "Returns: "
-msgstr ""
+msgstr "מחזירה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:216
 #, kde-format
 msgid "Type: "
-msgstr ""
+msgstr "סוג: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:235
 #, kde-format
 msgid "Enum: "
-msgstr ""
+msgstr "מונה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:237
 #, kde-format
 msgid "Container: "
-msgstr ""
+msgstr "מכולה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:245
 #, kde-format
 msgid "Scope: %1 "
-msgstr ""
+msgstr "היקף: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:263
 #, kde-format
 msgid "Access: %1 "
-msgstr ""
+msgstr "גישה: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:282
 #, kde-format
 msgid "Kind: %1 %2 "
-msgstr ""
+msgstr "סוג: %1 %2 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:284
 #, kde-format
 msgid "Kind: %1 "
-msgstr ""
+msgstr "סוג: %1  "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, kde-format
 msgid "Deprecated"
-msgstr ""
+msgstr "השימוש הופסק"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
 #, kde-format
 msgid "Status: %1 "
-msgstr ""
+msgstr "מצב: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
 #, kde-format
 msgid "Def.: "
-msgstr ""
+msgstr "הגדרה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:300
 #, kde-format
 msgid "Decl.: "
-msgstr ""
+msgstr "הכרזה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:310
 #, kde-format
 msgid " Def.: "
-msgstr ""
+msgstr " הגדרה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:320
 #, kde-format
 msgid " Decl.: "
-msgstr ""
+msgstr " הכרזה: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:328
 #, kde-format
 msgid "Show uses"
-msgstr ""
+msgstr "הצגת שימושים"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:367
 #, kde-format
 msgid "Show documentation for "
-msgstr ""
+msgstr "הצגת תיעוד עבור "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:471
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
-msgstr ""
+msgstr "<אלמוני>"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
-msgstr ""
+msgstr "דריסה של "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
-msgstr ""
+msgstr "פונקציה"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
 #, kde-format
 msgid " from "
-msgstr ""
+msgstr " מ־"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
-msgstr ""
+msgstr "הסתרת "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
-msgstr ""
+msgstr "נדרס ב־ "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
@@ -1037,69 +1039,69 @@ msgstr ""
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
 msgctxt "tells if a declaration is defining the variable's value"
 msgid "definition"
-msgstr ""
+msgstr "הגדרה"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:821
 #, kde-format
 msgctxt "as in c++ forward declaration"
 msgid "forward"
-msgstr ""
+msgstr "מקדימה"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:826
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
-msgstr ""
+msgstr "קבוע"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "בית"
+msgstr[1] "שני בתים"
+msgstr[2] "%1 בתים"
+msgstr[3] "%1 בתים"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "סיבית"
+msgstr[1] "שתי סיביות"
+msgstr[2] "%1 סיביות"
+msgstr[3] "%1 סיביות"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, kde-format
 msgid "offset in parent: %1"
-msgstr ""
+msgstr "היסט בהורה: %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
 msgid "size: %1 Bytes"
-msgstr ""
+msgstr "גודל: %1 בתים"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "מיושר ל־: %1 בתים"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
 msgid "Declarations:"
-msgstr ""
+msgstr "הכרזות:"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:93
 #, kde-format
@@ -1136,22 +1138,22 @@ msgstr ""
 #: language/duchain/navigation/abstractnavigationcontext.cpp:511
 #, kde-format
 msgid "Namespace"
-msgstr ""
+msgstr "מרחב שם"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:516
 #, kde-format
 msgid "Namespace import"
-msgstr ""
+msgstr "ייבוא מרחב שם"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:518
 #, kde-format
 msgid "Namespace alias"
-msgstr ""
+msgstr "כינוי מרחב שם"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:525
 #, kde-format
 msgid "Forward Declaration"
-msgstr ""
+msgstr "הכרזה מקדימה"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
@@ -1168,17 +1170,17 @@ msgstr ""
 #: language/duchain/navigation/problemnavigationcontext.cpp:85
 #, kde-format
 msgid "Problem"
-msgstr ""
+msgstr "בעיה"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:114
 #, kde-format
 msgid "Problem in <i>%1</i>"
-msgstr ""
+msgstr "בעיה ב־<i>%1</i>"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
 #, kde-format
 msgid "Location: "
-msgstr ""
+msgstr "מקום: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:156
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
@@ -1189,67 +1191,67 @@ msgstr ""
 #: language/duchain/navigation/problemnavigationcontext.cpp:159
 #, kde-format
 msgid " in "
-msgstr ""
+msgstr " ב־ "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:194
 #, kde-format
 msgid "Solution (%1)"
-msgstr ""
+msgstr "פתרון (%1)"
 
 #: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
 msgid "%1 still needs an update!"
-msgstr ""
+msgstr "%1 עדיין זקוק לעדכון!"
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:41
 #, kde-format
 msgid "Uses of "
-msgstr ""
+msgstr "שימושים של "
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:46
 #, kde-format
 msgid "Uses of %1"
-msgstr ""
+msgstr "שימושים של %1"
 
 #: language/duchain/navigation/useswidget.cpp:130
 #, kde-format
 msgctxt "refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr ""
+msgstr "שורה <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:211
 #: language/duchain/navigation/useswidget.cpp:218
 #, kde-format
 msgctxt "Refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr ""
+msgstr "שורה <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:413
 #, kde-format
 msgid "Unknown context"
-msgstr ""
+msgstr "הקשר לא ידוע"
 
 #: language/duchain/navigation/useswidget.cpp:420
 #: shell/launchconfigurationdialog.cpp:481
 #, kde-format
 msgid "Global"
-msgstr ""
+msgstr "מקיף"
 
 #: language/duchain/navigation/useswidget.cpp:444
 #, kde-format
 msgctxt "%1: source file"
 msgid "In %1"
-msgstr ""
+msgstr "ב־%1"
 
 #: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
 msgid "Definition"
-msgstr ""
+msgstr "הגדרה"
 
 #: language/duchain/navigation/useswidget.cpp:474
 #, kde-format
 msgid "Declaration"
-msgstr ""
+msgstr "הכרזה"
 
 #: language/duchain/navigation/useswidget.cpp:512
 #, kde-format
@@ -1266,47 +1268,47 @@ msgstr[3] ""
 #, kde-format
 msgctxt "Refers to closing a UI element"
 msgid "Collapse"
-msgstr ""
+msgstr "צמצום"
 
 #: language/duchain/navigation/useswidget.cpp:555
 #, kde-format
 msgctxt "Refers to opening a UI element"
 msgid "Expand"
-msgstr ""
+msgstr "הרחבה"
 
 #: language/duchain/navigation/useswidget.cpp:640
 #, kde-format
 msgid "1 use found"
 msgid_plural "%1 uses found"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "נמצא שימוש אחד"
+msgstr[1] "נמצאו שני שימושים"
+msgstr[2] "נמצאו %1 שימושים"
+msgstr[3] "נמצאו %1 שימושים"
 
 #: language/duchain/navigation/useswidget.cpp:642
 #, kde-format
 msgid "Expand all"
-msgstr ""
+msgstr "הרחבה של הכול"
 
 #: language/duchain/navigation/useswidget.cpp:644
 #, kde-format
 msgid "Collapse all"
-msgstr ""
+msgstr "צמצום של הכול"
 
 #: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
 #, kde-format
 msgid "Warning"
-msgstr ""
+msgstr "אזהרה"
 
 #: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
 #, kde-format
 msgid "Hint"
-msgstr ""
+msgstr "רמז"
 
 #: language/duchain/problem.cpp:203 shell/problem.cpp:76
 #, kde-format
 msgid "Disk"
-msgstr ""
+msgstr "כונן"
 
 #: language/duchain/problem.cpp:205 shell/problem.cpp:77
 #, kde-format
@@ -1354,23 +1356,23 @@ msgstr ""
 #: language/duchain/problem.cpp:233
 #, kde-format
 msgid "<no explanation>"
-msgstr ""
+msgstr "<אין הסבר>"
 
 #: language/duchain/types/containertypes.cpp:74
 #, kde-format
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 מתוך %2"
 
 #: language/duchain/types/containertypes.cpp:84
 #: language/duchain/types/containertypes.cpp:85
 #, kde-format
 msgid "unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 #: language/duchain/types/containertypes.cpp:87
 #, kde-format
 msgid "%1 of %2 : %3"
-msgstr ""
+msgstr "%1 מתוך %2 : %3"
 
 #: language/util/debuglanguageparserhelper.h:179
 #, kde-format
@@ -1993,13 +1995,13 @@ msgstr ""
 #: shell/debugcontroller.cpp:270
 #, kde-format
 msgid "Ctrl+Alt+B"
-msgstr ""
+msgstr "Ctrl+Alt+B"
 
 #: shell/debugcontroller.cpp:271
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
-msgstr ""
+msgstr "החלפת מצב נקודת עצירה"
 
 #: shell/debugcontroller.cpp:272
 #, kde-format
@@ -2011,13 +2013,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
-msgstr ""
+msgstr "הצגת השורה הנוכחית"
 
 #: shell/debugcontroller.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
-msgstr ""
+msgstr "הצגת מקום ההרצה הנוכחי"
 
 #: shell/debugcontroller.cpp:278
 #, kde-format
@@ -2845,31 +2847,31 @@ msgstr "עמודה"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr ""
+msgstr "ביטול הפעולה הזאת"
 
 #: shell/progresswidget/progressmanager.cpp:87
 #, kde-format
 msgctxt "@info"
 msgid "Aborting..."
-msgstr ""
+msgstr "מבוטלת…"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
-msgstr ""
+msgstr "פתיחת חלונית התקדמות מפורטת"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
-msgstr ""
+msgstr "הסתרת חלון התקדמות מפורט"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
-msgstr ""
+msgstr "הצגת חלון התקדמות מפורט"
 
 #: shell/project.cpp:99
 #, kde-format
@@ -2880,29 +2882,29 @@ msgstr "המיזם %1 נטען"
 #, kde-format
 msgctxt "%1: Project name"
 msgid "Loading %1"
-msgstr ""
+msgstr "%1 נטען"
 
 #: shell/project.cpp:226
 #, kde-format
 msgid ""
 "Unable to load the project file %1.<br>The project has been removed from the "
 "session."
-msgstr ""
+msgstr "לא ניתן לטעון את קובץ המיזם %1.<br>המיזם הוסר מההפעלה."
 
 #: shell/project.cpp:252
 #, kde-format
 msgid "Unable to create hidden dir (%1) for developer file"
-msgstr ""
+msgstr "לא ניתן ליצור תיקייה מוסתרת (%1) לקובץ פיתוח"
 
 #: shell/project.cpp:268
 #, kde-format
 msgid "Unable to get project file: %1"
-msgstr ""
+msgstr "לא ניתן למשוך את קובץ המיזם: %1"
 
 #: shell/project.cpp:308
 #, kde-format
 msgid "Could not load %1, a project with the same name '%2' is already open."
-msgstr ""
+msgstr "לא ניתן לטעון את %1, כבר יש מיזם פתוח באותו השם ‚%2’."
 
 #: shell/project.cpp:339
 #, kde-format
@@ -2916,7 +2918,7 @@ msgstr ""
 msgid ""
 "The project importing plugin (%1) does not support the IProjectFileManager "
 "interface."
-msgstr ""
+msgstr "תוסף ייבוא המיזמים (%1) לא תומך בממשק IProjectFileManager."
 
 #: shell/project.cpp:402
 #, kde-format
@@ -2944,13 +2946,13 @@ msgstr "מקום שגוי: %1"
 #: shell/projectcontroller.cpp:310
 #, kde-format
 msgid "Already opening %1, not opening again"
-msgstr ""
+msgstr "%1 כבר נפתח, לא ייפתח שוב"
 
 #: shell/projectcontroller.cpp:467
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
-msgstr ""
+msgstr "דריסה"
 
 #: shell/projectcontroller.cpp:468
 #, kde-format
@@ -3434,7 +3436,7 @@ msgstr "לשמור את הקבצים שהשתנו?"
 #: shell/savedialog.cpp:52
 #, kde-format
 msgid "The following files have been modified. Save them?"
-msgstr ""
+msgstr "הקבצים הבאים השתנו. לשמור אותם?"
 
 #: shell/savedialog.cpp:70
 #, kde-format
@@ -3987,28 +3989,28 @@ msgstr "השלמה מפורטת:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
-msgstr ""
+msgstr "אף פעם לא"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
-msgstr ""
+msgstr "כשנקרא ידנית"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "תמיד"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
 #, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
-msgstr ""
+msgstr "הדגשת קוד סמנטית"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
