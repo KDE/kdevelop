@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-12 22:01+0300\n"
+"PO-Revision-Date: 2026-05-23 16:33+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -168,6 +168,8 @@ msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
+"לא ניתן לפתוח את ההפעלה %1 הלא ידועה. כדאי להפעיל עם `‎--list-sessions` "
+"לאיתור ההפעלות הזמינות או להשתמש ב־`‎-n` כדי ליצור הפעלה חדשה."
 
 #: main.cpp:381
 #, kde-format
