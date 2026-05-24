@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-12 22:00+0300\n"
+"PO-Revision-Date: 2026-05-23 16:36+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -134,6 +134,7 @@ msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr ""
+"השורות הנבחרות יסוגו לאחור והשינויים יאבדו. זאת פעולה בלתי הפיכה. להמשיך?"
 
 #: diffviewsctrl.cpp:340
 #, kde-format
@@ -144,17 +145,17 @@ msgstr "הסגה"
 #: gitmessagehighlighter.cpp:66
 #, kde-format
 msgid "Try to keep summary length below %1 characters."
-msgstr ""
+msgstr "עדיף לנסות לשמור על אורך התקציר מתחת ל־%1 תווים."
 
 #: gitmessagehighlighter.cpp:82
 #, kde-format
 msgid "Separate summary from details with one empty line."
-msgstr ""
+msgstr "הפרדת התקציר מהפרטים בשורה ריקה אחת."
 
 #: gitmessagehighlighter.cpp:92
 #, kde-format
 msgid "Try to keep line length below %1 characters."
-msgstr ""
+msgstr "עדיף לנסות לשמור על אורך השורה מתחת ל־%1 תווים."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
 #: gitnameemaildialog.ui:17
@@ -197,12 +198,12 @@ msgstr "כתיבה להגדרות המקיפות"
 #: gitplugin.cpp:190
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
-msgstr ""
+msgstr "לא ניתן למצוא את קובץ ההפעלה git. הוא מותקן במערכת?"
 
 #: gitplugin.cpp:199
 #, kde-format
 msgid "Git Commit"
-msgstr ""
+msgstr "קיבוע ב־Git"
 
 #: gitplugin.cpp:256
 #, kde-format
@@ -392,7 +393,7 @@ msgstr "לא במעקב"
 #: repostatusmodel.cpp:117
 #, kde-format
 msgid "Files not tracked in VCS"
-msgstr ""
+msgstr "קבצים שלא במעקב של מערכת ניהול הגרסאות"
 
 #: repostatusmodel.cpp:242
 #, kde-format

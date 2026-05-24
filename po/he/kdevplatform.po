@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2026-05-22 12:46+0300\n"
+"PO-Revision-Date: 2026-05-23 07:17+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1106,7 +1106,7 @@ msgstr "הכרזות:"
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:93
 #, kde-format
 msgid "not parsed yet"
-msgstr ""
+msgstr "לא פוענח עדיין"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:103
 #, kde-format
@@ -1123,17 +1123,17 @@ msgstr ""
 #: language/duchain/navigation/abstractnavigationcontext.cpp:504
 #, kde-format
 msgid "Typedef"
-msgstr ""
+msgstr "הגדרת סוג"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:507
 #, kde-format
 msgid "Class"
-msgstr ""
+msgstr "מחלקה"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:509
 #, kde-format
 msgid "Variable"
-msgstr ""
+msgstr "משתנה"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:511
 #, kde-format
@@ -1258,10 +1258,10 @@ msgstr "הכרזה"
 msgctxt "%1: number of uses, %2: filename with uses"
 msgid "%2: 1 use"
 msgid_plural "%2: %1 uses"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%2: שימוש אחד"
+msgstr[1] "%2: שני שימושים"
+msgstr[2] "%2: %1 שימושים"
+msgstr[3] "%2: %1 שימושים"
 
 #: language/duchain/navigation/useswidget.cpp:518
 #: language/duchain/navigation/useswidget.cpp:559
@@ -1333,7 +1333,7 @@ msgstr ""
 #: language/duchain/problem.cpp:213 shell/problem.cpp:81
 #, kde-format
 msgid "Semantic analysis"
-msgstr ""
+msgstr "ניתוח סמנטי"
 
 #: language/duchain/problem.cpp:215
 #, kde-format
@@ -1343,7 +1343,7 @@ msgstr ""
 #: language/duchain/problem.cpp:218 shell/problem.cpp:75
 #, kde-format
 msgid "Unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 #: language/duchain/problem.cpp:225
 #, kde-format
@@ -1394,7 +1394,7 @@ msgstr ""
 #: language/util/debuglanguageparserhelper.h:184
 #, kde-format
 msgid "code to parse"
-msgstr ""
+msgstr "קוד לפיענוח"
 
 #: outputview/outputexecutejob.cpp:186
 #, kde-format
@@ -1444,27 +1444,27 @@ msgstr ""
 #: outputview/outputexecutejob.cpp:283
 #, kde-format
 msgid "*** %1 ***"
-msgstr ""
+msgstr "*** %1 ***"
 
 #: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
-msgstr ""
+msgstr "*** תהליך חוסל ***"
 
 #: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
-msgstr ""
+msgstr "*** אזהרה: לא ניתן לחסל את התהליך ***"
 
 #: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
-msgstr ""
+msgstr "העלייה של %1 נכשלה"
 
 #: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
-msgstr ""
+msgstr "%1 קרס"
 
 #: outputview/outputexecutejob.cpp:343
 #, kde-format
@@ -1479,7 +1479,7 @@ msgstr "שגיאת כתיבה"
 #: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
-msgstr ""
+msgstr "הזמן שהוקצב להמתנה לתהליך הסתיים"
 
 #: outputview/outputexecutejob.cpp:355
 #, kde-format
@@ -1489,12 +1489,12 @@ msgstr "קוד יציאה %1"
 #: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "*** Failure: %1 ***"
-msgstr ""
+msgstr "*** כשל: %1 ***"
 
 #: outputview/outputexecutejob.cpp:380
 #, kde-format
 msgid "*** Finished ***"
-msgstr ""
+msgstr "*** הסתיים ***"
 
 #: project/abstractfilemanagerplugin.cpp:325
 #, kde-format
@@ -1508,7 +1508,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
-msgstr ""
+msgstr "תיקיית המיזם נמחקה"
 
 #: project/abstractfilemanagerplugin.cpp:354
 #, kde-format
@@ -1572,17 +1572,17 @@ msgstr "הקובץ <i>%1</i> כבר קיים."
 #: project/helper.cpp:96
 #, kde-format
 msgid "Cannot create file <i>%1</i>."
-msgstr ""
+msgstr "לא ניתן ליצור את הקובץ <i>%1</i>."
 
 #: project/helper.cpp:115
 #, kde-format
 msgid "Cannot create folder <i>%1</i>."
-msgstr ""
+msgstr "לא ניתן ליצור את התיקייה <i>%1</i>."
 
 #: project/importprojectjob.cpp:55
 #, kde-format
 msgid "Project Import: %1"
-msgstr ""
+msgstr "ייבוא מיזם: %1"
 
 #: project/importprojectjob.cpp:89
 #, kde-format
@@ -1679,26 +1679,26 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected dependencies from the list"
-msgstr ""
+msgstr "הסרת התלויות הנבחרות מהרשימה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
 #: project/widgets/dependencieswidget.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr ""
+msgstr "העלאת התלות הנבחרת במעלה הרשימה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr ""
+msgstr "הורדת התלות הנבחרת במורד הרשימה"
 
 #: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
-msgstr ""
+msgstr "הכתיבה אל %1 נכשלה, כנראה שהכונן מלא"
 
 #: serialization/itemrepositoryregistry.cpp:75
 #, kde-format
@@ -1713,13 +1713,13 @@ msgstr[3] ""
 #, kde-format
 msgctxt "tty action"
 msgid "Clear cache"
-msgstr ""
+msgstr "פינוי מטמון"
 
 #: serialization/itemrepositoryregistry.cpp:78
 #, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
-msgstr ""
+msgstr "ההפעלה קרסה"
 
 #: serialization/itemrepositoryregistry.cpp:79
 #, kde-format
@@ -1729,18 +1729,22 @@ msgid ""
 "Press Clear if you want KDevelop to clear the cache, otherwise press "
 "Continue if you are sure the crash has another origin."
 msgstr ""
+"כנראה שהקריסה נגרמה עקב פגם בנתונים ששמורים במטמון.\n"
+"\n"
+"יש ללחוץ על פינוי כדי ש־KDevelop יפנה את מטמון, אם לא אפשר ללחוץ על להמשיך "
+"אם ברור לך לחלוטין שהקריסה נגרמת ממקור אחר."
 
 #: serialization/itemrepositoryregistry.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Cache"
-msgstr ""
+msgstr "לפנות מטמון"
 
 #: serialization/itemrepositoryregistry.cpp:82
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr ""
+msgstr "להמשיך"
 
 #: shell/areadisplay.cpp:44
 #, kde-format
@@ -3711,7 +3715,7 @@ msgstr "הגדרת מאבחנים"
 #: shell/settings/bgpreferences.cpp:73
 #, kde-format
 msgid "Configure Background Parser"
-msgstr ""
+msgstr "הגדרת מפענח רקע"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:20
@@ -3728,7 +3732,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr ""
+msgstr "הפעלת מפענח רקע"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -4125,14 +4129,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr ""
+msgstr "גופן מודגש להכרזות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr ""
+msgstr "בעיות שמופיעות כהערות כחלק מהשורה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304
@@ -4174,7 +4178,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
-msgstr ""
+msgstr "מילות סימון ‚לביצוע’ (TODO):"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
@@ -4189,7 +4193,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr ""
+msgstr "פיענוח מיזם"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4571,7 +4575,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr ""
+msgstr "מעגן שמאלי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4579,14 +4583,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr ""
+msgstr "מעגן תחתון"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr ""
+msgstr "מעגן ימני"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
@@ -4816,6 +4820,9 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
+"הסגנון %1 משמש גם לשפות הבאות:\n"
+"%2.\n"
+"למחוק אותו?"
 
 #: shell/sourceformatterselectionedit.cpp:1079
 #, kde-format
@@ -5173,19 +5180,19 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr ""
+msgstr "הצגת המעגן השמאלי"
 
 #: sublime/mainwindow_p.cpp:64
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr ""
+msgstr "הצגת המעגן הימני"
 
 #: sublime/mainwindow_p.cpp:68
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr ""
+msgstr "הצגת המעגן התחתון"
 
 #: sublime/mainwindow_p.cpp:72
 #, kde-format
