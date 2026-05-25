@@ -17,6 +17,7 @@
         "Description[fi]": "Mahdollistaa nopean useiden tiedostojen haun mallien tai säännöllisten lausekkeiden avulla. Sallii myös korvauksen.",
         "Description[fr]": "Permet de rechercher rapidement dans plusieurs fichiers en utilisant des motifs ou des expressions rationnelles. Et permet de le remplacer aussi.",
         "Description[gl]": "Permite facer unha busca rápida en varios ficheiros usando padróns ou expresións regulares, e tamén realizar substitucións.",
+        "Description[he]": "לאפשר חיפוש מהיר בקרב כמה קבצים באמצעות תבניות או ביטויים רגולריים. מאפשר גם החלפה.",
         "Description[it]": "Consente la ricerca veloce di file multipli usando espressioni regolari o modelli. E consente anche di sostituirli.",
         "Description[ka]": "საშუალებას გაძლევთ, სწრაფად მოძებნოთ ბევრ ფაილში ნიმუშების ან რეგულარული გამოსახულებების გამოყენებით. ასევე საშუალება აქვს, ჩაანაცვლოს ეს ტექსტი.",
         "Description[ko]": "여러 파일에서 패턴이나 정규 표현식을 사용하여 빠르게 찾거나 바꿉니다.",
