@@ -56,6 +56,7 @@
         "Description[fi]": "Tämä liitännäinen yhdistää KDevelopiin Cppcheckin (staattisen analyysityökalun)",
         "Description[fr]": "Ce module externe intègre Cppcheck (outil d'analyse statique) à KDevelop",
         "Description[gl]": "Este complemento integra Cppcheck (unha ferramenta de análise estática) con KDevelop.",
+        "Description[he]": "התוסף הזה משלב את Cppcheck (כלי לניתוח סטטי) לתוך KDevelop",
         "Description[it]": "Questa estensione integra Cppcheck (strumento di analisi statica) in KDevelop",
         "Description[ka]": "ეს დამატება აინტეგრირებს Cppcheck-ს (სტატიკური ანალიზის პროგრამა) KDevelop-ში",
         "Description[ko]": "이 플러그인은 KDevelop에 Cppcheck(정적 분석 도구)를 통합합니다",

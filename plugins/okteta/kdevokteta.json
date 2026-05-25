@@ -56,6 +56,7 @@
         "Description[fi]": "Mahdollistaa raakadatatiedostojen katselun ja muokkauksen (Okteta-pohjaisesti)",
         "Description[fr]": "Permet l'aperçu et l'édition des données brutes de fichiers (repose sur Okteta)",
         "Description[gl]": "Permite visualizar e editar os datos en bruto de ficheiros (baseado en Okteta).",
+        "Description[he]": "הפעלת צפייה ועריכה של נתונים גולמיים בקבצים (מבוסס Okteta)",
         "Description[it]": "Abilita la visualizzazione e la modifica dei dati grezzi dei file (basato su Okteta)",
         "Description[ka]": "საშუალებას გაძლევთ დაუმუშავებელი მონაცემები ან ფაილები ნახოთ და ჩაასწოროთ (დაფუძნებულია Okteta-ზე)",
         "Description[ko]": "파일의 원시 데이터를 보고 편집하기(Okteta 사용)",
