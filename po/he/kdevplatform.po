@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-05-23 07:17+0300\n"
+"PO-Revision-Date: 2026-05-24 22:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -133,7 +133,7 @@ msgstr "נקודת העצירה לא נמצאה"
 #: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
-msgstr ""
+msgstr "לא ניתן למצוא נקודת עצירה ב־%1:%2"
 
 #: debugger/breakpoint/breakpointmodel.cpp:384
 #, kde-format
@@ -187,13 +187,13 @@ msgstr ""
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
 "document first."
-msgstr ""
+msgstr "לא ניתן להוסיף נקודת עצירה למסמך ללא שם. נא לשמור את המסמך קודם."
 
 #: debugger/breakpoint/breakpointwidget.cpp:59
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Breakpoints"
-msgstr ""
+msgstr "נקודות עצירה של מנפה שגיאות"
 
 #: debugger/breakpoint/breakpointwidget.cpp:60
 #, kde-format
@@ -207,12 +207,12 @@ msgstr ""
 #: debugger/breakpoint/breakpointwidget.cpp:86
 #, kde-format
 msgid "Breakpoint Details"
-msgstr ""
+msgstr "פרטי נקודת עצירה"
 
 #: debugger/breakpoint/breakpointwidget.cpp:95
 #, kde-format
 msgid "New code breakpoint ..."
-msgstr ""
+msgstr "נקודת עצירה חדשה בקוד…"
 
 #: debugger/breakpoint/breakpointwidget.cpp:96
 #, kde-format
@@ -2916,6 +2916,8 @@ msgid ""
 "Could not load project management plugin <b>%1</b>.<br>Check that the "
 "required programs are installed, or see console output for more information."
 msgstr ""
+"לא ניתן לטעון את תוסף ניהול המיזמים <b>%1</b>.<br>נא לבדוק שהתוכניות הנחוצות "
+"מותקנות או לעיין בפלט המסוף לקבלת מידע נוסף."
 
 #: shell/project.cpp:349
 #, kde-format
@@ -2935,6 +2937,8 @@ msgid ""
 "Could not store developer specific project configuration.\n"
 "Attention: The project settings you changed will be lost."
 msgstr ""
+"לא ניתן לאחסן הגדרות מיזם נקודתיות למתכנתים.\n"
+"לתשומת ליבך: הגדרות המיזם ששינית ילכו לאיבוד."
 
 #: shell/projectcontroller.cpp:157
 #, kde-format
@@ -2963,7 +2967,7 @@ msgstr "דריסה"
 msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
-msgstr ""
+msgstr "להמשיך לפתיחת המיזם ושימוש בהגדרות המיזם כפי שסופקו"
 
 #: shell/projectcontroller.cpp:469
 #, kde-format
@@ -2975,13 +2979,13 @@ msgstr "פתיחת קובץ קיים"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
-msgstr ""
+msgstr "להמשיך לפתוח את המיזם אבל להשתמש בהגדרות המיזם הקיימות"
 
 #: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
-msgstr ""
+msgstr "לבטל ולא לפתוח את המיזם"
 
 #: shell/projectcontroller.cpp:475
 #, kde-format
@@ -2989,12 +2993,14 @@ msgid ""
 "There already exists a project configuration file at %1.\n"
 "Do you want to override it or open the existing file?"
 msgstr ""
+"כבר קיים קובץ הגדרות מיזם תחת %1.\n"
+"לדרוס אותו או לפתוח את הקובץ הקיים?"
 
 #: shell/projectcontroller.cpp:478
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
-msgstr ""
+msgstr "דריסת הגדרות המיזם הקיימות"
 
 #: shell/projectcontroller.cpp:496
 #, kde-format
@@ -3403,7 +3409,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
-msgstr ""
+msgstr "<%1> משימה ללא שם"
 
 #: shell/runcontroller.cpp:1006
 #, kde-format
@@ -3484,6 +3490,8 @@ msgid ""
 "Active session.\n"
 "pid %1, app %2, host %3"
 msgstr ""
+"הפעלה פעילה.\n"
+"מזהה תהליך %1, יישום %2, מארח %3"
 
 #: shell/sessionchooserdialog.cpp:96
 #, kde-format

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-03-08 22:31+0200\n"
+"PO-Revision-Date: 2026-05-24 22:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -209,7 +209,7 @@ msgstr "חיפוש…"
 #, kde-format
 msgctxt "@option:check"
 msgid "Break lines"
-msgstr ""
+msgstr "קטיעת שורות"
 
 #: config/globalconfigpage.cpp:29
 #, kde-format
@@ -366,7 +366,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Qt developer"
-msgstr ""
+msgstr "פיתוח Qt"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:109
@@ -507,27 +507,27 @@ msgstr "ניתוח Clazy‏ (%1)"
 #: job.cpp:135
 #, kde-format
 msgid "Unknown Level"
-msgstr ""
+msgstr "רמה לא ידועה"
 
 #: job.cpp:201
 #, kde-format
 msgid "Failed to start Clazy analysis process."
-msgstr ""
+msgstr "הפעלת תהליך הניתוח של Clazy נכשלה."
 
 #: job.cpp:206
 #, kde-format
 msgid "Clazy analysis process crashed."
-msgstr ""
+msgstr "תהליך הניתוח של Clazy קרס."
 
 #: job.cpp:211
 #, kde-format
 msgid "Clazy analysis process timed out."
-msgstr ""
+msgstr "ההמתנה לתהליך הניתוח של Clazy הסתיימה."
 
 #: job.cpp:215
 #, kde-format
 msgid "Write to Clazy analysis process failed."
-msgstr ""
+msgstr "הכתיבה לתהליך הניתוח של Clazy נכשלה."
 
 #: job.cpp:219
 #, kde-format
@@ -546,21 +546,23 @@ msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
 "already installed."
 msgstr ""
+"לא ניתן לזהות את הנתיב של clazy-standalone. יש להגדיר את הנתיב ידנית אם "
+"Clazy כבר מותקן."
 
 #: jobparameters.cpp:44
 #, kde-format
 msgid "clazy-standalone path is empty."
-msgstr ""
+msgstr "הנתיב של clazy-standalone ריק."
 
 #: jobparameters.cpp:52
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
-msgstr ""
+msgstr "הנתיב של clazy-standalone ‏‚%1’ לא קיים."
 
 #: jobparameters.cpp:57
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
-msgstr ""
+msgstr "הנתיב של clazy-standalone ‏‚%1’ אינו קובץ הרצה."
 
 #: jobparameters.cpp:66
 #, kde-format
@@ -568,18 +570,20 @@ msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
 "is already installed."
 msgstr ""
+"לא ניתן לזהות את נתיב התיעוד של Clazy. יש להגדיר את הנתיב ידנית אם Clazy כבר "
+"מותקן."
 
 #: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
-msgstr ""
+msgstr "נתיב התיעוד של Clazy ריק."
 
 #: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
-msgstr ""
+msgstr "נתיב התיעוד של Clazy‏ ‚%1’ לא קיים."
 
 #: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
-msgstr ""
+msgstr "נתיב התיעוד של Clazy ‏‚%1’ אינו תיקייה."
