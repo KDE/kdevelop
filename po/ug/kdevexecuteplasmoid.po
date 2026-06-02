@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevexecuteplasmoid\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:16-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: plasmoidexecutionconfig.cpp:118
 #, kde-format
@@ -39,36 +40,31 @@ msgid "Could not resolve the dependency: %1"
 msgstr ""
 
 #: plasmoidexecutionconfig.cpp:288
-#, fuzzy, kde-format
-#| msgid "Plasmoid"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
-msgstr "Plasmoid"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Plasmoid"
+#, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
-msgstr "Plasmoid"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
-#, fuzzy, kde-format
-#| msgctxt "NAME OF TRANSLATORS"
-#| msgid "Your names"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
-msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr "ھەرىكەت"
+msgstr "قىلمىش"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
@@ -79,16 +75,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
-#, fuzzy, kde-format
-#| msgid "Theme"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
-msgstr "ئۆرنەك"
+msgstr "ئۆرنەك:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "بېقىنىشچانلىق"
@@ -103,7 +97,7 @@ msgstr ""
 #: plasmoidexecutionjob.cpp:35
 #, kde-format
 msgid "Plasmoid Viewer"
-msgstr ""
+msgstr "Plasmoid كۆرگۈچ"
 
 #: plasmoidexecutionjob.cpp:70
 #, kde-format

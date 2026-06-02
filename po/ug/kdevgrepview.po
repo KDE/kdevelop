@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: grepdialog.cpp:55
 #, kde-format
@@ -30,15 +31,13 @@ msgid "All Open Projects"
 msgstr ""
 
 #: grepdialog.cpp:260 grepdialog.cpp:620 grepviewplugin.cpp:94
-#, fuzzy, kde-format
-#| msgid "Find in Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
-msgstr "ھۆججەتتىن ئىزدە"
+msgstr ""
 
 #: grepdialog.cpp:268
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "ئىزدە…"
@@ -163,13 +162,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
-msgstr ""
+msgstr "ئالدىنقى تۈر(&P)"
 
 #: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
-msgstr ""
+msgstr "كېيىنكى تۈر(&N)"
 
 #: grepoutputview.cpp:80
 #, kde-format
@@ -184,21 +183,19 @@ msgid "&Expand All"
 msgstr ""
 
 #: grepoutputview.cpp:86
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@action"
 msgid "New &Search"
-msgstr "ئىزدە…"
+msgstr ""
 
 #: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
-msgstr ""
+msgstr "يېڭىلا"
 
 #: grepoutputview.cpp:89
-#, fuzzy, kde-format
-#| msgid "Clear Search History"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "ئىزدەش تارىخىنى تازىلا"
@@ -215,8 +212,7 @@ msgid "Start Replacement"
 msgstr ""
 
 #: grepoutputview.cpp:326
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
 msgstr "ئالماشتۇر"
@@ -244,18 +240,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
-msgstr "ئالماشتۇر"
+msgstr "ئالماشتۇر(&R)"
 
 #: grepviewplugin.cpp:79
-#, fuzzy, kde-format
-#| msgid "Find in Files"
+#, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
-msgstr "ھۆججەتتىن ئىزدە"
+msgstr ""
 
 #: grepviewplugin.cpp:82
 #, kde-format
@@ -274,18 +268,16 @@ msgid ""
 msgstr ""
 
 #: grepviewplugin.cpp:132 grepviewplugin.cpp:155
-#, fuzzy, kde-format
-#| msgid "Find in Files"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr "ھۆججەتتىن ئىزدە"
+msgstr ""
 
 #: grepviewplugin.cpp:143
-#, fuzzy, kde-format
-#| msgid "Find in Files"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
-msgstr "ھۆججەتتىن ئىزدە"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35
@@ -385,8 +377,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Template:"
 msgstr "قېلىپ:"
@@ -423,8 +414,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
-#, fuzzy, kde-format
-#| msgid "Depth:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "چوڭقۇرلۇق:"
@@ -447,27 +437,24 @@ msgstr ""
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:121
-#, fuzzy, kde-format
-#| msgid "Full"
+#, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
 msgstr "تامامەن"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Pattern:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "ئەندىزە:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: grepwidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
-msgstr "ھۆججەتلەر:"
+msgstr "ھۆججەت:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:160
@@ -508,11 +495,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:221
-#, fuzzy, kde-format
-#| msgid "Exclude:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
-msgstr "ئۆز ئىچىگە ئالمايدىغانلىرى:"
+msgstr "مۇستەسنا:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
@@ -587,7 +573,6 @@ msgstr ""
 #~ msgid "Edit"
 #~ msgstr "تەھرىرلەش"
 
-#, fuzzy
 #~| msgid "Replace"
 #~ msgid "Find/Replace"
 #~ msgstr "ئالماشتۇر"

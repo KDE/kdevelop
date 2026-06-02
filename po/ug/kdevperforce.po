@@ -8,26 +8,25 @@ msgstr ""
 "Project-Id-Version: kdevperforce\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:05+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:19-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 3.9\n"
 
 #: perforceplugin.cpp:108
-#, fuzzy, kde-format
-#| msgid "The variable P4CONFIG is not set."
+#, kde-format
 msgid "The variable P4CONFIG is not set. Is perforce installed on the system?"
-msgstr "بۇ P4CONFIG ئۆزگەرگۈچى تەڭشەلمىگەن."
+msgstr ""
 
 #: perforceplugin.cpp:122
 #, kde-format
 msgid "Perforce"
-msgstr "Perforce"
+msgstr ""
 
 #: perforceplugin.cpp:232 perforceplugin.cpp:249
 #, kde-format
@@ -50,11 +49,10 @@ msgid "Directory not supported for this operation"
 msgstr "مۇندەرىجە بۇ مەشغۇلاتنى قوللىمايدۇ"
 
 #: perforceplugin.cpp:461
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
-msgstr "تەھرىرلەش"
+msgstr "تەھرىر"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -152,7 +150,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Test"
-msgstr ""
+msgstr "سىنا"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonConfig)
 #: ui/perforceimportmetadatawidget.ui:197

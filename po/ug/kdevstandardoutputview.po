@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:20-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -24,8 +25,7 @@ msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 
 #: outputwidget.cpp:63
-#, fuzzy, kde-format
-#| msgid "Output View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "چىقىرىش كۆرۈنۈشى"
@@ -43,18 +43,16 @@ msgid "Close all other output views"
 msgstr ""
 
 #: outputwidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "Previous"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Output"
-msgstr "ئالدىنقى"
+msgstr ""
 
 #: outputwidget.cpp:94
-#, fuzzy, kde-format
-#| msgid "Previous"
+#, kde-format
 msgctxt "@action"
 msgid "Next Output"
-msgstr "ئالدىنقى"
+msgstr ""
 
 #: outputwidget.cpp:99
 #, kde-format
@@ -75,42 +73,37 @@ msgid "Word Wrap"
 msgstr ""
 
 #: outputwidget.cpp:119
-#, fuzzy, kde-format
-#| msgid "Next"
+#, kde-format
 msgctxt "@action"
 msgid "First Item"
-msgstr "كېيىنكى"
+msgstr "تۇنجى تۈر"
 
 #: outputwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Previous"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Item"
-msgstr "ئالدىنقى"
+msgstr "ئالدىنقى تۈر"
 
 #: outputwidget.cpp:127
-#, fuzzy, kde-format
-#| msgid "Next"
+#, kde-format
 msgctxt "@action"
 msgid "Next Item"
-msgstr "كېيىنكى"
+msgstr "كېيىنكى تۈر"
 
 #: outputwidget.cpp:131
-#, fuzzy, kde-format
-#| msgid "Next"
+#, kde-format
 msgctxt "@action"
 msgid "Last Item"
-msgstr "كېيىنكى"
+msgstr ""
 
 #: outputwidget.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
-msgstr ""
+msgstr "تازىلا"
 
 #: outputwidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "ئىزدە…"
@@ -165,13 +158,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
-msgstr "قۇرۇش"
+msgstr "قۇر"
 
 #: standardoutputview.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
-msgstr "ئىجرا"
+msgstr "ئىجرا قىل"
 
 #: standardoutputview.cpp:86
 #, kde-format

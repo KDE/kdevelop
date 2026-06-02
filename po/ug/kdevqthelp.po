@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:19-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: qthelpconfig.cpp:47
 #, kde-format
@@ -23,11 +24,10 @@ msgid "Qt Compressed Help Files"
 msgstr ""
 
 #: qthelpconfig.cpp:50
-#, fuzzy, kde-format
-#| msgid "Modify"
+#, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
-msgstr "ئۆزگەرت"
+msgstr ""
 
 #: qthelpconfig.cpp:52
 #, kde-format
@@ -41,11 +41,10 @@ msgid "Name cannot be empty."
 msgstr ""
 
 #: qthelpconfig.cpp:105
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
-msgstr "QtHelp باش بېتى"
+msgstr ""
 
 #: qthelpconfig.cpp:121
 #, kde-format
@@ -72,7 +71,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
-msgstr ""
+msgstr "Qt ياردەم"
 
 #: qthelpconfig.cpp:301
 #, kde-format
@@ -81,8 +80,7 @@ msgid "Configure Qt Help Settings"
 msgstr ""
 
 #: qthelpconfig.cpp:326
-#, fuzzy, kde-format
-#| msgid "Modify"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "ئۆزگەرت"
@@ -91,7 +89,7 @@ msgstr "ئۆزگەرت"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
-msgstr ""
+msgstr "ئۆچۈر"
 
 #: qthelpconfig.cpp:338
 #, kde-format
@@ -108,11 +106,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
 #: qthelpconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Load Qt API documentation:"
-msgstr "QtHelp باش بېتى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
 #: qthelpconfig.ui:46
@@ -123,32 +120,28 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
 #: qthelpconfig.ui:69
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgctxt "@title:group"
 msgid "Install Additional Documentation Files"
-msgstr "QtHelp باش بېتى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:104
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "ئاتى"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:109
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@title:column"
 msgid "Path"
 msgstr "يول"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: qthelpconfig.ui:134
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "قوش"
@@ -158,23 +151,21 @@ msgstr "قوش"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Icon:"
-msgstr ""
+msgstr "سىنبەلگە:"
 
 #. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
 #: qthelpconfigeditdialog.ui:24
-#, fuzzy, kde-format
-#| msgid "Select an icon"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an icon"
-msgstr "アイコンを選択してください"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qthelpconfigeditdialog.ui:34
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "ئاتى"
+msgstr "ئاتى:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:41
@@ -185,19 +176,17 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:44
-#, fuzzy, kde-format
-#| msgid "Select an icon"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr "アイコンを選択してください"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
-msgstr "يول"
+msgstr "يول:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:64
@@ -216,13 +205,12 @@ msgstr ""
 #: qthelpdocumentation.cpp:384
 #, kde-format
 msgid "Could not find any documentation for '%1'"
-msgstr "‹%1› نىڭ ھېچقانداق قوللانمىسىنى تاپالمىدى"
+msgstr "«%1» نىڭ ھېچقانداق قوللانمىسىنى تاپالمىدى"
 
 #: qthelpdocumentation.cpp:478
-#, fuzzy, kde-format
-#| msgid "QtHelp Home Page"
+#, kde-format
 msgid "%1 Home Page"
-msgstr "QtHelp باش بېتى"
+msgstr ""
 
 #: qthelpqtdoc.cpp:172
 #, kde-format

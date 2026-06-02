@@ -8,19 +8,20 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 00:41+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
 msgid "GDB"
-msgstr "GDB"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
@@ -109,27 +110,24 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: gdbconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Debugger"
+#, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
 msgstr "سازلىغۇچ"
 
 #. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
 #: gdbconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
-msgstr "ئىجرا قىلغىلى بولىدۇ:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Gdb executable"
-msgstr "ئىجرا قىلغىلى بولىدۇ:"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:51
@@ -173,8 +171,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: gdbconfigpage.ui:87
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Options"
 msgstr "تاللانما"
@@ -320,11 +317,10 @@ msgid "Run &gdb script:"
 msgstr ""
 
 #: gdboutputwidget.cpp:50
-#, fuzzy, kde-format
-#| msgid "GDB Output"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
-msgstr "GDB چىقىرىش"
+msgstr ""
 
 #: gdboutputwidget.cpp:51
 #, kde-format
@@ -362,11 +358,10 @@ msgid ""
 msgstr ""
 
 #: gdboutputwidget.cpp:394
-#, fuzzy, kde-format
-#| msgid "Copy All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
-msgstr "ھەممىنى كۆچۈر"
+msgstr ""
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevgdbui.rc:19
@@ -375,25 +370,22 @@ msgid "Debugger Toolbar"
 msgstr "سازلىغۇچ قورال بالدىقى"
 
 #: memviewdlg.cpp:68
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
-msgstr "باشلاش"
+msgstr "باشلاش:"
 
 #: memviewdlg.cpp:71
-#, fuzzy, kde-format
-#| msgid "Amount"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
-msgstr "مىقدارى"
+msgstr ""
 
 #: memviewdlg.cpp:94
-#, fuzzy, kde-format
-#| msgid "Memory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
-msgstr "ئەسلەك"
+msgstr ""
 
 #: memviewdlg.cpp:223
 #, kde-format
@@ -402,43 +394,37 @@ msgid_plural "%2 (%1 bytes)"
 msgstr[0] "%2 (%1 بايت)"
 
 #: memviewdlg.cpp:267
-#, fuzzy, kde-format
-#| msgid "&Reload"
+#, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
 msgstr "قايتا يۈكلە(&R)"
 
 #: memviewdlg.cpp:275
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
 msgstr "فورمات(&F)"
 
 #: memviewdlg.cpp:278
-#, fuzzy, kde-format
-#| msgid "&Binary"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "ئىككىلىك سان(&B)"
 
 #: memviewdlg.cpp:283
-#, fuzzy, kde-format
-#| msgid "&Octal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "سەككىزلىك سىستېما(&O)"
 
 #: memviewdlg.cpp:288
-#, fuzzy, kde-format
-#| msgid "&Decimal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "ئونلۇق سان(&D)"
 
 #: memviewdlg.cpp:293
-#, fuzzy, kde-format
-#| msgid "&Hexadecimal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "ئون ئالتىلىك سان(&H)"
@@ -453,25 +439,22 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
-msgstr ""
+msgstr "&0"
 
 #: memviewdlg.cpp:315
-#, fuzzy, kde-format
-#| msgid "&1"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
 #: memviewdlg.cpp:320
-#, fuzzy, kde-format
-#| msgid "&2"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
 #: memviewdlg.cpp:325
-#, fuzzy, kde-format
-#| msgid "&4"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
@@ -480,13 +463,13 @@ msgstr "&4"
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
-msgstr ""
+msgstr "&8"
 
 #: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
-msgstr ""
+msgstr "1&6"
 
 #: memviewdlg.cpp:348
 #, kde-format
@@ -504,14 +487,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
-msgstr ""
+msgstr "كۆرۈنۈشنى ياپ"
 
 #: memviewdlg.cpp:407
-#, fuzzy, kde-format
-#| msgid "Memory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
-msgstr "ئەسلەك"
+msgstr "ئەسلەك كۆرگۈچ"
 
 #: memviewdlg.cpp:411
 #, kde-format
@@ -532,15 +514,13 @@ msgid "Disassemble/Registers"
 msgstr ""
 
 #: toolviewfactoryholder.cpp:38
-#, fuzzy, kde-format
-#| msgid "GDB"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB"
-msgstr "GDB"
+msgstr ""
 
 #: toolviewfactoryholder.cpp:43
-#, fuzzy, kde-format
-#| msgid "Memory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory"
 msgstr "ئەسلەك"
@@ -564,27 +544,22 @@ msgstr "ئەسلەك"
 #~ msgid "Instruction"
 #~ msgstr "پەرمان"
 
-#, fuzzy
 #~| msgid "&Binary"
 #~ msgid "Binary"
 #~ msgstr "ئىككىلىك سان(&B)"
 
-#, fuzzy
 #~| msgid "&Octal"
 #~ msgid "Octal"
 #~ msgstr "سەككىزلىك سىستېما(&O)"
 
-#, fuzzy
 #~| msgid "&Decimal"
 #~ msgid "Decimal"
 #~ msgstr "ئونلۇق سان(&D)"
 
-#, fuzzy
 #~| msgid "&Hexadecimal"
 #~ msgid "Hexadecimal"
 #~ msgstr "ئون ئالتىلىك سان(&H)"
 
-#, fuzzy
 #~| msgid "&Format"
 #~ msgid "Format"
 #~ msgstr "فورمات(&F)"
@@ -604,7 +579,6 @@ msgstr "ئەسلەك"
 #~ msgid "Warning"
 #~ msgstr "ئاگاھلاندۇرۇش"
 
-#, fuzzy
 #~| msgid "Warning"
 #~ msgid "(running)"
 #~ msgstr "ئاگاھلاندۇرۇش"
@@ -620,7 +594,6 @@ msgstr "ئەسلەك"
 #~ msgid "GDB Support"
 #~ msgstr "GDB قوللىشى"
 
-#, fuzzy
 #~| msgid "&Format"
 #~ msgid "Form"
 #~ msgstr "فورمات(&F)"

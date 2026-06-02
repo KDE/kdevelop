@@ -8,21 +8,21 @@ msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:16-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "ئەركىن ئۆزگەرگۈچى:"
+msgstr "ئۆزگەرگۈچى"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -30,11 +30,10 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr ""
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "ئىجراچان"
+msgstr ""
 
 #: executeplugin.cpp:194
 #, kde-format
@@ -67,11 +66,10 @@ msgid ""
 msgstr ""
 
 #: nativeappconfig.cpp:182
-#, fuzzy, kde-format
-#| msgid "Could not start application"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
-msgstr "پروگراممىنى قوزغىتالمىدى"
+msgstr ""
 
 #: nativeappconfig.cpp:192
 #, kde-format
@@ -89,19 +87,17 @@ msgid "Compiled Binary"
 msgstr ""
 
 #: nativeappconfig.cpp:338
-#, fuzzy, kde-format
-#| msgid "Executable"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
-msgstr "ئىجراچان"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: nativeappconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Executable"
+#, kde-format
 msgctxt "@title:group"
 msgid "Executable"
-msgstr "ئىجراچان"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: nativeappconfig.ui:41
@@ -112,11 +108,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: nativeappconfig.ui:81
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&xecutable:"
-msgstr "ئىجرا قىلغىلى بولىدۇ:"
+msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:106
@@ -134,19 +129,17 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: nativeappconfig.ui:121
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr "ھەرىكەت"
+msgstr "قىلمىش"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: nativeappconfig.ui:127
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Ar&guments:"
-msgstr "ئەركىن ئۆزگەرگۈچى:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: nativeappconfig.ui:137
@@ -160,11 +153,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: nativeappconfig.ui:144
-#, fuzzy, kde-format
-#| msgid "Working Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Working &directory:"
-msgstr "خىزمەت مۇندەرىجىسى:"
+msgstr "خىزمەت مۇندەرىجىسى(&D):"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: nativeappconfig.ui:154
@@ -175,11 +167,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&nvironment:"
-msgstr "مۇھىت:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: nativeappconfig.ui:179
@@ -221,23 +212,21 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
-msgstr ""
+msgstr "قايتا قوزغات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: nativeappconfig.ui:251
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "بېقىنىشچانلىق"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: nativeappconfig.ui:257
-#, fuzzy, kde-format
-#| msgid "Action:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
-msgstr "ھەرىكەت:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:267
@@ -260,20 +249,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:277
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "ھېچقانداق قىلما"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:282
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Build"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
-msgstr "قۇرۇش"
+msgstr "قۇر"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:287

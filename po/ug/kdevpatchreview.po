@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:19-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: localpatchsource.cpp:34
 #, kde-format
@@ -24,30 +25,28 @@ msgstr "ئۆزلەشتۈرۈلگەن ياماق"
 
 #. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
 #: localpatchwidget.ui:29
-#, fuzzy, kde-format
-#| msgid "Patch"
+#, kde-format
 msgctxt "@title:group"
 msgid "Patch"
-msgstr "ياماق"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: localpatchwidget.ui:38
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Base directory:"
-msgstr ""
+msgstr "ئاساسىي مۇندەرىجە:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
 #: localpatchwidget.ui:45
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch/base"
-msgstr ""
+msgstr "/path/to/patch/base"
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "From File"
+#, kde-format
 msgctxt "@title:tab"
 msgid "From File"
 msgstr "ھۆججەتتىن"
@@ -57,7 +56,7 @@ msgstr "ھۆججەتتىن"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch"
-msgstr ""
+msgstr "/path/to/patch"
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70
@@ -98,16 +97,14 @@ msgid "Applied.<br/>"
 msgstr ""
 
 #: patchhighlighter.cpp:91 patchhighlighter.cpp:106
-#, fuzzy, kde-format
-#| msgid "Insertion"
+#, kde-format
 msgid "Insertion<br/>"
-msgstr "قىستۇر"
+msgstr ""
 
 #: patchhighlighter.cpp:94 patchhighlighter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Removal"
+#, kde-format
 msgid "Removal<br/>"
-msgstr "چىقىرىش"
+msgstr ""
 
 #: patchhighlighter.cpp:95
 #, kde-format
@@ -130,22 +127,19 @@ msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
 msgstr ""
 
 #: patchhighlighter.cpp:409 patchhighlighter.cpp:416
-#, fuzzy, kde-format
-#| msgid "Insertion"
+#, kde-format
 msgctxt "@item"
 msgid "Insertion"
 msgstr "قىستۇر"
 
 #: patchhighlighter.cpp:411 patchhighlighter.cpp:418
-#, fuzzy, kde-format
-#| msgid "Removal"
+#, kde-format
 msgctxt "@item"
 msgid "Removal"
-msgstr "چىقىرىش"
+msgstr ""
 
 #: patchhighlighter.cpp:413 patchhighlighter.cpp:420
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgctxt "@item"
 msgid "Change"
 msgstr "ئۆزگەرت"
@@ -157,15 +151,13 @@ msgid "Kompare Model Update"
 msgstr ""
 
 #: patchreview.cpp:455
-#, fuzzy, kde-format
-#| msgid "Overview"
+#, kde-format
 msgctxt "@title complete patch"
 msgid "Overview"
-msgstr "قىسقىچە بايان"
+msgstr "ئىخچام كۆرۈنۈش"
 
 #: patchreview.cpp:460 patchreview.cpp:535
-#, fuzzy, kde-format
-#| msgid "Patch Review"
+#, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
 msgstr "ياماق باھالاش"
@@ -176,11 +168,10 @@ msgid "The base directory of the patch must be an absolute directory."
 msgstr ""
 
 #: patchreview.cpp:499 patchreview.cpp:524
-#, fuzzy, kde-format
-#| msgid "Patch Review"
+#, kde-format
 msgctxt "@action"
 msgid "Finish Review"
-msgstr "ياماق باھالاش"
+msgstr ""
 
 #: patchreview.cpp:606
 #, kde-format
@@ -218,8 +209,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
 #: patchreview.ui:74
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:button"
 msgid "Update"
 msgstr "يېڭىلا"
@@ -240,27 +230,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
-#, fuzzy, kde-format
-#| msgid "Patch Review"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
-msgstr "ياماق باھالاش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
 #: patchreview.ui:149
-#, fuzzy, kde-format
-#| msgid "Patch Review"
+#, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
-msgstr "ياماق باھالاش"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
 #: patchreview.ui:168
-#, fuzzy, kde-format
-#| msgid "Changes"
+#, kde-format
 msgctxt "@title:group"
 msgid "Changes"
-msgstr "ئۆزگىرىشلەر"
+msgstr ""
 
 #: patchreviewtoolview.cpp:83
 #, kde-format
@@ -272,7 +259,7 @@ msgstr[0] ""
 #: patchreviewtoolview.cpp:223
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
-msgstr ""
+msgstr "<qt>يېڭى ئىلتىماسىڭىزنىڭ ئورنى:<br /><a href='%1'>%1</a> </qt>"
 
 #: patchreviewtoolview.cpp:226
 #, kde-format
@@ -282,18 +269,16 @@ msgid ""
 msgstr ""
 
 #: patchreviewtoolview.cpp:257
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "ھەممىنى تاللا"
 
 #: patchreviewtoolview.cpp:259
-#, fuzzy, kde-format
-#| msgid "Deselect All"
+#, kde-format
 msgctxt "@action"
 msgid "Deselect All"
-msgstr "تاللاشنىڭ ھەممىسىنى بىكار قىل"
+msgstr "ھەممىنى تاللىما"
 
 #: patchreviewtoolview.cpp:557
 #, kde-format

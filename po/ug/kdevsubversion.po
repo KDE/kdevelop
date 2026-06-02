@@ -8,28 +8,27 @@ msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:20-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: kdevsvnplugin.cpp:334
-#, fuzzy, kde-format
-#| msgid "Copy..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
-msgstr "كۆچۈر…"
+msgstr ""
 
 #: kdevsvnplugin.cpp:341
-#, fuzzy, kde-format
-#| msgid "Move..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
-msgstr "يۆتكە…"
+msgstr ""
 
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
@@ -60,7 +59,7 @@ msgstr ""
 #: kdevsvnplugin.cpp:425
 #, kde-format
 msgid "Subversion"
-msgstr "Subversion"
+msgstr "تارماق نەشرى"
 
 #: svnaddjob.cpp:73
 #, kde-format
@@ -85,7 +84,7 @@ msgstr ""
 #: svncheckoutjob.cpp:84
 #, kde-format
 msgid "Subversion Checkout"
-msgstr "Subversion Checkout"
+msgstr ""
 
 #: svncheckoutjob.cpp:95
 #, kde-format
@@ -93,10 +92,9 @@ msgid "Not enough information to checkout"
 msgstr ""
 
 #: svncommitjob.cpp:108
-#, fuzzy, kde-format
-#| msgid "Subversion Checkout"
+#, kde-format
 msgid "Subversion Commit"
-msgstr "Subversion Checkout"
+msgstr ""
 
 #: svncommitjob.cpp:119
 #, kde-format
@@ -121,7 +119,7 @@ msgstr ""
 #: svndiffjob.cpp:255
 #, kde-format
 msgid "Subversion Diff"
-msgstr "Subversion Diff"
+msgstr ""
 
 #: svndiffjob.cpp:271
 #, kde-format
@@ -210,7 +208,7 @@ msgstr "%1 نى ئالماشتۇرۇۋاتىدۇ."
 #: svninternaljobbase.cpp:166
 #, kde-format
 msgid "Transmitting file data "
-msgstr "ھۆججەتنىڭ سانلىق-مەلۇماتلىرىنى يوللاۋاتىدۇ "
+msgstr "ھۆججەتنىڭ سانلىق مەلۇماتلىرىنى يوللاۋاتىدۇ "
 
 #: svninternaljobbase.cpp:172
 #, kde-format
@@ -315,11 +313,10 @@ msgid "Not enough information to execute revert"
 msgstr ""
 
 #: svnssldialog.cpp:28
-#, fuzzy, kde-format
-#| msgid "SSL Server Certificate"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
-msgstr "SSL مۇلازىمېتىر گۇۋاھنامىسى"
+msgstr ""
 
 #: svnssldialog.cpp:30
 #, kde-format
@@ -334,11 +331,10 @@ msgid "Trust Temporarily"
 msgstr ""
 
 #: svnssldialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "SSL Server Certificate"
+#, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
-msgstr "SSL مۇلازىمېتىر گۇۋاھنامىسى"
+msgstr ""
 
 #: svnstatusjob.cpp:117
 #, kde-format
@@ -362,27 +358,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
-#, fuzzy, kde-format
-#| msgid "Source directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "مەنبە مۇندەرىجە:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
-msgstr "خەزىنە:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
-msgstr "خەزىنە:"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
@@ -393,11 +386,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr "تاپشۇرۇش ئۇچۇرى:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, msgLabel)
 #: ui/ssltrustdialog.ui:17
@@ -415,16 +407,14 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ui/ssltrustdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Certificate Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
-msgstr "گۇۋاھنامە ئۇچۇرى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
-#, fuzzy, kde-format
-#| msgid "Hostname:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
 msgstr "ماشىنا ئاتى:"
@@ -437,8 +427,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/ssltrustdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Issuer:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Issuer:"
 msgstr "تارقاتقۇچى:"
@@ -451,11 +440,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/ssltrustdialog.ui:104
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
-msgstr "ئىناۋەتلىك ۋاقتى:"
+msgstr "ئىناۋەتلىك ۋاقتى(باشلىنىشى):"
 
 #. i18n: ectx: property (text), widget (QLabel, validFrom)
 #: ui/ssltrustdialog.ui:117
@@ -465,11 +453,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: ui/ssltrustdialog.ui:124
-#, fuzzy, kde-format
-#| msgid "Valid Until:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
-msgstr "ئىناۋەتلىك ۋاقتى:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, validUntil)
 #: ui/ssltrustdialog.ui:137
@@ -479,8 +466,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/ssltrustdialog.ui:144
-#, fuzzy, kde-format
-#| msgid "Fingerprint:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
 msgstr "بارماق ئىزى:"

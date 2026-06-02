@@ -8,30 +8,29 @@ msgstr ""
 "Project-Id-Version: kdevdocumentview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:15-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: kdevdocumentview.cpp:64
 #, kde-format
 msgid "Documents"
-msgstr "پۈتۈكلەر"
+msgstr "پۈتۈك"
 
 #: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
-#, fuzzy, kde-format
-#| msgid "Documents"
+#, kde-format
 msgctxt "@title:window"
 msgid "Documents"
-msgstr "پۈتۈكلەر"
+msgstr "پۈتۈك"
 
 #: kdevdocumentview.cpp:211
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "قايتا يۈكلە"
@@ -40,14 +39,13 @@ msgstr "قايتا يۈكلە"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
-msgstr ""
+msgstr "ياپ"
 
 #: kdevdocumentview.cpp:218
-#, fuzzy, kde-format
-#| msgid "Close Other Files"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr "باشقا ھۆججەتلەرنى يېپىش"
+msgstr "باشقا ھەممىنى ياپ"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

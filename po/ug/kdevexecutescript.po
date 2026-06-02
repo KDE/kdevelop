@@ -8,20 +8,21 @@ msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: executescriptplugin.cpp:61
 #, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr ""
+msgstr "قوليازما يولى"
 
 #: executescriptplugin.cpp:78
 #, kde-format
@@ -29,11 +30,10 @@ msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
 
 #: executescriptplugin.cpp:97
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr "ئەركىن ئۆزگەرگۈچى:"
+msgstr "ئۆزگەرگۈچى"
 
 #: executescriptplugin.cpp:140
 #, kde-format
@@ -47,11 +47,10 @@ msgid "Type or select an interpreter..."
 msgstr ""
 
 #: scriptappconfig.cpp:116
-#, fuzzy, kde-format
-#| msgid "Could not start application"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Script Application"
-msgstr "پروگراممىنى قوزغىتالمىدى"
+msgstr ""
 
 #: scriptappconfig.cpp:126
 #, kde-format
@@ -72,19 +71,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: scriptappconfig.ui:44
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script interpreter:"
-msgstr "قوليازما"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: scriptappconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@title:group"
 msgid "Script file"
-msgstr "قوليازما"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
 #: scriptappconfig.ui:101
@@ -102,11 +99,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scriptLabel)
 #: scriptappconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Script file:"
-msgstr "قوليازما"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:133
@@ -124,35 +120,31 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: scriptappconfig.ui:148
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr "ھەرىكەت"
+msgstr "قىلمىش"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: scriptappconfig.ui:160
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
 msgstr "ئەركىن ئۆزگەرگۈچى:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: scriptappconfig.ui:170
-#, fuzzy, kde-format
-#| msgid "Enter arguments to give to the executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter arguments to give to the executable"
-msgstr "پروگراممىغا بېرىدىغان پارامېتىرلارنى كىرگۈزۈڭ"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: scriptappconfig.ui:177
-#, fuzzy, kde-format
-#| msgid "Working Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Working directory:"
-msgstr "خىزمەت مۇندەرىجىسى:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: scriptappconfig.ui:187
@@ -163,11 +155,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr "مۇھىت:"
+msgstr "مۇھىت ئۆزگەرگۈچى:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: scriptappconfig.ui:212
@@ -178,11 +169,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
-msgstr "قوليازما"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:231
@@ -208,11 +198,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:245
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
-msgstr "قوليازما"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:250
@@ -276,7 +265,7 @@ msgstr "باشلاۋاتىدۇ: %1"
 #: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr "*** ئۆلتۈرۈلگەن پروگراممىلار ***"
+msgstr "*** ئۆلتۈرۈلگەن پىروگراممىلار ***"
 
 #: scriptappjob.cpp:190
 #, kde-format
@@ -303,7 +292,7 @@ msgstr "***چاتاق چىقتى. قايتۇرۇش كودى: %1 ***"
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
-msgstr "*** پروگرامما '%1' نى قوزغاتقىلى بولمىدى. يول توغرىمۇ تەكشۈرۈڭ ***"
+msgstr "*** پىروگرامما «%1» نى قوزغاتقىلى بولمىدى. يول توغرىمۇ تەكشۈرۈڭ ***"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

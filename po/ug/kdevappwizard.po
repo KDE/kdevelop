@@ -8,51 +8,45 @@ msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:12-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: appwizarddialog.cpp:23
-#, fuzzy, kde-format
-#| msgid "Create New Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
 msgstr "يېڭى قۇرۇلۇش قۇرۇش"
 
 #: appwizarddialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "Page for general configuration options"
-#| msgid "General"
+#, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
 msgstr "ئادەتتىكى"
 
 #: appwizarddialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "نەشر باشقۇرۇش"
 
 #: appwizardplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "New From Template..."
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "قېلىپتىن پايدىلىنىپ يېڭىدىن قۇرۇش"
+msgstr ""
 
 #: appwizardplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Generate a new project from a template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
-msgstr "قېلىپتىن يېڭى قۇرۇلۇش قۇرىدۇ"
+msgstr ""
 
 #: appwizardplugin.cpp:72
 #, kde-format
@@ -63,10 +57,9 @@ msgid ""
 msgstr ""
 
 #: appwizardplugin.cpp:106
-#, fuzzy, kde-format
-#| msgid "Could not create project from template\n"
+#, kde-format
 msgid "Could not create project from template."
-msgstr "قېلىپتىن يېڭى قۇرۇلۇش ياسىغىلى بولمىدى\n"
+msgstr ""
 
 #: appwizardplugin.cpp:134
 #, kde-format
@@ -74,11 +67,10 @@ msgid "Please see the Version Control tool view."
 msgstr ""
 
 #: appwizardplugin.cpp:136
-#, fuzzy, kde-format
-#| msgid "Version Control System:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr "نەشر كونترول قىلىش سىستېمىسى"
+msgstr ""
 
 #: appwizardplugin.cpp:152
 #, kde-format
@@ -86,10 +78,9 @@ msgid "Could not initialize DVCS repository"
 msgstr "DVCS خەزىنىسىنى دەسلەپلەشتۈرگىلى بولمىدى"
 
 #: appwizardplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Could not add files to the DVCS repository"
+#, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr "ھۆججەتلەرنى  خەزىنىسىگە قوشقىلى بولمىدى"
+msgstr ""
 
 #: appwizardplugin.cpp:174
 #, kde-format
@@ -104,7 +95,7 @@ msgstr "قۇرۇلۇشنى %1 غا ئىمپورت قىلغىلى بولمىدى.
 #: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
-msgstr "قۇرۇلۇشنى ئىمپورت قىلغىلى بولمىدى."
+msgstr "قۇرۇلۇشنى ئەكىرەلمىدى"
 
 #: appwizardplugin.cpp:207
 #, kde-format
@@ -127,32 +118,28 @@ msgid "Project Templates"
 msgstr "قۇرۇلۇش قېلىپلىرى"
 
 #: projectselectionpage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "كاتېگورىيە"
 
 #: projectselectionpage.cpp:60
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
-msgstr "قۇرۇلۇش قېلىپلىرى"
+msgstr ""
 
 #: projectselectionpage.cpp:70
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr "تېخىمۇ كۆپ قېلىپلارغا ئېرىشىش"
+msgstr ""
 
 #: projectselectionpage.cpp:77
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
-msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
+msgstr ""
 
 #: projectselectionpage.cpp:173
 #, kde-format
@@ -180,10 +167,9 @@ msgid "Invalid project template, please choose a leaf item"
 msgstr "قۇرۇلۇش قېلىپى ئىناۋەتسىز، بىر تارماق تۈرنى تاللاڭ"
 
 #: projectselectionpage.cpp:247
-#, fuzzy, kde-format
-#| msgid "Path already exists and contains files"
+#, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr "يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار"
+msgstr ""
 
 #: projectselectionpage.cpp:294
 #, kde-format
@@ -191,55 +177,47 @@ msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
-"كۆرسىتىلگەن يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار. راستلا داۋاملاشتۇرامسىز؟"
+"كۆرسىتىلگەن يول مەۋجۇت ھەم ئىچىدە ھۆججەتلەر بار. راستتىنلا داۋاملاشتۇرامسىز؟"
 
 #: projectselectionpage.cpp:310
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
-msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:group"
 msgid "Properties"
 msgstr "خاسلىق"
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Project"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
-msgstr "قۇرۇلۇش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
 msgstr "ئورنى:"
 
 #: projectvcspage.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "No Version Control Support chosen"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
 msgstr "يوق"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
-#, fuzzy, kde-format
-#| msgid "Version Control System:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
-msgstr "نەشر كونترول قىلىش سىستېمىسى"
+msgstr ""
 
 #~ msgid "Failed to create project"
 #~ msgstr "قۇرۇلۇش قۇرۇش مەغلۇپ بولدى"
@@ -248,7 +226,6 @@ msgstr "نەشر كونترول قىلىش سىستېمىسى"
 #~ msgid "Project"
 #~ msgstr "قۇرۇلۇش"
 
-#, fuzzy
 #~| msgid "Application Name:"
 #~ msgid "Application Wizard"
 #~ msgstr "ئەمىلى پروگرامما نامى :"

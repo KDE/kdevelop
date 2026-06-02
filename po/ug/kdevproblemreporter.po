@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:19-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: problemreporterplugin.cpp:97
 #, kde-format
@@ -24,25 +25,22 @@ msgstr ""
 
 #: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
 #: problemsview.cpp:318
-#, fuzzy, kde-format
-#| msgid "Problems"
+#, kde-format
 msgctxt "@title:window"
 msgid "Problems"
-msgstr "مەسىلىلەر"
+msgstr ""
 
 #: problemreporterplugin.cpp:285
-#, fuzzy, kde-format
-#| msgid "Solve Problem"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
-msgstr "مەسىلە ھەل قىلىش"
+msgstr ""
 
 #: problemreporterplugin.cpp:287
-#, fuzzy, kde-format
-#| msgid "Solve: %1"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"
-msgstr "يېشىم: %1"
+msgstr ""
 
 #: problemsview.cpp:36
 #, kde-format
@@ -57,8 +55,7 @@ msgid "Which files to display the problems for"
 msgstr ""
 
 #: problemsview.cpp:53
-#, fuzzy, kde-format
-#| msgid "Current Document"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Document"
 msgstr "نۆۋەتتىكى پۈتۈك"
@@ -70,11 +67,10 @@ msgid "Display problems in current document"
 msgstr ""
 
 #: problemsview.cpp:57
-#, fuzzy, kde-format
-#| msgid "Open Documents"
+#, kde-format
 msgctxt "@option:check"
 msgid "Open Documents"
-msgstr "پۈتۈك ئاچ"
+msgstr ""
 
 #: problemsview.cpp:58
 #, kde-format
@@ -83,8 +79,7 @@ msgid "Display problems in all open documents"
 msgstr ""
 
 #: problemsview.cpp:61
-#, fuzzy, kde-format
-#| msgid "Current Project"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Project"
 msgstr "نۆۋەتتىكى قۇرۇلۇش"
@@ -99,7 +94,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "All Projects"
-msgstr ""
+msgstr "ھەممە قۇرۇلۇش"
 
 #: problemsview.cpp:66
 #, kde-format
@@ -135,7 +130,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show All"
-msgstr ""
+msgstr "ھەممىنى كۆرسەت"
 
 #: problemsview.cpp:79
 #, kde-format
@@ -150,11 +145,10 @@ msgid "Path Filter..."
 msgstr ""
 
 #: problemsview.cpp:132
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Imports"
-msgstr "خاتالىق"
+msgstr ""
 
 #: problemsview.cpp:133
 #, kde-format
@@ -166,27 +160,25 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display errors"
-msgstr ""
+msgstr "خاتالىقنى كۆرسەت"
 
 #: problemsview.cpp:145
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Errors"
-msgstr "خاتالىق"
+msgstr "خاتالىقنى كۆرسەت"
 
 #: problemsview.cpp:148
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display warnings"
-msgstr ""
+msgstr "ئاگاھلاندۇرۇشنى كۆرسەت"
 
 #: problemsview.cpp:150
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Warnings"
-msgstr "ئاگاھلاندۇرۇش"
+msgstr ""
 
 #: problemsview.cpp:153
 #, kde-format
@@ -195,33 +187,31 @@ msgid "Display hints"
 msgstr ""
 
 #: problemsview.cpp:155
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Hints"
-msgstr "ئاگاھلاندۇرۇش"
+msgstr ""
 
 #: problemsview.cpp:175
 #, kde-format
 msgctxt "@title:menu"
 msgid "Grouping"
-msgstr ""
+msgstr "گۇرۇپپىلاش"
 
 #: problemsview.cpp:180
 #, kde-format
 msgctxt "@option:check"
 msgid "None"
-msgstr ""
+msgstr "يوق"
 
 #: problemsview.cpp:181
 #, kde-format
 msgctxt "@option:check"
 msgid "Path"
-msgstr ""
+msgstr "يول"
 
 #: problemsview.cpp:182
-#, fuzzy, kde-format
-#| msgid "Severity"
+#, kde-format
 msgctxt "@option:check"
 msgid "Severity"
 msgstr "مۇھىملىقى"
@@ -230,32 +220,28 @@ msgstr "مۇھىملىقى"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "ئىزدە…"
 
 #: problemsview.cpp:456
 #, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: problemsview.cpp:494
-#, fuzzy, kde-format
-#| msgid "Solve: %1"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"
-msgstr "يېشىم: %1"
+msgstr ""
 
 #: problemtreeview.cpp:96
-#, fuzzy, kde-format
-#| msgid "Problems"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
-msgstr "مەسىلىلەر"
+msgstr ""
 
 #: problemtreeview.cpp:251
-#, fuzzy, kde-format
-#| msgctxt "@title:column problem description"
-#| msgid "Problem"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
 msgstr "مەسىلە"
@@ -267,13 +253,11 @@ msgid "&Copy Description"
 msgstr ""
 
 #: problemtreeview.cpp:272
-#, fuzzy, kde-format
-#| msgid "Solve: %1"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"
-msgstr "يېشىم: %1"
+msgstr ""
 
-#, fuzzy
 #~| msgid "Solve: %1"
 #~ msgid "Solve"
 #~ msgstr "يېشىم: %1"

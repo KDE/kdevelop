@@ -1,0 +1,55 @@
+# Uyghur translation for kdevdocker.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Abduqadir Abliz <sahranbay@gmail.com>, 2026., YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"PO-Revision-Date: 2026-05-31 18:14-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+#: dockerplugin.cpp:133
+#, kde-format
+msgid "docker build '%1'"
+msgstr ""
+
+#: dockerplugin.cpp:137
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "بەلگە ئاتى تاللىنىدۇ"
+
+#: dockerplugin.cpp:138
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Tag name for '%1':"
+msgstr "«%1» نىڭ بەلگە ئىسمى:"
+
+#: dockerplugin.cpp:145
+#, kde-format
+msgctxt "%1 - Docker tag name"
+msgid "Docker Build \"%1\""
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dockerpreferences.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "'docker run' arguments:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dockerpreferences.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects volume:"
+msgstr ""

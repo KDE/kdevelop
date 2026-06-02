@@ -8,28 +8,27 @@ msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:13-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: cmakebuilddirchooser.cpp:29
-#, fuzzy, kde-format
-#| msgid "Configure a build directory for %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "%1 ئۈچۈن قۇرۇش مۇندەرىجىسىنى سەپلەيدۇ"
+msgstr ""
 
 #: cmakebuilddirchooser.cpp:86
-#, fuzzy, kde-format
-#| msgid "Configure a build directory for %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr "%1 ئۈچۈن قۇرۇش مۇندەرىجىسىنى سەپلەيدۇ"
+msgstr ""
 
 #: cmakebuilddirchooser.cpp:196
 #, kde-format
@@ -68,27 +67,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr "ياساش مۇندەرىجىسى(&B)"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "New build directory"
-msgstr "ياساش مۇندەرىجىسى(&B)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: cmakebuilddirchooser.ui:48
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build &directory:"
-msgstr "ياساش مۇندەرىجىسى(&B)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: cmakebuilddirchooser.ui:84
@@ -115,11 +111,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
-msgstr "ياساش مۇندەرىجىسى(&B)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
@@ -127,7 +122,7 @@ msgstr "ياساش مۇندەرىجىسى(&B)"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "قوشۇمچە ئۆزگەرگۈچى:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: cmakebuilddirchooser.ui:182
@@ -149,36 +144,31 @@ msgid "INVALID"
 msgstr "ئىناۋەتسىز"
 
 #: cmakecodecompletionmodel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "بۇيرۇق"
 
 #: cmakecodecompletionmodel.cpp:201
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "ئۆزگىرىشچان"
 
 #: cmakecodecompletionmodel.cpp:202
-#, fuzzy, kde-format
-#| msgid "Macro"
+#, kde-format
 msgctxt "@item"
 msgid "Macro"
-msgstr "Macro"
+msgstr ""
 
 #: cmakecodecompletionmodel.cpp:203
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "يول"
 
 #: cmakecodecompletionmodel.cpp:204
-#, fuzzy, kde-format
-#| msgid "Target"
+#, kde-format
 msgctxt "@item"
 msgid "Target"
 msgstr "نىشان"
@@ -189,39 +179,34 @@ msgid "wrong"
 msgstr ""
 
 #: cmakecommandscontents.cpp:29
-#, fuzzy, kde-format
-#| msgid "Commands"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Commands"
-msgstr "بۇيرۇقلار"
+msgstr "بۇيرۇق"
 
 #: cmakecommandscontents.cpp:30
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Variables"
-msgstr "ئۆزگەرگۈچىلەر"
+msgstr "ئۆزگەرگۈچى"
 
 #: cmakecommandscontents.cpp:31
-#, fuzzy, kde-format
-#| msgid "Modules"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Modules"
-msgstr "بۆلەكلەر"
+msgstr "بۆلەك"
 
 #: cmakecommandscontents.cpp:32
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Properties"
 msgstr "خاسلىق"
 
 #: cmakecommandscontents.cpp:33
-#, fuzzy, kde-format
-#| msgid "Policies"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Policies"
-msgstr "تەدبىرلەر"
+msgstr "تۈزۈم"
 
 #: cmakecommandscontents.cpp:102
 #, kde-format
@@ -278,32 +263,28 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
-#, fuzzy, kde-format
-#| msgid "Cache Values"
+#, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
-msgstr "غەملەك قىممەتلىرى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgctxt "@label"
 msgid "Comment:"
 msgstr "ئىزاھات:"
 
 #. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
 #: settings/cmakebuildsettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Show Advanced"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced"
-msgstr "ئالىينى كۆرسىتىش"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
 #: settings/cmakebuildsettings.ui:125
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:group"
 msgid "Advanced"
 msgstr "ئالىي"
@@ -317,11 +298,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
-msgstr "ياساش مۇندەرىجىسى(&B)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: settings/cmakebuildsettings.ui:198
@@ -339,11 +319,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
-#, fuzzy, kde-format
-#| msgid "Show Advanced Values"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
-msgstr "ئالىي قىممەتلەرنى كۆرسىتىش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: settings/cmakebuildsettings.ui:242
@@ -353,36 +332,31 @@ msgid "CMake executable:"
 msgstr ""
 
 #: settings/cmakecachemodel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "ئاتى"
 
 #: settings/cmakecachemodel.cpp:37
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: settings/cmakecachemodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "قىممەت"
 
 #: settings/cmakecachemodel.cpp:39
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "ئىزاھات"
 
 #: settings/cmakecachemodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:column"
 msgid "Advanced"
 msgstr "ئالىي"
@@ -391,7 +365,7 @@ msgstr "ئالىي"
 #, kde-format
 msgctxt "@title:column"
 msgid "Strings"
-msgstr ""
+msgstr "ھەرب- بەلگە تىزىقى"
 
 #: settings/cmakepreferences.cpp:370
 #, kde-format
@@ -404,7 +378,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "ئۆچۈرمە"
 
 #: settings/cmakepreferences.cpp:379
 #, kde-format
@@ -415,7 +389,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
-msgstr ""
+msgstr "CMake"
 
 #: settings/cmakepreferences.cpp:430
 #, kde-format
@@ -431,7 +405,7 @@ msgstr ""
 #: testing/ctestrunjob.cpp:77
 #, kde-format
 msgid "CTest"
-msgstr "CTest"
+msgstr ""
 
 #: testing/ctestrunjob.cpp:127
 #, kde-format
@@ -463,7 +437,6 @@ msgstr[0] ""
 #~ msgid "Your emails"
 #~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
 
-#, fuzzy
 #~| msgid "CMake Directory"
 #~ msgid "CMake Binary:"
 #~ msgstr "CMake مۇندەرىجىسى"

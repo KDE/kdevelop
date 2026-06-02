@@ -8,27 +8,28 @@ msgstr ""
 "Project-Id-Version: kdevcodeutils\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:13-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Document Declaration"
-msgstr ""
+msgstr "پۈتۈك باياناتى"
 
 #: codeutilsplugin.cpp:50
 #, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
-msgstr ""
+msgstr "Alt+Shift+d"
 
 #: codeutilsplugin.cpp:52
 #, kde-format
@@ -61,7 +62,6 @@ msgstr "…"
 #~ msgid "Your emails"
 #~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
 
-#, fuzzy
 #~| msgid "Code Utilities"
 #~ msgid "Code Utils"
 #~ msgstr "كود قوراللىرى"

@@ -8,21 +8,22 @@ msgstr ""
 "Project-Id-Version: kdevokteta\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:18-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n: ectx: Menu (permission)
 #: kdevokteta.rc:10
 #, kde-format
 msgctxt "@title:menu"
 msgid "Permissions"
-msgstr "ئىمتىيازلار"
+msgstr "ئىجازەت"
 
 #. i18n: ectx: Menu (view)
 #: kdevokteta.rc:39
@@ -34,13 +35,13 @@ msgstr "كۆرۈنۈش"
 #: kdevokteta.rc:57
 #, kde-format
 msgid "Bookmarks"
-msgstr "خەتكۈشلەر"
+msgstr "خەتكۈش"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevokteta.rc:77
 #, kde-format
 msgid "Main Toolbar"
-msgstr ""
+msgstr "ئاساسىي قورال بالداق"
 
 #: oktetadocument.cpp:130
 #, kde-format
@@ -48,18 +49,16 @@ msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "پۈتۈك «%1» نىڭ ساقلانمىغان ئۆزگەرتىشلىرى بار. بۇلارنى ساقلامسىز؟"
 
 #: oktetadocument.cpp:131
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "پۈتۈك ياپ"
 
 #: oktetaplugin.cpp:94
-#, fuzzy, kde-format
-#| msgid "Hex Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
-msgstr "ئون ئالتىلىك تەھرىرلىگۈچ"
+msgstr ""
 
 #: oktetawidget.cpp:92
 #, kde-format

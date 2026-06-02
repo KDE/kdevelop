@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: committoolview.cpp:200 committoolview.cpp:201
 #, kde-format
@@ -25,7 +26,7 @@ msgstr ""
 #: committoolview.cpp:218
 #, kde-format
 msgid "Refresh"
-msgstr ""
+msgstr "يېڭىلا"
 
 #: committoolview.cpp:219
 #, kde-format
@@ -100,12 +101,12 @@ msgstr ""
 #: diffviewsctrl.cpp:128 diffviewsctrl.cpp:134
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "جەنۇب"
 
 #: diffviewsctrl.cpp:129 diffviewsctrl.cpp:135
 #, kde-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: diffviewsctrl.cpp:181
 #, kde-format
@@ -138,7 +139,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
-msgstr ""
+msgstr "ئەسلىگە ياندۇر"
 
 #: gitmessagehighlighter.cpp:66
 #, kde-format
@@ -177,7 +178,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
-msgstr ""
+msgstr "ئاتى(&N):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gitnameemaildialog.ui:48
@@ -231,7 +232,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr ""
+msgstr "ۋاقىتلىق ساقلاشنى قاڭقىت"
 
 #: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
@@ -265,10 +266,9 @@ msgid "Email or name for Git not specified"
 msgstr ""
 
 #: gitplugin.cpp:548
-#, fuzzy, kde-format
-#| msgid "No files or message specified"
+#, kde-format
 msgid "No message specified"
-msgstr "ھۆججەت يوق ياكى ئۇچۇر بەلگىلەنمىگەن"
+msgstr ""
 
 #: gitplugin.cpp:622
 #, kde-format
@@ -284,13 +284,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "ۋاقىتلىق ساقلا"
 
 #: gitplugin.cpp:904
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "ساقلاپ قال"
 
 #: rebasedialog.cpp:25
 #, kde-format
@@ -307,11 +307,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rebasedialog.ui:20
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Base branch:"
-msgstr "تارماق"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
 #: rebasedialog.ui:40
@@ -325,7 +324,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel"
-msgstr ""
+msgstr "ۋاز كەچ"
 
 #: repostatusmodel.cpp:78
 #, kde-format
@@ -343,7 +342,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr ""
+msgstr "توقۇنۇشلار"
 
 #: repostatusmodel.cpp:86
 #, kde-format
@@ -355,7 +354,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "ۋاقىتلىق ساقلاندى"
 
 #: repostatusmodel.cpp:97
 #, kde-format
@@ -366,7 +365,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
-msgstr ""
+msgstr "ئۆزگەرتىلگەن ۋاقتى"
 
 #: repostatusmodel.cpp:104
 #, kde-format
@@ -377,7 +376,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr ""
+msgstr "توقۇنۇشلار"
 
 #: repostatusmodel.cpp:111
 #, kde-format
@@ -388,7 +387,7 @@ msgstr ""
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "ئىزلانمىغان"
 
 #: repostatusmodel.cpp:117
 #, kde-format
@@ -513,13 +512,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "ئىزلانمىغان"
 
 #: repostatusmodel.cpp:289
 #, kde-format
 msgctxt "file in unknown (invalid) state"
 msgid "Unknown"
-msgstr ""
+msgstr "يوچۇن"
 
 #: repostatusmodel.cpp:382
 #, kde-format
@@ -542,21 +541,20 @@ msgid " (untracked)"
 msgstr ""
 
 #: repostatusmodel.cpp:603
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgid "no branch"
-msgstr "تارماق"
+msgstr ""
 
 #: repostatusmodel.cpp:604
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: simplecommitform.cpp:40
 #, kde-format
 msgid "Commit"
-msgstr ""
+msgstr "تاپشۇر(_C)"
 
 #: simplecommitform.cpp:65
 #, kde-format
@@ -601,8 +599,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
-#, fuzzy, kde-format
-#| msgid "Drop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "سۆرەپ تاشلا"
@@ -646,8 +643,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "Pop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Pop"
 msgstr "پوپ"
@@ -661,8 +657,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
-#, fuzzy, kde-format
-#| msgid "Show"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show"
 msgstr "كۆرسەت"
@@ -676,8 +671,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
-#, fuzzy, kde-format
-#| msgid "Apply"
+#, kde-format
 msgctxt "@action:button"
 msgid "Apply"
 msgstr "قوللان"
@@ -691,11 +685,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111
-#, fuzzy, kde-format
-#| msgid "Branch"
+#, kde-format
 msgctxt "@action:button"
 msgid "Branch"
-msgstr "تارماق"
+msgstr "شاخ"
 
 #~ msgid "error: %1"
 #~ msgstr "خاتالىق: %1"

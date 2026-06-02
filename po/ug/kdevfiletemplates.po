@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: classidentifierpage.cpp:31
 #, kde-format
@@ -36,11 +37,10 @@ msgid "Variable type and identifier"
 msgstr ""
 
 #: filetemplatesplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "Create From Template"
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "قېلىپتىن قۇرۇش"
+msgstr ""
 
 #: filetemplatesplugin.cpp:71
 #, kde-format
@@ -51,32 +51,28 @@ msgid ""
 msgstr ""
 
 #: filetemplatesplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid "Create From Template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create new files from a template"
-msgstr "قېلىپتىن قۇرۇش"
+msgstr ""
 
 #: filetemplatesplugin.cpp:76 filetemplatesplugin.cpp:308
-#, fuzzy, kde-format
-#| msgid "Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Template Preview"
-msgstr "قېلىپ"
+msgstr ""
 
 #: filetemplatesplugin.cpp:115
-#, fuzzy, kde-format
-#| msgid "Create From Template"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create from Template..."
-msgstr "قېلىپتىن قۇرۇش"
+msgstr ""
 
 #: filetemplatesplugin.cpp:135
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Template Preview"
-msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
+msgstr ""
 
 #: filetemplatesplugin.cpp:147
 #, kde-format
@@ -84,8 +80,7 @@ msgid "File Templates"
 msgstr "ھۆججەت قېلىپلىرى"
 
 #: licensepage.cpp:85
-#, fuzzy, kde-format
-#| msgid "Other"
+#, kde-format
 msgctxt "@item:inlistbox other license"
 msgid "Other"
 msgstr "باشقا"
@@ -112,12 +107,11 @@ msgid_plural "Invalid output files: %2"
 msgstr[0] ""
 
 #: outputpage.cpp:171
-#, fuzzy, kde-format
-#| msgid "Output"
+#, kde-format
 msgctxt "@title:group"
 msgid "Output File"
 msgid_plural "Output Files"
-msgstr[0] "چىقار"
+msgstr[0] ""
 
 #: outputpage.cpp:172
 #, kde-format
@@ -130,7 +124,7 @@ msgstr[0] ""
 #, kde-format
 msgctxt "@label:chooser file name arg"
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: outputpage.cpp:194
 #, kde-format
@@ -140,25 +134,22 @@ msgstr "قۇر: "
 #: outputpage.cpp:200
 #, kde-format
 msgid "Column: "
-msgstr "ئىستون: "
+msgstr "رەت: "
 
 #: overridespage.cpp:37
-#, fuzzy, kde-format
-#| msgid "Public"
+#, kde-format
 msgctxt "@item access policy"
 msgid "Public"
 msgstr "ئاممىۋى"
 
 #: overridespage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Protected"
+#, kde-format
 msgctxt "@item access policy"
 msgid "Protected"
 msgstr "قوغدالغان"
 
 #: overridespage.cpp:41
-#, fuzzy, kde-format
-#| msgid "Private"
+#, kde-format
 msgctxt "@item access policy"
 msgid "Private"
 msgstr "شەخسىي"
@@ -176,18 +167,16 @@ msgid "Destructor"
 msgstr ""
 
 #: overridespage.cpp:55
-#, fuzzy, kde-format
-#| msgid "Signal"
+#, kde-format
 msgctxt "@item function property"
 msgid "Signal"
-msgstr "سىگنال"
+msgstr ""
 
 #: overridespage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Slot"
+#, kde-format
 msgctxt "@item function property"
 msgid "Slot"
-msgstr "ئوقۇر"
+msgstr ""
 
 #: overridespage.cpp:59
 #, kde-format
@@ -208,11 +197,10 @@ msgid "Create Files from Template in <filename>%1</filename>"
 msgstr ""
 
 #: templateclassassistant.cpp:284 templateclassassistant.cpp:531
-#, fuzzy, kde-format
-#| msgid "Create From Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create Files from Template"
-msgstr "قېلىپتىن قۇرۇش"
+msgstr ""
 
 #: templateclassassistant.cpp:289
 #, kde-format
@@ -246,11 +234,10 @@ msgid "Override Methods"
 msgstr ""
 
 #: templateclassassistant.cpp:342
-#, fuzzy, kde-format
-#| msgid "Class Members"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Class Members"
-msgstr "تىپ(Class) ئەزالىرى"
+msgstr ""
 
 #: templateclassassistant.cpp:370
 #, kde-format
@@ -259,29 +246,25 @@ msgid "Test Cases"
 msgstr ""
 
 #: templateclassassistant.cpp:380
-#, fuzzy, kde-format
-#| msgid "License"
+#, kde-format
 msgctxt "@title:tab"
 msgid "License"
 msgstr "ئىجازەتنامە"
 
 #: templateclassassistant.cpp:386
-#, fuzzy, kde-format
-#| msgid "Output"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Output"
 msgstr "چىقار"
 
 #: templateclassassistant.cpp:396
-#, fuzzy, kde-format
-#| msgid "Template"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Template Options"
-msgstr "قېلىپ"
+msgstr ""
 
 #: templateclassassistant.cpp:479
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "@item default declarations"
 msgid "Default"
 msgstr "كۆڭۈلدىكى"
@@ -290,7 +273,7 @@ msgstr "كۆڭۈلدىكى"
 #, kde-format
 msgctxt "@label"
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: templatepreviewtoolview.cpp:92
 #, kde-kuit-format
@@ -306,27 +289,24 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: templatepreviewtoolview.ui:30
-#, fuzzy, kde-format
-#| msgid "Template"
+#, kde-format
 msgctxt "@title:group"
 msgid "Template Type"
-msgstr "قېلىپ"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, projectRadioButton)
 #: templatepreviewtoolview.ui:39
-#, fuzzy, kde-format
-#| msgid "File Templates"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Project template"
-msgstr "ھۆججەت قېلىپلىرى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, classRadioButton)
 #: templatepreviewtoolview.ui:49
-#, fuzzy, kde-format
-#| msgid "Class Members"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Class template"
-msgstr "تىپ(Class) ئەزالىرى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, emptyLinesPolicyLabel)
 #: templatepreviewtoolview.ui:61
@@ -363,8 +343,7 @@ msgid "<b>Preview:</b> %1"
 msgstr ""
 
 #: templateselectionpage.cpp:205
-#, fuzzy, kde-format
-#| msgid "Language"
+#, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "تىل"
@@ -376,25 +355,22 @@ msgid "Framework"
 msgstr ""
 
 #: templateselectionpage.cpp:207
-#, fuzzy, kde-format
-#| msgid "Template"
+#, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "قېلىپ"
 
 #: templateselectionpage.cpp:242
-#, fuzzy, kde-format
-#| msgid "Create From Template"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
-msgstr "قېلىپتىن قۇرۇش"
+msgstr ""
 
 #: templateselectionpage.cpp:249
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
-msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/licensechooser.ui:29
@@ -404,11 +380,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/licensechooser.ui:44
-#, fuzzy, kde-format
-#| msgid "License"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "License type:"
-msgstr "ئىجازەتنامە"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:64
@@ -419,11 +394,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
 #: ui/licensechooser.ui:67
-#, fuzzy, kde-format
-#| msgid "License"
+#, kde-format
 msgctxt "@option:check"
 msgid "Save license"
-msgstr "ئىجازەتنامە"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/licensechooser.ui:94
@@ -442,11 +416,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, identifierLabel)
 #: ui/newclass.ui:35 ui/testcases.ui:35
-#, fuzzy, kde-format
-#| msgid "Identifier"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Identifier:"
-msgstr "بەلگە"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, inheritanceLabel)
 #: ui/newclass.ui:48
@@ -483,8 +456,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:47
-#, fuzzy, kde-format
-#| msgid "Access"
+#, kde-format
 msgctxt "@title:column"
 msgid "Access"
 msgstr "زىيارەت"
@@ -494,23 +466,21 @@ msgstr "زىيارەت"
 #, kde-format
 msgctxt "@title:column"
 msgid "Properties"
-msgstr ""
+msgstr "خاسلىق"
 
 #. i18n: ectx: property (text), widget (QPushButton, selectAllPushButton)
 #: ui/overridevirtuals.ui:62
-#, fuzzy, kde-format
-#| msgid "Select &All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Select &All"
 msgstr "ھەممىنى تاللا(&A)"
 
 #. i18n: ectx: property (text), widget (QPushButton, deselectAllPushButton)
 #: ui/overridevirtuals.ui:69
-#, fuzzy, kde-format
-#| msgid "&Deselect All"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Deselect All"
-msgstr "ھەممىنى تاللىما(&D)"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/testcases.ui:29

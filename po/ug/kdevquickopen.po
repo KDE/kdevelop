@@ -8,20 +8,21 @@ msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:20-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: actionsquickopenprovider.cpp:36
 #, kde-format
 msgctxt "description (shortcut)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: documentationquickopenprovider.cpp:33
 #, kde-format
@@ -48,7 +49,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1: file path"
 msgid "File: %1"
-msgstr ""
+msgstr "ھۆججەت: %1"
 
 #. i18n: ectx: ToolBar (quickOpenToolBar)
 #: kdevquickopen.rc:42
@@ -68,48 +69,42 @@ msgid "Not parsed yet"
 msgstr ""
 
 #: projectfilequickopen.cpp:179
-#, fuzzy, kde-format
-#| msgid "none"
+#, kde-format
 msgctxt "@item no project"
 msgid "none"
 msgstr "يوق"
 
 #: projectitemquickopen.cpp:346 projectitemquickopen.cpp:357
 #: quickopenplugin.cpp:66
-#, fuzzy, kde-format
-#| msgid "Classes"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Classes"
-msgstr "تىپلار"
+msgstr "تىپ"
 
 #: projectitemquickopen.cpp:347 projectitemquickopen.cpp:360
 #: quickopenplugin.cpp:65
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Functions"
-msgstr "فۇنكسىيىلەر"
+msgstr "فۇنكسىيە"
 
 #: projectitemquickopen.cpp:355 quickopenplugin.cpp:59
-#, fuzzy, kde-format
-#| msgid "Project"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Project"
 msgstr "قۇرۇلۇش"
 
 #: quickopenplugin.cpp:60
-#, fuzzy, kde-format
-#| msgid "Includes"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Includes"
 msgstr "ئۆز ئىچىگە ئالىدۇ"
 
 #: quickopenplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Includers"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Includers"
-msgstr "ئۆز ئىچىگە ئالغۇچى"
+msgstr ""
 
 #: quickopenplugin.cpp:62
 #, kde-format
@@ -118,53 +113,46 @@ msgid "Currently Open"
 msgstr ""
 
 #: quickopenplugin.cpp:64
-#, fuzzy, kde-format
-#| msgid "Files"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Files"
-msgstr "ھۆججەتلەر"
+msgstr "ھۆججەت"
 
 #: quickopenplugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Documentation"
-msgstr "قوللانمىلار"
+msgstr "قوللانما"
 
 #: quickopenplugin.cpp:68
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Actions"
-msgstr "فۇنكسىيىلەر"
+msgstr "مەشغۇلات"
 
 #: quickopenplugin.cpp:279
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "&Quick Open"
-msgstr "تېز ئېچىش"
+msgstr "تېز ئاچ(&Q)"
 
 #: quickopenplugin.cpp:285
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &File"
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:291
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Class"
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:297
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Function"
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:303
 #, kde-format
@@ -173,18 +161,16 @@ msgid "Quick Open &Already Open File"
 msgstr ""
 
 #: quickopenplugin.cpp:308
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Documentation"
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:314
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Actions"
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:319
 #, kde-format
@@ -199,54 +185,47 @@ msgid "Jump to Definition"
 msgstr ""
 
 #: quickopenplugin.cpp:330
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Embedded Quick Open"
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:337
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgctxt "@action jump to"
 msgid "Next Function"
-msgstr "فۇنكسىيىلەر"
+msgstr "كېيىنكى فۇنكسىيە"
 
 #: quickopenplugin.cpp:342
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgctxt "@action jump to"
 msgid "Previous Function"
-msgstr "فۇنكسىيىلەر"
+msgstr "ئالدىنقى فۇنكسىيە"
 
 #: quickopenplugin.cpp:347
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgctxt "@action open outline quick open menu"
 msgid "Outline"
 msgstr "ئىزنا"
 
 #: quickopenplugin.cpp:497
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@title:window"
 msgid "Quick Open"
 msgstr "تېز ئېچىش"
 
 #: quickopenplugin.cpp:831
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgctxt "@title:window"
 msgid "Outline"
 msgstr "ئىزنا"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
 #: quickopenplugin.cpp:941 quickopenwidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
-msgstr "تېز ئېچىش"
+msgstr ""
 
 #: quickopenplugin.cpp:942
 #, kde-format
@@ -258,27 +237,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, searchLabel)
 #: quickopenwidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Search:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Search:"
 msgstr "ئىزدە:"
 
 #. i18n: ectx: property (text), widget (QPushButton, okButton)
 #: quickopenwidget.ui:54
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "@action:button"
 msgid "Open"
 msgstr "ئاچ"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: quickopenwidget.ui:61
-#, fuzzy, kde-format
-#| msgid "Cancel"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel"
-msgstr "ئەمەلدىن قالدۇر"
+msgstr "ۋاز كەچ"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: quickopenwidget.ui:91

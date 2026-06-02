@@ -8,24 +8,25 @@ msgstr ""
 "Project-Id-Version: kdevmanpage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:18-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: manpagedocumentation.cpp:261
 #, kde-format
 msgid "Man Content Page"
-msgstr ""
+msgstr "قوللانما مەزمۇن بېتى"
 
 #: manpagedocumentationwidget.cpp:32
 #, kde-format
 msgid "Loading man pages..."
-msgstr ""
+msgstr "قوللانما بېتىنى يۈكلەۋاتىدۇ…"
 
 #: manpagedocumentationwidget.cpp:86
 #, kde-format
@@ -37,7 +38,7 @@ msgstr ""
 #: manpageplugin.cpp:53
 #, kde-format
 msgid "Man Page"
-msgstr ""
+msgstr "قوللانما بېتى"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

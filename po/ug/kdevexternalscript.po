@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: editexternalscript.cpp:30
 #, kde-format
@@ -114,23 +115,20 @@ msgid ""
 msgstr ""
 
 #: editexternalscript.cpp:106
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New External Script"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr ""
 
 #: editexternalscript.cpp:108
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit External Script '%1'"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: editexternalscript.ui:19
-#, fuzzy, kde-format
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
 msgstr "ئاتى(&N):"
@@ -146,24 +144,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
-#, fuzzy, kde-format
-#| msgid "&Command:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Command:"
-msgstr "بۇيرۇق(&C):"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, stdinLabel)
 #: editexternalscript.ui:51
-#, fuzzy, kde-format
-#| msgid "&Input:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Input:"
-msgstr "كىرگۈزۈش(&I):"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:62
-#, fuzzy, kde-format
-#| msgid "nothing"
+#, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Nothing"
 msgstr "يوق"
@@ -191,16 +186,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
 #: editexternalscript.ui:85
-#, fuzzy, kde-format
-#| msgid "&Input:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&Output:"
-msgstr "كىرگۈزۈش(&I):"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:96
-#, fuzzy, kde-format
-#| msgid "ignore"
+#, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Ignore"
 msgstr "پەرۋا قىلما"
@@ -238,20 +231,18 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Create New File"
-msgstr ""
+msgstr "يېڭى ھۆججەت قۇر"
 
 #. i18n: ectx: property (text), widget (QLabel, stderrLabel)
 #: editexternalscript.ui:129
-#, fuzzy, kde-format
-#| msgid "Errors:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Errors:"
 msgstr "خاتالىق:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:140
-#, fuzzy, kde-format
-#| msgid "ignore"
+#, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Ignore"
 msgstr "پەرۋا قىلما"
@@ -296,7 +287,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Create New File"
-msgstr ""
+msgstr "يېڭى ھۆججەت قۇر"
 
 #. i18n: ectx: property (text), widget (QLabel, saveLabel)
 #: editexternalscript.ui:178
@@ -307,11 +298,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:189
-#, fuzzy, kde-format
-#| msgid "nothing"
+#, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Nothing"
-msgstr "يوق"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:194
@@ -343,11 +333,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:235
-#, fuzzy, kde-format
-#| msgid "Filter..."
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
-msgstr "سۈزگۈچ…"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:240
@@ -379,8 +368,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:261
-#, fuzzy, kde-format
-#| msgid "Shortcut:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Shortcut:"
 msgstr "تېزلەتمە:"
@@ -400,7 +388,7 @@ msgstr ""
 #: externalscriptjob.cpp:272
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr "*** ئۆلتۈرۈلگەن پروگراممىلار ***"
+msgstr "*** ئۆلتۈرۈلگەن پىروگراممىلار ***"
 
 #: externalscriptjob.cpp:352
 #, kde-format
@@ -427,12 +415,12 @@ msgstr "***چاتاق چىقتى. قايتۇرۇش كودى: %1 ***"
 msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
-msgstr "*** پروگرامما '%1' نى قوزغاتقىلى بولمىدى. يول توغرىمۇ تەكشۈرۈڭ ***"
+msgstr "*** پىروگرامما «%1» نى قوزغاتقىلى بولمىدى. يول توغرىمۇ تەكشۈرۈڭ ***"
 
 #: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr "سىرتقى قوليازما پىروگرامما"
 
 #: externalscriptplugin.cpp:137
 #, kde-format
@@ -455,39 +443,34 @@ msgid "Paste to Hastebin"
 msgstr ""
 
 #: externalscriptplugin.cpp:239
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:menu"
 msgid "External Scripts"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr "سىرتقى قوليازما پىروگرامما"
 
 #: externalscriptview.cpp:31
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr "سىرتقى قوليازما پىروگرامما"
 
 #: externalscriptview.cpp:50
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@action"
 msgid "Add External Script"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr ""
 
 #: externalscriptview.cpp:55
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr ""
 
 #: externalscriptview.cpp:60
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr ""
 
 #: externalscriptview.cpp:147
 #, kde-format
@@ -497,22 +480,20 @@ msgid ""
 msgstr ""
 
 #: externalscriptview.cpp:150
-#, fuzzy, kde-format
-#| msgid "External Scripts"
+#, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
-msgstr "سىرتقى قوليازما پروگرامما"
+msgstr ""
 
 #: externalscriptview.cpp:151
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "چىقىرىۋەت"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
 #: externalscriptview.ui:35
-#, fuzzy, kde-format
-#| msgid "Filter..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "سۈزگۈچ…"

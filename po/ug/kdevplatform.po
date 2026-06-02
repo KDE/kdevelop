@@ -8,28 +8,28 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-31 00:42+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 18:19-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #: debugger/breakpoint/breakpoint.cpp:195
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
 msgstr "خاتالىق"
@@ -38,24 +38,22 @@ msgstr "خاتالىق"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
-msgstr ""
+msgstr "ساقلانمىغان"
 
 #: debugger/breakpoint/breakpoint.cpp:203
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
-msgstr ""
+msgstr "كۈتۈۋاتىدۇ"
 
 #: debugger/breakpoint/breakpoint.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr ""
+msgstr "پاكىز"
 
 #: debugger/breakpoint/breakpoint.cpp:238
-#, fuzzy, kde-format
-#| msgctxt "project name (branch name)"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt "location (address)"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
@@ -125,10 +123,9 @@ msgid "Breakpoint"
 msgstr "توختاش نۇقتىسى"
 
 #: debugger/breakpoint/breakpointmodel.cpp:378
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgid "Breakpoint not found"
-msgstr "توختاش نۇقتىسى"
+msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:378
 #, kde-format
@@ -136,10 +133,9 @@ msgid "Couldn't find breakpoint at %1:%2"
 msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:384
-#, fuzzy, kde-format
-#| msgid "Breakpoint"
+#, kde-format
 msgid "&Breakpoint"
-msgstr "توختاش نۇقتىسى"
+msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:390
 #, kde-format
@@ -154,14 +150,14 @@ msgstr ""
 #: debugger/breakpoint/breakpointmodel.cpp:394
 #, kde-format
 msgid "&Bookmark"
-msgstr ""
+msgstr "خەتكۈش(&B)"
 
 #: debugger/breakpoint/breakpointmodel.cpp:436
 #: debugger/variable/variablecollection.cpp:422
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: debugger/breakpoint/breakpointmodel.cpp:437
 #, kde-format
@@ -206,22 +202,19 @@ msgid ""
 msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:86
-#, fuzzy, kde-format
-#| msgid "Breakpoints"
+#, kde-format
 msgid "Breakpoint Details"
-msgstr "توختاش نۇقتىلىرى"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:95
-#, fuzzy, kde-format
-#| msgid "Toggle Breakpoint"
+#, kde-format
 msgid "New code breakpoint ..."
-msgstr "توختاش نۇقتىسىنى ئالماشتۇر"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:96
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgid "Enter condition ..."
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:124
 #, kde-format
@@ -248,11 +241,10 @@ msgid "Data &Read"
 msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:142
-#, fuzzy, kde-format
-#| msgid "Access"
+#, kde-format
 msgctxt "Data access breakpoint"
 msgid "Data &Access"
-msgstr "زىيارەت"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:147
 #, kde-format
@@ -260,22 +252,19 @@ msgid "&Delete"
 msgstr "ئۆچۈر(&D)"
 
 #: debugger/breakpoint/breakpointwidget.cpp:156
-#, fuzzy, kde-format
-#| msgid "Disable"
+#, kde-format
 msgid "Disable &All"
-msgstr "چەكلە"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:157
-#, fuzzy, kde-format
-#| msgid "&Enable all"
+#, kde-format
 msgid "&Enable All"
-msgstr "ھەممىنى قوزغات(&E)"
+msgstr ""
 
 #: debugger/breakpoint/breakpointwidget.cpp:158
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgid "&Remove All"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: debugger/framestack/framestackmodel.cpp:187
 #, kde-format
@@ -387,16 +376,14 @@ msgid "Value"
 msgstr "قىممەت"
 
 #: debugger/variable/variabletooltip.cpp:115
-#, fuzzy, kde-format
-#| msgid "Match case"
+#, kde-format
 msgid "Watch This"
-msgstr "دەل ماسلاش"
+msgstr ""
 
 #: debugger/variable/variabletooltip.cpp:117
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgid "Stop on Change"
-msgstr "ئۆزگەرت"
+msgstr ""
 
 #: debugger/variable/variablewidget.cpp:87
 #, kde-format
@@ -480,8 +467,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Find:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Find:"
 msgstr "ئىزدە:"
@@ -491,58 +477,53 @@ msgstr "ئىزدە:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr ""
+msgstr "كېيىنكى ماس كەلگەنگە ئاتلا"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:69
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr ""
+msgstr "ئالدىنقى ماس كەلگەنگە ئاتلا"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Match case"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
-msgstr "دەل ماسلاش"
+msgstr ""
 
 #: documentation/documentationview.cpp:38
 #: shell/settings/documentationpreferences.cpp:25
 #, kde-format
 msgid "Documentation"
-msgstr "قوللانمىلار"
+msgstr "قوللانما"
 
 #: documentation/documentationview.cpp:69
-#, fuzzy, kde-format
-#| msgid "Back"
+#, kde-format
 msgctxt "@action go back"
 msgid "Back"
-msgstr "كەينى"
+msgstr "قايت"
 
 #: documentation/documentationview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Forward"
+#, kde-format
 msgctxt "@action go forward"
 msgid "Forward"
-msgstr "ئالدى"
+msgstr "ئالدىغا"
 
 #: documentation/documentationview.cpp:79
-#, fuzzy, kde-format
-#| msgid "Home"
+#, kde-format
 msgctxt "@action go to start page"
 msgid "Home"
-msgstr "ماكان"
+msgstr "باش بەت"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
 #: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:585
 #: vcs/dvcs/ui/branchmanager.ui:143
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "ئىزدە"
+msgstr "ئىزدە…"
 
 #: documentation/documentationview.cpp:111
 #, kde-format
@@ -557,8 +538,7 @@ msgid "Find in text of current documentation page"
 msgstr ""
 
 #: interfaces/contextmenuextension.cpp:133
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Debug"
 msgstr "سازلا"
@@ -589,10 +569,9 @@ msgid ""
 msgstr ""
 
 #: language/assistant/renameaction.cpp:69
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgid "Rename \"%1\" to \"%2\""
-msgstr "ئات ئۆزگەرت"
+msgstr ""
 
 #: language/assistant/renameaction.cpp:109
 #: language/assistant/renamefileaction.cpp:77
@@ -601,7 +580,7 @@ msgstr "ئات ئۆزگەرت"
 #: language/codegen/basicrefactoring.cpp:367
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr ""
+msgstr "ئۆزگىرىشنى قوللىنالمىدى: %1"
 
 #: language/assistant/renameassistant.cpp:108
 #, kde-format
@@ -688,11 +667,10 @@ msgid "not implemented"
 msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:91
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action"
 msgid "Rename \"%1\"..."
-msgstr "ئات ئۆزگەرت"
+msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:221
 #, kde-format
@@ -705,24 +683,22 @@ msgid "Declaration is located in non-writable file %1."
 msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:296
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr "ئات ئۆزگەرت"
+msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:300
 #, kde-format
 msgctxt "@title:tab"
 msgid "Uses"
-msgstr ""
+msgstr "ئىشلىتىلىشى"
 
 #: language/codegen/basicrefactoring.cpp:302
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
-msgstr "بايانات"
+msgstr ""
 
 #: language/codegen/basicrefactoring.cpp:309
 #, kde-format
@@ -731,19 +707,17 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename"
 msgstr "ئات ئۆزگەرت"
 
 #. i18n: ectx: property (text), widget (QLabel, newNameLabel)
 #: language/codegen/basicrefactoring.ui:22
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&New name:"
-msgstr "ئاتى:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:35
@@ -755,18 +729,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr "ئات ئۆزگەرت"
+msgstr "ئات ئۆزگەرت(&R)"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
 #, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
-msgstr ""
+msgstr "ۋاز كەچ(&C)"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -824,7 +797,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Abort"
-msgstr ""
+msgstr "توختات(&A)"
 
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
@@ -862,16 +835,14 @@ msgid "Import %1 as %2"
 msgstr ""
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgid "Import %1"
-msgstr "ئىمپورت قىل"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgid "lost declaration"
-msgstr "بايانات"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
@@ -889,16 +860,14 @@ msgid " :[value-dependent]"
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
-#, fuzzy, kde-format
-#| msgid "Namespace"
+#, kde-format
 msgid "namespace %1 "
-msgstr "ئات بوشلۇقى"
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
-#, fuzzy, kde-format
-#| msgid "enumerator "
+#, kde-format
 msgid "enumeration %1 "
-msgstr "سانىغۇچ "
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
 #, kde-format
@@ -908,7 +877,7 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
 #, kde-format
 msgid ") "
-msgstr ") "
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:184
 #, kde-format
@@ -928,7 +897,7 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:216
 #, kde-format
 msgid "Type: "
-msgstr "تىپى: "
+msgstr "تۈرى: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:235
 #, kde-format
@@ -966,10 +935,9 @@ msgid "Deprecated"
 msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:288
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Status: %1 "
-msgstr "ھالىتى"
+msgstr "ھالىتى: %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
 #, kde-format
@@ -979,7 +947,7 @@ msgstr "ئېنىقلىمىسى.: "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:300
 #, kde-format
 msgid "Decl.: "
-msgstr "Decl.: "
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:310
 #, kde-format
@@ -989,7 +957,7 @@ msgstr " ئېنىقلىمىسى.: "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:320
 #, kde-format
 msgid " Decl.: "
-msgstr " Decl.: "
+msgstr ""
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:328
 #, kde-format
@@ -1063,7 +1031,7 @@ msgstr ""
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:816
 #, kde-format
@@ -1104,7 +1072,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1، %2"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
 #, kde-format
@@ -1196,10 +1164,9 @@ msgid "Problem in <i>%1</i>"
 msgstr ""
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgid "Location: "
-msgstr "ئورنى"
+msgstr "ئورنى: "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:156
 #: language/duchain/navigation/problemnavigationcontext.cpp:166
@@ -1210,14 +1177,12 @@ msgstr ""
 #: language/duchain/navigation/problemnavigationcontext.cpp:159
 #, kde-format
 msgid " in "
-msgstr ""
+msgstr " ئىچىدە "
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Solution (%1)"
-msgstr "%1 نى سەپلە"
+msgstr ""
 
 #: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
@@ -1256,7 +1221,7 @@ msgstr ""
 #: shell/launchconfigurationdialog.cpp:481
 #, kde-format
 msgid "Global"
-msgstr "ئومۇمىي دائىرىلىك"
+msgstr "ئومۇمىيەت"
 
 #: language/duchain/navigation/useswidget.cpp:444
 #, kde-format
@@ -1286,13 +1251,13 @@ msgstr[0] ""
 #, kde-format
 msgctxt "Refers to closing a UI element"
 msgid "Collapse"
-msgstr "ئابزاس ئايرىمىسى يوشۇر"
+msgstr "يىغ"
 
 #: language/duchain/navigation/useswidget.cpp:555
 #, kde-format
 msgctxt "Refers to opening a UI element"
 msgid "Expand"
-msgstr "كېڭەيت"
+msgstr "ياي"
 
 #: language/duchain/navigation/useswidget.cpp:640
 #, kde-format
@@ -1313,12 +1278,12 @@ msgstr "ھەممىنى قاتلا"
 #: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
 #, kde-format
 msgid "Warning"
-msgstr ""
+msgstr "ئاگاھلاندۇرۇش"
 
 #: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
 #, kde-format
 msgid "Hint"
-msgstr ""
+msgstr "كۆرسەتمە(Hint)"
 
 #: language/duchain/problem.cpp:203 shell/problem.cpp:76
 #, kde-format
@@ -1353,12 +1318,12 @@ msgstr ""
 #: language/duchain/problem.cpp:215
 #, kde-format
 msgid "To-do"
-msgstr ""
+msgstr "قىلىدىغان ئىش"
 
 #: language/duchain/problem.cpp:218 shell/problem.cpp:75
 #, kde-format
 msgid "Unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: language/duchain/problem.cpp:225
 #, kde-format
@@ -1376,14 +1341,13 @@ msgstr ""
 #: language/duchain/types/containertypes.cpp:74
 #, kde-format
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 / %2"
 
 #: language/duchain/types/containertypes.cpp:84
 #: language/duchain/types/containertypes.cpp:85
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: language/duchain/types/containertypes.cpp:87
 #, kde-format
@@ -1458,10 +1422,9 @@ msgid "Failed to specify program to start: %1"
 msgstr ""
 
 #: outputview/outputexecutejob.cpp:283
-#, fuzzy, kde-format
-#| msgid "*** Finished ***"
+#, kde-format
 msgid "*** %1 ***"
-msgstr "*** تامام ***"
+msgstr ""
 
 #: outputview/outputexecutejob.cpp:309
 #, kde-format
@@ -1522,11 +1485,10 @@ msgid ""
 msgstr ""
 
 #: project/abstractfilemanagerplugin.cpp:328
-#, fuzzy, kde-format
-#| msgid "Project already being opened"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
-msgstr "قۇرۇلۇش ئېچىلىپ بولغان"
+msgstr ""
 
 #: project/abstractfilemanagerplugin.cpp:354
 #, kde-format
@@ -1638,8 +1600,7 @@ msgid "Enter the path to an item from the projects tree..."
 msgstr ""
 
 #: project/projectitemlineedit.cpp:160
-#, fuzzy, kde-format
-#| msgid "Select..."
+#, kde-format
 msgctxt "@action"
 msgid "Select..."
 msgstr "تاللا…"
@@ -1720,12 +1681,10 @@ msgid "Failed writing to %1, probably the disk is full"
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Session"
+#, kde-format
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
-msgstr[0] "ئەڭگىمە"
+msgstr[0] ""
 
 #: serialization/itemrepositoryregistry.cpp:77
 #, kde-format
@@ -1734,12 +1693,10 @@ msgid "Clear cache"
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Session"
+#, kde-format
 msgctxt "@title"
 msgid "Session Crashed"
-msgstr "ئەڭگىمە"
+msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:79
 #, kde-format
@@ -1757,11 +1714,10 @@ msgid "Clear Cache"
 msgstr ""
 
 #: serialization/itemrepositoryregistry.cpp:82
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr "داۋاملاشتۇر(&C)"
+msgstr "داۋاملاشتۇر"
 
 #: shell/areadisplay.cpp:44
 #, kde-format
@@ -1778,12 +1734,10 @@ msgid "Back to Code"
 msgstr ""
 
 #: shell/configdialog.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure"
-msgstr "%1 نى سەپلە"
+msgstr "سەپلە"
 
 #: shell/configdialog.cpp:84
 #, kde-format
@@ -1791,12 +1745,14 @@ msgid ""
 "The settings of the current module have changed.\n"
 "Do you want to apply the changes or discard them?"
 msgstr ""
+"نۆۋەتتىكى بۆلەكنىڭ تەڭشىكى ئۆزگەرتىلدى.\n"
+"ئۆزگەرتىشنى ساقلامسىز ياكى تاشلىۋېتەمسىز؟"
 
 #: shell/configdialog.cpp:86
 #, kde-format
 msgctxt "@title:window"
 msgid "Apply Settings"
-msgstr ""
+msgstr "تەڭشەك قوللان"
 
 #: shell/core.cpp:183
 #, kde-format
@@ -1808,24 +1764,21 @@ msgid ""
 msgstr ""
 
 #: shell/core.cpp:191
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr "ئوقۇلغان قىستۇرمىلار"
+msgstr ""
 
 #: shell/debugcontroller.cpp:51
-#, fuzzy, kde-format
-#| msgid "Variables"
+#, kde-format
 msgctxt "@title:window"
 msgid "Variables"
-msgstr "ئۆزگەرگۈچىلەر"
+msgstr "ئۆزگەرگۈچى"
 
 #: shell/debugcontroller.cpp:83
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgid "Debugger"
-msgstr "سازلىغۇچ:"
+msgstr "سازلىغۇچ"
 
 #: shell/debugcontroller.cpp:113
 #, kde-format
@@ -1834,11 +1787,10 @@ msgid "Frame Stack"
 msgstr ""
 
 #: shell/debugcontroller.cpp:118
-#, fuzzy, kde-format
-#| msgid "Breakpoints"
+#, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
-msgstr "توختاش نۇقتىلىرى"
+msgstr "توختاش نۇقتىسى"
 
 #: shell/debugcontroller.cpp:191
 #, kde-format
@@ -1856,18 +1808,16 @@ msgid "Restarts applications from the beginning."
 msgstr ""
 
 #: shell/debugcontroller.cpp:199
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "ئۈزۈلۈش"
 
 #: shell/debugcontroller.cpp:200
-#, fuzzy, kde-format
-#| msgid "Interrupt"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
-msgstr "ئۈزۈلۈش"
+msgstr ""
 
 #: shell/debugcontroller.cpp:201
 #, kde-format
@@ -2014,11 +1964,10 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:269
-#, fuzzy, kde-format
-#| msgid "Toggle Breakpoint"
+#, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
-msgstr "توختاش نۇقتىسىنى ئالماشتۇر"
+msgstr ""
 
 #: shell/debugcontroller.cpp:270
 #, kde-format
@@ -2026,8 +1975,7 @@ msgid "Ctrl+Alt+B"
 msgstr ""
 
 #: shell/debugcontroller.cpp:271
-#, fuzzy, kde-format
-#| msgid "Toggle Breakpoint"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "توختاش نۇقتىسىنى ئالماشتۇر"
@@ -2039,11 +1987,10 @@ msgid "Toggles the breakpoint at the current line in editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:276
-#, fuzzy, kde-format
-#| msgid "Show Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
-msgstr "پۈتۈكلەرنى كۆرسىتىش"
+msgstr ""
 
 #: shell/debugcontroller.cpp:277
 #, kde-format
@@ -2058,11 +2005,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr ""
 
 #: shell/debugcontroller.cpp:291
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "ئەڭگىمە ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #: shell/debugcontroller.cpp:497 shell/runcontroller.cpp:473
 #, kde-format
@@ -2085,11 +2031,10 @@ msgid ""
 msgstr ""
 
 #: shell/debugcontroller.cpp:504
-#, fuzzy, kde-format
-#| msgid "&Continue"
+#, kde-format
 msgctxt "@action"
 msgid "&Continue"
-msgstr "داۋاملاشتۇر(&C)"
+msgstr ""
 
 #: shell/debugcontroller.cpp:506
 #, kde-format
@@ -2113,18 +2058,16 @@ msgid "Debugger Toolbar"
 msgstr "سازلىغۇچ قورال بالدىقى"
 
 #: shell/documentationcontroller.cpp:114
-#, fuzzy, kde-format
-#| msgid "Show Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Show Documentation"
-msgstr "پۈتۈكلەرنى كۆرسىتىش"
+msgstr ""
 
 #: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Documentation"
-msgstr "قوللانمىلار"
+msgstr "قوللانما"
 
 #: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:59
 #, kde-format
@@ -2132,8 +2075,7 @@ msgid "Untitled"
 msgstr "ماۋزۇسىز"
 
 #: shell/documentcontroller.cpp:118
-#, fuzzy, kde-format
-#| msgid "Open File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "ھۆججەت ئاچ"
@@ -2169,15 +2111,13 @@ msgid "Do Not Open"
 msgstr ""
 
 #: shell/documentcontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid "&Open..."
+#, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "ئاچ(&O)…"
 
 #: shell/documentcontroller.cpp:612
-#, fuzzy, kde-format
-#| msgid "Open file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "ھۆججەت ئاچ"
@@ -2189,10 +2129,7 @@ msgid "Opens a file for editing."
 msgstr ""
 
 #: shell/documentcontroller.cpp:617
-#, fuzzy, kde-format
-#| msgid ""
-#| "This lists files which you have opened recently, and allows you to easily "
-#| "open them again."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This lists files which you have opened recently, and allows you to easily "
@@ -2202,11 +2139,10 @@ msgstr ""
 "ئاسانلاشتۇرىدۇ."
 
 #: shell/documentcontroller.cpp:622
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: shell/documentcontroller.cpp:624
 #, kde-format
@@ -2222,11 +2158,10 @@ msgid ""
 msgstr ""
 
 #: shell/documentcontroller.cpp:631
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action"
 msgid "Reload All"
-msgstr "قايتا يۈكلە"
+msgstr ""
 
 #: shell/documentcontroller.cpp:633
 #, kde-format
@@ -2241,39 +2176,34 @@ msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 
 #: shell/documentcontroller.cpp:640
-#, fuzzy, kde-format
-#| msgid "&Close"
+#, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "ياپ(&C)"
 
 #: shell/documentcontroller.cpp:642
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
-msgstr "ھۆججەتنى تاقا"
+msgstr ""
 
 #: shell/documentcontroller.cpp:643
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
-msgstr "ھۆججەتنى تاقا"
+msgstr ""
 
 #: shell/documentcontroller.cpp:648
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "ھەممىنى ياپ(&E)"
 
 #: shell/documentcontroller.cpp:650
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
-msgstr "پۈتۈك ياپ"
+msgstr ""
 
 #: shell/documentcontroller.cpp:651
 #, kde-format
@@ -2284,18 +2214,16 @@ msgid ""
 msgstr ""
 
 #: shell/documentcontroller.cpp:657
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "باشقا ھەممىنى ياپ(&H)"
 
 #: shell/documentcontroller.cpp:659
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
-msgstr "پۈتۈك ياپ"
+msgstr ""
 
 #: shell/documentcontroller.cpp:660
 #, kde-format
@@ -2312,11 +2240,10 @@ msgid "Show Annotate on Current Document"
 msgstr ""
 
 #: shell/documentcontroller.cpp:666
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@action"
 msgid "Annotate"
-msgstr "ھالەت"
+msgstr "ئىزاھ"
 
 #: shell/documentcontroller.cpp:1288
 #, kde-format
@@ -2326,25 +2253,21 @@ msgid ""
 msgstr ""
 
 #: shell/editorconfigpage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
-msgstr "تەھرىرلەش"
+msgstr "تەھرىرلىگۈچ"
 
 #: shell/editorconfigpage.cpp:54
-#, fuzzy, kde-format
-#| msgid "Configure Editor..."
+#, kde-format
 msgid "Configure Text Editor"
-msgstr "تەھرىرلىگۈچنى سەپلەش…"
+msgstr ""
 
 #: shell/environmentconfigurebutton.cpp:73
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure notifications"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
-msgstr "ئۇقتۇرۇش سەپلەش"
+msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:330
 #, kde-format
@@ -2373,18 +2296,16 @@ msgid "currently unset"
 msgstr ""
 
 #: shell/ktexteditorpluginintegration.cpp:492
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:window"
 msgid "Messages"
-msgstr "ئۇچۇر"
+msgstr "ئۇچۇرلار"
 
 #: shell/launchconfigurationdialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:57
 #, kde-format
@@ -2405,18 +2326,16 @@ msgid ""
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:252
 #, kde-format
@@ -2425,8 +2344,7 @@ msgid ""
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:253
-#, fuzzy, kde-format
-#| msgid "Unsaved Changes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "ساقلانمىغان ئۆزگەرتىش"
@@ -2450,51 +2368,45 @@ msgid "Editing %2: <b>%1</b>"
 msgstr ""
 
 #: shell/launchconfigurationdialog.cpp:710
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "ئاتى"
 
 #: shell/launchconfigurationdialog.cpp:713
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
 "+ Application)"
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: shell/launchconfigurationdialog.ui:29
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "قوش"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
 #: shell/launchconfigurationdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "چىقىرىۋەت"
 
 #. i18n: ectx: property (text), widget (QLabel, debugLabel)
 #: shell/launchconfigurationdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Debugger:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Debugger:"
-msgstr "سازلىغۇچ:"
+msgstr ""
 
 #: shell/loadedpluginsdialog.cpp:279
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
-msgstr "ئوقۇلغان قىستۇرمىلار"
+msgstr ""
 
 #: shell/loadedpluginsdialog.cpp:285
 #, kde-format
@@ -2507,9 +2419,7 @@ msgid " (read only)"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:224
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@info:tooltip %1 = application name"
 msgid "Configure %1"
 msgstr "%1 نى سەپلە"
@@ -2521,11 +2431,10 @@ msgid "Lets you customize %1."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:228
-#, fuzzy, kde-format
-#| msgid "Configure Notifications..."
+#, kde-format
 msgctxt "@action"
 msgid "Configure Notifications..."
-msgstr "ئۇقتۇرۇشلارنى سەپلە"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:229
 #, kde-format
@@ -2540,11 +2449,10 @@ msgid "Shows a dialog that lets you configure notifications."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:234
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgctxt "@action"
 msgid "Loaded Plugins"
-msgstr "ئوقۇلغان قىستۇرمىلار"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:235
 #, kde-format
@@ -2559,11 +2467,10 @@ msgid "Shows a dialog with information about all loaded plugins."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:239
-#, fuzzy, kde-format
-#| msgid "&Next Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Window"
-msgstr "كېيىنكى كۆزنەك(&N)"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:242
 #, kde-format
@@ -2578,11 +2485,10 @@ msgid "Switches to the next window."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:247
-#, fuzzy, kde-format
-#| msgid "&Previous Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Window"
-msgstr "ئالدىنقى كۆزنەك(&P)"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:250
 #, kde-format
@@ -2609,8 +2515,7 @@ msgid "Jump to Previous Outputmark"
 msgstr ""
 
 #: shell/mainwindow_p.cpp:268
-#, fuzzy, kde-format
-#| msgid "Split View &Top/Bottom"
+#, kde-format
 msgctxt "@action"
 msgid "Split View &Top/Bottom"
 msgstr "كۆرۈنۈشنى پارچىلا ئۇستى/ئاستى(&T)"
@@ -2628,8 +2533,7 @@ msgid "Splits the current view horizontally."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:276
-#, fuzzy, kde-format
-#| msgid "Split View &Left/Right"
+#, kde-format
 msgctxt "@action"
 msgid "Split View &Left/Right"
 msgstr "كۆرۈنۈشنى پارچىلا سول/ئوڭ(&L)"
@@ -2647,11 +2551,10 @@ msgid "Splits the current view vertically."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:283
-#, fuzzy, kde-format
-#| msgid "&Previous Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr "ئالدىنقى كۆزنەك(&P)"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:286
 #, kde-format
@@ -2666,19 +2569,16 @@ msgid "Switches to the next split view."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:291
-#, fuzzy, kde-format
-#| msgid "&Previous Window"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
-msgstr "ئالدىنقى كۆزنەك(&P)"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:294
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Previous window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
-msgstr "ئالدىنقى كۆزنەك"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:295
 #, kde-format
@@ -2687,15 +2587,13 @@ msgid "Switches to the previous split view."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:303
-#, fuzzy, kde-format
-#| msgid "&New"
+#, kde-format
 msgctxt "@action new file"
 msgid "&New"
 msgstr "يېڭى(&N)"
 
 #: shell/mainwindow_p.cpp:304
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
 msgid "New"
 msgstr "يېڭى"
@@ -2713,12 +2611,10 @@ msgid "Creates an empty file."
 msgstr ""
 
 #: shell/mainwindow_p.cpp:312
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:314
 #, kde-format
@@ -2735,50 +2631,43 @@ msgstr ""
 #: shell/mainwindow_p.cpp:320
 #, kde-format
 msgid "&Window Color Scheme"
-msgstr ""
+msgstr "كۆزنەك رەڭ لايىھەسى(&W)"
 
 #: shell/mainwindow_p.cpp:354
-#, fuzzy, kde-format
-#| msgid "Split View Top/Bottom"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
-msgstr "كۆرۈنۈشنى پارچىلاش ئۇستى/ئاستى"
+msgstr "كۆرۈنۈشنى ئاستى/ئۈستى بۆل"
 
 #: shell/mainwindow_p.cpp:357
-#, fuzzy, kde-format
-#| msgid "Split View Left/Right"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
-msgstr "كۆرۈنۈشنى پارچىلاش سول/ئوڭ"
+msgstr "كۆرۈنۈشنى ئوڭ/سولغا بۆل"
 
 #: shell/mainwindow_p.cpp:361
-#, fuzzy, kde-format
-#| msgid "New File"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "New File"
 msgstr "يېڭى ھۆججەت"
 
 #: shell/mainwindow_p.cpp:367
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload"
 msgstr "قايتا يۈكلە"
 
 #: shell/mainwindow_p.cpp:370
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Reload All"
-msgstr "قايتا يۈكلە"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:410
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: shell/mainwindow_p.cpp:433
 #, kde-format
@@ -2787,15 +2676,13 @@ msgid "Lock the Panel from Hiding"
 msgstr ""
 
 #: shell/openprojectdialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Project Files"
-msgstr "قۇرۇلۇش %1"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:141
-#, fuzzy, kde-format
-#| msgid "Select Source"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Select Source"
 msgstr "مەنبە تاللا"
@@ -2808,25 +2695,21 @@ msgid ""
 msgstr ""
 
 #: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
-#, fuzzy, kde-format
-#| msgid "Open Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "قۇرۇلۇش ئاچ"
 
 #: shell/openprojectdialog.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Project Management"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
-msgstr "قۇرۇلۇش باشقۇرۇش"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:228
-#, fuzzy, kde-format
-#| msgid "Open Project"
+#, kde-format
 msgid "Open \"%1\" as project"
-msgstr "قۇرۇلۇش ئاچ"
+msgstr ""
 
 #: shell/openprojectdialog.cpp:232
 #, kde-format
@@ -2834,11 +2717,10 @@ msgid "Selected URL is invalid"
 msgstr ""
 
 #: shell/openprojectdialog.cpp:277
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
-msgstr "مەۋجۇت ھۆججەتنى ئېچىش"
+msgstr ""
 
 #: shell/partcontroller.cpp:228
 #, kde-format
@@ -2872,10 +2754,9 @@ msgid "Overwrite External Changes"
 msgstr ""
 
 #: shell/problem.cpp:40
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgid "Plugin"
-msgstr "ئوقۇلغان قىستۇرمىلار"
+msgstr ""
 
 #: shell/problem.cpp:80
 #, kde-format
@@ -2885,23 +2766,22 @@ msgstr ""
 #: shell/problem.cpp:82
 #, kde-format
 msgid "Todo"
-msgstr ""
+msgstr "بېجىرىدىغان"
 
 #: shell/problem.cpp:167
 #, kde-format
 msgctxt "@item problem severity"
 msgid "Hint"
-msgstr ""
+msgstr "كۆرسەتمە(Hint)"
 
 #: shell/problem.cpp:168
 #, kde-format
 msgctxt "@item problem severity"
 msgid "Warning"
-msgstr ""
+msgstr "ئاگاھلاندۇرۇش"
 
 #: shell/problem.cpp:169
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item problem severity"
 msgid "Error"
 msgstr "خاتالىق"
@@ -2913,71 +2793,61 @@ msgid "Re-parse all watched documents"
 msgstr ""
 
 #: shell/problemmodel.cpp:323
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:column source of problem"
 msgid "Source"
 msgstr "مەنبە"
 
 #: shell/problemmodel.cpp:325
-#, fuzzy, kde-format
-#| msgid "Problem"
+#, kde-format
 msgctxt "@title:column problem description"
 msgid "Problem"
 msgstr "مەسىلە"
 
 #: shell/problemmodel.cpp:327
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@title:column file where problem was found"
 msgid "File"
 msgstr "ھۆججەت"
 
 #: shell/problemmodel.cpp:329
-#, fuzzy, kde-format
-#| msgid "Line"
+#, kde-format
 msgctxt "@title:column line number with problem"
 msgid "Line"
 msgstr "قۇر"
 
 #: shell/problemmodel.cpp:331
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgctxt "@title:column column number with problem"
 msgid "Column"
-msgstr "ئىستون"
+msgstr "رەت"
 
 #: shell/progresswidget/progressdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Cancel this operation."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr "بۇ مەشغۇلاتنى ئەمەلدىن قالدۇرىدۇ."
+msgstr ""
 
 #: shell/progresswidget/progressmanager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Aborting..."
+#, kde-format
 msgctxt "@info"
 msgid "Aborting..."
 msgstr "توختىتىلىۋاتىدۇ..."
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:99
-#, fuzzy, kde-format
-#| msgid "Open detailed progress dialog"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
 msgstr "تەپسىلىي جەريان كۆزنىكىنى ئاچىدۇ"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
-#, fuzzy, kde-format
-#| msgid "Hide detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
 msgstr "تەپسىلىي جەريان كۆزنىكىنى يوشۇر"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
-#, fuzzy, kde-format
-#| msgid "Show detailed progress window"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
 msgstr "تەپسىلىي جەريان كۆزنىكىنى كۆرسەت"
@@ -3030,10 +2900,9 @@ msgid ""
 msgstr ""
 
 #: shell/project.cpp:402
-#, fuzzy, kde-format
-#| msgid "Could not open file '%1'"
+#, kde-format
 msgid "Could not open project."
-msgstr "ھۆججەت «%1» نى ئاچالمايدۇ"
+msgstr ""
 
 #: shell/project.cpp:560
 #, kde-format
@@ -3043,11 +2912,10 @@ msgid ""
 msgstr ""
 
 #: shell/projectcontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
-msgstr "قۇرۇلۇش %1 نى سەپلەش"
+msgstr ""
 
 #: shell/projectcontroller.cpp:300
 #, kde-format
@@ -3060,8 +2928,7 @@ msgid "Already opening %1, not opening again"
 msgstr ""
 
 #: shell/projectcontroller.cpp:467
-#, fuzzy, kde-format
-#| msgid "Override"
+#, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "قاپلاش"
@@ -3074,11 +2941,10 @@ msgid ""
 msgstr ""
 
 #: shell/projectcontroller.cpp:469
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
-msgstr "مەۋجۇت ھۆججەتنى ئېچىش"
+msgstr ""
 
 #: shell/projectcontroller.cpp:470
 #, kde-format
@@ -3087,11 +2953,10 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 
 #: shell/projectcontroller.cpp:472
-#, fuzzy, kde-format
-#| msgid "Could not open file '%1'"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
-msgstr "ھۆججەت «%1» نى ئاچالمايدۇ"
+msgstr ""
 
 #: shell/projectcontroller.cpp:475
 #, kde-format
@@ -3120,7 +2985,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "قايتا ئاچ"
 
 #: shell/projectcontroller.cpp:552
 #, kde-format
@@ -3177,33 +3042,28 @@ msgid "Closes all currently selected projects"
 msgstr ""
 
 #: shell/projectcontroller.cpp:591
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: shell/projectcontroller.cpp:597
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr "قۇرۇلۇش %1 نى سەپلەش"
+msgstr ""
 
 #: shell/projectcontroller.cpp:598
-#, fuzzy, kde-format
-#| msgctxt "@action:button To make a commit"
-#| msgid "Commit"
+#, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "تاپشۇر(_C)"
+msgstr ""
 
 #: shell/projectcontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid "Open Recent Project"
+#, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
-msgstr "يېقىنقى قۇرۇلۇشنى ئېچىش"
+msgstr ""
 
 #: shell/projectcontroller.cpp:610
 #, kde-format
@@ -3228,11 +3088,10 @@ msgid "No active document"
 msgstr ""
 
 #: shell/projectcontroller.cpp:849
-#, fuzzy, kde-format
-#| msgid "Project already being opened"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr "قۇرۇلۇش ئېچىلىپ بولغان"
+msgstr ""
 
 #: shell/projectcontroller.cpp:852
 #, kde-format
@@ -3248,11 +3107,10 @@ msgid "Add project to current session"
 msgstr ""
 
 #: shell/projectcontroller.cpp:860
-#, fuzzy, kde-format
-#| msgid "Open Existing File"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr "مەۋجۇت ھۆججەتنى ئېچىش"
+msgstr ""
 
 #: shell/projectcontroller.cpp:921
 #, kde-format
@@ -3260,11 +3118,10 @@ msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 
 #: shell/projectcontroller.cpp:1225
-#, fuzzy, kde-format
-#| msgid "Open Recent Project"
+#, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr "يېقىنقى قۇرۇلۇشنى ئېچىش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
@@ -3276,12 +3133,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Project Management"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Project manager:"
-msgstr "قۇرۇلۇش باشقۇرۇش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
@@ -3293,8 +3148,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "ئاتى:"
@@ -3334,24 +3188,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Source:"
 msgstr "مەنبە:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/projectsourcepage.ui:49
-#, fuzzy, kde-format
-#| msgid "Destination"
+#, kde-format
 msgctxt "@title:group"
 msgid "Destination"
 msgstr "نىشان"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectsourcepage.ui:55
-#, fuzzy, kde-format
-#| msgid "Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Directory:"
 msgstr "مۇندەرىجە:"
@@ -3365,37 +3216,32 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
-#, fuzzy, kde-format
-#| msgid "Source"
+#, kde-format
 msgctxt "@title:group"
 msgid "Source"
 msgstr "مەنبە"
 
 #. i18n: ectx: property (text), widget (QPushButton, get)
 #: shell/projectsourcepage.ui:105
-#, fuzzy, kde-format
-#| msgid "Get"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get"
-msgstr "Get"
+msgstr ""
 
 #: shell/runcontroller.cpp:89
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "سازلا"
 
 #: shell/runcontroller.cpp:98
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "سەپلىمە ھۆججەت"
 
 #: shell/runcontroller.cpp:107
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "ئىجرا قىل"
@@ -3406,12 +3252,10 @@ msgid "The current launch configuration does not support the '%1' mode."
 msgstr ""
 
 #: shell/runcontroller.cpp:458
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr "%1 نى سەپلە"
+msgstr ""
 
 #: shell/runcontroller.cpp:461
 #, kde-format
@@ -3428,15 +3272,13 @@ msgid ""
 msgstr ""
 
 #: shell/runcontroller.cpp:465
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
-msgstr "ئىجرا قىل"
+msgstr ""
 
 #: shell/runcontroller.cpp:466
-#, fuzzy, kde-format
-#| msgid "Execute"
+#, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "ئىجرا قىل"
@@ -3456,8 +3298,7 @@ msgid ""
 msgstr ""
 
 #: shell/runcontroller.cpp:475
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
 msgstr "سازلا"
@@ -3468,17 +3309,13 @@ msgstr "سازلا"
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 #: shell/runcontroller.cpp:489
-#, fuzzy, kde-format
-#| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
-#| msgid "Stop All"
+#, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
-msgstr "ھەممىنى توختىتىش"
+msgstr ""
 
 #: shell/runcontroller.cpp:490
-#, fuzzy, kde-format
-#| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
-#| msgid "Stop All"
+#, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "ھەممىنى توختىتىش"
@@ -3496,15 +3333,13 @@ msgid "Requests that all running jobs are stopped."
 msgstr ""
 
 #: shell/runcontroller.cpp:500
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "توختا"
 
 #: shell/runcontroller.cpp:502
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "توختا"
@@ -3522,11 +3357,10 @@ msgid "List of jobs that can be stopped individually."
 msgstr ""
 
 #: shell/runcontroller.cpp:508
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: shell/runcontroller.cpp:509
 #, kde-format
@@ -3601,26 +3435,22 @@ msgid "(no projects)"
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
-msgstr "ئەڭگىمە ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #: shell/sessionchooserdialog.cpp:49
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
-msgstr "ئەڭگىمە"
+msgstr ""
 
 #: shell/sessionchooserdialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "Run"
+#, kde-format
 msgctxt "@action:button"
 msgid "Run"
-msgstr "ئىجرا"
+msgstr "ئىجرا قىل"
 
 #: shell/sessionchooserdialog.cpp:94
 #, kde-format
@@ -3633,7 +3463,7 @@ msgstr ""
 #: shell/sessionchooserdialog.cpp:96
 #, kde-format
 msgid "Running"
-msgstr "ئىجرادا"
+msgstr "ئىجرا قىلىنىۋاتىدۇ"
 
 #: shell/sessionchooserdialog.cpp:191
 #, kde-format
@@ -3662,25 +3492,22 @@ msgid ""
 msgstr ""
 
 #: shell/sessionchooserdialog.cpp:204
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
-msgstr "ئەڭگىمە ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:134
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start New Session"
-msgstr "ئەڭگىمە ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:135 shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New session name:"
-msgstr "ئاتى:"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:144
 #, kde-format
@@ -3690,18 +3517,15 @@ msgid ""
 msgstr ""
 
 #: shell/sessioncontroller.cpp:157
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename Session"
-msgstr "ئەڭگىمە ئاتىنى ئۆزگەرت"
+msgstr "جەريانچاق ئاتىنى ئۆزگەرت"
 
 #: shell/sessioncontroller.cpp:260
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Session"
+#, kde-format
 msgid "Session Manager"
-msgstr "ئەڭگىمە"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:272
 #, kde-format
@@ -3728,11 +3552,10 @@ msgid "Start a new KDevelop instance with an empty named session"
 msgstr ""
 
 #: shell/sessioncontroller.cpp:288
-#, fuzzy, kde-format
-#| msgid "Rename Session"
+#, kde-format
 msgctxt "@action"
 msgid "Rename Current Session..."
-msgstr "ئەڭگىمە ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #: shell/sessioncontroller.cpp:294
 #, kde-format
@@ -3741,11 +3564,10 @@ msgid "Delete Current Session..."
 msgstr ""
 
 #: shell/sessioncontroller.cpp:298
-#, fuzzy, kde-format
-#| msgid "Quit"
+#, kde-format
 msgctxt "@action"
 msgid "Quit"
-msgstr "ئاخىرلاشتۇر"
+msgstr "چىكىن"
 
 #: shell/sessioncontroller.cpp:518
 #, kde-format
@@ -3753,36 +3575,31 @@ msgid "Copy of %1"
 msgstr "%1 نىڭ كۆپەيتىلمىسى"
 
 #: shell/sessioncontroller.cpp:608
-#, fuzzy, kde-format
-#| msgid "Identity"
+#, kde-format
 msgctxt "@title:column"
 msgid "Identity"
 msgstr "سالاھىيەت"
 
 #: shell/sessioncontroller.cpp:609
-#, fuzzy, kde-format
-#| msgid "Contents"
+#, kde-format
 msgctxt "@title:column"
 msgid "Contents"
-msgstr "مەزمۇنلار"
+msgstr "مەزمۇن"
 
 #: shell/sessioncontroller.cpp:610
-#, fuzzy, kde-format
-#| msgid "State"
+#, kde-format
 msgctxt "@title:column"
 msgid "State"
 msgstr "ھالەت"
 
 #: shell/sessioncontroller.cpp:611
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "ئاتى"
 
 #: shell/sessioncontroller.cpp:617
-#, fuzzy, kde-format
-#| msgid "Filter:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filter:"
 msgstr "سۈزگۈچ:"
@@ -3842,11 +3659,10 @@ msgid "Retry Startup"
 msgstr ""
 
 #: shell/sessionlock.cpp:192
-#, fuzzy, kde-format
-#| msgid "Close Other Files"
+#, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
-msgstr "باشقا ھۆججەتلەرنى يېپىش"
+msgstr ""
 
 #: shell/sessionlock.cpp:202
 #, kde-format
@@ -3866,17 +3682,14 @@ msgid "Analyzers"
 msgstr ""
 
 #: shell/settings/analyzerspreferences.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Analyzers"
-msgstr "%1 نى سەپلە"
+msgstr ""
 
 #: shell/settings/bgpreferences.cpp:73
-#, fuzzy, kde-format
-#| msgid "Background Parser"
+#, kde-format
 msgid "Configure Background Parser"
-msgstr "تەگلىك تەھلىل قىلغۇچ"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:20
@@ -3890,11 +3703,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
-#, fuzzy, kde-format
-#| msgid "Background Parser"
+#, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr "تەگلىك تەھلىل قىلغۇچ"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -3906,16 +3718,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
-#, fuzzy, kde-format
-#| msgid "Delay:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
 msgstr "كېچىكىش:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
-#, fuzzy, kde-format
-#| msgid " ms"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
 msgstr " ms"
@@ -3945,11 +3755,9 @@ msgid " threads"
 msgstr ""
 
 #: shell/settings/documentationpreferences.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure notifications"
+#, kde-format
 msgid "Configure Documentation"
-msgstr "ئۇقتۇرۇش سەپلەش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:42
@@ -3962,17 +3770,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Show Preview"
-msgstr "ئالدىن كۆزەت"
+msgstr "ئالدىن كۆزىتىشنى كۆرسەت"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
 #: shell/settings/editstyledialog.ui:69
 #: shell/sourceformatterselectionedit.ui:112
-#, fuzzy, kde-format
-#| msgid "Preview:"
+#, kde-format
 msgctxt "@label"
 msgid "Preview:"
 msgstr "ئالدىن كۆزەت:"
@@ -3980,7 +3786,7 @@ msgstr "ئالدىن كۆزەت:"
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
 msgid "Environment"
-msgstr ""
+msgstr "مۇھىت"
 
 #: shell/settings/environmentpreferences.cpp:84
 #, kde-format
@@ -3993,25 +3799,22 @@ msgid "%1 (default profile)"
 msgstr ""
 
 #: shell/settings/environmentprofilemodel.cpp:91
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@title:column"
 msgid "Variable"
 msgstr "ئۆزگىرىشچان"
 
 #: shell/settings/environmentprofilemodel.cpp:93
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "قىممەت"
 
 #: shell/settings/environmentwidget.cpp:81
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter variable..."
-msgstr "ھۆججەتنى تاقا"
+msgstr ""
 
 #: shell/settings/environmentwidget.cpp:169
 #, kde-format
@@ -4027,36 +3830,31 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Environment profile:"
-msgstr "ھۆججەتنى تاقا"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
 #: shell/settings/environmentwidget.ui:39
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr "ھۆججەتنى تاقا"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Close file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone profile..."
-msgstr "ھۆججەتنى تاقا"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
 #: shell/settings/environmentwidget.ui:59
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove profile"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
 #: shell/settings/environmentwidget.ui:69
@@ -4067,12 +3865,10 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove variable"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
 #: shell/settings/environmentwidget.ui:130
@@ -4082,17 +3878,14 @@ msgid "Batch edit mode"
 msgstr ""
 
 #: shell/settings/languagepreferences.cpp:34
-#, fuzzy, kde-format
-#| msgid " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid " file"
 msgid_plural " files"
-msgstr[0] " ھۆججەتلەر"
+msgstr[0] " ھۆججەت"
 
 #: shell/settings/languagepreferences.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Language Support"
+#, kde-format
 msgid "Language Support"
 msgstr "تىل قوللىشى"
 
@@ -4103,8 +3896,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
 msgstr "كود تاماملاش"
@@ -4162,16 +3954,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
-#, fuzzy, kde-format
-#| msgid "Code Completion"
+#, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
-msgstr "كود تاماملاش"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Never"
 msgstr "ھەرگىز"
@@ -4185,8 +3975,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
-#, fuzzy, kde-format
-#| msgid "Always"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr "ھەمىشە"
@@ -4243,10 +4032,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
-#, fuzzy, kde-format
-#| msgid "Global"
+#, kde-format
 msgid "Global colors:"
-msgstr "ئومۇمىي دائىرىلىك"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4309,11 +4097,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
-#, fuzzy, kde-format
-#| msgid "Declaration"
+#, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr "بايانات"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
@@ -4327,12 +4114,11 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr ""
+msgstr "يوق"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
 msgstr "خاتالىق"
@@ -4375,12 +4161,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Project Management"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr "قۇرۇلۇش باشقۇرۇش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4437,7 +4221,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Memory"
-msgstr ""
+msgstr "ئەسلەك"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:445
@@ -4468,13 +4252,13 @@ msgstr "نەشر باشقۇرۇش"
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
-msgstr "قوراللار"
+msgstr "قورال"
 
 #: shell/settings/pluginpreferences.cpp:39
 #, kde-format
 msgctxt "@title:group"
 msgid "Documentation"
-msgstr "قوللانمىلار"
+msgstr "قوللانما"
 
 #: shell/settings/pluginpreferences.cpp:40
 #, kde-format
@@ -4513,17 +4297,14 @@ msgid "Other"
 msgstr "باشقا"
 
 #: shell/settings/pluginpreferences.h:27
-#, fuzzy, kde-format
-#| msgid "Loaded Plugins"
+#, kde-format
 msgid "Plugins"
-msgstr "ئوقۇلغان قىستۇرمىلار"
+msgstr "قىستۇرما"
 
 #: shell/settings/pluginpreferences.h:28
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Plugins"
-msgstr "%1 نى سەپلە"
+msgstr "قىستۇرما سەپلەش"
 
 #. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:11
@@ -4566,16 +4347,14 @@ msgid ""
 msgstr ""
 
 #: shell/settings/projectpreferences.cpp:44
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgid "Projects"
-msgstr "قۇرۇلۇش %1"
+msgstr "قۇرۇلۇش"
 
 #: shell/settings/projectpreferences.cpp:49
-#, fuzzy, kde-format
-#| msgid "Configure Project %1"
+#, kde-format
 msgid "Configure Projects"
-msgstr "قۇرۇلۇش %1 نى سەپلەش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
@@ -4588,11 +4367,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Projects base directory:"
-msgstr "مەنبە مۇندەرىجە:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:47
@@ -4628,18 +4406,15 @@ msgid "Runtimes"
 msgstr ""
 
 #: shell/settings/runtimespreferences.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Runtimes"
-msgstr "%1 نى سەپلە"
+msgstr ""
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgid "Source Formatter"
-msgstr "مەنبە مۇندەرىجە:"
+msgstr "مەنبەنى پىچقۇچ"
 
 #: shell/settings/sourceformattersettings.cpp:80
 #, kde-format
@@ -4648,8 +4423,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgctxt "@title:group"
 msgid "General"
 msgstr "ئادەتتىكى"
@@ -4690,43 +4464,37 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr ""
+msgstr "پىچىم ئۇسلۇبى"
 
 #: shell/settings/templateconfig.cpp:39
-#, fuzzy, kde-format
-#| msgid "Share Templates"
+#, kde-format
 msgid "Templates"
-msgstr "قېلىپ ھەمبەھىرلە"
+msgstr "قېلىپ"
 
 #: shell/settings/templateconfig.cpp:44
-#, fuzzy, kde-format
-#| msgctxt "%1 = application name"
-#| msgid "Configure %1"
+#, kde-format
 msgid "Configure Templates"
-msgstr "%1 نى سەپلە"
+msgstr ""
 
 #: shell/settings/templatepage.cpp:30
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr "تېخىمۇ كۆپ قېلىپلارغا ئېرىشىش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
-#, fuzzy, kde-format
-#| msgid "Load Template From File"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load Template From File"
-msgstr "قېلىپنى ھۆججەتتىن ئوقۇش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
-#, fuzzy, kde-format
-#| msgid "Clone Template"
+#, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"
-msgstr "قېلىپنى كىلونلا"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
 #: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:46
@@ -4775,39 +4543,32 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Left"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr "سول"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr "ئاستى"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Right"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr "ئوڭ"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
-#, fuzzy, kde-format
-#| msgid "Tabbed Browsing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
-msgstr "بەتكۈچلۈك كۆرۈش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92
@@ -4850,11 +4611,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
-#, fuzzy, kde-format
-#| msgid "Show tabs"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
-msgstr "بەتكۈچ كۆرسەت"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:129
@@ -4896,31 +4656,27 @@ msgid "Color widgets based on the project affiliation"
 msgstr ""
 
 #: shell/settings/uipreferences.cpp:56
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgid "Configure User Interface"
-msgstr "كۆرۈنمەيۈز"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:226
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr "فورمات(&F)"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:230
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr "فورمات(&F)"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:234
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr "فورمات(&F)"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
@@ -4991,11 +4747,10 @@ msgid ""
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:867
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr "فورمات(&F)"
+msgstr ""
 
 #: shell/sourceformattercontroller.cpp:868
 #, kde-format
@@ -5003,11 +4758,10 @@ msgid "Reformat all files in the selected folder?"
 msgstr ""
 
 #: shell/sourceformattercontroller.cpp:872
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr "فورمات(&F)"
+msgstr ""
 
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
@@ -5034,11 +4788,10 @@ msgid ""
 msgstr ""
 
 #: shell/sourceformatterselectionedit.cpp:1079
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "ئۆچۈر"
+msgstr ""
 
 #: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
@@ -5047,8 +4800,7 @@ msgstr "يېڭى %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
-#, fuzzy, kde-format
-#| msgid "Language:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Language:"
 msgstr "تىل:"
@@ -5079,11 +4831,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
-#, fuzzy, kde-format
-#| msgid "&Format"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Formatter:"
-msgstr "فورمات(&F)"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, formatterDescriptionButton)
 #: shell/sourceformatterselectionedit.ui:152
@@ -5093,24 +4844,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
-#, fuzzy, kde-format
-#| msgid "Style:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "ئۇسلۇب:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:201
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "يېڭى"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
 #: shell/sourceformatterselectionedit.ui:208
-#, fuzzy, kde-format
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "تەھرىر…"
@@ -5142,36 +4890,31 @@ msgstr ""
 #: shell/textdocument.cpp:665
 #, kde-format
 msgid " Line: %1 Col: %2 "
-msgstr " قۇر: %1 ئىستون: %2 "
+msgstr " قۇر: %1 رەت: %2 "
 
 #: shell/uicontroller.cpp:81
-#, fuzzy, kde-format
-#| msgid "Code"
+#, kde-format
 msgctxt "area"
 msgid "Code"
 msgstr "كودى"
 
 #: shell/uicontroller.cpp:92
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "area"
 msgid "Debug"
 msgstr "سازلا"
 
 #: shell/uicontroller.cpp:101
-#, fuzzy, kde-format
-#| msgid "Review"
+#, kde-format
 msgctxt "area"
 msgid "Review"
 msgstr "تەكشۈر"
 
 #: shell/uicontroller.cpp:500
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:75
 #, kde-format
@@ -5190,18 +4933,16 @@ msgid "Remove this working set. The contained documents are not affected."
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:121
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@label"
 msgid "Documents:"
-msgstr "قوللانمىلار"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:129
-#, fuzzy, kde-format
-#| msgid "Add All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add All"
-msgstr "ھەممىنى قوش"
+msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:130
 #, kde-format
@@ -5212,8 +4953,7 @@ msgid ""
 msgstr ""
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
-#, fuzzy, kde-format
-#| msgid "Remove All"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove All"
 msgstr "ھەممىنى چىقىرىۋەت"
@@ -5248,14 +4988,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "ۋاقىتلىق ساقلا"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:320
-#, fuzzy, kde-format
-#| msgid "Load"
+#, kde-format
 msgctxt "@action:button"
 msgid "Load"
-msgstr "يۈك"
+msgstr "يۈكلە"
 
 #: sublime/container.cpp:345
 #, kde-format
@@ -5275,32 +5014,28 @@ msgid "(Press Ctrl+Tab to switch)"
 msgstr ""
 
 #: sublime/container.cpp:772
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
-msgstr "ھۆججەت ئاتى"
+msgstr "ھۆججەت ئاتىنى كۆچۈر"
 
 #: sublime/container.cpp:775
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "ياپ"
 
 #: sublime/container.cpp:777
-#, fuzzy, kde-format
-#| msgid "Close All Ot&hers"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
-msgstr "باشقا ھەممىنى ياپ(&H)"
+msgstr "باشقا ھەممىنى ياپ"
 
 #: sublime/container.cpp:779
-#, fuzzy, kde-format
-#| msgid "Clos&e All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
-msgstr "ھەممىنى ياپ(&E)"
+msgstr "ھەممىنى ياپ"
 
 #: sublime/idealbuttonbarwidget.cpp:48
 #, kde-format
@@ -5315,11 +5050,10 @@ msgid "Right click to add new tool views."
 msgstr ""
 
 #: sublime/idealcontroller.cpp:88
-#, fuzzy, kde-format
-#| msgid "Debugger Toolbar"
+#, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
-msgstr "سازلىغۇچ قورال بالدىقى"
+msgstr ""
 
 #: sublime/idealcontroller.cpp:381
 #, kde-format
@@ -5343,25 +5077,19 @@ msgid "Tool View Position"
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:125
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Left"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "سول"
 
 #: sublime/idealdockwidget.cpp:126
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "ئاستى"
 
 #: sublime/idealdockwidget.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "toolview position"
-#| msgid "Right"
+#, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "ئوڭ"
@@ -5385,12 +5113,10 @@ msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr ""
 
 #: sublime/idealdockwidget.cpp:154
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: sublime/idealdockwidget.cpp:166
 #, kde-format
@@ -5399,11 +5125,10 @@ msgid "Assign Shortcut For '%1' Tool View"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:49
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
-msgstr "قوللانمىلار"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:51
 #, kde-format
@@ -5412,11 +5137,10 @@ msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:60
-#, fuzzy, kde-format
-#| msgid "Show text"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr "تېكىست كۆرسەت"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:64
 #, kde-format
@@ -5443,41 +5167,34 @@ msgid "Hide/Restore Docks"
 msgstr ""
 
 #: sublime/mainwindow_p.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:88
-#, fuzzy, kde-format
-#| msgid "&Previous Window"
+#, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr "ئالدىنقى كۆزنەك(&P)"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove lock file"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
-msgstr "ھەممىنى چىقىرىۋەت"
+msgstr ""
 
 #: sublime/mainwindow_p.cpp:644
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "ياپ"
 
 #: sublime/mainwindow_p.cpp:645
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
-msgstr "تاپشۇرۇش ئۇچۇرى:"
+msgstr "ئۇچۇرنى ياپ"
 
 #: util/duchainify/main.cpp:268
 #, kde-format
@@ -5495,10 +5212,9 @@ msgid "(c) 2009 David Nolden"
 msgstr ""
 
 #: util/duchainify/main.cpp:276
-#, fuzzy, kde-format
-#| msgid "directory"
+#, kde-format
 msgid "file or directory"
-msgstr "مۇندەرىجە"
+msgstr ""
 
 #: util/duchainify/main.cpp:279
 #, kde-format
@@ -5577,8 +5293,7 @@ msgid "Recursively dump errors from imported contexts."
 msgstr ""
 
 #: util/environmentselectionmodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Profile"
+#, kde-format
 msgctxt "@title:column"
 msgid "Profile"
 msgstr "سەپلىمە ھۆججەت"
@@ -5625,8 +5340,7 @@ msgid "Set Write Permissions"
 msgstr ""
 
 #: util/shellutils.cpp:180
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "پەرۋا قىلما"
@@ -5727,11 +5441,9 @@ msgid "Command exited with value %1."
 msgstr ""
 
 #: vcs/dvcs/dvcsjob.cpp:370
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "error"
+#, kde-format
 msgid "error: %1"
-msgstr "خاتالىق"
+msgstr "خاتالىق: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
@@ -5740,12 +5452,10 @@ msgid "Branches..."
 msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Session"
+#, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
-msgstr "ئەڭگىمە"
+msgstr ""
 
 #: vcs/dvcs/ui/branchmanager.cpp:114
 #, kde-format
@@ -5832,8 +5542,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "@action:button new branch"
 msgid "New"
 msgstr "يېڭى"
@@ -5847,8 +5556,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:button"
 msgid "Rename"
 msgstr "ئات ئۆزگەرت"
@@ -5878,35 +5586,32 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
-#, fuzzy, kde-format
-#| msgid "Checkout"
+#, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "تەكشۈر"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
 #, kde-format
 msgctxt "@action:button merge a branch"
 msgid "Merge"
-msgstr ""
+msgstr "بىرلەشتۈر"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Source Directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "مەنبە مۇندەرىجە:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
 #: vcs/widgets/vcsdiffpatchsources.cpp:49
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr "تاپشۇرۇش ئۇچۇرى:"
+msgstr ""
 
 #: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
@@ -5919,61 +5624,52 @@ msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr ""
 
 #: vcs/models/vcsannotationmodel.cpp:116
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgid "Author:"
-msgstr "ئاپتور"
+msgstr "يازغۇچى:"
 
 #: vcs/models/vcsannotationmodel.cpp:117
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgid "Date:"
-msgstr "چېسلا"
+msgstr "چېسلا:"
 
 #: vcs/models/vcsannotationmodel.cpp:118
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgid "Commit message:"
-msgstr "تاپشۇرۇش ئۇچۇرى:"
+msgstr ""
 
 #: vcs/models/vcseventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Revision"
 msgstr "تۈزىتىلمە"
 
 #: vcs/models/vcseventmodel.cpp:90
-#, fuzzy, kde-format
-#| msgid "Message"
+#, kde-format
 msgctxt "@title:column"
 msgid "Message"
 msgstr "ئۇچۇر"
 
 #: vcs/models/vcseventmodel.cpp:92
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgctxt "@title:column"
 msgid "Author"
-msgstr "ئاپتور"
+msgstr "يازغۇچى"
 
 #: vcs/models/vcseventmodel.cpp:94
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgctxt "@title:column"
 msgid "Date"
 msgstr "چېسلا"
 
 #: vcs/models/vcsfilechangesmodel.cpp:32
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item file was added to versioncontrolsystem"
 msgid "Added"
 msgstr "قوشۇلدى"
 
 #: vcs/models/vcsfilechangesmodel.cpp:34
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item file was deleted from versioncontrolsystem"
 msgid "Deleted"
 msgstr "ئۆچۈرۈلدى"
@@ -5985,8 +5681,7 @@ msgid "Has Conflicts"
 msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item version controlled file was modified"
 msgid "Modified"
 msgstr "ئۆزگەرتىلگەن ۋاقتى"
@@ -5998,61 +5693,52 @@ msgid "Up To Date"
 msgstr ""
 
 #: vcs/models/vcsfilechangesmodel.cpp:43
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "@item file is not known to versioncontrolsystem"
 msgid "Unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: vcs/models/vcsfilechangesmodel.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "Unknown VCS file status, probably a backend error"
-#| msgid "?"
+#, kde-format
 msgctxt "@item Unknown VCS file status, probably a backend error"
 msgid "?"
 msgstr "؟"
 
 #: vcs/models/vcsfilechangesmodel.cpp:137
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgctxt "@title:column"
 msgid "Filename"
 msgstr "ھۆججەت ئاتى"
 
 #: vcs/models/vcsfilechangesmodel.cpp:138
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "ھالىتى"
 
 #: vcs/models/vcsitemeventmodel.cpp:46
-#, fuzzy, kde-format
-#| msgid "Added"
+#, kde-format
 msgctxt "@item"
 msgid "Added"
 msgstr "قوشۇلدى"
 
 #: vcs/models/vcsitemeventmodel.cpp:48
-#, fuzzy, kde-format
-#| msgid "Deleted"
+#, kde-format
 msgctxt "@item"
 msgid "Deleted"
 msgstr "ئۆچۈرۈلدى"
 
 #: vcs/models/vcsitemeventmodel.cpp:50
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgctxt "@item"
 msgid "Modified"
 msgstr "ئۆزگەرتىلگەن ۋاقتى"
 
 #: vcs/models/vcsitemeventmodel.cpp:52
-#, fuzzy, kde-format
-#| msgid "Copied"
+#, kde-format
 msgctxt "@item"
 msgid "Copied"
-msgstr "كۆچۈرۈلدى"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:54
 #, kde-format
@@ -6061,59 +5747,49 @@ msgid "Replaced"
 msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "separes an action list"
-#| msgid ", "
+#, kde-format
 msgctxt "separates an action list"
 msgid ", "
 msgstr "، "
 
 #: vcs/models/vcsitemeventmodel.cpp:85
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Location"
 msgstr "ئورنى"
 
 #: vcs/models/vcsitemeventmodel.cpp:86
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title:column"
 msgid "Actions"
-msgstr "مەشغۇلاتلار"
+msgstr "مەشغۇلات"
 
 #: vcs/models/vcsitemeventmodel.cpp:87
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Location"
-msgstr "ئورنى"
+msgstr ""
 
 #: vcs/models/vcsitemeventmodel.cpp:88
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
-msgstr "تۈزىتىلمە"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@action:button To make a commit"
-#| msgid "Commit"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
-msgstr "تاپشۇر(_C)"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:84
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "يېڭىلا"
 
 #: vcs/vcspluginhelper.cpp:85
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "قوش"
@@ -6125,18 +5801,16 @@ msgid "Show Differences..."
 msgstr ""
 
 #: vcs/vcspluginhelper.cpp:87
-#, fuzzy, kde-format
-#| msgid "Revert"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "ئەسلىگە ياندۇر"
 
 #: vcs/vcspluginhelper.cpp:88 vcs/vcspluginhelper.cpp:456
-#, fuzzy, kde-format
-#| msgid "History..."
+#, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
-msgstr "ئىز…"
+msgstr ""
 
 #: vcs/vcspluginhelper.cpp:89
 #, kde-format
@@ -6157,15 +5831,13 @@ msgid "Show Diff (All Files)..."
 msgstr ""
 
 #: vcs/vcspluginhelper.cpp:92
-#, fuzzy, kde-format
-#| msgid "Push"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
-msgstr "قويۇش"
+msgstr "ئىتتەر"
 
 #: vcs/vcspluginhelper.cpp:93
-#, fuzzy, kde-format
-#| msgid "Pull"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "تارت"
@@ -6203,45 +5875,43 @@ msgid ""
 msgstr ""
 
 #: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Revision"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
-msgstr "تۈزىتىلمە"
+msgstr ""
 
 #: vcs/widgets/standardvcslocationwidget.cpp:23
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr "ئوچۇق سەپلىمە…"
+msgstr ""
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:53
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
 msgid_plural "%1 years"
-msgstr[0] ""
+msgstr[0] "%1 يىل"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:63
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
 msgid_plural "%1 months"
-msgstr[0] ""
+msgstr[0] "%1 ئاي"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:67
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
 msgid_plural "%1 days"
-msgstr[0] ""
+msgstr[0] "%1 كۈن"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
-msgstr ""
+msgstr "بۈگۈن"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
@@ -6258,11 +5928,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Commit Message:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
-msgstr "تاپشۇرۇش ئۇچۇرى:"
+msgstr ""
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
@@ -6343,19 +6012,16 @@ msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr ""
 
-#, fuzzy
 #~| msgid "Debug"
 #~ msgctxt "@title:window"
 #~ msgid "Debug"
 #~ msgstr "سازلا"
 
-#, fuzzy
 #~| msgid "Recursive"
 #~ msgctxt "@option:check"
 #~ msgid "Recursive"
 #~ msgstr "چوڭقۇرلاش"
 
-#, fuzzy
 #~| msgid "Running"
 #~ msgctxt "@info:progress"
 #~ msgid "Running %1"
@@ -6364,13 +6030,11 @@ msgstr ""
 #~ msgid "Remove All"
 #~ msgstr "ھەممىنى چىقىرىۋەت"
 
-#, fuzzy
 #~| msgid "Share Templates"
 #~ msgctxt "@action:button"
 #~ msgid "Share Templates"
 #~ msgstr "قېلىپ ھەمبەھىرلە"
 
-#, fuzzy
 #~| msgid "Search"
 #~ msgid "Search..."
 #~ msgstr "ئىزدە"
@@ -6503,7 +6167,6 @@ msgstr ""
 #~ msgid "Version Control"
 #~ msgstr "نەشر باشقۇرۇش"
 
-#, fuzzy
 #~| msgctxt "project name (branch name)"
 #~| msgid "%1 (%2)"
 #~ msgctxt "a copy of the existing environment was created"
@@ -6513,7 +6176,6 @@ msgstr ""
 #~ msgid "Add Group"
 #~ msgstr "گۇرۇپپا قوش"
 
-#, fuzzy
 #~| msgid "Remove Group"
 #~ msgid "Clone Group"
 #~ msgstr "گۇرۇپپىنى چىقىرىۋەت"
@@ -6536,18 +6198,15 @@ msgstr ""
 #~ msgid "Clone"
 #~ msgstr "كىلون"
 
-#, fuzzy
 #~| msgid "&Format"
 #~ msgid "Form"
 #~ msgstr "فورمات(&F)"
 
-#, fuzzy
 #~| msgid "enumerator "
 #~ msgctxt "generating a file: %1 file %2 generator tool"
 #~ msgid "generating %1 (%2)"
 #~ msgstr "سانىغۇچ "
 
-#, fuzzy
 #~| msgctxt "project name (branch name)"
 #~| msgid "%1 (%2)"
 #~ msgctxt ""
@@ -6555,7 +6214,6 @@ msgstr ""
 #~ msgid "linking %1 (%2)"
 #~ msgstr "%1 (%2)"
 
-#, fuzzy
 #~| msgctxt "project name (branch name)"
 #~| msgid "%1 (%2)"
 #~ msgctxt ""
@@ -6563,7 +6221,6 @@ msgstr ""
 #~ msgid "linking %1 (%2)"
 #~ msgstr "%1 (%2)"
 
-#, fuzzy
 #~| msgctxt "project name (branch name)"
 #~| msgid "%1 (%2)"
 #~ msgctxt ""
@@ -6571,21 +6228,18 @@ msgstr ""
 #~ msgid "linking %1 (%2)"
 #~ msgstr "%1 (%2)"
 
-#, fuzzy
 #~| msgctxt "@info:status"
 #~| msgid "install"
 #~ msgctxt "installing a file: %1 file"
 #~ msgid "installing %1"
 #~ msgstr "ئورنات"
 
-#, fuzzy
 #~| msgctxt "%1: Project name"
 #~| msgid "Loading %1"
 #~ msgctxt "creating a folder: %1 path"
 #~ msgid "creating %1"
 #~ msgstr "ئوقۇۋاتىدۇ %1"
 
-#, fuzzy
 #~| msgid "enumerator "
 #~ msgctxt "change directory: %1: path"
 #~ msgid "entering %1 (%2)"
