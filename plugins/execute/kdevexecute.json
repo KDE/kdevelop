@@ -34,6 +34,7 @@
                 "Name[sl]": "Hamish Rodda",
                 "Name[sv]": "Hamish Rodda",
                 "Name[tr]": "Hamish Rodda",
+                "Name[ug]": "Hamish Rodda",
                 "Name[uk]": "Hamish Rodda",
                 "Name[zh_CN]": "Hamish Rodda",
                 "Name[zh_TW]": "Hamish Rodda"
@@ -113,7 +114,7 @@
         "Name[sl]": "Izvedi programe",
         "Name[sv]": "Kör program",
         "Name[tr]": "Uygulamaları Yürüt",
-        "Name[ug]": "پروگرامما ئىجرا قىلىش",
+        "Name[ug]": "پىروگرامما ئىجرا قىلىش",
         "Name[uk]": "Виконання програм",
         "Name[zh_CN]": "执行程序",
         "Name[zh_TW]": "執行程式"
