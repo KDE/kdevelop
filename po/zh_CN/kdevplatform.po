@@ -1384,7 +1384,7 @@ msgstr "显示生成的 AST 树"
 #: language/util/debuglanguageparserhelper.h:183
 #, kde-format
 msgid "print generated token stream"
-msgstr "显示生成的词令流"
+msgstr "显示生成的令牌流"
 
 #: language/util/debuglanguageparserhelper.h:184
 #, kde-format

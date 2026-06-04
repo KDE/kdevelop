@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-11 00:43+0000\n"
-"PO-Revision-Date: 2026-05-24 22:15+0300\n"
+"PO-Revision-Date: 2026-06-03 08:09+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4435,28 +4435,28 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
-msgstr ""
+msgstr "שמירת כל המסמכים טרום הבנייה"
 
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
 msgid "Runtimes"
-msgstr ""
+msgstr "סביבות ריצה"
 
 #: shell/settings/runtimespreferences.cpp:33
 #, kde-format
 msgid "Configure Runtimes"
-msgstr ""
+msgstr "הגדרת סביבות ריצה"
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
 #, kde-format
 msgid "Source Formatter"
-msgstr ""
+msgstr "מעצב מקור"
 
 #: shell/settings/sourceformattersettings.cpp:80
 #, kde-format
 msgid "Configure Source Formatter"
-msgstr ""
+msgstr "הגדרת מעצב מקור"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/sourceformattersettings.ui:20
@@ -4473,13 +4473,15 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
 msgstr ""
+"לדרוס את מצב ההזחה של העורך לפי סגנון העיצוב למסמכים בלי שורת הגדרה "
+"(modeline) של Kate."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr ""
+msgstr "דריסת מצב ההזחה של Kate"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
@@ -4487,14 +4489,14 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr ""
+msgstr "הוספת שורת הגדרה (modeline) של Kate לפי סגנון העיצוב למסמכים מעוצבים."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
-msgstr ""
+msgstr "הוספת שורת הגדרה (modeline) של Kate"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
@@ -4544,7 +4546,7 @@ msgstr "ממשק משתמש"
 #, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr ""
+msgstr "התנהגות חלון מעגן"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4789,37 +4791,37 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr ""
+msgstr "לשכתב קבצים?"
 
 #: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
-msgstr ""
+msgstr "לשכתב את כל הקבצים בתיקייה הנבחרת?"
 
 #: shell/sourceformattercontroller.cpp:872
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr ""
+msgstr "שכתוב"
 
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
-msgstr ""
+msgstr "מתבצע שכתוב"
 
 #: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
-msgstr ""
+msgstr "שכתוב קבצים"
 
 #: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מתבצע שכתוב של קובץ אחד"
+msgstr[1] "מתבצע שכתוב של שני קבצים"
+msgstr[2] "מתבצע שכתוב של %1 קבצים"
+msgstr[3] "מתבצע שכתוב של %1 קבצים"
 
 #: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
@@ -5341,7 +5343,7 @@ msgstr "אירעו תקלות הצגה במהלך הפיענוח"
 #: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
-msgstr ""
+msgstr "הטלת שגיאות באופן נסוג מהקשרים מיובאים."
 
 #: util/environmentselectionmodel.cpp:40
 #, kde-format
@@ -5400,7 +5402,7 @@ msgstr "התעלמות"
 #: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr ""
+msgstr "הוספת הרשאות כתיבה על חלק מהקבצים נכשלה."
 
 #: util/shellutils.cpp:193
 #, kde-format
