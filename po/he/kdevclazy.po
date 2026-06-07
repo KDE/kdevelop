@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-24 22:11+0300\n"
+"PO-Revision-Date: 2026-06-06 07:49+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -359,7 +359,7 @@ msgstr "תואם Qt4"
 msgctxt "@info:tooltip"
 msgid ""
 "For running clazy on Qt itself, optional, but honors specific guidelines."
-msgstr ""
+msgstr "להרצת clazy על Qt עצמו, רשות, אבל מכבד הנחיות מסוימות."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
 #: config/projectconfigpage.ui:101
@@ -424,21 +424,21 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable all fix-its"
-msgstr ""
+msgstr "הפעלה של כל הצעות התיקון"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:179
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fix-its will be applied to a separate file (for unit-test use only)."
-msgstr ""
+msgstr "הצגות תיקון יחולו בקובץ נפרד (לשימוש בדיקות יחידה בלבד)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:182
 #, kde-format
 msgctxt "@option:check"
 msgid "No-inplace fix-its"
-msgstr ""
+msgstr "אין הצעות תיקון מקומיות"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
 #: config/projectconfigpage.ui:192
@@ -449,6 +449,8 @@ msgid ""
 "parallel checking, which can lead to multiple fix-it applying for header "
 "files."
 msgstr ""
+"נא לגבות את הקוד שלך לפני החלת הצעות תיקון. לתוצאות מיטביות יש גם\n"
+"להשבית בדיקה מקבילית, מה שיכול להוביל להחלה של כמה הצעות תיקון בקובצי כותרת."
 
 #. i18n: ectx: attribute (title), widget (QWidget, extraTab)
 #: config/projectconfigpage.ui:209
@@ -462,35 +464,35 @@ msgstr "משתנים נוספים"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler append:"
-msgstr ""
+msgstr "הוספה למהדר (בסוף):"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
 #: config/projectconfigpage.ui:222
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to append to the compiler command line."
-msgstr ""
+msgstr "משתנים נוספים להוספה לסוף שורת הפקודה של המהדר."
 
 #. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
 #: config/projectconfigpage.ui:232
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler prepend:"
-msgstr ""
+msgstr "הוספה למהדר (בהתחלה):"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
 #: config/projectconfigpage.ui:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to prepend to the compiler command line."
-msgstr ""
+msgstr "משתנים נוספים להוספה לתחילת שורת הפקודה של המהדר."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
 #: config/projectconfigpage.ui:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to clazy-standalone."
-msgstr ""
+msgstr "משתנים נוספים ל־clazy-standalone."
 
 #. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
 #: config/projectconfigpage.ui:259
