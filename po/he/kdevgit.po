@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2026-05-23 16:36+0300\n"
+"PO-Revision-Date: 2026-06-06 07:52+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #: committoolview.cpp:200 committoolview.cpp:201
 #, kde-format
@@ -51,17 +51,17 @@ msgstr "הקיבוע נכשל. כדאי לעיין בתצוגת כלי בקרת 
 #: diffviewsctrl.cpp:50
 #, kde-format
 msgid "Stage selected lines or hunk"
-msgstr ""
+msgstr "בימוי השורות או המקטע הנבחרים"
 
 #: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Unstage selected lines or hunk"
-msgstr ""
+msgstr "הורדת השורות או המקטע הנבחרים מבימוי"
 
 #: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Revert selected lines or hunk"
-msgstr ""
+msgstr "הסגת השורות או המקטע הנבחרים"
 
 #: diffviewsctrl.cpp:56
 #, kde-format
@@ -86,27 +86,27 @@ msgstr "הסגת השורות הנבחרות"
 #: diffviewsctrl.cpp:116
 #, kde-format
 msgid "Unstage selected hunk"
-msgstr ""
+msgstr "הורדת המקטע הנבחר מבימוי"
 
 #: diffviewsctrl.cpp:117
 #, kde-format
 msgid "Stage selected hunk"
-msgstr ""
+msgstr "בימוי המקטע הנבחר"
 
 #: diffviewsctrl.cpp:118
 #, kde-format
 msgid "Revert selected hunk"
-msgstr ""
+msgstr "הסגת המקטע הנבחר"
 
 #: diffviewsctrl.cpp:128 diffviewsctrl.cpp:134
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "ב"
 
 #: diffviewsctrl.cpp:129 diffviewsctrl.cpp:135
 #, kde-format
 msgid "G"
-msgstr ""
+msgstr "ק"
 
 #: diffviewsctrl.cpp:181
 #, kde-format
