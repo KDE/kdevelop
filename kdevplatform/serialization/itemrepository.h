@@ -2238,8 +2238,11 @@ private:
         uint totalSize = size + MyBucket::AdditionalSpacePerItem;
 
         Q_ASSERT((totalSize > ItemRepositoryBucketSize));
+        Q_ASSERT(m_buckets.size() < ItemRepositoryBucketLimit);
 
-        auto useBucket = BucketId{0};
+        // NOTE: Narrowing conversion is OK, since the size will never be >= ItemRepositoryBucketLimit (65536)
+        // so it will fit into BucketId. At 65535 allocateNextBuckets() will fail.
+        auto useBucket = BucketId(m_buckets.size());
         auto rangeStart = BucketId{std::numeric_limits<BucketId>::max()};
         auto rangeEnd = BucketId{std::numeric_limits<BucketId>::max()};
         const uint extent = MyBucket::calculateExtentSize(size);
