@@ -2280,6 +2280,7 @@ private:
                         // We'll need to allocate
                         useBucket = rangeStart;
                         Q_ASSERT(useBucket == m_currentBucket);
+                        break;
                     }
                 }
             }
