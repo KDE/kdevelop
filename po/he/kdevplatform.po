@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-31 00:42+0000\n"
-"PO-Revision-Date: 2026-06-03 08:09+0300\n"
+"PO-Revision-Date: 2026-06-11 08:30+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -4220,14 +4220,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
-msgstr ""
+msgstr "גודל מיזם מזערי לפיענוח מפושט:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: shell/settings/languagepreferences.ui:415
 #, kde-format
 msgctxt "@title:group"
 msgid "Storage and Memory Use"
-msgstr ""
+msgstr "שימוש באחסון ובזיכרון"
 
 #. i18n: ectx: property (text), widget (QLabel, label_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:421
@@ -5930,6 +5930,7 @@ msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
+"לא ניתן להציג פרשנויות, הממשק KTextEditor::AnnotationInterface חסר לעורך."
 
 #: vcs/vcspluginhelper.cpp:424
 #, kde-format
@@ -5938,6 +5939,8 @@ msgid ""
 "not a text document:\n"
 "%1"
 msgstr ""
+"לא ניתן להריץ פעולת פרשנות כיוון שהמסמך לא נמצא, או שזה לא היה מסמך טקסט:\n"
+"%1"
 
 #: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
