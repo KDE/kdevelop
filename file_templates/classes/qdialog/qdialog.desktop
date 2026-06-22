@@ -202,7 +202,6 @@ OutputFile={{ name }}.cpp
 Name=User Interface
 Name[ar]=واجهة المستخدم
 Name[az]=İstifaddəçi İnterfeysi
-Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari
 Name[ca@valencia]=Interfície d'usuari
