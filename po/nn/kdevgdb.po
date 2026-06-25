@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 00:41+0000\n"
-"PO-Revision-Date: 2008-11-26 17:46+0100\n"
+"PO-Revision-Date: 2026-06-23 22:25+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
 "Language: nn\n"
@@ -16,6 +16,7 @@ msgstr ""
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 26.07.70\n"
 
 #: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
@@ -366,7 +367,7 @@ msgstr ""
 #: kdevgdbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr ""
+msgstr "Verktøylinje for feilsøking"
 
 #: memviewdlg.cpp:68
 #, kde-format
