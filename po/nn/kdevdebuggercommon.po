@@ -16,6 +16,7 @@ msgstr ""
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 26.07.70\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
