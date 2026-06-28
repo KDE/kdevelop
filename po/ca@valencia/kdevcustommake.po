@@ -78,7 +78,7 @@ msgstr "La cadena del paràmetre «%1» no pareix vàlida. El resultat és: %2."
 #: makefileresolver/makefileresolver.cpp:497
 #, kde-format
 msgid "The directory \"%1\" does not exist. Output was: %2."
-msgstr "El directori «%1» no existix. El resultat és %2."
+msgstr "La carpeta «%1» no existix. El resultat és %2."
 
 #: makefileresolver/makefileresolver.cpp:501
 #, kde-format

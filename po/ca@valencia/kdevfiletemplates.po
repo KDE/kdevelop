@@ -473,7 +473,7 @@ msgstr "Trieu qualsevol mètode que voldríeu substituir en la classe nova."
 #, kde-format
 msgctxt "@title:column"
 msgid "Superclass -> Function"
-msgstr "Superclasse -> Funció"
+msgstr "Superclasse → Funció"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
 #: ui/overridevirtuals.ui:47

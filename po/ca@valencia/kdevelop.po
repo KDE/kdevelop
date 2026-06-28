@@ -826,7 +826,7 @@ msgid ""
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
 "Inicia la depuració d'una aplicació en KDevelop amb el depurador indicat.\n"
-"Ha de seguir l'executable que s'ha de depurar - incloent els arguments.\n"
+"Ha de seguir l'executable que s'ha de depurar – incloent els arguments.\n"
 "Exemple: kdevelop --debug gdb lamevaaplicacio --foo bar"
 
 #: main.cpp:501

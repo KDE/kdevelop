@@ -32,7 +32,7 @@ msgstr "Classes"
 #, kde-format
 msgctxt "@action"
 msgid "Find in &Class Browser"
-msgstr "Bu&sca en el navegador de classes"
+msgstr "Bu&sca al navegador de classes"
 
 #: classwidget.cpp:72
 #, kde-format
