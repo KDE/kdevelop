@@ -26,7 +26,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configureu un directori de construcció - %1"
+msgstr "Configureu un directori de construcció – %1"
 
 #: cmakebuilddirchooser.cpp:86
 #, kde-format

@@ -46,14 +46,13 @@ msgid ""
 "The directory '%1' is not empty and does not seem to be an already "
 "configured build directory"
 msgstr ""
-"El directori «%1» no està buit i no pareix que siga un directori de "
-"construcció ja configurat"
+"La carpeta «%1» no està buida i no pareix que siga una carpeta de "
+"construcció ja configurada"
 
 #: mesonbuilder.cpp:169
 #, kde-format
 msgid "The directory '%1' cannot be used as a meson build directory"
-msgstr ""
-"El directori «%1» no es pot emprar com un directori de construcció Meson"
+msgstr "La carpeta «%1» no es pot emprar com una carpeta de construcció Meson"
 
 #: mesonbuilder.cpp:172 mesonjobprune.cpp:55
 #, kde-format
@@ -95,12 +94,12 @@ msgstr "Meson"
 #: mesonjobprune.cpp:43
 #, kde-format
 msgid "The directory '%1' is already pruned"
-msgstr "El directori «%1» ja s'ha eliminat"
+msgstr "La carpeta «%1» ja s'ha eliminat"
 
 #: mesonjobprune.cpp:49
 #, kde-format
 msgid "The directory '%1' does not appear to be a meson build directory"
-msgstr "El directori «%1» no pareix que siga un directori de construcció Meson"
+msgstr "La carpeta «%1» no pareix que siga una carpeta de construcció Meson"
 
 #: mesonjobprune.cpp:50
 #, kde-format
@@ -281,7 +280,7 @@ msgstr "Este directori de construcció Meson no està completament configurat"
 #: settings/mesonconfigpage.cpp:197
 #, kde-format
 msgid "This directory does not seem to be a meson build directory"
-msgstr "Este directori no pareix que siga un directori de construcció Meson"
+msgstr "Este directori no pareix que siga una carpeta de construcció Meson"
 
 #: settings/mesonconfigpage.cpp:200
 #, kde-format
@@ -391,7 +390,7 @@ msgstr "Últim"
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configureu un directori de construcció - %1"
+msgstr "Configureu un directori de construcció – %1"
 
 #: settings/mesonnewbuilddir.cpp:137
 #, kde-format

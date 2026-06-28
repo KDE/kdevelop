@@ -86,7 +86,7 @@ msgstr "Adjunta al procés amb Heaptrack"
 #, kde-format
 msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
 msgstr ""
-"No s'ha pogut iniciar l'anàlisi de Heaptrack - No s'ha carregat el connector "
+"No s'ha pogut iniciar l'anàlisi de Heaptrack – No s'ha carregat el connector "
 "«%1»."
 
 #: plugin.cpp:105

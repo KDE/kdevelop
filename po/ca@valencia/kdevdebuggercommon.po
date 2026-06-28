@@ -281,7 +281,7 @@ msgstr ""
 #: midebuggerplugin.cpp:150
 #, kde-format
 msgid "KDevelop (%1) - %2"
-msgstr "KDevelop (%1) - %2"
+msgstr "KDevelop (%1) – %2"
 
 #: midebuggerplugin.cpp:233
 #, kde-format

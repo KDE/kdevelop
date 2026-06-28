@@ -195,7 +195,7 @@ msgstr "Visualitza els suggeriments"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Hints"
-msgstr "Mostra els consells"
+msgstr "Mostra els consells d'eina"
 
 #: problemsview.cpp:175
 #, kde-format

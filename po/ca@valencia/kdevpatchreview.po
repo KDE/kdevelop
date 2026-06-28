@@ -169,7 +169,7 @@ msgstr "Revisió del pedaç"
 #: patchreview.cpp:467
 #, kde-format
 msgid "The base directory of the patch must be an absolute directory."
-msgstr "El directori base del pedaç cal que siga un directori absolut."
+msgstr "El directori base del pedaç cal que siga una carpeta absoluta."
 
 #: patchreview.cpp:499 patchreview.cpp:524
 #, kde-format

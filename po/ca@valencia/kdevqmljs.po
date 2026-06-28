@@ -80,13 +80,13 @@ msgstr "QWidget hereu"
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
 #, kde-format
 msgid "Inherits QDeclarativeItem - Qt Quick 1"
-msgstr "QDeclarativeItem hereu - Qt Quick 1"
+msgstr "QDeclarativeItem hereu – Qt Quick 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
 #, kde-format
 msgid "Inherits QQuickItem - Qt Quick 2"
-msgstr "QQuickItem hereu - Qt Quick 2"
+msgstr "QQuickItem hereu – Qt Quick 2"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
