@@ -18,6 +18,19 @@ private:
     using Bucket = Repo::MyBucket;
 
 private Q_SLOTS:
+
+    void testCalculateExtentSize()
+    {
+        QCOMPARE(Bucket::calculateExtentSize(0), 0);
+        QCOMPARE(Bucket::calculateExtentSize(1), 0);
+        QCOMPARE(Bucket::calculateExtentSize(ItemRepositoryBucketSize - Bucket::AdditionalSpacePerItem), 0);
+        QCOMPARE(Bucket::calculateExtentSize(ItemRepositoryBucketSize - 1), 1);
+        QCOMPARE(Bucket::calculateExtentSize(ItemRepositoryBucketSize), 1);
+        QCOMPARE(Bucket::calculateExtentSize(ItemRepositoryBucketSize * 2), 1);
+        QCOMPARE(Bucket::calculateExtentSize(Bucket::DataSize), 1); // 2 buckets
+        QCOMPARE(Bucket::calculateExtentSize(Bucket::DataSize * 2), 2); // 3 buckets
+        QCOMPARE(Bucket::calculateExtentSize(Bucket::DataSize * 3), 3); // 4 buckets
+    }
     void testBasic()
     {
         QMutex mutex;
