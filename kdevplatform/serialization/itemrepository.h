@@ -377,7 +377,9 @@ public:
 
     static constexpr int calculateExtentSize(int itemSize)
     {
-        itemSize -= ItemRepositoryBucketSize + AdditionalSpacePerItem;
+        itemSize -= ItemRepositoryBucketSize - AdditionalSpacePerItem;
+        if (itemSize <= 0)
+            return 0; // Fits into a single bucket
         int extents = itemSize / DataSize + 1;
         return extents;
     }
