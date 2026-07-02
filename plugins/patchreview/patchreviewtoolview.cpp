@@ -42,7 +42,6 @@
 
 #ifdef WITH_PURPOSE
 #include <Purpose/AlternativesModel>
-#include <purpose_version.h>
 #include <Purpose/Menu>
 #endif
 

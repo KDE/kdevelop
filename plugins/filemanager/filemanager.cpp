@@ -22,7 +22,6 @@
 #include <KActionMenu>
 #include <KJobWidgets>
 #include <KConfigGroup>
-#include <kio_version.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>

@@ -11,10 +11,6 @@
 #include "cmakebuilderconfig.h"
 #include "cmakeutils.h"
 
-#ifdef Q_OS_WIN
-#include <kio_version.h>
-#endif
-
 CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent)
     : KDevelop::ConfigPage(plugin, CMakeBuilderSettings::self(), parent)
 {

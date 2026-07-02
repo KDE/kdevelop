@@ -17,7 +17,6 @@
 #include <KLocalizedString>
 #include <KNSCore/Entry>
 #include <KNSWidgets/Button>
-#include <kio_version.h>
 
 #include "ui_qthelpconfig.h"
 #include "ui_qthelpconfigeditdialog.h"

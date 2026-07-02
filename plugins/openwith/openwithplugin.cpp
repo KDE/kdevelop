@@ -23,7 +23,6 @@
 #include <KPluginFactory>
 #include <KOpenWithDialog>
 #include <KIO/ApplicationLauncherJob>
-#include <kio_version.h>
 #include <KIO/JobUiDelegateFactory>
 
 #include <interfaces/contextmenuextension.h>
