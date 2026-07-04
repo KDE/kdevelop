@@ -18,6 +18,7 @@ if(BUILD_BENCHMARKS)
 endif()
 ecm_add_test(test_itemrepository.cpp LINK_LIBRARIES itemrepositorytestbase)
 ecm_add_test(test_itemrepositorybucket.cpp LINK_LIBRARIES itemrepositorytestbase)
+ecm_add_test(test_itemrepositoryoverflow.cpp LINK_LIBRARIES itemrepositorytestbase)
 ecm_add_test(test_itemrepositoryregistry_automatic.cpp
     LINK_LIBRARIES Qt::Test KDev::Serialization KDev::Tests
 )

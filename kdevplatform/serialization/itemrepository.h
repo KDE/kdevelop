@@ -64,6 +64,7 @@
 // #define DEBUG_WRITING_EXTENTS
 
 class TestItemRepository;
+class TestItemRepositoryOverflow;
 class BenchItemRepository;
 
 namespace KDevelop {
@@ -2610,6 +2611,7 @@ private:
     ItemRepositoryRegistry* const m_registry;
 
     friend class ::TestItemRepository;
+    friend class ::TestItemRepositoryOverflow;
     friend class ::BenchItemRepository;
 };
 
