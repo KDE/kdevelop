@@ -49,6 +49,12 @@
 
 #define ITEMREPOSITORY_USE_MMAP_LOADING
 
+#ifdef DEBUG_SMALL_REPO
+#define BUCKET_COUNT 1024
+#else
+#define BUCKET_COUNT 1 << 16;
+#endif
+
 //Assertion macro that prevents warnings if debugging is disabled
 //Only use it to verify values, it should not call any functions, since else the function will even be called in release mode
 #ifdef QT_NO_DEBUG
@@ -174,7 +180,7 @@ void writeList(QIODevice* file, const QVector<T>& from)
  */
 
 const constexpr auto ItemRepositoryBucketSize = 1 << 16;
-const constexpr auto ItemRepositoryBucketLimit = 1 << 16;
+const constexpr auto ItemRepositoryBucketLimit = BUCKET_COUNT;
 const constexpr auto ItemRepositoryMaxBucketIndex =
     ItemRepositoryBucketLimit - 2; // max index is size - 1, and we reserve 0xffff
 const constexpr auto ItemRepositoryBucketLinearGrowthFactor = 10;

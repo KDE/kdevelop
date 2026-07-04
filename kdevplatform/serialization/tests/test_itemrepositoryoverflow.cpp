@@ -1,9 +1,14 @@
-#include "itemrepositorytestbase.h"
-#include "itemrepositoryitem.h"
 
 #include <QTest>
 
+#define DEBUG_MONSTERBUCKETS 1
 #define DEBUG_ITEMREPOSITORY_LOADING 1
+#define DEBUG_ITEM_REACHABILITY 1
+#define DEBUG_INCORRECT_DELETE 1
+#define DEBUG_SMALL_REPO 1
+
+#include "itemrepositorytestbase.h"
+#include "itemrepositoryitem.h"
 
 #include "serialization/itemrepository.h"
 
