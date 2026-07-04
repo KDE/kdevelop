@@ -194,6 +194,7 @@ class Bucket
 
 public:
     using ItemId = std::uint16_t;
+    friend class ::TestItemRepository;
 
     static const constexpr unsigned short AdditionalSpacePerItem = sizeof(ItemId);
 

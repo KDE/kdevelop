@@ -18,7 +18,7 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-private:
+protected:
     const QTemporaryDir m_repositoryDir;
 };
 

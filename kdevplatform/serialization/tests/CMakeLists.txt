@@ -17,6 +17,7 @@ if(BUILD_BENCHMARKS)
     set_tests_properties(bench_indexedstring PROPERTIES TIMEOUT 30)
 endif()
 ecm_add_test(test_itemrepository.cpp LINK_LIBRARIES itemrepositorytestbase)
+ecm_add_test(test_itemrepositorybucket.cpp LINK_LIBRARIES itemrepositorytestbase)
 ecm_add_test(test_itemrepositoryregistry_automatic.cpp
     LINK_LIBRARIES Qt::Test KDev::Serialization KDev::Tests
 )
