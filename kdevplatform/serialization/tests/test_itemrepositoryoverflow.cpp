@@ -22,7 +22,7 @@ int almostFillRepository(ItemRepository<TestItem, TestItemRequest>& repository, 
     // Two indices are reserved: 0x0 and 0xffff. Making the max number of items ItemRepositoryBucketLimit - 2
     for (; i < ItemRepositoryBucketLimit - ItemRepositoryBucketLinearGrowthFactor - 2; ++i) {
         //Fill up repository
-        TestItem* item = createItem(i, ItemRepositoryBucketSize - additionalSpace - 1);
+        TestItemPtr item(createItem(i, ItemRepositoryBucketSize - additionalSpace - 1));
         unsigned int indexed = repository.index(TestItemRequest(*item));
         Q_ASSERT(indexed != 0);
     }
