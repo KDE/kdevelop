@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -39,13 +39,13 @@ msgstr "कोऽपि बिल्ड् निर्देशिका वि
 msgid "No build directory configured, cannot configure"
 msgstr "कोऽपि बिल्ड् निर्देशिका विन्यस्तः, विन्यस्तुं न शक्नोति"
 
-#: cmakebuilderpreferences.cpp:44
+#: cmakebuilderpreferences.cpp:40
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake इति"
 
-#: cmakebuilderpreferences.cpp:49
+#: cmakebuilderpreferences.cpp:45
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"

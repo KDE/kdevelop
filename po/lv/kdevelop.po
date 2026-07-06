@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2002-03-23 20:46EEST\n"
 "Last-Translator: Andris Maziks <andzha@latnet.lv>\n"
 "Language-Team: Latvian\n"
@@ -879,17 +879,17 @@ msgstr "&Līmenis:"
 msgid "Arbitrary String Which Says Something"
 msgstr ""
 
-#: plasma/runner/kdevelopsessions.cpp:27
+#: plasma/runner/kdevelopsessions.cpp:26
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr ""
 
-#: plasma/runner/kdevelopsessions.cpp:31
+#: plasma/runner/kdevelopsessions.cpp:30
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr ""
 
-#: plasma/runner/kdevelopsessions.cpp:105
+#: plasma/runner/kdevelopsessions.cpp:104
 #, fuzzy, kde-format
 msgid "Open KDevelop Session"
 msgstr "&Līmenis:"

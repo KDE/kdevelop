@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2020-01-18 10:46+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -272,7 +272,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Muudatused"
 
-#: patchreviewtoolview.cpp:83
+#: patchreviewtoolview.cpp:82
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -280,12 +280,12 @@ msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2 (1 tükk)"
 msgstr[1] "%2 (%1 tükki)"
 
-#: patchreviewtoolview.cpp:223
+#: patchreviewtoolview.cpp:222
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>Uue päringu leiab aadressil:<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:226
+#: patchreviewtoolview.cpp:225
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -294,33 +294,33 @@ msgstr ""
 "Paiga eksport nurjus.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:257
+#: patchreviewtoolview.cpp:256
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgctxt "@action"
 msgid "Select All"
 msgstr "Vali kõik"
 
-#: patchreviewtoolview.cpp:259
+#: patchreviewtoolview.cpp:258
 #, fuzzy, kde-format
 #| msgid "Deselect All"
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Tühista kõigi valimine"
 
-#: patchreviewtoolview.cpp:557
+#: patchreviewtoolview.cpp:556
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Testid töös: %p%"
 
-#: patchreviewtoolview.cpp:585
+#: patchreviewtoolview.cpp:584
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Test õnnestus"
 msgstr[1] "Kõik %1 testi õnnestusid"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:588
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Testitulemused: %1 õnnestus, %2 nurjus, %3 viga"

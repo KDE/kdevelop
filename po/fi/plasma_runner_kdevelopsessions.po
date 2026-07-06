@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma_runner_kdevelopsessions\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2013-02-24 18:56+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: kdevelopsessions.cpp:27
+#: kdevelopsessions.cpp:26
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Etsii :q::a vastaavia KDevelop-istuntoja."
 
-#: kdevelopsessions.cpp:31
+#: kdevelopsessions.cpp:30
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Luettelee kaikki KDevelop-istunnot tililläsi."
 
-#: kdevelopsessions.cpp:105
+#: kdevelopsessions.cpp:104
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Avaa KDevelop-istunto"

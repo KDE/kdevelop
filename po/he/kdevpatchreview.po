@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2026-01-10 20:36+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -249,7 +249,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "שינויים"
 
-#: patchreviewtoolview.cpp:83
+#: patchreviewtoolview.cpp:82
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -259,12 +259,12 @@ msgstr[1] "%2 (שני גושים)"
 msgstr[2] "%2 (%1 גושים)"
 msgstr[3] "%2 (%1 גושים)"
 
-#: patchreviewtoolview.cpp:223
+#: patchreviewtoolview.cpp:222
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>אפשר למצוא את הבקשה החדשה תחת:<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:226
+#: patchreviewtoolview.cpp:225
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -273,24 +273,24 @@ msgstr ""
 "לא ניתן לייצא את הטלאי.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:257
+#: patchreviewtoolview.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "בחירה בהכול"
 
-#: patchreviewtoolview.cpp:259
+#: patchreviewtoolview.cpp:258
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "ביטול בחירה"
 
-#: patchreviewtoolview.cpp:557
+#: patchreviewtoolview.cpp:556
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "בדיקות רצות: %p%"
 
-#: patchreviewtoolview.cpp:585
+#: patchreviewtoolview.cpp:584
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
@@ -299,7 +299,7 @@ msgstr[1] "כל שתי הבדיקות עברו"
 msgstr[2] "כל %1 הבדיקות עברו"
 msgstr[3] "כל %1 הבדיקות עברו"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:588
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "תוצאות בדיקות: %1 עברו, %2 נכשלו, %3 עם שגיאה"

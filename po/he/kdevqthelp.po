@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2025-11-11 15:21+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -18,80 +18,80 @@ msgstr ""
 "n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Lokalize 25.08.3\n"
 
-#: qthelpconfig.cpp:47
+#: qthelpconfig.cpp:46
 #, kde-format
 msgid "Qt Compressed Help Files"
 msgstr "קובצי עזרה דחוסים של Qt"
 
-#: qthelpconfig.cpp:50
+#: qthelpconfig.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "שינוי רשומה"
 
-#: qthelpconfig.cpp:52
+#: qthelpconfig.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "הוספת רשומה חדשה"
 
-#: qthelpconfig.cpp:70
+#: qthelpconfig.cpp:69
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "השם לא יכול להישאר ריק."
 
-#: qthelpconfig.cpp:105
+#: qthelpconfig.cpp:104
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "הורדת תיעוד חדש"
 
-#: qthelpconfig.cpp:121
+#: qthelpconfig.cpp:120
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr "הפקודה „qmake -query” לא הצליחה לספק נתיב לקובץ QtHelp‏ (QCH)."
 
-#: qthelpconfig.cpp:209
+#: qthelpconfig.cpp:208
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "התיעוד מסופק על ידי GHNS"
 
-#: qthelpconfig.cpp:235
+#: qthelpconfig.cpp:234
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "קובץ העזרה הדחוס של Qt אינו תקין."
 
-#: qthelpconfig.cpp:244
+#: qthelpconfig.cpp:243
 #, kde-format
 msgid "Documentation already imported"
 msgstr "התיעוד כבר יובא"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:295
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "עזרה של Qt"
 
-#: qthelpconfig.cpp:301
+#: qthelpconfig.cpp:300
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "הגדרת תצורת העזרה של Qt"
 
-#: qthelpconfig.cpp:326
+#: qthelpconfig.cpp:325
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "שינוי"
 
-#: qthelpconfig.cpp:332
+#: qthelpconfig.cpp:331
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "מחיקה"
 
-#: qthelpconfig.cpp:338
+#: qthelpconfig.cpp:337
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2024-12-24 20:39+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -891,17 +891,17 @@ msgstr "KDevelop Sessions इति"
 msgid "Arbitrary String Which Says Something"
 msgstr "मनमाना तारः यः किमपि वदति"
 
-#: plasma/runner/kdevelopsessions.cpp:27
+#: plasma/runner/kdevelopsessions.cpp:26
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr ":q: इत्यस्य मेलनं कुर्वन्तः KDevelop सत्रं प्राप्नोति ।"
 
-#: plasma/runner/kdevelopsessions.cpp:31
+#: plasma/runner/kdevelopsessions.cpp:30
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "भवतः खाते सर्वाणि KDevelop सम्पादकसत्राणि सूचीबद्धं करोति ।"
 
-#: plasma/runner/kdevelopsessions.cpp:105
+#: plasma/runner/kdevelopsessions.cpp:104
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop सत्रं उद्घाटयन्तु"

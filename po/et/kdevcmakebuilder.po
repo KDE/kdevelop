@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2020-02-21 11:14+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -40,14 +40,14 @@ msgstr "Ehituskataloogi pole määratud, ei saa paigaldada"
 msgid "No build directory configured, cannot configure"
 msgstr "Ehituskataloogi pole määratud, ei saa konfigureerida"
 
-#: cmakebuilderpreferences.cpp:44
+#: cmakebuilderpreferences.cpp:40
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: cmakebuilderpreferences.cpp:49
+#: cmakebuilderpreferences.cpp:45
 #, fuzzy, kde-format
 #| msgid "Configure Global CMake Settings"
 msgctxt "@title:tab"

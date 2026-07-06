@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2014-03-20 22:11+0200\n"
 "Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -20,83 +20,83 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: qthelpconfig.cpp:47
+#: qthelpconfig.cpp:46
 #, fuzzy, kde-format
 #| msgid "Qt Compressed Help file is not valid."
 msgid "Qt Compressed Help Files"
 msgstr "Το συμπιεσμένο αρχείο βοήθειας για την Qt δεν είναι έγκυρο."
 
-#: qthelpconfig.cpp:50
+#: qthelpconfig.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Τροποποίηση καταχώρησης"
 
-#: qthelpconfig.cpp:52
+#: qthelpconfig.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Προσθήκη νέας καταχώρησης"
 
-#: qthelpconfig.cpp:70
+#: qthelpconfig.cpp:69
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Το όνομα δεν μπορεί να είναι κενό"
 
-#: qthelpconfig.cpp:105
+#: qthelpconfig.cpp:104
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Λήψη νέας τεκμηρίωσης"
 
-#: qthelpconfig.cpp:121
+#: qthelpconfig.cpp:120
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
 
-#: qthelpconfig.cpp:209
+#: qthelpconfig.cpp:208
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Η τεκμηρίωση παρέχει η GHNS"
 
-#: qthelpconfig.cpp:235
+#: qthelpconfig.cpp:234
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Το συμπιεσμένο αρχείο βοήθειας για την Qt δεν είναι έγκυρο."
 
-#: qthelpconfig.cpp:244
+#: qthelpconfig.cpp:243
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Έχει γίνει εισαγωγή τεκμηρίωσης"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:295
 #, fuzzy, kde-format
 #| msgid "QtHelp"
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "QtHelp"
 
-#: qthelpconfig.cpp:301
+#: qthelpconfig.cpp:300
 #, fuzzy, kde-format
 #| msgid "Check Qt Help documentation"
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Εξετάστε την τεκμηρίωση βοήθειας για Qt"
 
-#: qthelpconfig.cpp:326
+#: qthelpconfig.cpp:325
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Τροποποίηση"
 
-#: qthelpconfig.cpp:332
+#: qthelpconfig.cpp:331
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr ""
 
-#: qthelpconfig.cpp:338
+#: qthelpconfig.cpp:337
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

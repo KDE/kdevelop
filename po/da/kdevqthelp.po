@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2014-04-26 15:37+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: qthelpconfig.cpp:47
+#: qthelpconfig.cpp:46
 #, fuzzy, kde-format
 #| msgid "Qt Compressed Help file is not valid."
 msgid "Qt Compressed Help Files"
 msgstr "Qt Compressed Help-fil er ikke gyldig."
 
-#: qthelpconfig.cpp:50
+#: qthelpconfig.cpp:49
 #, fuzzy, kde-format
 #| msgid "Modify Entry"
 msgctxt "@title:window"
 msgid "Modify Entry"
 msgstr "Ændr indgang"
 
-#: qthelpconfig.cpp:52
+#: qthelpconfig.cpp:51
 #, fuzzy, kde-format
 #| msgid "Add New Entry"
 msgctxt "@title:window"
 msgid "Add New Entry"
 msgstr "Tilføj ny indgang"
 
-#: qthelpconfig.cpp:70
+#: qthelpconfig.cpp:69
 #, kde-format
 msgid "Name cannot be empty."
 msgstr "Navnet må ikke være tomt."
 
-#: qthelpconfig.cpp:105
+#: qthelpconfig.cpp:104
 #, fuzzy, kde-format
 #| msgctxt "Allow user to get some API documentation with GHNS"
 #| msgid "Get New Documentation"
@@ -52,55 +52,55 @@ msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Hent ny dokumentation"
 
-#: qthelpconfig.cpp:121
+#: qthelpconfig.cpp:120
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
 
-#: qthelpconfig.cpp:209
+#: qthelpconfig.cpp:208
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Dokumentation leveret af GHNS"
 
-#: qthelpconfig.cpp:235
+#: qthelpconfig.cpp:234
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Qt Compressed Help-fil er ikke gyldig."
 
-#: qthelpconfig.cpp:244
+#: qthelpconfig.cpp:243
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Dokumentation er allerede importeret"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:295
 #, fuzzy, kde-format
 #| msgid "QtHelp"
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "QtHelp"
 
-#: qthelpconfig.cpp:301
+#: qthelpconfig.cpp:300
 #, fuzzy, kde-format
 #| msgid "Check Qt Help documentation"
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Tjek Qt Help-dokumentationen"
 
-#: qthelpconfig.cpp:326
+#: qthelpconfig.cpp:325
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Ændr"
 
-#: qthelpconfig.cpp:332
+#: qthelpconfig.cpp:331
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr ""
 
-#: qthelpconfig.cpp:338
+#: qthelpconfig.cpp:337
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

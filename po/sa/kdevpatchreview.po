@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2024-12-20 22:10+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -250,7 +250,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "परिवर्तनं करोति"
 
-#: patchreviewtoolview.cpp:83
+#: patchreviewtoolview.cpp:82
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -258,12 +258,12 @@ msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2 (१ हंक)"
 msgstr[1] "%2 (%1 हंक्स्)"
 
-#: patchreviewtoolview.cpp:223
+#: patchreviewtoolview.cpp:222
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>नूतनं अनुरोधं भवन्तः अत्र प्राप्तुं शक्नुवन्ति:<br /> <a href='%1'>%1</a></qt>"
 
-#: patchreviewtoolview.cpp:226
+#: patchreviewtoolview.cpp:225
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -272,31 +272,31 @@ msgstr ""
 "पट्टिकां निर्यातयितुं न शक्तवान्।\n"
 "%1"
 
-#: patchreviewtoolview.cpp:257
+#: patchreviewtoolview.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "All इति चिनोतु"
 
-#: patchreviewtoolview.cpp:259
+#: patchreviewtoolview.cpp:258
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "सर्वाणि अचयनं कुर्वन्तु"
 
-#: patchreviewtoolview.cpp:557
+#: patchreviewtoolview.cpp:556
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "परीक्षणं चालयति: %p%"
 
-#: patchreviewtoolview.cpp:585
+#: patchreviewtoolview.cpp:584
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "परीक्षा उत्तीर्णा"
 msgstr[1] "सर्वाणि %1 परीक्षानि उत्तीर्णानि"
 
-#: patchreviewtoolview.cpp:589
+#: patchreviewtoolview.cpp:588
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "परीक्षणपरिणामाः : %1 उत्तीर्णः, %2 विफलः, %3 त्रुटयः"

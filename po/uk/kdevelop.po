@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2025-04-17 13:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -913,18 +913,18 @@ msgstr "Сеанси KDevelop"
 msgid "Arbitrary String Which Says Something"
 msgstr "Довільний рядок, який повідомляє про щось"
 
-#: plasma/runner/kdevelopsessions.cpp:27
+#: plasma/runner/kdevelopsessions.cpp:26
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Знаходить сеанси KDevelop, які відповідають запиту :q:."
 
-#: plasma/runner/kdevelopsessions.cpp:31
+#: plasma/runner/kdevelopsessions.cpp:30
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr ""
 "Показує список всіх сеансів редактора KDevelop на вашому обліковому записі."
 
-#: plasma/runner/kdevelopsessions.cpp:105
+#: plasma/runner/kdevelopsessions.cpp:104
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Відкрити сеанс KDevelop"

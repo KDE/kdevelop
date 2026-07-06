@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
 "PO-Revision-Date: 2013-09-16 12:36+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -887,17 +887,17 @@ msgstr "KDevelop-økter"
 msgid "Arbitrary String Which Says Something"
 msgstr "Vilkårlig streng som sier noe"
 
-#: plasma/runner/kdevelopsessions.cpp:27
+#: plasma/runner/kdevelopsessions.cpp:26
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Finner KDevelop-økter som passer med :q:."
 
-#: plasma/runner/kdevelopsessions.cpp:31
+#: plasma/runner/kdevelopsessions.cpp:30
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Lister alle KDevelop redigeringsøkter i kontoen din."
 
-#: plasma/runner/kdevelopsessions.cpp:105
+#: plasma/runner/kdevelopsessions.cpp:104
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Åpne KDevelop-økt"
