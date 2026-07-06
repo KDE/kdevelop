@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-31 00:42+0000\n"
+"POT-Creation-Date: 2026-07-06 02:55+0000\n"
 "PO-Revision-Date: 2026-03-24 11:15+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -1735,7 +1735,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "حرّك الاعتماد المحدد للأسفل في القائمة"
 
-#: serialization/itemrepository.h:310 serialization/itemrepository.h:1880
+#: serialization/itemrepository.h:310 serialization/itemrepository.h:1882
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "فشل الكتابة إلى %1، من المحتمل أن القرص ممتلئ"

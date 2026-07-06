@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-31 00:42+0000\n"
+"POT-Creation-Date: 2026-07-06 02:55+0000\n"
 "PO-Revision-Date: 2026-06-11 08:30+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1695,7 +1695,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "הורדת התלות הנבחרת במורד הרשימה"
 
-#: serialization/itemrepository.h:310 serialization/itemrepository.h:1880
+#: serialization/itemrepository.h:310 serialization/itemrepository.h:1882
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "הכתיבה אל %1 נכשלה, כנראה שהכונן מלא"
