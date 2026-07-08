@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2026-06-06 07:52+0300\n"
+"PO-Revision-Date: 2026-07-07 09:17+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -173,6 +173,9 @@ msgid ""
 "written to the Git configuration, either locally for the current project "
 "only, or globally for all Git projects.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>עדיין לא הגדרת את השם ואת כתובת הדוא״ל שילוו את קיבועי "
+"ה־Git שלך.<br/>הערכים שימולאו כאן ייכתבו להגדרות של Git, או מקומית או למיזם "
+"הנוכחי בלבד או לחלופין לכל מיזמי ה־Git.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gitnameemaildialog.ui:35
