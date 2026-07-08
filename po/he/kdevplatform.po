@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 00:43+0000\n"
-"PO-Revision-Date: 2026-06-11 08:30+0300\n"
+"PO-Revision-Date: 2026-07-07 09:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -4071,7 +4071,7 @@ msgstr ""
 #: shell/settings/languagepreferences.ui:186
 #, kde-format
 msgid "Global colors:"
-msgstr ""
+msgstr "צבעים מקיפים:"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4105,7 +4105,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr ""
+msgstr "הדגשת בעיות תחביריות:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4116,13 +4116,15 @@ msgid ""
 "<p>When enabled, lines with errors will get additionally highlighted and "
 "their positions get marked in the scrollbar.</p>"
 msgstr ""
+"<p>כשהאפשרות מופעלת, שורות עם שגיאות תקבלנה הדגשה נוספת והמקומות שלהן יסומנו "
+"בפס הגלילה.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
 #, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr ""
+msgstr "הדגשת שורות בעיתיות:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
@@ -4131,6 +4133,8 @@ msgid ""
 "<html><head/><body><p>Use bold font for declarations such as classes, "
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>להשתמש בגופן מודגש להכרזות כגון מחלקות, פונקציות, "
+"משתנים מקומיים ועוד.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
@@ -4265,7 +4269,7 @@ msgstr "זיכרון"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "תיקיית הפעלה זמנית"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4556,13 +4560,15 @@ msgid ""
 "<p>Controls whether the bottom left corner is occupied by the dock at the "
 "left, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>שליטה האם הפינה הימנית התחתונה מאוכלת על ידי המעגן משמאל, או על ידי המעגן "
+"משמאל.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
-msgstr ""
+msgstr "הפינה השמאלית התחתונה מאוכלסת על ידי:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4572,13 +4578,15 @@ msgid ""
 "<p>Controls whether the bottom right corner is occupied by the dock at the "
 "right, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>שליטה האם הפינה הימנית התחתונה מאוכלת על ידי המעגן מימין, או על ידי המעגן "
+"מלמטה.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
-msgstr ""
+msgstr "הפינה הימנית התחתונה מאוכלסת על ידי:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
@@ -4665,6 +4673,7 @@ msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
 msgstr ""
+"מפעיל או מכבה את הצגת כפתור הסגירה בכל לשונית בסרגל הלשוניות בראש חלון העורך."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
