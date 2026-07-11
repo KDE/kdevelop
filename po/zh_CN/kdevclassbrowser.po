@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevclassbrowser.pot\n"
-"X-Crowdin-File-ID: 54638\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevclassbrowser.pot\n"
+"X-Crowdin-File-ID: 54754\n"
 
 #: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
 #, kde-format

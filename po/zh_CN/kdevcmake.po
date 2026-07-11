@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevcmake.pot\n"
-"X-Crowdin-File-ID: 54516\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevcmake.pot\n"
+"X-Crowdin-File-ID: 54806\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
