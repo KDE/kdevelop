@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-06 00:43+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2026-03-24 11:15+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -1735,7 +1735,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "حرّك الاعتماد المحدد للأسفل في القائمة"
 
-#: serialization/itemrepository.h:310 serialization/itemrepository.h:1882
+#: serialization/itemrepository.h:318 serialization/itemrepository.h:1890
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "فشل الكتابة إلى %1، من المحتمل أن القرص ممتلئ"
@@ -4822,6 +4822,29 @@ msgstr "عند التمكين، الألسنة والودجات الأخرى ت�
 msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
 msgstr "لوِّن الودجات بناء على الانتماء للمشروع"
+
+#. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
+#: shell/settings/uiconfig.ui:167
+#, fuzzy, kde-format
+#| msgid "Projects"
+msgctxt "@title:group"
+msgid "Project Tree"
+msgstr "المشاريع"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
+#: shell/settings/uiconfig.ui:173
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Collapse all child items whenever an item in the project tree is collapsed."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
+#: shell/settings/uiconfig.ui:176
+#, kde-format
+msgctxt "@option:check"
+msgid "Collapse items recursively"
+msgstr ""
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format

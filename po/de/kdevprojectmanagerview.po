@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2023-03-17 23:05+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -408,37 +408,37 @@ msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "Dateiname:"
 
-#: projecttreeview.cpp:151
+#: projecttreeview.cpp:179
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "Hierher &verschieben"
 
-#: projecttreeview.cpp:157
+#: projecttreeview.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "Hierher &kopieren"
 
-#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#: projecttreeview.cpp:191 projecttreeview.cpp:252
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "&Abbrechen"
 
-#: projecttreeview.cpp:218
+#: projecttreeview.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
 msgstr "&Zum Ziel hinzufügen"
 
-#: projecttreeview.cpp:348
+#: projecttreeview.cpp:376
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
 msgstr "Analysieren mit"
 
-#: projecttreeview.cpp:364
+#: projecttreeview.cpp:392
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."

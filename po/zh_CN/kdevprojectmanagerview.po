@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2024-04-23 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -400,37 +400,37 @@ msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "文件名："
 
-#: projecttreeview.cpp:151
+#: projecttreeview.cpp:179
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "移动至此处(&M)"
 
-#: projecttreeview.cpp:157
+#: projecttreeview.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "复制至此处(&C)"
 
-#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#: projecttreeview.cpp:191 projecttreeview.cpp:252
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "取消(&A)"
 
-#: projecttreeview.cpp:218
+#: projecttreeview.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
 msgstr "添加到构建目标(&A)"
 
-#: projecttreeview.cpp:348
+#: projecttreeview.cpp:376
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
 msgstr "使用...分析"
 
-#: projecttreeview.cpp:364
+#: projecttreeview.cpp:392
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."

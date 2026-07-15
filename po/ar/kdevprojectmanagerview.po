@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2025-10-05 21:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -426,37 +426,37 @@ msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "اسم الملف:"
 
-#: projecttreeview.cpp:151
+#: projecttreeview.cpp:179
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "&انقل هنا"
 
-#: projecttreeview.cpp:157
+#: projecttreeview.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "&انسخ هنا"
 
-#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#: projecttreeview.cpp:191 projecttreeview.cpp:252
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "&ألغِ"
 
-#: projecttreeview.cpp:218
+#: projecttreeview.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
 msgstr "&أضف إلى هدف البناء"
 
-#: projecttreeview.cpp:348
+#: projecttreeview.cpp:376
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
 msgstr "حلل باستخدام"
 
-#: projecttreeview.cpp:364
+#: projecttreeview.cpp:392
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."

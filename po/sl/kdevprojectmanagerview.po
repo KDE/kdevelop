@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2021-11-12 08:59+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -419,37 +419,37 @@ msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "Ime datoteke:"
 
-#: projecttreeview.cpp:151
+#: projecttreeview.cpp:179
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "Pre&makni sem"
 
-#: projecttreeview.cpp:157
+#: projecttreeview.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "&Kopiraj sem"
 
-#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#: projecttreeview.cpp:191 projecttreeview.cpp:252
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "Prekliči"
 
-#: projecttreeview.cpp:218
+#: projecttreeview.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
 msgstr "Dod&aj v nabor izgradenj"
 
-#: projecttreeview.cpp:348
+#: projecttreeview.cpp:376
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
 msgstr "Analiziraj z"
 
-#: projecttreeview.cpp:364
+#: projecttreeview.cpp:392
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."

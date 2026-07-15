@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2026-05-02 18:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -409,37 +409,37 @@ msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "Dosya adı:"
 
-#: projecttreeview.cpp:151
+#: projecttreeview.cpp:179
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "Buraya &Taşı"
 
-#: projecttreeview.cpp:157
+#: projecttreeview.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "Buraya Ko&pyala"
 
-#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#: projecttreeview.cpp:191 projecttreeview.cpp:252
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "İ&ptal"
 
-#: projecttreeview.cpp:218
+#: projecttreeview.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
 msgstr "Yapı Kümesine &Ekle"
 
-#: projecttreeview.cpp:348
+#: projecttreeview.cpp:376
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
 msgstr "Şununla Çözümle"
 
-#: projecttreeview.cpp:364
+#: projecttreeview.cpp:392
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."

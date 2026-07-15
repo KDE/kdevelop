@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-07-15 00:43+0000\n"
 "PO-Revision-Date: 2026-06-18 21:48+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -460,40 +460,40 @@ msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "Fájlnév:"
 
-#: projecttreeview.cpp:151
+#: projecttreeview.cpp:179
 #, fuzzy, kde-format
 #| msgid "&Move Here"
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "Át&helyezés ide"
 
-#: projecttreeview.cpp:157
+#: projecttreeview.cpp:185
 #, fuzzy, kde-format
 #| msgid "&Copy Here"
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "&Másolás ide"
 
-#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#: projecttreeview.cpp:191 projecttreeview.cpp:252
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "Mé&gse"
 
-#: projecttreeview.cpp:218
+#: projecttreeview.cpp:246
 #, fuzzy, kde-format
 #| msgid "Add to Build Set"
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
 msgstr "Hozzáadás a fordítókészlethez"
 
-#: projecttreeview.cpp:348
+#: projecttreeview.cpp:376
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
 msgstr ""
 
-#: projecttreeview.cpp:364
+#: projecttreeview.cpp:392
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action:inmenu"
