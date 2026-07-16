@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 00:43+0000\n"
-"PO-Revision-Date: 2026-02-11 06:29+0100\n"
+"PO-Revision-Date: 2026-07-15 06:17+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4893,11 +4893,10 @@ msgstr "Obarvaj gradnike glede na projekt, v katerega spadajo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "Projekt %1"
+msgstr "Drevo projekta"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -4906,13 +4905,15 @@ msgctxt "@info:tooltip"
 msgid ""
 "Collapse all child items whenever an item in the project tree is collapsed."
 msgstr ""
+"Strni vse podrejene elemente, kadar koli je element v drevesu projekta "
+"strnjen."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:176
 #, kde-format
 msgctxt "@option:check"
 msgid "Collapse items recursively"
-msgstr ""
+msgstr "Rekurzivno strni elemente"
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format

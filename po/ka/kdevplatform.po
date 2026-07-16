@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 00:43+0000\n"
-"PO-Revision-Date: 2026-03-30 07:22+0200\n"
+"PO-Revision-Date: 2026-07-15 06:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4882,11 +4882,10 @@ msgstr "ვიჯეტები გაფერადება პროექ�
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "პროექტები"
+msgstr "პროექტის ხე"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -4894,14 +4893,14 @@ msgstr "პროექტები"
 msgctxt "@info:tooltip"
 msgid ""
 "Collapse all child items whenever an item in the project tree is collapsed."
-msgstr ""
+msgstr "ყველა შვილი ელემენტის ჩამოშლა, როცა პროექტის ხეში ელემენტი ჩამოიშლება."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:176
 #, kde-format
 msgctxt "@option:check"
 msgid "Collapse items recursively"
-msgstr ""
+msgstr "ელემენტების რეკურსიული ჩამოშლა"
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format
