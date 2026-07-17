@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2024, 2025 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 giovanni <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 00:43+0000\n"
-"PO-Revision-Date: 2025-09-02 18:02+0200\n"
+"PO-Revision-Date: 2026-07-16 16:50+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -833,7 +833,7 @@ msgstr ""
 #: language/duchain/namespacealiasdeclaration.cpp:94
 #, kde-format
 msgid "Import %1 as %2"
-msgstr ""
+msgstr "Importa %1 como %2"
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
 #, kde-format
@@ -908,7 +908,7 @@ msgstr "Enum: "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:237
 #, kde-format
 msgid "Container: "
-msgstr ""
+msgstr "Container (receptaculo): "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:245
 #, kde-format
@@ -1796,7 +1796,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
-msgstr ""
+msgstr "Punctos de interruption"
 
 #: shell/debugcontroller.cpp:191
 #, kde-format
@@ -1973,7 +1973,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
-msgstr ""
+msgstr "Commuta puncto de interruption"
 
 #: shell/debugcontroller.cpp:270
 #, kde-format
@@ -1984,7 +1984,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
-msgstr ""
+msgstr "Commuta puncto de interruption"
 
 #: shell/debugcontroller.cpp:272
 #, kde-format
@@ -3846,7 +3846,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add profile..."
-msgstr ""
+msgstr "Adde Profilo..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
 #: shell/settings/environmentwidget.ui:49
@@ -4664,11 +4664,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "Projectos"
+msgstr "Arbore de Projecto"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -5474,7 +5473,7 @@ msgstr ""
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "error: %1"
 
 #: vcs/dvcs/dvcsplugin.cpp:96
 #, kde-format
