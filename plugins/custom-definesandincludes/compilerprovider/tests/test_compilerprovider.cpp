@@ -236,6 +236,43 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     ICore::self()->projectController()->closeProject(project);
 }
 
+void TestCompilerProvider::testCompilerIncludesOrder()
+{
+    auto project = ProjectsGenerator::GenerateSimpleProject();
+    Q_ASSERT(project);
+
+    auto settings = SettingsManager::globalInstance();
+
+    {
+        auto entries = settings->readPaths(project->projectConfiguration().data());
+        QVERIFY(entries.length() == 1);
+
+        auto &entry = entries[0];
+        QVERIFY(entry.includes.length() == 1);
+        QVERIFY(entry.includes[0] == (QDir::rootPath() + "usr/include/mydir"));
+
+        entry.includes.clear();
+        for (int i = 0; i < 31; ++i) {
+            entry.includes += QDir::rootPath() + QString("usr/include/dir%1").arg(17 - i);
+        }
+
+        settings->writePaths(project->projectConfiguration().data(), entries);
+    }
+
+    {
+        auto entries = settings->readPaths(project->projectConfiguration().data());
+        QVERIFY(entries.length() == 1);
+
+        auto &entry = entries[0];
+        QVERIFY(entry.includes.length() == 31);
+        for (int i = 0; i < 31; ++i) {
+            QVERIFY(entry.includes[i] == (QDir::rootPath() + QString("usr/include/dir%1").arg(17 - i)));
+        }
+    }
+
+    ICore::self()->projectController()->closeProject(project);
+}
+
 QTEST_MAIN(TestCompilerProvider)
 
 #include "moc_test_compilerprovider.cpp"
