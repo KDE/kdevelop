@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testCompilerIncludesAndDefines();
     void testStorageBackwardsCompatible();
     void testCompilerIncludesAndDefinesForProject();
+    void testCompilerIncludesOrder();
     void testStorageNewSystem();
 };
 
