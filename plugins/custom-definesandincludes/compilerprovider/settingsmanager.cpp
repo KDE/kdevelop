@@ -224,10 +224,16 @@ QVector<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
             } else {
                 KConfigGroup includes(pathgrp.group(ConfigConstants::includesKey()));
                 const QMap<QString, QString> incMap = includes.entryMap();
-                for (auto& value :incMap) {
-                    if(value.isEmpty()){
-                        continue;
+
+                // Create a new QMap with an integer as key, to preserve the order
+                QMap<int, QString> incMapSorted;
+                for (const auto [key, value] : incMap.asKeyValueRange()) {
+                    if (!value.isEmpty()) {
+                        incMapSorted[key.toInt()] = value;
                     }
+                }
+
+                for (auto& value: incMapSorted) {
                     path.includes += value;
                 }
             }
