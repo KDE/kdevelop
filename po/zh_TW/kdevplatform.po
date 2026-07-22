@@ -6,20 +6,20 @@
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2012.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2010, 2011, 2012.
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2012, 2013, 2014.
-# SPDX-FileCopyrightText: 2023, 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023-2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 00:43+0000\n"
-"PO-Revision-Date: 2025-05-03 15:33+0900\n"
+"PO-Revision-Date: 2026-07-22 01:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -779,7 +779,7 @@ msgctxt ""
 "(encountered <foundText>) -> <newText>"
 msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
-msgstr ""
+msgstr "%1 中有不一致的變更，於 %2 之間，發現 %3 (遇到 \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
@@ -792,7 +792,7 @@ msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
 "<encountered>) -> <newText>"
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
-msgstr ""
+msgstr "%1 中有不一致的變更，於 %2 = \"%3\"(遇到 \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:539
 #, kde-format
@@ -804,6 +804,7 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
+"於 %1 有不一致的變更請求；重疊的變更：\"%2\"->\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
@@ -1352,7 +1353,7 @@ msgctxt ""
 "<severity>: <description> in <url>:[<range>]: <explanation> (found by "
 "<source>)"
 msgid "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
-msgstr ""
+msgstr "%1：%2 於 %3:[(%4,%5),(%6,%7)]：%8（由 %9 發現）"
 
 #: language/duchain/problem.cpp:233
 #, kde-format
@@ -1795,6 +1796,9 @@ msgid ""
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">this article</a> for more information."
 msgstr ""
+"<p>啟動時找不到任何外掛程式。<br/>請確保 QT_PLUGIN_PATH 有正確設定。</p>更多"
+"資訊請參見<a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">此文章</a>。"
 
 #: shell/core.cpp:191
 #, kde-format
@@ -1828,7 +1832,7 @@ msgstr "中斷點"
 #: shell/debugcontroller.cpp:191
 #, kde-format
 msgid "&Restart"
-msgstr "重新啟動 (&R)"
+msgstr "重新啟動(&R)"
 
 #: shell/debugcontroller.cpp:192
 #, kde-format
@@ -1986,13 +1990,7 @@ msgid "Step out of the current function"
 msgstr "單步跳出目前的函式"
 
 #: shell/debugcontroller.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@whatsthis"
-#| msgid ""
-#| "Executes the application until the currently executing function is "
-#| "completed. The debugger will then display the line after the original "
-#| "call to that function. If program execution is in the outermost frame (i."
-#| "e. in main()) then this operation has no effect."
+#, kde-format
 msgctxt "@whatsthis"
 msgid ""
 "Executes the application until the currently executing function is "
@@ -2004,7 +2002,9 @@ msgid ""
 "tool view."
 msgstr ""
 "執行應用程式，直到目前的函式執行完畢。除錯器會顯示呼叫該函式的地方。如果是在"
-"最外層的框架（也就是 main()），則這個操作不會發生作用。"
+"最外層的框架（也就是 <code>main()</code>），則這個操作不會發生作用。<br>在單"
+"部跳出非 <code>void</code> 的函式時，它的回傳值與型態會在「%3」工具檢視當中的"
+"「%2」區塊以名為 <code>%1</code> 的變數顯示。"
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
@@ -2048,12 +2048,10 @@ msgid "Jumps to the execution line in the editor."
 msgstr "在編輯器中跳到執行的行數。"
 
 #: shell/debugcontroller.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Delete Current Session..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr "刪除目前的工作階段..."
+msgstr "中止目前的工作階段"
 
 #: shell/debugcontroller.cpp:497 shell/runcontroller.cpp:473
 #, kde-format
@@ -2329,6 +2327,10 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"以下語言由其專屬的 KDevelop 外掛程式提供好很多的支援，因此已於 %1 外掛程式停"
+"用以防止衝突：<var>%2</var>。如果因為要比較支援完整的程度或是在試著迴避問題等"
+"等原因而要使用 %1 外掛程式所提供的支援，請先將該專屬的 KDevelop 外掛程式停"
+"用，並且設定環境變數 <var>%3</var>（<span style='color:%4'>%5</span>）"
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
@@ -2810,7 +2812,7 @@ msgstr "外掛程式"
 #: shell/problem.cpp:80
 #, kde-format
 msgid "DuchainBuilder"
-msgstr ""
+msgstr "DuchainBuilder"
 
 #: shell/problem.cpp:82
 #, kde-format
@@ -4751,11 +4753,10 @@ msgstr "依所屬專案為元件著色"
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "專案"
+msgstr "專案樹"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -4763,14 +4764,14 @@ msgstr "專案"
 msgctxt "@info:tooltip"
 msgid ""
 "Collapse all child items whenever an item in the project tree is collapsed."
-msgstr ""
+msgstr "折疊專案樹項目時也折疊所有子項目"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:176
 #, kde-format
 msgctxt "@option:check"
 msgid "Collapse items recursively"
-msgstr ""
+msgstr "遞迴折疊項目"
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format
