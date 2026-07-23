@@ -129,7 +129,10 @@ public:
 
         return QTabBar::event(ev);
     }
-    void mousePressEvent(QMouseEvent* event) override {
+
+// Qt >= 6.11 has native implementation for MMB close
+#if QT_VERSION < QT_VERSION_CHECK(6, 11, 0)
+    void mouseReleaseEvent(QMouseEvent* event) override {
         if (event->button() == Qt::MiddleButton) {
             // just close on midbutton, drag can still be done with left mouse button
 
@@ -139,8 +142,9 @@ public:
             }
             return;
         }
-        QTabBar::mousePressEvent(event);
+        QTabBar::mouseReleaseEvent(event);
     }
+#endif
 
     void mouseDoubleClickEvent(QMouseEvent* event) override
     {
