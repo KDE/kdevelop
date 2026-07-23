@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-15 00:43+0000\n"
+"POT-Creation-Date: 2026-07-23 00:42+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -5637,47 +5637,47 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Laadi"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:349
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Rida: 00000 Veerg: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:383
 #, fuzzy, kde-format
 #| msgid "Show sorted list of opened documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Näita avatud dokumente sorditud loendina"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:395
 #, fuzzy, kde-format
 #| msgid "(Press Ctrl+Tab to switch)"
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Lülitamiseks vajuta Ctrl+Tab)"
 
-#: sublime/container.cpp:772
+#: sublime/container.cpp:776
 #, fuzzy, kde-format
 #| msgid "Copy Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopeeri failinimi"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Sulge"
 
-#: sublime/container.cpp:777
+#: sublime/container.cpp:781
 #, fuzzy, kde-format
 #| msgid "Close All Other"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Sulge kõik teised"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:783
 #, fuzzy, kde-format
 #| msgid "Close All"
 msgctxt "@action:inmenu"
