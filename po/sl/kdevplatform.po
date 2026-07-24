@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-06 02:55+0000\n"
+"POT-Creation-Date: 2026-07-24 02:38+0000\n"
 "PO-Revision-Date: 2026-02-11 06:29+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -5271,42 +5271,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Naloži"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:349
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Vrstica: 00000 Stolpec: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:383
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Prikaži razvrščen seznam odprtih dokumentov"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:395
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Pritisnite Ctrl+Tab za preklop)"
 
-#: sublime/container.cpp:772
+#: sublime/container.cpp:776
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopiraj ime datoteke"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Zapri"
 
-#: sublime/container.cpp:777
+#: sublime/container.cpp:781
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Zapri vse druge"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:783
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

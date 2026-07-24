@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-06 02:55+0000\n"
+"POT-Creation-Date: 2026-07-24 02:38+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -5183,42 +5183,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "भार"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:349
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "रेखाः 00000 कर्नलः 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:383
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "उद्घाटितदस्तावेजानां क्रमबद्धसूचीं दर्शयतु"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:395
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(स्विच कर्तुं Ctrl+Tab नुदन्तु)"
 
-#: sublime/container.cpp:772
+#: sublime/container.cpp:776
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "सञ्चिकानाम प्रतिलिपि कुर्वन्तु"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "पिधानं करोतु"
 
-#: sublime/container.cpp:777
+#: sublime/container.cpp:781
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "अन्ये सर्वे पिधाय"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:783
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

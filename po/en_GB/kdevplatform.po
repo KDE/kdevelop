@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-06 02:55+0000\n"
+"POT-Creation-Date: 2026-07-24 02:38+0000\n"
 "PO-Revision-Date: 2024-08-24 12:00+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -5244,42 +5244,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Load"
 
-#: sublime/container.cpp:345
+#: sublime/container.cpp:349
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Line: 00000 Col: 000"
 
-#: sublime/container.cpp:379
+#: sublime/container.cpp:383
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Show sorted list of opened documents"
 
-#: sublime/container.cpp:391
+#: sublime/container.cpp:395
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Press Ctrl+Tab to switch)"
 
-#: sublime/container.cpp:772
+#: sublime/container.cpp:776
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Copy Filename"
 
-#: sublime/container.cpp:775
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Close"
 
-#: sublime/container.cpp:777
+#: sublime/container.cpp:781
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Close All Other"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:783
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
