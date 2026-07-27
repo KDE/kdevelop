@@ -36,6 +36,7 @@ private Q_SLOTS:
     void testQSetInt();
     void testQSetString();
     void testQChar();
+    void testQGeometry();
     void testQListPOD();
     void testQPersistentModelIndex();
     void testQUuid();

@@ -1128,6 +1128,47 @@ class QUuidPrinter:
                                             int(self.val['data4'][4]), int(self.val['data4'][5]),
                                             int(self.val['data4'][6]), int(self.val['data4'][7]))
 
+def checkedIntValue(val):
+    # Since Qt 6.10 the coordinates are QtPrivate::QCheckedIntegers::QCheckedInt<int>, before that plain int
+    try:
+        return int(val['m_i'])
+    except gdb.error:
+        return int(val)
+
+# The geometry printers below deliberately reproduce the QDebug operators, spacing
+# included, so that the debugger shows exactly what a qDebug() of the same value prints.
+
+class QPointPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        # same output as QDebug operator<<(QPoint)
+        return "QPoint(%d,%d)" % (checkedIntValue(self.val['xp']), checkedIntValue(self.val['yp']))
+
+class QSizePrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        # same output as QDebug operator<<(QSize)
+        return "QSize(%d, %d)" % (checkedIntValue(self.val['wd']), checkedIntValue(self.val['ht']))
+
+class QRectPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        x1 = checkedIntValue(self.val['x1'])
+        y1 = checkedIntValue(self.val['y1'])
+        x2 = checkedIntValue(self.val['x2'])
+        y2 = checkedIntValue(self.val['y2'])
+        # same output as QDebug operator<<(QRect)
+        return "QRect(%d,%d %dx%d)" % (x1, y1, x2 - x1 + 1, y2 - y1 + 1)
+
 class CborValueType(Enum):
     # converted from qcborvalue.h
     Integer         = 0x00
@@ -1730,6 +1771,9 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
     pretty_printers_dict[re.compile('^QUuid$')] = lambda val: QUuidPrinter(val)
+    pretty_printers_dict[re.compile('^QPoint$')] = lambda val: QPointPrinter(val)
+    pretty_printers_dict[re.compile('^QSize$')] = lambda val: QSizePrinter(val)
+    pretty_printers_dict[re.compile('^QRect$')] = lambda val: QRectPrinter(val)
     pretty_printers_dict[re.compile('^QVariant$')] = lambda val: QVariantPrinter(val)
     pretty_printers_dict[re.compile('^QPersistentModelIndex$')] = lambda val: QPersistentModelIndexPrinter(val)
     pretty_printers_dict[re.compile('^QCborArray$')] = lambda val: QCborArrayPrinter(val)
