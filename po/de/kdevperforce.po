@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2011, 2020, 2023 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2011, 2013, 2016, 2018 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2011, 2020, 2023 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevperforce\n"
