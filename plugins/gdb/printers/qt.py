@@ -512,8 +512,17 @@ class QMapPrinter(PrinterBaseType):
             return 0
 
         if self._qt6StdMapPrinter:
-            if hasattr(self._qt6StdMapPrinter, 'num_children'):
-                return self._qt6StdMapPrinter.num_children()
+            stdMapNumChildren = getattr(self._qt6StdMapPrinter, 'num_children', None)
+            if stdMapNumChildren:
+                try:
+                    # Counts the key and the value of each element separately, like we do.
+                    return int(stdMapNumChildren())
+                except Exception:
+                    # gcc 16.1 raises NameError here, its num_children() has a typo, and it
+                    # also counts elements rather than children. Both are fixed together
+                    # upstream, so one that runs at all counts children. Fall back meanwhile.
+                    # https://inbox.sourceware.org/gcc-patches/20260727171343.767046-1-david.faure@kdab.com/
+                    pass
 
             # HACK: let's try to stringify the map and see if we can extract the size from there
             # this is error-prone but faster than a potential O(N) iteration on `children`
