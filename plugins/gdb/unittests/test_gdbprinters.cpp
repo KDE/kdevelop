@@ -835,6 +835,25 @@ void QtPrintersTest::testQChar()
     QVERIFY(gdb.execute("print c").contains("\"k\""));
 }
 
+void QtPrintersTest::testQGeometry()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qgeometry"));
+    gdb.execute("break qgeometry.cpp:29");
+    gdb.execute("run");
+
+    QCOMPARE(printedValue(gdb, "defaultPoint"), "QPoint(0,0)");
+    QCOMPARE(printedValue(gdb, "point"), "QPoint(1,2)");
+    QCOMPARE(printedValue(gdb, "negativePoint"), "QPoint(-3,-4)");
+
+    QCOMPARE(printedValue(gdb, "defaultSize"), "QSize(-1, -1)");
+    QCOMPARE(printedValue(gdb, "size"), "QSize(10, 20)");
+
+    QCOMPARE(printedValue(gdb, "defaultRect"), "QRect(0,0 0x0)");
+    QCOMPARE(printedValue(gdb, "rect"), "QRect(1,2 30x40)");
+    QCOMPARE(printedValue(gdb, "negativeRect"), "QRect(-5,-6 7x8)");
+    QCOMPARE(printedValue(gdb, "emptyRect"), "QRect(1,2 0x0)");
+}
+
 void QtPrintersTest::testQListPOD()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qlistpod"));
