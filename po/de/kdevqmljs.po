@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
-# SPDX-FileCopyrightText: 2013, 2014 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2013-2014 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2013-2015 Burkhard Lück <lueck@hube-lueck.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmljs\n"
