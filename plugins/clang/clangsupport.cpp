@@ -179,6 +179,9 @@ ClangSupport::ClangSupport(QObject* parent, const KPluginMetaData& metaData, con
 
     ClangIntegration::DUChainUtils::registerDUChainItems();
 
+    // Force early init so that SessionSettings::instance() is called before any KCM has a chance to use it uninitialized
+    ClangSettingsManager::self();
+
     m_highlighting = new ClangHighlighting(this);
     m_refactoring = new ClangRefactoring(this);
     m_index.reset(new ClangIndex);

@@ -30,9 +30,6 @@ public:
 
     KDevelop::ConfigPage::ConfigPageType configPageType() const override;
 
-    void apply() override;
-    void reset() override;
-
 private:
     QScopedPointer<Ui::SessionSettings> m_settings;
 

@@ -52,7 +52,9 @@ ParserSettings ClangSettingsManager::parserSettings(const QString& path) const
 }
 
 ClangSettingsManager::ClangSettingsManager()
-{}
+{
+    SessionConfig::instance(ICore::self()->activeSession()->config());
+}
 
 bool ParserSettings::isCpp() const
 {

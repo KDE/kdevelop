@@ -16,20 +16,8 @@ SessionSettings::SessionSettings(QWidget* parent)
     m_settings->setupUi(this);
 }
 
-void SessionSettings::reset()
-{
-     ConfigPage::reset();
-
-    Q_ASSERT(ICore::self()->activeSession());
-}
-
 SessionSettings::~SessionSettings( )
 {}
-
-void SessionSettings::apply()
-{
-     ConfigPage::apply();
-}
 
 QString SessionSettings::name() const
 {
