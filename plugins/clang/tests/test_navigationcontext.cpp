@@ -56,6 +56,15 @@ void TestNavigationContext::testDeclarationDetailsVirtualFinalAbstract()
             virtual ~Derived();
             virtual bool isFinal() final;
         };
+
+        class DestructorBase {
+        public:
+            virtual ~DestructorBase() = default;
+        };
+
+        class FinalDestructor final : public DestructorBase {
+            ~FinalDestructor() final;
+        };
     )"),
                   QStringLiteral("cpp"));
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -78,6 +87,11 @@ void TestNavigationContext::testDeclarationDetailsVirtualFinalAbstract()
         QCOMPARE(isFinalDecls.size(), 1);
         const DeclarationPointer isFinalDecl(isFinalDecls.first());
 
+        const auto finalDestructorDecls =
+            top->findDeclarations(QualifiedIdentifier(u"FinalDestructor::~FinalDestructor"));
+        QCOMPARE(finalDestructorDecls.size(), 1);
+        const DeclarationPointer finalDestructorDecl(finalDestructorDecls.first());
+
         const QStringList onlyVirtualDetails = TestDeclarationNavigationContext::declarationDetails(onlyVirtualDecl);
         QVERIFY(onlyVirtualDetails.contains(QStringLiteral("virtual")));
         QVERIFY(!onlyVirtualDetails.contains(QStringLiteral("abstract")));
@@ -92,6 +106,12 @@ void TestNavigationContext::testDeclarationDetailsVirtualFinalAbstract()
         QVERIFY(isFinalDetails.contains(QStringLiteral("final")));
         QVERIFY(!isFinalDetails.contains(QStringLiteral("virtual")));
         QVERIFY(!isFinalDetails.contains(QStringLiteral("abstract")));
+
+        const QStringList finalDestructorDetails =
+            TestDeclarationNavigationContext::declarationDetails(finalDestructorDecl);
+        QVERIFY(finalDestructorDetails.contains(QStringLiteral("final")));
+        QVERIFY(!finalDestructorDetails.contains(QStringLiteral("virtual")));
+        QVERIFY(!finalDestructorDetails.contains(QStringLiteral("abstract")));
     }
 }
 

@@ -42,6 +42,12 @@ public:
     void nonConstMethod();
 };
 
+class FinalDestructorBase
+{
+public:
+    virtual ~FinalDestructorBase() = default;
+};
+
 class Derived : public Base
 {
 public:
@@ -51,6 +57,17 @@ public:
     /// "isAbstract" : false,
     /// "isFinal" : true
     void bar3() final;
+};
+
+class FinalDestructor final : public FinalDestructorBase
+{
+public:
+    /// "isNoexcept" : true,
+    /// "isStatic" : false,
+    /// "isVirtual" : true,
+    /// "isAbstract" : false,
+    /// "isFinal" : true
+    ~FinalDestructor() final = default;
 };
 
 /// "isNoexcept" : false

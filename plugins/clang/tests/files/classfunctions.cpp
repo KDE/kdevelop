@@ -80,3 +80,21 @@ public:
     /// "isDefinition" : true
     explicit operator bool() const noexcept final {return true;}
 };
+
+class FinalDestructorBase
+{
+public:
+    /// "isAbstract" : true
+    virtual ~FinalDestructorBase() = 0;
+};
+
+class FinalDestructor final : public FinalDestructorBase
+{
+public:
+    /// "isNoexcept" : true,
+    /// "isAbstract" : false,
+    /// "isFinal" : true,
+    /// "isVirtual" : true,
+    /// "isDefinition" : true
+    ~FinalDestructor() final {}
+};
