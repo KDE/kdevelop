@@ -109,6 +109,9 @@ public:
         setDocumentMode(true);
         setUsesScrollButtons(true);
         setElideMode(Qt::ElideNone);
+        // support easier dragging between views
+       setAcceptDrops(true);
+       setChangeCurrentOnDrag(true);
     }
 
     bool event(QEvent* ev) override {
