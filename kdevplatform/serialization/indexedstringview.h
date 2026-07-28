@@ -34,8 +34,6 @@ public:
     /**
      * @param str must be a utf8 encoded string, does not need to be 0-terminated.
      * @param length must be its length in bytes.
-     * @param hash must be a hash as constructed with the here defined hash functions.
-     *             If it is zero, it will be computed.
      */
     explicit IndexedStringView(const char* str, unsigned short length)
         : m_index{IndexedString::indexForString(str, length)}
