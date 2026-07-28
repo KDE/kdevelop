@@ -15,40 +15,10 @@
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 #include <util/path.h>
 
+#include <sessionconfig.h>
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
-
-namespace
-{
-    const QString settingsGroup = QStringLiteral("Clang Settings");
-
-    const QString macros = QStringLiteral("macros");
-    const QString lookAhead = QStringLiteral("lookAhead");
-
-    const QString forwardDeclare = QStringLiteral("forwardDeclare");
-
-AssistantsSettings readAssistantsSettings(KConfig* cfg)
-{
-    auto grp = cfg->group(settingsGroup);
-    AssistantsSettings settings;
-
-    settings.forwardDeclare = grp.readEntry(forwardDeclare, true);
-
-    return settings;
-}
-
-CodeCompletionSettings readCodeCompletionSettings(KConfig* cfg)
-{
-    auto grp = cfg->group(settingsGroup);
-    CodeCompletionSettings settings;
-
-    settings.macros = grp.readEntry(macros, true);
-    settings.lookAhead = grp.readEntry(lookAhead, false);
-
-    return settings;
-}
-}
 
 ClangSettingsManager* ClangSettingsManager::self()
 {
@@ -56,23 +26,19 @@ ClangSettingsManager* ClangSettingsManager::self()
     return &manager;
 }
 
-AssistantsSettings ClangSettingsManager::assistantsSettings() const
+bool ClangSettingsManager::assistants_forwardDeclare() const
 {
-    auto cfg = ICore::self()->activeSession()->config();
-    return readAssistantsSettings(cfg.data());
+    return SessionConfig::self()->forwardDeclare();
 }
 
-CodeCompletionSettings ClangSettingsManager::codeCompletionSettings() const
+bool ClangSettingsManager::codeCompletion_lookAhead() const
 {
-    if (m_enableTesting) {
-        CodeCompletionSettings settings;
-        settings.lookAhead = true;
-        settings.macros = true;
-        return settings;
-    }
+    return m_enableTesting ? true : SessionConfig::self()->lookAhead();
+}
 
-    auto cfg = ICore::self()->activeSession()->config();
-    return readCodeCompletionSettings(cfg.data());
+bool ClangSettingsManager::codeCompletion_macros() const
+{
+    return m_enableTesting ? true : SessionConfig::self()->macros();
 }
 
 ParserSettings ClangSettingsManager::parserSettings(KDevelop::ProjectBaseItem* item) const

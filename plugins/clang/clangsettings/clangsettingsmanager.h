@@ -27,25 +27,15 @@ struct ParserSettings
 };
 Q_DECLARE_METATYPE(ParserSettings)
 
-struct CodeCompletionSettings
-{
-    bool macros = true;
-    bool lookAhead = false;
-};
-
-struct AssistantsSettings
-{
-    bool forwardDeclare = true;
-};
-
 class KDEVCLANGPRIVATE_EXPORT ClangSettingsManager
 {
 public:
     static ClangSettingsManager* self();
 
-    AssistantsSettings assistantsSettings() const;
+    bool assistants_forwardDeclare() const;
 
-    CodeCompletionSettings codeCompletionSettings() const;
+    bool codeCompletion_lookAhead() const;
+    bool codeCompletion_macros() const;
 
     ParserSettings parserSettings(KDevelop::ProjectBaseItem* item) const;
 

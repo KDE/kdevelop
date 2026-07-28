@@ -763,7 +763,7 @@ class LookAheadItemMatcher
 public:
     explicit LookAheadItemMatcher(const TopDUContextPointer& ctx)
         : m_topContext(ctx)
-        , m_enabled(ClangSettingsManager::self()->codeCompletionSettings().lookAhead)
+        , m_enabled(ClangSettingsManager::self()->codeCompletion_lookAhead())
     {}
 
     /// Adds all local declarations for @p declaration into possible look-ahead items.
@@ -1016,7 +1016,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
             }
         }
 
-        auto addMacros = ClangSettingsManager::self()->codeCompletionSettings().macros;
+        auto addMacros = ClangSettingsManager::self()->codeCompletion_macros();
         if (!addMacros) {
             m_filters |= NoMacros;
         }

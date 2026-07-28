@@ -481,7 +481,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
     const auto possibleIdentifiers = findPossibleQualifiedIdentifiers(identifier, file, cursor);
     const auto matchingDeclarations = findMatchingDeclarations(possibleIdentifiers);
 
-    if (ClangSettingsManager::self()->assistantsSettings().forwardDeclare) {
+    if (ClangSettingsManager::self()->assistants_forwardDeclare()) {
         const auto& forwardDeclareFixits = forwardDeclarations(matchingDeclarations, file);
         for (const auto& fixit : forwardDeclareFixits) {
             fixits << fixit;
