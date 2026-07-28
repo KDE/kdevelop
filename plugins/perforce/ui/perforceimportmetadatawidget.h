@@ -7,8 +7,9 @@
 #ifndef KDEVPLATFORM_PERFORCEIMPORTMETADATAWIDGET_H
 #define KDEVPLATFORM_PERFORCEIMPORTMETADATAWIDGET_H
 
-#include "ui_perforceimportmetadatawidget.h"
-
+namespace Ui {
+class PerforceImportMetadataWidget;
+}
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 
 /**
@@ -22,6 +23,7 @@ class PerforceImportMetadataWidget
 
 public:
     explicit PerforceImportMetadataWidget(QWidget* parent = nullptr);
+    ~PerforceImportMetadataWidget() override;
 
     QUrl source() const override;
     KDevelop::VcsLocation destination() const override;
@@ -43,7 +45,7 @@ private:
 
     bool validateP4user(const QString& projectDir) const;
 
-    Ui::PerforceImportMetadataWidget* m_ui;
+    std::unique_ptr<Ui::PerforceImportMetadataWidget> m_ui;
     QString m_errorDescription;
 };
 

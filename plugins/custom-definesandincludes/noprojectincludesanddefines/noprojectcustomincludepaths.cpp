@@ -36,6 +36,8 @@ QString NoProjectCustomIncludePaths::storageDirectory() const
     return m_ui->storageDirectory->url().toLocalFile();
 }
 
+NoProjectCustomIncludePaths::~NoProjectCustomIncludePaths() noexcept = default;
+
 void NoProjectCustomIncludePaths::appendCustomIncludePath(const QString& path)
 {
     m_ui->customIncludePaths->appendPlainText(path);

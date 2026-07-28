@@ -26,8 +26,8 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
                                                  const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : KDevelop::ConfigPage(plugin, nullptr, parent)
     , m_project(options.project)
+    , m_prefsUi(new Ui::QMakeConfig)
 {
-    m_prefsUi = new Ui::QMakeConfig;
     m_prefsUi->setupUi(this);
 
     m_chooserUi = new QMakeBuildDirChooser(m_project);

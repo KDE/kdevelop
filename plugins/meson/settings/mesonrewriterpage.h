@@ -32,7 +32,7 @@ public:
 
 public:
     explicit MesonRewriterPage(KDevelop::IPlugin* plugin, KDevelop::IProject* project, QWidget* parent = nullptr);
-
+    ~MesonRewriterPage() override;
     QString name() const override;
     QString fullName() const override;
     QIcon icon() const override;
@@ -56,7 +56,7 @@ private:
 
 private:
     KDevelop::IProject* m_project = nullptr;
-    Ui::MesonRewriterPage* m_ui = nullptr;
+    std::unique_ptr<Ui::MesonRewriterPage> m_ui;
     bool m_configChanged = false;
     State m_state = START;
     MesonOptsPtr m_opts = nullptr;

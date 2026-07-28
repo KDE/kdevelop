@@ -13,6 +13,8 @@
 #include <QTextStream>
 #include <QStandardPaths>
 
+#include "ui_perforceimportmetadatawidget.h"
+
 using namespace KDevelop;
 
 PerforceImportMetadataWidget::PerforceImportMetadataWidget(QWidget* parent)
@@ -50,6 +52,8 @@ PerforceImportMetadataWidget::PerforceImportMetadataWidget(QWidget* parent)
 
     connect(m_ui->testP4setupButton, &QPushButton::pressed, this, &PerforceImportMetadataWidget::testP4setup);
 }
+
+PerforceImportMetadataWidget::~PerforceImportMetadataWidget() noexcept = default;
 
 QUrl PerforceImportMetadataWidget::source() const
 {

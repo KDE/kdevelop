@@ -17,10 +17,10 @@
 
 MesonRewriterInputBase::MesonRewriterInputBase(const QString& name, const QString& kwarg, QWidget* parent)
     : QWidget(parent)
+    , m_ui(new Ui::MesonRewriterInputBase)
     , m_name(name)
     , m_kwarg(kwarg)
 {
-    m_ui = new Ui::MesonRewriterInputBase;
     m_ui->setupUi(this);
     m_ui->l_name->setText(m_name + QLatin1Char(':'));
 
@@ -169,14 +169,16 @@ QJsonValue MesonRewriterInputString::value()
 
 MesonRewriterOptionContainer::MesonRewriterOptionContainer(MesonOptViewPtr optView, QWidget* parent)
     : QWidget(parent)
+    , m_ui(new Ui::MesonRewriterOptionContainer)
     , m_optView(optView)
 {
-    m_ui = new Ui::MesonRewriterOptionContainer;
     m_ui->setupUi(this);
     m_ui->h_layout->insertWidget(0, m_optView.get());
 
     connect(optView.get(), &MesonOptionBaseView::configChanged, this, [this]() { emit configChanged(); });
 }
+
+MesonRewriterOptionContainer::~MesonRewriterOptionContainer() noexcept = default;
 
 void MesonRewriterOptionContainer::deleteMe()
 {

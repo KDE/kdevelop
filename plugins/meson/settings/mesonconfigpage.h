@@ -51,7 +51,7 @@ private:
 
 private:
     KDevelop::IProject* m_project = nullptr;
-    Ui::MesonConfigPage* m_ui = nullptr;
+    std::unique_ptr<Ui::MesonConfigPage> m_ui;
     Meson::MesonConfig m_config;
     Meson::BuildDir m_current;
     bool m_configChanged = false;

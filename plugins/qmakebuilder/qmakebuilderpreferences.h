@@ -42,7 +42,7 @@ public Q_SLOTS:
 private:
     KDevelop::IProject* m_project;
 
-    Ui::QMakeConfig* m_prefsUi;
+    std::unique_ptr<Ui::QMakeConfig> m_prefsUi;
     QMakeBuildDirChooser* m_chooserUi;
 };
 

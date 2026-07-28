@@ -9,8 +9,8 @@
 
 AndroidPreferences::AndroidPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
     : KDevelop::ConfigPage(plugin, config, parent)
+    , m_prefsUi(new Ui::AndroidPreferences)
 {
-    auto m_prefsUi = new Ui::AndroidPreferences;
     m_prefsUi->setupUi(this);
 }
 

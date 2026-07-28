@@ -9,8 +9,8 @@
 
 DockerPreferences::DockerPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
     : KDevelop::ConfigPage(plugin, config, parent)
+    , m_prefsUi(new Ui::DockerPreferences)
 {
-    auto m_prefsUi = new Ui::DockerPreferences;
     m_prefsUi->setupUi(this);
 }
 

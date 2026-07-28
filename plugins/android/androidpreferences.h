@@ -22,7 +22,7 @@ class AndroidPreferences : public KDevelop::ConfigPage
         KDevelop::ConfigPage::ConfigPageType configPageType() const override;
         QString name() const override;
     private:
-        QScopedPointer<Ui::AndroidPreferences> m_prefsUi;
+        std::unique_ptr<Ui::AndroidPreferences> m_prefsUi;
 };
 
 #endif

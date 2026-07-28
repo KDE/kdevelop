@@ -39,6 +39,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionExecutable->lineEdit(), &KLineEdit::textEdited, this, QOverload<const QString&>::of(&ConfigWidget::actionExecutableChanged) );
 }
 
+ConfigWidget::~ConfigWidget() noexcept = default;
+
 CustomBuildSystemConfig ConfigWidget::config() const
 {
     CustomBuildSystemConfig c;

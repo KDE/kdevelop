@@ -41,7 +41,7 @@ public:
     void reset() override;
 
 private:
-    Ui::GlobalConfigPage* ui;
+    std::unique_ptr<Ui::GlobalConfigPage> ui;
     CheckSetSelectionManager* const m_checkSetSelectionManager;
 };
 

@@ -27,12 +27,12 @@ using namespace KDevelop;
 MesonConfigPage::MesonConfigPage(IPlugin* plugin, IProject* project, QWidget* parent)
     : ConfigPage(plugin, nullptr, parent)
     , m_project(project)
+    , m_ui(new Ui::MesonConfigPage)
 {
     Q_ASSERT(project); // Catch errors early
     auto* mgr = dynamic_cast<MesonManager*>(m_project->buildSystemManager());
     Q_ASSERT(mgr); // This dialog only works with the MesonManager
 
-    m_ui = new Ui::MesonConfigPage;
     m_ui->setupUi(this);
     m_ui->advanced->setSupportedBackends(mgr->supportedMesonBackends());
 

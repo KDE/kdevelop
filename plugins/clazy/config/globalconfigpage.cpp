@@ -15,12 +15,11 @@ namespace Clazy
 {
 
 GlobalConfigPage::GlobalConfigPage(CheckSetSelectionManager* checkSetSelectionManager,
-                                   const QSharedPointer<const ChecksDB>& db,
-                                   KDevelop::IPlugin* plugin, QWidget* parent)
+                                   const QSharedPointer<const ChecksDB>& db, KDevelop::IPlugin* plugin, QWidget* parent)
     : ConfigPage(plugin, GlobalSettings::self(), parent)
+    , ui(new Ui::GlobalConfigPage())
     , m_checkSetSelectionManager(checkSetSelectionManager)
 {
-    ui = new Ui::GlobalConfigPage();
     ui->setupUi(this);
     ui->checksets->setCheckSetSelectionManager(checkSetSelectionManager, db);
 

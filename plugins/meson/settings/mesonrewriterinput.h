@@ -66,7 +66,7 @@ Q_SIGNALS:
     void configChanged();
 
 private:
-    Ui::MesonRewriterInputBase* m_ui = nullptr;
+    std::unique_ptr<Ui::MesonRewriterInputBase> m_ui;
     QString m_name;
     QString m_kwarg;
     bool m_enabled = false;
@@ -101,6 +101,7 @@ class MesonRewriterOptionContainer : public QWidget
 
 public:
     MesonRewriterOptionContainer(MesonOptViewPtr optView, QWidget* parent);
+    ~MesonRewriterOptionContainer() override;
 
     bool shouldDelete() const;
     bool hasChanged() const;
@@ -113,7 +114,7 @@ Q_SIGNALS:
     void configChanged();
 
 private:
-    Ui::MesonRewriterOptionContainer* m_ui = nullptr;
+    std::unique_ptr<Ui::MesonRewriterOptionContainer> m_ui;
     MesonOptViewPtr m_optView = nullptr;
 
     bool m_markedForDeletion = false;

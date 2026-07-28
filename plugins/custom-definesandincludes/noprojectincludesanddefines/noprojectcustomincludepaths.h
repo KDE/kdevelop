@@ -21,6 +21,7 @@ class NoProjectCustomIncludePaths : public QDialog
 
 public:
     explicit NoProjectCustomIncludePaths( QWidget* parent = nullptr );
+    ~NoProjectCustomIncludePaths() override;
 
     void setStorageDirectory( const QString& path );
     QString storageDirectory() const;
@@ -30,7 +31,7 @@ public:
     void setCustomIncludePaths(const QString& paths);
 
 private:
-    Ui::CustomIncludePaths* m_ui;
+    std::unique_ptr<Ui::CustomIncludePaths> m_ui;
 
 private Q_SLOTS:
     void openAddIncludeDirectoryDialog();

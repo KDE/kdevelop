@@ -26,6 +26,7 @@ class ConfigWidget : public QWidget
 Q_OBJECT
 public:
     explicit ConfigWidget( QWidget* parent = nullptr );
+    ~ConfigWidget() override;
     void loadConfig(const CustomBuildSystemConfig& cfg);
     CustomBuildSystemConfig config() const;
     void clear();
@@ -42,7 +43,7 @@ private:
     template<typename F>
     void applyChange(F toolChanger);
 
-    Ui::ConfigWidget* ui;
+    std::unique_ptr<Ui::ConfigWidget> ui;
     QVector<CustomBuildSystemTool> m_tools;
     void setTool( const CustomBuildSystemTool& tool );
 };

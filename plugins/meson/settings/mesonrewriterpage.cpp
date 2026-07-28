@@ -52,10 +52,10 @@ private:
 MesonRewriterPage::MesonRewriterPage(IPlugin* plugin, IProject* project, QWidget* parent)
     : ConfigPage(plugin, nullptr, parent)
     , m_project(project)
+    , m_ui(new Ui::MesonRewriterPage)
 {
     Q_ASSERT(m_project);
 
-    m_ui = new Ui::MesonRewriterPage;
     m_ui->setupUi(this);
 
     m_projectKwargs = constructPojectInputs();
@@ -69,6 +69,8 @@ MesonRewriterPage::MesonRewriterPage(IPlugin* plugin, IProject* project, QWidget
     recalculateLengths();
     reset();
 }
+
+MesonRewriterPage::~MesonRewriterPage() noexcept = default;
 
 #define STRING_INPUT(name, id) new MesonRewriterInputString(QStringLiteral(name), QStringLiteral(id), this)
 

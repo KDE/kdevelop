@@ -22,7 +22,7 @@ public:
     KDevelop::ConfigPage::ConfigPageType configPageType() const override;
     QString name() const override;
 private:
-    QScopedPointer<Ui::DockerPreferences> m_prefsUi;
+    std::unique_ptr<Ui::DockerPreferences> m_prefsUi;
 };
 
 #endif

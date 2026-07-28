@@ -55,6 +55,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     connect( this, &CustomBuildSystemConfigWidget::changed, this, &CustomBuildSystemConfigWidget::verify );
 }
 
+CustomBuildSystemConfigWidget::~CustomBuildSystemConfigWidget() noexcept = default;
+
 void CustomBuildSystemConfigWidget::loadDefaults()
 {
 }

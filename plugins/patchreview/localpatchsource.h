@@ -73,7 +73,7 @@ public Q_SLOTS:
 
 private:
     LocalPatchSource* m_lpatch;
-    Ui::LocalPatchWidget* m_ui;
+    std::unique_ptr<Ui::LocalPatchWidget> m_ui;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H

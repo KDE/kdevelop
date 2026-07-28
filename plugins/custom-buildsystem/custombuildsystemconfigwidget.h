@@ -23,6 +23,7 @@ class CustomBuildSystemConfigWidget : public QWidget
 Q_OBJECT
 public:
     explicit CustomBuildSystemConfigWidget( QWidget* parent );
+    ~CustomBuildSystemConfigWidget() override;
     void loadFrom( KConfig* );
     void saveTo(KConfig* cfg);
     void loadDefaults();
@@ -37,7 +38,7 @@ private Q_SLOTS:
     void verify();
 private:
     void saveConfig( KConfigGroup& grp, const CustomBuildSystemConfig& c, int index );
-    Ui::CustomBuildSystemConfigWidget* ui;
+    std::unique_ptr<Ui::CustomBuildSystemConfigWidget> ui;
     QVector<CustomBuildSystemConfig> configs;
 };
 
