@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-23 00:42+0000\n"
+"POT-Creation-Date: 2026-07-29 00:44+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -1085,7 +1085,7 @@ msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr "konštanta"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
@@ -1093,7 +1093,7 @@ msgstr[0] "1 bajt"
 msgstr[1] "%1 bajty"
 msgstr[2] "%1 bajtov"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:886
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
@@ -1101,23 +1101,23 @@ msgstr[0] "1 Bit"
 msgstr[1] "%1 Bity"
 msgstr[2] "%1 Bitov"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "offset in parent: %1"
 msgstr "posun v predkovi: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:889
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr "%1, %2"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr "veľkosť: %1 Bajtov"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:898
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr "zarovnané na: %1 Bajtov"
@@ -5276,42 +5276,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Načítať"
 
-#: sublime/container.cpp:349
+#: sublime/container.cpp:352
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Riadok: 00000 Stĺpec: 000"
 
-#: sublime/container.cpp:383
+#: sublime/container.cpp:386
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Ukázať zoradený zoznam otvorených dokumentov"
 
-#: sublime/container.cpp:395
+#: sublime/container.cpp:398
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Stlačte Ctrl+Tab na prepnutie)"
 
-#: sublime/container.cpp:776
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopírovať názov súboru"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:782
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Zatvoriť kartu"
 
-#: sublime/container.cpp:781
+#: sublime/container.cpp:784
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Zavrieť všetko ostatné"
 
-#: sublime/container.cpp:783
+#: sublime/container.cpp:786
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

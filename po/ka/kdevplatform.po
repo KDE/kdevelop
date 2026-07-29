@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-23 00:42+0000\n"
+"POT-Creation-Date: 2026-07-29 00:44+0000\n"
 "PO-Revision-Date: 2026-07-15 06:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1091,37 +1091,37 @@ msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr "კონსტანტა"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] "1 ბაიტი"
 msgstr[1] "%1 ბაიტი"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:886
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] "1 ბიტი"
 msgstr[1] "%1 ბიტი"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "offset in parent: %1"
 msgstr "წანაცვლება მშობელში: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:889
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr "%1, %2"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr "ზომა: %1 ბაიტი"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:898
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr "სწორებულია: %1 ბაიტით"
@@ -5273,42 +5273,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "ჩატვირთვა"
 
-#: sublime/container.cpp:349
+#: sublime/container.cpp:352
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "ხაზი: 00000 სვეტი: 000"
 
-#: sublime/container.cpp:383
+#: sublime/container.cpp:386
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "გახსნილი დოკუმენტების დალაგებული სიის ჩვენება"
 
-#: sublime/container.cpp:395
+#: sublime/container.cpp:398
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(გადასართველად დააწექით Ctrl+Tab)"
 
-#: sublime/container.cpp:776
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "ფაილის სახელის კოპირება"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:782
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "დახურვა"
 
-#: sublime/container.cpp:781
+#: sublime/container.cpp:784
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "აქტიურის გარდა ყველას დახურვა"
 
-#: sublime/container.cpp:783
+#: sublime/container.cpp:786
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-23 00:42+0000\n"
+"POT-Creation-Date: 2026-07-29 00:44+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1111,37 +1111,37 @@ msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr "konstant"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
 msgstr[0] "1 bait"
 msgstr[1] "%1 baiti"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:886
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] "1 bitt"
 msgstr[1] "%1 bitti"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "offset in parent: %1"
 msgstr ""
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:889
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr "%1, %2"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr "suurus: %1 baiti"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:898
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr ""
@@ -5637,47 +5637,47 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "Laadi"
 
-#: sublime/container.cpp:349
+#: sublime/container.cpp:352
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "Rida: 00000 Veerg: 000"
 
-#: sublime/container.cpp:383
+#: sublime/container.cpp:386
 #, fuzzy, kde-format
 #| msgid "Show sorted list of opened documents"
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "Näita avatud dokumente sorditud loendina"
 
-#: sublime/container.cpp:395
+#: sublime/container.cpp:398
 #, fuzzy, kde-format
 #| msgid "(Press Ctrl+Tab to switch)"
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(Lülitamiseks vajuta Ctrl+Tab)"
 
-#: sublime/container.cpp:776
+#: sublime/container.cpp:779
 #, fuzzy, kde-format
 #| msgid "Copy Filename"
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "Kopeeri failinimi"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:782
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "Sulge"
 
-#: sublime/container.cpp:781
+#: sublime/container.cpp:784
 #, fuzzy, kde-format
 #| msgid "Close All Other"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Sulge kõik teised"
 
-#: sublime/container.cpp:783
+#: sublime/container.cpp:786
 #, fuzzy, kde-format
 #| msgid "Close All"
 msgctxt "@action:inmenu"

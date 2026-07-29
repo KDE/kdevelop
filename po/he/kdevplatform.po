@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-23 00:42+0000\n"
+"POT-Creation-Date: 2026-07-29 00:44+0000\n"
 "PO-Revision-Date: 2026-07-07 09:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1059,7 +1059,7 @@ msgctxt "a variable that won't change, const"
 msgid "constant"
 msgstr "קבוע"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:881
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
 #, kde-format
 msgid "1 Byte"
 msgid_plural "%1 Bytes"
@@ -1068,7 +1068,7 @@ msgstr[1] "שני בתים"
 msgstr[2] "%1 בתים"
 msgstr[3] "%1 בתים"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:882
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:886
 #, kde-format
 msgid "1 Bit"
 msgid_plural "%1 Bits"
@@ -1077,23 +1077,23 @@ msgstr[1] "שתי סיביות"
 msgstr[2] "%1 סיביות"
 msgstr[3] "%1 סיביות"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "offset in parent: %1"
 msgstr "היסט בהורה: %1"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:885
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:889
 #, kde-format
 msgctxt "%1: bytes, %2: bits"
 msgid "%1, %2"
 msgstr "%1, %2"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:890
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
 #, kde-format
 msgid "size: %1 Bytes"
 msgstr "גודל: %1 בתים"
 
-#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:894
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:898
 #, kde-format
 msgid "aligned to: %1 Bytes"
 msgstr "מיושר ל־: %1 בתים"
@@ -5078,42 +5078,42 @@ msgctxt "@action:button"
 msgid "Load"
 msgstr "טעינה"
 
-#: sublime/container.cpp:349
+#: sublime/container.cpp:352
 #, kde-format
 msgid "Line: 00000 Col: 000"
 msgstr "שורה: 00000 עמודה: 000"
 
-#: sublime/container.cpp:383
+#: sublime/container.cpp:386
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
 msgstr "הצגת רשימה מסודרת של מסמכים פתוחים"
 
-#: sublime/container.cpp:395
+#: sublime/container.cpp:398
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
 msgstr "(יש ללחוץ על Ctrl+Tab כדי להחליף)"
 
-#: sublime/container.cpp:776
+#: sublime/container.cpp:779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Filename"
 msgstr "העתקת שם קובץ"
 
-#: sublime/container.cpp:779
+#: sublime/container.cpp:782
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close"
 msgstr "סגירה"
 
-#: sublime/container.cpp:781
+#: sublime/container.cpp:784
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "סגירת כל האחרים"
 
-#: sublime/container.cpp:783
+#: sublime/container.cpp:786
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Close All"
