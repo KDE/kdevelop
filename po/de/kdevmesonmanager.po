@@ -398,7 +398,7 @@ msgstr ""
 #: settings/mesonnewbuilddir.cpp:154
 #, kde-format
 msgid "Cannot use specified directory"
-msgstr "Der angegebene Ordner kann nicht benutzt werden"
+msgstr "Der angegebene Ordner kann nicht verwendet werden"
 
 #: settings/mesonnewbuilddir.cpp:157
 #, kde-format

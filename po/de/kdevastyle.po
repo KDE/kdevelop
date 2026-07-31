@@ -266,7 +266,7 @@ msgid ""
 "from their immediately preceding closing brackets."
 msgstr ""
 "Nach schließenden Klammern umbrechen, wenn ein beendender\n"
-"Block-Header (z. B. „else“, „catch“ ...) beginnt."
+"Block-Header (z. B. „else“, „catch“ ...) beginnt."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
@@ -383,7 +383,7 @@ msgid ""
 "2. Comments are broken from the block.\n"
 msgstr ""
 "Wie --break-blocks, bis auf das Einfügen von Leerzeilen\n"
-"um beendende Block-Header (z. B. „else“, „catch“ ...).\n"
+"um beendende Block-Header (z. B. „else“, „catch“ ...).\n"
 "\n"
 "Bekannte Probleme:\n"
 "\n"
@@ -491,7 +491,7 @@ msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
 msgstr ""
-"Leerzeichen nach Headern von Klammer-Ausdrücken einfügen (z. B. „if“, „for“, "
+"Leerzeichen nach Headern von Klammer-Ausdrücken einfügen (z. B. „if“, „for“, "
 "„while“, ...)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)

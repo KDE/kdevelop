@@ -431,7 +431,7 @@ msgstr ""
 "beliebige Ausdrücke anzuzeigen.<br />Lokale Variablen werden automatisch "
 "angezeigt und beim Einzelschritt durch das Programm aktualisiert. Jeden "
 "Ausdruck, den Sie eingegeben haben, können Sie entweder einmal auswerten "
-"oder überwachen (d. h. er wird automatisch aktualisiert). Ausdrücke, die "
+"oder überwachen (d. h. er wird automatisch aktualisiert). Ausdrücke, die "
 "nicht automatisch aktualisiert werden, können manuell mit dem Kontextmenü "
 "aktualisiert werden. Ausdrücke können durch Klicken auf die Namensspalte mit "
 "aussagekräftigeren Namen versehen werden.<br />Um den Wert einer Variable "
@@ -2149,7 +2149,7 @@ msgid ""
 "breakpoint has been activated or the interrupt was pressed)."
 msgstr ""
 "Setzt die Ausführung der Anwendung im Debugger fort. Das funktioniert nur, "
-"wenn die Anwendung mit dem Debugger angehalten wurde (d. h. ein Haltepunkt "
+"wenn die Anwendung mit dem Debugger angehalten wurde (d. h. ein Haltepunkt "
 "getroffen oder Unterbrechen gedrückt wurde)."
 
 #. i18n: ectx: ToolBar (debugToolBar)
@@ -4195,7 +4195,7 @@ msgid ""
 "for example function arguments, variables and the like.</p>"
 msgstr ""
 "<p>Diese Einstellung bestimmt die Intensität der Farben für lokale "
-"Variablen, z. B. Funktionsargumente, Variablen und Ähnliches.</p>"
+"Variablen, z. B. Funktionsargumente, Variablen und Ähnliches.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
 #: shell/settings/languagepreferences.ui:134
@@ -4253,7 +4253,7 @@ msgid ""
 "for example classes, methods, functions etc.</p>"
 msgstr ""
 "<p>Diese Einstellung bestimmt die Intensität der Farben für globale Typen, "
-"z. B. Klassen, Methoden, Funktionen usw.</p>"
+"z. B. Klassen, Methoden, Funktionen usw.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221

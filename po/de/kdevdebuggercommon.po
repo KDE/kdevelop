@@ -263,7 +263,7 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 "<b>Core-Datei untersuchen</b><p>Laden einer Core-Datei, welche gewöhnlich "
-"nach dem Absturz einer Anwendung z. B. durch einen Speicherzugriffsfehler "
+"nach dem Absturz einer Anwendung z. B. durch einen Speicherzugriffsfehler "
 "erzeugt wird. Die Core-Datei enthält ein Abbild des Programmspeichers im "
 "Augenblick des Absturzes, was eine nachträgliche Analyse ermöglicht.</p>"
 
@@ -746,7 +746,7 @@ msgstr "&AT&&T"
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
 msgstr ""
-"GDB verwendet den AT&T-Stil beim Disassemblieren (z. B. mov 0xc(%ebp),%eax)."
+"GDB verwendet den AT&T-Stil beim Disassemblieren (z. B. mov 0xc(%ebp),%eax)."
 
 #: widgets/disassemblewidget.cpp:149
 #, kde-format
@@ -761,7 +761,7 @@ msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
 "+0xc])."
 msgstr ""
-"GDB verwendet den Intel-Stil beim Disassemblieren (z. B. mov eax, DWORD PTR "
+"GDB verwendet den Intel-Stil beim Disassemblieren (z. B. mov eax, DWORD PTR "
 "[ebp+0xc])."
 
 #: widgets/disassemblewidget.cpp:189
