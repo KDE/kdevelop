@@ -423,7 +423,7 @@ KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
                 break;
             }
 
-            return CXChildVisit_Break;
+            return CXChildVisit_Continue;
         }, &flags);
     }
     return flags;

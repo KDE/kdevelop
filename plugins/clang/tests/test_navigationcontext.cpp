@@ -50,11 +50,12 @@ void TestNavigationContext::testDeclarationDetailsVirtualFinalAbstract()
         public:
             virtual bool isAbstract() = 0;
             virtual bool onlyVirtual();
+            virtual bool isFinal();
         };
 
         class Derived : public Base {
             virtual ~Derived();
-            virtual bool isFinal() final;
+            bool isFinal() override final;
         };
 
         class DestructorBase {

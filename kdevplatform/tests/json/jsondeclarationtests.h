@@ -223,6 +223,28 @@ DeclarationTest(isVirtual)
 }
 
 ///JSON type: bool
+///@returns whether the (function) declaration's isSignal matches the given value
+DeclarationTest(isSignal)
+{
+    const auto* const classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (!classFuncDecl)
+        return QStringLiteral("Non-class-function declaration cannot be a signal.");
+
+    return compareValues(classFuncDecl->isSignal(), value, QStringLiteral("Declaration's isSignal"));
+}
+
+///JSON type: bool
+///@returns whether the (function) declaration's isSlot matches the given value
+DeclarationTest(isSlot)
+{
+    const auto* const classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (!classFuncDecl)
+        return QStringLiteral("Non-class-function declaration cannot be a slot.");
+
+    return compareValues(classFuncDecl->isSlot(), value, QStringLiteral("Declaration's isSlot"));
+}
+
+///JSON type: bool
 ///@returns whether the (function) declaration's isExplicit matches the given value
 DeclarationTest(isExplicit)
 {
