@@ -95,7 +95,7 @@ msgid ""
 "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
 "the script.</p>"
 msgstr ""
-"<p>Legt fest, was mit der Ausgabe des Skripts geschehen soll (d. h. "
+"<p>Legt fest, was mit der Ausgabe des Skripts geschehen soll (d. h. "
 "<code>STDOUT</code>)</p>"
 
 #: editexternalscript.cpp:68
@@ -106,7 +106,7 @@ msgid ""
 "the script.</p><p>Note: if the action is the same as that chosen for the "
 "output, the channels will be merged and handled together.</p>"
 msgstr ""
-"<p>Legt fest, was mit den Fehlern des Skripts geschehen soll (d. h. "
+"<p>Legt fest, was mit den Fehlern des Skripts geschehen soll (d. h. "
 "<code>STDERR</code>)</p><p>Hinweis: Wenn die Aktion dieselbe wie bei der "
 "Ausgabe ist, werden die Kanäle zusammengeführt und zusammen behandelt.</p>"
 
@@ -152,7 +152,7 @@ msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
 "indicate errors by red text.</p>"
 msgstr ""
-"<p>Legt den Filter fest, der auf die Ausgabe angewendet wird, z. B. um "
+"<p>Legt den Filter fest, der auf die Ausgabe angewendet wird, z. B. um "
 "Fehler in roter Schriftfarbe anzuzeigen</p>"
 
 #: editexternalscript.cpp:106

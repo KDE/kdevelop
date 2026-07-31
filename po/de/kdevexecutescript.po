@@ -187,7 +187,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the filter to applied to the output. E.g. to mark errors with red text"
 msgstr ""
-"Wählen Sie den Filter, der auf die Ausgabe angewendet wird, z. B. um Fehler "
+"Wählen Sie den Filter, der auf die Ausgabe angewendet wird, z. B. um Fehler "
 "in roter Schriftfarbe anzuzeigen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
