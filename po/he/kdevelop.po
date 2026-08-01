@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-23 16:33+0300\n"
+"PO-Revision-Date: 2026-07-31 12:41+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -281,6 +281,7 @@ msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 msgstr ""
+"שרשרת הגדרה-שימוש, תמיכה ב־C++‎, ניווט בקוד, השלמת קוד, סיוע בכתיבת קוד, שכתוב"
 
 #: main.cpp:398
 #, kde-format
@@ -300,7 +301,7 @@ msgstr "האמיש רודה"
 #: main.cpp:399
 #, kde-format
 msgid "Text editor integration, definition-use chain"
-msgstr ""
+msgstr "שילוב עם עורך טקסט, שרשרת הגדרה-שימוש"
 
 #: main.cpp:400
 #, kde-format
@@ -366,7 +367,7 @@ msgstr "טלאים ל־SnippetPart, למנפה השגיאות ולשימושיו
 #: main.cpp:410
 #, kde-format
 msgid "Dukju Ahn"
-msgstr ""
+msgstr "דוקג׳ו אהן"
 
 #: main.cpp:410
 #, kde-format
@@ -501,12 +502,12 @@ msgstr "מגוון רכיבים, תיעוד במפתח של htdig"
 #: main.cpp:425
 #, kde-format
 msgid "Victor Roeder"
-msgstr ""
+msgstr "ויקטור רוידר"
 
 #: main.cpp:425
 #, kde-format
 msgid "Help with Automake manager and persistent class store"
-msgstr ""
+msgstr "עזרה עם מנהל Automake ואחסון מחלקות עקבי"
 
 #: main.cpp:426
 #, kde-format
@@ -556,7 +557,7 @@ msgstr "מריו סקלאס"
 #: main.cpp:430
 #, kde-format
 msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
-msgstr ""
+msgstr "דפדפן חלקים, תכנון מחדש של CvsPart, טלאים, תקלות (תיקונים)"
 
 #: main.cpp:431
 #, kde-format
@@ -583,7 +584,7 @@ msgstr "חלק יצירת הקבצים וכל מיני דברים קטנים ו�
 #: main.cpp:433
 #, kde-format
 msgid "Ajay Guleria"
-msgstr ""
+msgstr "אג׳אי גולריה"
 
 #: main.cpp:433
 #, kde-format
