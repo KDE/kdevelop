@@ -1,5 +1,6 @@
 # Translation of plasma_runner_kdevelopsessions to Norwegian Nynorsk
 #
+# Karl Ove Hufthammer <karl@huftis.org>, 2016, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
