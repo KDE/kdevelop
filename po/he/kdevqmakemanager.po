@@ -1,0 +1,137 @@
+# Copyright (C) 2026 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# SPDX-FileCopyrightText: 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"PO-Revision-Date: 2026-08-01 14:50+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 26.04.3\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "צוות התרגום של KDE ישראל"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde-l10n-he@kde.org"
+
+#: qmakebuilddirchooser.cpp:124
+#, kde-format
+msgid "Please specify path to QMake executable."
+msgstr "נא לציין נתיב לקובץ ההפעלה של QMake"
+
+#: qmakebuilddirchooser.cpp:129
+#, kde-format
+msgid "QMake executable \"%1\" does not exist."
+msgstr "קובץ ההפעלה של QMake‏ „%1” לא קיים."
+
+#: qmakebuilddirchooser.cpp:132
+#, kde-format
+msgid "QMake executable is not a file."
+msgstr "קובץ ההפעלה של QMake אינו קובץ."
+
+#: qmakebuilddirchooser.cpp:135
+#, kde-format
+msgid "QMake executable is not executable."
+msgstr "קובץ ההפעלה של QMake לא ניתן להפעלה."
+
+#: qmakebuilddirchooser.cpp:140
+#, kde-format
+msgid "QMake executable cannot be queried for variables."
+msgstr "אי אפשר לתשאל את קובץ ההפעלה של QMake בנוגע למשתנים שלו."
+
+#: qmakebuilddirchooser.cpp:143
+#, kde-format
+msgid "No basic MkSpec file could be found for the given QMake executable."
+msgstr "לא ניתן למצוא קובץ MkSpec בסיסי לקובץ ההפעלה של QMake שסופק."
+
+#: qmakebuilddirchooser.cpp:150
+#, kde-format
+msgid "Please specify a build folder."
+msgstr "נא לציין תיקיית בנייה."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: qmakebuilddirchooser.ui:23
+#, kde-format
+msgctxt "@label:textbox"
+msgid "QMake &executable:"
+msgstr "קובץ ה&פעלה של QMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qmakebuilddirchooser.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Build directory:"
+msgstr "תיקיית &בנייה:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qmakebuilddirchooser.ui:62
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Install to (target.path):"
+msgstr "ה&תקנה אל (תיקיית.יעד):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qmakebuilddirchooser.ui:85
+#, kde-format
+msgctxt "@labal:listbox"
+msgid "Build &type:"
+msgstr "&סוג בנייה:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
+#: qmakebuilddirchooser.ui:115
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "(Use default from .pro file)"
+msgstr "(להשתמש בברירת המחדל מקובץ ‎.pro)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: qmakebuilddirchooser.ui:123
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra arguments:"
+msgstr "ארגומנטים נוספים:"
+
+#: qmakebuilddirchooserdialog.cpp:22
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory"
+msgstr "הגדרת תיקיית בנייה"
+
+#: qmakejob.cpp:33
+#, kde-format
+msgid "Run QMake in %1"
+msgstr "הרצת QMake ב־%1"
+
+#: qmakejob.cpp:137
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** הסתיים עם קוד החזרה: %1 ***"
+
+#: qmakejob.cpp:139
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** התהליך בוטל ***"
+
+#: qmakejob.cpp:141
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** קרס עם קוד החזרה: %1 ***"
+
+#: qmakemanager.cpp:75
+#, kde-format
+msgctxt "@action"
+msgid "Run QMake"
+msgstr "הרצת QMake"

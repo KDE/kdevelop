@@ -1,5 +1,6 @@
 # Translation of kdevplatform to Norwegian Nynorsk
 #
+# Karl Ove Hufthammer <karl@huftis.org>, 2013, 2016, 2021, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"

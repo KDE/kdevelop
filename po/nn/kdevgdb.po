@@ -1,5 +1,6 @@
 # Translation of kdevgdb to Norwegian Nynorsk
 #
+# Karl Ove Hufthammer <karl@huftis.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
