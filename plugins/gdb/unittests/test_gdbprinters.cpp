@@ -16,7 +16,10 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QPoint>
+#include <QRect>
 #include <QRegularExpression>
+#include <QSize>
 #include <QStandardPaths>
 
 #include <algorithm>
@@ -121,6 +124,16 @@ public:
 
     output.remove(0, pos + separator.size());
     return output;
+}
+
+// formats the value like qDebug() does, to verify that a printer produces the same output
+template<typename T>
+[[nodiscard]] QByteArray formatValue(T&& value)
+{
+    QString result;
+    QDebug strm(&result);
+    strm.nospace().noquote() << value;
+    return result.toUtf8();
 }
 
 } // unnamed namespace
@@ -841,17 +854,17 @@ void QtPrintersTest::testQGeometry()
     gdb.execute("break qgeometry.cpp:29");
     gdb.execute("run");
 
-    QCOMPARE(printedValue(gdb, "defaultPoint"), "QPoint(0,0)");
-    QCOMPARE(printedValue(gdb, "point"), "QPoint(1,2)");
-    QCOMPARE(printedValue(gdb, "negativePoint"), "QPoint(-3,-4)");
+    QCOMPARE(printedValue(gdb, "defaultPoint"), formatValue(QPoint()));
+    QCOMPARE(printedValue(gdb, "point"), formatValue(QPoint(1, 2)));
+    QCOMPARE(printedValue(gdb, "negativePoint"), formatValue(QPoint(-3, -4)));
 
-    QCOMPARE(printedValue(gdb, "defaultSize"), "QSize(-1, -1)");
-    QCOMPARE(printedValue(gdb, "size"), "QSize(10, 20)");
+    QCOMPARE(printedValue(gdb, "defaultSize"), formatValue(QSize()));
+    QCOMPARE(printedValue(gdb, "size"), formatValue(QSize(10, 20)));
 
-    QCOMPARE(printedValue(gdb, "defaultRect"), "QRect(0,0 0x0)");
-    QCOMPARE(printedValue(gdb, "rect"), "QRect(1,2 30x40)");
-    QCOMPARE(printedValue(gdb, "negativeRect"), "QRect(-5,-6 7x8)");
-    QCOMPARE(printedValue(gdb, "emptyRect"), "QRect(1,2 0x0)");
+    QCOMPARE(printedValue(gdb, "defaultRect"), formatValue(QRect()));
+    QCOMPARE(printedValue(gdb, "rect"), formatValue(QRect(1, 2, 30, 40)));
+    QCOMPARE(printedValue(gdb, "negativeRect"), formatValue(QRect(-5, -6, 7, 8)));
+    QCOMPARE(printedValue(gdb, "emptyRect"), formatValue(QRect(1, 2, 0, 0)));
 }
 
 void QtPrintersTest::testQListPOD()
