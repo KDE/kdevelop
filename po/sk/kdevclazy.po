@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclazy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2022-04-17 20:53+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -214,7 +214,7 @@ msgctxt "@option:check"
 msgid "Break lines"
 msgstr "Zalomiť riadky"
 
-#: config/globalconfigpage.cpp:29
+#: config/globalconfigpage.cpp:28
 #, kde-format
 msgid "1 check detected"
 msgid_plural "%1 checks detected"
@@ -222,13 +222,13 @@ msgstr[0] "1 kontrola detekovaná"
 msgstr[1] "%1 kontroly detekované"
 msgstr[2] "%1 kontrol detekovaných"
 
-#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#: config/globalconfigpage.cpp:78 config/projectconfigpage.cpp:106
 #, kde-format
 msgctxt "@title:tab"
 msgid "Clazy"
 msgstr "Clazy"
 
-#: config/globalconfigpage.cpp:84
+#: config/globalconfigpage.cpp:83
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clazy Settings"

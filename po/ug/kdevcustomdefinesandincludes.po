@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-15 00:41+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2026-05-31 18:14-0400\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
@@ -396,7 +396,7 @@ msgctxt "@title:window"
 msgid "Setup Custom Include Paths"
 msgstr ""
 
-#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:56
+#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:58
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"

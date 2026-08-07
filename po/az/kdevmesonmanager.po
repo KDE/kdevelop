@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2021-06-29 17:20+0400\n"
 "Last-Translator: Kheyyam Gojayev <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -245,7 +245,7 @@ msgctxt "@action:button"
 msgid "Hide Advanced Configuration"
 msgstr "Əlavə tənzimləməni gizlətmək"
 
-#: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:174
+#: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:176
 #, kde-format
 msgid "Status: %1"
 msgstr "Vəziyyət: %1"
@@ -285,12 +285,12 @@ msgstr "Səhv qurulma qovluğu tənzimləməsi (boş qurulma qovluğu sətiri)"
 msgid "Something went very wrong. This is a bug"
 msgstr "Bəzi şeylər çox yalnızş oldu. Bu bir xətadır"
 
-#: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:208
+#: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:210
 #, kde-format
 msgid "No changes"
 msgstr "Dəyişiklik yoxdur"
 
-#: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:211
+#: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:213
 #, kde-format
 msgid "%1 option changed"
 msgid_plural "%1 options changed"
@@ -498,45 +498,45 @@ msgstr "Layihə"
 msgid "Testing"
 msgstr "Sınaqdan keçirilmə"
 
-#: settings/mesonrewriterpage.cpp:179 settings/mesonrewriterpage.cpp:188
+#: settings/mesonrewriterpage.cpp:181 settings/mesonrewriterpage.cpp:190
 #, kde-format
 msgid "Initializing GUI"
 msgstr "GUİ-nin başladılması"
 
-#: settings/mesonrewriterpage.cpp:182
+#: settings/mesonrewriterpage.cpp:184
 #, kde-format
 msgid "Loading project data..."
 msgstr "Layihə veriləni yüklənir..."
 
-#: settings/mesonrewriterpage.cpp:185
+#: settings/mesonrewriterpage.cpp:187
 #, kde-format
 msgid "Writing project data..."
 msgstr "Layihə veriləni yazılır..."
 
-#: settings/mesonrewriterpage.cpp:191
+#: settings/mesonrewriterpage.cpp:193
 #, kde-format
 msgid "Loading meson rewriter data failed"
 msgstr "Meson yenidən yazma veriləni yüklənə bilmədi"
 
-#: settings/mesonrewriterpage.cpp:406
+#: settings/mesonrewriterpage.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
 msgstr "Əlavə Meson parametri seçin"
 
-#: settings/mesonrewriterpage.cpp:407
+#: settings/mesonrewriterpage.cpp:409
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
 msgstr "Əlavə etmək üçün Meson seçimi:"
 
-#: settings/mesonrewriterpage.cpp:438
+#: settings/mesonrewriterpage.cpp:440
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project"
 msgstr "Layihə"
 
-#: settings/mesonrewriterpage.cpp:443
+#: settings/mesonrewriterpage.cpp:445
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Settings"

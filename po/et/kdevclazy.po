@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2020-01-23 10:43+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -231,21 +231,21 @@ msgctxt "@option:check"
 msgid "Break lines"
 msgstr "Ridade murdmine"
 
-#: config/globalconfigpage.cpp:29
+#: config/globalconfigpage.cpp:28
 #, kde-format
 msgid "1 check detected"
 msgid_plural "%1 checks detected"
 msgstr[0] "Leiti 1 kontroll"
 msgstr[1] "Leiti %1 kontrolli"
 
-#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#: config/globalconfigpage.cpp:78 config/projectconfigpage.cpp:106
 #, fuzzy, kde-format
 #| msgid "Clazy"
 msgctxt "@title:tab"
 msgid "Clazy"
 msgstr "Clazy"
 
-#: config/globalconfigpage.cpp:84
+#: config/globalconfigpage.cpp:83
 #, fuzzy, kde-format
 #| msgid "Configure Clazy Settings"
 msgctxt "@title:tab"

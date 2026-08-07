@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:42+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2024-11-15 15:47+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -243,7 +243,7 @@ msgctxt "@action:button"
 msgid "Hide Advanced Configuration"
 msgstr "Piilota lisäasetukset"
 
-#: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:174
+#: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:176
 #, kde-format
 msgid "Status: %1"
 msgstr "Tila: %1"
@@ -283,12 +283,12 @@ msgstr "Virheellinen koostamiskansioasetus (tyhjä koostamiskansiojono)"
 msgid "Something went very wrong. This is a bug"
 msgstr "Jotakin meni vikaa. Tämä on ohjelmavirhe"
 
-#: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:208
+#: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:210
 #, kde-format
 msgid "No changes"
 msgstr "Ei muutoksia"
 
-#: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:211
+#: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:213
 #, kde-format
 msgid "%1 option changed"
 msgid_plural "%1 options changed"
@@ -499,45 +499,45 @@ msgstr "Projekti"
 msgid "Testing"
 msgstr "Testataan"
 
-#: settings/mesonrewriterpage.cpp:179 settings/mesonrewriterpage.cpp:188
+#: settings/mesonrewriterpage.cpp:181 settings/mesonrewriterpage.cpp:190
 #, kde-format
 msgid "Initializing GUI"
 msgstr "Käyttöliittymää alustetaan"
 
-#: settings/mesonrewriterpage.cpp:182
+#: settings/mesonrewriterpage.cpp:184
 #, kde-format
 msgid "Loading project data..."
 msgstr "Ladataan projektin tietoja…"
 
-#: settings/mesonrewriterpage.cpp:185
+#: settings/mesonrewriterpage.cpp:187
 #, kde-format
 msgid "Writing project data..."
 msgstr "Kirjoitetaan projektin tietoja…"
 
-#: settings/mesonrewriterpage.cpp:191
+#: settings/mesonrewriterpage.cpp:193
 #, kde-format
 msgid "Loading meson rewriter data failed"
 msgstr ""
 
-#: settings/mesonrewriterpage.cpp:406
+#: settings/mesonrewriterpage.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
 msgstr "Valitse Meson-lisävalinta"
 
-#: settings/mesonrewriterpage.cpp:407
+#: settings/mesonrewriterpage.cpp:409
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
 msgstr "Lisättävä Meson-valinta:"
 
-#: settings/mesonrewriterpage.cpp:438
+#: settings/mesonrewriterpage.cpp:440
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project"
 msgstr "Projekti"
 
-#: settings/mesonrewriterpage.cpp:443
+#: settings/mesonrewriterpage.cpp:445
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Settings"

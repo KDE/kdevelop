@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2026-06-06 07:49+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -211,7 +211,7 @@ msgctxt "@option:check"
 msgid "Break lines"
 msgstr "קטיעת שורות"
 
-#: config/globalconfigpage.cpp:29
+#: config/globalconfigpage.cpp:28
 #, kde-format
 msgid "1 check detected"
 msgid_plural "%1 checks detected"
@@ -220,13 +220,13 @@ msgstr[1] "זוהו שתי בדיקות"
 msgstr[2] "זוהו %1 בדיקות"
 msgstr[3] "זוהו %1 בדיקות"
 
-#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#: config/globalconfigpage.cpp:78 config/projectconfigpage.cpp:106
 #, kde-format
 msgctxt "@title:tab"
 msgid "Clazy"
 msgstr "Clazy"
 
-#: config/globalconfigpage.cpp:84
+#: config/globalconfigpage.cpp:83
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clazy Settings"

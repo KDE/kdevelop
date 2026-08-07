@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2023-10-09 14:21+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -56,7 +56,7 @@ msgid "Edit"
 msgstr "Editar"
 
 # skip-rule: trasno-path
-#: ui/perforceimportmetadatawidget.cpp:124
+#: ui/perforceimportmetadatawidget.cpp:128
 #, kde-format
 msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
@@ -65,12 +65,12 @@ msgstr ""
 "Non é posíbel atopar o executábel de perforce. Está instalado no sistema? "
 "Está na PATH?"
 
-#: ui/perforceimportmetadatawidget.cpp:152
+#: ui/perforceimportmetadatawidget.cpp:156
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
 msgstr "O cliente de P4 fallou co código de saída «%1»."
 
-#: ui/perforceimportmetadatawidget.cpp:196
+#: ui/perforceimportmetadatawidget.cpp:200
 #, kde-format
 msgid "P4 Client failed with error code: %1"
 msgstr "O cliente de P4 fallou co código de erro «%1»."

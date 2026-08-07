@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-08-07 00:43+0000\n"
 "PO-Revision-Date: 2013-03-12 16:35+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -54,19 +54,19 @@ msgctxt "@action::inmenu"
 msgid "Edit"
 msgstr "संपादन"
 
-#: ui/perforceimportmetadatawidget.cpp:124
+#: ui/perforceimportmetadatawidget.cpp:128
 #, kde-format
 msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
 
-#: ui/perforceimportmetadatawidget.cpp:152
+#: ui/perforceimportmetadatawidget.cpp:156
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
 msgstr ""
 
-#: ui/perforceimportmetadatawidget.cpp:196
+#: ui/perforceimportmetadatawidget.cpp:200
 #, kde-format
 msgid "P4 Client failed with error code: %1"
 msgstr ""
