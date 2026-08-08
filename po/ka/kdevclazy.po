@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-07 00:43+0000\n"
-"PO-Revision-Date: 2024-07-20 05:26+0200\n"
+"PO-Revision-Date: 2026-08-07 06:37+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.9\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -493,7 +493,7 @@ msgstr "კომპილატორის ბრძანებისთვ�
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler prepend:"
-msgstr "კომპილატორის პარამეტრებამდე მისაწერი დამატებითი პარამეტრები:"
+msgstr "კომპილატორის პარამეტრებამდე მიწერა:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
 #: config/projectconfigpage.ui:239
