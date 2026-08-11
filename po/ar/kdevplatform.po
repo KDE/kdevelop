@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-29 00:44+0000\n"
-"PO-Revision-Date: 2026-07-15 19:01+0400\n"
+"PO-Revision-Date: 2026-08-10 18:36+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -656,7 +656,7 @@ msgstr "لم يمكن فتح الملف."
 #: language/backgroundparser/parsejob.cpp:336
 #, kde-format
 msgid "File could not be read from disk due to permissions."
-msgstr "لم يمكن قراءة الملف من القرص بسبب الأذونات."
+msgstr "لم يمكن قراءة الملف من القرص بسبب الأذون."
 
 #: language/backgroundparser/parseprojectjob.cpp:74
 #, kde-format
@@ -5551,8 +5551,8 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
-"ليس لديك صلاحيات كتابة للملفات التالية؛ هل تُريد إضافة صلاحيات كتابة للمالك "
-"قبل الحفظ؟"
+"ليس لديك أذون كتابة للملفات التالية؛ هل تُريد إضافة أذون كتابة للمالك قبل "
+"الحفظ؟"
 
 #: util/shellutils.cpp:178
 #, kde-format
@@ -5564,7 +5564,7 @@ msgstr "بعض الملفات محمية ضد الكتابة"
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "اِضبط صلاحيات الكتابة"
+msgstr "اِضبط أذون الكتابة"
 
 #: util/shellutils.cpp:180
 #, kde-format
@@ -5575,13 +5575,13 @@ msgstr "تجاهل"
 #: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr "فشِل إضافة صلاحيات كتابة لبعض الملفات."
+msgstr "فشِل إضافة أذون كتابة لبعض الملفات."
 
 #: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
-msgstr "فشِل ضبط الصلاحيات"
+msgstr "فشِل ضبط الأذون"
 
 #: util/shellutils.cpp:232
 #, kde-format
