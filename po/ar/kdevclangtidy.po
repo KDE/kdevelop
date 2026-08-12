@@ -206,7 +206,7 @@ msgid ""
 "displayed. Can be used together with -line-filter."
 msgstr ""
 "تعبير نمطي يطابق أسماء الترويسات لإخراج التشخيصات منها. تظهر التشخيصات من "
-"الملف الرئيسي لكل وحدة ترجمة دائماً. يمكن استخدامه مع -line-filter."
+"الملف الرئيسي لكل وحدة ترجمة دائمًا. يمكن استخدامه مع -line-filter."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119

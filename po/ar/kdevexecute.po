@@ -63,7 +63,7 @@ msgstr "ابدأ آخر"
 msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
-msgstr "<p>ملاحظة: <code>gnome-terminal</code> مدعوم جزئياً فقط بسبب قيوده.</p>"
+msgstr "<p>ملاحظة: <code>gnome-terminal</code> مدعوم جزئيًا فقط بسبب قيوده.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -192,8 +192,8 @@ msgid ""
 "interact with applications requiring user input from a terminal emulator. To "
 "run such applications, you should use an external terminal.</p>"
 msgstr ""
-"<p>مبدئياً، شغّل التطبيقات في الخلفية واعرض ناتجها فقط في عرض أداة. هذا يجعل "
-"التفاعل مع التطبيقات التي تتطلب إدخال المستخدم من محاكي طرفية مستحيلاً. "
+"<p>مبدئيًا، شغّل التطبيقات في الخلفية واعرض ناتجها فقط في عرض أداة. هذا يجعل "
+"التفاعل مع التطبيقات التي تتطلب إدخال المستخدم من محاكي طرفية مستحيلًا. "
 "لتشغيل مثل هذه التطبيقات، استخدم طرفية خارجية.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)

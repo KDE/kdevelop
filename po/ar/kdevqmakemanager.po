@@ -46,7 +46,7 @@ msgstr "ملف QMake التنفيذي ليس ملفًا."
 #: qmakebuilddirchooser.cpp:135
 #, kde-format
 msgid "QMake executable is not executable."
-msgstr "ملف QMake التنفيذي ليس قابلاً للتنفيذ."
+msgstr "ملف QMake التنفيذي ليس قابلًا للتنفيذ."
 
 #: qmakebuilddirchooser.cpp:140
 #, kde-format

@@ -46,7 +46,7 @@ msgstr "ابحث..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
-msgstr "اختر دليلاً للبحث فيه"
+msgstr "اختر دليلًا للبحث فيه"
 
 #: grepdialog.cpp:611
 #, kde-format
@@ -56,7 +56,7 @@ msgstr[0] "%2، وعنصر إضافي واحد"
 msgstr[1] "%2، وعنصران إضافيان"
 msgstr[2] "%2، و%1 عناصر إضافيّة"
 msgstr[3] "%2، و%1 عناصر إضافيّة"
-msgstr[4] "%2، و%1 عنصراً إضافيًّا"
+msgstr[4] "%2، و%1 عنصرًا إضافيًّا"
 msgstr[5] "%2، و%1 عنصر إضافي"
 
 #: grepdialog.cpp:627
@@ -291,9 +291,9 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
-"يفتح هذا الأمر حوار 'اعثر واستبدل في الملفّات'. هناك، أدخل تعبيراً نمطيًّا سيبحث "
+"يفتح هذا الأمر حوار 'اعثر واستبدل في الملفّات'. هناك، أدخل تعبيرًا نمطيًّا سيبحث "
 "فيه ضمن جميع الملفّات في الأدلة التي تحدّدها. ستعرض المطابقات، ويمكنك التبديل "
-"إلى مطابقة مباشرة. يمكنك إجراء استبدال أيضاً."
+"إلى مطابقة مباشرة. يمكنك إجراء استبدال أيضًا."
 
 #: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
@@ -512,7 +512,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr "اختر موقعاً بسرعة من مجموعة من الأدلّة"
+msgstr "اختر موقعًا بسرعة من مجموعة من الأدلّة"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
@@ -632,7 +632,7 @@ msgid ""
 "of the file paths.</p>"
 msgstr ""
 "أدخل نمط أسماء الملفّات التي تريد استثناءها من البحث هنا. يمكنك إعطاء عدّة "
-"أنماط مفصولة بفواصل أو مسافات.<p>كل نمط محاط داخلياً بعلامات نجميّة، بحيث يمكن "
+"أنماط مفصولة بفواصل أو مسافات.<p>كل نمط محاط داخليًا بعلامات نجميّة، بحيث يمكن "
 "لكل نمط أن يطابق أجزاء من مسارات الملفّات.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -678,7 +678,7 @@ msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
-"اختر الموقع الذي تريد البحث فيه. يمكن أن يكون دليلاً، أو ملفّاً، أو قائمة "
+"اختر الموقع الذي تريد البحث فيه. يمكن أن يكون دليلًا، أو ملفًّا، أو قائمة "
 "مفصولة بفاصلة منقوطة (بدون مسافات) من الأدلة/الملفات."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
@@ -686,4 +686,4 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr "اختر دليلاً للبحث فيه"
+msgstr "اختر دليلًا للبحث فيه"

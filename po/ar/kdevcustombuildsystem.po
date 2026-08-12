@@ -64,7 +64,7 @@ msgid ""
 "If this is the same as the source directory you can leave it empty."
 msgstr ""
 "اختر الدليل الذي تنفّذ فيه الأدوات.\n"
-"اتركه فارغاً إن كان هو نفسه دليل المصدر."
+"اتركه فارغًا إن كان هو نفسه دليل المصدر."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
 #: configwidget.ui:30
@@ -137,7 +137,7 @@ msgstr "البيئة:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
-msgstr "اختر بيئة مضبوطة مسبقاً لأداتك"
+msgstr "اختر بيئة مضبوطة مسبقًا لأداتك"
 
 #: custombuildjob.cpp:67
 #, kde-format
@@ -194,7 +194,7 @@ msgstr "الأداة %1 المخصصة في المشروع «%2» معطّلة"
 #, kde-format
 msgid ""
 "The given arguments would need a real shell, this is not supported currently."
-msgstr "المعاملات المعطاة تحتاج إلى صدفة حقيقية، وهذا غير مدعوم حالياً."
+msgstr "المعاملات المعطاة تحتاج إلى صدفة حقيقية، وهذا غير مدعوم حاليًا."
 
 #: custombuildjob.cpp:166
 #, kde-format

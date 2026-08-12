@@ -2616,7 +2616,7 @@ msgstr "افصل العرض أ&على/أسفل"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Split horizontal"
-msgstr "اقسم أفقياً"
+msgstr "اقسم أفقيًا"
 
 #: shell/mainwindow_p.cpp:272
 #, kde-format
@@ -3816,7 +3816,7 @@ msgid ""
 "enabled. Disabling the background parser will disable large parts of "
 "KDevelop's functionality.</p>"
 msgstr ""
-"<p>يُفعّل أو يُعطّل المُحلِّل الخلفي.<br>إن لم تكن متأكدًا، اِتركه مُفعّلاً. تعطيل "
+"<p>يُفعّل أو يُعطّل المُحلِّل الخلفي.<br>إن لم تكن متأكدًا، اِتركه مُفعّلًا. تعطيل "
 "المُحلِّل الخلفي سـ يُعطّل أجزاء كبيرة من وظيفة KDevelop مطوّرك.</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
@@ -4648,7 +4648,7 @@ msgstr "أحضر المزيد من القوالب"
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template From File"
-msgstr "حمِّل قالباً من ملف"
+msgstr "حمِّل قالبًا من ملف"
 
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
 #: shell/settings/templatepage.ui:36
@@ -4747,7 +4747,7 @@ msgstr "تحكَّم فيما إذا تفتح ألسنة جديدة بجوار �
 #, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
-msgstr "اِفتح لساناً جديداً بعد الحالي"
+msgstr "اِفتح لسانًا جديدًا بعد الحالي"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
@@ -4757,7 +4757,7 @@ msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
-"عند التمكين، الملحقات يمكنها تجميع الملفات المرتبطة جنباً إلى جنب.\n"
+"عند التمكين، الملحقات يمكنها تجميع الملفات المرتبطة جنبًا إلى جنب.\n"
 "على سبيل المثال، ملف ترويسة سيفتح بجوار ملف التنفيذ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
@@ -4765,7 +4765,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Arrange related documents side by side"
-msgstr "رتب المستندات المرتبطة جنباً إلى جنب"
+msgstr "رتب المستندات المرتبطة جنبًا إلى جنب"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:116
@@ -4954,7 +4954,7 @@ msgstr[0] "إعادة تنسيق ملف واحد"
 msgstr[1] "إعادة تنسيق %1 ملف"
 msgstr[2] "إعادة تنسيق ملفين"
 msgstr[3] "إعادة تنسيق %1 ملفات"
-msgstr[4] "إعادة تنسيق %1 ملفاً"
+msgstr[4] "إعادة تنسيق %1 ملفًا"
 msgstr[5] "إعادة تنسيق %1 ملف"
 
 #: shell/sourceformatterselectionedit.cpp:1077
@@ -4964,7 +4964,7 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
-"الأسلوب %1 مستخدَم أيضاً للغات التالية:\n"
+"الأسلوب %1 مستخدَم أيضًا للغات التالية:\n"
 "%2.\n"
 "هل أنت متأكِّد أنك تُريد حذفه؟"
 
@@ -5012,9 +5012,9 @@ msgstr ""
 "<p>اِختر اللغات التي تستخدمها واحدة تلو الأخرى من مربع التحرير والسرد "
 "<i>اللغة</i> في الأسفل، واختر المنسِّق والأسلوب المرغوب لكل منها. <i>انقر مع "
 "Ctrl</i> على أسلوب محدَّد لإلغاء تحديده.</p>\n"
-"<p>ضبط المنسِّق والأسلوب الصحيح لكل لغة مستخدَمة مهم جداً: لا تتأثر إجراءات "
-"<i>أعِد تنسيق المصدر</i>/<i>السطر</i>/<i>الملفات...</i> الصريحة فقط، بل أيضاً "
-"تنسيق الشفرة المولَّدة آلياً أو المُنقَّحة آلياً أو المُصحَّحة آلياً (على سبيل المثال، "
+"<p>ضبط المنسِّق والأسلوب الصحيح لكل لغة مستخدَمة مهم جدًا: لا تتأثر إجراءات "
+"<i>أعِد تنسيق المصدر</i>/<i>السطر</i>/<i>الملفات...</i> الصريحة فقط، بل أيضًا "
+"تنسيق الشفرة المولَّدة آليًا أو المُنقَّحة آليًا أو المُصحَّحة آليًا (على سبيل المثال، "
 "إجراء قائمة السياق <i>إعادة تسمية</i>).</p>\n"
 "<p>لاحظ أن KDevelop ينسِّق كل ملفات <i>*.h</i> باستِخدام منسِّق وأسلوب مضبطين "
 "للغة <i>C</i>، حتى ترويسات C++ التي تنتمي إلى مشروع C++ بحت. يحدث هذا لأن "
@@ -5079,7 +5079,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
-msgstr "مستند معدَّل خارجياً"
+msgstr "مستند معدَّل خارجيًا"
 
 #: shell/textdocument.cpp:665
 #, kde-format
@@ -5146,7 +5146,7 @@ msgid ""
 "working set"
 msgstr ""
 "أضِف كل المستندات التي هي جزء من مجموعة العمل هذه إلى مجموعة العمل النشطة "
-"حالياً"
+"حاليًا"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
 #, kde-format
@@ -5161,7 +5161,7 @@ msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
-"أزِل كل المستندات التي هي جزء من مجموعة العمل هذه من مجموعة العمل النشطة حالياً"
+"أزِل كل المستندات التي هي جزء من مجموعة العمل هذه من مجموعة العمل النشطة حاليًا"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:169
 #, kde-format
@@ -5319,7 +5319,7 @@ msgstr "أزِل عرض الأداة"
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
-msgstr "اِسنِد اختصاراً لعرض أداة '%1'"
+msgstr "اِسنِد اختصارًا لعرض أداة '%1'"
 
 #: sublime/mainwindow_p.cpp:49
 #, kde-format
@@ -5493,7 +5493,7 @@ msgstr "اِطبع المشاكل التي صادفت أثناء التحليل"
 #: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
-msgstr "فرِّغ الأخطاء تكرارياً من السياقات المستوردة."
+msgstr "فرِّغ الأخطاء تكراريًا من السياقات المستوردة."
 
 #: util/environmentselectionmodel.cpp:40
 #, kde-format
@@ -5580,7 +5580,7 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
-"جُمع حرف ميتا للصدفة في %1 لضبط التشغيل '%2'، هذا غير مدعوم حالياً. إجهاض "
+"جُمع حرف ميتا للصدفة في %1 لضبط التشغيل '%2'، هذا غير مدعوم حاليًا. إجهاض "
 "البدء."
 
 #: util/shellutils.cpp:247
@@ -5630,7 +5630,7 @@ msgstr "دليل العمل غير موجود: %1"
 #: vcs/dvcs/dvcsjob.cpp:175
 #, kde-format
 msgid "Working Directory is not absolute: %1"
-msgstr "دليل العمل ليس مطلقاً: %1"
+msgstr "دليل العمل ليس مطلقًا: %1"
 
 #: vcs/dvcs/dvcsjob.cpp:225
 #, kde-format
@@ -5672,7 +5672,7 @@ msgstr "مدير الفروع"
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
-msgstr "اِختر فرعاً أساسياً من القائمة قبل إنشاء فرع جديد."
+msgstr "اِختر فرعًا أساسيًا من القائمة قبل إنشاء فرع جديد."
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
@@ -5692,8 +5692,8 @@ msgid ""
 "Branch \"%1\" already exists.\n"
 "Please, choose another name."
 msgstr ""
-"الفرع \"%1\" موجود سلفاً.\n"
-"اِختر اسماً آخر."
+"الفرع \"%1\" موجود سلفًا.\n"
+"اِختر اسمًا آخر."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
 #, kde-format
@@ -5701,7 +5701,7 @@ msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
-"حالياً على الفرع \"%1\".\n"
+"حاليًا على الفرع \"%1\".\n"
 "لحذفه، اِنتقل إلى فرع آخر."
 
 #: vcs/dvcs/ui/branchmanager.cpp:147
@@ -5721,12 +5721,12 @@ msgid ""
 "Please, choose another name."
 msgstr ""
 "الفرع \"%1\" غير موجود.\n"
-"اِختر اسماً آخر."
+"اِختر اسمًا آخر."
 
 #: vcs/dvcs/ui/branchmanager.cpp:196
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
-msgstr "اِختر فرعاً للدمج في الفرع الحالي من القائمة."
+msgstr "اِختر فرعًا للدمج في الفرع الحالي من القائمة."
 
 #: vcs/dvcs/ui/branchmanager.cpp:234 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
@@ -5755,7 +5755,7 @@ msgstr "دعم نظام تحكم في النسخ (VCS)"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Creates new branch based on the selected branch"
-msgstr "يُنشئ فرعاً جديداً بناء على الفرع المحدَّد"
+msgstr "يُنشئ فرعًا جديدًا بناء على الفرع المحدَّد"
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
@@ -5835,7 +5835,7 @@ msgstr "رسالة الالتزام:"
 #: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
 msgid "Branch \"%1\" already exists."
-msgstr "الفرع \"%1\" موجود سلفاً."
+msgstr "الفرع \"%1\" موجود سلفًا."
 
 #: vcs/models/brancheslistmodel.cpp:68
 #, kde-format
@@ -6095,7 +6095,7 @@ msgid ""
 "%1"
 msgstr ""
 "لا أستطيع تنفيذ إجراء التعليق التوضيحي لأن المستند لم يعثر عليه، أو لم يكن "
-"مستنداً نصياً:\n"
+"مستندًا نصيًا:\n"
 "%1"
 
 #: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
