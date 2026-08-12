@@ -41,7 +41,7 @@ msgstr "لم يُحدَّد ملفّات أو رسالة"
 #: perforceplugin.cpp:364 perforceplugin.cpp:380
 #, kde-format
 msgid "Please select a file for this operation"
-msgstr "الرجاء حدّد ملفّاً لهذه العمليّة"
+msgstr "الرجاء حدّد ملفًّا لهذه العمليّة"
 
 #: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format

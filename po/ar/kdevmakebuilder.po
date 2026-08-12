@@ -118,7 +118,7 @@ msgstr "اصنع"
 #: makejob.cpp:98
 #, kde-format
 msgid "Build item no longer available"
-msgstr "عنصر البناء لم يعد متوفراً"
+msgstr "عنصر البناء لم يعد متوفرًا"
 
 #: makejob.cpp:105
 #, kde-format

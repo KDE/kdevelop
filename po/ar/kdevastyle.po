@@ -221,7 +221,7 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
-"ضع مسافة بادئة، بدلاً من محاذاة، لأسطر المتابعة التي تلي أسطرًا تحتوي على قوس "
+"ضع مسافة بادئة، بدلًا من محاذاة، لأسطر المتابعة التي تلي أسطرًا تحتوي على قوس "
 "فتح '(' أو إسناد '='."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)

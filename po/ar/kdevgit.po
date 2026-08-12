@@ -283,7 +283,7 @@ msgstr "لا ملفات للحذف"
 #: gitplugin.cpp:902
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
-msgstr "لديك تغييرات معلّقة، هل تريد تخبئتها أولاً؟"
+msgstr "لديك تغييرات معلّقة، هل تريد تخبئتها أولًا؟"
 
 #: gitplugin.cpp:903
 #, kde-format
@@ -574,7 +574,7 @@ msgstr "ملخّص الإيداع"
 #: simplecommitform.cpp:88 simplecommitform.cpp:172
 #, kde-format
 msgid "To commit changes, please write a commit message first"
-msgstr "لإيداع التغييرات، اكتب رسالة الإيداع أولاً"
+msgstr "لإيداع التغييرات، اكتب رسالة الإيداع أولًا"
 
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
@@ -584,7 +584,7 @@ msgstr "أَدِع التغييرات إلى <b>%1</b> على الفرع <b>%2</
 #: simplecommitform.cpp:122
 #, kde-format
 msgid "To commit changes, please select a project first"
-msgstr "لإيداع التغييرات، اختر مشروعًا أولاً"
+msgstr "لإيداع التغييرات، اختر مشروعًا أولًا"
 
 #: simplecommitform.cpp:163
 #, kde-format

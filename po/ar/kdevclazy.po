@@ -67,7 +67,7 @@ msgid ""
 "The default level. Very similar to level 0, slightly more false-positives "
 "but very few."
 msgstr ""
-"المستوى **المبدئي**. مشابه جدًا للمستوى 0، إيجابياته الكاذبة أكثر قليلاً "
+"المستوى **المبدئي**. مشابه جدًا للمستوى 0، إيجابياته الكاذبة أكثر قليلًا "
 "ولكنها قليلة جدًا."
 
 #: checksdb.cpp:43
