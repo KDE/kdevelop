@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-20 00:41+0000\n"
+"POT-Creation-Date: 2026-08-14 02:43+0000\n"
 "PO-Revision-Date: 2022-07-09 12:56+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -91,7 +91,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Texto de formato personalizado"
 
-#: debugsession.cpp:162
+#: debugsession.cpp:165
 #, kde-format
 msgid ""
 "No environment profile specified, looks like a broken configuration, please "
@@ -101,12 +101,12 @@ msgstr ""
 "inválida; verifique por favor a configuração de execução '%1'. A usar o "
 "perfil de ambientes por omissão."
 
-#: debugsession.cpp:253
+#: debugsession.cpp:256
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:272
+#: debugsession.cpp:275
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr "<b>Precisa do gdb 7.0.0 ou superior.</b><br />Está a usar: %1"
