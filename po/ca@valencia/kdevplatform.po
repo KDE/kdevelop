@@ -1414,12 +1414,12 @@ msgstr ""
 #: language/util/debuglanguageparserhelper.h:182
 #, kde-format
 msgid "print generated AST tree"
-msgstr "imprimix a la pantalla l'arbre AST generat"
+msgstr "imprimix en la pantalla l'arbre AST generat"
 
 #: language/util/debuglanguageparserhelper.h:183
 #, kde-format
 msgid "print generated token stream"
-msgstr "imprimix a la pantalla el flux de testimonis generats"
+msgstr "imprimix en la pantalla el flux de testimonis generats"
 
 #: language/util/debuglanguageparserhelper.h:184
 #, kde-format
@@ -5569,7 +5569,7 @@ msgstr ""
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
-"Imprimix a la pantalla tota la cadena de definició d'usos després de "
+"Imprimix en la pantalla tota la cadena de definició d'usos després de "
 "completar una anàlisi amb èxit"
 
 #: util/duchainify/main.cpp:298
@@ -5581,7 +5581,7 @@ msgstr "Imprimix els contexts dels pares en bolcar els contexts"
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
-"Imprimix a la pantalla totes les definicions per a la cadena de definició "
+"Imprimix en la pantalla totes les definicions per a la cadena de definició "
 "d'usos després de completar una anàlisi amb èxit"
 
 #: util/duchainify/main.cpp:303
@@ -5589,7 +5589,7 @@ msgstr ""
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
-"Imprimix a la pantalla tota la «PersistentSymbolTable» per a la cadena de "
+"Imprimix en la pantalla tota la «PersistentSymbolTable» per a la cadena de "
 "definició d'usos després de completar una anàlisi amb èxit"
 
 #: util/duchainify/main.cpp:306
@@ -5607,7 +5607,7 @@ msgstr "Bolca la gràfica DUChain (en format .dot)"
 #: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
-msgstr "Imprimix a la pantalla els problemes trobats durant l'anàlisi"
+msgstr "Imprimix en la pantalla els problemes trobats durant l'anàlisi"
 
 #: util/duchainify/main.cpp:313
 #, kde-format
