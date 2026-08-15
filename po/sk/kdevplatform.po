@@ -4882,11 +4882,10 @@ msgstr "Farebné widgety založené na pričlenení k projektu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "Projekt %1"
+msgstr "Strom projektu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -4895,13 +4894,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Collapse all child items whenever an item in the project tree is collapsed."
 msgstr ""
+"Zbaliť všetky podradené položky pri každom zbalení položky v strome projektu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:176
 #, kde-format
 msgctxt "@option:check"
 msgid "Collapse items recursively"
-msgstr ""
+msgstr "Zbaliť položky rekurzívne"
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format
