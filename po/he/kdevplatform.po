@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-24 02:38+0000\n"
-"PO-Revision-Date: 2026-07-31 12:44+0300\n"
+"PO-Revision-Date: 2026-08-26 18:14+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -180,7 +180,7 @@ msgstr "מצב פעיל"
 #: debugger/breakpoint/breakpointmodel.cpp:443
 #, kde-format
 msgid "State"
-msgstr ""
+msgstr "מצב"
 
 #: debugger/breakpoint/breakpointmodel.cpp:667
 #, kde-format
@@ -203,6 +203,8 @@ msgid ""
 "breakpoint item allows you to change the breakpoint and will take you to the "
 "source in the editor window."
 msgstr ""
+"הצגת רשימת נקודות העצירה עם המצב הנוכחי שלהן. לחיצה על פריט נקודת עצירה "
+"מאפשרת לך לשנות את נקודת העצירה ותוביל אותך למקור בחלון העורך."
 
 #: debugger/breakpoint/breakpointwidget.cpp:86
 #, kde-format
@@ -425,32 +427,32 @@ msgstr ""
 #: debugger/variable/variablewidget.cpp:217
 #, kde-format
 msgid "&Natural"
-msgstr ""
+msgstr "&טבעי"
 
 #: debugger/variable/variablewidget.cpp:222
 #, kde-format
 msgid "&Binary"
-msgstr ""
+msgstr "&בינרי"
 
 #: debugger/variable/variablewidget.cpp:227
 #, kde-format
 msgid "&Octal"
-msgstr ""
+msgstr "&אוקטלי"
 
 #: debugger/variable/variablewidget.cpp:232
 #, kde-format
 msgid "&Decimal"
-msgstr ""
+msgstr "&עשרוני"
 
 #: debugger/variable/variablewidget.cpp:237
 #, kde-format
 msgid "&Hexadecimal"
-msgstr ""
+msgstr "ה&קסדצימלי"
 
 #: debugger/variable/variablewidget.cpp:252
 #, kde-format
 msgid "Remove Watch Variable"
-msgstr ""
+msgstr "הסרת משתנה במעקב"
 
 #: debugger/variable/variablewidget.cpp:259
 #, kde-format
@@ -3129,7 +3131,7 @@ msgstr "המיזם כבר פתוח"
 msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
-msgstr ""
+msgstr "המיזם שניסית לפתוח כבר פתוח בהפעלה נוספת אחת לפחות.<br>מה לעשות?"
 
 #: shell/projectcontroller.cpp:856
 #, kde-format
@@ -3430,7 +3432,7 @@ msgstr "מערכת מארחת"
 #: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr ""
+msgstr "אפשרות לבחור סביבת זמן ריצה"
 
 #: shell/runtimecontroller.cpp:92
 #, kde-format
@@ -3576,7 +3578,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Start New Named Session..."
-msgstr ""
+msgstr "הקמת הפעלה חדשה עם שם…"
 
 #: shell/sessioncontroller.cpp:282
 #, kde-format

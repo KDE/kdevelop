@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-05 08:54+0300\n"
+"PO-Revision-Date: 2026-08-26 13:09+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #: customscript_plugin.cpp:87
 #, kde-format
@@ -129,6 +129,11 @@ msgid ""
 "b> will be replaced by the path of <br />a currently open project whose name "
 "is &lt;project name&gt;."
 msgstr ""
+"<b>‎$TMPFILE</b> יוחלף בנתיב לקובץ הזמני. <br />הקוד ייכתב לקובץ, הקובץ הזמני "
+"<br />יוחלף למקום הזה, והתוצאה תיקרא <br />מהקובץ הזה. <br /><br /><b>‎$FILE</"
+"b> יוחלף בנתיב הקובץ המקורי. <br />אסור לשנות את תוכן הקובץ, מותר לערוך "
+"שינויים רק <br />ב־ $TMPFILE.<br /><br /><b>${&lt;project name&gt;}</b> "
+"יוחלף בנתיב של <br />מיזם נוכחי פתוח ששמו הוא is &lt;project name&gt;."
 
 #: customscript_plugin.cpp:595
 #, kde-format
