@@ -87,7 +87,8 @@ void DebugSession::initializeDebugger()
     addCommand(MI::GdbSet, QStringLiteral("width 0"));
     addCommand(MI::GdbSet, QStringLiteral("height 0"));
 
-    // Disable emojis in GDB's output. GDB 17.2+ may also print such with broken encoding.
+    // Disable emojis in GDB's output.
+    // See: https://sourceware.org/bugzilla/show_bug.cgi?id=34501
     addCommand(MI::GdbSet, QStringLiteral("style emoji off"));
 
     addCommand(MI::SignalHandle, QStringLiteral("SIG32 pass nostop noprint"));
