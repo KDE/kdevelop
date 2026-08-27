@@ -4,14 +4,14 @@
 Dependencies:
 - 'on': ['@all']
   'require':
-    'frameworks/kcmutils': '@latest-kf6'
-    'frameworks/kitemmodels': '@latest-kf6'
-    'frameworks/knewstuff': '@latest-kf6'
-    'frameworks/knotifyconfig': '@latest-kf6'
-    'frameworks/ktexteditor': '@latest-kf6'
-    'frameworks/ktexttemplate': '@latest-kf6'
-    'frameworks/purpose': '@latest-kf6'
-    'frameworks/threadweaver': '@latest-kf6'
+    'frameworks/kcmutils': 'Frameworks/6.24'
+    'frameworks/kitemmodels': 'Frameworks/6.24'
+    'frameworks/knewstuff': 'Frameworks/6.24'
+    'frameworks/knotifyconfig': 'Frameworks/6.24'
+    'frameworks/ktexteditor': 'Frameworks/6.24'
+    'frameworks/ktexttemplate': 'Frameworks/6.24'
+    'frameworks/purpose': 'Frameworks/6.24'
+    'frameworks/threadweaver': 'Frameworks/6.24'
     'kdevelop/kdevelop-pg-qt': '@latest-kf6'
     'sdk/libkomparediff2': '@same'
     # TODO: Okteta Qt6 port not yet complete, ETA 10/2024 or later. Once available, adapt code & reenable again.
@@ -19,7 +19,7 @@ Dependencies:
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
-    'frameworks/krunner': '@latest-kf6'
+    'frameworks/krunner': 'Frameworks/6.24'
     'plasma/libksysguard': '@latest-kf6'
     'plasma/libplasma': '@latest-kf6'
 
