@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-13 00:45+0000\n"
+"POT-Creation-Date: 2026-08-28 00:44+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -89,7 +89,7 @@ msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Egyedi formátumú szöveg"
 
-#: debugsession.cpp:165
+#: debugsession.cpp:166
 #, fuzzy, kde-format
 #| msgid ""
 #| "No environment group specified, looks like a broken configuration, please "
@@ -102,12 +102,12 @@ msgstr ""
 "ellenőrizze a futási beállítást: „%1”. Az alapértelmezett környezetcsoport "
 "használata."
 
-#: debugsession.cpp:256
+#: debugsession.cpp:257
 #, kde-format
 msgid "<unknown version>"
 msgstr ""
 
-#: debugsession.cpp:275
+#: debugsession.cpp:276
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""
