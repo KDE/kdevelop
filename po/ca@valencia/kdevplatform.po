@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-24 02:38+0000\n"
-"PO-Revision-Date: 2026-02-11 09:11+0100\n"
+"PO-Revision-Date: 2026-09-01 19:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3555,12 +3555,12 @@ msgstr "Sistema amfitrió"
 #: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr "Permet seleccionar un temps d'execució"
+msgstr "Permet seleccionar un entorn d'execució"
 
 #: shell/runtimecontroller.cpp:92
 #, kde-format
 msgid "Runtime: %1"
-msgstr "Temps d'execució: %1"
+msgstr "Entorn d'execució: %1"
 
 #: shell/savedialog.cpp:47
 #, kde-format
@@ -4516,7 +4516,7 @@ msgstr "Analitzadors"
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
-msgstr "Temps d'execució"
+msgstr "Entorns d'execució"
 
 #: shell/settings/pluginpreferences.cpp:45
 #, kde-format
@@ -4641,12 +4641,12 @@ msgstr "Guarda tots els documents abans de construir"
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
 msgid "Runtimes"
-msgstr "Temps d'execució"
+msgstr "Entorns d'execució"
 
 #: shell/settings/runtimespreferences.cpp:33
 #, kde-format
 msgid "Configure Runtimes"
-msgstr "Configura els temps d'execució"
+msgstr "Configura els entorns d'execució"
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
