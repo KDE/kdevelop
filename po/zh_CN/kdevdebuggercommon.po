@@ -56,7 +56,7 @@ msgstr "树状显示"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr "自有进程"
+msgstr "我的进程"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
