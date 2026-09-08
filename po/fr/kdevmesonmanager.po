@@ -353,7 +353,7 @@ msgstr "<NEW>"
 #: settings/mesonlisteditor.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "Boîte de dialogue"
+msgstr "Boite de dialogue"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_new)
 #: settings/mesonlisteditor.ui:38
