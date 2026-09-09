@@ -29,7 +29,7 @@ msgstr "Recompiler l'environnement"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
-msgstr "Recompile toutes les dépendances pour un environnement rafraîchi."
+msgstr "Recompile toutes les dépendances pour un environnement rafraichi."
 
 #: flatpakplugin.cpp:55
 #, kde-format

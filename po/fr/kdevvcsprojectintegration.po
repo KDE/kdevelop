@@ -29,7 +29,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Rafraichir"
 
 #: vcschangesviewplugin.cpp:54
 #, kde-format
@@ -60,7 +60,7 @@ msgstr "Recharger la vue"
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"
 msgstr ""
-"Rafraîchit la vue pour tous les projets, dans le cas d'une modification "
+"Rafraichit la vue pour tous les projets, dans le cas d'une modification "
 "quelconque"
 
 #~ msgctxt "NAME OF TRANSLATORS"

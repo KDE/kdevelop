@@ -33,7 +33,7 @@ msgstr "Filtrer par nom de fichier / nom de projet"
 #: committoolview.cpp:218
 #, kde-format
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Rafraichir"
 
 #: committoolview.cpp:219
 #, kde-format
