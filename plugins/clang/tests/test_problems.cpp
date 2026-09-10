@@ -183,6 +183,10 @@ void TestProblems::testFixits()
     auto* a1 = qobject_cast<ClangFixitAssistant*>(p1->solutionAssistant().data());
     QVERIFY(a1);
 
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(21, 0, 0))
+        QEXPECT_FAIL("delayed-spell-check",
+                     "Clang 21 removed delayed typo corrections : https://github.com/llvm/llvm-project/pull/143423",
+                     Abort);
     QCOMPARE(p1->allFixits(), fixits);
 }
 
@@ -224,12 +228,26 @@ void TestProblems::testFixits_data()
     // int main() { C c; c.someVariablf = 1; }
     //                     ^~~~~~~~~~~~
     //                     someVariable
-    QTest::newRow("spell-check")
+    QTest::newRow("delayed-spell-check")
         << "class C{ int someVariable; };\n"
            "int main() { C c; c.someVariablf = 1; }\n"
         << 1
         << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 20, 1, 32)),
             QString(), clangVersion9OrHigher ? QStringLiteral("someVariablf") : QString()} };
+
+    // expected:
+    // error: use of undeclared identifier 'someVariablf'; did you mean 'someVariable'?
+    // test.cpp:3:1: error: use of undeclared identifier 'someVariablf'; did you mean 'someVariable'?
+    //      3 | someVariablf = 6;
+    //        | ^~~~~~~~~~~~
+    //        | someVariable
+
+    QTest::newRow("spell-check")
+        << "int main(){\n"
+           "int someVariable =5;\n"
+           "someVariablf = 6;}" << 1
+        << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), KTextEditor::Range(2, 0, 2, 12)),
+            QString(), QStringLiteral("someVariablf")} };
 }
 
 struct Replacement
