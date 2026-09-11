@@ -311,7 +311,7 @@ msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 msgstr ""
-"Chaîne définition-utilisation, prise en charge du C++, navigation dans le "
+"Chaine définition-utilisation, prise en charge du C++, navigation dans le "
 "code, complètement du code, assistance pour le codage, re-factorisation"
 
 #: main.cpp:398
@@ -941,7 +941,7 @@ msgstr "Sessions KDevelop"
 
 #: plasma/applet/package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
-msgstr "Chaîne arbitraire indiquant quelque chose"
+msgstr "Chaine arbitraire indiquant quelque chose"
 
 #: plasma/runner/kdevelopsessions.cpp:27
 #, kde-format

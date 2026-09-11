@@ -26,4 +26,4 @@ msgstr "Sessions KDevelop"
 
 #: package/contents/ui/main.qml:79
 msgid "Arbitrary String Which Says Something"
-msgstr "Chaîne Arbitraire Qui Indique Quelque Chose"
+msgstr "Chaine Arbitraire Qui Indique Quelque Chose"

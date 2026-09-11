@@ -397,7 +397,7 @@ msgstr "Avancé"
 #, kde-format
 msgctxt "@title:column"
 msgid "Strings"
-msgstr "Chaînes"
+msgstr "Chaines"
 
 #: settings/cmakepreferences.cpp:370
 #, kde-format

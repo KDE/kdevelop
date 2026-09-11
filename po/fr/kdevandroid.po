@@ -31,7 +31,7 @@ msgstr "Fichier de chaine d'outils « extra-cmake-modules » de KDE pour Andro
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Android toolchain:"
-msgstr "Chaîne d'outils Android :"
+msgstr "Chaine d'outils Android :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: androidpreferences.ui:46
@@ -59,7 +59,7 @@ msgstr "Architecture :"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Toolchain:"
-msgstr "Chaîne d'outils :"
+msgstr "Chaine d'outils :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: androidpreferences.ui:94
