@@ -1,0 +1,109 @@
+# Copyright (C) 2026 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# SPDX-FileCopyrightText: 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2026-07-06 00:43+0000\n"
+"PO-Revision-Date: 2026-09-13 21:31+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 26.08.0\n"
+
+#: cmakebuilder.cpp:106
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "לא ניתן למצוא את הבונה של make. נא לבדוק שההתקנה שלך תקינה"
+
+#: cmakebuilder.cpp:133 cmakebuilder.cpp:159 cmakebuilder.cpp:186
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "לא ניתן למצוא בונה עבור %1"
+
+#: cmakebuilder.cpp:199
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "לא מוגדרת תיקיית בנייה, לא ניתן להתקין"
+
+#: cmakebuilder.cpp:209
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "לא מוגדרת תיקיית בנייה, לא ניתן להגדיר"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "הגדרת תצורת CMake מקיפה"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "קובץ הפעלה כברירת מחדל ל־CMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "מחולל ברירת מחדל:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "שגיאה פנימית: לא צוין מיזם להגדרה."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "יצירת תיקיית הבנייה %1 נכשלה."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr "לא מוגדרת תיקיית בנייה, לא ניתן לאפס את תיקיית הבנייה"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "תיקיית בנייה שגויה, לא ניתן לאפס את תיקיית הבנייה"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** הניפוי הצליח **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** הניפוי נכשל: %1 **"

@@ -299,7 +299,7 @@ double bar ()
 ><title
 >Configurar una aplicació com un segon projecte</title>
 <para
->La propera cosa que voldreu fer és crear altres projectes en la mateixa sessió. En l'exemple anterior, voleu afegir el controlador de dispositiu com el segon projecte, el qual es pot fer emprant exactament els mateixos passos.</para>
+>El següent que voldreu fer és crear altres projectes en la mateixa sessió. En l'exemple anterior, voleu afegir el controlador de dispositiu com el segon projecte, el qual es pot fer emprant exactament els mateixos passos.</para>
 <para
 >Si teniu múltiples aplicacions o biblioteques, simplement repetiu els passos per a afegir més i més projectes a la vostra sessió.</para>
 </sect1>
@@ -2764,7 +2764,7 @@ void foo()
 >F12</keycap
 >, l'ordre «finish» del <application
 >gdb</application
->). A cada pas, el &kdevelop; actualitza les variables que es mostren a l'esquerra als seus valors actuals. També podeu passa el ratolí sobre un símbol en el codi, &pex;, una variable, el &kdevelop; mostrarà el valor actual d'aquest símbol i oferirà aturar el programa durant l'execució la pròxima vegada que es canviï el valor d'aquesta variable. Si coneixeu el <application
+>). A cada pas, el &kdevelop; actualitza les variables que es mostren a l'esquerra als seus valors actuals. També podeu passar el ratolí sobre un símbol en el codi, &pex;, una variable, el &kdevelop; mostrarà el valor actual d'aquest símbol i oferirà aturar el programa durant l'execució la pròxima vegada que es canviï el valor d'aquesta variable. Si coneixeu el <application
 >gdb</application
 >, també podeu fer clic al botó de l'eina <guilabel
 >GDB</guilabel
