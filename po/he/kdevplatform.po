@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-24 02:38+0000\n"
-"PO-Revision-Date: 2026-08-26 18:14+0300\n"
+"PO-Revision-Date: 2026-09-15 11:36+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -93,10 +93,10 @@ msgstr "נקודת העצירה פעילה"
 #, kde-format
 msgid "Hit %1 time"
 msgid_plural "Hit %1 times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "פגיעה חד־פעמית"
+msgstr[1] "פגיעה דו־פעמית"
+msgstr[2] "פגיעה %1 פעמים"
+msgstr[3] "פגיעה %1 פעמים"
 
 #: debugger/breakpoint/breakpointdetails.cpp:129
 #, kde-format
@@ -2374,13 +2374,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
-msgstr ""
+msgstr "שינויים שלא נשמרו"
 
 #: shell/launchconfigurationdialog.cpp:325
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
-msgstr ""
+msgstr "לא נדרשות הגדרות עבור ‚%1’"
 
 #: shell/launchconfigurationdialog.cpp:369
 #, kde-format
@@ -2392,7 +2392,7 @@ msgstr ""
 #: shell/launchconfigurationdialog.cpp:437
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
-msgstr ""
+msgstr "עריכה של %2: <b>%1</b>"
 
 #: shell/launchconfigurationdialog.cpp:710
 #, kde-format
@@ -2599,19 +2599,19 @@ msgstr "מעבר לתצוגה המופצלת הבאה."
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
-msgstr ""
+msgstr "התצוגה המפוצלת ה&קודמת"
 
 #: shell/mainwindow_p.cpp:294
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
-msgstr ""
+msgstr "התצוגה המפוצלת הקודמת"
 
 #: shell/mainwindow_p.cpp:295
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
-msgstr ""
+msgstr "מעבר לתצוגה המפוצלת הקודמת"
 
 #: shell/mainwindow_p.cpp:303
 #, kde-format
@@ -2700,7 +2700,7 @@ msgstr "הוספת תצוגת כלי"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
-msgstr ""
+msgstr "נעילת הלוח מפני הסתרה"
 
 #: shell/openprojectdialog.cpp:132
 #, kde-format
