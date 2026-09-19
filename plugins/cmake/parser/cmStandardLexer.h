@@ -3,9 +3,8 @@
 #ifndef cmStandardLexer_h
 #define cmStandardLexer_h
 
-#include <QtGlobal>
-
 /* Disable some warnings.  */
+#include <stdint.h>
 #if defined(_MSC_VER)
 #pragma warning(disable : 4018)
 #pragma warning(disable : 4127)
@@ -50,11 +49,12 @@
 #define YY_NO_UNPUT 1
 #define ECHO
 
-typedef qint8 flex_int8_t;
-typedef quint8 flex_uint8_t;
-typedef qint16 flex_int16_t;
-typedef quint16 flex_uint16_t;
-typedef qint32 flex_int32_t;
-typedef quint32 flex_uint32_t;
+// Declare the flex_* types same way as Qt defines their q(u)int* types
+typedef signed char flex_int8_t;
+typedef unsigned char flex_uint8_t;
+typedef short flex_int16_t;
+typedef unsigned short flex_uint16_t;
+typedef int flex_int32_t;
+typedef unsigned int flex_uint32_t;
 
 #endif
