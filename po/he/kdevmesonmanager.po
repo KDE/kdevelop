@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-09-13 21:40+0300\n"
+"PO-Revision-Date: 2026-09-17 10:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -165,7 +165,7 @@ msgstr ""
 #: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
 #, kde-format
 msgid "The current build directory is invalid"
-msgstr ""
+msgstr "תיקיית הבנייה הנוכחית שגויה"
 
 #: mintro/mesontests.cpp:80
 #, kde-format
@@ -262,17 +262,17 @@ msgstr "תיקיית בנייה מוגדרת"
 #: settings/mesonconfigpage.cpp:191
 #, kde-format
 msgid "This meson build directory is not fully configured"
-msgstr ""
+msgstr "תיקיית הבנייה של meson לא מוגדרת במלואה"
 
 #: settings/mesonconfigpage.cpp:197
 #, kde-format
 msgid "This directory does not seem to be a meson build directory"
-msgstr ""
+msgstr "התיקייה הזאת לא נראית כמו תיקיית בנייה של meson"
 
 #: settings/mesonconfigpage.cpp:200
 #, kde-format
 msgid "Invalid build directory configuration (empty build directory string)"
-msgstr ""
+msgstr "הגדרות תיקיית בנייה שגויות (מחרוזת תיקיית בנייה ריקה)"
 
 #: settings/mesonconfigpage.cpp:203
 #, kde-format
@@ -288,8 +288,10 @@ msgstr "אין שינויים"
 #, kde-format
 msgid "%1 option changed"
 msgid_plural "%1 options changed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "אפשרות השתנתה"
+msgstr[1] "שתי אפשרויות השתנו"
+msgstr[2] "%1 אפשרויות השתנו"
+msgstr[3] "%1 אפשרויות השתנו"
 
 #: settings/mesonconfigpage.cpp:332
 #, kde-format
