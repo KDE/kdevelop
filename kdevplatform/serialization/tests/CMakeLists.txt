@@ -27,3 +27,4 @@ ecm_add_test(test_itemrepositoryregistry_deferred.cpp
 )
 ecm_add_test(test_indexedstring.cpp LINK_LIBRARIES itemrepositorytestbase)
 ecm_add_test(test_indexedstringview.cpp LINK_LIBRARIES itemrepositorytestbase)
+ecm_add_test(test_referencecounting.cpp LINK_LIBRARIES Qt::Test KDev::Serialization)

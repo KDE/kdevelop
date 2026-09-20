@@ -31,11 +31,7 @@ public:
     void enable(Pointer start, unsigned size);
     void disable(Pointer start, unsigned size);
 
-    static DUChainReferenceCounting& instance() noexcept
-    {
-        static thread_local DUChainReferenceCounting duchainReferenceCounting;
-        return duchainReferenceCounting;
-    }
+    static DUChainReferenceCounting& instance() noexcept;
 
 private:
     // This defaulted default constructor is implicitly noexcept. Marking it as noexcept explicitly, however,

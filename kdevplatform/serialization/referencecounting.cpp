@@ -13,6 +13,12 @@
 #include <algorithm>
 
 namespace KDevelop {
+DUChainReferenceCounting& DUChainReferenceCounting::instance() noexcept
+{
+    static thread_local DUChainReferenceCounting duchainReferenceCounting;
+    return duchainReferenceCounting;
+}
+
 void DUChainReferenceCounting::Interval::assign(Pointer newStart, unsigned newSize) noexcept
 {
     start = newStart;
