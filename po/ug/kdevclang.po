@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-31 00:42+0000\n"
-"PO-Revision-Date: 2026-05-31 18:13-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
@@ -273,7 +273,7 @@ msgctxt ""
 "%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
 "arguments"
 msgid "%1: %2"
-msgstr "%1: %2"
+msgstr ""
 
 #: duchain/macronavigationcontext.cpp:65
 #, kde-format

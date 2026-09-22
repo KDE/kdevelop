@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-31 18:12-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
@@ -37,14 +37,14 @@ msgstr "Android قورال زەنجىرى:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Android NDK:"
-msgstr "Android NDK:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: androidpreferences.ui:60
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Android SDK:"
-msgstr "Android SDK:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: androidpreferences.ui:74
@@ -65,4 +65,4 @@ msgstr "قورال زەنجىرى:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "ABI:"
-msgstr "ABI:"
+msgstr ""

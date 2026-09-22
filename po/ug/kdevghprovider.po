@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
@@ -79,9 +79,9 @@ msgid ""
 "Could not create token: \"%1\"\n"
 "%2"
 msgstr ""
-"كىملىك دەلىللەش مەغلۇپ بولدى. قايتا سىناڭ.\n"
+"دەلىللىيەلمىدى. Please try again.\n"
 "\n"
-"پەرمان تاختا قۇرالمىدى: «%1»\n"
+"Could not create token: \"%1\"\n"
 "%2"
 
 #: ghdialog.cpp:129
@@ -125,7 +125,7 @@ msgstr ""
 #: ghproviderplugin.cpp:35
 #, kde-format
 msgid "GitHub"
-msgstr "GitHub"
+msgstr ""
 
 #: ghproviderwidget.cpp:58
 #, kde-format

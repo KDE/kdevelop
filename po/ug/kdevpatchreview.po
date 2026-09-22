@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 00:43+0000\n"
-"PO-Revision-Date: 2026-05-31 18:19-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +42,7 @@ msgstr "ئاساسىي مۇندەرىجە:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch/base"
-msgstr "/path/to/patch/base"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
@@ -56,7 +56,7 @@ msgstr "ھۆججەتتىن"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch"
-msgstr "/path/to/patch"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70

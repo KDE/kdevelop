@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-28 00:44+0000\n"
-"PO-Revision-Date: 2026-05-31 18:17-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -439,37 +439,37 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
-msgstr "&0"
+msgstr ""
 
 #: memviewdlg.cpp:315
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
-msgstr "&1"
+msgstr ""
 
 #: memviewdlg.cpp:320
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
-msgstr "&2"
+msgstr ""
 
 #: memviewdlg.cpp:325
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
-msgstr "&4"
+msgstr ""
 
 #: memviewdlg.cpp:330
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
-msgstr "&8"
+msgstr ""
 
 #: memviewdlg.cpp:335
 #, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
-msgstr "1&6"
+msgstr ""
 
 #: memviewdlg.cpp:348
 #, kde-format
