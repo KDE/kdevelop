@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-09-22 00:43+0000\n"
 "PO-Revision-Date: 2008-12-12 00:37+0900\n"
 "Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: problemreporterplugin.cpp:97
+#: problemreporterplugin.cpp:103
 #, kde-format
 msgid "Parser"
 msgstr "パーサ"
 
-#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemreporterplugin.cpp:104 problemreporterplugin.cpp:250
 #: problemsview.cpp:318
 #, fuzzy, kde-format
 #| msgid "Problems"
@@ -29,14 +29,14 @@ msgctxt "@title:window"
 msgid "Problems"
 msgstr "問題"
 
-#: problemreporterplugin.cpp:285
+#: problemreporterplugin.cpp:291
 #, fuzzy, kde-format
 #| msgid "Problem"
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "問題"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:293
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"

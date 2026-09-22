@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-09-22 00:43+0000\n"
 "PO-Revision-Date: 2022-09-23 11:14+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -32,25 +32,25 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: problemreporterplugin.cpp:97
+#: problemreporterplugin.cpp:103
 #, kde-format
 msgid "Parser"
 msgstr "Analizator składni"
 
-#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemreporterplugin.cpp:104 problemreporterplugin.cpp:250
 #: problemsview.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "Problemy"
 
-#: problemreporterplugin.cpp:285
+#: problemreporterplugin.cpp:291
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "Rozwiąż problem"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:293
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"

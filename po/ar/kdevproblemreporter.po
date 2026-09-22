@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-09-22 00:43+0000\n"
 "PO-Revision-Date: 2025-10-05 15:51+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -18,25 +18,25 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: problemreporterplugin.cpp:97
+#: problemreporterplugin.cpp:103
 #, kde-format
 msgid "Parser"
 msgstr "محلل"
 
-#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemreporterplugin.cpp:104 problemreporterplugin.cpp:250
 #: problemsview.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr "المشكلات"
 
-#: problemreporterplugin.cpp:285
+#: problemreporterplugin.cpp:291
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "حلّ المشكلة"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:293
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"

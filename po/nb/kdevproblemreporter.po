@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-09-22 00:43+0000\n"
 "PO-Revision-Date: 2011-01-28 18:01+0100\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -19,25 +19,25 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.1\n"
 
-#: problemreporterplugin.cpp:97
+#: problemreporterplugin.cpp:103
 #, kde-format
 msgid "Parser"
 msgstr "Tolker"
 
-#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemreporterplugin.cpp:104 problemreporterplugin.cpp:250
 #: problemsview.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
 msgstr ""
 
-#: problemreporterplugin.cpp:285
+#: problemreporterplugin.cpp:291
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr ""
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:293
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"

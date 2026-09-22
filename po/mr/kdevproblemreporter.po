@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-09-22 00:43+0000\n"
 "PO-Revision-Date: 2013-03-13 16:52+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: problemreporterplugin.cpp:97
+#: problemreporterplugin.cpp:103
 #, kde-format
 msgid "Parser"
 msgstr ""
 
-#: problemreporterplugin.cpp:98 problemreporterplugin.cpp:244
+#: problemreporterplugin.cpp:104 problemreporterplugin.cpp:250
 #: problemsview.cpp:318
 #, fuzzy, kde-format
 #| msgctxt "@title:column problem description"
@@ -31,7 +31,7 @@ msgctxt "@title:window"
 msgid "Problems"
 msgstr "समस्या"
 
-#: problemreporterplugin.cpp:285
+#: problemreporterplugin.cpp:291
 #, fuzzy, kde-format
 #| msgctxt "@title:column problem description"
 #| msgid "Problem"
@@ -39,7 +39,7 @@ msgctxt "@action:inmenu"
 msgid "Solve Problem"
 msgstr "समस्या"
 
-#: problemreporterplugin.cpp:287
+#: problemreporterplugin.cpp:293
 #, fuzzy, kde-format
 #| msgid "Scope"
 msgctxt "@action:inmenu"
