@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-29 00:44+0000\n"
-"PO-Revision-Date: 2026-02-13 16:37+0200\n"
+"PO-Revision-Date: 2026-09-22 21:47+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -4917,11 +4917,10 @@ msgstr "Раскрашивать виджеты на основе принадл
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Project %1"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "Проект %1"
+msgstr "Дерево проекта"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -4930,13 +4929,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Collapse all child items whenever an item in the project tree is collapsed."
 msgstr ""
+"Сворачивать все вложенные элементы при сворачивании элемента дерева проекта"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:176
 #, kde-format
 msgctxt "@option:check"
 msgid "Collapse items recursively"
-msgstr ""
+msgstr "Сворачивать элементы рекурсивно"
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format
