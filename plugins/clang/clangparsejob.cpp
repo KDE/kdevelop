@@ -302,7 +302,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
         clang()->index()->unpinTranslationUnitForUrl(document());
         if (!(minimumFeatures() & Rescheduled)) {
             auto features = static_cast<TopDUContext::Features>(minimumFeatures() | Rescheduled);
-            ICore::self()->languageController()->backgroundParser()->addDocument(document(), features, priority());
+            ICore::self()->languageController()->backgroundParser()->addDocument(document(), features, parsePriority());
         }
         return;
     }
