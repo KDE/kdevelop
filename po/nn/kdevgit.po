@@ -1,5 +1,6 @@
 # Translation of kdevgit to Norwegian Nynorsk
 #
+# Karl Ove Hufthammer <karl@huftis.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
@@ -16,6 +17,7 @@ msgstr ""
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: committoolview.cpp:200 committoolview.cpp:201
 #, kde-format
