@@ -4064,7 +4064,6 @@ msgctxt "@info:tooltip"
 msgid "Batch edit mode"
 msgstr "Режим пакетного изменения"
 
-# [reported at bugs.kde.org] BUGME: add plural forms
 #: shell/settings/languagepreferences.cpp:34
 #, kde-format
 msgctxt "@item:valuesuffix"
