@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the kdevelop package.
 #
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024-2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-05-03 15:30+0900\n"
+"PO-Revision-Date: 2026-10-01 04:05+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 
 #: flatpakplugin.cpp:49
 #, kde-format
@@ -60,11 +60,10 @@ msgid "Flatpak Bundle (*.flatpak)"
 msgstr "Flatpak Bundle (*.flatpak)"
 
 #: flatpakplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export Bundle %1"
-msgstr "Flatpak Bundle (*.flatpak)"
+msgstr "Flatpak 匯出 Bundle %1"
 
 #: flatpakplugin.cpp:237
 #, kde-format
@@ -91,8 +90,7 @@ msgid "Device hostname:"
 msgstr "裝置主機名稱："
 
 #: flatpakruntime.cpp:61
-#, fuzzy, kde-format
-#| msgid "Flatpak"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatpak"
 msgstr "Flatpak"
@@ -101,56 +99,49 @@ msgstr "Flatpak"
 #, kde-format
 msgctxt "%1 - application ID or name"
 msgid "Flatpak Create %1"
-msgstr ""
+msgstr "Flatpak 建立 %1"
 
 #: flatpakruntime.cpp:227
 #, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Finalize %1"
-msgstr ""
+msgstr "Flatpak 收尾 %1"
 
 #: flatpakruntime.cpp:233
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export %1"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Export %1"
-msgstr "匯出 %1"
+msgstr "Flatpak 匯出 %1"
 
 #: flatpakruntime.cpp:236
-#, fuzzy, kde-format
-#| msgid "Flatpak Bundle (*.flatpak)"
+#, kde-format
 msgctxt "%1 - application ID"
 msgid "Flatpak Bundle %1"
-msgstr "Flatpak Bundle (*.flatpak)"
+msgstr "Flatpak Bundle %1"
 
 #: flatpakruntime.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak Environment %1 for %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Run %1 on %2"
-msgstr "編譯適用於 %2 的 Flatpak 環境 %1"
+msgstr "Flatpak 在 %2 執行 %1"
 
 #: flatpakruntime.cpp:258
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer .flatpak to %1"
-msgstr ""
+msgstr "將 .flatpak 傳輸到 %1"
 
 #: flatpakruntime.cpp:260
 #, kde-format
 msgctxt "%1 - device host name"
 msgid "Transfer replicate.sh to %1"
-msgstr ""
+msgstr "將 replicate.sh 傳輸到 %1"
 
 #: flatpakruntime.cpp:264
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Build Flatpak Environment %1 for %2"
+#, kde-format
 msgctxt "%1 - application ID, %2 - device host name"
 msgid "Flatpak Install %1 to %2"
-msgstr "編譯適用於 %2 的 Flatpak 環境 %1"
+msgstr "Flatpak 安裝 %1 到 %2"
 
 #~ msgid "Bundling"
 #~ msgstr "正在包裝成 Bundle"

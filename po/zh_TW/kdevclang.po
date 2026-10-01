@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-31 00:42+0000\n"
-"PO-Revision-Date: 2024-03-08 04:07+0900\n"
+"PO-Revision-Date: 2026-10-01 04:09+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: Traditional Chinese\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
@@ -131,12 +131,12 @@ msgstr "巨集"
 #: codecompletion/context.cpp:1464
 #, kde-format
 msgid "Abstract Override"
-msgstr ""
+msgstr "抽象覆寫"
 
 #: codecompletion/context.cpp:1465
 #, kde-format
 msgid "Virtual Override"
-msgstr ""
+msgstr "虛擬覆寫"
 
 #: codecompletion/context.cpp:1480
 #, kde-format

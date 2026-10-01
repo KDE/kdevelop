@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-29 00:44+0000\n"
-"PO-Revision-Date: 2026-07-22 01:03+0900\n"
+"PO-Revision-Date: 2026-10-01 04:04+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -479,7 +479,7 @@ msgstr "變更時停止(&S)"
 #, kde-format
 msgctxt "%1 - the name of a GDB variable, e.g. \"$1\""
 msgid "%1 (last function return value)"
-msgstr ""
+msgstr "%1（上一個函式回傳值）"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:42
@@ -4812,7 +4812,7 @@ msgstr "利用已設定的原始碼格式化工具提供的格式化功能。"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "使用 <i>%1</i> (<b>%2</b>) 來重新格式化所選範圍或檔案"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4821,12 +4821,14 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"使用 <i>%1</i> 工具將所選文字（沒有選取文字時則套用於整個檔案）重新格式化為 "
+"<b>%2</b> 風格。"
 
 #: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr "使用 <i>%1</i> (<b>%2</b>) 來重新編排目前行數"
+msgstr "使用 <i>%1</i> (<b>%2</b>) 來重新格式化目前行數"
 
 #: shell/sourceformattercontroller.cpp:622
 #, kde-format
@@ -4840,7 +4842,7 @@ msgstr "使用 <i>%1</i> 工具利用 <b>%2</b> 樣式來重新編排行數。"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
-msgstr ""
+msgstr "使用已設定的原始碼格式化工具重新格式化所選範圍或檔案"
 
 #: shell/sourceformattercontroller.cpp:628
 #, kde-format
@@ -4849,6 +4851,8 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"使用已設定的原始碼格式化工具將所選文字（沒有選取文字時則套用於整個檔案）重新"
+"格式化。"
 
 #: shell/sourceformattercontroller.cpp:630
 #, kde-format
@@ -5258,7 +5262,7 @@ msgstr "專注模式"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
-msgstr ""
+msgstr "移除大部分元件，讓您能專注在最重要的部分"
 
 #: sublime/mainwindow_p.cpp:60
 #, kde-format
