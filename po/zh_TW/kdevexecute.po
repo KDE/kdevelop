@@ -4,29 +4,27 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2012, 2013.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-08-09 04:01+0900\n"
+"PO-Revision-Date: 2026-10-01 04:06+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: executeplugin.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Ar&guments:"
+#, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr "參數(&G)："
+msgstr "參數"
 
 #: executeplugin.cpp:82
 #, kde-format
@@ -34,19 +32,15 @@ msgid "Couldn't resolve the dependency: %1"
 msgstr "無法解決此相依性問題：%1"
 
 #: executeplugin.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Executable"
+#, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr "執行檔"
+msgstr "執行檔路徑"
 
 #: executeplugin.cpp:194
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Use external terminal:"
+#, kde-format
 msgid "external terminal command"
-msgstr "使用外部終端機："
+msgstr "外部終端機指令"
 
 #: nativeappconfig.cpp:125
 #, kde-format
@@ -71,7 +65,7 @@ msgstr "開啟另一個實體"
 msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
-msgstr ""
+msgstr "<p>注意：<code>gnome-terminal</code> 由於其功能限制而僅部分支援。</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
@@ -219,6 +213,8 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"定義執行外部終端機用的命令。<br>\n"
+"執行檔路徑和它的參數會加到這個命令後面。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
