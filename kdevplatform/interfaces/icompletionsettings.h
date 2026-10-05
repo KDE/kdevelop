@@ -63,7 +63,7 @@ public:
     virtual PrecompiledPreambleStorage precompiledPreambleStorage() const = 0;
 
 Q_SIGNALS:
-    void settingsChanged(ICompletionSettings*);
+    void settingsChanged();
 };
 
 }

@@ -21,8 +21,6 @@ public:
 
     bool automaticCompletionEnabled() const override;
 
-    void emitChanged() { emit settingsChanged(this); }
-
     int localColorizationLevel() const override;
 
     int globalColorizationLevel() const override;
@@ -48,7 +46,7 @@ public:
     static CompletionSettings& self();
 
 private:
-    CompletionSettings() = default;
+    CompletionSettings();
 };
 }
 #endif

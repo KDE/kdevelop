@@ -88,6 +88,10 @@ auto CompletionSettings::precompiledPreambleStorage() const -> PrecompiledPreamb
     return LanguageConfig::precompiledPreambleStorage();
 }
 
+CompletionSettings::CompletionSettings()
+{
+    connect(LanguageConfig::self(), &LanguageConfig::configChanged, this, &ICompletionSettings::settingsChanged);
+}
 }
 
 #include "moc_completionsettings.cpp"

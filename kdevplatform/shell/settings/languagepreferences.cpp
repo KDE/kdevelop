@@ -52,13 +52,6 @@ LanguagePreferences::LanguagePreferences(QWidget* parent)
     preferencesDialog->groupBox_4->hide();
 }
 
-void LanguagePreferences::notifySettingsChanged()
-{
-    auto& settings(static_cast<CompletionSettings&>(*ICore::self()->languageController()->completionSettings()));
-
-    settings.emitChanged();
-}
-
 LanguagePreferences::~LanguagePreferences( )
 {
     delete preferencesDialog;
@@ -77,8 +70,6 @@ void LanguagePreferences::apply()
             }
         }
     }
-
-    notifySettingsChanged();
 }
 
 QString LanguagePreferences::name() const
