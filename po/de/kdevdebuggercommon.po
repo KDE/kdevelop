@@ -1,20 +1,21 @@
 # SPDX-FileCopyrightText: 2008-2009, 2012-2018 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2009-2014, 2016, 2018, 2020, 2022 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2010, 2012 Gerhard Stengel <gstengel@gmx.net>
+# SPDX-FileCopyrightText: 2026 Ewald Müller <EMuede@netscape.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-04 00:43+0000\n"
-"PO-Revision-Date: 2022-07-23 22:31+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2026-10-02 09:59+0200\n"
+"Last-Translator: Ewald Müller <EMuede@netscape.net>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #: dialogs/processselection.cpp:148
 #, kde-format
@@ -34,110 +35,100 @@ msgstr "An einen Prozess hängen"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search"
-msgstr ""
+msgstr "Suchen"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonList)
 #: dialogs/processselection.ui:35
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Display"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as List"
-msgstr "Anzeigen"
+msgstr "Als Liste anzeigen"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonTree)
 #: dialogs/processselection.ui:57
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Display"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display as Tree"
-msgstr "Anzeigen"
+msgstr "Als Baum anzeigen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:80
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Own Processes"
-msgstr ""
+msgstr "Eigene Prozesse"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "User Processes"
-msgstr ""
+msgstr "Benutzerprozesse"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:96
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "System Processes"
-msgstr ""
+msgstr "Systemprozesse"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, processesCombo)
 #: dialogs/processselection.ui:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Processes"
-msgstr ""
+msgstr "Alle Prozesse"
 
 #: dialogs/selectcoredialog.cpp:20
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Core File"
-msgstr "Core-Dateien auswählen"
+msgstr "Kerndatei auswählen"
 
 #: dialogs/selectcoredialog.cpp:49
 #, kde-format
 msgid "Invalid executable file name"
-msgstr ""
+msgstr "Ungültiger Name der ausführbaren Datei"
 
 #: dialogs/selectcoredialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgid "Executable file does not exist"
-msgstr "Das Programm existiert nicht "
+msgstr "Die ausführbare Datei existiert nicht"
 
 #: dialogs/selectcoredialog.cpp:59
 #, kde-format
 msgid "Executable is not a file"
-msgstr ""
+msgstr "Keine ausführbare Datei"
 
 #: dialogs/selectcoredialog.cpp:63
 #, kde-format
 msgid "Executable file is not readable"
-msgstr ""
+msgstr "Die ausführbare Datei ist nicht lesbar"
 
 #: dialogs/selectcoredialog.cpp:70
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Empty core file name"
-msgstr "Core-Datei untersuchen"
+msgstr "Name der Kerndatei ist leer"
 
 #: dialogs/selectcoredialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Examine core file"
+#, kde-format
 msgid "Invalid core file name"
-msgstr "Core-Datei untersuchen"
+msgstr "Name der Kerndatei ist ungültig"
 
 #: dialogs/selectcoredialog.cpp:80
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgid "Core file does not exist"
-msgstr "Das Programm existiert nicht "
+msgstr "Die Kerndatei existiert nicht"
 
 #: dialogs/selectcoredialog.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@label:chooser"
-#| msgid "Core file:"
+#, kde-format
 msgid "Core is not a file"
-msgstr "Core-Datei:"
+msgstr "Der Kern ist keine Datei"
 
 #: dialogs/selectcoredialog.cpp:88
 #, kde-format
 msgid "Core file is not readable"
-msgstr ""
+msgstr "Die Kerndatei ist nicht lesbar"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/selectcoredialog.ui:19
@@ -151,23 +142,25 @@ msgstr "Programmdatei:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Core file:"
-msgstr "Core-Datei:"
+msgstr "Kerndatei:"
 
 #: mibreakpointcontroller.cpp:810
-#, fuzzy, kde-format
-#| msgid "<br>Old value: %1"
+#, kde-format
 msgid ""
 "\n"
 "Old value: %1"
-msgstr "<br>Alter Wert: %1"
+msgstr ""
+"\n"
+"Alter Wert: %1"
 
 #: mibreakpointcontroller.cpp:813
-#, fuzzy, kde-format
-#| msgid "<br>New value: %1"
+#, kde-format
 msgid ""
 "\n"
 "New value: %1"
-msgstr "<br>Neuer Wert: %1"
+msgstr ""
+"\n"
+"Neuer Wert: %1"
 
 #: midebugger.cpp:319
 #, kde-format
@@ -251,7 +244,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
-msgstr "Core-Dateien mit %1 untersuchen"
+msgstr "Kerndatei mit %1 untersuchen"
 
 #: midebuggerplugin.cpp:123
 #, kde-format
@@ -262,9 +255,9 @@ msgid ""
 "The core file contains an image of the program memory at the time it "
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
-"<b>Core-Datei untersuchen</b><p>Laden einer Core-Datei, welche gewöhnlich "
-"nach dem Absturz einer Anwendung z. B. durch einen Speicherzugriffsfehler "
-"erzeugt wird. Die Core-Datei enthält ein Abbild des Programmspeichers im "
+"<b>Kerndatei untersuchen</b><p>Das lädt eine Kerndatei, die gewöhnlich nach "
+"dem Absturz einer Anwendung (z. B. aufgrund eines Speicherzugriffsfehlers) "
+"erzeugt wird. Die Kerndatei enthält ein Abbild des Programmspeichers im "
 "Augenblick des Absturzes, was eine nachträgliche Analyse ermöglicht.</p>"
 
 #: midebuggerplugin.cpp:135
@@ -290,13 +283,12 @@ msgstr "KDevelop (%1) - %2"
 #: midebuggerplugin.cpp:233
 #, kde-format
 msgid "Choose a core file to examine..."
-msgstr "Wählen Sie die zu untersuchende Core-Datei ..."
+msgstr "Wählen Sie die zu untersuchende Kerndatei …"
 
 #: midebuggerplugin.cpp:254
 #, kde-format
 msgid "Choose a process to attach to..."
-msgstr ""
-"Wählen Sie einen Prozess, an den der Debugger angehängt werden soll ..."
+msgstr "Wählen Sie einen Prozess, an den der Debugger angehängt werden soll …"
 
 #: midebuggerplugin.cpp:268
 #, kde-format
@@ -324,7 +316,7 @@ msgstr "„%1“ ist nicht ausführbar"
 #: midebugjobs.cpp:196
 #, kde-format
 msgid "Debug core file"
-msgstr "Core-Datei untersuchen"
+msgstr "Kerndatei untersuchen"
 
 #: midebugjobs.cpp:212
 #, kde-format
@@ -332,16 +324,13 @@ msgid "Debug process %1"
 msgstr "Prozess %1 debuggen"
 
 #: midebuglauncher.cpp:61
-#, fuzzy, kde-format
-#| msgid ""
-#| "A program is already being debugged. Do you want to abort the currently "
-#| "running debug session and continue?"
+#, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
 "Es wird bereits ein Programm im Debugger ausgeführt. Möchten Sie die gerade "
-"laufende Debug-Sitzung abbrechen und fortfahren?"
+"laufende Debug-Sitzung abbrechen und eine neue starten?"
 
 #: midebugsession.cpp:280
 #, kde-format
@@ -356,18 +345,17 @@ msgstr "Wird mit Prozess %1 verbunden"
 #: midebugsession.cpp:383
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
-msgstr "<b>Debugger kann sich nicht verbinden:</b><br />"
+msgstr "<b>Debugger kann nicht verbunden werden:</b><br />"
 
 #: midebugsession.cpp:396
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Debugger kann nicht gestartet werden:</b><br />"
 
 #: midebugsession.cpp:410
 #, kde-format
 msgid "Examining core file %1"
-msgstr "Core-Datei %1 wird untersucht"
+msgstr "Kerndatei %1 wird untersucht"
 
 #: midebugsession.cpp:512
 #, kde-format
@@ -399,10 +387,9 @@ msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Ungültiger Debugger-Befehl</b><br>%1"
 
 #: midebugsession.cpp:1019
-#, fuzzy, kde-format
-#| msgid "<b>Could not start debugger:</b><br />"
+#, kde-format
 msgid "<b>Failed to load core file:</b><br />"
-msgstr "<b>Debugger kann nicht gestartet werden:</b><br />"
+msgstr "<b>Die Kerndatei kann nicht geladen werden:</b><br />"
 
 #: midebugsession.cpp:1108
 #, kde-format
@@ -415,30 +402,26 @@ msgid "Exited normally"
 msgstr "Normal beendet"
 
 #: midebugsession.cpp:1119
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Beendet durch Signal %1"
 
 #: midebugsession.cpp:1121
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Exited on signal %1 (%2)"
-msgstr "Beendet durch Signal %1"
+msgstr "Beendet durch Signal %1 (%2)"
 
 #: midebugsession.cpp:1157
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Program received signal %1"
-msgstr "Programm hat Signal %1 (%2) empfangen"
+msgstr "Programm hat Signal %1 empfangen"
 
 #: midebugsession.cpp:1159
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
@@ -476,10 +459,9 @@ msgstr ""
 "Original-Text des aktuellen Befehls: „%3“\n"
 
 #: midebugsession.cpp:1316
-#, fuzzy, kde-format
-#| msgid "Debugger error"
+#, kde-format
 msgid "<b>Debugger error:</b><br />"
-msgstr "Debugger-Fehler"
+msgstr "<b>Debugger-Fehler:</b><br />"
 
 #: miframestackmodel.cpp:71
 #, kde-format
@@ -601,19 +583,14 @@ msgid "Can't create a temporary file"
 msgstr "Temporäre Datei kann nicht erzeugt werden"
 
 #: stty.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
-#| "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-#| "do sleep 3600;done\""
+#, kde-format
 msgid ""
 "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
 "accepts these arguments: %2"
 msgstr ""
 "Zugriff auf die TTY-Schnittstelle oder das Pseudoterminal %1 ist nicht "
-"möglich. Überprüfen, ob es sich tatsächlich um ein Terminal handelt und das "
-"es diese Argumente akzeptiert: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
-"do sleep 3600;done\""
+"möglich. Überprüfen Sie, ob es sich tatsächlich um ein Terminal handelt und "
+"dass es diese Argumente akzeptiert: %2"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:48 widgets/debuggerconsoleview.ui:14
