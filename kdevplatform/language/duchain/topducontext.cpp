@@ -57,6 +57,11 @@ ReferencedTopDUContext::ReferencedTopDUContext(const ReferencedTopDUContext& rhs
         DUChain::self()->refCountUp(m_topContext);
 }
 
+ReferencedTopDUContext::ReferencedTopDUContext(ReferencedTopDUContext&& rhs) noexcept
+    : m_topContext(std::exchange(rhs.m_topContext, nullptr))
+{
+}
+
 ReferencedTopDUContext::~ReferencedTopDUContext()
 {
     if (m_topContext && !DUChain::deleted())
@@ -65,16 +70,13 @@ ReferencedTopDUContext::~ReferencedTopDUContext()
 
 ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUContext& rhs)
 {
-    if (m_topContext == rhs.m_topContext)
-        return *this;
+    ReferencedTopDUContext(rhs).swap(*this);
+    return *this;
+}
 
-    if (m_topContext)
-        DUChain::self()->refCountDown(m_topContext);
-
-    m_topContext = rhs.m_topContext;
-
-    if (m_topContext)
-        DUChain::self()->refCountUp(m_topContext);
+ReferencedTopDUContext& ReferencedTopDUContext::operator=(ReferencedTopDUContext&& rhs) noexcept
+{
+    ReferencedTopDUContext(std::move(rhs)).swap(*this);
     return *this;
 }
 

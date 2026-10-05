@@ -52,9 +52,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext
 public:
     ReferencedTopDUContext(TopDUContext* context = nullptr);
     ReferencedTopDUContext(const ReferencedTopDUContext& rhs);
+    ReferencedTopDUContext(ReferencedTopDUContext&& rhs) noexcept;
     ~ReferencedTopDUContext();
 
     ReferencedTopDUContext& operator=(const ReferencedTopDUContext& rhs);
+    ReferencedTopDUContext& operator=(ReferencedTopDUContext&& rhs) noexcept;
 
     inline TopDUContext* data() const
     {
@@ -80,11 +82,22 @@ public:
         return m_topContext;
     }
 
+    inline void swap(ReferencedTopDUContext& rhs) noexcept
+    {
+        using std::swap;
+        swap(m_topContext, rhs.m_topContext);
+    }
+
     size_t hash() const;
 
 private:
     TopDUContext* m_topContext;
 };
+
+inline void swap(ReferencedTopDUContext& lhs, ReferencedTopDUContext& rhs) noexcept
+{
+    lhs.swap(rhs);
+}
 
 /**
  * The top context in a definition-use chain for one source file.
