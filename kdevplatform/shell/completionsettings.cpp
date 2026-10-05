@@ -16,16 +16,6 @@
 namespace KDevelop
 {
 
-static QString completionLevelToString(ICompletionSettings::CompletionLevel l)
-{
-    if (l < 0 || l >= ICompletionSettings::LAST_LEVEL) {
-        return QString();
-    }
-
-    const static QString levels[ICompletionSettings::LAST_LEVEL] = {QStringLiteral("Minimal"), QStringLiteral("MinimalWhenAutomatic"), QStringLiteral("AlwaysFull")};
-    return levels[l];
-}
-
 CompletionSettings& CompletionSettings::self()
 {
     static CompletionSettings settings;
@@ -34,28 +24,28 @@ CompletionSettings& CompletionSettings::self()
 
 QStringList CompletionSettings::todoMarkerWords() const
 {
-    const QString markers = m_languageGroup.readEntry("todoMarkerWords", m_todoMarkerWords);
-    return KShell::splitArgs(markers);
+    // TODO store a QStringList directly in the config. This requires migration, probably using kconf_update.
+    return KShell::splitArgs(LanguageConfig::todoMarkerWords());
 }
 
 int CompletionSettings::minFilesForSimplifiedParsing() const
 {
-    return m_languageGroup.readEntry("minFilesForSimplifiedParsing", m_minFilesForSimplifiedParsing);
+    return LanguageConfig::minFilesForSimplifiedParsing();
 }
 
 bool CompletionSettings::showMultiLineSelectionInformation() const
 {
-    return m_languageGroup.readEntry("showMultiLineSelectionInformation", m_showMultiLineInformation);
+    return LanguageConfig::showMultiLineSelectionInformation();
 }
 
 bool CompletionSettings::highlightProblematicLines() const
 {
-    return m_languageGroup.readEntry("highlightProblematicLines", m_highlightProblematicLines);
+    return LanguageConfig::highlightProblematicLines();
 }
 
 bool CompletionSettings::highlightSemanticProblems() const
 {
-    return m_languageGroup.readEntry("highlightSemanticProblems", m_highlightSemanticProblems);
+    return LanguageConfig::highlightSemanticProblems();
 }
 
 ICompletionSettings::ProblemInlineNotesLevel CompletionSettings::problemInlineNotesLevel() const
@@ -65,55 +55,39 @@ ICompletionSettings::ProblemInlineNotesLevel CompletionSettings::problemInlineNo
 
 bool CompletionSettings::boldDeclarations() const
 {
-    return m_languageGroup.readEntry("boldDeclarations", m_boldDeclarations);
+    return LanguageConfig::boldDeclarations();
 }
 
 int CompletionSettings::globalColorizationLevel() const
 {
-    return m_languageGroup.readEntry("globalColorization", m_globalColorizationLevel);
+    return LanguageConfig::globalColorization();
 }
 
 CompletionSettings::GlobalColorSource CompletionSettings::globalColorSource() const
 {
-    const auto metaEnum = QMetaEnum::fromType<GlobalColorSource>();
-    const auto globalColorSource = m_languageGroup.readEntry("globalColorSource", QByteArray());
-    bool ok = false;
-    auto value = metaEnum.keyToValue(globalColorSource.constData(), &ok);
-    return ok ? static_cast<GlobalColorSource>(value) : m_globalColorSource;
+    return LanguageConfig::globalColorSource();
 }
 
 int CompletionSettings::localColorizationLevel() const
 {
-    return m_languageGroup.readEntry("localColorization", m_localColorizationLevel);
+    return LanguageConfig::localColorization();
 }
 
 bool CompletionSettings::automaticCompletionEnabled() const
 {
-    return m_languageGroup.readEntry("Automatic Invocation", m_automatic);
+    return LanguageConfig::automaticInvocation();
 }
 
 ICompletionSettings::CompletionLevel CompletionSettings::completionLevel() const
 {
-    const QString level = m_languageGroup.readEntry("completionDetail", completionLevelToString(m_level));
-
-    for (int i = 0; i < ICompletionSettings::LAST_LEVEL; i++) {
-        if (completionLevelToString(static_cast<CompletionLevel>(i)) == level) {
-            return static_cast<CompletionLevel>(i);
-        }
-    }
-    return m_level;
+    return LanguageConfig::completionDetail();
 }
 
 auto CompletionSettings::precompiledPreambleStorage() const -> PrecompiledPreambleStorage
 {
-    return static_cast<PrecompiledPreambleStorage>(LanguageConfig::precompiledPreambleStorage());
+    return LanguageConfig::precompiledPreambleStorage();
 }
 
-CompletionSettings::CompletionSettings()
-    : m_todoMarkerWords(QStringLiteral("TODO FIXME"))
-    , m_languageGroup(KSharedConfig::openConfig(), QStringLiteral("Language Support"))
-{
-}
 }
 
 #include "moc_completionsettings.cpp"

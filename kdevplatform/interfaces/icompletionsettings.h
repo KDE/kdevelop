@@ -22,8 +22,7 @@ public:
     enum CompletionLevel {
         Minimal,
         MinimalWhenAutomatic,
-        AlwaysFull,
-        LAST_LEVEL
+        AlwaysFull
     };
 
     enum ProblemInlineNotesLevel {
