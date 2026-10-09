@@ -49,7 +49,6 @@ endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LibAStyle
-  FOUND_VAR LibAStyle_FOUND
   REQUIRED_VARS LibAStyle_LIBRARIES LibAStyle_INCLUDE_DIR
   VERSION_VAR _libastyle_version
 )
