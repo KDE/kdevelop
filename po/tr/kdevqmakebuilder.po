@@ -4,13 +4,13 @@
 # Translators:
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2024, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: playground-devtools-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2024-11-10 19:46+0300\n"
+"PO-Revision-Date: 2026-10-08 19:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: qmakebuilderpreferences.cpp:80
 #, kde-format
@@ -32,8 +32,8 @@ msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
-"%1 dizini, K Geliştir’in listesinden kaldırılmak üzere.\n"
-"K Geliştir’in bu dizini dosya sisteminden kaldırmasını istiyor musunuz?"
+"%1 dizini, KDevelop’un listesinden kaldırılmak üzere.\n"
+"KDevelop’un bu dizini dosya sisteminden kaldırmasını istiyor musunuz?"
 
 #: qmakebuilderpreferences.cpp:143
 #, kde-format

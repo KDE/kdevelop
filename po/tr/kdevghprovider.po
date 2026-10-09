@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2024, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevghprovider\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-11-10 19:11+0300\n"
+"PO-Revision-Date: 2026-10-08 19:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: ghdialog.cpp:25
 #, kde-format
@@ -25,7 +25,7 @@ msgid ""
 "authorize KDevelop, you will be able to fetch your public/private "
 "repositories and the repositories from your organizations."
 msgstr ""
-"K Geliştir’dan GitHub hesabınızı kullanmaya yetkili değilsiniz. K Geliştir’i "
+"KDevelop’tan GitHub hesabınızı kullanmaya yetkili değilsiniz. KDevelop’u "
 "yetkilendirirseniz genel/özel depolarınızı ve kuruluşlarınızdaki "
 "depolarınızı getirebilirsiniz."
 

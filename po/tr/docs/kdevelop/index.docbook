@@ -52,7 +52,7 @@
     <keyword
 >KDE</keyword>
     <keyword
->K Geliştir</keyword>
+>KDevelop</keyword>
     <keyword
 >IDE</keyword>
     <keyword
@@ -688,7 +688,7 @@ double bar ()
 > 
 <para
 ><application
->K Geliştir</application
+>KDevelop</application
 >, kaynak kodundaki farklı nesneleri vurgulamak için çeşitli renkler kullanır. Farklı renklerin ne anlama geldiğini biliyorsanız tek bir karakter okumadan, yalnızca renklere bakarak kaynak kodundan tez çok fazla bilgi çıkarabilirsiniz. Vurgulama kuralları aşağıdaki gibidir: </para>
 <itemizedlist>
 <listitem
@@ -2362,7 +2362,7 @@ void foo()
 ><guimenu
 >Ayarlar</guimenu
 ><guisubmenu
->K Geliştir Uygulamasını Yapılandır…</guisubmenu
+>KDevelop Uygulamasını Yapılandır…</guisubmenu
 ><guimenuitem
 >Şablonlar</guimenuitem
 ></menuchoice
@@ -2393,7 +2393,7 @@ void foo()
 >Sıfırdan bir şablon yazmak istiyorsanız <link linkend="creating-projects-from-scratch"
 >yeni bir proje</link
 > oluşturarak ve <filename
->K Geliştir</filename
+>KDevelop</filename
 > kategorisindeki <filename
 >C++ Sınıfı Şablonu</filename
 > projesini seçerek örnek bir C++ sınıfı şablonuyla başlayabilirsiniz. </para>
