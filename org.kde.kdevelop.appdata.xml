@@ -38,7 +38,7 @@
   <name xml:lang="sk">KDevelop</name>
   <name xml:lang="sl">KDevelop</name>
   <name xml:lang="sv">KDevelop</name>
-  <name xml:lang="tr">K Geliştir</name>
+  <name xml:lang="tr">KDevelop</name>
   <name xml:lang="uk">KDevelop</name>
   <name xml:lang="zh-CN">KDevelop</name>
   <name xml:lang="zh-TW">KDevelop</name>
@@ -104,7 +104,7 @@
     <p xml:lang="sk">KDevelop je slobodné a otvorené integrované vývojové prostredie (IDE).</p>
     <p xml:lang="sl">KDevelop je prosto in odprtokodno integrirano razvojno okolje  (IDE).</p>
     <p xml:lang="sv">KDevelop är en fri integrerad utvecklingsmiljö (IDE) med öppen källkod för olika programvaruprojekt.</p>
-    <p xml:lang="tr">K Geliştir, Özgür ve Açık Kaynaklı bir tümleşik geliştirme ortamıdır (IDE).</p>
+    <p xml:lang="tr">KDevelop, Özgür ve Açık Kaynaklı bir tümleşik geliştirme ortamıdır (IDE).</p>
     <p xml:lang="uk">KDevelop є вільним комплексним середовищем розробки (IDE) з відкритим кодом.</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
     <p xml:lang="zh-TW">KDevelop 是一個自由且開源的整合開發環境 (IDE)。</p>
@@ -168,7 +168,7 @@
     <p xml:lang="sk">KDevelop má backendy parsera pre C, C++ a Javascript/QML, s ďalšími externými pluginmi podporujúcimi napr. PHP alebo Python.</p>
     <p xml:lang="sl">KDevelop vsebuje razčlenjevalna zaledja za C, C++ in Javascript/QML, zunanji vstavki pa podpirajo tudi npr. PHP ali Python.</p>
     <p xml:lang="sv">KDevelop har gränssnitt för tolkning av C, C++ och Javascript/QML, med ytterligare externa insticksprogram som stöder t.ex. PHP eller Python.</p>
-    <p xml:lang="tr">K Geliştir’in C, C++ ve Javascript/QML ayrıştırma arka uçları vardır; dış eklentilerle örn. PHP veya Python da desteklenir.</p>
+    <p xml:lang="tr">KDevelop’un C, C++ ve Javascript/QML ayrıştırma arka uçları vardır; dış eklentilerle örn. PHP veya Python da desteklenir.</p>
     <p xml:lang="uk">У KDevelop передбачено модулі обробки коду мовами C, C++ та Javascript/QML та додатки для розширення підтримки коду іншими мовами програмування, зокрема PHP і Python.</p>
     <p xml:lang="zh-CN">KDevelop 提供了 C、C++ 和 JavaScript/QML 的解析器后端，并通过插件提供 PHP 和 Python 等语言的支持。</p>
     <p xml:lang="zh-TW">KDevelop 有 C、C++ 與 Javascript/QML 的剖析器後端，並有其他外部外掛程式支援 PHP 或 Python 等等。</p>
