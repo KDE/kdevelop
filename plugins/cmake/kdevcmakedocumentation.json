@@ -71,7 +71,7 @@
         "Description[sk]": "Povolí KDevelopu poskytnúť dokumentáciu CMake",
         "Description[sl]": "Omogoča, da KDevelop prikaže dokumentacijo za CMake",
         "Description[sv]": "Låter KDevelop tillhandahålla CMake-dokumentation",
-        "Description[tr]": "K Geliştir uygulamasının CMake belgelendirmesi sağlamasına izin verir",
+        "Description[tr]": "KDevelop uygulamasının CMake belgelendirmesi sağlamasına izin verir",
         "Description[uk]": "Надає змогу KDevelop показувати документацію CMake",
         "Description[zh_CN]": "允许 KDevelop 提供 CMake 文档",
         "Description[zh_TW]": "讓 KDevelop 可以提供 CMake 說明文件",

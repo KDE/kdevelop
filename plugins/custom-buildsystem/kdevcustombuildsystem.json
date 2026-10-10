@@ -29,7 +29,7 @@
         "Description[sk]": "Povolí použiť vlastné buildovacie systémy pre projekty KDevelop",
         "Description[sl]": "Dovoli uporabo sistemov za izgradnjo po meri za projekte KDevelop",
         "Description[sv]": "Gör det möjligt att använda egna byggsystem för projekt i KDevelop",
-        "Description[tr]": "K Geliştir projeleri için özel yapı sistemlerinin kullanılmasına izin verir",
+        "Description[tr]": "KDevelop projeleri için özel yapı sistemlerinin kullanılmasına izin verir",
         "Description[uk]": "Надає змогу використовувати нетипові системи збирання у проєктах KDevelop",
         "Description[zh_CN]": "允许对 KDevelop 工程使用自定义构建系统",
         "Description[zh_TW]": "讓 KDevelop 專案可以使用自訂編譯系統",
