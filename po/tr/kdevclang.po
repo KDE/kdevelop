@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2022, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2024, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-31 00:42+0000\n"
-"PO-Revision-Date: 2024-11-10 18:00+0300\n"
+"PO-Revision-Date: 2026-10-12 11:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
@@ -83,7 +83,7 @@ msgid ""
 "this.\n"
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
-"clang ile birlikte gelen “%1” yolu geçersiz (cpuid.h üstbilgisi eksik).\n"
+"clang ile birlikte gelen “%1” yolu geçersiz (cpuid.h üst bilgisi eksik).\n"
 "Bunu elle düzeltmek için KDEV_CLANG_BUILTIN_DIR çevre değişkenini ayarlamayı "
 "deneyin.\n"
 "Ayrıca bakınız: https://bugs.kde.org/show_bug.cgi?id=393779"
@@ -271,7 +271,7 @@ msgstr "Bir kez #pragma ekle"
 #: duchain/headerguardassistant.cpp:46
 #, kde-format
 msgid "Add macro-based #ifndef/#define/#endif header guard"
-msgstr "Makro tabanlı #ifndef/#define/#endif üstbilgi koruyucusu ekle"
+msgstr "Makro tabanlı #ifndef/#define/#endif üst bilgi koruyucusu ekle"
 
 #: duchain/macrodefinition.cpp:112
 #, kde-format
@@ -335,7 +335,7 @@ msgstr "İçerilen dosya: %1"
 #: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
-msgstr "Üstbilgi, birden çok içermeye karşı korunmuyor"
+msgstr "Üst bilgi, birden çok içermeye karşı korunmuyor"
 
 #: duchain/parsesession.cpp:640
 #, kde-format
@@ -343,7 +343,7 @@ msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
 "conventional #ifndef/#define/#endif macro guards or with #pragma once."
 msgstr ""
-"Verilen üstbilgi, birden çok içermeye karşı korunmuyor; ya geleneksel "
+"Verilen üst bilgi, birden çok içermeye karşı korunmuyor; ya geleneksel "
 "#ifndef/#define/#endif makro koruyucuları ile ya da bir kez #pragma ile."
 
 #: duchain/unknowndeclarationproblem.cpp:374

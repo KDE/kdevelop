@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2022, 2024, 2025 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2024-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomdefinesandincludes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-07 00:43+0000\n"
-"PO-Revision-Date: 2025-03-04 12:50+0300\n"
+"PO-Revision-Date: 2026-10-12 11:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
@@ -183,16 +183,16 @@ msgid ""
 "parsed in plain C mode. By default they are parsed as C++ headers.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p><code>*.h</code> üstbilgilerinin düz C kipinde "
-"ayrıştırılmasını istiyorsanız bunu imleyin. Öntanımlı olarak, C++ "
-"üstbilgileri olarak ayrıştırılırlar.</p></body></html>"
+"<html><head/><body><p><code>*.h</code> üst bilgilerinin düz C kipinde "
+"ayrıştırılmasını istiyorsanız bunu imleyin. Öntanımlı olarak, C++ üst "
+"bilgileri olarak ayrıştırılırlar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, parseHeadersInPlainC)
 #: kcm_widget/parserwidget.ui:23
 #, kde-format
 msgctxt "@option:check"
 msgid "Parse *.h headers in plain C"
-msgstr "*.h üstbilgilerini düz C olarak ayrıştır"
+msgstr "*.h üst bilgilerini düz C olarak ayrıştır"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: kcm_widget/parserwidget.ui:36
