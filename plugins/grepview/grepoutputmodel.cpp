@@ -45,9 +45,10 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, boo
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     setCheckable(checkable);
+    // Not auto-tristate: propagateState() and refreshState() set the check state
+    // themselves, skipping disabled (already replaced) matches, which Qt would count
     if(checkable)
     {
-        setAutoTristate(true);
         setCheckState(Qt::Checked);
     }
 }
@@ -376,8 +377,6 @@ void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
     if(checkable)
     {
         item->setCheckState(Qt::Checked);
-        if(item->rowCount() && checkable)
-            item->setAutoTristate(true);
     }
     for(int row = 0; row < item->rowCount(); ++row)
         makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
@@ -413,8 +412,6 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
         if(m_itemsCheckable)
         {
             copy->setCheckState(Qt::Checked);
-            if(copy->rowCount())
-                copy->setAutoTristate(true);
         }
         
         fileItem->appendRow(copy);

@@ -457,6 +457,46 @@ void FindReplaceTest::testReplace()
     tempDir.remove();
 }
 
+void FindReplaceTest::testCheckStates()
+{
+    GrepOutputModel model;
+    const QString fileName = QStringLiteral("/tmp/file.cpp");
+    GrepOutputItem::List matches;
+    for (int line = 0; line < 3; ++line) {
+        const KTextEditor::Range range(line, 0, line, 3);
+        const DocumentChangePointer change(new DocumentChange(IndexedString(fileName), range,
+                                                              QStringLiteral("foo"), QString()));
+        matches.append(GrepOutputItem(change, QStringLiteral("foo"), true));
+    }
+    model.appendOutputs(fileName, matches);
+    model.makeItemsCheckable(true);
+    QStandardItem *root = model.item(0);
+    QStandardItem *file = root->child(0);
+    QCOMPARE(file->rowCount(), 3);
+    QStandardItem *match0 = file->child(0);
+    QStandardItem *match1 = file->child(1);
+    QStandardItem *match2 = file->child(2);
+
+    // Unchecking a match leaves the other matches alone
+    QVERIFY(model.setData(match0->index(), Qt::Unchecked, Qt::CheckStateRole));
+    QCOMPARE(match0->checkState(), Qt::Unchecked);
+    QCOMPARE(match1->checkState(), Qt::Checked);
+    QCOMPARE(match2->checkState(), Qt::Checked);
+    QCOMPARE(file->checkState(), Qt::PartiallyChecked);
+    QCOMPARE(root->checkState(), Qt::PartiallyChecked);
+
+    // Checking the file again doesn't check matches that were replaced already,
+    // which doReplacements() unchecks and disables
+    match1->setCheckState(Qt::Unchecked);
+    match1->setEnabled(false);
+    QVERIFY(model.setData(file->index(), Qt::Checked, Qt::CheckStateRole));
+    QCOMPARE(match0->checkState(), Qt::Checked);
+    QCOMPARE(match1->checkState(), Qt::Unchecked);
+    QCOMPARE(match2->checkState(), Qt::Checked);
+    QCOMPARE(file->checkState(), Qt::Checked);
+    QCOMPARE(root->checkState(), Qt::Checked);
+}
+
 void FindReplaceTest::addTestProjectFromFileSystem(const QString& path)
 {
     auto* const project = new TestProject(Path{path});

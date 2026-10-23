@@ -57,6 +57,8 @@ private Q_SLOTS:
     void testReplace();
     void testReplace_data();
 
+    void testCheckStates();
+
 private:
     void addTestProjectFromFileSystem(const QString& path);
     template<typename Test>
