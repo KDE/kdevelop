@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 00:42+0000\n"
+"POT-Creation-Date: 2026-10-27 00:58+0000\n"
 "PO-Revision-Date: 2024-09-20 13:56+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -126,34 +126,34 @@ msgstr "Grep: %1"
 msgid "Line %1: "
 msgstr "Γραμμή %1: "
 
-#: grepoutputmodel.cpp:400
+#: grepoutputmodel.cpp:399
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
 msgstr[0] "<b>1</b> αποτέλεσμα σύγκρισης"
 msgstr[1] "<b>%1</b> αποτελέσματα σύγκρισης"
 
-#: grepoutputmodel.cpp:401
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
 msgstr[0] "<b>1</b> αρχείο"
 msgstr[1] "<b>%1</b> αρχεία"
 
-#: grepoutputmodel.cpp:403
+#: grepoutputmodel.cpp:402
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%1 σε %2</b>"
 
-#: grepoutputmodel.cpp:405
+#: grepoutputmodel.cpp:404
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
 msgstr[0] "%2: 1 ταίριασμα"
 msgstr[1] "%2: %1 ταιριάσματα"
 
-#: grepoutputmodel.cpp:475
+#: grepoutputmodel.cpp:472
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

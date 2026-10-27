@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 00:42+0000\n"
+"POT-Creation-Date: 2026-10-27 00:58+0000\n"
 "PO-Revision-Date: 2024-08-19 15:05+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -124,34 +124,34 @@ msgstr "Grep: %1"
 msgid "Line %1: "
 msgstr "Lerroa %1: "
 
-#: grepoutputmodel.cpp:400
+#: grepoutputmodel.cpp:399
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
 msgstr[0] "Bat-etortze <b>1</b>"
 msgstr[1] "<b>%1</b> bat-etortze"
 
-#: grepoutputmodel.cpp:401
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
 msgstr[0] "Fitxategi <b>1</b>"
 msgstr[1] "<b>%1</b> fitxategi"
 
-#: grepoutputmodel.cpp:403
+#: grepoutputmodel.cpp:402
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%1 %2</b>(e)an"
 
-#: grepoutputmodel.cpp:405
+#: grepoutputmodel.cpp:404
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
 msgstr[0] "%2: bat-etortze 1"
 msgstr[1] "%2: %1 bat-etortze"
 
-#: grepoutputmodel.cpp:475
+#: grepoutputmodel.cpp:472
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "

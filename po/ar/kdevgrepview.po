@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 00:42+0000\n"
+"POT-Creation-Date: 2026-10-27 00:58+0000\n"
 "PO-Revision-Date: 2025-10-05 14:55+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -130,7 +130,7 @@ msgstr "جريب: %1"
 msgid "Line %1: "
 msgstr "السّطر %1: "
 
-#: grepoutputmodel.cpp:400
+#: grepoutputmodel.cpp:399
 #, kde-format
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
@@ -141,7 +141,7 @@ msgstr[3] "<b>%1 مطابقات</b>"
 msgstr[4] "<b>%1 مطابقة</b>"
 msgstr[5] "<b>%1 مطابقة</b>"
 
-#: grepoutputmodel.cpp:401
+#: grepoutputmodel.cpp:400
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
@@ -152,13 +152,13 @@ msgstr[3] "<b>%1 ملفّات</b>"
 msgstr[4] "<b>%1 ملفًّا</b>"
 msgstr[5] "<b>%1 ملفّ</b>"
 
-#: grepoutputmodel.cpp:403
+#: grepoutputmodel.cpp:402
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<b>%1 في %2</b>"
 
-#: grepoutputmodel.cpp:405
+#: grepoutputmodel.cpp:404
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
@@ -169,7 +169,7 @@ msgstr[3] "%2: %1 مطابقات"
 msgstr[4] "%2: %1 مطابقة"
 msgstr[5] "%2: %1 مطابقة"
 
-#: grepoutputmodel.cpp:475
+#: grepoutputmodel.cpp:472
 #, kde-format
 msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
