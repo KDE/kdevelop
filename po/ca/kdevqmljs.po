@@ -215,23 +215,3 @@ msgstr "Espaiat entre els elements"
 #, kde-format
 msgid "Width of an item in pixels"
 msgstr "Amplada d'un element en píxels"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Antoni Bella"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "antonibella5@yahoo.com"
-
-#~ msgid "Subversion Submit"
-#~ msgstr "Envia amb Subversion"
-
-#~ msgid "Descriptio&n"
-#~ msgstr "Desc&ripció"
-
-#~ msgid "F&iles"
-#~ msgstr "F&itxers"
-
-#~ msgid "Check a&ll"
-#~ msgstr "&Marca-ho tot"

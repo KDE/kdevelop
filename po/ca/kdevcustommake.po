@@ -94,7 +94,3 @@ msgstr ""
 #, kde-format
 msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
 msgstr "Carpeta: «%1» Ordre: «%2» Resultat: «%3»"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Executa"

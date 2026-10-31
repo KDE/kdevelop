@@ -128,26 +128,3 @@ msgstr "L'element de construcció ja no està disponible"
 #, kde-format
 msgid "Internal error: cannot build a file item"
 msgstr "Error intern: no s'ha pogut construir un element de fitxer"
-
-#~ msgid "kdesu"
-#~ msgstr "kdesu"
-
-#~ msgid "kdesudo"
-#~ msgstr "kdesudo"
-
-#~ msgid "gksu"
-#~ msgstr "gksu"
-
-#~ msgid "sudo"
-#~ msgstr "sudo"
-
-#~ msgid "View"
-#~ msgstr "Visualitza"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Manuel Tortosa"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "manutortosa@gmail.com"

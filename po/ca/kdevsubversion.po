@@ -486,9 +486,3 @@ msgstr "Empremta digital:"
 #, kde-format
 msgid "fingerprint"
 msgstr "empremta digital"
-
-#~ msgid "Ssl Server Certificate"
-#~ msgstr "Certificat SSL del servidor"
-
-#~ msgid "Repository Location to import into"
-#~ msgstr "Ubicació del repositori on importar"

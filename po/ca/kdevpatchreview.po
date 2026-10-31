@@ -303,36 +303,3 @@ msgstr[1] "S'han superat totes les %1 proves"
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Resultats de les proves: %1 superades, %2 han fallat, %3 errors"
-
-#~ msgid "Base:"
-#~ msgstr "Base:"
-
-#~ msgid "Patch base..."
-#~ msgstr "Base del pedaç..."
-
-#~ msgid "Patch location..."
-#~ msgstr "Ubicació del pedaç..."
-
-#~ msgid "Command's output..."
-#~ msgstr "Sortida de l'ordre..."
-
-#~ msgid "Error exporting"
-#~ msgstr "Error en exportar"
-
-#~ msgid "Edit Patch"
-#~ msgstr "Edita el pedaç"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Save As..."
-#~ msgstr "Desa com a..."
-
-#~ msgid "Send..."
-#~ msgstr "Envia..."
-
-#~ msgid "Send to contact..."
-#~ msgstr "Envia al contacte..."
-
-#~ msgid "Side view (Kompare)..."
-#~ msgstr "Vista costat a costat (Kompare)..."
