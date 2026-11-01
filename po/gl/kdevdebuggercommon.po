@@ -356,7 +356,8 @@ msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Non foi posíbel anexar o depurador:</b><br />"
 
 #: midebugsession.cpp:396
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<b>Could not start debugger:</b><br />"
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Non foi posíbel iniciar o depurador:</b><br />"
 

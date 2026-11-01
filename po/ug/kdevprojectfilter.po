@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2026-09-23 06:56+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
@@ -18,25 +18,25 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.9\n"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:84
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "ئەندىزە"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:86
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "نىشان"
 
-#: filtermodel.cpp:80
+#: filtermodel.cpp:88
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "مەشغۇلات"
 
-#: filtermodel.cpp:109
+#: filtermodel.cpp:117
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -49,32 +49,32 @@ msgid ""
 "thus match any item with a relative path ending on the given pattern."
 msgstr ""
 
-#: filtermodel.cpp:121
+#: filtermodel.cpp:129
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
 ">Filters either apply only to files, only to folders or to both."
 msgstr ""
 
-#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr ""
 
-#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:140 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "قىسقۇچ"
 
-#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:145 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "ھۆججەت"
 
-#: filtermodel.cpp:143
+#: filtermodel.cpp:151
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -84,13 +84,13 @@ msgid ""
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
 
-#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:157 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "ئىچىدە"
 
-#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:162 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

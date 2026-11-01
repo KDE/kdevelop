@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2024-12-13 19:10+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:84
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "प्रतिमानम्‌"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:86
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "लक्ष्यम्"
 
-#: filtermodel.cpp:80
+#: filtermodel.cpp:88
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "नामपत्र"
 
-#: filtermodel.cpp:109
+#: filtermodel.cpp:117
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -56,7 +56,7 @@ msgstr ""
 "*/&quot;</code> पूर्वनिर्धारितं प्राप्नुवन्ति तथा च दत्तप्रतिरूपे समाप्तेन सापेक्षमार्गेण सह "
 "कस्यापि द्रव्यस्य मेलनं कुर्वन्ति ।"
 
-#: filtermodel.cpp:121
+#: filtermodel.cpp:129
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -65,25 +65,25 @@ msgstr ""
 "लक्ष्यं परिभाषयति यत् फ़िल्टर किं प्रकारस्य द्रव्यस्य विरुद्धं मेलनं भवति ।<br /> फ़िल्टर् केवलं "
 "सञ्चिकासु, केवलं पुटेषु वा उभयत्र वा प्रवर्तन्ते ।"
 
-#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "सञ्चिकाः पुटं च"
 
-#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:140 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "पुटम्"
 
-#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:145 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "सञ्चिकाः"
 
-#: filtermodel.cpp:143
+#: filtermodel.cpp:151
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -98,13 +98,13 @@ msgstr ""
 "सञ्चिकाः समाविष्टुं, भवान् <code>&quot;*&quot;</code> मार्गेण सर्वाणि सञ्चिकाः "
 "बहिष्कृत्य ततः समावेशी <code>&quot;*.cpp&quot;</code> प्रतिरूपं प्रयोक्तुं शक्नोति ।"
 
-#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:157 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "निहितः"
 
-#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:162 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2023-04-17 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:84
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "Kuvio"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:86
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "Kohteet"
 
-#: filtermodel.cpp:80
+#: filtermodel.cpp:88
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "Toiminto"
 
-#: filtermodel.cpp:109
+#: filtermodel.cpp:117
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -58,7 +58,7 @@ msgstr ""
 "implisiittisesti <code>\"*/\"</code>. Tällöin se vastaa jokaista kohdetta, "
 "jonka suhteellinen polku päättyy annettuun kuvioon."
 
-#: filtermodel.cpp:121
+#: filtermodel.cpp:129
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -67,25 +67,25 @@ msgstr ""
 "Kohde määrittää, millaisia kohteita suodatin vastaa.<br />Suodattimia "
 "käytetään joko vain tiedostoihin, vain kansioihin tai molempiin."
 
-#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "Tiedostot ja kansiot"
 
-#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:140 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "Kansiot"
 
-#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:145 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "Tiedostot"
 
-#: filtermodel.cpp:143
+#: filtermodel.cpp:151
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -101,13 +101,13 @@ msgstr ""
 "pois kuviolla <code>\"*\"</code> ja sitten käyttää mukaan ottavaa kuviota "
 "<code>\"*.cpp\"</code>."
 
-#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:157 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "Ota mukaan"
 
-#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:162 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

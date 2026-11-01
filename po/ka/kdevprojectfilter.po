@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2024-07-19 13:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,25 +18,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:84
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "ნიმუში"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:86
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "სამიზნეები"
 
-#: filtermodel.cpp:80
+#: filtermodel.cpp:88
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "ქმედება"
 
-#: filtermodel.cpp:109
+#: filtermodel.cpp:117
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -57,7 +57,7 @@ msgstr ""
 "არც <code>\"*\"</code>-ით, იღებენ <code>\"*/\"</code>პრეფიქსს და ემთხვევა "
 "ნებსმიერ ელემენტს, რომელიც შედარებით ბილიკზე მითითებულ ნიმუშს ემთხვევა."
 
-#: filtermodel.cpp:121
+#: filtermodel.cpp:129
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -66,25 +66,25 @@ msgstr ""
 "სამიზნე აღწერს, ელემენტის რომელი ტიპით გაიფილტრება ის.<br />ფილტრები "
 "გადატარდება მხოლო ფაილებზე, მხოლოდ საქაღალდეებზე ან ორივეზე."
 
-#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "ფაილები და საქაღალდეები"
 
-#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:140 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "საქაღალდეები"
 
-#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:145 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "ფაილები"
 
-#: filtermodel.cpp:143
+#: filtermodel.cpp:151
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -100,13 +100,13 @@ msgstr ""
 "ნიმუშით <code>\"*\"</code> და შემდეგ დაამატეთ ჩასასმელი ნიმუში <code>\"*.cpp"
 "\"</code>."
 
-#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:157 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "ჩართვა"
 
-#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:162 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2025-10-05 15:20+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -18,25 +18,25 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:84
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "النمط"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:86
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "الأهداف"
 
-#: filtermodel.cpp:80
+#: filtermodel.cpp:88
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "الإجراء"
 
-#: filtermodel.cpp:109
+#: filtermodel.cpp:117
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -56,7 +56,7 @@ msgstr ""
 "تُضاف إليها ضمنًا <code>\"*/\"</code> في البداية، ولذا تُطابَق على أيّ عنصر بمسار "
 "نسبي ينتهي بالنمط المُعطى."
 
-#: filtermodel.cpp:121
+#: filtermodel.cpp:129
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -65,25 +65,25 @@ msgstr ""
 "يحدّد الهدف نوع العنصر الذي يُطابَق عليه المرشّح.<br />تُطبَّق المرشّحات إمّا على "
 "الملفّات فقط، أو على المجلّدات فقط، أو على كليهما."
 
-#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "الملفات والمجلدات"
 
-#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:140 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "المجلّدات"
 
-#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:145 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "الملفات"
 
-#: filtermodel.cpp:143
+#: filtermodel.cpp:151
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -97,13 +97,13 @@ msgstr ""
 "المنتهية بـ <code>\".cpp\"</code> في مشروعك فقط، يمكنك استثناء كلّ الملفّات "
 "عبر <code>\"*\"</code> ثمّ تطبيق نمط تضميني <code>\"*.cpp\"</code>."
 
-#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:157 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "ضمّن"
 
-#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:162 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

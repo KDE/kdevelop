@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-29 00:44+0000\n"
+"POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2025-06-22 11:37+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -137,64 +137,64 @@ msgstr ""
 msgid "Breakpoint"
 msgstr "Punto de parada"
 
-#: debugger/breakpoint/breakpointmodel.cpp:378
+#: debugger/breakpoint/breakpointmodel.cpp:357
 #, kde-format
 msgid "Breakpoint not found"
 msgstr "Non se atopou o punto de parada"
 
-#: debugger/breakpoint/breakpointmodel.cpp:378
+#: debugger/breakpoint/breakpointmodel.cpp:357
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
 msgstr "Non foi posíbel atopar o punto de parada en %1:%2."
 
-#: debugger/breakpoint/breakpointmodel.cpp:384
+#: debugger/breakpoint/breakpointmodel.cpp:363
 #, kde-format
 msgid "&Breakpoint"
 msgstr "&Punto de parada"
 
-#: debugger/breakpoint/breakpointmodel.cpp:390
+#: debugger/breakpoint/breakpointmodel.cpp:369
 #, kde-format
 msgid "&Disable Breakpoint"
 msgstr "&Desactivar o punto de parada"
 
-#: debugger/breakpoint/breakpointmodel.cpp:391
+#: debugger/breakpoint/breakpointmodel.cpp:370
 #, kde-format
 msgid "&Enable Breakpoint"
 msgstr "Acti&var o punto de parada"
 
-#: debugger/breakpoint/breakpointmodel.cpp:394
+#: debugger/breakpoint/breakpointmodel.cpp:373
 #, kde-format
 msgid "&Bookmark"
 msgstr "&Marcador"
 
-#: debugger/breakpoint/breakpointmodel.cpp:436
+#: debugger/breakpoint/breakpointmodel.cpp:415
 #: debugger/variable/variablecollection.cpp:422
 #: debugger/variable/variabletooltip.cpp:79
 #, kde-format
 msgid "Type"
 msgstr "Tipo"
 
-#: debugger/breakpoint/breakpointmodel.cpp:437
+#: debugger/breakpoint/breakpointmodel.cpp:416
 #, kde-format
 msgid "Location"
 msgstr "Lugar"
 
-#: debugger/breakpoint/breakpointmodel.cpp:438
+#: debugger/breakpoint/breakpointmodel.cpp:417
 #, kde-format
 msgid "Condition"
 msgstr "Condición"
 
-#: debugger/breakpoint/breakpointmodel.cpp:442
+#: debugger/breakpoint/breakpointmodel.cpp:421
 #, kde-format
 msgid "Active status"
 msgstr "Estado activo"
 
-#: debugger/breakpoint/breakpointmodel.cpp:443
+#: debugger/breakpoint/breakpointmodel.cpp:422
 #, kde-format
 msgid "State"
 msgstr "Estado"
 
-#: debugger/breakpoint/breakpointmodel.cpp:667
+#: debugger/breakpoint/breakpointmodel.cpp:646
 #, kde-format
 msgid ""
 "A breakpoint cannot be added to an untitled document. Please save the "
@@ -4057,20 +4057,23 @@ msgctxt "@info:tooltip"
 msgid "Batch edit mode"
 msgstr "Modo de edición por lotes"
 
-#: shell/settings/languagepreferences.cpp:34
-#, kde-format
+#: shell/settings/languagepreferences.cpp:36
+#, fuzzy, kde-format
+#| msgctxt "@item:valuesuffix"
+#| msgid " file"
+#| msgid_plural " files"
 msgctxt "@item:valuesuffix"
-msgid " file"
-msgid_plural " files"
+msgid "%v file"
+msgid_plural "%v files"
 msgstr[0] " ficheiro"
 msgstr[1] " ficheiros"
 
-#: shell/settings/languagepreferences.cpp:82
+#: shell/settings/languagepreferences.cpp:84
 #, kde-format
 msgid "Language Support"
 msgstr "Linguaxes admitidas"
 
-#: shell/settings/languagepreferences.cpp:87
+#: shell/settings/languagepreferences.cpp:89
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Configurar o completado de código e o realce semántico"
@@ -4377,7 +4380,7 @@ msgid "Project Parsing"
 msgstr "Análise do proxecto"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
-#. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_minFilesForSimplifiedParsing)
 #: shell/settings/languagepreferences.ui:379
 #: shell/settings/languagepreferences.ui:399
 #, kde-format
