@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-01 00:53+0000\n"
-"PO-Revision-Date: 2026-07-15 09:21+0300\n"
+"PO-Revision-Date: 2026-11-01 13:34+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -4052,17 +4052,14 @@ msgid "Batch edit mode"
 msgstr "Режим пакетного редагування"
 
 #: shell/settings/languagepreferences.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid " file"
-#| msgid_plural " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "%v file"
 msgid_plural "%v files"
-msgstr[0] " файл"
-msgstr[1] " файли"
-msgstr[2] " файлів"
-msgstr[3] " файл"
+msgstr[0] "%v файл"
+msgstr[1] "%v файли"
+msgstr[2] "%v файлів"
+msgstr[3] "%v файл"
 
 #: shell/settings/languagepreferences.cpp:84
 #, kde-format
