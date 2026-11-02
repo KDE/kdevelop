@@ -221,6 +221,7 @@
     <category>IDE</category>
   </categories>
   <releases>
+    <release version="6.6.260803" date="2026-11-05"/>
     <release version="6.6.260802" date="2026-10-08"/>
     <release version="6.6.260801" date="2026-09-10"/>
     <release version="6.6.260800" date="2026-08-20"/>
