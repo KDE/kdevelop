@@ -412,8 +412,7 @@ msgid "Exited normally"
 msgstr "Saíu con normalidade"
 
 #: midebugsession.cpp:1119
-#, fuzzy, kde-format
-#| msgid "Exited on signal %1"
+#, kde-format
 msgctxt "%1 - the name of a POSIX signal"
 msgid "Exited on signal %1"
 msgstr "Saíuse co sinal %1"
@@ -434,8 +433,7 @@ msgid "Program received signal %1"
 msgstr "O programa recibiu o sinal %1 (%2)"
 
 #: midebugsession.cpp:1159
-#, fuzzy, kde-format
-#| msgid "Program received signal %1 (%2)"
+#, kde-format
 msgctxt ""
 "%1 - the name of a POSIX signal, %2 - a user-friendly name of the same signal"
 msgid "Program received signal %1 (%2)"
