@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-01 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
 "PO-Revision-Date: 2026-02-22 00:15+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -4063,12 +4063,12 @@ msgid_plural "%v files"
 msgstr[0] " fitxategi"
 msgstr[1] " fitxategi"
 
-#: shell/settings/languagepreferences.cpp:84
+#: shell/settings/languagepreferences.cpp:77
 #, kde-format
 msgid "Language Support"
 msgstr "Lengoaia bateragarritasuna"
 
-#: shell/settings/languagepreferences.cpp:89
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Konfiguratu kode-betetzea eta nabarmentze semantikoa"

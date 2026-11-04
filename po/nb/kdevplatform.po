@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-01 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
 "PO-Revision-Date: 2013-04-01 11:18+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -3956,12 +3956,12 @@ msgid_plural "%v files"
 msgstr[0] "Ny fil"
 msgstr[1] "Ny fil"
 
-#: shell/settings/languagepreferences.cpp:84
+#: shell/settings/languagepreferences.cpp:77
 #, kde-format
 msgid "Language Support"
 msgstr "Språkstøtte"
 
-#: shell/settings/languagepreferences.cpp:89
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr ""

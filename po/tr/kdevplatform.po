@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-01 00:53+0000\n"
-"PO-Revision-Date: 2026-10-08 19:03+0300\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
+"PO-Revision-Date: 2026-11-03 22:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -4034,22 +4034,19 @@ msgid "Batch edit mode"
 msgstr "Toplu düzenleme kipi"
 
 #: shell/settings/languagepreferences.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid " file"
-#| msgid_plural " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "%v file"
 msgid_plural "%v files"
-msgstr[0] " dosya"
-msgstr[1] " dosya"
+msgstr[0] "%v dosya"
+msgstr[1] "%v dosya"
 
-#: shell/settings/languagepreferences.cpp:84
+#: shell/settings/languagepreferences.cpp:77
 #, kde-format
 msgid "Language Support"
 msgstr "Dil Desteği"
 
-#: shell/settings/languagepreferences.cpp:89
+#: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
 msgstr "Kod Tamamlama ve Anlamsal Vurgulama Ayarlarını Yapılandır"

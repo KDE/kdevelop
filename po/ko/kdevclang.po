@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
 "PO-Revision-Date: 2022-05-07 02:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 21.12.3\n"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#: clangsettings/sessionsettings/sessionsettings.cpp:24
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
 msgstr "C/C++ 도우미"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#: clangsettings/sessionsettings/sessionsettings.cpp:29
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
@@ -87,13 +87,13 @@ msgstr ""
 "KDEV_CLANG_BUILTIN_DIR 환경 변수를 수동으로 설정하십시오.\n"
 "같이 보기: https://bugs.kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:278
+#: clangsupport.cpp:281
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "선언 이름 바꾸기"
 
-#: clangsupport.cpp:285
+#: clangsupport.cpp:288
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

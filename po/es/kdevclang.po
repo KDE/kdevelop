@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
 "PO-Revision-Date: 2025-05-17 01:53+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 20.04.3\n"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#: clangsettings/sessionsettings/sessionsettings.cpp:24
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
 msgstr "Asistentes de C/C++"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#: clangsettings/sessionsettings/sessionsettings.cpp:29
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
@@ -92,13 +92,13 @@ msgstr ""
 "manual para corregir este problema.\n"
 "Consulte también: https://bugs.kde.org/show_bug.cgi?id=393779"
 
-#: clangsupport.cpp:278
+#: clangsupport.cpp:281
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Cambiar nombre de declaración"
 
-#: clangsupport.cpp:285
+#: clangsupport.cpp:288
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

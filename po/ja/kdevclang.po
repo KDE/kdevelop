@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
 "PO-Revision-Date: 2016-08-28 10:50-0700\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -14,13 +14,13 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#: clangsettings/sessionsettings/sessionsettings.cpp:24
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
 msgstr ""
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#: clangsettings/sessionsettings/sessionsettings.cpp:29
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
@@ -79,13 +79,13 @@ msgid ""
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
 
-#: clangsupport.cpp:278
+#: clangsupport.cpp:281
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr ""
 
-#: clangsupport.cpp:285
+#: clangsupport.cpp:288
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"

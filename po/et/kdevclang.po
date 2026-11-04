@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 00:42+0000\n"
+"POT-Creation-Date: 2026-11-04 01:01+0000\n"
 "PO-Revision-Date: 2020-01-16 20:31+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.08.1\n"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#: clangsettings/sessionsettings/sessionsettings.cpp:24
 #, fuzzy, kde-format
 #| msgid "C/C++ Helpers"
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
 msgstr "C/C++ abilised"
 
-#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#: clangsettings/sessionsettings/sessionsettings.cpp:29
 #, fuzzy, kde-format
 #| msgid "Configure C/C++ Helpers"
 msgctxt "@title:tab"
@@ -96,14 +96,14 @@ msgid ""
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
 
-#: clangsupport.cpp:278
+#: clangsupport.cpp:281
 #, fuzzy, kde-format
 #| msgid "Rename Declaration"
 msgctxt "@action"
 msgid "Rename Declaration"
 msgstr "Muuda deklaratsiooni nime"
 
-#: clangsupport.cpp:285
+#: clangsupport.cpp:288
 #, fuzzy, kde-format
 #| msgid "Move into Source"
 msgctxt "@action"
