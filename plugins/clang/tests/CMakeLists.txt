@@ -104,6 +104,15 @@ ecm_add_test(test_problems.cpp
         KDevClangPrivate
 )
 
+ecm_add_test(test_modules.cpp
+    TEST_NAME test_modules
+    LINK_LIBRARIES
+        KDev::Tests
+        Qt::Test
+        KDevClangPrivate
+        Clang::libclang
+)
+
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 ecm_add_test(test_files.cpp
 TEST_NAME test_files-clang
