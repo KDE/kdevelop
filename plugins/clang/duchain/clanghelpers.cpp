@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QRegularExpression>
+#include <QStandardPaths>
 
 #include <algorithm>
 
@@ -458,4 +459,33 @@ QString ClangHelpers::clangBuiltinIncludePath()
         return QString::fromUtf8(KDEV_CLANG_BUILTIN_DIR);
     }();
     return dir;
+}
+
+QString ClangHelpers::clangCompilerPath()
+{
+    static const QString clangPath = []() -> QString {
+        // 1. Check sibling bin directory next to libclang's builtin include path
+        const QString builtin = clangBuiltinIncludePath();
+        if (!builtin.isEmpty()) {
+            for (const auto& rel : {QStringLiteral("/../../../../bin/clang++"), QStringLiteral("/../../bin/clang++")}) {
+                const QString candidate = QDir::cleanPath(builtin + rel);
+                if (QFileInfo::exists(candidate)) {
+                    return candidate;
+                }
+            }
+        }
+
+        // 2. Check for versioned clang++ matching libclang's major version in PATH
+        const QString major = clangVersion().section(QLatin1Char('.'), 0, 0);
+        if (!major.isEmpty()) {
+            const QString exe = QStandardPaths::findExecutable(QStringLiteral("clang++-%1").arg(major));
+            if (!exe.isEmpty()) {
+                return exe;
+            }
+        }
+
+        // 3. Fall back to unversioned clang++ in PATH
+        return QStandardPaths::findExecutable(QStringLiteral("clang++"));
+    }();
+    return clangPath;
 }

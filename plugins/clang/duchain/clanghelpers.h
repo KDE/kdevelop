@@ -111,6 +111,12 @@ KDEVCLANGPRIVATE_EXPORT QString clangBuiltinIncludePath();
  */
 KDEVCLANGPRIVATE_EXPORT bool isValidClangBuiltingIncludePath(const QString& path);
 
+/**
+ * @return Path to the clang++ compiler binary matching libclang or found in PATH.
+ * Returns an empty string if clang++ cannot be found.
+ */
+KDEVCLANGPRIVATE_EXPORT QString clangCompilerPath();
+
 }
 
 #endif //CLANGHELPERS_H
