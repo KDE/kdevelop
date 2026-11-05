@@ -50,6 +50,7 @@ set(kdevclangprivate_SRCS
     duchain/clangducontext.cpp
     duchain/clanghelpers.cpp
     duchain/clangindex.cpp
+    duchain/clangmodule.cpp
     duchain/clangparsingenvironment.cpp
     duchain/clangparsingenvironmentfile.cpp
     duchain/clangpch.cpp
