@@ -9,6 +9,7 @@
 #include "parsesession.h"
 #include <QStandardPaths>
 #include "clangdiagnosticevaluator.h"
+#include "clangmodule.h"
 #include "todoextractor.h"
 #include "clanghelpers.h"
 #include "clangindex.h"
@@ -23,14 +24,22 @@
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
 
+#include <clang-c/CXCompilationDatabase.h>
+
 #include <KShell>
 
+#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QMutex>
+#include <QProcess>
+#include <QRegularExpression>
+#include <QSet>
 
 #include <algorithm>
+#include <functional>
 
 using namespace KDevelop;
 
@@ -289,15 +298,18 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
                    std::back_inserter(clangArguments),
                    [] (const QByteArray &argument) { return argument.constData(); });
 
+    const auto parserSettings = environment.parserSettings();
+    const bool isModule = parserSettings.isCpp() && ClangModule::isCppModuleUnit(tuUrl.str(), unsavedFiles);
+
     // NOTE: the PCH include must come before all other includes!
-    if (pchInclude.isValid()) {
+    if (!isModule && pchInclude.isValid()) {
         clangArguments << "-include";
         QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
         smartArgs << pchFile;
         clangArguments << pchFile.constData();
     }
 
-    if (notClangAndGccVersionAtLeast(environment.defines(), 7)) {
+    if (!isModule && notClangAndGccVersionAtLeast(environment.defines(), 7)) {
         const auto compatFile =
             QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                    QStringLiteral("kdevclangsupport/gccCompatibility/additional_floating_types.h"))
@@ -345,9 +357,150 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         clangArguments << workingDirectory.constData();
     }
 
-    // append extra args from environment variable
-    for (const QByteArray& arg : extraArgs) {
-        clangArguments << arg.constData();
+    if (ClangModule::isCpp20OrLater(parserSettings)) {
+        // Extract modmaps directly from compile_commands.json to bypass build plugin exclusions
+        QSet<QString> processedResponseFiles;
+        const QByteArray buildDir = environment.workingDirectory().toLocalFile().toUtf8();
+        const QString localPath = tuUrl.toUrl().isLocalFile() ? tuUrl.toUrl().toLocalFile() : tuUrl.str();
+        const QByteArray localFile = localPath.toUtf8();
+
+        CXCompilationDatabase_Error dbError = CXCompilationDatabase_NoError;
+        CXCompilationDatabase db = clang_CompilationDatabase_fromDirectory(buildDir.constData(), &dbError);
+
+        if (dbError == CXCompilationDatabase_NoError && db) {
+            CXCompileCommands commands = clang_CompilationDatabase_getCompileCommands(db, localFile.constData());
+            unsigned numCommands = clang_CompileCommands_getSize(commands);
+            if (numCommands == 0) {
+                const QString canonical = QFileInfo(localPath).canonicalFilePath();
+                if (!canonical.isEmpty() && canonical != localPath) {
+                    clang_CompileCommands_dispose(commands);
+                    commands = clang_CompilationDatabase_getCompileCommands(db, canonical.toUtf8().constData());
+                    numCommands = clang_CompileCommands_getSize(commands);
+                }
+            }
+
+            if (numCommands > 0) {
+                // Get the first available compile command definition for this file
+                CXCompileCommand command = clang_CompileCommands_getCommand(commands, 0);
+                const unsigned numArgs = clang_CompileCommand_getNumArgs(command);
+
+                QString gccModmapPath;
+
+                for (unsigned i = 0; i < numArgs; ++i) {
+                    ClangString argStr(clang_CompileCommand_getArg(command, i));
+                    QString token = QString::fromUtf8(argStr.c_str());
+
+                    if (token.startsWith(QLatin1Char('@'))) {
+                        const QString responseFilePath = QDir(QString::fromUtf8(buildDir)).absoluteFilePath(token.mid(1));
+
+                        processedResponseFiles.insert(QDir::cleanPath(responseFilePath));
+
+                        QFile responseFile(responseFilePath);
+                        if (responseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                            QByteArray contents = responseFile.readAll();
+                            contents.replace('\n', ' ');
+                            contents.replace('\r', ' ');
+
+                            const QList<QByteArray> splitArgs = contents.split(' ');
+                            for (const QByteArray& subArg : splitArgs) {
+                                QByteArray trimmed = subArg.trimmed();
+                                if (!trimmed.isEmpty()) {
+                                    trimmed.replace("\"", "");
+                                    trimmed.replace("\'", "");
+                                    trimmed.replace("\\", "");
+
+                                    if (trimmed.startsWith("-fmodule-file=")) {
+                                        int eqIdx = trimmed.indexOf('=');
+                                        int pathIdx = trimmed.indexOf('=', eqIdx + 1);
+                                        if (pathIdx == -1) {
+                                            pathIdx = eqIdx;
+                                        }
+
+                                        const QString modPath = QDir(QString::fromUtf8(buildDir)).absoluteFilePath(QString::fromUtf8(trimmed.mid(pathIdx + 1)));
+                                        trimmed = trimmed.left(pathIdx + 1) + modPath.toUtf8();
+                                    }
+
+                                    if (!trimmed.isEmpty()) {
+                                        smartArgs << trimmed;
+                                        clangArguments << smartArgs.last().constData();
+                                    }
+                                }
+                            }
+                        }
+                    } else if (token.startsWith(QLatin1String("-fmodule-file="))) {
+                        int eqIdx = token.indexOf(QLatin1Char('='));
+                        int pathIdx = token.indexOf(QLatin1Char('='), eqIdx + 1);
+                        if (pathIdx == -1) {
+                            pathIdx = eqIdx;
+                        }
+                        const QString modPath = QDir(QString::fromUtf8(buildDir)).absoluteFilePath(token.mid(pathIdx + 1));
+                        const QByteArray trimmed = token.left(pathIdx + 1).toUtf8() + modPath.toUtf8();
+                        smartArgs << trimmed;
+                        clangArguments << smartArgs.last().constData();
+                    } else if (token.startsWith(QLatin1String("-fmodule-mapper="))) {
+                        gccModmapPath = token.mid(QStringLiteral("-fmodule-mapper=").length());
+                        gccModmapPath.remove(QLatin1Char('\"')).remove(QLatin1Char('\''));
+                        if (QDir::isRelativePath(gccModmapPath)) {
+                            gccModmapPath = QDir(QString::fromUtf8(buildDir)).absoluteFilePath(gccModmapPath);
+                        }
+                    } else if (token == QLatin1String("-fmodule-mapper") && i + 1 < numArgs) {
+                        ++i;
+                        ClangString nextArgStr(clang_CompileCommand_getArg(command, i));
+                        gccModmapPath = QString::fromUtf8(nextArgStr.c_str());
+                        gccModmapPath.remove(QLatin1Char('\"')).remove(QLatin1Char('\''));
+                        if (QDir::isRelativePath(gccModmapPath)) {
+                            gccModmapPath = QDir(QString::fromUtf8(buildDir)).absoluteFilePath(gccModmapPath);
+                        }
+                    }
+                }
+
+                if (!gccModmapPath.isEmpty()) {
+                    QStringList searchIncludePaths;
+                    for (const auto& path : includes.system) {
+                        if (!path.isEmpty()) {
+                            searchIncludePaths << path.toLocalFile();
+                        }
+                    }
+                    for (const auto& path : includes.project) {
+                        if (!path.isEmpty()) {
+                            searchIncludePaths << path.toLocalFile();
+                        }
+                    }
+
+                    const auto moduleArgs = ClangModule::processGccModmap(
+                        gccModmapPath, db, QString::fromUtf8(buildDir),
+                        isModule, searchIncludePaths, parserSettings.parserOptions);
+                    for (const auto& arg : moduleArgs) {
+                        smartArgs << arg;
+                        clangArguments << smartArgs.last().constData();
+                    }
+                }
+            }
+            clang_CompileCommands_dispose(commands);
+            clang_CompilationDatabase_dispose(db);
+        }
+
+        // append extra args from environment variable, skip the ones we already handled above
+        for (const QByteArray& arg : extraArgs) {
+            bool alreadyProcessed = false;
+
+            if (arg.startsWith('@')) {
+                const QString responseFilePath = QDir(QString::fromUtf8(environment.workingDirectory().toLocalFile().toUtf8())).absoluteFilePath(QString::fromUtf8(arg.mid(1)));
+
+
+                if (processedResponseFiles.contains(QDir::cleanPath(responseFilePath))) {
+                    alreadyProcessed = true;
+                }
+            }
+
+            if (!alreadyProcessed) {
+                clangArguments << arg.constData();
+            }
+        }
+    } else {
+        for (const QByteArray& arg : extraArgs) {
+            clangArguments << arg.constData();
+        }
     }
 
     QVector<CXUnsavedFile> unsaved;
@@ -412,7 +565,22 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
             {
                 continue;
             }
+            if (notClangAndGccVersionAtLeast(defines, 14)) {
+                if (it.key().startsWith(QLatin1String("__STDCPP_FLOAT"))
+                    || it.key().startsWith(QLatin1String("__STDCPP_BFLOAT16_T__"))
+                    || it.key().startsWith(QLatin1String("__BFLT16_"))
+                    || it.key().startsWith(QLatin1String("__FLT128")))
+                {
+                    continue;
+                }
+            }
             definesStream << QLatin1String("#define ") << it.key() << ' ' << it.value() << '\n';
+        }
+        if (notClangAndGccVersionAtLeast(defines, 14)) {
+            definesStream << QLatin1String("#define _GLIBCXX_USE_FLOAT128 0\n");
+            definesStream << QLatin1String("#define __FLOAT128__ 0\n");
+            definesStream << QLatin1String("#define __STDC_WANT_IEC_60559_BFP_EXT__ 0\n");
+            definesStream << QLatin1String("#define _GLIBCXX_HAVE_FLOAT128_MATH 0\n");
         }
         if (notClangAndGccVersionAtLeast(defines, 11)) {
             /* fake GCC compatibility for __malloc__ attribute with arguments to silence warnings like this:
