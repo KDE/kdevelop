@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdev-clang-tidy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-02-09 18:25+0200\n"
+"PO-Revision-Date: 2026-10-30 17:00+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -38,7 +38,7 @@ msgstr "Kaikki tarkistukset"
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr ""
+msgstr "Anna uudelle tarkistusjoukolle nimi"
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
@@ -48,35 +48,31 @@ msgstr "Nimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/checksetmanagewidget.ui:31
-#, fuzzy, kde-format
-#| msgid "Checks"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Check set:"
-msgstr "Tarkistukset"
+msgstr "Tarkistusjoukko:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:48
-#, fuzzy, kde-format
-#| msgid "All checks"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add check set"
-msgstr "Kaikki tarkistukset"
+msgstr "Lisää tarkistusjoukko"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:58
-#, fuzzy, kde-format
-#| msgid "Checks"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone check set"
-msgstr "Tarkistukset"
+msgstr "Monista tarkistusjoukko"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:68
-#, fuzzy, kde-format
-#| msgid "All checks"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove check set"
-msgstr "Kaikki tarkistukset"
+msgstr "Poista tarkistusjoukko"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:78
@@ -90,7 +86,7 @@ msgstr "Aseta oletukseksi"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr ""
+msgstr "Muokkaa tarkistusjoukon nimeä"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
@@ -208,6 +204,9 @@ msgid ""
 "from. Diagnostics from the main file of each translation unit are always "
 "displayed. Can be used together with -line-filter."
 msgstr ""
+"Niiden otsakkeiden nimiä vastaava säännöllinen lauseke, joista tulostetaan "
+"diagnostiikkaa. Kunkin käännösyksikön päätiedoston diagnostiikka näytetään "
+"aina. Voi käyttää yhdessä -line-filter-valitsimen kanssa."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119

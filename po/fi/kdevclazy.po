@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2026 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Tommi Nieminen <translator@legisign.org>, 2020.
+# SPDX-FileCopyrightText: 2020, 2026 Tommi Nieminen <translator@legisign.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-07-31 13:46+0300\n"
+"PO-Revision-Date: 2026-10-30 12:30+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -107,48 +108,48 @@ msgstr "Nimi:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Check set:"
-msgstr ""
+msgstr "Tarkistusjoukko:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:48
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add check set"
-msgstr ""
+msgstr "Lisää tarkistusjoukko"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clone check set"
-msgstr ""
+msgstr "Monista tarkistusjoukko"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove check set"
-msgstr ""
+msgstr "Poista tarkistusjoukko"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
 #: config/checksetmanagewidget.ui:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr ""
+msgstr "Aseta oletukseksi"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr ""
+msgstr "Muokkaa tarkistusjoukon nimeä"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Custom"
-msgstr ""
+msgstr "Mukautettu"
 
 #: config/checksetselectioncombobox.cpp:30
 #, kde-format
@@ -166,14 +167,14 @@ msgstr "%1 (oletusvalinta)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
-msgstr ""
+msgstr "Etsi tarkistuksia…"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
 #, kde-format
 msgctxt "@action:button"
 msgid "Reset Checks"
-msgstr ""
+msgstr "Palauta tarkistukset"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
 #: config/checkswidget.ui:74
@@ -181,6 +182,8 @@ msgstr ""
 msgid ""
 "Since nothing is selected Clazy will use all checks from levels 0 and 1."
 msgstr ""
+"Koska mitään ei ole valittu, Clazy käyttää kaikkia tasojen 0 ja 1 "
+"tarkistuksia."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/commandlinewidget.ui:29
@@ -194,7 +197,7 @@ msgstr "Komentorivi"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "Etsi…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
 #: config/commandlinewidget.ui:47
@@ -207,20 +210,20 @@ msgstr ""
 #, kde-format
 msgid "1 check detected"
 msgid_plural "%1 checks detected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Havaittiin 1 tarkistus"
+msgstr[1] "Havaittiin %1 tarkistusta"
 
 #: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
 #, kde-format
 msgctxt "@title:tab"
 msgid "Clazy"
-msgstr ""
+msgstr "Clazy"
 
 #: config/globalconfigpage.cpp:84
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clazy Settings"
-msgstr ""
+msgstr "Clazyn asetukset"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathBox)
 #: config/globalconfigpage.ui:29
@@ -248,21 +251,21 @@ msgstr "clazy-standalone-ohjelmatiedoston sijainti."
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Documentation:"
-msgstr ""
+msgstr "Ohjeistus:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
 #: config/globalconfigpage.ui:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Path to clazy documentation directory."
-msgstr ""
+msgstr "Clazyn ohjeistuskansion sijainti."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/globalconfigpage.ui:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr ""
+msgstr "Suorita analyysityöt rinnan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/globalconfigpage.ui:94
@@ -304,7 +307,7 @@ msgstr "Yksityiskohtainen tuloste"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Checks"
-msgstr ""
+msgstr "Tarkistukset"
 
 #. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
 #: config/projectconfigpage.ui:66
@@ -493,37 +496,37 @@ msgstr "Lisäparametrit:"
 #: job.cpp:105
 #, kde-format
 msgid "Clazy Analysis (%1)"
-msgstr ""
+msgstr "Clazy-analyysi (%1)"
 
 #: job.cpp:135
 #, kde-format
 msgid "Unknown Level"
-msgstr ""
+msgstr "Tuntematon taso"
 
 #: job.cpp:201
 #, kde-format
 msgid "Failed to start Clazy analysis process."
-msgstr ""
+msgstr "Clazyn analyysiprosessin käynnistäminen epäonnistui."
 
 #: job.cpp:206
 #, kde-format
 msgid "Clazy analysis process crashed."
-msgstr ""
+msgstr "Clazyn analyysiprosessi kaatui."
 
 #: job.cpp:211
 #, kde-format
 msgid "Clazy analysis process timed out."
-msgstr ""
+msgstr "Clazyn analyysiprosessin aikakatkaisu."
 
 #: job.cpp:215
 #, kde-format
 msgid "Write to Clazy analysis process failed."
-msgstr ""
+msgstr "Clazyn analyysiprosessiin kirjoittaminen epäonnistui."
 
 #: job.cpp:219
 #, kde-format
 msgid "Read from Clazy analysis process failed."
-msgstr ""
+msgstr "Clazyn analyysiprosessin lukeminen epäonnistui."
 
 #: job.cpp:229
 #, kde-format
@@ -561,18 +564,20 @@ msgid ""
 "Clazy documentation path cannot be detected. Set the path manually if Clazy "
 "is already installed."
 msgstr ""
+"Clazyn ohjeistuksen sijaintia ei tunnistettu. Aseta sijainti itse, jos Clazy "
+"on jo asennettu."
 
 #: jobparameters.cpp:69
 #, kde-format
 msgid "Clazy documentation path is empty."
-msgstr ""
+msgstr "Clazyn ohjeistuksen sijainti on tyhjä."
 
 #: jobparameters.cpp:77
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
-msgstr ""
+msgstr "Clazyn ohjeistuksen sijaintia ”%1” ei ole olemassa."
 
 #: jobparameters.cpp:82
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
-msgstr ""
+msgstr "Clazyn ohjeistuksen sijainti ”%1” ei ole kansio."
