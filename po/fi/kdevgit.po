@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2026-02-09 19:08+0200\n"
+"PO-Revision-Date: 2026-10-30 12:20+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -52,18 +52,17 @@ msgstr "Toimitus epäonnistui. Katso versionhallinnan työkalunäkymää."
 #: diffviewsctrl.cpp:50
 #, kde-format
 msgid "Stage selected lines or hunk"
-msgstr ""
+msgstr "Vaiheista valitut rivit tai palanen"
 
 #: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Unstage selected lines or hunk"
-msgstr ""
+msgstr "Kumoa valittujen rivien tai palasen vaiheistus"
 
 #: diffviewsctrl.cpp:54
-#, fuzzy, kde-format
-#| msgid "Removes the selected branch"
+#, kde-format
 msgid "Revert selected lines or hunk"
-msgstr "Poistaa valitun haaran"
+msgstr "Palauta valitut rivit tai palanen"
 
 #: diffviewsctrl.cpp:56
 #, kde-format
@@ -88,23 +87,22 @@ msgstr "Palauta valitut rivit"
 #: diffviewsctrl.cpp:116
 #, kde-format
 msgid "Unstage selected hunk"
-msgstr ""
+msgstr "Kumoa valitun palasen vaiheistus"
 
 #: diffviewsctrl.cpp:117
 #, kde-format
 msgid "Stage selected hunk"
-msgstr ""
+msgstr "Vaiheista valittu palanen"
 
 #: diffviewsctrl.cpp:118
-#, fuzzy, kde-format
-#| msgid "Removes the selected branch"
+#, kde-format
 msgid "Revert selected hunk"
-msgstr "Poistaa valitun haaran"
+msgstr "Palauta valittu palanen"
 
 #: diffviewsctrl.cpp:128 diffviewsctrl.cpp:134
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: diffviewsctrl.cpp:129 diffviewsctrl.cpp:135
 #, kde-format
@@ -223,25 +221,25 @@ msgstr "Pohjaa uudelleen"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
-msgstr "Git-kätköt"
+msgstr "Git-jemmat"
 
 #: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
-msgstr "Kätköjen hallinta"
+msgstr "Jemmojen hallinta"
 
 #: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
-msgstr "Vie kätköön"
+msgstr "Vie jemmaan"
 
 #: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr "Tuo kätköstä"
+msgstr "Tuo jemmasta"
 
 #: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
@@ -295,7 +293,7 @@ msgstr "Muutoksia on odottamassa. Haluatko kätkeä ne ensin?"
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "Kätkö"
+msgstr "Jemma"
 
 #: gitplugin.cpp:904
 #, kde-format
@@ -601,12 +599,12 @@ msgstr "Vaiheista muutokset ennen toimittamista."
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
-msgstr "Kätköjen hallinta"
+msgstr "Jemmojen hallinta"
 
 #: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
-msgstr "Haluatko varmasti hylätä kätkön ”%1”?"
+msgstr "Haluatko varmasti hylätä jemman ”%1”?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
@@ -619,7 +617,7 @@ msgstr "Hylkää"
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
-msgstr "Git-kätkö"
+msgstr "Git-jemma"
 
 #: stashmanagerdialog.cpp:130
 #, kde-format
@@ -650,7 +648,7 @@ msgstr "Poista valittu haara"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
-msgstr "Ota kätkön muutokset käyttöön ja hylkää kätkö"
+msgstr "Ota jemman muutokset käyttöön ja hylkää se"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
@@ -664,7 +662,7 @@ msgstr "Pop"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
-msgstr "Näytä kätkön sisältö"
+msgstr "Näytä jemman sisältö"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
@@ -678,7 +676,7 @@ msgstr "Näytä"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
-msgstr "Ota kätkön muutokset käyttöön"
+msgstr "Ota jemman muutokset käyttöön"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
@@ -692,7 +690,8 @@ msgstr "Käytä"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
-msgstr "Luo uuden haaran, tuo siihen kätköstä muutokset ja hylkää kätkön."
+msgstr ""
+"Luo uuden haaran, tuo siihen jemmasta muutokset ja hylkää jemman sitten"
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111

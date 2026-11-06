@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-02-09 17:27+0200\n"
+"PO-Revision-Date: 2026-10-30 12:26+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -142,7 +142,7 @@ msgstr "CMake-&ohjelmatiedosto:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatically reconfigure when CMake project files change"
-msgstr ""
+msgstr "Tee automaattinen uudelleenasetus CMake-projektitiedostojen muututtua"
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format
