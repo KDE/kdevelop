@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-04 01:01+0000\n"
-"PO-Revision-Date: 2026-09-01 19:32+0200\n"
+"PO-Revision-Date: 2026-11-01 22:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -4060,15 +4060,12 @@ msgid "Batch edit mode"
 msgstr "Mode edició per lots"
 
 #: shell/settings/languagepreferences.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid " file"
-#| msgid_plural " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "%v file"
 msgid_plural "%v files"
-msgstr[0] " fitxer"
-msgstr[1] " fitxers"
+msgstr[0] "%v fitxer"
+msgstr[1] "%v fitxers"
 
 #: shell/settings/languagepreferences.cpp:77
 #, kde-format
