@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2017, 2019, 2023 Vít Pelčák <vit@pelcak.org>
 # Vit Pelcak <vit@pelcak.org>, 2021.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2021-04-23 12:29+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-10 20:26+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Poedit 3.10\n"
 
 #: astyle_plugin.cpp:249
 #, kde-format
@@ -26,6 +27,10 @@ msgid ""
 "white-space:pre'>Home Page: <a href=\"http://astyle.sourceforge.net/"
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
+"<b>Artistic Style</b> je nástroj pro odsazování, formátování a zkrášlování "
+"zdrojového kódu v programovacích jazycích C, C++, C# a Java.<p style='margin-"
+"top:0;white-space:pre'>Domovská stránka: <a href=\"http://astyle.sourceforge."
+"net/\">http://astyle.sourceforge.net</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -39,14 +44,14 @@ msgstr "Odsazování"
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Tabs"
-msgstr "Karty"
+msgstr "Tabulátory"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:53
 #, kde-format
 msgctxt "@item:inlistbox Indentation type"
 msgid "Force tabs"
-msgstr "Vynutit karty"
+msgstr "Vynutit tabulátory"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
 #: astyle_preferences.ui:58
@@ -63,6 +68,8 @@ msgid ""
 "Number of spaces that will be converted to a tab.\n"
 "The number of spaces per tab is controlled by the editor."
 msgstr ""
+"Počet mezer, které budou převedeny na tabulátor.\n"
+"Počet mezer na jeden tabulátor určuje editor."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:104
@@ -83,7 +90,7 @@ msgstr "Pře&vést tabulátory na mezery"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fill empty lines with the white space of their previous lines."
-msgstr ""
+msgstr "Prázdné řádky vyplnit mezerami z předchozích řádků."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
 #: astyle_preferences.ui:117
@@ -97,7 +104,7 @@ msgstr "V&yplnit prázdné řádky"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Indent:"
-msgstr "Odsadit"
+msgstr "Odsadit:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:153
@@ -111,7 +118,7 @@ msgstr "Bloky"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Brackets"
-msgstr "Závorky"
+msgstr "Hranaté závorky"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:163
@@ -139,14 +146,14 @@ msgstr "Popisky"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Namespaces"
-msgstr "Prostory jmen"
+msgstr "Jmenné prostory"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:183
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preprocessor directives"
-msgstr ""
+msgstr "Direktivy předzpracovatele"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
 #: astyle_preferences.ui:188
@@ -164,6 +171,8 @@ msgid ""
 "Indent a maximal # spaces in a continuous statement,\n"
 "relative to the previous line."
 msgstr ""
+"V souvislém příkazu odsadit o maximální počet # mezer,\n"
+"vzhledem k předchozímu řádku."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
@@ -174,27 +183,29 @@ msgid ""
 "Indent a minimal # spaces in a continuous conditional\n"
 "belonging to a conditional header."
 msgstr ""
+"V souvislé podmínce odsadit o minimální počet mezer\n"
+"příslušejících k hlavičce podmínky."
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
 #: astyle_preferences.ui:215
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum in conditional:"
-msgstr ""
+msgstr "Minimum v podmínce:"
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:229
 #, kde-format
 msgctxt "@item"
 msgid "Twice current"
-msgstr ""
+msgstr "Aktuální dvakrát"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
 #: astyle_preferences.ui:246
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum in statement:"
-msgstr ""
+msgstr "Maximum v příkazu:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
 #: astyle_preferences.ui:256
@@ -211,13 +222,15 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
+"Odsadit, namísto zarovnání, následující řádky po řádcích obsahujících "
+"otevírací závorku '(' nebo přiřazení '='."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:272
 #, kde-format
 msgctxt "@option:check"
 msgid "Continuation lines:"
-msgstr ""
+msgstr "Pokračovací řádky:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOther)
 #: astyle_preferences.ui:295
@@ -231,7 +244,7 @@ msgstr "Jiné"
 #, kde-format
 msgctxt "@title:group"
 msgid "Brackets"
-msgstr "Závorky"
+msgstr "Hranaté závorky"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBrackets)
 #: astyle_preferences.ui:315
@@ -248,13 +261,15 @@ msgid ""
 "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
 "from their immediately preceding closing brackets."
 msgstr ""
+"Oddělit hranaté závorky před klíčovými slovy (např. 'else', 'catch', …)\n"
+"od bezprostředně předcházejících uzavíracích hranatých závorek."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
 #, kde-format
 msgctxt "@option:check"
 msgid "Brea&k closing headers"
-msgstr ""
+msgstr "Oddělit uzavírací klíčová slova"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:343
@@ -275,7 +290,7 @@ msgstr "Přiložit"
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Break"
-msgstr "Přerušení"
+msgstr "Oddělit"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
 #: astyle_preferences.ui:358
@@ -289,7 +304,7 @@ msgstr "Linux"
 #, kde-format
 msgctxt "@item:inlistbox brackets style"
 msgid "Run-In"
-msgstr ""
+msgstr "Spustit-v"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:371
@@ -299,13 +314,15 @@ msgid ""
 "Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', "
 "'while')"
 msgstr ""
+"Přidat složené závorky k jednořádkovým podmíněným příkazům bez závorek "
+"(např. 'if', 'for', 'while')"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracesAdd)
 #: astyle_preferences.ui:374
 #, kde-format
 msgctxt "@option:check add braces to unbraced one-line conditional statements"
 msgid "Add b&races"
-msgstr ""
+msgstr "Přidat složené závo&rky"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
 #: astyle_preferences.ui:386
@@ -329,13 +346,22 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
+"Vložit prázdné řádky kolem nesouvisejících bloků, popisků, tříd,...\n"
+"Známé problémy:\n"
+"\n"
+"1. Pokud příkaz NENÍ součástí bloku, \n"
+"jsou všechny následující příkazy zobrazeny s dvojitým řádkováním. \n"
+"Příkazy obsažené v bloku jsou formátovány \n"
+"správně.\n"
+"\n"
+"2. Komentáře jsou odděleny od bloku.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
 #: astyle_preferences.ui:404
 #, kde-format
 msgctxt "@option:check break unrelated blocks by a newline"
 msgid "&Break blocks"
-msgstr ""
+msgstr "Oddělit &bloky"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:422
@@ -354,34 +380,45 @@ msgid ""
 "\n"
 "2. Comments are broken from the block.\n"
 msgstr ""
+"Podobně jako --break-blocks, s tím rozdílem, že navíc vkládá prázdné řádky \n"
+"kolem uzavíracích klíčových slov (např. 'else', 'catch', ...).\n"
+"\n"
+"Známé problémy:\n"
+"\n"
+"1. Pokud příkaz NENÍ součástí bloku, \n"
+"jsou všechny následující příkazy formátovány s dvojitým řádkováním. \n"
+"Příkazy uzavřené v bloku jsou formátovány \n"
+"správně.\n"
+"\n"
+"2. Komentáře jsou odděleny od bloku.\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
 #: astyle_preferences.ui:425
 #, kde-format
 msgctxt "@option:check break all blocks with a newline"
 msgid "Break all bl&ocks"
-msgstr ""
+msgstr "Oddělit všechny bl&oky"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Break 'else if()' statements into two different lines."
-msgstr ""
+msgstr "Oddělit příkazy 'else if()' do dvou samostatných řádků."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
 #: astyle_preferences.ui:435
 #, kde-format
 msgctxt "@option:check break else if() into separate lines"
 msgid "Break i&f-else"
-msgstr ""
+msgstr "Oddělit i&f-else"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
 #: astyle_preferences.ui:445
 #, kde-format
 msgctxt "@title:group"
 msgid "Padding"
-msgstr "Odstup"
+msgstr "Odsazení"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:460
@@ -395,28 +432,28 @@ msgstr "Žádná změna"
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Unpad"
-msgstr ""
+msgstr "Zrušit odsazení"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:470
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside only"
-msgstr ""
+msgstr "Pouze uvnitř"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:475
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Outside only"
-msgstr ""
+msgstr "Pouze venku"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:480
 #, kde-format
 msgctxt "@item:inlistbox parenthesis padding"
 msgid "Inside and outside"
-msgstr ""
+msgstr "Uvnitř i venku"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:490
@@ -427,20 +464,23 @@ msgid ""
 "Once padded, operators stay padded.\n"
 "There is no unpad operator option."
 msgstr ""
+"Kolem operátorů se vloží odsazení mezerami.\n"
+"Jakmile jsou operátory doplněny mezerami, zůstávají tak.\n"
+"Neexistuje možnost zrušit odsazení operátorů."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
 #: astyle_preferences.ui:493
 #, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr ""
+msgstr "Přid&at mezery kolem operátorů"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:500
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Pad parenthesis:"
-msgstr ""
+msgstr "Vyplnění v závorkách:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:507
@@ -450,20 +490,22 @@ msgid ""
 "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
 "'while', ...)"
 msgstr ""
+"Za klíčová slova v závorkách (např. 'if', 'for', 'while', …) vložit vyplnění "
+"mezerami"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
 #, kde-format
 msgctxt "@option:check"
 msgid "Add spaces after parenthesis &headers"
-msgstr ""
+msgstr "Přidat mezery za závorkami a klíčovými slovy"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
 #: astyle_preferences.ui:522
 #, kde-format
 msgctxt "@title:group"
 msgid "One Liners"
-msgstr ""
+msgstr "Jednořádkové"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:529
@@ -473,27 +515,29 @@ msgid ""
 "Do not break lines containing multiple statements into\n"
 "multiple single-statement lines."
 msgstr ""
+"Řádky obsahující více příkazů nerozdělovat na\n"
+"více řádků s jedním příkazem."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
 #: astyle_preferences.ui:532
 #, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
-msgstr ""
+msgstr "Zachovat pří&kazy na jednom řádku"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:539
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Do not break blocks residing completely on one line."
-msgstr ""
+msgstr "Neoddělovat bloky, které se vejdou celé na jeden řádek."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep o&ne-line blocks"
-msgstr ""
+msgstr "Zachovat jed&nořádkové bloky"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gpOther)
 #: astyle_preferences.ui:552

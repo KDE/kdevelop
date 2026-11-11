@@ -1,40 +1,41 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2016, 2017, 2019, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-04 01:01+0000\n"
-"PO-Revision-Date: 2020-09-17 16:25+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-10 22:35+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:24
 #, kde-format
 msgctxt "@title:tab"
 msgid "C/C++ Helpers"
-msgstr ""
+msgstr "Pomocné nástroje pro C/C++"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:29
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure C/C++ Helpers"
-msgstr ""
+msgstr "Nastavení pomocných nástrojů pro C/C++"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: clangsettings/sessionsettings/sessionsettings.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Code Completion"
-msgstr "Doplnění kódu"
+msgstr "Doplňování kódu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:35
@@ -44,20 +45,22 @@ msgid ""
 "If disabled, macros will not be included in the code completion results. "
 "This can improve the responsiveness of code completion in some cases."
 msgstr ""
+"Pokud je tato funkce vypnutá, makra se nezobrazí ve výsledcích doplňování "
+"kódu. V některých případech to může zlepšit odezvu funkce doplňování kódu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
 #: clangsettings/sessionsettings/sessionsettings.ui:38
 #, kde-format
 msgctxt "@option:check"
 msgid "Add macros to code completion"
-msgstr ""
+msgstr "Přidat makra do funkce automatického doplňování kódu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
 #: clangsettings/sessionsettings/sessionsettings.ui:51
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Look-ahead code completion"
-msgstr ""
+msgstr "Povolit prediktivní doplňování kódu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: clangsettings/sessionsettings/sessionsettings.ui:64
@@ -71,7 +74,7 @@ msgstr "Asistenti"
 #, kde-format
 msgctxt "@option:check"
 msgid "Forward declare assistant"
-msgstr ""
+msgstr "Asistent pro předběžné deklarace"
 
 #: clangsupport.cpp:171
 #, kde-format
@@ -81,23 +84,28 @@ msgid ""
 "this.\n"
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
+"Cesta k vestavěným funkcím Clangu \"%1\" je neplatná (chybí hlavičkový "
+"soubor cpuid.h).\n"
+"Tuto chybu lze opravit ručním nastavením proměnné prostředí "
+"KDEV_CLANG_BUILTIN_DIR.\n"
+"Viz také: https://bugs.kde.org/show_bug.cgi?id=393779"
 
 #: clangsupport.cpp:281
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
-msgstr ""
+msgstr "Přejmenovat deklaraci"
 
 #: clangsupport.cpp:288
 #, kde-format
 msgctxt "@action"
 msgid "Move into Source"
-msgstr ""
+msgstr "Přejít do zdroje"
 
 #: codecompletion/context.cpp:149
 #, kde-format
 msgid "Override %1"
-msgstr "Předefinovat %1"
+msgstr "Přepsat %1"
 
 #: codecompletion/context.cpp:352
 #, kde-format
@@ -112,12 +120,12 @@ msgstr "Speciální"
 #: codecompletion/context.cpp:1417
 #, kde-format
 msgid "Look-ahead Matches"
-msgstr ""
+msgstr "Prediktivní shody"
 
 #: codecompletion/context.cpp:1418
 #, kde-format
 msgid "Builtin"
-msgstr "Vestavěná"
+msgstr "Vestavěné"
 
 #: codecompletion/context.cpp:1419
 #, kde-format
@@ -127,12 +135,12 @@ msgstr "Makra"
 #: codecompletion/context.cpp:1464
 #, kde-format
 msgid "Abstract Override"
-msgstr ""
+msgstr "Přepsání abstraktu"
 
 #: codecompletion/context.cpp:1465
 #, kde-format
 msgid "Virtual Override"
-msgstr ""
+msgstr "Virtuální přepsání"
 
 #: codecompletion/context.cpp:1480
 #, kde-format
@@ -142,12 +150,12 @@ msgstr "Implementovat funkci"
 #: codegen/adaptsignatureaction.cpp:51
 #, kde-format
 msgid "Update declaration signature"
-msgstr ""
+msgstr "Aktualizovat podpis deklarace"
 
 #: codegen/adaptsignatureaction.cpp:51
 #, kde-format
 msgid "Update definition signature"
-msgstr ""
+msgstr "Aktualizovat podpis definice"
 
 #: codegen/adaptsignatureaction.cpp:62
 #, kde-format
@@ -156,6 +164,9 @@ msgid ""
 "from: %1\n"
 "to: %2"
 msgstr ""
+"Aktualizovat podpis deklarace\n"
+"z: %1\n"
+"na: %2"
 
 #: codegen/adaptsignatureaction.cpp:63
 #, kde-format
@@ -164,6 +175,9 @@ msgid ""
 "from: %1\n"
 "to: %2"
 msgstr ""
+"Aktualizovat podpis definice\n"
+"z: %1\n"
+"na: %2"
 
 #: codegen/adaptsignatureaction.cpp:113
 #, kde-format
@@ -173,7 +187,7 @@ msgstr "Selhalo provádění změn: %1"
 #: codegen/adaptsignatureassistant.cpp:76
 #, kde-format
 msgid "Adapt Signature"
-msgstr ""
+msgstr "Přizpůsobit podpis"
 
 #: codegen/clangrefactoring.cpp:82
 #, kde-format
@@ -184,32 +198,32 @@ msgstr "Přejmenovat %1"
 #: codegen/clangrefactoring.cpp:94
 #, kde-format
 msgid "Create separate definition for %1"
-msgstr ""
+msgstr "Vytvořte samostatnou definici pro %1"
 
 #: codegen/clangrefactoring.cpp:137
 #, kde-format
 msgid "No declaration under cursor"
-msgstr ""
+msgstr "Žádná deklarace pod kurzorem"
 
 #: codegen/clangrefactoring.cpp:145
 #, kde-format
 msgid "No source file available for %1."
-msgstr ""
+msgstr "Pro %1 není k dispozici žádný zdrojový soubor."
 
 #: codegen/clangrefactoring.cpp:157
 #, kde-format
 msgid "Failed to update DUChain for %1."
-msgstr ""
+msgstr "Nepodařilo se aktualizovat DUChain pro %1."
 
 #: codegen/clangrefactoring.cpp:161
 #, kde-format
 msgid "Declaration lost while updating."
-msgstr ""
+msgstr "Deklarace se při aktualizaci ztratila."
 
 #: codegen/clangrefactoring.cpp:167
 #, kde-format
 msgid "Cannot create definition for this declaration."
-msgstr ""
+msgstr "Nelze vytvořit definici pro tuto deklaraci."
 
 #: codegen/clangrefactoring.cpp:174
 #, kde-format
@@ -224,22 +238,22 @@ msgstr "Vložení selhalo"
 #: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
 #, kde-format
 msgid "Applying changes failed: %1"
-msgstr ""
+msgstr "Použití změn se nezdařilo: %1"
 
 #: duchain/clangproblem.cpp:204
 #, kde-format
 msgid "Fix-it Hints"
-msgstr ""
+msgstr "Tipy na opravy"
 
 #: duchain/clangproblem.cpp:246
 #, kde-format
 msgid "Insert \"%1\" at line: %2, column: %3"
-msgstr ""
+msgstr "Vložit \"%1\" na řádek: %2, sloupec: %3"
 
 #: duchain/clangproblem.cpp:250
 #, kde-format
 msgid "Replace text at line: %1, column: %2 with: \"%3\""
-msgstr ""
+msgstr "Nahradit text v řádku: %1, sloupci: %2 textem: \"%3\""
 
 #: duchain/clangproblem.cpp:253
 #, kde-format
@@ -249,17 +263,17 @@ msgstr "Nahradit \"%1\" za: \"%2\""
 #: duchain/clangproblem.cpp:256
 #, kde-format
 msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
-msgstr ""
+msgstr "Nahradit více řádků počínaje řádkem: %1, sloupcem: %2 textem: \"%3\""
 
 #: duchain/headerguardassistant.cpp:45
 #, kde-format
 msgid "Add #pragma once"
-msgstr ""
+msgstr "Přidat #pragma once"
 
 #: duchain/headerguardassistant.cpp:46
 #, kde-format
 msgid "Add macro-based #ifndef/#define/#endif header guard"
-msgstr ""
+msgstr "Přidat ochranu hlavičky pomocí maker #ifndef/#define/#endif"
 
 #: duchain/macrodefinition.cpp:112
 #, kde-format
@@ -288,7 +302,7 @@ msgstr "Makro"
 #, kde-format
 msgctxt "%1: the link to the definition"
 msgid "Defined in: %1"
-msgstr ""
+msgstr "Definováno v: %1"
 
 #: duchain/macronavigationcontext.cpp:72
 #, kde-format
@@ -303,7 +317,7 @@ msgstr "Tělo: "
 #: duchain/missingincludepathproblem.cpp:35
 #, kde-format
 msgid "Add Custom Include Path"
-msgstr ""
+msgstr "Přidat vlastní cestu pro začlenění"
 
 #: duchain/missingincludepathproblem.cpp:58
 #, kde-format
@@ -323,7 +337,7 @@ msgstr "Ve vloženém souboru: %1"
 #: duchain/parsesession.cpp:639
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
-msgstr ""
+msgstr "Hlavička není chráněna proti vícenásobnému začlenění"
 
 #: duchain/parsesession.cpp:640
 #, kde-format
@@ -331,6 +345,9 @@ msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
 "conventional #ifndef/#define/#endif macro guards or with #pragma once."
 msgstr ""
+"Uvedená hlavička není chráněna proti vícenásobnému začlenění, a to ani "
+"pomocí běžných ochranných maker #ifndef/#define/#endif, ani pomocí #pragma "
+"once."
 
 #: duchain/unknowndeclarationproblem.cpp:374
 #, kde-format
@@ -340,12 +357,12 @@ msgstr "Vložit '%1'"
 #: duchain/unknowndeclarationproblem.cpp:434
 #, kde-format
 msgid "Forward declare as 'class'"
-msgstr ""
+msgstr "Předběžná deklarace jako 'class'"
 
 #: duchain/unknowndeclarationproblem.cpp:441
 #, kde-format
 msgid "Forward declare as 'struct'"
-msgstr ""
+msgstr "Předběžná deklarace jako 'struct'"
 
 #: util/clangutils.cpp:191
 #, kde-format
