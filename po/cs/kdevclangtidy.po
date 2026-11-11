@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vit Pelcak <vit@pelcak.org>, 2018, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:39+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-10 20:38+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: analyzer.cpp:29
 #, kde-format
@@ -116,7 +117,7 @@ msgstr "Clang-Tidy"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Clang-Tidy Settings"
-msgstr ""
+msgstr "Nastavení Clang-Tidy"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/clangtidypreferences.ui:29
@@ -130,14 +131,14 @@ msgstr "Cesty"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Clang-&Tidy executable:"
-msgstr ""
+msgstr "Spustitelný soubor Clang-&Tidy:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
 #: config/clangtidypreferences.ui:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The full path to the Clang-Tidy executable"
-msgstr ""
+msgstr "Úplná cesta ke spustitelnému souboru Clang-Tidy"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
 #: config/clangtidypreferences.ui:72
@@ -186,14 +187,14 @@ msgstr "Vložené soubory"
 #, kde-format
 msgctxt "@option:check"
 msgid "&Check system headers:"
-msgstr ""
+msgstr "&Zkontrolovat systémové hlavičky:"
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/clangtidyprojectconfigpage.ui:92
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header fi&lter:"
-msgstr ""
+msgstr "Filtr h&lavičky:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/clangtidyprojectconfigpage.ui:105
@@ -204,6 +205,10 @@ msgid ""
 "from. Diagnostics from the main file of each translation unit are always "
 "displayed. Can be used together with -line-filter."
 msgstr ""
+"Regulární výraz, který porovnává názvy hlaviček, z nichž se mají zobrazit "
+"diagnostické informace. Diagnostické informace z hlavního souboru každé "
+"překladové jednotky se zobrazují vždy. Lze použít společně s parametrem -"
+"line-filter."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119
@@ -225,11 +230,12 @@ msgstr "E&xtra parametry:"
 msgctxt "@info:tooltip"
 msgid "Additional command line options to pass to Clang-Tidy."
 msgstr ""
+"Další parametry příkazového řádku, které je třeba předat nástroji Clang-Tidy."
 
 #: job.cpp:68
 #, kde-format
 msgid "Clang-Tidy Analysis"
-msgstr ""
+msgstr "Analýza pomocí Clang-Tidy"
 
 #: job.cpp:142
 #, kde-format
@@ -239,19 +245,19 @@ msgstr "Spuštění procesu Clang-Tidy selhalo."
 #: job.cpp:147
 #, kde-format
 msgid "Clang-Tidy crashed."
-msgstr ""
+msgstr "Clang-Tidy se zhroutil."
 
 #: job.cpp:151
 #, kde-format
 msgid "Clang-Tidy process timed out."
-msgstr ""
+msgstr "Došlo k vypršení časového limitu procesu Clang-Tidy."
 
 #: job.cpp:155
 #, kde-format
 msgid "Write to Clang-Tidy process failed."
-msgstr ""
+msgstr "Zápis do procesu Clang-Tidy selhal."
 
 #: job.cpp:159
 #, kde-format
 msgid "Read from Clang-Tidy process failed."
-msgstr ""
+msgstr "Čtení z procesu Clang-Tidy selhalo."

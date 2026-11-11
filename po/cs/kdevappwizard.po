@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2017, 2020.
 # Vit Pelcak <vit@pelcak.org>, 2021.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2021-08-13 09:42+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-10 19:27+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.04.3\n"
+"X-Generator: Poedit 3.10\n"
 
 #: appwizarddialog.cpp:23
 #, kde-format
@@ -55,6 +56,8 @@ msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
+"Tímto se spustí průvodce aplikací KDevelop. Ten vám pomůže vytvořit kostru "
+"vaší aplikace na základě sady šablon."
 
 #: appwizardplugin.cpp:106
 #, kde-format
@@ -64,7 +67,7 @@ msgstr "Nepovedlo se vytvořit nový projekt ze šablony."
 #: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
-msgstr ""
+msgstr "Podívejte se prosím na zobrazení nástroje Správa verzí."
 
 #: appwizardplugin.cpp:136
 #, kde-format
@@ -75,7 +78,7 @@ msgstr "Chyba systému pro správu verzí"
 #: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
-msgstr ""
+msgstr "Nepodařilo se inicializovat repozitář DVCS"
 
 #: appwizardplugin.cpp:161
 #, kde-format
@@ -85,7 +88,7 @@ msgstr "Stav repozitáře DVCS nelze zjistit"
 #: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
-msgstr ""
+msgstr "Nepodařilo se přidat soubory do repozitáře DVCS"
 
 #: appwizardplugin.cpp:182
 #, kde-format
@@ -95,12 +98,12 @@ msgstr "Nepovedlo se importovat projekt do %1."
 #: appwizardplugin.cpp:199
 #, kde-format
 msgid "Could not import project"
-msgstr "Projekt nelze importovat "
+msgstr "Projekt nelze importovat"
 
 #: appwizardplugin.cpp:207
 #, kde-format
 msgid "Could not checkout imported project"
-msgstr ""
+msgstr "Nelze dokončit načtení importovaného projektu"
 
 #: appwizardplugin.cpp:332
 #, kde-format
@@ -159,17 +162,17 @@ msgstr "Neplatný název projektu"
 #: projectselectionpage.cpp:219
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
-msgstr ""
+msgstr "Nelze vytvořit podadresáře, chybí oprávnění pro: %1"
 
 #: projectselectionpage.cpp:234
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
-msgstr ""
+msgstr "Neplatná šablona projektu, vyberte prosím položku na nejnižší úrovni"
 
 #: projectselectionpage.cpp:247
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr ""
+msgstr "Složka již existuje a obsahuje soubory. Otevřete ji jako projekt."
 
 #: projectselectionpage.cpp:294
 #, kde-format
@@ -177,6 +180,7 @@ msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
+"Zadaná cesta již existuje a obsahuje soubory. Opravdu chcete pokračovat?"
 
 #: projectselectionpage.cpp:310
 #, kde-format
