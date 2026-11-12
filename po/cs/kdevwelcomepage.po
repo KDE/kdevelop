@@ -2,31 +2,32 @@
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2016, 2017, 2024 Vít Pelčák <vit@pelcak.org>
 # Vit Pelcak <vit@pelcak.org>, 2021.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2024-07-09 16:17+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-12 01:10+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Vít Pelčák"
+msgstr "Vít Pelčák,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "vit@pelcak.org"
+msgstr "vit@pelcak.org,libor.filipek@gmail.com"
 
 #: welcomepageview.cpp:50
 #, kde-format
@@ -41,6 +42,15 @@ msgid ""
 "userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
 "instructions.</a></p>"
 msgstr ""
+"<br/>\n"
+"<h3>Poznámka pro uživatele Windows</h3>\n"
+"<p>Upozorňujeme, že KDevelop pro Windows NEobsahuje kompilátor C/C++!</p>\n"
+"<p>Musíte si nainstalovat buď GCC přes MinGW, nebo nejnovější verzi IDE "
+"Microsoft Visual Studio a ujistit se, že je prostředí správně nastaveno "
+"<i>před</i> spuštěním KDevelopu.</p>\n"
+"<p>Pokud potřebujete další pomoc, podívejte se prosím na <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">pokyny pro KDevelop ve "
+"Windows.</a></p>"
 
 #. i18n: ectx: property (text), widget (QLabel, appNameLabel)
 #: welcomepageview.ui:55
@@ -64,13 +74,13 @@ msgstr "KDevelop.org"
 #: welcomepageview.ui:104
 #, kde-format
 msgid "Learn about KDevelop"
-msgstr ""
+msgstr "Zjistěte více o KDevelopu"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, joinTeamLinkLabel)
 #: welcomepageview.ui:114
 #, kde-format
 msgid "Join KDevelop's team!"
-msgstr ""
+msgstr "Přidejte se k týmu KDevelop!"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, handbookLinkLabel)
 #: welcomepageview.ui:124
@@ -118,3 +128,8 @@ msgid ""
 "<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
 "KDevelop\">User Manual.</a></p>"
 msgstr ""
+"<h3>Vítejte v KDevelopu!</h3>\n"
+"<p>Práci na projektu můžete zahájit otevřením stávajícího projektu nebo "
+"vytvořením nového pomocí výše uvedených tlačítek.</p>\n"
+"<p>Pokud potřebujete pomoc, podívejte se prosím do <a href=\"https://"
+"userbase.kde.org/KDevelop\">uživatelské příručky.</a></p>"

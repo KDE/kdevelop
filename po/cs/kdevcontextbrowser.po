@@ -1,51 +1,52 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2013, 2016, 2017, 2018, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:31+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-11 11:51+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: contextbrowser.cpp:161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
-msgstr ""
+msgstr "Přejít zpět v historii kontextu"
 
 #: contextbrowser.cpp:173
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
-msgstr ""
+msgstr "Přejít vpřed v historii kontextu"
 
 #: contextbrowser.cpp:189
 #, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
-msgstr "Obrys"
+msgstr "Struktura"
 
 #: contextbrowser.cpp:190
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
-msgstr "Obrys"
+msgstr "Struktura"
 
 #: contextbrowser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Navigate outline of active document, click to browse"
-msgstr ""
+msgstr "Procházet strukturu aktivního dokumentu, kliknutím prohlížet"
 
 #: contextbrowser.cpp:232
 #, kde-format
@@ -57,13 +58,13 @@ msgstr "Režim Pro&cházení zdroje"
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
-msgstr ""
+msgstr "&Předchozí navštívený kontext"
 
 #: contextbrowser.cpp:244
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
-msgstr ""
+msgstr "&Následující navštívený kontext"
 
 #: contextbrowser.cpp:250
 #, kde-format
@@ -140,4 +141,4 @@ msgstr "Odemknout stávající pohled"
 #: kdevcontextbrowser.rc:25
 #, kde-format
 msgid "Code Browser Toolbar"
-msgstr ""
+msgstr "Panel nástrojů prohlížeče kódu"
