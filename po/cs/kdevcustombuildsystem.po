@@ -1,27 +1,28 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2015, 2017, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:42+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-11 22:50+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: configwidget.cpp:25
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Build"
-msgstr "Překlad"
+msgstr "Sestavení"
 
 #: configwidget.cpp:26
 #, kde-format
@@ -45,7 +46,7 @@ msgstr "Vyčistit"
 #, kde-format
 msgctxt "@item:inlistbox build action"
 msgid "Prune"
-msgstr ""
+msgstr "Uklidit"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: configwidget.ui:19
@@ -62,20 +63,23 @@ msgid ""
 "Select the directory where the tools are being executed in.\n"
 "If this is the same as the source directory you can leave it empty."
 msgstr ""
+"Vyberte adresář, ve kterém se nástroje spouštějí.\n"
+"Pokud se jedná o stejný adresář jako zdrojový, můžete toto pole nechat "
+"prázdné."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
 #: configwidget.ui:30
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "The directory where the tools are executed in"
-msgstr ""
+msgstr "Adresář, ve kterém se nástroje spouštějí"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: configwidget.ui:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Build Tools"
-msgstr ""
+msgstr "Nástroje pro sestavení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: configwidget.ui:48
@@ -89,7 +93,7 @@ msgstr "Činnost:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable:"
-msgstr ""
+msgstr "Povolit:"
 
 #. i18n: ectx: property (text), widget (QLabel, execLabel)
 #: configwidget.ui:75
@@ -106,6 +110,8 @@ msgid ""
 "This is the executable that should be executed when selecting the action "
 "from the Project menu"
 msgstr ""
+"Toto je spustitelný soubor, který by se měl spustit při výběru akce z "
+"nabídky Projekt"
 
 #. i18n: ectx: property (text), widget (QLabel, argLabel)
 #: configwidget.ui:95
@@ -119,7 +125,7 @@ msgstr "Argumenty:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The arguments that the tool needs to execute properly."
-msgstr ""
+msgstr "Argumenty, které nástroj potřebuje ke správnému spuštění."
 
 #. i18n: ectx: property (text), widget (QLabel, envLabel)
 #: configwidget.ui:115
@@ -133,13 +139,13 @@ msgstr "Prostředí:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a pre-configured environment for your tool"
-msgstr ""
+msgstr "Vyberte si předem nakonfigurované prostředí pro svůj nástroj"
 
 #: custombuildjob.cpp:67
 #, kde-format
 msgctxt "Building: <command> <project item name>"
 msgid "Building: %1 %2"
-msgstr "Překládá se: %1 %2"
+msgstr "Sestavuje se: %1 %2"
 
 #: custombuildjob.cpp:70
 #, kde-format
@@ -169,43 +175,45 @@ msgstr "Nastavuje se: %1 %2"
 #, kde-format
 msgctxt "Pruning: <command> <project item name>"
 msgid "Pruning: %1 %2"
-msgstr ""
+msgstr "Uklízí se: %1 %2"
 
 #: custombuildjob.cpp:95
 #, kde-format
 msgid "Undefined Build type"
-msgstr ""
+msgstr "Nedefinovaný typ sestavení"
 
 #: custombuildjob.cpp:99
 #, kde-format
 msgid "No command given for custom %1 tool in project \"%2\"."
-msgstr ""
+msgstr "V projektu \"%2\" nebyl zadán žádný příkaz pro vlastní nástroj %1."
 
 #: custombuildjob.cpp:104
 #, kde-format
 msgid "The custom %1 tool in project \"%2\" is disabled"
-msgstr ""
+msgstr "Vlastní nástroj %1 v projektu \"%2\" je deaktivován"
 
 #: custombuildjob.cpp:116
 #, kde-format
 msgid ""
 "The given arguments would need a real shell, this is not supported currently."
 msgstr ""
+"Uvedené argumenty by vyžadovaly skutečný shell, což v současné době není "
+"podporováno."
 
 #: custombuildjob.cpp:166
 #, kde-format
 msgid "Failed to start command."
-msgstr ""
+msgstr "Spuštění příkazu se nezdařilo."
 
 #: custombuildjob.cpp:169
 #, kde-format
 msgid "Command crashed."
-msgstr ""
+msgstr "Příkaz se zhroutil."
 
 #: custombuildjob.cpp:172
 #, kde-format
 msgid "Unknown error executing command."
-msgstr ""
+msgstr "Při provádění příkazu došlo k neznámé chybě."
 
 #: custombuildjob.cpp:189
 #, kde-format
@@ -245,7 +253,7 @@ msgstr "vymazat"
 #, kde-format
 msgctxt "@item:intext custom 'prune' tool"
 msgid "prune"
-msgstr ""
+msgstr "uklidit"
 
 #: custombuildsystemconfig.cpp:19
 #, kde-format
@@ -286,3 +294,5 @@ msgid ""
 "Configure a projects custom build tool and includes/defines for the language "
 "support."
 msgstr ""
+"Nastavte vlastní nástroj pro sestavení projektu a soubory includes/definice "
+"pro podporu daného jazyka."

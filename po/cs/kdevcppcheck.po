@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2013, 2014, 2015, 2016, 2017, 2018, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:36+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-11 23:26+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Poedit 3.10\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
@@ -55,14 +56,14 @@ msgstr "Výstup"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hide output view during check"
-msgstr ""
+msgstr "Skrýt zobrazení výstupu během kontroly"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
 #: config/globalconfigpage.ui:58
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Cppcheck XML output in the output view"
-msgstr ""
+msgstr "Zobrazit výstup Cppcheck ve formátu XML v okně výstupu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
 #: config/projectconfigpage.ui:39
@@ -79,13 +80,15 @@ msgid ""
 "Check for unused functions. It is recommend to only enable this when the "
 "whole program is scanned"
 msgstr ""
+"Zkontrolujte, zda nejsou v kódu nepoužívané funkce. Doporučuje se tuto "
+"funkci zapnout pouze v případě, že se provádí kontrola celého programu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
 #: config/projectconfigpage.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Unused function"
-msgstr ""
+msgstr "Nepoužívaná funkce"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:60
@@ -96,20 +99,23 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
+"Nechte Cppcheck generovat hlášení i v případě, že analýza není jednoznačná. "
+"Při použití této volby dochází k falešným pozitivům. Každý výsledek je třeba "
+"pečlivě prověřit, než budete vědět, zda je v pořádku, nebo ne."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
 #, kde-format
 msgctxt "@option:check"
 msgid "Inconclusive analysis"
-msgstr ""
+msgstr "Nejednoznačná analýza"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable information messages"
-msgstr ""
+msgstr "Zapnout informační zprávy"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
 #: config/projectconfigpage.ui:73
@@ -126,20 +132,22 @@ msgid ""
 "Warn if there are missing includes. For detailed information use 'check-"
 "config'"
 msgstr ""
+"Upozornit na chybějící příkazy include. Podrobné informace získáte pomocí "
+"příkazu 'check-config'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
 #: config/projectconfigpage.ui:86
 #, kde-format
 msgctxt "@option:check"
 msgid "Missing include"
-msgstr ""
+msgstr "Chybějící příkaz include"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:96
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable performance messages"
-msgstr ""
+msgstr "Zapnout zprávy o výkonu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
 #: config/projectconfigpage.ui:99
@@ -159,20 +167,25 @@ msgid ""
 "that is effective.<br/><br/>Be careful with using this option - it can "
 "dramatically slow checking.</p>"
 msgstr ""
+"<p>Vynutí kontrolu souborů, které obsahují velké množství konfigurací. Pokud "
+"je takový soubor nalezen, zobrazí se chybová zpráva, takže není důvod tuto "
+"volbu používat ve výchozím nastavení. Pokud je použita společně s volbou '--"
+"max-configs=', platí ta druhá z uvedených voleb.<br/><br/>Při používání této "
+"volby buďte opatrní – může výrazně zpomalit kontrolu.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112
 #, kde-format
 msgctxt "@option:check"
 msgid "Force checking"
-msgstr ""
+msgstr "Vynucení kontroly"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable portability messages"
-msgstr ""
+msgstr "Povolit zprávy o přenositelnosti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
 #: config/projectconfigpage.ui:122
@@ -189,6 +202,8 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
+"Povolit všechny kontroly stylu kódování. Jsou povoleny všechny zprávy se "
+"závažností 'style', 'performance' a 'portability'."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
@@ -205,20 +220,22 @@ msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
 "flag."
 msgstr ""
+"Zkontrolovat nastavení nástroje Cppcheck. Tento příznak deaktivuje běžnou "
+"analýzu kódu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
 #, kde-format
 msgctxt "@option:check"
 msgid "Check config"
-msgstr ""
+msgstr "Zkontrolovat nastavení"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
 #: config/projectconfigpage.ui:158
 #, kde-format
 msgctxt "@title:tab"
 msgid "Include Directories"
-msgstr "Zahrnout adresáře"
+msgstr "Adresáře pro hlavičkové soubory"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:164
@@ -228,13 +245,16 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
+"Přidat adresáře pro hlavičkové soubory 'project' do argumentů nástroje "
+"Cppcheck. Tato volba přidá pouze cesty související s kořenovým adresářem "
+"projektu a adresáři pro sestavení."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'project' include dirs"
-msgstr ""
+msgstr "Použít adresáře pro hlavičkové soubory 'project'"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:180
@@ -244,20 +264,23 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
+"<p>Přidat další adresáře pro hlavičkové soubory 'system' do argumentů "
+"nástroje Cppcheck.<br/><br/>Při používání této volby buďte opatrní – může "
+"výrazně zpomalit kontrolu.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Use 'system' include dirs"
-msgstr ""
+msgstr "Použít adresáře pro hlavičkové soubory 'system'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: config/projectconfigpage.ui:198
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Ignored includes:"
-msgstr ""
+msgstr "&Ignorované adresáře pro hlavičkové soubory:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
 #: config/projectconfigpage.ui:218
@@ -278,6 +301,20 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html>\n"
+"\n"
+"<p>Definuje seznam ignorovaných adresářů pro hlavičkové soubory, oddělených "
+"středníky.</p>\n"
+"\n"
+"<p>Můžete použít následující zástupné symboly:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> – Nahradí se adresou URL kořenového adresáře projektu."
+"</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> – Nahradí se adresou URL adresáře sestavení projektu.</"
+"p>\n"
+"\n"
+"</html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
 #: config/projectconfigpage.ui:241
@@ -312,6 +349,19 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html>\n"
+"\n"
+"<p>Definuje další parametry pro cppcheck (viz dokumentace).</p>\n"
+"\n"
+"<p>Můžete použít následující zástupné symboly:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> – Nahradí se adresou URL kořenového adresáře projektu."
+"</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> – Nahradí se adresou URL adresáře pro sestavení "
+"projektu.</p>\n"
+"\n"
+"</html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: config/projectconfigpage.ui:308
@@ -347,27 +397,27 @@ msgstr "Cppcheck"
 #: job.cpp:150
 #, kde-format
 msgid "Failed to start Cppcheck from \"%1\"."
-msgstr ""
+msgstr "Nepodařilo se spustit Cppcheck z \"%1\"."
 
 #: job.cpp:155
 #, kde-format
 msgid "Cppcheck crashed."
-msgstr ""
+msgstr "Cppcheck se zhroutil."
 
 #: job.cpp:160
 #, kde-format
 msgid "Cppcheck process timed out."
-msgstr ""
+msgstr "Došlo k vypršení časového limitu Cppcheck."
 
 #: job.cpp:164
 #, kde-format
 msgid "Write to Cppcheck process failed."
-msgstr ""
+msgstr "Zápis do procesu Cppcheck selhal."
 
 #: job.cpp:168
 #, kde-format
 msgid "Read from Cppcheck process failed."
-msgstr ""
+msgstr "Čtení z procesu Cppcheck selhalo."
 
 #: parameters.cpp:145
 #, kde-format
@@ -379,17 +429,23 @@ msgid ""
 "'XX' value can be found in any project's moc-generated file or in the "
 "<QtCore/qobjectdefs.h> header file."
 msgstr ""
+"Zdá se, že tento projekt využívá knihovnu Qt. Aby nástroj cppcheck fungoval "
+"správně, je třeba nastavit hodnotu definice Q_MOC_OUTPUT_REVISION. Bohužel "
+"modul není schopen tuto hodnotu najít automaticky – měli byste ji nastavit "
+"ručně přidáním '-DQ_MOC_OUTPUT_REVISION=XX' do dodatečných parametrů. "
+"Hodnotu 'XX' najdete v jakémkoli souboru generovaném moc v rámci projektu "
+"nebo v hlavičkovém souboru <QtCore/qobjectdefs.h>."
 
 #: parser.cpp:220
 #, kde-format
 msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
-msgstr ""
+msgstr "Zpracování XML v Cppcheck: chyba v řádku %1, sloupci %2: %3"
 
 #: plugin.cpp:51
 #, kde-format
 msgctxt "@action"
 msgid "Analyze Current File with Cppcheck"
-msgstr ""
+msgstr "Analyzovat aktuální soubor pomocí Cppcheck"
 
 #: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
 #, kde-format

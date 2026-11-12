@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-11-03 22:04+0300\n"
+"PO-Revision-Date: 2026-11-10 21:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3920,8 +3920,8 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
-"Bu biçem için önizleme görünürlüğünü açın/kapatın.\n"
-"Önizleme, biçimlendirmesi dosya yoluna bağımlı olan biçemler için devre dışı "
+"Bu stil için önizleme görünürlüğünü açın/kapatın.\n"
+"Önizleme, biçimlendirmesi dosya yoluna bağımlı olan stiller için devre dışı "
 "olmalıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
@@ -4188,7 +4188,7 @@ msgstr ""
 "yoğunluğuna bağlı olarak seçili düzenleyici temasına uyum sağlayacaktır. "
 "Renkler üzerinde tam denetime iye olmak istiyorsanız renk kaynağı olarak "
 "düzenleyici temasını kullanabilirsiniz. Sonrasında, Düzenleyici  &gt; Renk "
-"Temaları &gt; Vurgulama Metin Biçemleri &gt; KDevelop/Anlamsal Renkler "
+"Temaları &gt; Vurgulama Metin Stilleri &gt; KDevelop/Anlamsal Renkler "
 "altından renklere ince ayar çekebilirsiniz.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
@@ -4645,7 +4645,7 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
 msgstr ""
-"Kate kip satırı bulunmayan belgeler için biçimlendirme biçemine göre "
+"Kate kip satırı bulunmayan belgeler için biçimlendirme stiline göre "
 "düzenleyicinin girintileme kipini geçersiz kıl."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
@@ -4677,7 +4677,7 @@ msgstr "Kate Kip Satırı Ekle"
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr "Biçimlendirme Biçemleri"
+msgstr "Biçimlendirme Stilleri"
 
 #: shell/settings/templateconfig.cpp:39
 #, kde-format
@@ -4956,7 +4956,7 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 "Seçili metni veya seçili öge yoksa tüm dosyayı, <i>%1</i> aracını kullanarak "
-"<b>%2</b> biçemiyle yeniden biçimlendir."
+"<b>%2</b> stiliyle yeniden biçimlendir."
 
 #: shell/sourceformattercontroller.cpp:619
 #, kde-format
@@ -4971,7 +4971,7 @@ msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
-"İmlecin altındaki satırı, <i>%1</i> aracını kullanarak <b>%2</b> biçemiyle "
+"İmlecin altındaki satırı, <i>%1</i> aracını kullanarak <b>%2</b> stiliyle "
 "yeniden biçimlendir."
 
 #: shell/sourceformattercontroller.cpp:626
@@ -5051,7 +5051,7 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
-"%1 biçemi, aşağıdaki diller tarafından da kullanılıyor:\n"
+"%1 stili, aşağıdaki diller tarafından da kullanılıyor:\n"
 "%2.\n"
 "Silmek istediğinizden emin misiniz?"
 
@@ -5059,7 +5059,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr "Biçem Silme"
+msgstr "Stil Silme"
 
 #: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
@@ -5077,7 +5077,7 @@ msgstr "Dil:"
 #: shell/sourceformatterselectionedit.ui:44
 #, kde-format
 msgid "How to configure formatting styles"
-msgstr "Biçimlendirme biçemlerini nasıl yapılandırmalı"
+msgstr "Biçimlendirme stillerini nasıl yapılandırmalı"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, usageHelpButton)
 #: shell/sourceformatterselectionedit.ui:49
@@ -5097,9 +5097,9 @@ msgid ""
 "p>"
 msgstr ""
 "<p>Aşağıdaki <i>Dil</i> çoklu kutusundan kullandığınız dilleri teker teker "
-"seçin ve her biri için istediğiniz biçimlendiriciyi ve biçemi ayarlayın. "
-"Seçimi kaldırmak için biçemin üzerine <i>Kontrol+Tık</i> yapın.</p>\n"
-"<p>Kullanılan her dil için doğru biçimlendiriciyi ve biçemi seçmek çok "
+"seçin ve her biri için istediğiniz biçimlendiriciyi ve stili ayarlayın. "
+"Seçimi kaldırmak için stilin üzerine <i>Kontrol+Tık</i> yapın.</p>\n"
+"<p>Kullanılan her dil için doğru biçimlendiriciyi ve stili seçmek çok "
 "önemlidir: Yalnızca <i>Kaynağı Yeniden Biçimlendir</i>/<i>Satır</i>/"
 "<i>Dosyalar…</i> eylemleri değil, kendiliğinden oluşturulmuş, düzenlenmiş "
 "veya düzeltilmiş kod da bundan etkilenir (örneğin, <i>Yeniden Adlandır</i> "
@@ -5127,7 +5127,7 @@ msgstr "Seçili bir biçimlendiricinin açıklaması"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
-msgstr "Biçem:"
+msgstr "Stil:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: shell/sourceformatterselectionedit.ui:201
