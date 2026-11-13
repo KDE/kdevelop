@@ -2,31 +2,32 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-01 00:53+0000\n"
-"PO-Revision-Date: 2023-02-24 11:07+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-12 23:26+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Poedit 3.10\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Klára Cihlářová"
+msgstr "Klára Cihlářová,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "koty@seznam.cz"
+msgstr "koty@seznam.cz,libor.filipek@gmail.com"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
@@ -160,7 +161,7 @@ msgstr "Nelze otevřít projekt '%1': %2"
 #: main.cpp:274
 #, kde-format
 msgid "Select the session to open the document in"
-msgstr ""
+msgstr "Vyberte sezení, ve které chcete dokument otevřít"
 
 #: main.cpp:301
 #, kde-format
@@ -168,6 +169,9 @@ msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
+"Nelze otevřít neznámé sezení %1. Seznam dostupných sezení najdete pomocí "
+"přepínače `--list-sessions` nebo můžete vytvořit nové sezení pomocí "
+"přepínače `-n`."
 
 #: main.cpp:374
 #, kde-format
@@ -187,13 +191,13 @@ msgstr "Autorská práva 1999-%1, Vývojáři KDevelop"
 #: main.cpp:380
 #, kde-format
 msgid "Igor Kushnir"
-msgstr ""
+msgstr "Igor Kushnir"
 
 #: main.cpp:381
 #, kde-format
 msgid ""
 "General maintenance, Bug fixing and prevention, Performance improvements"
-msgstr ""
+msgstr "Obecná údržba, opravy chyb a prevence, zvýšení výkonu"
 
 #: main.cpp:383
 #, kde-format
@@ -203,7 +207,7 @@ msgstr "Kevin Funk"
 #: main.cpp:383
 #, kde-format
 msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
-msgstr "Spolu správce, C++/Clang, QA, Podpora Windows, Výkon, Web"
+msgstr "Společný správce, C++/Clang, QA, podpora Windows, výkon, web"
 
 #: main.cpp:384
 #, kde-format
@@ -214,6 +218,8 @@ msgstr "Sven Brauch"
 #, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
 msgstr ""
+"Společný správce, AppImage, podpora jazyka Python, vylepšení uživatelského "
+"rozhraní"
 
 #: main.cpp:385
 #, kde-format
@@ -235,6 +241,8 @@ msgstr "Milian Wolff"
 msgid ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
 msgstr ""
+"C++/Clang, obecný správce, moduly pro vývoj webových aplikací, úryvky kódu, "
+"výkon"
 
 #: main.cpp:387
 #, kde-format
@@ -244,7 +252,7 @@ msgstr "Olivier JG"
 #: main.cpp:387
 #, kde-format
 msgid "C++/Clang, DUChain, Bug Fixes"
-msgstr ""
+msgstr "C++/Clang, DUChain, opravy chyb"
 
 #: main.cpp:388
 #, kde-format
@@ -279,6 +287,8 @@ msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 msgstr ""
+"Řetězec definice použití, podpora jazyka C++, navigace v kódu, doplňování "
+"kódu, pomoc při programování, refaktoring"
 
 #: main.cpp:391
 #, kde-format
@@ -298,7 +308,7 @@ msgstr "Hamish Rodda"
 #: main.cpp:392
 #, kde-format
 msgid "Text editor integration, definition-use chain"
-msgstr ""
+msgstr "Integrace textového editoru, řetězec definice použití"
 
 #: main.cpp:393
 #, kde-format
@@ -308,7 +318,7 @@ msgstr "Amilcar do Carmo Lucas"
 #: main.cpp:393
 #, kde-format
 msgid "Website admin, API documentation, Doxygen and autoproject patches"
-msgstr ""
+msgstr "Správce webu, dokumentace k API, opravy pro Doxygen a autoproject"
 
 #: main.cpp:394
 #, kde-format
@@ -338,7 +348,7 @@ msgstr "Cédric Pasteur"
 #: main.cpp:398
 #, kde-format
 msgid "astyle and indent support"
-msgstr ""
+msgstr "podpora stylů a odsazení"
 
 #: main.cpp:399
 #, kde-format
@@ -359,7 +369,7 @@ msgstr "Robert Gruber"
 #: main.cpp:402
 #, kde-format
 msgid "SnippetPart, debugger and usability patches"
-msgstr ""
+msgstr "SnippetPart, ladicí nástroj a opravy týkající se použitelnosti"
 
 #: main.cpp:403
 #, kde-format
@@ -409,12 +419,12 @@ msgstr "Nokia Corporation/Qt Software"
 #: main.cpp:407
 #, kde-format
 msgid "Designer code"
-msgstr ""
+msgstr "Kód Designer"
 
 #: main.cpp:409
 #, kde-format
 msgid "Contributors to older versions:"
-msgstr "Přispěvatelé do starších verzí"
+msgstr "Přispěvatelé do starších verzí:"
 
 #: main.cpp:410
 #, kde-format
@@ -484,7 +494,7 @@ msgstr "Ian Reinhart Geiser"
 #: main.cpp:416
 #, kde-format
 msgid "Dist part, bash support, application templates"
-msgstr ""
+msgstr "Část Dist, podpora Bash, šablony aplikací"
 
 #: main.cpp:417
 #, kde-format
@@ -504,7 +514,7 @@ msgstr "Victor Roeder"
 #: main.cpp:418
 #, kde-format
 msgid "Help with Automake manager and persistent class store"
-msgstr ""
+msgstr "Pomoc s nástrojem Automake Manager a trvalým úložištěm tříd"
 
 #: main.cpp:419
 #, kde-format
@@ -554,7 +564,7 @@ msgstr "Mario Scalas"
 #: main.cpp:423
 #, kde-format
 msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
-msgstr ""
+msgstr "PartExplorer, přepracování programu CvsPart, opravy, chyby (opravy)"
 
 #: main.cpp:424
 #, kde-format
@@ -567,6 +577,7 @@ msgid ""
 "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
 "patches"
 msgstr ""
+"Moduly Replace, Bookmarks, FileList a CTags2. Celková vylepšení a opravy"
 
 #: main.cpp:425
 #, kde-format
@@ -576,7 +587,7 @@ msgstr "Julian Rockey"
 #: main.cpp:425
 #, kde-format
 msgid "Filecreate part and other bits and patches"
-msgstr ""
+msgstr "Část týkající se vytváření souborů a další drobnosti a opravy"
 
 #: main.cpp:426
 #, kde-format
@@ -636,7 +647,7 @@ msgstr "Hugo Varotto"
 #: main.cpp:431 main.cpp:432
 #, kde-format
 msgid "Fileselector component"
-msgstr ""
+msgstr "Komponenta pro výběr souborů"
 
 #: main.cpp:432
 #, kde-format
@@ -651,7 +662,7 @@ msgstr "Daniel Engelschalt"
 #: main.cpp:433
 #, kde-format
 msgid "C++ code completion, persistent class store"
-msgstr ""
+msgstr "Automatické doplňování kódu v C++, trvalé úložiště tříd"
 
 #: main.cpp:434
 #, kde-format
@@ -686,7 +697,7 @@ msgstr "Marcel Turino"
 #: main.cpp:437
 #, kde-format
 msgid "Documentation index view"
-msgstr ""
+msgstr "Zobrazení indexu dokumentace"
 
 #: main.cpp:438
 #, kde-format
@@ -704,6 +715,8 @@ msgid ""
 "Documentation Finder,  qmake projectmanager patches, usability improvements, "
 "bugfixes ... "
 msgstr ""
+"Vyhledávač dokumentace, opravy pro správce projektů qmake, vylepšení "
+"použitelnosti, opravy chyb ... "
 
 #: main.cpp:440
 #, kde-format
@@ -713,7 +726,7 @@ msgstr "Andreas Koepfle"
 #: main.cpp:440
 #, kde-format
 msgid "QMake project manager patches"
-msgstr ""
+msgstr "Opravy správce projektů QMake"
 
 #: main.cpp:441
 #, kde-format
@@ -724,6 +737,7 @@ msgstr "Sascha Cunz"
 #, kde-format
 msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
 msgstr ""
+"Úprava kódu a opravy chyb v qEditoru, AutoMake a mnoha dalších programech"
 
 #: main.cpp:442
 #, kde-format
@@ -738,7 +752,7 @@ msgstr "Grafika pro jazyk ruby"
 #: main.cpp:457
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
-msgstr ""
+msgstr "Otevřít KDevelop v novém sezení pod zadaným názvem."
 
 #: main.cpp:460
 #, kde-format
@@ -746,6 +760,8 @@ msgid ""
 "Open KDevelop with the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
+"Otevřít KDevelop s daným sezením.\n"
+"Můžete předat buď hash, nebo název sezení."
 
 #: main.cpp:464
 #, kde-format
@@ -753,11 +769,15 @@ msgid ""
 "Delete the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
+"Smazat dané sezení. \n"
+"Můžete předat buď hash, nebo název sezení."
 
 #: main.cpp:468
 #, kde-format
 msgid "Shows all available sessions and lets you select one to open."
 msgstr ""
+"Zobrazí všechna dostupná sezení a umožní vám vybrat jedno z nich a otevřít "
+"ho."
 
 #: main.cpp:470
 #, kde-format
@@ -772,7 +792,7 @@ msgstr "Vypsat dostupná sezení a ukončit."
 #: main.cpp:474
 #, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr ""
+msgstr "Otevřít KDevelop a stáhnout projekt z uvedené adresy <repo url>."
 
 #: main.cpp:477
 #, kde-format
@@ -780,6 +800,8 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
+"Otevřít KDevelop a načíst daný projekt. <project> může být buď soubor s "
+"příponou .kdev4, nebo cesta k adresáři."
 
 #: main.cpp:480
 #, kde-format
@@ -788,16 +810,23 @@ msgid ""
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
+"Spustit ladění aplikace v KDevelop pomocí zadaného ladicího programu.\n"
+"Je třeba uvést spustitelný soubor, který má být laděn – včetně argumentů.\n"
+"Příklad: kdevelop --debug gdb myapp --foo bar"
 
 #: main.cpp:494
 #, kde-format
 msgid "Files to load, or directories to load as projects"
 msgstr ""
+"Soubory, které se mají načíst, nebo adresáře, které se mají načíst jako "
+"projekty"
 
 #: main.cpp:505
 #, kde-format
 msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
 msgstr ""
+"Dostupná sezení (k otevření konkrétního sezení použijte příkaz '-s HASH' "
+"nebo '-s NAME'):"
 
 #: main.cpp:506
 #, kde-format
@@ -812,12 +841,12 @@ msgstr "Název: Otevřené projekty"
 #: main.cpp:515
 #, kde-format
 msgid "[running]"
-msgstr ""
+msgstr "[spuštěno]"
 
 #: main.cpp:617
 #, kde-format
 msgid "Select the session you would like to use"
-msgstr ""
+msgstr "Vybrat sezení, které chcete použít"
 
 #: main.cpp:625
 #, kde-format
@@ -861,7 +890,7 @@ msgstr "Sezení s názvem %1 bylo úspěšně odstraněno."
 #: main.cpp:777
 #, kde-format
 msgid "Cannot find native launch configuration type"
-msgstr ""
+msgstr "Nelze najít nativní typ konfigurace spouštění"
 
 #: main.cpp:797
 #, kde-format

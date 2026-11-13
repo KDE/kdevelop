@@ -1,49 +1,50 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2015, 2017, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:38+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-12 23:35+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Poedit 3.10\n"
 
 #: executeplugin.cpp:62
 #, kde-format
 msgctxt "command line arguments to an executable"
 msgid "arguments"
-msgstr ""
+msgstr "argumenty"
 
 #: executeplugin.cpp:82
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
-msgstr ""
+msgstr "Nepodařilo se vyřešit závislost: %1"
 
 #: executeplugin.cpp:140
 #, kde-format
 msgctxt "path to an executable"
 msgid "executable path"
-msgstr ""
+msgstr "cesta ke spustitelnému souboru"
 
 #: executeplugin.cpp:194
 #, kde-format
 msgid "external terminal command"
-msgstr ""
+msgstr "příkaz externího terminálu"
 
 #: nativeappconfig.cpp:125
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
-msgstr ""
+msgstr "Zeptat se, zda běží"
 
 #: nativeappconfig.cpp:126
 #, kde-format
@@ -63,12 +64,14 @@ msgid ""
 "<p>Note: <code>gnome-terminal</code> is only partially supported due to its "
 "limitations.</p>"
 msgstr ""
+"<p>Poznámka: <code>gnome-terminal</code> je kvůli svým omezením podporován "
+"pouze částečně.</p>"
 
 #: nativeappconfig.cpp:182
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
-msgstr ""
+msgstr "Nastavení nativní aplikace"
 
 #: nativeappconfig.cpp:192
 #, kde-format
@@ -83,7 +86,7 @@ msgstr "Nativní aplikace"
 #: nativeappconfig.cpp:257
 #, kde-format
 msgid "Compiled Binary"
-msgstr ""
+msgstr "Kompilovaný binární soubor"
 
 #: nativeappconfig.cpp:338
 #, kde-format
@@ -117,7 +120,7 @@ msgstr "Spustite&lný soubor:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "executable or /path/to/executable"
-msgstr ""
+msgstr "spustitelný soubor nebo cesta ke spustitelnému souboru"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:109
@@ -125,6 +128,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Enter the executable name or the absolute path to the executable file"
 msgstr ""
+"Zadat název spustitelného souboru nebo absolutní cestu k tomuto souboru"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: nativeappconfig.ui:121
@@ -149,6 +153,9 @@ msgid ""
 "pass arguments containing space characters by putting them in double-quotes."
 "</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Zadejte argumenty, které chcete předat spustitelnému "
+"souboru.<br/>Argumenty obsahující mezery můžete předat tak, že je uvedete v "
+"uvozovkách.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: nativeappconfig.ui:144
@@ -162,7 +169,7 @@ msgstr "Pracovní a&dresář:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr ""
+msgstr "Vyberte pracovní adresář pro spustitelný soubor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
@@ -176,7 +183,7 @@ msgstr "Prostř&edí:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "Vyberte prostředí, které chcete použít"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206
@@ -188,13 +195,17 @@ msgid ""
 "interact with applications requiring user input from a terminal emulator. To "
 "run such applications, you should use an external terminal.</p>"
 msgstr ""
+"<p>Ve výchozím nastavení se aplikace spouštějí na pozadí a v okně nástroje "
+"se zobrazuje pouze jejich výstup. Z tohoto důvodu není možné z emulátoru "
+"terminálu pracovat s aplikacemi, které vyžadují uživatelský vstup. K "
+"spuštění takových aplikací byste měli použít externí terminál.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:209
 #, kde-format
 msgctxt "@option:check"
 msgid "Use external terminal:"
-msgstr "Použít externí terminál"
+msgstr "Použít externí terminál:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
 #: nativeappconfig.ui:228
@@ -205,6 +216,9 @@ msgid ""
 "The path to the executable and its arguments will be appended to this "
 "command."
 msgstr ""
+"Zadejte příkaz pro spuštění externího emulátoru terminálu.<br>\n"
+"K tomuto příkazu bude připojena cesta k spustitelnému souboru a jeho "
+"argumenty."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:238
@@ -235,6 +249,8 @@ msgid ""
 "Specifies the action to take for the dependencies before starting the "
 "executable."
 msgstr ""
+"Určuje, jak se má naložit se závislostmi před spuštěním spustitelného "
+"souboru."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:270
@@ -245,6 +261,9 @@ msgid ""
 "allows there to be parts of a project, upon which the executable does not "
 "directly depend, to be built and/or installed before running the application."
 msgstr ""
+"Vybrané činnosti se provedou před spuštěním spustitelného souboru. To "
+"umožňuje, aby se před spuštěním aplikace sestavily a/nebo nainstalovaly ty "
+"části projektu, na nichž spustitelný soubor přímo nezávisí."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:277
@@ -272,7 +291,7 @@ msgstr "Sestavit a nainstalovat"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
-msgstr "Ověřuji cíle:"
+msgstr "Cíle:"
 
 #: nativeappjob.cpp:39
 #, kde-format
@@ -280,12 +299,15 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
+"Není zadán žádný profil prostředí, zdá se, že konfigurace je poškozená. "
+"Zkontrolujte prosím konfiguraci spuštění '%1'. Používá se výchozí profil "
+"prostředí."
 
 #: nativeappjob.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
-msgstr ""
+msgstr "Úloha již běží"
 
 #: nativeappjob.cpp:154
 #, kde-format

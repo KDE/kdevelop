@@ -1,72 +1,75 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2017, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:39+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-13 00:54+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Poedit 3.10\n"
 
 #: executescriptplugin.cpp:61
 #, kde-format
 msgctxt "path to a script"
 msgid "script path"
-msgstr ""
+msgstr "cesta ke skriptu"
 
 #: executescriptplugin.cpp:78
 #, kde-format
 msgid "No remote host set for launch configuration '%1'. Aborting start."
 msgstr ""
+"Pro spouštěcí konfiguraci '%1' není nastaven žádný vzdálený hostitel. "
+"Spuštění se přerušuje."
 
 #: executescriptplugin.cpp:97
 #, kde-format
 msgctxt "command line arguments to a script"
 msgid "arguments"
-msgstr ""
+msgstr "argumenty"
 
 #: executescriptplugin.cpp:140
 #, kde-format
 msgid "interpreter command"
-msgstr ""
+msgstr "příkaz interpretru"
 
 #: scriptappconfig.cpp:83
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Type or select an interpreter..."
-msgstr ""
+msgstr "Zadejte nebo vyberte interpretr…"
 
 #: scriptappconfig.cpp:116
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Script Application"
-msgstr ""
+msgstr "Nastavení aplikace skriptu"
 
 #: scriptappconfig.cpp:126
 #, kde-format
 msgid "Executes Script Applications"
-msgstr ""
+msgstr "Spuštění aplikace skriptu"
 
 #: scriptappconfig.cpp:136 scriptappconfig.cpp:186
 #, kde-format
 msgid "Script Application"
-msgstr ""
+msgstr "Aplikace skriptu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: scriptappconfig.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Interpreter"
-msgstr "Interpretr:"
+msgstr "Interpretr"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: scriptappconfig.ui:44
@@ -87,14 +90,14 @@ msgstr "Soubor skriptu"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run the file currently open in the editor"
-msgstr ""
+msgstr "Spustit soubor, který je právě otevřený v editoru"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
 #: scriptappconfig.ui:111
 #, kde-format
 msgctxt "@option:radio"
 msgid "Always run the same file"
-msgstr ""
+msgstr "Vždy spouštět stejný soubor"
 
 #. i18n: ectx: property (text), widget (QLabel, scriptLabel)
 #: scriptappconfig.ui:123
@@ -108,7 +111,7 @@ msgstr "Soubor skriptu:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the absolute path to the script to run"
-msgstr ""
+msgstr "Zadejte absolutní cestu ke skriptu, který se má spustit"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:136
@@ -136,7 +139,7 @@ msgstr "Argumenty:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter arguments to give to the executable"
-msgstr ""
+msgstr "Zadejte parametry, které mají být předány spustitelnému souboru"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: scriptappconfig.ui:177
@@ -150,7 +153,7 @@ msgstr "Pracovní adresář:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr ""
+msgstr "Vyberte pracovní adresář pro spustitelný soubor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
@@ -164,7 +167,7 @@ msgstr "Prostředí:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "Vyberte prostředí, které chcete použít"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
@@ -180,6 +183,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the filter to applied to the output. E.g. to mark errors with red text"
 msgstr ""
+"Vyberte filtr, který se má použít na výstup. Např. pro označení chyb "
+"červeným textem"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:235
@@ -193,7 +198,7 @@ msgstr "Žádný filtr"
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr ""
+msgstr "Filtr kompilátoru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:245
@@ -207,28 +212,28 @@ msgstr "Filtr chyb skriptu"
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr ""
+msgstr "Filtr statické analýzy"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: scriptappconfig.ui:267
 #, kde-format
 msgctxt "@title:group"
 msgid "Execute on Host"
-msgstr ""
+msgstr "Spustit na hostiteli"
 
 #. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
 #: scriptappconfig.ui:273
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute on remote host"
-msgstr ""
+msgstr "Spustit na vzdáleném hostiteli"
 
 #. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
 #: scriptappconfig.ui:285
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote host (ssh):"
-msgstr ""
+msgstr "Vzdálený hostitel (ssh):"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, remoteHost)
 #: scriptappconfig.ui:298
@@ -242,7 +247,7 @@ msgstr "uzivatel@hostitel"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a remote host (user@host)"
-msgstr ""
+msgstr "Zadejte vzdáleného hostitele (uživatel@hostitel)"
 
 #: scriptappjob.cpp:43
 #, kde-format
@@ -250,31 +255,34 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
+"Není zadán žádný profil prostředí, zdá se, že konfigurace je poškozená. "
+"Zkontrolujte prosím konfiguraci spuštění '%1'. Používá se výchozí profil "
+"prostředí."
 
 #: scriptappjob.cpp:90
 #, kde-format
 msgid "There is no active document to launch."
-msgstr ""
+msgstr "Neexistuje žádný aktivní dokument, který by bylo možné spustit."
 
 #: scriptappjob.cpp:165
 #, kde-format
 msgid "Starting: %1"
-msgstr "Spouštím: %1"
+msgstr "Spouštění: %1"
 
 #: scriptappjob.cpp:179
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr ""
+msgstr "*** Zabitá aplikace ***"
 
 #: scriptappjob.cpp:190
 #, kde-format
 msgid "*** Exited normally ***"
-msgstr ""
+msgstr "*** Ukončeno normálně ***"
 
 #: scriptappjob.cpp:192
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
-msgstr ""
+msgstr "*** Ukončeno s návratovým kódem: %1 ***"
 
 #: scriptappjob.cpp:195
 #, kde-format
@@ -284,7 +292,7 @@ msgstr "*** Proces byl přerušen ***"
 #: scriptappjob.cpp:198
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
-msgstr ""
+msgstr "*** Došlo k selhání s návratovým kódem: %1 ***"
 
 #: scriptappjob.cpp:213
 #, kde-format
@@ -292,3 +300,4 @@ msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
 msgstr ""
+"*** Nelze spustit program '%1'. Zkontrolujte, zda je cesta zadána správně ***"
