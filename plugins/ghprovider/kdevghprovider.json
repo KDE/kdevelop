@@ -44,6 +44,7 @@
         "Description[az]": "Bu qoşma, GitHub'dan layihələri almağa kömək edir",
         "Description[ca@valencia]": "Este connector ajuda a obtindre els projectes des de GitHub",
         "Description[ca]": "Aquest connector ajuda a obtenir els projectes des de GitHub",
+        "Description[cs]": "Tento modul pomáhá stahovat projekty z GitHubu",
         "Description[de]": "Dieses Modul hilft dabei, GitHub-Projekte zu beziehen",
         "Description[el]": "Αυτό το πρόσθετο βοηθάει στη λήψη έργων από το Github",
         "Description[en_GB]": "This plugin helps to obtain projects from GitHub",

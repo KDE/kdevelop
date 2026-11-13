@@ -45,7 +45,7 @@
         "Description[az]": "Bu qoşma, qaynaq kodundakı xətaları göstərir.",
         "Description[ca@valencia]": "Este connector permet mostrar errors en el codi font.",
         "Description[ca]": "Aquest connector permet mostrar errors en el codi font.",
-        "Description[cs]": "Tento zásuvný modul ukazuje chyby ve zdrojovém kódu.",
+        "Description[cs]": "Tento modul ukazuje chyby ve zdrojovém kódu.",
         "Description[de]": "Dieses Modul zeigt Fehler im Quelltext an.",
         "Description[el]": "Αυτό το πρόσθετο εμφανίζει τα λάθη στον πηγαίο κώδικα.",
         "Description[en_GB]": "This plugin shows errors in source code.",

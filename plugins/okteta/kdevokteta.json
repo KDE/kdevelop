@@ -46,6 +46,7 @@
         "Description[az]": "Faylların xam məlumatlarınının oxunmasını və onlara düzəliş edilməsini aktiv edir (Okteta-əsaslı)",
         "Description[ca@valencia]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en Okteta)",
         "Description[ca]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en l'Okteta)",
+        "Description[cs]": "Umožňuje prohlížení a úpravy surových dat souborů (na bázi oktetů)",
         "Description[de]": "Ermöglicht das Betrachten und Bearbeiten der Rohdaten von Dateien (basiert auf Okteta)",
         "Description[el]": "Ενεργοποιεί την προβολή και επεξεργασία των ακατέργαστων δεδομένων αρχείων (με βάση το octeta)",
         "Description[en_GB]": "Enables viewing and editing of the raw data of files (Okteta-based)",
