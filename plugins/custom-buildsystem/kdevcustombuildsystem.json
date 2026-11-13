@@ -6,6 +6,7 @@
         "Description[bs]": "DOpušta korištene vlastitih sistema za gradnju KDevelop projekata",
         "Description[ca@valencia]": "Permet utilitzar sistemes de construcció personalitzats per a projectes de KDevelop",
         "Description[ca]": "Permet utilitzar sistemes de construcció personalitzats per a projectes del KDevelop",
+        "Description[cs]": "Umožňuje používat vlastní systémy sestavování pro projekty v KDevelop",
         "Description[de]": "Ermöglicht ein benutzerdefiniertes Erstellungssystem für KDevelop-Projekte",
         "Description[el]": "Επιτρέπει τη χρήση προσαρμοσμένων συστημάτων κατασκευής για έργα του KDevelop",
         "Description[en_GB]": "Allows to use custom build systems for KDevelop projects",

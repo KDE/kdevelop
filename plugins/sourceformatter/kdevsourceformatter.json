@@ -6,6 +6,7 @@
         "Description[az]": "Layihədəki qaynaq kodunun formatlanması üçün hansı üslubdan istifadə edilməli olduğunu tənzimləyin.",
         "Description[ca@valencia]": "Configura quin estil s'ha d'utilitzar per a donar format al codi font d'un projecte.",
         "Description[ca]": "Configura quin estil s'ha d'usar per a donar format al codi font d'un projecte.",
+        "Description[cs]": "Nastavit, jaký styl se má použít pro formátování zdrojového kódu v projektu.",
         "Description[de]": "Einstellung des Formatierungsstils für den Quelltext in einem Projekt.",
         "Description[el]": "Διαμορφώνει το στιλ για τη μορφή του πηγαίου κώδικα σε ένα έργο.",
         "Description[en_GB]": "Configure which style should be used for formatting of the sourcecode in a project.",

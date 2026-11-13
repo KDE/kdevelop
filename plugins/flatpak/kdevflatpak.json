@@ -46,6 +46,7 @@
         "Description[az]": "Flatpak işləmə vaxtını göstərir",
         "Description[ca@valencia]": "Exposa els entorns d'execució de Flatpak",
         "Description[ca]": "Exposa els entorns d'execució del Flatpak",
+        "Description[cs]": "Zpřístupňuje běhová prostředí Flatpak",
         "Description[de]": "Stellt Flatpak-Laufzeitumgebungen bereit",
         "Description[el]": "Εμφανίζει εκτελέσεις του flatpak",
         "Description[en_GB]": "Exposes Flatpak runtimes",

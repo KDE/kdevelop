@@ -45,6 +45,7 @@
         "Description[az]": "Hansı faylların və qovluqların layiyə qovluğuna daxil edilib edilməyəcəyini tənzimləyin.",
         "Description[ca@valencia]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.",
         "Description[ca]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.",
+        "Description[cs]": "Nastavit, které soubory a složky v projektové složce mají být zahrnuty nebo vyloučeny.",
         "Description[de]": "Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.",
         "Description[el]": "Διαμορφώνει τα αρχεία και τους φακέλους μέσα στο έργο που θα πρέπει να συμπεριλαμβάνονται ή να αποκλείονται.",
         "Description[en_GB]": "Configure which files and folders inside the project folder should be included or excluded.",
