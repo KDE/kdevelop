@@ -1,0 +1,3279 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY kdevelop "<application
+>KDevelop</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Arabic "INCLUDE">
+]>
+<book id="kdevelop" lang="&language;">
+<bookinfo>
+<title
+>كتيب مطورك</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>حُوّلت هذه الوثائق من صفحة <ulink url="https://userbase.kde.org/KDevelop4/Manual"
+>KDevelop4/Manual</ulink
+> في قاعدة مستخدمي كيدي.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-08-19</date>
+    <releaseinfo
+>مطورك 4.4 (&kde; 4.9)</releaseinfo>
+<abstract>
+<para
+>مطورك هي بيئة تطوير متكاملة تُستخدم لمجموعة واسعة من مهام البرمجة.</para>
+    </abstract>
+  <keywordset>
+    <keyword
+>كيدي</keyword>
+    <keyword
+>مطوّرك</keyword>
+    <keyword
+>IDE</keyword>
+    <keyword
+>تطوير</keyword>
+    <keyword
+>برمجة</keyword>
+  </keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2012-08-19T12:36:08Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="what-is-kdevelop"
+><title
+>ما هي مطورك؟</title>
+<para
+><ulink url="https://www.kdevelop.org/"
+>مطورك</ulink
+> هي بيئة تطوير متكاملة حديثة (IDE) للغة C++ (ولغات أخرى)، وهي واحدة من العديد من <ulink url="https://kde.org/applications/"
+>تطبيقات كيدي</ulink
+>. ونتيجة لذلك، تعمل على &Linux; (حتى لو كنت تستخدم أحد أسطح المكتب الأخرى، مثل GNOME)، ولكنها متاحة أيضًا لمعظم المتغيرات الأخرى لـ &UNIX; ولنظام Windows أيضًا.</para>
+<para
+>تقدم مطورك جميع وسائل الراحة في بيئات التطوير المتكاملة الحديثة. بالنسبة للمشاريع والتطبيقات الكبيرة، فإن أهم ميزة هي أن مطورك <emphasis
+>تفهم لغة C++</emphasis
+>: فهي تحلل قاعدة المصدر بالكامل وتتذكر أي الفئات تحتوي على أي دوال عضو، وأين تُعرّف المتغيرات، وما هي أنواعها، والعديد من الأشياء الأخرى حول الكود الخاص بك. على سبيل المثال، لنفترض أن أحد ملفات الرأس في مشروعك يعلن عن فئة</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>ولاحقًا في برنامجك لديك</para>
+<para
+><programlisting
+>Car my_ride;
+// ...do something with this variable...
+std::string color = my_ride.ge
+</programlisting>
+</para>
+<para
+>ستتذكر أن <varname
+>my_ride</varname
+> في السطر الأخير هو متغير من النوع <varname
+>Car</varname
+> وستعرض عليك إكمال <varname
+>ge</varname
+> كـ <varname
+>get_color()</varname
+> لأن هذه هي الدالة العضو الوحيدة في فئة <varname
+>Car</varname
+> التي تبدأ هكذا. بدلًا من مواصلة الكتابة، تضغط فقط على &Enter; للحصول على الكلمة كاملة؛ وهذا يوفر الكتابة، ويتجنب الأخطاء المطبعية، ولا يتطلب منك تذكر الأسماء الدقيقة لمئات أو آلاف الدوال والفئات التي تشكل المشاريع الكبيرة.</para>
+<para
+>كمثال ثانٍ، افترض أن لديك كودًا مثل هذا:</para>
+<para
+><programlisting
+>double foo ()
+{
+  double var = my_func();
+ return var * var;
+}
+double bar ()
+{
+  double var = my_func();
+  return var * var * var;
+}
+</programlisting
+></para>
+<para
+>إذا مررت مؤشر الفأرة فوق الرمز <varname
+>var</varname
+> في الدالة <varname
+>bar</varname
+>، فستحصل على خيار رؤية جميع استخدامات هذا الرمز. النقر عليه سيظهر لك فقط استخدامات هذا المتغير في الدالة <varname
+>bar</varname
+> لأن مطورك تفهم أن المتغير <varname
+>var</varname
+> في الدالة <varname
+>foo</varname
+> لا علاقة له به. وبالمثل، النقر بالزر الأيمن على اسم المتغير يسمح لك بإعادة تسمية المتغير؛ القيام بذلك سيؤثر فقط على المتغير في <varname
+>bar</varname
+> وليس على الذي يحمل نفس الاسم في <varname
+>foo</varname
+>.</para>
+<para
+>لكن مطورك ليست مجرد محرر كود ذكي؛ هناك أشياء أخرى تقوم بها مطورك بشكل جيد. من الواضح أنها تبرز الكود المصدري بألوان مختلفة؛ ولها أداة محاذاة قابلة للتخصيص؛ ولها واجهة مدمجة مع مصحح أخطاء GNU <application
+>gdb</application
+>؛ ويمكنها عرض الوثائق الخاصة بدالة إذا مررت مؤشر الفأرة فوق استخدام لهذه الدالة؛ ويمكنها التعامل مع أنواع مختلفة من بيئات البناء والمترجمات (مثل المشاريع القائمة على <guilabel
+>make</guilabel
+> و <guilabel
+>cmake</guilabel
+>)، والعديد من الأشياء الرائعة الأخرى التي نوقشت في هذا الدليل.</para>
+</chapter>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"
+><title
+>الجلسات والمشاريع: أساسيات مطورك</title>
+<para
+>في هذا القسم، سنستعرض بعض المصطلحات حول كيفية رؤية مطورك للعالم وكيفية تنظيم العمل. على وجه الخصوص، نقدم مفهوم <emphasis
+>الجلسات</emphasis
+> و<emphasis
+>المشاريع</emphasis
+> ونشرح كيف يمكنك إعداد المشاريع التي تريد العمل عليها في مطورك.</para>
+<sect1 id="terminology"
+><title
+>المصطلحات</title>
+<para
+>لدى مطورك مفهوم <emphasis
+>الجلسات</emphasis
+> و<emphasis
+>المشاريع</emphasis
+>. تحتوي الجلسة على جميع المشاريع التي لها علاقة ببعضها البعض. بالنسبة للأمثلة التالية، افترض أنك مطور لكل من مكتبة وتطبيق يستخدمها. يمكنك التفكير في مكتبات كيدي الأساسية كالأولى ومطورك كالثانية. مثال آخر: لنفترض أنك مخترق نواة &Linux; ولكنك تعمل أيضًا على برنامج تشغيل جهاز لـ &Linux; لم يُدمج بعد في شجرة النواة.</para>
+<para
+>لذا، بأخذ المثال الأخير، سيكون لديك جلسة في مطورك تحتوي على مشروعين: نواة &Linux; وبرنامج تشغيل الجهاز. سترغب في تجميعهما في جلسة واحدة (بدلًا من وجود جلستين بمشروع واحد لكل منهما) لأنه سيكون من المفيد أن تكون قادرًا على رؤية دوال النواة وهياكل البيانات في مطورك كلما كتبت كودًا مصدريًا لبرنامج التشغيل &mdash; على سبيل المثال، حتى تتمكن من الحصول على أسماء دوال ومتغيرات النواة موسعة آليًا، أو حتى تتمكن من رؤية وثائق دوال النواة أثناء العمل على برنامج تشغيل الجهاز.</para>
+<para
+>تخيل الآن أنك أيضًا مطور كيدي. عندها سيكون لديك جلسة ثانية تحتوي على كيدي كمشروع. يمكنك من حيث المبدأ أن يكون لديك جلسة واحدة لكل هذا، لكن لا يوجد سبب حقيقي لذلك: في عملك على كيدي، لا تحتاج إلى الوصول إلى دوال النواة أو برنامج تشغيل الجهاز؛ ولا تريد أن تتوسع أسماء فئات كيدي آليًا أثناء العمل على نواة &Linux;. أخيرًا، بناء بعض مكتبات كيدي مستقل عن إعادة ترجمة نواة &Linux; (بينما كلما قمت بترجمة برنامج تشغيل الجهاز، سيكون من الجيد أيضًا إعادة ترجمة نواة &Linux; إذا تغيرت بعض ملفات رأس النواة).</para>
+<para
+>أخيرًا، استخدام آخر للجلسات هو إذا كنت تعمل على كل من إصدار التطوير الحالي لمشروع، وكذلك على فرع: في هذه الحالة، لا تريد أن تخلط مطورك بين الفئات التي تنتمي إلى الخط الرئيسي والفرع، لذا سيكون لديك جلستان، بنفس مجموعة المشاريع ولكن من أدلة مختلفة (تتوافق مع فروع تطوير مختلفة).</para>
+</sect1>
+<sect1 id="setting-up-a-session-and-importing-an-existing-project"
+><title
+>إعداد جلسة واستيراد مشروع موجود</title>
+<para
+>دعنا نلتزم بمثال نواة &Linux; وبرنامج تشغيل الجهاز &mdash; قد ترغب في استبدال مجموعتك الخاصة من المكتبات أو المشاريع لهذين المثالين. لإنشاء جلسة جديدة تحتوي على هذين المشروعين، اذهب إلى قائمة <menuchoice
+><guimenu
+>جلسة</guimenu
+><guimenuitem
+>بدء جلسة جديدة</guimenuitem
+></menuchoice
+> في أعلى اليسار (أو، إذا كانت هذه هي المرة الأولى التي تستخدم فيها مطورك: ببساطة استخدم الجلسة الافتراضية التي تحصل عليها عند الاستخدام الأول، وهي فارغة).</para>
+<para
+>نريد بعد ذلك ملء هذه الجلسة بمشاريع نفترض في الوقت الحالي أنها موجودة بالفعل في مكان ما (حالة بدء المشاريع من الصفر نوقشت في مكان آخر من هذا الدليل). لهذا، هناك طريقتان أساسيتان، اعتمادًا على ما إذا كان المشروع موجودًا بالفعل على قرصك الصلب أو يحتاج إلى تنزيله من خادم.</para>
+<sect2 id="option-1--importing-a-project-from-a-version-control-system-server"
+><title
+>الخيار 1: استيراد مشروع من خادم نظام تحكم بالإصدارات</title>
+<para
+>لنفترض أولًا أن المشروع الذي نريد إعداده &mdash; نواة &Linux; &mdash; موجود في بعض أنظمة التحكم بالإصدارات على خادم، لكنك لم تسحبه بعد إلى قرصك الصلب المحلي. في هذه الحالة، اذهب إلى قائمة <guilabel
+>مشروع</guilabel
+> لإنشاء نواة &Linux; كمشروع داخل الجلسة الحالية ثم اتبع هذه الخطوات:</para>
+<itemizedlist>
+<listitem
+><para
+>اذهب إلى <menuchoice
+><guimenu
+>مشروع</guimenu
+><guimenuitem
+>جلب مشروع</guimenuitem
+></menuchoice
+> لاستيراد مشروع </para
+></listitem>
+<listitem
+><para
+>لديك بعد ذلك خيارات متعددة لبدء مشروع جديد في الجلسة الحالية، اعتمادًا على من أين يجب أن تأتي الملفات المصدرية: يمكنك فقط توجيه مطورك إلى دليل موجود (انظر الخيار 2 أدناه)، أو يمكنك أن تطلب من مطورك الحصول على المصادر من مستودع. </para
+></listitem>
+<listitem
+><para
+>بافتراض أنك لا تملك بالفعل إصدارًا مسحوبًا: <itemizedlist>
+<listitem
+><para
+>في مربع الحوار، تحت <guilabel
+>اختيار المصدر</guilabel
+>، اختر استخدام <guilabel
+>من نظام الملفات</guilabel
+>، أو <guilabel
+>Subversion</guilabel
+>، أو <guilabel
+>Git</guilabel
+>، أو <guilabel
+>GitHub</guilabel
+>، أو <guilabel
+>KDE</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>اختر دليل عمل كوجهة يجب أن تُسحب إليه المصادر </para
+></listitem>
+<listitem
+><para
+>اختر عنوان URL لموقع المستودع حيث يمكن الحصول على ملفات المصدر </para
+></listitem>
+<listitem
+><para
+>اضغط <guilabel
+>احصل</guilabel
+>. قد يستغرق هذا وقتًا طويلًا؛ اعتمادًا على سرعة اتصالك وحجم المشروع. لسوء الحظ، في مطورك 4.2.x لا يُظهر شريط التقدم أي شيء فعليًا، ولكن يمكنك تتبع التقدم بالنظر دوريًا إلى مخرجات أمر سطر الأوامر <screen
+>du -sk <replaceable
+>/path/to/مطورك/project</replaceable
+></screen
+> لترى كمية البيانات التي نُزّلت بالفعل. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>أُبلغ عن مشكلة شريط التقدم كـ <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832"
+>خلل مطورك 256832</ulink
+>.</para
+></note
+></para>
+<para
+><note
+><para
+>في هذه العملية، أحصل أيضًا على رسالة الخطأ <emphasis
+>تحتاج إلى تحديد موقع صالح للمشروع</emphasis
+> والتي يمكن تجاهلها بأمان.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>يطلب منك تحديد ملف مشروع مطورك في هذا الدليل. نظرًا لأنك ربما لا تملك واحدًا بعد، فقط اضغط <guilabel
+>التالي</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>اضغط <guilabel
+>التالي</guilabel
+> مرة أخرى </para
+></listitem>
+<listitem
+><para
+>سيطلب منك مطورك بعد ذلك اختيار مدير مشروع. إذا كان هذا المشروع يستخدم ملفات make القياسية لـ &UNIX;، فاختر مدير مشروع makefile المخصص </para
+></listitem>
+<listitem
+><para
+>سيبدأ مطورك بعد ذلك في تحليل المشروع بأكمله. مرة أخرى، سيستغرق وقتًا طويلًا لاجتياز جميع الملفات وفهرسة الأصناف &etc; في أسفل يمين النافذة الرئيسة، يوجد شريط تقدم يُظهر مدى تقدم هذه العملية. (إذا كان لديك عدة أنوية معالج، يمكنك تسريع هذه العملية بالذهاب إلى عنصر القائمة <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guimenuitem
+>اضبط مطورك</guimenuitem
+></menuchoice
+>، ثم اختيار <guilabel
+>محلل الخلفية</guilabel
+> على اليسار، وزيادة عدد الخيوط للتحليل الخلفي على اليمين.) </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"
+><title
+>الخيار 2: استيراد مشروع موجود بالفعل على قرصك الصلب</title>
+<para
+>بدلًا من ذلك، إذا كان المشروع الذي تريد العمل عليه موجودًا بالفعل على قرصك الصلب (مثلًا، لأنك نزّلته كملف tar من خادم FTP، أو لأنك سحبت بالفعل نسخة من المشروع من نظام تحكم بالإصدارات، أو لأنه مشروعك الخاص الموجود <emphasis
+>فقط</emphasis
+> على قرصك الصلب)، فاستخدم <menuchoice
+><guimenu
+>المشاريع</guimenu
+><guimenuitem
+>افتح/استورد مشروعًا</guimenuitem
+></menuchoice
+> وفي مربع الحوار اختر الدليل الذي يوجد فيه مشروعك.</para>
+</sect2>
+</sect1>
+<sect1 id="setting-up-an-application-as-a-second-project"
+><title
+>إعداد تطبيق كمشروع ثانٍ</title>
+<para
+>الشيء التالي الذي تريد فعله هو إعداد مشاريع أخرى في نفس الجلسة. في المثال أعلاه، قد ترغب في إضافة مشغل الجهاز كمشروع ثانٍ، ويمكنك فعل ذلك باستخدام نفس الخطوات تمامًا.</para>
+<para
+>إذا كان لديك تطبيقات أو مكتبات متعددة، فقط كرر الخطوات لإضافة المزيد والمزيد من المشاريع إلى جلستك.</para>
+</sect1>
+<sect1 id="creating-projects-from-scratch"
+><title
+>إنشاء مشاريع من الصفر</title>
+<para
+>هناك بالطبع أيضًا إمكانية أن تبدأ مشروعًا جديدًا من الصفر. يمكن فعل ذلك باستخدام عنصر القائمة <menuchoice
+><guimenu
+>المشاريع</guimenu
+><guimenuitem
+>جديد من قالب...</guimenuitem
+></menuchoice
+>، الذي يعرض عليك مربع حوار اختيار قالب. بعض قوالب المشاريع مُقدّمة مع مطورك، ولكن تتوفر المزيد بتثبيت تطبيق <application
+>KAppTemplate</application
+>. اختر نوع المشروع ولغة البرمجة من مربع الحوار، أدخل اسمًا وموقعًا لمشروعك، وانقر <guilabel
+>التالي</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-project-dialog.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>الصفحة الثانية من مربع الحوار تسمح لك بإعداد نظام تحكم بالإصدارات. اختر النظام الذي ترغب في استخدامه، واملأ الإعداد الخاص بالنظام إذا لزم الأمر. إذا كنت لا ترغب في استخدام نظام تحكم بالإصدارات، أو تريد إعداده يدويًا لاحقًا، اختر <guilabel
+>لا شيء</guilabel
+>. عندما تكون راضيًا عن اختيارك، اضغط <guilabel
+>إنهاء</guilabel
+>. </para>
+<para
+>مشروعك قد أُنشئ الآن، لذا يمكنك محاولة بنائه أو تثبيته. ستتضمن بعض القوالب تعليقات داخل الكود، أو حتى ملف README منفصل، ويُوصى بقراءة تلك أولًا. بعد ذلك، يمكنك البدء في العمل على مشروعك، بإضافة أي ميزات تريدها. </para>
+</sect1>
+</chapter>
+<chapter id="working-with-source-code"
+><title
+>العمل مع الكود المصدري</title>
+<para
+>إلى جانب التنقيح، قراءة وكتابة الكود المصدري هو ما ستقضي معظم وقتك فيه عند تطوير البرمجيات. لتحقيق هذه الغاية، يقدم لك مطورك العديد والعديد من الطرق المختلفة لاستكشاف الأكواد المصدرية وجعل كتابتها أكثر إنتاجية. كما نوقش بتفصيل أكبر في الأقسام التالية، مطورك ليس مجرد محرر مصدر &mdash; بل هو نظام إدارة مصادر يمنحك طرق عرض مختلفة للمعلومات المستخلصة من الملفات التي تشكل مجتمعة الكود المصدري لجلسة عملك.</para>
+<sect1 id="tools-and-views"
+><title
+>الأدوات وطرق العرض</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-7.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>للعمل مع المشاريع، لدى مطورك مفهوم <emphasis
+>الأدوات</emphasis
+>. توفر الأداة طريقة عرض معينة للمصدر، أو إجراء يمكن اتخاذه به. تُعرض الأدوات بواسطة أزرار حول محيط نافذتك (بنص عمودي على طول الهوامش اليسرى واليمنى، أو أفقيًا على طول الهامش السفلي). إذا نقرت عليها، تتوسع إلى نافذة فرعية &mdash; <emphasis
+>طريقة عرض</emphasis
+> &mdash; داخل النافذة الرئيسة؛ إذا نقرت على زر الأداة مرة أخرى، تختفي النافذة الفرعية مرة أخرى.</para>
+<para
+>لجعل نافذة فرعية تختفي، يمكنك أيضًا النقر على <guilabel
+>x</guilabel
+> في أعلى يمين النافذة الفرعية</para>
+<!--FIXME How to add a tool-->
+<para
+>الصورة أعلاه تُظهر مجموعة معينة من الأدوات، مصطفة على الهوامش اليسرى واليمنى؛ في الصورة، أداة <guilabel
+>الأصناف</guilabel
+> مفتوحة على اليسار وأداة <guilabel
+>المقاطع</guilabel
+> على اليمين، مع محرر لملف مصدر في المنتصف. عمليًا، في معظم الأوقات سيكون لديك على الأرجح المحرر فقط وربما أداة <guilabel
+>الأصناف</guilabel
+> أو <guilabel
+>متصفح الكود</guilabel
+> مفتوحة على اليسار. من المحتمل أن تكون طرق عرض الأدوات الأخرى مفتوحة فقط مؤقتًا أثناء استخدامك للأداة، تاركة مساحة أكبر للمحرر معظم الوقت.</para>
+<para
+>عند تشغيل مطورك لأول مرة، يجب أن يكون لديك بالفعل زر أداة <guilabel
+>المشاريع</guilabel
+>. انقر عليه: سيفتح نافذة فرعية تُظهر المشاريع التي أضفتها إلى الجلسة في الأسفل، وعرض نظام ملفات لأدلة مشاريعك في الأعلى.</para>
+<para
+>هناك العديد من الأدوات الأخرى التي يمكنك استخدامها مع مطورك، وليست كلها موجودة مبدئيًا كأزرار على المحيط. لإضافة بعضها، اذهب إلى إدخال القائمة <menuchoice
+><guimenu
+>النوافذ</guimenu
+><guimenuitem
+>أضف طريقة عرض أداة</guimenuitem
+></menuchoice
+>. إليك بعضًا مما قد تجدها مفيدة:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>الأصناف</guilabel
+>: قائمة كاملة بجميع الأصناف المُعرّفة في أحد المشاريع أو جلستك مع جميع دوالها ومتغيراتها الأعضاء. النقر على أي من الأعضاء يفتح نافذة محرر مصدر في موقع العنصر الذي نقرت عليه. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>المستندات</guilabel
+>: يسرد بعض الملفات التي زُرتها مؤخرًا، حسب النوع (&eg; ملفات مصدر، ملفات تصحيح، مستندات نصية عادية). </para
+></listitem>
+<listitem
+><para
+><guilabel
+>متصفح الكود</guilabel
+>: اعتمادًا على موضع المؤشر في ملف، تُظهر هذه الأداة أشياء ذات صلة. على سبيل المثال، إذا كنت على سطر <varname
+>#include</varname
+>، فإنها تُظهر معلومات عن الملف الذي تضمنه مثل الأصناف المُصرّحة في ذلك الملف؛ إذا كنت على سطر فارغ في نطاق الملف، فإنها تُظهر الأصناف والدوال المُصرّحة والمُعرّفة في الملف الحالي (كلها كروابط: النقر عليها ينقلك إلى النقطة في الملف حيث يوجد التصريح أو التعريف فعليًا)؛ إذا كنت في تعريف دالة، فإنها تُظهر مكان التصريح وتقدم قائمة بالأماكن التي تُستخدم فيها الدالة. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>نظام الملفات</guilabel
+>: يُظهر لك عرضًا شجريًا لنظام الملفات. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>الوثائق</guilabel
+>: تتيح لك البحث عن صفحات الدليل ووثائق المساعدة الأخرى. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>المقاطع البرمجية</guilabel
+>: توفر تسلسلات نصية تُستخدم مرارًا وتكرارًا ولا يرغب المستخدم في كتابتها في كل مرة. على سبيل المثال، في المشروع الذي أُنشئت منه الصورة أعلاه، توجد حاجة متكررة لكتابة كود مثل </para
+></listitem>
+</itemizedlist>
+<para
+><programlisting
+>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell\n      = triangulation.begin_active();\n   cell != triangulation.end();\n   ++cell)</programlisting
+>هذا تعبير صعب، لكنه سيبدو تقريبًا هكذا في كل مرة تحتاج فيها إلى مثل هذه الحلقة &mdash; مما يجعله مرشحًا جيدًا لمقطع برمجي.</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>كونسول</guilabel
+>: يفتح نافذة سطر أوامر داخل النافذة الرئيسة لـ مطورك، للأوامر العرضية التي قد ترغب في إدخالها (&eg; لتشغيل <varname
+>./configure</varname
+>). </para
+></listitem>
+</itemizedlist>
+<para
+>قائمة كاملة بالأدوات وطرق العرض متاحة <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
+>هنا</ulink
+>.</para>
+<para
+>بالنسبة للعديد من المبرمجين، المساحة الرأسية للشاشة هي الأهم. لهذا الغرض، يمكنك ترتيب طرق عرض الأدوات على الهامش الأيسر والأيمن للنافذة: لنقل أداة، انقر على رمزها بزر الفأرة الأيمن واختر موضعًا جديدًا لها.</para>
+</sect1>
+<sect1 id="exploring-source-code"
+><title
+>استكشاف الكود المصدري</title>
+<sect2 id="local-information"
+><title
+>معلومات محلية</title>
+<para
+>مطورك <emphasis
+>يفهم</emphasis
+> الكود المصدري، ونتيجة لذلك، فهو بارع جدًا في تزويدك بمعلومات حول المتغيرات أو الدوال التي قد تظهر في برنامجك. على سبيل المثال، هذه لقطة شاشة للعمل مع جزء من كود وتحريك الفأرة فوق الرمز <varname
+>cell</varname
+> في السطر 1316 (إذا كنت تعمل باستخدام لوحة المفاتيح، يمكنك تحقيق نفس التأثير بالضغط باستمرار على مفتاح &Alt; لبعض الوقت):</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>يعرض مطورك تلميحًا أداتيًا يتضمن نوع المتغير (هنا: <varname
+>DoFHandler&lt;dim&gt;active_cell_iterator</varname
+>)، وأين صُرّح عن هذا المتغير (الحاوية <emphasis
+>container</emphasis
+>، وهي هنا الدالة المحيطة <varname
+>get_maximal_velocity</varname
+> لأنه متغير محلي)، وما هو (متغير، وليس دالة أو صنف أو نطاق أسماء)، وأين صُرّح عنه (في السطر 1314، على بعد أسطر قليلة في الكود).</para>
+<para
+>في السياق الحالي، الرمز الذي حُرك الفأرة فوقه ليس له وثائق مرتبطة. في هذا المثال، لو حُرك الفأرة فوق الرمز <varname
+>get_this_mpi_process</varname
+> في السطر 1318، لكانت النتيجة هكذا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>هنا، قام مطورك بالإسناد الترافقي للإعلان من ملف مختلف تمامًا (<filename
+>utilities.h</filename
+>، والذي يقع في الواقع في مشروع مختلف من نفس الجلسة) مع تعليق نمط دوكسيجين (doxygen) الذي يرافق الإعلان هناك.</para>
+<para
+>ما يجعل هذه التلميحات الأداتية أكثر فائدة هو أنها ديناميكية: يمكنني النقر على الحاوية للحصول على معلومات حول السياق الذي صُرّح فيه المتغير (&ie; حول نطاق الأسماء <varname
+>System</varname
+>، مثل أين صُرّح عنه، وعُرّف، واستُخدم، أو ما هي وثائقه) ويمكنني النقر على الروابط الزرقاء التي ستعيد تعيين موضع المؤشر إلى موقع الإعلان عن الرمز (&eg; في <varname
+>utilities.h</varname
+>، السطر 289) أو تعطيني قائمة بالأماكن التي استُخدم فيها هذا الرمز في الملف الحالي أو عبر جميع مشاريع الجلسة الحالية. الأخير غالبًا ما يكون مفيدًا إذا كنت ترغب في استكشاف كيف، على سبيل المثال، تُستخدم دالة معينة في قاعدة كود كبيرة.</para>
+<note
+><para
+>المعلومات في التلميح الأداتي عابرة &mdash; تعتمد على الضغط باستمرار على مفتاح &Alt; أو تحريك الفأرة. إذا كنت تريد مكانًا أكثر ديمومة لها، افتح طريقة عرض الأداة <guilabel
+>متصفح الكود</guilabel
+> في إحدى النوافذ الفرعية. على سبيل المثال، هنا المؤشر على نفس الدالة كما في المثال أعلاه، وطريقة عرض الأداة على اليسار تقدم نفس نوع المعلومات كما في التلميح الأداتي سابقًا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-15.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>تحريك المؤشر على اليمين يغير المعلومات المعروضة على اليسار. والأكثر من ذلك، النقر على زر <guilabel
+>اقفل العرض الحالي</guilabel
+> في أعلى اليمين يتيح لك قفل هذه المعلومات، مما يجعلها مستقلة عن حركة المؤشر بينما تستكشف المعلومات المعروضة هناك.</para
+></note>
+<para
+><note
+><para
+>هذا النوع من معلومات السياق متاح في العديد من الأماكن الأخرى في مطورك، وليس فقط في محرر المصدر. على سبيل المثال، الضغط باستمرار على مفتاح &Alt; في قائمة إكمال (&eg; عند إجراء فتح سريع) يعطي أيضًا معلومات سياق حول الرمز الحالي.</para
+></note
+></para>
+</sect2>
+<sect2 id="file-scope-information"
+><title
+>معلومات نطاق الملف</title>
+<para
+>المستوى التالي هو الحصول على معلومات حول ملف المصدر بأكمله الذي تعمل عليه حاليًا. لهذه الغاية، ضع المؤشر في نطاق الملف في الملف الحالي وانظر إلى ما تظهره طريقة عرض الأداة <guilabel
+>متصفح الكود</guilabel
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>هنا، تعرض قائمة بنطاقات الأسماء والصنوف والدوال المُصرّح عنها أو المُعرّفة في الملف الحالي، مما يعطيك نظرة عامة عما يحدث في هذا الملف ووسيلة للقفز مباشرة إلى أي من هذه الإعلانات أو التعريفات دون التمرير لأعلى ولأسفل في الملف أو البحث عن رمز معين.</para>
+<para
+><note
+><para
+>المعلومات المعروضة لنطاق الملف هي نفسها المعروضة في وضع <quote
+>المخطط التفصيلي</quote
+> الذي نوقش أدناه للتنقل في الكود المصدري؛ الفرق هو أن وضع المخطط التفصيلي هو مجرد تلميح أداتي مؤقت.</para
+></note
+></para>
+</sect2>
+<sect2 id="project-and-session-scope-information"
+><title
+>معلومات نطاق المشروع والجلسة</title>
+<para
+>هناك طرق عديدة للحصول على معلومات حول مشروع بأكمله (أو، في الواقع، حول جميع المشاريع في جلسة). هذا النوع من المعلومات يُقدم عادةً من خلال طرق عرض أدوات متنوعة. على سبيل المثال، طريقة عرض الأداة <guilabel
+>الصنوف</guilabel
+> توفر هيكلًا شجريًا لجميع الصنوف ونطاقات الأسماء المحيطة لجميع المشاريع في جلسة، مع الدوال الأعضاء والمتغيرات لكل من هذه الصنوف:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>تحريك الفأرة فوق إدخال يعطي مرة أخرى معلومات حول الرمز، وموقع إعلانه وتعريفه، واستخداماته. النقر المزدوج على إدخال في هذا العرض الشجري يفتح نافذة محرر في الموقع الذي صُرّح فيه الرمز أو عُرّف.</para>
+<para
+>لكن هناك طرق أخرى للنظر إلى المعلومات العامة. على سبيل المثال، أداة <guilabel
+>المستندات</guilabel
+> توفر عرضًا لمشروع من حيث أنواع الملفات أو المستندات الأخرى التي يتكون منها هذا المشروع:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-18.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="rainbow-color-highlighting-explained"
+><title
+>شرح التمييز اللوني لقوس قزح</title
+> 
+<para
+><application
+>مطورك</application
+> يستخدم مجموعة متنوعة من الألوان لتمييز كائنات مختلفة في الكود المصدري. إذا كنت تعرف ما تعنيه الألوان المختلفة، يمكنك استخراج الكثير من المعلومات من الكود المصدري بسرعة بمجرد النظر إلى الألوان، دون قراءة حرف واحد. قواعد التمييز هي كما يلي: </para>
+<itemizedlist>
+<listitem
+><para
+>كائنات من نوع صنف / بنية، تعداد (القيم والنوع)، دوال (عامة)، وأعضاء الصنف، لكل منها لونها الخاص المُخصص (الصنوف خضراء، التعدادات حمراء داكنة، والأعضاء صفراء داكنة أو بنفسجية، الدوال (العامة) دائمًا بنفسجية).</para
+></listitem>
+<listitem
+><para
+>جميع المتغيرات العامة ملونة باللون الأخضر الداكن.</para
+></listitem>
+<listitem
+><para
+>المُعرّفات التي هي تعريفات نوع (typedefs) لنوع آخر ملونة باللون الأزرق المخضر (teal).</para
+></listitem>
+<listitem
+><para
+>جميع التصريحات والتعريفات للكائنات تكون بالخط العريض.</para
+></listitem>
+<listitem
+><para
+>إذا تم الوصول إلى عضو من داخل السياق الذي عُرف فيه (الصنف الأساسي أو المشتق) يظهر باللون الأصفر، وإلا يظهر باللون البنفسجي.</para
+></listitem>
+<listitem
+><para
+>إذا كان العضو خاصًا أو محميًا، يُلون بلون أغمق قليلًا عند استخدامه.</para
+></listitem>
+<listitem
+><para
+>للمتغيرات المحلية لنطاق جسم الدالة، تُختار ألوان قوس قزح بناءً على تجزئة (hash) للمُعرّف. يشمل ذلك وسائط الدالة. سيكون للمُعرّف دائمًا نفس اللون ضمن نطاقه (لكن نفس المُعرّف سيحصل على لون مختلف إذا كان يمثل كائنًا مختلفًا، أي إذا أُعيد تعريفه في نطاق أكثر تداخلًا)، وستحصل عادةً على نفس اللون لنفس اسم المُعرّف في نطاقات مختلفة. وبالتالي، إذا كان لديك دوال متعددة تأخذ وسائط بنفس الأسماء، فستبدو جميع الوسائط بنفس اللون. يمكن إيقاف تشغيل ألوان قوس قزح هذه بشكل منفصل عن التلوين العام في حوار الإعدادات.</para
+></listitem>
+<listitem
+><para
+>المُعرّفات التي لم يتمكن مطورك من تحديد التصريح المقابل لها تُلون باللون الأبيض. قد يحدث هذا أحيانًا بسبب فقدان توجيهات <varname
+>#include</varname
+>.</para
+></listitem>
+<listitem
+><para
+>بالإضافة إلى ذلك التلوين، سيُطبق تمييز بناء الجملة العادي للمحرر، كما هو معروف من &kate;. سيتجاوز التمييز الدلالي لـ مطورك دائمًا تمييز المحرر إذا كان هناك تعارض.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="navigating-in-source-code"
+><title
+>التنقل في الشيفرة المصدرية</title>
+<para
+>في القسم السابق، ناقشنا استكشاف الشيفرة المصدرية، أي الحصول على معلومات حول الرموز والملفات والمشاريع. الخطوة التالية هي الانتقال في قاعدة الشيفرة المصدرية الخاصة بك، أي التنقل فيها. هناك مرة أخرى مستويات مختلفة يمكن فيها ذلك: محليًا، داخل ملف، وداخل مشروع.</para>
+<para
+><note
+><para
+>العديد من طرق التنقل عبر الشيفرة يمكن الوصول إليها من قائمة <guilabel
+>تنقل</guilabel
+> في النافذة الرئيسية لـ مطورك.</para
+></note
+></para>
+<sect2 id="local-navigation"
+><title
+>التنقل المحلي</title>
+<para
+>مطورك هو أكثر بكثير من مجرد محرر، لكنه <emphasis
+>أيضًا</emphasis
+> محرر شيفرة مصدرية. على هذا النحو، يمكنك بالطبع تحريك المؤشر لأعلى أو لأسفل أو لليسار أو لليمين في ملف مصدري. يمكنك أيضًا استخدام مفتاحي <keycap
+>PageUp</keycap
+> و <keycap
+>PageDown</keycap
+>، وجميع الأوامر الأخرى التي اعتدت عليها من أي محرر مفيد.</para>
+</sect2>
+<sect2 id="file-scope-navigation-and-outline-mode"
+><title
+>التنقل في نطاق الملف ووضع المخطط التفصيلي</title>
+<para
+>في نطاق الملف، يقدم مطورك العديد من الطرق الممكنة للتنقل عبر الشيفرة المصدرية. على سبيل المثال:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>مخطط تفصيلي</guilabel
+>: يمكنك الحصول على مخطط تفصيلي لما هو موجود في الملف الحالي بثلاث طرق مختلفة على الأقل: <itemizedlist>
+<listitem
+><para
+>النقر في مربع النص <guilabel
+>مخطط تفصيلي</guilabel
+> في أعلى يمين النافذة الرئيسية، أو الضغط على <keycombo
+>&Alt;&Ctrl;<keycap
+>N</keycap
+></keycombo
+> يفتح قائمة منسدلة تسرد جميع تصريحات الدوال والصنوف: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-19.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> يمكنك بعد ذلك ببساطة اختيار أي منها للانتقال إليه، أو &mdash; إذا كان هناك الكثير &mdash; ابدأ بكتابة أي نص قد يظهر في الأسماء المعروضة؛ في هذه الحالة، بينما تستمر في الكتابة، تصبح القائمة أصغر فأصغر مع إزالة الأسماء التي لا تطابق النص المكتوب بالفعل حتى تصبح مستعدًا لاختيار أحد الخيارات. </para
+></listitem>
+<listitem
+><para
+>وضع المؤشر في نطاق الملف (أي خارج أي تصريحات أو تعريفات دالة أو صنف) وفتح أداة <guilabel
+>متصفح الشيفرة</guilabel
+>: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-16.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> يوفر لك هذا أيضًا مخططًا تفصيليًا لما يحدث في الملف الحالي، ويسمح لك بتحديد المكان الذي تريد الانتقال إليه. </para
+></listitem>
+<listitem
+><para
+>تحريك الماوس فوق علامة التبويب لأحد الملفات المفتوحة يعطي أيضًا مخططًا تفصيليًا للملف في علامة التبويب تلك. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+>ملفات الشيفرة المصدرية منظمة كقائمة من تصريحات أو تعريفات الدوال. الضغط على <keycombo
+>&Alt;&Ctrl;<keycap
+>PgUp</keycap
+></keycombo
+> و <keycombo
+>&Alt;&Ctrl;<keycap
+>PgDown</keycap
+></keycombo
+> ينتقل إلى تعريف الدالة السابق أو التالي في هذا الملف. </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-and-session-scope-navigation--semantic-navigation"
+><title
+>التنقل في نطاق المشروع والجلسة: التنقل الدلالي</title>
+<para
+>كما ذكر في أماكن أخرى، لا ينظر مطورك عادةً إلى ملفات مصدرية فردية بل ينظر إلى المشاريع ككل (أو بالأحرى، إلى جميع المشاريع التي تشكل جزءًا من الجلسة الحالية). ونتيجة لذلك، يقدم العديد من الإمكانيات للتنقل عبر المشاريع بأكملها. بعض هذه مشتق مما ناقشناه بالفعل في القسم الخاص بـ <link linkend="exploring-source-code"
+>استكشاف الشيفرة المصدرية</link
+> بينما البعض الآخر مختلف تمامًا. الموضوع المشترك هو أن ميزات التنقل هذه تستند إلى <emphasis
+>فهم دلالي</emphasis
+> للشيفرة، أي أنها تقدم لك شيئًا يتطلب تحليل مشاريع بأكملها وربط البيانات. تُظهر القائمة التالية بعض الطرق للتنقل عبر الشيفرة المصدرية المنتشرة عبر عدد كبير جدًا من الملفات:</para>
+<itemizedlist>
+<listitem
+><para
+>كما رأينا في القسم الخاص بـ <link linkend="exploring-source-code"
+>استكشاف الشيفرة المصدرية</link
+>، يمكنك الحصول على تلميح أدوات يشرح أسماء النطاقات والصنوف والدوال أو المتغيرات الفردية عن طريق تحريك الماوس فوقها أو الضغط باستمرار على مفتاح &Alt; لفترة من الوقت. إليك مثال: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-14.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> </mediaobject
+> </screenshot
+> النقر على الروابط الخاصة بتصريح رمز أو توسيع قائمة الاستخدامات يسمح لك بالانتقال إلى هذه المواقع، وفتح الملف المعني ووضع المؤشر في الموقع المقابل إذا لزم الأمر. يمكن تحقيق تأثير مماثل باستخدام عرض أداة <guilabel
+>متصفح الشيفرة</guilabel
+> الذي نوقش سابقًا أيضًا. </para
+></listitem>
+<listitem
+><para
+>طريقة أسرع للانتقال إلى تصريح رمز دون الحاجة إلى النقر على الروابط في تلميح الأدوات هي تمكين <guilabel
+>وضع تصفح الشيفرة المصدرية</guilabel
+> مؤقتًا عن طريق الضغط باستمرار على مفتاح &Alt; أو &Ctrl;. في هذا الوضع، يمكن النقر مباشرة على أي رمز في المحرر للانتقال إلى تصريحه. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>فتح سريع</guilabel
+>: طريقة قوية جدًا للانتقال إلى ملفات أو مواقع أخرى هي استخدام طرق <emphasis
+>الفتح السريع</emphasis
+> المختلفة في مطورك. هناك أربعة إصدارات منها: <itemizedlist>
+<listitem
+><para
+><guilabel
+>فتح سريع لصنف</guilabel
+> (<menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>فتح سريع لصنف</guimenuitem
+></menuchoice
+> أو <keycombo
+>&Alt;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>): ستحصل على قائمة بجميع الصنوف في هذه الجلسة. ابدأ بكتابة (جزء من) اسم صنف وستستمر القائمة في التقلص إلى تلك التي تطابق ما كتبته فقط. إذا كانت القائمة قصيرة بما يكفي، حدد عنصرًا باستخدام مفتاحي الأعلى والأسفل وسينقلك مطورك إلى المكان الذي صُرح فيه الصنف. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>فتح سريع لدالة</guilabel
+> (<menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>فتح سريع لدالة</guimenuitem
+></menuchoice
+> أو <keycombo
+>&Alt;&Ctrl;<keycap
+>M</keycap
+></keycombo
+>): ستحصل على قائمة بجميع الدوال (الأعضاء) التي تشكل جزءًا من المشاريع في الجلسة الحالية، ويمكنك الاختيار منها بنفس الطريقة المذكورة أعلاه. لاحظ أن هذه القائمة قد تتضمن كلًا من تصريحات وتعريفات الدوال. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>فتح سريع لملف</guilabel
+> (<menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>فتح سريع لملف</guimenuitem
+></menuchoice
+> أو <keycombo
+>&Alt;&Ctrl;<keycap
+>O</keycap
+></keycombo
+>): ستحصل على قائمة بجميع الملفات التي تشكل جزءًا من المشاريع في الجلسة الحالية، ويمكنك الاختيار منها بنفس الطريقة المذكورة أعلاه. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>فتح سريع عالمي</guilabel
+> (<menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>فتح سريع</guimenuitem
+></menuchoice
+> أو <keycombo
+>&Alt;&Ctrl;<keycap
+>Q</keycap
+></keycombo
+>): إذا نسيت أي مجموعة مفاتيح مرتبطة بأي من الأوامر المذكورة أعلاه، فهذه هي الأداة السويسرية المتعددة الاستخدامات &mdash; فهي ببساطة تقدم لك قائمة مجمعة بجميع الملفات والدوال والصنوف والأشياء الأخرى التي يمكنك الاختيار منها. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>انتقال إلى التصريح/التعريف</guilabel
+>: عند تنفيذ دالة (عضو)، غالبًا ما يحتاج المرء إلى العودة إلى النقطة التي صُرحت فيها الدالة، على سبيل المثال للحفاظ على مزامنة قائمة وسائط الدالة بين التصريح والتعريف، أو لتحديث التوثيق. للقيام بذلك، ضع المؤشر على اسم الدالة واختر <menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>انتقال إلى التصريح</guimenuitem
+></menuchoice
+> (أو اضغط على <keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+>) للوصول إلى المكان الذي صُرحت فيه الدالة. هناك طرق متعددة للعودة إلى المكان الأصلي: <itemizedlist>
+<listitem
+><para
+>اختيار <menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>انتقال إلى التعريف</guimenuitem
+></menuchoice
+> (أو الضغط على <keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+>). </para
+></listitem>
+<listitem
+><para
+>اختيار <menuchoice
+><guimenu
+>تنقل</guimenu
+><guimenuitem
+>السياق الذي تمت زيارته سابقًا</guimenuitem
+></menuchoice
+> (أو الضغط على <keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Left</keycap
+></keycombo
+>)، كما هو موضح أدناه. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>القفز إلى تعريف رمز هو أمر لا يعمل فقط عند وضع المؤشر على اسم الدالة التي تنفذها حاليًا. بل يعمل أيضًا للرموز الأخرى: وضع المؤشر على متغير (محلي، عام، أو عضو) والقفز إلى تعريفه ينقلك أيضًا إلى موضع تعريفه. وبالمثل، يمكنك وضع المؤشر على اسم صنف، مثلًا في متغير من تعريف دالة، والقفز إلى موضع تعريفه.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>التبديل بين التعريف/التنفيذ</guilabel
+>: في المثال أعلاه، للقفز إلى موضع تعريف الدالة الحالية، تحتاج أولًا إلى وضع المؤشر على اسم الدالة. لتجنب هذه الخطوة، يمكنك اختيار <menuchoice
+><guimenu
+>التنقل</guimenu
+><guimenuitem
+>تبديل التعريف/التنفيذ</guimenuitem
+></menuchoice
+> (أو الضغط على <keycombo
+>&Shift;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>) للقفز إلى تعريف الدالة التي يوجد المؤشر بداخلها حاليًا. اختيار نفس مدخل القائمة مرة ثانية ينقلك عائدًا إلى الموضع الذي عُرفت فيه الدالة. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>الاستخدام السابق/التالي</guilabel
+>: وضع المؤشر على اسم متغير محلي واختيار <menuchoice
+><guimenu
+>التنقل</guimenu
+><guimenuitem
+>الاستخدام التالي</guimenuitem
+></menuchoice
+> (أو الضغط على <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>يمين</keycap
+></keycombo
+>) ينقلك إلى الاستخدام التالي لهذا المتغير في الكود. (لاحظ أن هذا لا يبحث فقط عن الحدوث التالي لاسم المتغير بل يراعي في الواقع أن المتغيرات التي تحمل نفس الاسم ولكن في نطاقات مختلفة هي مختلفة.) نفس الشيء يعمل لاستخدام أسماء الدوال. اختيار <menuchoice
+><guimenu
+>التنقل</guimenu
+><guimenuitem
+>الاستخدام السابق</guimenuitem
+></menuchoice
+> (أو الضغط على <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>يسار</keycap
+></keycombo
+>) ينقلك إلى الاستخدام السابق لرمز. </para
+></listitem>
+</itemizedlist>
+<para
+><note
+><para
+>لرؤية قائمة بجميع استخدامات اسم التي تتناوب هذه الأوامر عبرها، ضع المؤشر عليه وافتح عرض أداة <guilabel
+>متصفح الكود</guilabel
+> أو اضغط مع الاستمرار على زر &Alt;. هذا موضح بمزيد من التفصيل في القسم الخاص بـ <link linkend="file-scope-information"
+>استكشاف الكود</link
+>.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>قائمة السياقات</guilabel
+>: متصفحات الويب لديها هذه الميزة حيث يمكنك الذهاب للخلف وللأمام في قائمة صفحات الويب الأكثر زيارة مؤخرًا. مطورك لديه نفس النوع من الميزات، باستثناء أنه بدلًا من صفحات الويب تزور <emphasis
+>سياقات</emphasis
+>. السياق هو الموقع الحالي للمؤشر، وتغيره بالتنقل بعيدًا عنه باستخدام أي شيء غير أوامر المؤشر &mdash; مثلًا، بالنقر على موقع يوفره تلميح أداة، في عرض أداة <guilabel
+>متصفح الكود</guilabel
+>، أحد الخيارات المعطاة في قائمة <guilabel
+>التنقل</guilabel
+>، أو أي أمر تنقل آخر. استخدام <menuchoice
+><guimenu
+>التنقل</guimenu
+><guimenuitem
+>السياق الذي زور سابقًا</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>يسار</keycap
+></keycombo
+>) و <menuchoice
+><guimenu
+>التنقل</guimenu
+><guimenuitem
+>السياق الذي زور تاليًا</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>يمين</keycap
+></keycombo
+>) ينقلك على طول هذه القائمة من السياقات التي زورتها تمامًا مثل زري <guilabel
+>رجوع</guilabel
+> و <guilabel
+>تقديم</guilabel
+> في المتصفح ينقلانك إلى صفحة الويب السابقة أو التالية في قائمة الصفحات التي زرتها. </para
+></listitem>
+<listitem
+><para
+>أخيرًا، هناك عروض أدوات تسمح لك بالتنقل إلى أماكن مختلفة في قاعدة الكود الخاصة بك. على سبيل المثال، أداة <guilabel
+>الصنوف</guilabel
+> تزودك بقائمة بجميع مساحات الأسماء والصنوف في جميع مشاريع الجلسة الحالية، وتسمح لك بتوسيعها لرؤية دوال الأعضاء والمتغيرات لكل من هذه الصنوف: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-17.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> النقر المزدوج على عنصر (أو الذهاب عبر قائمة السياق باستخدام زر الفأرة الأيمن) يسمح لك بالقفز إلى موقع تعريف العنصر. أدوات أخرى تسمح بأشياء مماثلة؛ على سبيل المثال، عرض أداة <guilabel
+>المشاريع</guilabel
+> يوفر قائمة بالملفات التي هي جزء من جلسة: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-13.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> مرة أخرى، النقر المزدوج على ملف يفتحه. </para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="writing-source-code"
+><title
+>كتابة كود المصدر</title>
+<para
+>لأن مطورك يفهم كود المصدر لمشاريعك، يمكنه المساعدة في كتابة المزيد من الكود. ما يلي يحدد بعض الطرق التي يفعل بها ذلك.</para>
+<sect2 id="auto-completion"
+><title
+>الإكمال الآليّ</title>
+<para
+>ربما الأكثر فائدة بين جميع الميزات في كتابة كود جديد هو الإكمال التلقائي. تأمل، على سبيل المثال، قطعة الكود التالية:</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+void foo()
+{
+  Car my_ride;
+  // ...do something with this variable...
+  std::string color = my_ride.ge
+</programlisting
+></para>
+<para
+>في السطر الأخير، سيتذكر مطورك أن المتغير <varname
+>my_ride</varname
+> هو من النوع <varname
+>Car</varname
+>، وسيعرض تلقائيًا إكمال اسم دالة العضو <varname
+>ge</varname
+> كـ <varname
+>get_color</varname
+>. في الواقع، كل ما عليك فعله هو الاستمرار في الكتابة حتى تقلل ميزة الإكمال التلقائي عدد التطابقات إلى واحد، ثم اضغط على مفتاح &Enter;:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لاحظ أنه يمكنك النقر على تلميح الأداة للحصول على مزيد من المعلومات حول الدالة بجانب نوع الإرجاع وما إذا كانت عامة:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-43.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>يمكن للإكمال التلقائي أن يوفر عليك الكثير من الكتابة إذا كان مشروعك يستخدم أسماء متغيرات ودوال طويلة؛ علاوة على ذلك، يتجنب الأخطاء الإملائية في الأسماء (وأخطاء المترجم الناتجة) ويجعل تذكر الأسماء الدقيقة للدوال أسهل بكثير؛ على سبيل المثال، إذا كانت جميع دوال الجلب الخاصة بك تبدأ بـ <varname
+>get_</varname
+>، فستكون ميزة الإكمال التلقائي قادرة على تقديم قائمة بدوال الجلب الممكنة فقط عندما تكون قد كتبت الأحرف الأربعة الأولى، مما يذكرك على الأرجح في هذه العملية أي من الدوال هو الصحيح. لاحظ أنه لكي يعمل الإكمال التلقائي، لا يلزم أن يكون تعريف صنف <varname
+>Car</varname
+> ولا المتغير <varname
+>my_ride</varname
+> في نفس الملف حيث تكتب الكود حاليًا. مطورك ببساطة يحتاج إلى معرفة أن هذه الصنوف والمتغيرات متصلة، &ie; الملفات التي تتم فيها هذه الاتصالات تحتاج إلى أن تكون جزءًا من المشروع الذي تعمل عليه حاليًا.</para>
+<para
+><note
+><para
+>مطورك لا يعرف دائمًا متى يساعدك في إكمال الكود. إذا لم يفتح تلميح أداة الإكمال التلقائي تلقائيًا، اضغط على <keycombo
+>&Ctrl;<keycap
+>مسافة</keycap
+></keycombo
+> لفتح قائمة الإكمالات يدويًا. بشكل عام، لكي يعمل الإكمال التلقائي، يحتاج مطورك إلى تحليل ملفات المصدر الخاصة بك. هذا يحدث في الخلفية لجميع الملفات التي هي جزء من مشاريع الجلسة الحالية بعد بدء تشغيل مطورك، وكذلك بعد أن تتوقف عن الكتابة لجزء من الثانية (يمكن ضبط التأخير).</para
+></note
+></para>
+<para
+><note
+><para
+>مطورك يحلل فقط الملفات التي يعتبرها كود مصدر، كما هو محدد بواسطة نوع MIME للملف. هذا النوع لا يُضبط قبل المرة الأولى التي يُحفظ فيها الملف؛ وبالتالي، إنشاء ملف جديد والبدء في كتابة كود فيه لن يؤدي إلى تشغيل التحليل للإكمال التلقائي حتى بعد حفظه لأول مرة.</para
+></note
+></para>
+<para
+><note
+><para
+>كما في الملاحظة السابقة، لكي يعمل الإكمال التلقائي، يجب أن يكون مطورك قادرًا على إيجاد التعريفات في ملفات الرأس. لهذا، يبحث في عدد من المسارات المبدئية. إذا لم يجد تلقائيًا ملف رأس، فسيضع خطًا تحت اسم ملف الرأس باللون الأحمر؛ في هذه الحالة، انقر بزر الفأرة الأيمن عليه لتخبر مطورك صراحة أين تجد هذه الملفات والمعلومات التي توفرها.</para
+></note
+></para>
+<para
+><note
+><para
+>ضبط الإكمال التلقائي نوقش في <link linkend="customizing-code-auto-completion"
+>هذا القسم من هذا الدليل</link
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="adding-new-classes-and-implementing-member-functions"
+><title
+>إضافة صنوف جديدة وتنفيذ دوال أعضاء</title>
+<para
+>مطورك لديه مساعد لإضافة صنوف جديدة. الإجراء موصوف في <link linkend="creating-a-new-class"
+>إنشاء صنف جديد</link
+>. يمكن إنشاء صنف C++ بسيط باختيار قالب C++ الأساسي من تصنيف <filename
+>صنف</filename
+>. في المساعد، يمكننا اختيار بعض دوال الأعضاء المعرفة مسبقًا، مثلًا منشئ فارغ، منشئ نسخ، ومدمّر. </para>
+<para
+>بعد إكمال المساعد، تُنشأ الملفات الجديدة وتُفتح في المحرر. ملف الرأس لديه بالفعل حواجز تضمين والصنف الجديد لديه جميع دوال الأعضاء التي اخترناها. الخطوتان التاليتان ستكونان توثيق الصنف ودوال أعضائه وتنفيذها. سنناقش أدوات توثيق الصنوف والدوال أدناه. لتنفيذ الدوال الخاصة المضافة بالفعل، اذهب ببساطة إلى اللسان <guilabel
+>bus.cpp</guilabel
+> حيث هيكل الدوال مُقدم بالفعل:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-30.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لإضافة دوال أعضاء جديدة، ارجع إلى اللسان <guilabel
+>bus.h</guilabel
+> وأضف اسم دالة. على سبيل المثال، دعنا نضيف هذا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-31.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لاحظ كيف بدأت بالفعل مع التنفيذ. ومع ذلك، في العديد من أنماط البرمجة، لا ينبغي تنفيذ الدالة في ملف الرأس بل في ملف .cpp المقابل. لهذه الغاية، ضع المؤشر على اسم الدالة واختر <menuchoice
+><guimenu
+>كود</guimenu
+><guimenuitem
+>نقل إلى المصدر</guimenuitem
+></menuchoice
+> أو اضغط على <keycombo
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+>. هذا يزيل الكود بين الأقواس المعقوفة من ملف الرأس (ويستبدله بفاصلة منقوطة حسب الضرورة لإنهاء تعريف الدالة) وينقله إلى ملف المصدر:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-32.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لاحظ كيف بدأت للتو في الكتابة وأنني قصدت التلميح إلى أن المتغير <varname
+>students</varname
+> يجب أن يكون على الأرجح متغير عضو في صنف <varname
+>Bus</varname
+> لكنني لم أضفه بعد. لاحظ أيضًا كيف يضع مطورك خطًا تحته لتوضيح أنه لا يعرف شيئًا عن المتغير. لكن هذه المشكلة يمكن حلها: النقر على اسم المتغير يعطي تلميح الأداة التالي:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-33.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>(يمكن تحقيق نفس الشيء بالنقر بزر الفأرة الأيمن عليه واختيار <guilabel
+>حل: أعلن كـ</guilabel
+>.) دعني أختار <quote
+>3 - private unsigned int</quote
+> (إما بالفأرة، أو بالضغط على <keycombo
+>&Alt;<keycap
+>3</keycap
+></keycombo
+>) ثم أرى كيف يظهر في ملف الرأس:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-34.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>من الجدير بالذكر أن مطورك يستخرج نوع المتغير المراد تعريفه من التعبير المستخدم لتهيئته. على سبيل المثال، إذا كنا قد كتبنا الجمع بالطريقة المشكوك فيها التالية، لكان قد اقترح تعريف المتغير كنوع <varname
+>double</varname
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-35.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>كنقطة أخيرة: الطريقة باستخدام <menuchoice
+><guimenu
+>كود</guimenu
+><guimenuitem
+>نقل إلى المصدر</guimenuitem
+></menuchoice
+> لا تُدرج دائمًا دالة العضو الجديدة حيث قد تريدها. على سبيل المثال، قد تريدها أن تُوسم بـ <varname
+>inline</varname
+> وتوضع في أسفل ملف الرأس. في حالة مثل هذه، اكتب التعريف وابدأ في كتابة تعريف الدالة هكذا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-36.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>مطورك يعرض تلقائيًا جميع الإكمالات الممكنة لما قد يأتي هنا. اختيار أحد مدخلي <varname
+>add_students</varname
+> يعطي الكود التالي الذي يملأ بالفعل قائمة الوسائط الكاملة:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-37.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>في المثال، قبول أحد الخيارات التي تقدمها أداة الإكمال التلقائي يعطي التوقيع الصحيح لكنه للأسف يحذف علامة <varname
+>inline</varname
+> التي كُتبت بالفعل. هذا أُبلغ عنه كـ <ulink url="https://bugs.kde.org/show_bug.cgi?id=274245"
+>خلل مطورك 274245</ulink
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="documenting-declarations"
+><title
+>توثيق التعريفات</title>
+<para
+>الكود الجيد موثق جيدًا، سواء على مستوى تنفيذ الخوارزميات داخل الدوال أو على مستوى الواجهة &mdash; &ie;، الصنوف، الدوال (العضو والعامة)، والمتغيرات (العضو أو العامة) تحتاج إلى توثيق لشرح قصدها، القيم الممكنة للوسائط، الشروط القبلية والبعدية، &etc;. فيما يتعلق بتوثيق الواجهة، أصبح <ulink url="http://www.doxygen.org"
+>doxygen</ulink
+> المعيار الفعلي لتنسيق التعليقات التي يمكن بعد ذلك استخراجها وعرضها على صفحات ويب قابلة للبحث.</para>
+<para
+>يدعم مطورك هذا النمط من التعليقات بتوفير اختصار لإنشاء هيكل التعليقات التي توثق صنفًا أو دالة عضو. على سبيل المثال، افترض أنك كتبت هذا الكود مسبقًا:</para>
+<para
+><programlisting
+>class Car {
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>تريد الآن إضافة توثيق لكل من الصنف والدالة العضو. للقيام بذلك، حرّك المؤشر إلى السطر الأول واختر <menuchoice
+><guimenu
+>الكود</guimenu
+><guimenuitem
+>توثيق التصريح</guimenuitem
+></menuchoice
+> أو اضغط <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>. سيرد مطورك بما يلي:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-23.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>المؤشر موجود بالفعل في المنطقة المعتمة لتعبئة الوصف القصير (بعد كلمة دوكسيجن <varname
+>@brief</varname
+>) لهذا الصنف. يمكنك بعد ذلك متابعة إضافة توثيق لهذا التعليق يعطي نظرة عامة أكثر تفصيلًا عما يفعله الصنف:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-24.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>أثناء وجود المحرر داخل التعليق، يُظلل نص التعليق باللون الأخضر (يختفي التظليل بمجرد تحريك المؤشر خارج التعليق). عندما تصل إلى نهاية سطر، اضغط &Enter; وسيبدأ مطورك آليًا سطرًا جديدًا يبدأ بعلامة نجمية ويضع المؤشر بمسافة بادئة بحرف واحد.</para>
+<para
+>الآن لنوثق الدالة العضو، مرة أخرى بوضع المؤشر على سطر التصريح واختيار <menuchoice
+><guimenu
+>الكود</guimenu
+><guimenuitem
+>توثيق التصريح</guimenuitem
+></menuchoice
+> أو الضغط على <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-25.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>مرة أخرى، يولد مطورك آليًا هيكل التعليق، بما في ذلك توثيق الدالة نفسها ونوع قيمتها المُرجَعة. في الحالة الحالية، اسم الدالة واضح بذاته، لكن غالبًا قد لا تكون وسائط الدالة واضحة ويجب توثيقها فرديًا. لتوضيح ذلك، لنفكر في دالة أكثر إثارة للاهتمام قليلًا والتعليق الذي يولده مطورك آليًا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-26.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>هنا، يحتوي التعليق المقترح بالفعل على جميع حقول دوكسيجن للمعاملات الفردية، على سبيل المثال.</para>
+</sect2>
+<sect2 id="renaming-variables-functions-and-classes"
+><title
+>إعادة تسمية المتغيرات والدوال والصنوف</title>
+<para
+>أحيانًا، يرغب المرء في إعادة تسمية دالة أو صنف أو متغير. على سبيل المثال، لنقل أن لدينا هذا مسبقًا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-38.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>ندرك بعد ذلك أننا غير راضين عن الاسم <varname
+>remove_students</varname
+> ونفضل تسميته، مثلًا، <varname
+>throw_out_students</varname
+>. يمكننا إجراء بحث واستبدال للاسم، لكن لهذا عيبان:</para>
+<itemizedlist>
+<listitem
+><para
+>قد تُستخدم الدالة في أكثر من ملف واحد. </para
+></listitem>
+<listitem
+><para
+>نريد حقًا إعادة تسمية هذه الدالة فقط وعدم لمس دوال قد تحمل الاسم نفسه لكنها مُصرّحة في صنوف أو نطاقات أسماء أخرى. </para
+></listitem>
+</itemizedlist>
+<para
+>يمكن حل هاتين المشكلتين بتحريك المؤشر إلى أي من مواضع اسم الدالة واختيار <menuchoice
+><guimenu
+>الكود</guimenu
+><guimenuitem
+>إعادة تسمية التصريح</guimenuitem
+></menuchoice
+> (أو النقر بالزر الأيمن على الاسم واختيار <guilabel
+>إعادة تسمية Bus::remove_students</guilabel
+>). يظهر مربع حوار يمكنك فيه إدخال الاسم الجديد للدالة ورؤية جميع الأماكن التي تُستخدم فيها الدالة فعليًا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-39.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="code-snippets"
+><title
+>مقتطفات الكود</title>
+<para
+>معظم المشاريع تحتوي على أجزاء من الكود يجب كتابتها بشكل متكرر في الكود المصدري. أمثلة: لمؤلفي المترجمات، حلقة على جميع التعليمات؛ لمؤلفي واجهات المستخدم، فحوصات أن إدخال المستخدم صحيح وإلا فتح صندوق خطأ؛ في مشروع مؤلف هذه السطور، سيكون كودًا من النوع</para>
+<para
+><programlisting
+>for (typename Triangulation::active_cell_iterator
+       cell = triangulation.begin_active();
+     cell != triangulation.end(); ++cell)
+  ... do something with the cell ...
+</programlisting>
+</para>
+<para
+>بدلًا من كتابة هذا النص مرارًا وتكرارًا (مع كل الأخطاء المطبعية المصاحبة)، يمكن لأداة <guilabel
+>المقتطفات</guilabel
+> في مطورك المساعدة هنا. للقيام بذلك، افتح عرض الأداة (انظر <link linkend="tools-and-views"
+>الأدوات والعروض</link
+> إذا لم يكن الزر المقابل موجودًا بالفعل على محيط نافذتك). ثم انقر على زر <quote
+>إضافة مستودع</quote
+> (تسمية غير دقيقة بعض الشيء &mdash; تسمح لك بإنشاء مجموعة مسماة من المقتطفات لأكواد مصدرية من نوع معين، &eg; مصادر C++) وأنشئ مستودعًا فارغًا. ثم انقر <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> لإضافة مقتطف، لتحصل على حوار مثل التالي:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-40.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>لا يجوز أن يحتوي اسم المقتطف على مسافات أو أحرف خاصة أخرى لأنه يجب أن يبدو كاسم دالة أو متغير عادي (لأسباب ستتضح في الفقرة التالية).</para
+></note
+></para>
+<para
+>لاستخدام مقتطف معرّف بهذه الطريقة، عند تحرير الكود، يمكنك فقط كتابة اسم المقتطف كما تفعل مع أي اسم دالة أو متغير آخر. سيصبح هذا الاسم متاحًا للإكمال التلقائي &mdash; مما يعني أنه لا ضرر في استخدام اسم طويل ووصفي لمقتطف مثل الاسم أعلاه &mdash; وعند قبول اقتراح تلميح الإكمال التلقائي (على سبيل المثال بالضغط على &Enter;)، سيُستبدل الجزء المُدخل بالفعل من اسم المقتطف بالتوسعة الكاملة للمقتطف وسيُضبط بمسافة بادئة بشكل صحيح:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-41.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لاحظ أنه لكي يعمل هذا، لا يلزم أن يكون عرض أداة <guilabel
+>المقتطفات</guilabel
+> مفتوحًا أو مرئيًا: تحتاج فقط إلى عرض الأداة لتعريف مقتطفات جديدة. بديل، وإن كان أقل ملاءمة، لتوسيع مقتطف هو ببساطة النقر عليه في عرض الأداة المعني.</para>
+<para
+><note
+><para
+>المقتطفات أقوى بكثير مما شُرح للتو. لوصف كامل لما يمكنك فعله بها، انظر <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
+>التوثيق التفصيلي لأداة المقتطفات</ulink
+>.</para
+></note
+></para>
+</sect2>
+</sect1>
+<sect1 id="modes-and-working-sets"
+><title
+>الأنماط ومجموعات العمل</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_noworkingset.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>إذا وصلت إلى هنا، ألق نظرة على أعلى يمين النافذة الرئيسية لـ مطورك: كما هو موضح في الصورة، سترى أن هناك ثلاثة <guilabel
+>أنماط</guilabel
+> يمكن أن يكون فيها مطورك: <guilabel
+>الكود</guilabel
+> (النمط الذي نناقشه في الفصل الحالي عن العمل مع الكود المصدري)، <guilabel
+>التنقيح</guilabel
+> (انظر <link linkend="debugging-programs-in-kdevelop"
+>تنقيح البرامج</link
+>) و<guilabel
+>المراجعة</guilabel
+> (انظر <link linkend="working-with-version-control-systems"
+>العمل مع أنظمة التحكم بالإصدارات</link
+>).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_sessionsprojectsworkingsets.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لكل نمط مجموعته الخاصة من الأدوات المكدسة حول المحيط، ولكل نمط أيضًا <emphasis
+>مجموعة عمل</emphasis
+> من الملفات والمستندات المفتوحة حاليًا. علاوة على ذلك، ترتبط كل مجموعة عمل من هذه المجموعات بجلسة حالية، &ie; لدينا العلاقة الموضحة أعلاه. لاحظ أن الملفات في مجموعة العمل تأتي من نفس الجلسة، لكنها قد تأتي من مشاريع مختلفة هي جزء من نفس الجلسة.</para>
+<para
+>إذا فتحت مطورك لأول مرة، تكون مجموعة العمل فارغة &mdash; لا توجد ملفات مفتوحة. لكن عندما تفتح ملفات للتحرير (أو التنقيح، أو المراجعة في الأنماط الأخرى) تنمو مجموعة العمل لديك. يُشار إلى أن مجموعة العمل غير فارغة برمز في اللسان، كما هو موضح أدناه. ستلاحظ أنه كلما أغلقت مطورك ثم أعدت تشغيله لاحقًا، تُحفظ مجموعة العمل وتُستعاد، &ie; تحصل على نفس مجموعة الملفات المفتوحة.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-10.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>إذا مررت مؤشر الفأرة فوق رمز مجموعة العمل، تحصل على تلميح يظهر لك الملفات المفتوحة حاليًا في هذه المجموعة (هنا: الملفان <varname
+>step-32.cc</varname
+> و<varname
+>step-1.cc</varname
+>). النقر على علامة الطرح الحمراء يغلق لسان الملف المقابل. الأهم ربما، النقر على الزر المسمى بالمقابل يسمح لك <guilabel
+>بإغلاق</guilabel
+> مجموعة العمل بأكملها مرة واحدة (&ie; إغلاق جميع الملفات المفتوحة حاليًا). لكن النقطة حول إغلاق مجموعة العمل هي أنها لا تغلق جميع الملفات فقط، بل تحفظ مجموعة العمل فعليًا وتفتح مجموعة جديدة لا تزال فارغة. يمكنك رؤية هذا هنا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-11.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لاحظ الرمزين إلى يسار ألسنة الأنماط الثلاثة (القلب والرمز غير المعروف إلى يساره). يمثل كل من هذين الرمزين مجموعة عمل محفوظة، بالإضافة إلى مجموعة العمل المفتوحة حاليًا. إذا مررت مؤشر الفأرة فوق رمز القلب، ستحصل على شيء مثل هذا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-12.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>يظهر لك أن مجموعة العمل المقابلة تحتوي على ملفين وأسماء مشاريعهما المقابلة: <varname
+>Makefile</varname
+> و<varname
+>changes.h</varname
+>. النقر على <guilabel
+>تحميل</guilabel
+> سيغلق ويحفظ مجموعة العمل الحالية (التي كما هو موضح هنا تحتوي على الملفين <varname
+>tria.h</varname
+> و<varname
+>tria.cc</varname
+> مفتوحين) ويفتح بدلًا منها مجموعة العمل المحددة. يمكنك أيضًا حذف مجموعة عمل بشكل دائم، مما يزيلها من مجموعة مجموعات العمل المحفوظة.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts"
+><title
+>بعض اختصارات لوحة المفاتيح المفيدة</title>
+<para
+>محرر مطورك يتبع اختصارات لوحة المفاتيح القياسية لجميع عمليات التحرير المعتادة. ومع ذلك، فإنه يدعم أيضًا عددًا من العمليات الأكثر تقدمًا عند تحرير الكود المصدري، بعضها مرتبط بمجموعات مفاتيح معينة. فيما يلي ما هو مفيد بشكل متكرر:</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>التنقل في الكود</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>O</keycap
+></keycombo
+></entry>
+    <entry
+>فتح ملف سريع: أدخل جزءًا من اسم ملف واختر من بين جميع الملفات في أشجار أدلة مشاريع الجلسة الحالية التي تطابق السلسلة؛ سيتم فتح الملف بعد ذلك</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>C</keycap
+></keycombo
+></entry>
+    <entry
+>فتح صنف سريع: أدخل جزءًا من اسم صنف واختر من بين جميع أسماء الأصناف المطابقة؛ سينتقل المؤشر بعد ذلك إلى تعريف الصنف</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>M</keycap
+></keycombo
+></entry>
+    <entry
+>فتح دالة سريع: أدخل جزءًا من اسم دالة (عضو) واختر من بين جميع الأسماء المطابقة؛ لاحظ أن القائمة تظهر كلًا من التصريحات والتعريفات وسينتقل المؤشر بعد ذلك إلى العنصر المحدد</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Q</keycap
+></keycombo
+></entry>
+    <entry
+>فتح سريع شامل: اكتب أي شيء (اسم ملف، اسم صنف، اسم دالة) واحصل على قائمة بأي شيء يطابق للاختيار منه</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>N</keycap
+></keycombo
+></entry>
+    <entry
+>مخطط تفصيلي: قدم قائمة بكل ما يحدث في هذا الملف، مثل تصريحات الأصناف وتعريفات الدوال</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+></entry>
+    <entry
+>انتقل إلى تعريف دالة إذا كان المؤشر حاليًا على تصريح دالة</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+></entry>
+    <entry
+>انتقل إلى تصريح دالة أو متغير إذا كان المؤشر حاليًا في تعريف دالة</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>PageDown</keycap
+></keycombo
+></entry>
+    <entry
+>انتقل إلى الدالة التالية</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>PageUp</keycap
+></keycombo
+></entry>
+    <entry
+>انتقل إلى الدالة السابقة</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>G</keycap
+></keycombo
+></entry>
+    <entry
+>اذهب إلى السطر</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>البحث والاستبدال</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>اعثر</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F3</keycap
+></entry>
+    <entry
+>ابحث على التالي</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+></entry>
+    <entry
+>استبدل</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>بحث واستبدال في ملفات متعددة</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>أشياء أخرى</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>_</keycap
+></keycombo
+></entry>
+    <entry
+>طي مستوى واحد: أزل هذه الكتلة من العرض، على سبيل المثال إذا كنت تريد التركيز على الصورة الأكبر داخل دالة</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>+</keycap
+></keycombo
+></entry>
+    <entry
+>وسّع مستوى واحدًا: التراجع عن الطي</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>علّق النص المحدد أو السطر الحالي</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>أزل تعليق النص المحدد أو السطر الحالي</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>وثّق الدالة الحالية. إذا كان المؤشر على دالة أو تعريف صنف، فإن ضغط هذا المفتاح سينشئ تعليقًا على نمط دوكسيجن مملوءًا مسبقًا بقائمة جميع الوسائط وقيم الإرجاع وغيرها</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+></entry>
+    <entry
+>بدّل الحرف الحالي والحرف السابق</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>K</keycap
+></keycombo
+></entry>
+    <entry
+>احذف السطر الحالي (ملاحظة: هذا ليس مجرد 'احذف من هنا إلى نهاية السطر' في إيماكس)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="code-generation-with-templates"
+><title
+>توليد الشيفرة باستخدام القوالب</title>
+<para
+>يستخدم مطورك القوالب لتوليد ملفات الشيفرة المصدرية ولتجنب كتابة شيفرة متكررة. </para>
+<sect1 id="creating-a-new-class"
+><title
+>إنشاء صنف جديد</title>
+<para
+>الاستخدام الأكثر شيوعًا لتوليد الشيفرة هو على الأرجح كتابة أصناف جديدة. لإنشاء صنف جديد في مشروع قائم، انقر بزر الفأرة الأيمن على مجلد المشروع واختر <guilabel
+>أنشئ من قالب...</guilabel
+>. يمكن فتح نفس الحوار من القائمة بالنقر على <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>جديد من قالب...</guimenuitem
+></menuchoice
+>، لكن استخدام مجلد مشروع له فائدة تعيين مسار أساسي لملفات المخرجات. اختر <filename
+>صنف</filename
+> في عرض اختيار التصنيف، واللغة والقالب المطلوبين في العرضين الآخرين. بعد اختيار قالب صنف، ستحتاج إلى تحديد تفاصيل الصنف الجديد. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-selection.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>أولًا، عليك تحديد معرّف للصنف الجديد. يمكن أن يكون اسمًا بسيطًا (مثل <varname
+>حافلة</varname
+>) أو معرّفًا كاملًا مع نطاقات أسماء (مثل <varname
+>نقل::حافلة</varname
+>). في الحالة الأخيرة، سيحلل مطورك المعرّف ويفصل نطاقات الأسماء عن الاسم الفعلي بشكل صحيح. في نفس الصفحة، يمكنك إضافة أصناف أساسية للصنف الجديد. قد تلاحظ أن بعض القوالب تختار صنفًا أساسيًا بنفسها، ويمكنك إزالته و/أو إضافة قواعد أخرى. يجب كتابة جملة الوراثة الكاملة هنا، والتي تعتمد على اللغة، مثل <varname
+>public QObject</varname
+> للسي++ أو <varname
+>extends SomeClass</varname
+> للبي إتش بي أو ببساطة اسم الصنف للبايثون. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-inheritance.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>في الصفحة التالية، يُعرض عليك اختيار من الطرق الافتراضية من جميع الأصناف الموروثة، بالإضافة إلى بعض المنشئات والمدمّرات والعوامل الافتراضية. سيؤدي تحديد مربع الاختيار بجانب توقيع طريقة إلى تنفيذ هذه الطريقة في الصنف الجديد. </para>
+<para
+>النقر على <guilabel
+>التالي</guilabel
+> يعرض صفحة حيث يمكنك إضافة أعضاء إلى صنف. اعتمادًا على القالب المحدد، قد تظهر هذه في الصنف الجديد كمتغيرات عضو، أو قد ينشئ القالب خصائص مع واضعي ومُحضِري قيم لها. في لغة يجب فيها التصريح بأنواع المتغيرات، مثل سي++، عليك تحديد كل من النوع والاسم للعضو، مثل <varname
+>int number</varname
+> أو <varname
+>QString name</varname
+>. في لغات أخرى، يمكنك حذف النوع، لكن من الجيد إدخاله على أي حال، لأن القالب المحدد قد يستخدمه بطريقة ما. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-members.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>في الصفحات التالية، يمكنك اختيار ترخيص للصنف الجديد، وتعيين أي خيارات مخصصة مطلوبة من قبل القالب المحدد، وتهيئة مواقع المخرجات لجميع الملفات المولّدة. بالنقر على <guilabel
+>إنهاء</guilabel
+>، تكمل المساعد وتنشئ الصنف الجديد. سيتم فتح الملفات المولّدة في المحرر، لذا يمكنك البدء في إضافة الشيفرة فورًا. </para>
+<para
+>بعد إنشاء صنف سي++ جديد، سيُعرض عليك خيار إضافة الصنف إلى هدف مشروع. اختر هدفًا من صفحة الحوار، أو أغلق الصفحة وأضف الملفات إلى هدف يدويًا. </para>
+<para
+>إذا اخترت قالب <filename
+>كائن كيوت</filename
+>، وحددت بعض الطرق الافتراضية، وأضفت متغيري عضو، فيجب أن يبدو المخرج كما في الصورة التالية. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-result.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>يمكنك رؤية أن أعضاء البيانات يُحوّلون إلى خصائص كيوت، مع دوال وصول ووحدات ماكرو Q_PROPERTY. حتى أن وسائط دوال الضبط تُمرّر بمرجع ثابت، حيثما كان ذلك مناسبًا. بالإضافة إلى ذلك، يُصرّح عن صنف خاص، ويُنشأ مؤشر خاص باستخدام Q_DECLARE_PRIVATE. كل هذا يتم بواسطة القالب، واختيار قالب مختلف في الخطوة الأولى يمكن أن يغير المخرج تمامًا. </para>
+</sect1>
+<sect1 id="creating-a-new-unit-test"
+><title
+>إنشاء اختبار وحدة جديد</title>
+<para
+>على الرغم من أن معظم أطر الاختبار تتطلب أن يكون كل اختبار أيضًا صنفًا، إلا أن مطورك يتضمن طريقة لتبسيط إنشاء اختبارات الوحدة. لإنشاء اختبار جديد، انقر بزر الفأرة الأيمن على مجلد مشروع واختر <guilabel
+>أنشئ من قالب...</guilabel
+>. في صفحة اختيار القالب، اختر <filename
+>اختبار</filename
+> كتصنيف، ثم اختر لغة البرمجة والقالب وانقر <guilabel
+>التالي</guilabel
+>. </para>
+<para
+>سيُطلب منك اسم الاختبار وقائمة بحالات الاختبار. لحالات الاختبار، عليك فقط تحديد قائمة بالأسماء. تتطلب بعض أطر اختبار الوحدة، مثل PyUnit وPHPUnit، أن تبدأ حالات الاختبار ببادئة خاصة. في مطورك، القالب هو المسؤول عن إضافة البادئة، لذا لا تحتاج إلى بادئة حالات الاختبار هنا. بعد النقر على <guilabel
+>التالي</guilabel
+>، حدد الترخيص ومواقع المخرجات للملفات المولّدة، وسيتم إنشاء الاختبار. </para>
+<para
+>اختبارات الوحدة المنشأة بهذه الطريقة لن تُضاف إلى أي هدف تلقائيًا. إذا كنت تستخدم CTest أو إطار اختبار آخر، تأكد من إضافة الملفات الجديدة إلى هدف. </para>
+</sect1>
+<sect1 id="other-files"
+><title
+>ملفات أخرى</title>
+<para
+>بينما تحظى الأصناف واختبارات الوحدة باهتمام خاص عند توليد الشيفرة من القوالب، يمكن استخدام نفس الطريقة لأي نوع من ملفات الشيفرة المصدرية. على سبيل المثال، يمكن استخدام قالب لوحدة CMake Find أو ملف .desktop. يمكن القيام بذلك باختيار <guilabel
+>أنشئ من قالب...</guilabel
+>، واختيار التصنيف والقالب المطلوبين. إذا كان التصنيف المحدد ليس <filename
+>صنف</filename
+> ولا <filename
+>اختبار</filename
+>، سيكون لديك فقط خيار اختيار الترخيص، وأي خيارات مخصصة يحددها القالب، ومواقع ملفات المخرجات. كما هو الحال مع الأصناف والاختبارات، إنهاء المساعد سيولّد الملفات ويفتحها في المحرر. </para>
+</sect1>
+<sect1 id="managing-templates"
+><title
+>إدارة القوالب</title>
+<para
+>من مساعد <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>جديد من قالب...</guimenuitem
+></menuchoice
+>، يمكنك أيضًا تنزيل قوالب ملفات إضافية بالنقر على زر <guilabel
+>احصل على المزيد من القوالب...</guilabel
+>. يفتح هذا حوار 'احصل على أشياء جديدة رائعة'، حيث يمكنك تثبيت قوالب إضافية، بالإضافة إلى تحديثها أو إزالتها. هناك أيضًا وحدة تهيئة للقوالب، يمكن الوصول إليها بالنقر على <menuchoice
+><guimenu
+>إعدادات</guimenu
+><guisubmenu
+>اضبط مطورك</guisubmenu
+><guimenuitem
+>قوالب</guimenuitem
+></menuchoice
+>. من هناك، يمكنك إدارة كل من قوالب الملفات (الموضحة أعلاه) وقوالب المشاريع (المستخدمة لإنشاء مشاريع جديدة). </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-manager.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>بالطبع، إذا لم يكن أي من القوالب المتاحة مناسبًا لمشروعك، يمكنك دائمًا إنشاء قوالب جديدة. أسهل طريقة هي على الأرجح نسخ وتعديل قالب موجود، بينما يوجد <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
+>برنامج تعليمي</ulink
+> قصير و <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
+>وثيقة مواصفات</ulink
+> أطول لمساعدتك. لنسخ قالب مثبت، افتح مدير القوالب بالنقر على <menuchoice
+><guimenu
+>إعدادات</guimenu
+><guisubmenu
+>اضبط مطورك...</guisubmenu
+><guimenuitem
+>قوالب</guimenuitem
+></menuchoice
+>، واختر القالب الذي ترغب في نسخه، ثم انقر على زر <guilabel
+>استخرج القالب</guilabel
+>. اختر مجلد وجهة، ثم انقر <guilabel
+>موافق</guilabel
+>، وسيتم استخراج محتويات القالب إلى المجلد المحدد. الآن يمكنك تعديل القالب بفتح الملفات المستخرجة وتعديلها. بعد الانتهاء، يمكنك استيراد قالبك الجديد إلى مطورك بفتح مدير القوالب، وتفعيل اللسان المناسب (إما <guilabel
+>قوالب المشاريع</guilabel
+> أو <guilabel
+>قوالب الملفات</guilabel
+>) والنقر على <guilabel
+>حمّل القالب</guilabel
+>. افتح ملف وصف القالب، وهو الملف ذو اللاحقة إما <varname
+>.kdevtemplate</varname
+> أو <varname
+>.desktop</varname
+>. سيضغط مطورك الملفات في أرشيف قالب ويستورد القالب. </para>
+<para
+><note
+><para
+>عند نسخ قالب موجود، تأكد من إعادة تسميته قبل استيراده مرة أخرى. وإلا، فإما أن تستبدل القالب القديم، أو سينتهي بك الأمر بقالبين لهما اسمان متطابقان. لإعادة تسمية قالب، أعد تسمية ملف الوصف إلى شيء فريد (لكن احتفظ باللاحقة)، وغيّر مدخل <filename
+>Name</filename
+> في ملف الوصف. </para
+></note>
+</para>
+<para
+>إذا أردت كتابة قالب من الصفر، يمكنك البدء بقالب صف C++ نموذجي عن طريق <link linkend="creating-projects-from-scratch"
+>إنشاء مشروع جديد</link
+> واختيار مشروع <filename
+>C++ Class Template</filename
+> في الفئة <filename
+>KDevelop</filename
+>. </para>
+</sect1>
+</chapter>
+<chapter id="building-compiling-projects-with-custom-makefiles"
+><title
+>بناء (ترجمة) المشاريع باستخدام ملفات Makefile مخصصة</title>
+<para
+>تصف العديد من المشاريع كيفية ترجمة ملفات المصدر (وأي الملفات يجب إعادة ترجمتها بمجرد تغيير ملف مصدر أو ملف رأس) باستخدام ملفات Makefile التي يفسرها برنامج <guilabel
+>make</guilabel
+> (انظر، على سبيل المثال، <ulink url="https://www.gnu.org/software/make/"
+>GNU make</ulink
+>). بالنسبة للمشاريع البسيطة، غالبًا ما يكون إعداد مثل هذا الملف يدويًا سهلًا جدًا. غالبًا ما تدمج المشاريع الأكبر ملفات Makefile الخاصة بها مع <guilabel
+>GNU autotools</guilabel
+> (autoconf, autoheader, automake). في هذا القسم، لنفترض ببساطة أن لديك ملف Makefile لمشروعك وتريد تعليم مطورك كيفية التفاعل معه.</para>
+<para
+><note
+><para
+>لا يعرف مطورك 4.x عن <guilabel
+>GNU autotools</guilabel
+> في وقت كتابة هذا القسم. إذا كان مشروعك يستخدمها، فسيتعين عليك تشغيل <varname
+>./configure</varname
+> أو أي من الأوامر الأخرى ذات الصلة يدويًا على سطر الأوامر. إذا أردت القيام بذلك داخل مطورك، افتح أداة <guilabel
+>Konsole</guilabel
+> (إذا لزم الأمر، أضفها إلى محيط النافذة الرئيسة باستخدام القائمة <menuchoice
+><guimenu
+>Windows</guimenu
+><guimenuitem
+>Add tool view</guimenuitem
+></menuchoice
+>) التي تمنحك عرض نافذة صدفة وشغّل <varname
+>./configure</varname
+> من سطر الأوامر في هذا العرض.</para
+></note
+></para>
+<para
+>الخطوة الأولى هي تعليم مطورك عن الأهداف في ملفات Makefile الخاصة بك. هناك طريقتان للقيام بذلك: اختيار أهداف Makefile فردية، واختيار مجموعة من الأهداف التي قد ترغب في بنائها بشكل متكرر. لكلا النهجين، افتح أداة <guilabel
+>Projects</guilabel
+> بالنقر على زر <guilabel
+>Projects</guilabel
+> على محيط النافذة الرئيسة لـ مطورك (إذا لم يكن لديك هذا الزر، انظر أعلاه كيفية إضافة زر أداة هناك). نافذة أداة <guilabel
+>Projects</guilabel
+> لها جزآن: النصف العلوي &mdash; بعنوان <guilabel
+>Projects</guilabel
+> &mdash; يسرد جميع مشاريعك ويسمح لك بتوسيع الأشجار الدليلية الأساسية. النصف السفلي &mdash; بعنوان <guilabel
+>Project Selection</guilabel
+> &mdash; يسرد مجموعة فرعية من تلك المشاريع التي سيتم بناؤها إذا اخترت عنصر القائمة <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Build selection</guimenuitem
+></menuchoice
+> أو ضغطت <keycap
+>F8</keycap
+>؛ سنعود إلى هذا الجزء أدناه.</para>
+<sect1 id="building-individual-makefile-targets"
+><title
+>بناء أهداف Makefile فردية</title>
+<para
+>في الجزء العلوي من عرض المشروع، وسّع الشجرة الفرعية لمشروع واحد، لنقل المشروع الذي تريد تشغيل هدف Makefile معين له. سيعطيك هذا أيقونات لـ (i) الأدلة تحت هذا المشروع، (ii) الملفات في الدليل الأعلى مستوى لهذا المشروع، (iii) أهداف Makefile التي يمكن لـ مطورك التعرف عليها. تظهر هذه الفئات في الصورة على اليمين. لاحظ أن مطورك <emphasis
+>يفهم</emphasis
+> صياغة Makefile إلى درجة معينة وبالتالي يمكنه تقديم أهداف محددة في ملف Makefile هذا (على الرغم من أن هذا الفهم له حدوده إذا كانت الأهداف مركبة أو ضمنية).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-1a.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لبناء أي من الأهداف المدرجة هناك، انقر عليه بزر الفأرة الأيمن واختر <guilabel
+>Build</guilabel
+>. على سبيل المثال، القيام بذلك مع الهدف <quote
+>clean</quote
+> سينفذ ببساطة <quote
+>make clean</quote
+>. يمكنك رؤية هذا يحدث في النافذة الفرعية بعنوان <guilabel
+>Build</guilabel
+> التي تفتح، وتظهر الأمر والمخرجات. (تتوافق هذه النافذة مع أداة <guilabel
+>Build</guilabel
+>، لذا يمكنك إغلاق النافذة ثم إعادة فتحها لاحقًا باستخدام زر أداة <guilabel
+>Build</guilabel
+> على محيط النافذة الرئيسة. تظهر في أسفل يمين الصورة.)</para>
+</sect1>
+<sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"
+><title
+>اختيار مجموعة من أهداف Makefile للبناء المتكرر</title>
+<para
+>النقر بزر الفأرة الأيمن على أهداف Makefile فردية في كل مرة تريد بناء شيء ما سيصبح قديمًا بسرعة. بدلًا من ذلك، نود أن يكون لدينا أهداف فردية لمشروع واحد أو أكثر في الجلسة يمكننا بناؤها بشكل متكرر دون عمل كثير بالفأرة. هذا هو المكان الذي يأتي فيه مفهوم <quote
+>تحديدات هدف البناء</quote
+>: إنها مجموعة من أهداف Makefile التي تُبنى واحدًا تلو الآخر كلما ضغطت على زر <guilabel
+>Build selection</guilabel
+> في قائمة الأزرار في الأعلى، أو اخترت عنصر القائمة <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Build selection</guimenuitem
+></menuchoice
+>، أو ضغطت على مفتاح الوظيفة <keycap
+>F8</keycap
+>.</para>
+<para
+>تظهر قائمة أهداف Makefile المحددة في النصف السفلي من عرض أداة <guilabel
+>Projects</guilabel
+>.</para>
+<para
+>افتراضيًا، يحتوي التحديد على جميع المشاريع، لكن يمكنك تغيير ذلك. على سبيل المثال، إذا كانت قائمة مشاريعك تحتوي على ثلاثة مشاريع (مكتبة أساسية L وتطبيقان A وB)، لكنك تعمل حاليًا فقط على المشروع A، فقد ترغب في إزالة المشروع B من التحديد بتظليله في التحديد والضغط على زر <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>. علاوة على ذلك، ربما تريد التأكد من بناء المكتبة L قبل المشروع A عن طريق تحريك الإدخالات في التحديد لأعلى ولأسفل باستخدام الأزرار على يمين القائمة. يمكنك أيضًا إدخال هدف Makefile معين في التحديد بالنقر عليه بزر الفأرة الأيمن واختيار <guilabel
+>Add to buildset</guilabel
+>، أو فقط بتظليله والضغط على زر <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> أعلى قائمة الأهداف المحددة مباشرة.</para>
+<para
+>يسمح لك مطورك بضبط ما يجب فعله كلما قمت ببناء التحديد. لتحقيق هذه الغاية، استخدم عنصر القائمة <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Open configuration</guimenuitem
+></menuchoice
+>. هناك، يمكنك على سبيل المثال تحديد عدد المهام المتزامنة التي يجب أن ينفذها <quote
+>make</quote
+> &mdash; إذا كان حاسوبك يحتوي، على سبيل المثال، على 8 أنوية معالجة، فإن إدخال 8 في هذا الحقل سيكون اختيارًا مفيدًا. في هذا الحوار، <guilabel
+>Default make target</guilabel
+> هو هدف Makefile يُستخدم لـ <emphasis
+>جميع</emphasis
+> الأهداف في التحديد.</para>
+</sect1>
+<sect1 id="what-to-do-with-error-messages"
+><title
+>ماذا تفعل برسائل الخطأ</title>
+<para
+>إذا واجه المترجم رسالة خطأ، انقر ببساطة على السطر الذي يحتوي على رسالة الخطأ وسيقفز المحرر إلى السطر (والعمود إذا كان متاحًا) حيث تم الإبلاغ عن الخطأ. اعتمادًا على رسالة الخطأ، قد يقدم لك مطورك أيضًا عدة إجراءات محتملة لإصلاح الخطأ، على سبيل المثال عن طريق تعريف متغير غير معرف سابقًا إذا تم العثور على رمز غير معروف.</para>
+</sect1>
+</chapter>
+<chapter id="running-programs-in-kdevelop"
+><title
+>تشغيل البرامج في مطورك</title>
+<para
+>بعد بناء برنامج، سترغب في تشغيله. لفعل ذلك، تحتاج إلى ضبط <emphasis
+>إطلاقات</emphasis
+> لمشاريعك. يتكون <emphasis
+>الإطلاق</emphasis
+> من اسم ملف تنفيذي، ومجموعة من وسائط سطر الأوامر، وبيئة تشغيل (مثل <quote
+>شغّل هذا البرنامج في صدفة</quote
+>، أو <quote
+>شغّل هذا البرنامج في المنقّح</quote
+>).</para>
+<sect1 id="setting-up-launches-in-kdevelop"
+><title
+>ضبط الإطلاقات في مطورك</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-2.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>لضبط هذا، اذهب إلى عنصر القائمة <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>ضبط الإطلاقات</guimenuitem
+></menuchoice
+>، وحدد المشروع الذي تريد إضافة إطلاق له، وانقر على الزر <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>. ثم أدخل اسم الملف التنفيذي، والمسار الذي تريد تشغيل البرنامج فيه. إذا كان تشغيل الملف التنفيذي يعتمد على بناء الملف التنفيذي و/أو مكتبات أخرى أولًا، فقد ترغب في إضافتها إلى القائمة في الأسفل: اختر <guilabel
+>بناء</guilabel
+> من القائمة المنسدلة، ثم اضغط على رمز <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-folder.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> على يمين مربع النص واختر أي هدف تريد بناؤه. في المثال أعلاه، اخترت الهدف <guilabel
+>الكل</guilabel
+> من المشروع <replaceable
+>1.deal.II</replaceable
+> و<replaceable
+>step-32</replaceable
+> من المشروع <replaceable
+>1.step-32</replaceable
+> للتأكد من ترجمة كل من المكتبة الأساسية وبرنامج التطبيق وتحديثهما قبل تنفيذ البرنامج فعليًا. بينما أنت هناك، يمكنك أيضًا ضبط إطلاق تنقيح بالنقر على رمز <guilabel
+>تنقيح</guilabel
+> وإضافة اسم برنامج المنقّح؛ إذا كان هذا هو المنقّح المبدئي للنظام (مثل <application
+>gdb</application
+> على &Linux;)، فلن تحتاج إلى فعل هذه الخطوة.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-3.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>يمكنك الآن محاولة تشغيل البرنامج: اختر <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>نفّذ الإطلاق</guimenuitem
+></menuchoice
+> من قائمة النافذة الرئيسة لـ مطورك (أو اضغط <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+>) وسيعمل برنامجك في نافذة فرعية منفصلة لـ مطورك. تظهر الصورة أعلاه النتيجة: النافذة الفرعية الجديدة لأداة <guilabel
+>تشغيل</guilabel
+> في الأسفل تُظهر مخرجات البرنامج الجاري تشغيله، في هذه الحالة برنامج <replaceable
+>step-32</replaceable
+>.</para>
+<para
+><note
+><para
+>إذا ضبطت إطلاقات متعددة، يمكنك اختيار أي منها يجب تشغيله عند الضغط على <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+> بالذهاب إلى <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>تشكيلة الإطلاق الحالية</guimenuitem
+></menuchoice
+>. هناك طريقة غير واضحة لتحرير اسم التشكيلة، مع ذلك: في مربع الحوار الذي يظهر عند اختيار <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>تشكيلة الإطلاق الحالية</guimenuitem
+></menuchoice
+>، انقر مرتين على اسم التشكيلة في عرض الشجرة على اليسار، مما سيسمح لك بتحرير اسم التشكيلة.</para
+></note
+></para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts0"
+><title
+>بعض اختصارات لوحة المفاتيح المفيدة</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>تشغيل برنامج</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F8</keycap
+></entry>
+    <entry
+>بناء (استدعِ make)</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>شغّل</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>شغّل البرنامج في المنقّح؛ قد ترغب في تعيين نقاط توقف مسبقًا، على سبيل المثال بالنقر بزر الفأرة الأيمن على سطر معين في شيفرة المصدر</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="debugging-programs-in-kdevelop"
+><title
+>تنقيح البرامج في مطورك</title>
+<sect1 id="running-a-program-in-the-debugger"
+><title
+>تشغيل برنامج في المنقّح</title>
+<para
+>بمجرد ضبط إطلاق (انظر <link linkend="running-programs-in-kdevelop"
+>تشغيل البرامج</link
+>)، يمكنك أيضًا تشغيله في منقّح: اختر عنصر القائمة <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>إطلاق تنقيح</guimenuitem
+></menuchoice
+>، أو اضغط <keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+>. إذا كنت معتادًا على <application
+>gdb</application
+>، فإن التأثير هو نفسه بدء <application
+>gdb</application
+> بالملف التنفيذي المحدد في تشكيلة الإطلاق ثم قول <varname
+>تشغيل</varname
+>. هذا يعني أنه إذا استدعى البرنامج <varname
+>abort()</varname
+> في مكان ما (مثل عند الوصول إلى تأكيد فاشل) أو إذا حدث خطأ تجزئة، فسيتوقف المنقّح. من ناحية أخرى، إذا عمل البرنامج حتى النهاية (بفعل الشيء الصحيح أو بدونه)، فلن يتوقف المنقّح من تلقاء نفسه قبل انتهاء البرنامج. في الحالة الأخيرة، سترغب في تعيين نقطة توقف على جميع أسطر قاعدة الشيفرة حيث تريد أن يتوقف المنقّح قبل تشغيل إطلاق التنقيح. يمكنك فعل ذلك بتحريك المؤشر إلى هذا السطر واختيار عنصر القائمة <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>بدّل نقطة التوقف</guimenuitem
+></menuchoice
+>، أو النقر بزر الفأرة الأيمن على سطر واختيار <guilabel
+>بدّل نقطة التوقف</guilabel
+> من قائمة السياق.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-4.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>تشغيل برنامج في المنقّح سيضع مطورك في وضع مختلف: سيستبدل جميع أزرار <quote
+>الأداة</quote
+> على محيط النافذة الرئيسة بأخرى مناسبة للتنقيح، بدلًا من التحرير. يمكنك رؤية أي وضع أنت فيه بالنظر إلى أعلى يمين النافذة: هناك ألسنة مسماة <guilabel
+>مراجعة</guilabel
+>، <guilabel
+>تنقيح</guilabel
+>، و<guilabel
+>شيفرة</guilabel
+>؛ النقر عليها يسمح لك بالتبديل ذهابًا وإيابًا بين الأوضاع الثلاثة؛ لكل وضع مجموعة من عروض الأدوات الخاصة به، يمكنك ضبطها بنفس الطريقة التي ضبطنا بها أدوات <guilabel
+>شيفرة</guilabel
+> في القسم <link linkend="tools-and-views"
+>الأدوات والعروض</link
+>.</para>
+<para
+>عندما يتوقف المنقح (عند نقطة توقف، أو نقطة يُستدعى فيها <varname
+>abort()</varname
+>) يمكنك فحص مجموعة متنوعة من المعلومات حول برنامجك. على سبيل المثال، في الصورة أعلاه، اخترنا أداة <guilabel
+>مكدس الإطار</guilabel
+> في الأسفل (المكافئة تقريبًا لأوامر <application
+>gdb</application
+> <quote
+>backtrace</quote
+> و <quote
+>info threads</quote
+>) التي تُظهر الخيوط المختلفة الجارية حاليًا في برنامجك على اليسار (هنا 8 خيوط إجمالًا) وكيف وصل التنفيذ إلى نقطة التوقف الحالية على اليمين (هنا: استدعى <varname
+>main()</varname
+> الدالة <varname
+>run()</varname
+>؛ ستكون القائمة أطول لو توقفنا في دالة استُدعيت بواسطة <varname
+>run()</varname
+> نفسها). على اليسار، يمكننا فحص المتغيرات المحلية بما في ذلك الكائن الحالي (الكائن المشار إليه بواسطة المتغير <varname
+>this</varname
+>).</para>
+<para
+>من هنا، هناك عدة إمكانيات يمكنك فعلها: يمكنك تنفيذ السطر الحالي (<keycap
+>F10</keycap
+>، أمر <quote
+>next</quote
+> في <application
+>gdb</application
+>)، أو الدخول إلى الدوال (<keycap
+>F11</keycap
+>، أمر <quote
+>step</quote
+> في <application
+>gdb</application
+>)، أو التشغيل حتى نهاية الدالة (<keycap
+>F12</keycap
+>، أمر <quote
+>finish</quote
+> في <application
+>gdb</application
+>). في كل مرحلة، يُحدّث مطورك المتغيرات المعروضة على اليسار إلى قيمها الحالية. يمكنك أيضًا تحويم الماوس فوق رمز في شفرتك، مثل متغير؛ سيعرض مطورك القيمة الحالية لذلك الرمز ويعرض إيقاف البرنامج أثناء التنفيذ في المرة التالية التي تتغير فيها قيمة هذا المتغير. إذا كنت تعرف <application
+>gdb</application
+>، يمكنك أيضًا النقر على زر أداة <guilabel
+>GDB</guilabel
+> في الأسفل وتكون لديك إمكانية إدخال أوامر <application
+>gdb</application
+>، مثلًا لتغيير قيمة متغير (الذي لا يبدو أن هناك طريقة أخرى له حاليًا).</para>
+</sect1>
+<sect1 id="attaching-the-debugger-to-a-running-process"
+><title
+>إرفاق المنقح بعملية جارية</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-9.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>أحيانًا، يرغب المرء في تنقيح برنامج يعمل بالفعل. أحد السيناريوهات لذلك هو تنقيح البرامج المتوازية باستخدام <ulink url="https://computing.llnl.gov/tutorials/mpi/"
+>MPI</ulink
+>، أو لتنقيح عملية خلفية طويلة التشغيل. لفعل ذلك، اذهب إلى إدخال القائمة <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>إرفاق بعملية</guimenuitem
+></menuchoice
+>، الذي سيفتح نافذة مثل النافذة أعلاه. سترغب في اختيار البرنامج الذي يطابق مشروعك المفتوح حاليًا في مطورك - في حالتي سيكون برنامج step-32.</para>
+<para
+>قد تكون قائمة البرامج هذه مربكة لأنها غالبًا ما تكون طويلة كما في الحالة الموضحة هنا. يمكنك تسهيل حياتك قليلًا بالذهاب إلى مربع القائمة المنسدلة في أعلى يمين النافذة. القيمة المبدئية هي <guilabel
+>عمليات المستخدم</guilabel
+>، أي جميع البرامج التي يديرها أي من المستخدمين المسجلين حاليًا في هذا الجهاز (إذا كان هذا هو سطح المكتب أو الحاسوب المحمول الخاص بك، فأنت على الأرجح المستخدم الوحيد، بصرف النظر عن الجذر وحسابات الخدمة المختلفة)؛ لكن القائمة لا تتضمن العمليات التي يديرها المستخدم الجذر. يمكنك تقييد القائمة إما باختيار <guilabel
+>عملياتي الخاصة</guilabel
+>، لإزالة جميع البرامج التي يديرها مستخدمون آخرون. أو الأفضل: اختر <guilabel
+>البرامج فقط</guilabel
+>، الذي يزيل الكثير من العمليات التي تعمل رسميًا باسمك ولكنك لا تتفاعل معها عادةً، مثل مدير النوافذ، والمهام الخلفية وما إلى ذلك التي من غير المحتمل أن تكون مرشحة للتنقيح.</para>
+<para
+>بمجرد اختيار عملية، سيدخلك إرفاقها إلى وضع التنقيح في مطورك، ويفتح جميع عروض أدوات المنقح المعتادة ويوقف البرنامج عند الموضع الذي كان فيه عند إرفاقك به. قد ترغب بعد ذلك في تعيين نقاط توقف، أو نقاط عرض، أو أي شيء آخر ضروري ومتابعة تنفيذ البرنامج بالذهاب إلى عنصر القائمة <menuchoice
+><guimenu
+>تشغيل</guimenu
+><guimenuitem
+>متابعة</guimenuitem
+></menuchoice
+>.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts1"
+><title
+>بعض اختصارات لوحة المفاتيح المفيدة</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>التّنقيح</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F10</keycap
+></entry>
+    <entry
+>تجاوز (أمر <quote
+>next</quote
+> في gdb)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F11</keycap
+></entry>
+    <entry
+>الدخول إلى (أمر <quote
+>step</quote
+> في gdb)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F12</keycap
+></entry>
+    <entry
+>الخروج من (أمر <quote
+>finish</quote
+> في gdb)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="working-with-version-control-systems"
+><title
+>العمل مع أنظمة التحكم بالإصدارات</title>
+<para
+>إذا كنت تعمل مع مشاريع أكبر، فمن المحتمل أن الشفرة المصدرية تُدار بواسطة نظام التحكم بالإصدارات مثل <ulink url="https://subversion.apache.org/"
+>subversion</ulink
+> أو <ulink url="https://git-scm.com/"
+>git</ulink
+>. الوصف التالي كُتب مع وضع <guilabel
+>subversion</guilabel
+> في الاعتبار ولكنه سيكون صحيحًا بنفس القدر إذا استخدمت <guilabel
+>git</guilabel
+> أو أي نظام تحكم بالإصدارات مدعوم آخر.</para>
+<para
+>أولًا لاحظ أنه إذا كان الدليل الذي يقع فيه المشروع تحت التحكم بالإصدارات، سيلاحظ مطورك ذلك آليًا. بعبارة أخرى: ليس من الضروري أن تخبر مطورك بأن يسحب نسخة بنفسه عند إعداد مشروعك؛ من المقبول توجيه مطورك إلى دليل سبق أن سحبت فيه نسخة من المستودع. إذا كان لديك مثل هذا الدليل تحت التحكم بالإصدارات، افتح عرض أداة <guilabel
+>المشاريع</guilabel
+>. هناك عدد من الأشياء التي يمكنك فعلها:</para>
+<itemizedlist>
+<listitem
+><para
+>إذا أصبح دليلك قديمًا، يمكنك تحديثه من المستودع: انقر على اسم المشروع بزر الفأرة الأيمن، اذهب إلى القائمة <guilabel
+>Subversion</guilabel
+> واختر <guilabel
+>تحديث</guilabel
+>. سيجلب هذا جميع الملفات التي تنتمي إلى هذا المشروع إلى أحدث إصدار بالنسبة للمستودع. </para
+></listitem>
+<listitem
+><para
+>إذا أردت تقييد هذا الإجراء إلى أدلة فرعية أو ملفات فردية، فوسّع عرض الشجرة لهذا المشروع إلى المستوى الذي تريده وانقر بزر الفأرة الأيمن على اسم دليل فرعي أو ملف، ثم افعل نفس ما سبق. </para
+></listitem>
+</itemizedlist>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-8.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<itemizedlist>
+<listitem
+><para
+>إذا حررت ملفًا أو أكثر، فوسّع عرض هذا المشروع إلى الدليل الذي توجد فيه هذه الملفات وانقر بزر الفأرة الأيمن على الدليل. يعطيك هذا عنصر قائمة <guilabel
+>Subversion</guilabel
+> يقدم لك خيارات مختلفة. اختر <guilabel
+>مقارنة مع الأساس</guilabel
+> لرؤية الفروق بين النسخة التي حررتها والنسخة في المستودع التي سبق أن سحبتها (المراجعة <quote
+>الأساس</quote
+>). سيعرض العرض الناتج <quote
+>الفروق</quote
+> لجميع الملفات في هذا الدليل. </para
+></listitem>
+<listitem
+><para
+>إذا حررت ملفًا واحدًا فقط، يمكنك أيضًا الحصول على قائمة <guilabel
+>Subversion</guilabel
+> لهذا الملف بمجرد النقر بزر الفأرة الأيمن على اسم الملف المقابل في عرض المشروع. والأبسط من ذلك، مجرد النقر بزر الفأرة الأيمن في عرض <guilabel
+>المحرر</guilabel
+> الذي فتحت فيه هذا الملف سيعطيك أيضًا خيار القائمة هذا. </para
+></listitem>
+<listitem
+><para
+>إذا أردت تسجيل ملف أو أكثر معدّل، انقر بزر الفأرة الأيمن إما على ملف فردي، أو دليل فرعي، أو المشروع بأكمله واختر <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>إيداع</guimenuitem
+></menuchoice
+>. سيدخلك هذا إلى وضع <guilabel
+>المراجعة</guilabel
+>، الوضع الثالث بالإضافة إلى <guilabel
+>الشفرة</guilabel
+> و <guilabel
+>التنقيح</guilabel
+> كما ترى في الزاوية اليمنى العليا من نافذة مطورك الرئيسة. الصورة على اليمين تظهر لك كيف يبدو هذا. في وضع <guilabel
+>المراجعة</guilabel
+>، يُظهر الجزء العلوي الفروق للدليل الفرعي/المشروع بأكمله ولكل ملف معدّل مع تمييز التغييرات (انظر علامات التبويب المختلفة في هذا الجزء من النافذة). افتراضيًا، جميع الملفات المعدّلة موجودة في مجموعة التغييرات التي أنت على وشك إيداعها، لكن يمكنك إلغاء تحديد بعض الملفات إذا كانت تعديلاتها غير مرتبطة بما تريد إيداعه. على سبيل المثال، في المثال على اليمين ألغيت تحديد <varname
+>step-32.cc</varname
+> و <varname
+>step-32.prm</varname
+> لأن التغييرات في هذه الملفات لا علاقة لها بالتغييرات الأخرى التي أجريتها على هذا المشروع ولا أريد تسجيلها بعد (قد أرغب لاحقًا في فعل ذلك في إيداع منفصل). بعد مراجعة التغييرات، يمكنك إدخال رسالة إيداع في مربع النص والضغط على <guilabel
+>إيداع</guilabel
+> على اليمين لإرسال الأمور. </para
+></listitem>
+<listitem
+><para
+>كما هو الحال مع رؤية الفروق، إذا أردت إيداع ملف واحد، يمكنك أيضًا النقر بزر الفأرة الأيمن في نافذة المحرر للحصول على عنصر القائمة <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>إيداع</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="customizing-kdevelop"
+><title
+>تخصيص مطورك</title>
+<para
+>هناك أوقات تريد فيها تغيير المظهر أو السلوك المبدئي لـ مطورك، مثلًا لأنك معتاد على اختصارات لوحة مفاتيح مختلفة أو لأن مشروعك يتطلب نمط إزاحة مختلفًا للشفرة المصدرية. في الأقسام التالية، نناقش بإيجاز الطرق المختلفة التي يمكن بها تخصيص مطورك لهذه الاحتياجات.</para>
+<sect1 id="customizing-the-editor"
+><title
+>تخصيص المحرر</title>
+<para
+>هناك عدد من الأشياء المفيدة التي يمكن ضبطها في وحول المحرر المدمج في مطورك. من الاستخدام الأكثر شيوعًا تشغيل ترقيم الأسطر باستخدام إدخال القائمة <menuchoice
+><guimenu
+>محرر</guimenu
+><guisubmenu
+>عرض</guisubmenu
+><guimenuitem
+>إظهار أرقام الأسطر</guimenuitem
+></menuchoice
+>، مما يسهل مطابقة رسائل خطأ المترجم أو رسائل التنقيح مع المواقع في الشفرة. في نفس القائمة الفرعية قد ترغب أيضًا في تشغيل <emphasis
+>حدود الأيقونات</emphasis
+> - عمود على يسار شفرتك يعرض فيه مطورك أيقونات مثل ما إذا كانت هناك نقطة توقف على السطر الحالي.</para>
+</sect1>
+<sect1 id="customizing-code-indentation"
+><title
+>تخصيص إزاحة الشفرة</title>
+<para
+>يحب الكثير منا تنسيق الشفرة بطريقة معينة. تفرض العديد من المشاريع أيضًا نمط إزاحة معين. قد لا يتطابق أي منهما مع نمط الإزاحة المبدئي لـ مطورك. ومع ذلك، يمكن تخصيص هذا: اذهب إلى عنصر القائمة <menuchoice
+><guimenu
+>إعدادات</guimenu
+><guimenuitem
+>تخصيص مطورك</guimenuitem
+></menuchoice
+>، ثم انقر على <guilabel
+>منسق المصدر</guilabel
+> على اليسار. يمكنك اختيار أحد أنماط الإزاحة المحددة مسبقًا المستخدمة على نطاق واسع، أو تعريف نمطك الخاص بإضافة نمط جديد ثم تحريره. قد لا تكون هناك طريقة لإعادة إنشاء النمط الذي تمت به إزاحة مصادر مشروعك في الماضي بدقة، لكن يمكنك الاقتراب باستخدام إعدادات لنمط جديد؛ مثال موضح في الصورتين أدناه.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-5.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-6.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>مع <guilabel
+>مطورك 4.2.2</guilabel
+>، يمكنك إنشاء نمط جديد لنوع ميم معين (مثل ملفات رؤوس C++) لكن هذا النمط لا يظهر ضمن قائمة الأنماط الممكنة لأنواع ميم أخرى (مثل ملفات مصدر C++) على الرغم من أنه سيكون من المفيد بالطبع استخدام نفس النمط لكلا النوعين من الملفات. سيكون عليك لذلك تعريف النمط مرتين، مرة لملفات الرؤوس ومرة لملفات المصدر. تم الإبلاغ عن هذا كـ <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
+>خلل مطورك 272335</ulink
+>.</para
+></note
+></para>
+</sect1>
+<sect1 id="customizing-keyboard-shortcuts"
+><title
+>تخصيص اختصارات لوحة المفاتيح</title>
+<para
+>لدى مطورك قائمة لا حدود لها تقريبًا من اختصارات لوحة المفاتيح (بعضها مدرج في أقسام <quote
+>اختصارات لوحة المفاتيح المفيدة</quote
+> لعدة فصول في هذا الدليل) يمكن تغييرها حسب ذوقك من خلال القائمة <menuchoice
+><guimenu
+>إعدادات</guimenu
+><guimenuitem
+>اضبط الاختصارات</guimenuitem
+></menuchoice
+>. في أعلى الحوار يمكنك إدخال كلمة بحث ويعرض فقط تلك الأوامر المطابقة؛ يمكنك بعد ذلك تحرير تركيبة المفاتيح المرتبطة بهذا الأمر.</para>
+<para
+>اثنان وجد أنهما مفيدان جدًا للتغيير هما ضبط <guilabel
+>محاذاة</guilabel
+> على مفتاح &Tab; (كثير من الناس لا يدخلون علامات التبويب يدويًا ويفضلون بدلًا من ذلك أن يختار المحرر تخطيط الشفرة؛ مع الاختصار المعدّل، يؤدي الضغط على &Tab; إلى جعل مطورك يزيح/يخرج/يحاذي الشفرة). الثاني هو وضع <guilabel
+>تبديل نقطة التوقف</guilabel
+> على <keycombo
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+> لأن هذه عملية متكررة إلى حد ما.</para>
+</sect1>
+<sect1 id="customizing-code-auto-completion"
+><title
+>تخصيص الإكمال التلقائي للشفرة</title>
+<para
+>تمت مناقشة إكمال الشفرة في <link linkend="auto-completion"
+>قسم هذا الدليل حول كتابة الشفرة المصدرية</link
+>. في مطورك، يأتي من مصدرين: المحرر، ومحرك التحليل. المحرر (&kate;) هو مكون من بيئة كيدي الأكبر ويقدم إكمالًا تلقائيًا بناءً على الكلمات التي رآها بالفعل في أجزاء أخرى من نفس المستند. يمكن التعرف على مثل هذه الإكمالات التلقائية في تلميح الأداة بواسطة الأيقونة التي تسبقها:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-20.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>يمكن تخصيص الإكمال التلقائي للمحرر عبر <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guisubmenu
+>اضبط المحرر</guisubmenu
+><guimenuitem
+>التحرير</guimenuitem
+><guimenuitem
+>الإكمال التلقائي</guimenuitem
+></menuchoice
+>. على وجه الخصوص، يمكنك اختيار عدد الأحرف التي تحتاج كتابتها في كلمة قبل تفعيل الإكمال التلقائي.</para>
+<para
+>من ناحية أخرى، الإكمال التلقائي الخاص بـ مطورك أقوى بكثير إذ يأخذ في الاعتبار المعلومات الدلالية حول السياق. على سبيل المثال، يعرف أي دوال الأعضاء يقدمها عند كتابة <varname
+>object.</varname
+>، &etc;، كما هو موضح هنا:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>تأتي معلومات السياق هذه من ملحقات دعم لغة متنوعة، يمكن استخدامها بعد حفظ ملف معين (لتتمكن من التحقق من نوع الملف واستخدام دعم اللغة الصحيح).</para>
+<para
+>تم ضبط إكمال مطورك ليظهر أثناء الكتابة، فورًا، في كل مكان تقريبًا يمكن فيه إكمال شيء. هذا قابل للضبط في <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guisubmenu
+>اضبط مطورك</guisubmenu
+><guimenuitem
+>دعم اللغة</guimenuitem
+></menuchoice
+>. إذا لم يكن مضبوطًا بالفعل (كما ينبغي مبدئيًا)، تأكد من ضبط <guilabel
+>تمكين الاستدعاء التلقائي</guilabel
+>.</para>
+<para
+>لدى مطورك طريقتان لعرض الإكمال: <guilabel
+>الإكمال التلقائي الأدنى</guilabel
+> يعرض المعلومات الأساسية فقط في تلميحات الإكمال (&ie; اسم النطاق، الصنف، الدالة، أو المتغير). سيبدو هذا مشابهًا لإكمال &kate; (باستثناء الأيقونات).</para>
+<para
+>من ناحية أخرى، <guilabel
+>الإكمال الكامل</guilabel
+> سيظهر بالإضافة إلى ذلك النوع لكل مدخل، وفي حالة الدوال، أيضًا الوسائط التي تأخذها. أيضًا، إذا كنت تملأ حاليًا وسائط دالة، سيكون للإكمال الكامل مربع معلومات إضافي فوق المؤشر يظهر الوسيط الحالي الذي تعمل عليه.</para>
+<para
+>يجب أن يقوم إكمال الشيفرة في مطورك أيضًا بإحضار إلى الأعلى وإبراز باللون الأخضر أي عناصر إكمال تطابق النوع المتوقع حاليًا في كل من الإكمال الأدنى والكامل، المعروفة باسم <quote
+>أفضل التطابقات</quote
+>.</para>
+<para
+>الاختيارات الثلاثة الممكنة لمستوى الإكمال في حوار الضبط هي:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>إكمال أدنى دائمًا</guilabel
+>: لا تُظهر أبدًا <quote
+>الإكمال الكامل</quote
+> </para
+></listitem>
+<listitem
+><para
+><guilabel
+>إكمال تلقائي أدنى</guilabel
+>: أظهر <quote
+>الإكمال الكامل</quote
+> فقط عندما يُفعّل الإكمال التلقائي يدويًا (&ie;، كلما ضغطت <keycombo
+>&Ctrl;<keycap
+>مسافة</keycap
+></keycombo
+>) </para
+></listitem>
+<listitem
+><para
+><guilabel
+>إكمال كامل دائمًا</guilabel
+>: أظهر دائمًا <quote
+>الإكمال الكامل</quote
+> </para
+></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<!--userbase-content-->
+<chapter id="credits">
+<title
+>الحقوق والترخيص</title>
+    <para
+>حقوق نشر التوثيق انظر تاريخ صفحة <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
+>مطورك4/دليل</ulink
+> في UserBase</para>
+    <para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

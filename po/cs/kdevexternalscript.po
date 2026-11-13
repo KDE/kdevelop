@@ -1,20 +1,21 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2017, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2020-09-17 16:34+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-13 01:05+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: editexternalscript.cpp:30
@@ -50,6 +51,30 @@ msgid ""
 "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
 "commands that could lead to data loss.</p>\n"
 msgstr ""
+"<p>Definuje příkaz, který se má provést při spuštění tohoto skriptu. Měly by "
+"být k dispozici základní funkce shellu vaší platformy.</p>\n"
+"<p>V příkazu můžete použít několik zástupných symbolů:</p>\n"
+"<dl>\n"
+"<dt><code>%u</code></dt>\n"
+"<dd>Nahradí se adresou URL aktivního dokumentu.</dd>\n"
+"<dt><code>%f</code></dt>\n"
+"<dd>Nahradí se lokální cestou k aktivnímu dokumentu.</dd>\n"
+"<dt><code>%n</code></dt>\n"
+"<dd>Nahradí se názvem aktivního dokumentu včetně jeho přípony.</dd>\n"
+"<dt><code>%b</code></dt>\n"
+"<dd>Nahradí se názvem aktivního dokumentu bez jeho přípony.</dd>\n"
+"<dt><code>%d</code></dt>\n"
+"<dd>Nahradí se cestou k adresáři aktivního dokumentu.</dd>\n"
+"<dt><code>%p</code></dt>\n"
+"<dd>Nahradí se adresou URL projektu aktuálního dokumentu.</dd>\n"
+"<dt><code>%s</code></dt>\n"
+"<dd>Nahradí se obsahem výběru v aktuálním dokumentu v podobě, která je "
+"bezpečná pro příkazový řádek.</dd>\n"
+"<dt><code>%i</code></dt>\n"
+"<dd>Je nahrazeno PID aktuálně spuštěného procesu KDevelop.</dd>\n"
+"</dl>\n"
+"<p><b>POZNÁMKA:</b>  Je vaší odpovědností zabránit spuštění nebezpečných "
+"příkazů, které by mohly vést ke ztrátě dat.</p>\n"
 
 #: editexternalscript.cpp:56
 #, kde-format
@@ -58,6 +83,8 @@ msgid ""
 "<p>Defines what the external script should get as input (via <code>STDIN</"
 "code>).</p>"
 msgstr ""
+"<p>Definuje, jaké vstupní údaje by měl externí skript obdržet "
+"(prostřednictvím <code>STDIN</code>).</p>"
 
 #: editexternalscript.cpp:62
 #, kde-format
@@ -66,6 +93,8 @@ msgid ""
 "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
 "the script.</p>"
 msgstr ""
+"<p>Definuje, jak se má naložit s výstupem (tj. <code>STDOUT</code>) skriptu."
+"</p>"
 
 #: editexternalscript.cpp:68
 #, kde-format
@@ -75,12 +104,15 @@ msgid ""
 "the script.</p><p>Note: if the action is the same as that chosen for the "
 "output, the channels will be merged and handled together.</p>"
 msgstr ""
+"<p>Definuje, jak se má naložit s chybami (tj. <code>STDERR</code>) skriptu.</"
+"p><p>Poznámka: Pokud je činnost stejná jako ta, která byla zvolena pro "
+"výstup, kanály se sloučí a budou zpracovány společně.</p>"
 
 #: editexternalscript.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
-msgstr ""
+msgstr "<p>Definuje název skriptu. Slouží pouze pro zobrazovací účely.</p>"
 
 #: editexternalscript.cpp:82
 #, kde-format
@@ -88,6 +120,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the shortcut(s) you can use to execute this external script.</p>"
 msgstr ""
+"<p>Definuje zkratky, které lze použít ke spuštění tohoto externího skriptu.</"
+"p>"
 
 #: editexternalscript.cpp:88
 #, kde-format
@@ -95,7 +129,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether documents should be saved before the script gets executed."
 "</p>"
-msgstr ""
+msgstr "<p>Definuje, zda se mají dokumenty uložit před spuštěním skriptu.</p>"
 
 #: editexternalscript.cpp:94
 #, kde-format
@@ -103,7 +137,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether the output of the script should be shown in a tool view.</"
 "p>"
-msgstr ""
+msgstr "<p>Definuje, zda se má výstup skriptu zobrazit v pohledu nástroje.</p>"
 
 #: editexternalscript.cpp:98
 #, kde-format
@@ -112,18 +146,20 @@ msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
 "indicate errors by red text.</p>"
 msgstr ""
+"<p>Definuje, jaký typ filtrování má být na výstupu použit. Např. pro "
+"označení chyb červeným textem.</p>"
 
 #: editexternalscript.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New External Script"
-msgstr ""
+msgstr "Vytvořit nový externí skript"
 
 #: editexternalscript.cpp:108
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit External Script '%1'"
-msgstr ""
+msgstr "Upravit externí skript '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: editexternalscript.ui:19
@@ -140,6 +176,8 @@ msgid ""
 "<p>The name will also be used as the identifier during code completion.</p>\n"
 "  <p><b>Note:</b> No spaces allowed.</p>"
 msgstr ""
+"<p>Tento název bude také použit jako identifikátor při doplňování kódu.</p>\n"
+"<p><b>Poznámka:</b> Mezery nejsou povoleny.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
@@ -167,21 +205,21 @@ msgstr "Nic"
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Nothing"
-msgstr ""
+msgstr "Výběr v aktuálním souboru nebo nic"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:72
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Whole File"
-msgstr ""
+msgstr "Výběr v aktuálním souboru nebo celý soubor"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:77
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Contents of Current File"
-msgstr ""
+msgstr "Obsah aktuálního souboru"
 
 #. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
 #: editexternalscript.ui:85
@@ -202,28 +240,28 @@ msgstr "Ignorovat"
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Insert at Cursor Position of Current File"
-msgstr ""
+msgstr "Vložit na pozici kurzoru v aktuálním souboru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:106
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
-msgstr ""
+msgstr "Nahradit výběr aktuálního souboru nebo vložit na pozici kurzoru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:111
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Whole File"
-msgstr ""
+msgstr "Nahradit výběr v aktuálním souboru nebo celý soubor"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:116
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Contents of Current File"
-msgstr ""
+msgstr "Nahradit obsah aktuálního souboru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:121
@@ -251,35 +289,35 @@ msgstr "Ignorovat"
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Merge with Normal Output"
-msgstr ""
+msgstr "Sloučit s normálním výstupem"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:150
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Insert at Cursor Position of Current File"
-msgstr ""
+msgstr "Vložit na pozici kurzoru v aktuálním souboru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:155
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
-msgstr ""
+msgstr "Nahradit výběr aktuálního souboru nebo vložit na pozici kurzoru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:160
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Whole File"
-msgstr ""
+msgstr "Nahradit výběr v aktuálním souboru nebo celý soubor"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:165
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Contents of Current File"
-msgstr ""
+msgstr "Nahradit obsah aktuálního souboru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:170
@@ -300,7 +338,7 @@ msgstr "Uložit reži&m:"
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Nothing"
-msgstr ""
+msgstr "Neukládat nic"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:194
@@ -314,7 +352,7 @@ msgstr "Uložit aktivní dokument"
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save All Open Documents"
-msgstr ""
+msgstr "Uložit všechny otevřené dokumenty"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: editexternalscript.ui:207
@@ -342,7 +380,7 @@ msgstr "Žádný filtr"
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr ""
+msgstr "Filtr kompilátoru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:245
@@ -356,14 +394,14 @@ msgstr "Filtr chyb skriptu"
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr ""
+msgstr "Filtr statické analýzy"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defines shortcuts you can use to execute this script."
-msgstr ""
+msgstr "Definuje zkratky, které lze použít ke spuštění tohoto skriptu."
 
 #. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:261
@@ -378,26 +416,28 @@ msgid ""
 "Cannot run script '%1' since it tries to access the editor contents but no "
 "document is open."
 msgstr ""
+"Skript '%1' nelze spustit, protože se pokouší přistupovat k obsahu editoru, "
+"ale není otevřen žádný dokument."
 
 #: externalscriptjob.cpp:228
 #, kde-format
 msgid "Running external script: %1"
-msgstr ""
+msgstr "Spouštění externího skriptu: %1"
 
 #: externalscriptjob.cpp:272
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr ""
+msgstr "*** Zabitá aplikace ***"
 
 #: externalscriptjob.cpp:352
 #, kde-format
 msgid "*** Exited normally ***"
-msgstr ""
+msgstr "*** Ukončeno normálně ***"
 
 #: externalscriptjob.cpp:355
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
-msgstr ""
+msgstr "*** Ukončeno s návratovým kódem: %1 ***"
 
 #: externalscriptjob.cpp:358
 #, kde-format
@@ -407,7 +447,7 @@ msgstr "*** Proces byl přerušen ***"
 #: externalscriptjob.cpp:360
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
-msgstr ""
+msgstr "*** Došlo k selhání s návratovým kódem: %1 ***"
 
 #: externalscriptjob.cpp:372
 #, kde-format
@@ -415,11 +455,12 @@ msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
 msgstr ""
+"*** Nelze spustit program '%1'. Zkontrolujte, zda je cesta zadána správně ***"
 
 #: externalscriptplugin.cpp:126
 #, kde-format
 msgid "External Scripts"
-msgstr ""
+msgstr "Externí skripty"
 
 #: externalscriptplugin.cpp:137
 #, kde-format
@@ -429,12 +470,12 @@ msgstr "Rychle zkompilovat"
 #: externalscriptplugin.cpp:143
 #, kde-format
 msgid "Sort Selection"
-msgstr ""
+msgstr "Seřadit výběr"
 
 #: externalscriptplugin.cpp:151
 #, kde-format
 msgid "Google Selection"
-msgstr ""
+msgstr "Najít výběr v Googlu"
 
 #: externalscriptplugin.cpp:157
 #, kde-format
@@ -477,12 +518,14 @@ msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
 "i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
 msgstr ""
+"<p>Opravdu chcete odstranit konfiguraci externího skriptu pro <i>%1</i>?</"
+"p><p><i>Poznámka:</i> Samotný skript nebude odstraněn.</p>"
 
 #: externalscriptview.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
-msgstr ""
+msgstr "Potvrdit odstranění externího skriptu"
 
 #: externalscriptview.cpp:151
 #, kde-format

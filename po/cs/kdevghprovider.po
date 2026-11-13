@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2013, 2014, 2015, 2017, 2020, 2023.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2023-06-23 09:28+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-12 23:39+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: ghdialog.cpp:25
 #, kde-format
@@ -24,12 +25,16 @@ msgid ""
 "authorize KDevelop, you will be able to fetch your public/private "
 "repositories and the repositories from your organizations."
 msgstr ""
+"KDevelopu jste neudělili oprávnění k používání vašeho účtu GitHub. Pokud "
+"KDevelopu toto oprávnění udělíte, budete moci načíst své veřejné i soukromé "
+"repozitáře a repozitáře vašich organizací."
 
 #: ghdialog.cpp:34
 #, kde-format
 msgctxt "%1 is the URL with the GitHub token settings"
 msgid "You can check the authorization for this application and others at %1"
 msgstr ""
+"Oprávnění pro tuto aplikaci i další aplikace si můžete zkontrolovat na %1"
 
 #: ghdialog.cpp:54
 #, kde-format
@@ -63,12 +68,12 @@ msgstr "Účet na GitHub"
 #: ghdialog.cpp:98
 #, kde-format
 msgid "Enter a login and a password"
-msgstr ""
+msgstr "Zadejte přihlašovací jméno a heslo"
 
 #: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:45
 #, kde-format
 msgid "Waiting for response"
-msgstr "Čekám na odpověď"
+msgstr "Čekání na odpověď"
 
 #: ghdialog.cpp:126
 #, kde-format
@@ -78,6 +83,10 @@ msgid ""
 "Could not create token: \"%1\"\n"
 "%2"
 msgstr ""
+"Ověření se nezdařilo. Zkuste to prosím znovu.\n"
+"\n"
+"Nepodařilo se vytvořit token: \"%1\"\n"
+"%2"
 
 #: ghdialog.cpp:129
 #, kde-format
@@ -93,6 +102,10 @@ msgid ""
 "Created token: \"%1\"\n"
 "%2"
 msgstr ""
+"Ověření proběhlo úspěšně.\n"
+"\n"
+"Vytvořen token: \"%1\"\n"
+"%2"
 
 #: ghdialog.cpp:136
 #, kde-format
@@ -115,7 +128,7 @@ msgstr "Kód OTP:"
 #: ghdialog.cpp:176
 #, kde-format
 msgid "Please, write your password here."
-msgstr ""
+msgstr "Zde prosím zadejte své heslo."
 
 #: ghproviderplugin.cpp:35
 #, kde-format
@@ -132,7 +145,7 @@ msgstr "Hledat..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "You can press the Return key if you do not want to wait."
-msgstr ""
+msgstr "Pokud nechcete čekat, můžete stisknout klávesu Return."
 
 #: ghproviderwidget.cpp:71
 #, kde-format
@@ -146,6 +159,8 @@ msgid ""
 "The Git plugin could not be loaded which is required to import a GitHub "
 "project."
 msgstr ""
+"Nepodařilo se načíst modul Git, který je nezbytný pro import projektu z "
+"GitHubu."
 
 #: ghproviderwidget.cpp:88
 #, kde-format
