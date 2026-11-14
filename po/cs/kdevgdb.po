@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 # Vit Pelcak <vit@pelcak.org>, 2021, 2023.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2023-08-07 11:45+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-13 10:57+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Poedit 3.10\n"
 
 #: debuggerplugin.cpp:35 gdbconfigpage.cpp:94
 #, kde-format
@@ -42,13 +43,20 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
+"<b>Vlastní formátovací řetězec</b>\n"
+"<p>Zadejte formátovací řetězec ve stylu jazyka C, který se použije při "
+"výpisu zvoleného výrazu. Například:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"Pokud není vlastní formátovací řetězec povolen, budou vypsány názvy a "
+"hodnoty všech výrazů s použitím \"%d\" jako formátovacího specifikátoru pro "
+"všechny výrazy."
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
 #, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
-msgstr ""
+msgstr "Výrazy k vytištění:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
@@ -60,6 +68,11 @@ msgid ""
 "expressions and continue execution when breakpoint is hit. You can think of "
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
+"<b>Zapnout trasování</b>\n"
+"<p>Trasování je mechanismus, který při dosažení zarážky automaticky vypisuje "
+"hodnoty vybraných výrazů a pokračuje v provádění. Můžete si to představit "
+"jako ladění pomocí funkce printf, které nevyžaduje úpravy zdrojového kódu.</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
@@ -81,6 +94,9 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
+"Není zadán žádný profil prostředí, zdá se, že konfigurace je poškozená. "
+"Zkontrolujte prosím konfiguraci spuštění '%1'. Používá se výchozí profil "
+"prostředí."
 
 #: debugsession.cpp:257
 #, kde-format
@@ -90,12 +106,12 @@ msgstr "<neznámá verze>"
 #: debugsession.cpp:276
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr ""
+msgstr "<b>Potřebujete gdb 7.0.0 nebo novější verzi.</b><br />Používáte: %1"
 
 #: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
-msgstr ""
+msgstr "Nepodařilo se najít ladicí shell '%1'."
 
 #: gdbconfigpage.cpp:79
 #, kde-format
@@ -140,6 +156,11 @@ msgid ""
 "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
 "executable."
 msgstr ""
+"Chcete-li spustit spustitelný soubor \"gdb\" z $PATH, nechte toto pole "
+"prázdné. Chcete-li spustit vlastní verzi gdb, například pro jinou "
+"architekturu, zadejte sem název spustitelného souboru. Můžete buď spustit "
+"gdb z $PATH, ale pod jiným názvem (například \"arm-gdb\"), a to zadáním "
+"tohoto názvu sem, nebo zadat úplnou cestu ke spustitelnému souboru gdb."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
@@ -161,6 +182,13 @@ msgid ""
 "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
 "span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Pokud chcete, aby byl gdb spouštěn pomocí speciálního "
+"skriptu v shellu, který například správně nastaví cestu ke knihovnám, vložte "
+"jej sem, např.: /path/to/script.sh --scriptArguments</p><p>Poznámka: váš "
+"skript bude spuštěn takto: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. Skript script.sh <span style=\" font-weight:600;\">tedy "
+"musí</span> ručně spustit spustitelný soubor &quot;debugger&quot;.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
@@ -181,7 +209,7 @@ msgstr "Možnosti"
 #, kde-format
 msgctxt "@option:check"
 msgid "Display static &members:"
-msgstr ""
+msgstr "Zobrazit statické &členy:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
 #: gdbconfigpage.ui:111
@@ -195,13 +223,19 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
+"Zobrazení statických členů zpomaluje GDB při\n"
+"generování dat v kódu založeném na Qt.\n"
+"Může to změnit \"signaturu\" dat,\n"
+"na které se spoléhají QString a podobné třídy,\n"
+"ale pokud potřebujete ladit právě tyto hodnoty,\n"
+"zaškrtněte tuto volbu."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
 #, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
-msgstr ""
+msgstr "Zobrazit názvy bez &demanglingu:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
@@ -212,6 +246,9 @@ msgid ""
 "can select to see the methods' mangled names.\n"
 "However, non-mangled names are easier to read."
 msgstr ""
+"Při zobrazení disasemblovaného kódu si\n"
+"můžete zvolit, zda se mají zobrazovat přetvořená jména metod.\n"
+"Nepřetvořená jména jsou však čitelnější."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
@@ -239,7 +276,7 @@ msgstr "Konzole GDB"
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr ""
+msgstr "Sada rámců"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:178
@@ -252,6 +289,11 @@ msgid ""
 "\ttarget remote ...\tconnect to the remote debugger\n"
 "\tcontinue\t[optional] run debugging to the first breakpoint"
 msgstr ""
+"Tento skript slouží k zadávání konkrétních příkazů potřebných pro připojení "
+"ke spustitelnému souboru běžícímu na vzdáleném počítači.\n"
+"\tshell sleep 5\tpočkat na spuštění vzdáleného programu\n"
+"\ttarget remote ...\tpřipojit se ke vzdálenému ladicímu programu\n"
+"\tpokračovat\t[volitelně] spustit ladění až k prvnímu bodu přerušení"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
@@ -274,13 +316,20 @@ msgid ""
 "contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skript pro spuštění vzdálené aplikace</p><p></"
+"p><p>Tento skript shellu se spustí poté, co gdb načte skript Gdb Config.</"
+"p><p>Jeho účelem je samotné spuštění vzdáleného procesu.</p><p>1) Najděte "
+"způsob, jak vzdáleně spustit příkaz – rsh, ssh, telnet, ...</p><p>2a) "
+"Spusťte na cílovém počítači příkaz &quot;gdbserver ... application&quot;.</"
+"p><p>nebo pokud váš spustitelný soubor obsahuje gdb stub:</p><p>2b) Spusťte "
+"na cílovém počítači příkaz &quot;application&quot;.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
 #, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
-msgstr "Sp&ustit shellový skript"
+msgstr "Sp&ustit shellový skript:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
@@ -288,7 +337,7 @@ msgstr "Sp&ustit shellový skript"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This script is sourced by gdb when the debugging starts."
-msgstr ""
+msgstr "Tento skript je načten programem gdb při spuštění ladění."
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
@@ -308,6 +357,11 @@ msgid ""
 "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
 "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skript pro připojení ke vzdálené aplikaci</"
+"p><p>Například:</p><p>\tshell sleep 5\t #počkat na spuštění vzdáleného "
+"programu</p><p>\ttarget remote ...\t#připojit se ke vzdálenému ladicímu "
+"programu</p><p>\tcontinue\t#[volitelně] spustit ladění až k prvnímu bodu "
+"přerušení.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
@@ -329,6 +383,8 @@ msgid ""
 "<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
 "issue any other GDB command while debugging.</p>"
 msgstr ""
+"<b>Výstup GDB</b><p>Zobrazuje všechny prováděné příkazy GDB. Během ladění "
+"můžete zadávat i jakékoli jiné příkazy GDB.</p>"
 
 #: gdboutputwidget.cpp:64
 #, kde-format
@@ -346,7 +402,7 @@ msgstr "Pozastavit vykonávání aplikace pro zadání příkazů GDB"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
-msgstr "Ukázat vnitřní p59kazy"
+msgstr "Ukázat vnitřní příkazy"
 
 #: gdboutputwidget.cpp:389
 #, kde-format
@@ -356,6 +412,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
+"Určuje, zda se budou zobrazovat příkazy vydané interně programem KDevelop."
+"<br>Tato volba se týká pouze budoucích příkazů; již vydané příkazy ze "
+"zobrazení nepřidá ani neodstraní."
 
 #: gdboutputwidget.cpp:394
 #, kde-format
@@ -513,7 +572,7 @@ msgstr "Otevřít nový prohlížeč paměti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers"
-msgstr ""
+msgstr "Diassemblování/Registry"
 
 #: toolviewfactoryholder.cpp:38
 #, kde-format
