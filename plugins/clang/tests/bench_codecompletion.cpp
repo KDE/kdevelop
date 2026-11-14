@@ -25,9 +25,14 @@ QTEST_MAIN(BenchCodeCompletion)
 using namespace KDevelop;
 
 BenchCodeCompletion::BenchCodeCompletion()
-    : m_index(new ClangIndex)
-    , m_model(new ClangCodeCompletionModel(m_index.data(), this))
 {
+}
+
+void BenchCodeCompletion::initTestCase()
+{
+    CodeCompletionTestBase::initTestCase();
+    m_index.reset(new ClangIndex);
+    m_model = new ClangCodeCompletionModel(m_index.data(), this);
     m_model->initialize();
 }
 

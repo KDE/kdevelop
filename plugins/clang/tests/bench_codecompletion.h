@@ -21,12 +21,13 @@ public:
     ~BenchCodeCompletion() override;
 
 private Q_SLOTS:
+    void initTestCase();
     void benchCodeCompletion_data();
     void benchCodeCompletion();
 
 private:
     QScopedPointer<ClangIndex> m_index;
-    ClangCodeCompletionModel* m_model;
+    ClangCodeCompletionModel* m_model = nullptr;
 };
 
 #endif // BENCHCODECOMPLETION_H
