@@ -1,41 +1,42 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2026 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 # Vit Pelcak <vit@pelcak.org>, 2019, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-07 00:43+0000\n"
-"PO-Revision-Date: 2020-09-17 16:22+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-14 23:04+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Poedit 3.10\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
 msgid "    *** MESON ERROR ***\n"
-msgstr ""
+msgstr "    *** CHYBA MESON ***\n"
 
 #: mesonbuilder.cpp:75
 #, kde-format
 msgid "Failed to set the internally used Ninja builder"
-msgstr ""
+msgstr "Nepodařilo se nastavit interně používaný nástroj Ninja Builder"
 
 #: mesonbuilder.cpp:78
 #, kde-format
 msgid "Failed to acquire the Ninja builder plugin"
-msgstr ""
+msgstr "Nepodařilo se načíst modul Ninja Builder"
 
 #: mesonbuilder.cpp:141 mesonbuilder.cpp:266
 #, kde-format
 msgid "The current build directory for %1 is invalid"
-msgstr ""
+msgstr "Aktuální adresář sestavení pro %1 je neplatný"
 
 #: mesonbuilder.cpp:164
 #, kde-format
@@ -43,11 +44,13 @@ msgid ""
 "The directory '%1' is not empty and does not seem to be an already "
 "configured build directory"
 msgstr ""
+"Adresář '%1' není prázdný a zřejmě se nejedná o již nakonfigurovaný adresář "
+"pro sestavení"
 
 #: mesonbuilder.cpp:169
 #, kde-format
 msgid "The directory '%1' cannot be used as a meson build directory"
-msgstr ""
+msgstr "Adresář '%1' nelze použít jako adresář pro sestavení Mesonu"
 
 #: mesonbuilder.cpp:172 mesonjobprune.cpp:55
 #, kde-format
@@ -55,6 +58,8 @@ msgid ""
 "The current build configuration is broken, because the build directory is "
 "not specified"
 msgstr ""
+"Aktuální konfigurace sestavení nefunguje, protože není zadán adresář pro "
+"sestavení"
 
 #: mesonbuilder.cpp:176
 #, kde-format
@@ -63,16 +68,19 @@ msgid ""
 "Please report a bug at https://bugs.kde.org/\n"
 "FILE: %1:%2"
 msgstr ""
+"Gratulujeme: Dostali jste se ke kódu, který nelze spustit!\n"
+"Chybu prosím nahlaste na adrese https://bugs.kde.org/\n"
+"SOUBOR: %1:%2"
 
 #: mesonbuilder.cpp:192 mesonbuilder.cpp:222
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
-msgstr ""
+msgstr "Interní chyba: Správcem systému sestavování není MesonManager"
 
 #: mesonbuilder.cpp:197 mesonbuilder.cpp:227
 #, kde-format
 msgid "Failed to create a new build directory"
-msgstr ""
+msgstr "Nepodařilo se vytvořit nový adresář pro sestavení"
 
 #: mesonjob.cpp:27 mesonjobprune.cpp:27
 #, kde-format
@@ -82,32 +90,32 @@ msgstr "Meson"
 #: mesonjobprune.cpp:43
 #, kde-format
 msgid "The directory '%1' is already pruned"
-msgstr ""
+msgstr "Adresář '%1' již byl vyčištěn"
 
 #: mesonjobprune.cpp:49
 #, kde-format
 msgid "The directory '%1' does not appear to be a meson build directory"
-msgstr ""
+msgstr "Zdá se, že adresář '%1' není adresářem pro sestavení Mesonu"
 
 #: mesonjobprune.cpp:50
 #, kde-format
 msgid "Aborting prune operation"
-msgstr ""
+msgstr "Zrušení operace vyčištění"
 
 #: mesonjobprune.cpp:70
 #, kde-format
 msgid "Deleting contents of '%1'"
-msgstr ""
+msgstr "Mazání obsahu souboru '%1'"
 
 #: mesonjobprune.cpp:76
 #, kde-format
 msgid "** Prune successful **"
-msgstr ""
+msgstr "** Čištění proběhlo úspěšně **"
 
 #: mesonjobprune.cpp:78
 #, kde-format
 msgid "** Prune failed: %1 **"
-msgstr ""
+msgstr "** Čištění selhalo: %1 **"
 
 #: mesonmanager.cpp:68
 #, kde-format
@@ -118,7 +126,7 @@ msgstr "Import projektu selhal"
 #: mesonmanager.cpp:115
 #, kde-format
 msgid "Meson builder error: %1"
-msgstr ""
+msgstr "Chyba nástroje Meson Builder: %1"
 
 #: mesonmanager.cpp:295
 #, kde-format
@@ -128,12 +136,12 @@ msgstr "Importování %1 selhalo, protože nešlo vytvořit adresář pro sestav
 #: mintro/mesonintrospectjob.cpp:115
 #, kde-format
 msgid "Introspection file '%1' does not exist"
-msgstr ""
+msgstr "Introspekční soubor '%1' neexistuje"
 
 #: mintro/mesonintrospectjob.cpp:119
 #, kde-format
 msgid "Failed to open introspection file '%1'"
-msgstr ""
+msgstr "Nepodařilo se otevřít introspekční soubor '%1'"
 
 #: mintro/mesonintrospectjob.cpp:125
 #, kde-format
@@ -143,34 +151,34 @@ msgstr "V %1:%2: %3"
 #: mintro/mesonintrospectjob.cpp:133
 #, kde-format
 msgid "The introspection file '%1' contains neither an array nor an object"
-msgstr ""
+msgstr "Introspekční soubor '%1' neobsahuje ani pole, ani objekt"
 
 #: mintro/mesonintrospectjob.cpp:154 rewriter/mesonrewriterjob.cpp:59
 #, kde-format
 msgid "%1 returned %2"
-msgstr ""
+msgstr "%1 vrátilo %2"
 
 #: mintro/mesonintrospectjob.cpp:160 rewriter/mesonrewriterjob.cpp:70
 #, kde-format
 msgid "JSON parser error: %1"
-msgstr ""
+msgstr "Chyba parseru JSON: %1"
 
 #: mintro/mesonintrospectjob.cpp:168
 #, kde-format
 msgid ""
 "The introspection output of '%1' contains neither an array nor an object"
-msgstr ""
+msgstr "Introspekční výstup '%1' neobsahuje ani pole, ani objekt"
 
 #: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
 #, kde-format
 msgid "The current build directory is invalid"
-msgstr ""
+msgstr "Aktuální adresář pro sestavení je neplatný"
 
 #: mintro/mesontests.cpp:80
 #, kde-format
 msgctxt "%1 - test case name"
 msgid "Meson Test \"%1\""
-msgstr ""
+msgstr "Test Mesonu \"%1\""
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
@@ -180,7 +188,7 @@ msgstr "Vytvoření dočasného souboru selhalo."
 #: rewriter/mesonrewriterjob.cpp:74
 #, kde-format
 msgid "The rewriter output of '%1' is not an object"
-msgstr ""
+msgstr "Výstup přepisovače pro '%1' není objekt"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_showAdvanced)
 #: settings/mesonadvancedsettings.ui:29
@@ -222,7 +230,7 @@ msgstr "Spustitelný soubor Meson:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Changing this will reset the build options."
-msgstr ""
+msgstr "Změna tohoto nastavení vymaže nastavení pro sestavení."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_mesonExe)
 #: settings/mesonadvancedsettings.ui:93
@@ -246,42 +254,44 @@ msgstr "Stav: %1"
 #: settings/mesonconfigpage.cpp:182
 #, kde-format
 msgid "The current build directory does not exist"
-msgstr ""
+msgstr "Aktuální adresář pro sestavení neexistuje"
 
 #: settings/mesonconfigpage.cpp:185
 #, kde-format
 msgid "The current build directory is empty"
-msgstr ""
+msgstr "Aktuální adresář pro sestavení je prázdný"
 
 #: settings/mesonconfigpage.cpp:188
 #, kde-format
 msgid "Build directory configured"
-msgstr ""
+msgstr "Nastaven adresář pro sestavení"
 
 #: settings/mesonconfigpage.cpp:191
 #, kde-format
 msgid "This meson build directory is not fully configured"
-msgstr ""
+msgstr "Tento adresář Mesonu pro sestavení není plně nakonfigurován"
 
 #: settings/mesonconfigpage.cpp:197
 #, kde-format
 msgid "This directory does not seem to be a meson build directory"
-msgstr ""
+msgstr "Tento adresář zřejmě není adresářem Mesonu pro sestavení"
 
 #: settings/mesonconfigpage.cpp:200
 #, kde-format
 msgid "Invalid build directory configuration (empty build directory string)"
 msgstr ""
+"Neplatná konfigurace adresáře pro sestavení (prázdný řetězec adresáře "
+"sestavení)"
 
 #: settings/mesonconfigpage.cpp:203
 #, kde-format
 msgid "Something went very wrong. This is a bug"
-msgstr ""
+msgstr "Něco se pokazilo. Jedná se o chybu"
 
 #: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:210
 #, kde-format
 msgid "No changes"
-msgstr ""
+msgstr "Žádné změny"
 
 #: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:213
 #, kde-format
@@ -301,7 +311,7 @@ msgstr "Meson"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Configuration"
-msgstr ""
+msgstr "Konfigurace projektu Meson"
 
 #. i18n: ectx: property (text), widget (QToolButton, b_addDir)
 #. i18n: ectx: property (text), widget (QToolButton, b_rmDir)
@@ -322,12 +332,12 @@ msgstr "Stavová zpráva..."
 #: settings/mesonconfigpage.ui:78 settings/mesonrewriterpage.ui:194
 #, kde-format
 msgid "Num changed"
-msgstr ""
+msgstr "Změna čísla"
 
 #: settings/mesonlisteditor.cpp:50
 #, kde-format
 msgid "<NEW>"
-msgstr ""
+msgstr "<NOVÝ>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, MesonListEditor)
 #: settings/mesonlisteditor.ui:14
@@ -375,47 +385,48 @@ msgstr "Poslední"
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Nastavit adresář pro překlad - %1"
+msgstr "Nastavit adresář pro sestavení - %1"
 
 #: settings/mesonnewbuilddir.cpp:137
 #, kde-format
 msgid "Specified meson executable does not exist"
-msgstr ""
+msgstr "Zadaný spustitelný soubor Meson neexistuje"
 
 #: settings/mesonnewbuilddir.cpp:145
 #, kde-format
 msgid "Creating new build directory"
-msgstr ""
+msgstr "Vytváření nového adresáře pro sestavení"
 
 #: settings/mesonnewbuilddir.cpp:148
 #, kde-format
 msgid "Using an already configured build directory"
-msgstr ""
+msgstr "Použití již nakonfigurovaného adresáře pro sestavení"
 
 #: settings/mesonnewbuilddir.cpp:151
 #, kde-format
 msgid "Using a broken meson build directory (this should be fine)"
 msgstr ""
+"Použití poškozeného adresáře Mesonu pro sestavení (to by mělo být v pořádku)"
 
 #: settings/mesonnewbuilddir.cpp:154
 #, kde-format
 msgid "Cannot use specified directory"
-msgstr ""
+msgstr "Nelze použít zadaný adresář"
 
 #: settings/mesonnewbuilddir.cpp:157
 #, kde-format
 msgid "There are already files in the build directory"
-msgstr ""
+msgstr "V adresáři pro sestavení se již nacházejí soubory"
 
 #: settings/mesonnewbuilddir.cpp:160
 #, kde-format
 msgid "The build directory field must not be empty"
-msgstr ""
+msgstr "Pole adresáře pro sestavení nesmí být prázdné"
 
 #: settings/mesonnewbuilddir.cpp:163
 #, kde-format
 msgid "You have reached unreachable code. This is a bug"
-msgstr ""
+msgstr "Dostali jste se ke kódu, který nelze provést. Jedná se o chybu"
 
 #. i18n: ectx: property (text), widget (QLabel, l_buildDir)
 #: settings/mesonnewbuilddir.ui:19
@@ -427,7 +438,7 @@ msgstr "Adresář pro sestavení:"
 #: settings/mesonnewbuilddir.ui:32
 #, kde-format
 msgid "Full Path to the new build directory"
-msgstr ""
+msgstr "Úplná cesta k novému adresáři pro sestavení"
 
 #. i18n: ectx: property (text), widget (QLabel, l_name)
 #. i18n: ectx: property (text), widget (QLabel, l_dispProject)
@@ -447,7 +458,7 @@ msgstr "Resetovat na původní hodnotu"
 #: settings/mesonoptionsview.ui:32
 #, kde-format
 msgid "Meson Options"
-msgstr ""
+msgstr "Možnosti Mesonu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, t_core)
 #: settings/mesonoptionsview.ui:45
@@ -495,7 +506,7 @@ msgstr "Zkouška"
 #: settings/mesonrewriterpage.cpp:181 settings/mesonrewriterpage.cpp:190
 #, kde-format
 msgid "Initializing GUI"
-msgstr "Spouštím pracovní prostředí"
+msgstr "Inicializace GUI"
 
 #: settings/mesonrewriterpage.cpp:184
 #, kde-format
@@ -510,19 +521,19 @@ msgstr "Zapisování dat projektu..."
 #: settings/mesonrewriterpage.cpp:193
 #, kde-format
 msgid "Loading meson rewriter data failed"
-msgstr ""
+msgstr "Načtení dat z nástroje Meson Rewriter se nezdařilo"
 
 #: settings/mesonrewriterpage.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
-msgstr ""
+msgstr "Vybrat další možnost pro Meson"
 
 #: settings/mesonrewriterpage.cpp:409
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
-msgstr ""
+msgstr "Možnost Meson k přidání:"
 
 #: settings/mesonrewriterpage.cpp:440
 #, kde-format

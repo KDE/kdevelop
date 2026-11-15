@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2020-09-17 16:30+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-14 11:32+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: config/projectconfigpage.cpp:44
 #, kde-format
@@ -28,7 +29,7 @@ msgstr "Formátovač zdroje"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Source Formatter"
-msgstr ""
+msgstr "Nastavení formátovače zdroje"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
 #: config/projectconfigpage.ui:29
@@ -52,13 +53,15 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without a Kate modeline."
 msgstr ""
+"Přepsat režim odsazování editoru podle stylu formátování u dokumentů bez "
+"řádku režimu Kate."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:45
 #, kde-format
 msgctxt "@option:check"
 msgid "Override editor indentation mode"
-msgstr ""
+msgstr "Přepsat režim odsazování v editoru"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:52
@@ -67,17 +70,19 @@ msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
 msgstr ""
+"Do naformátovaných dokumentů přidat řádek režimu Kate v souladu se stylem "
+"formátování."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:55
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate modeline"
-msgstr ""
+msgstr "Přidat řádek režimu Kate"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
 #: config/projectconfigpage.ui:65
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr ""
+msgstr "Styly formátování"

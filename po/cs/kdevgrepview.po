@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019.
 # SPDX-FileCopyrightText: 2021, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2021-04-23 12:31+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-14 11:22+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: grepdialog.cpp:55
 #, kde-format
@@ -52,9 +53,9 @@ msgstr "Vyberte adresář k prohledávání"
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%2 a ještě %1 položka"
+msgstr[1] "%2 a %1 další položky"
+msgstr[2] "%2 a %1 dalších položek"
 
 #: grepdialog.cpp:627
 #, kde-format
@@ -66,7 +67,7 @@ msgstr "Hledat \"%1\" v %2"
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
-msgstr ""
+msgstr "Hledat \"%1\" v %2 (v čase %3)"
 
 #: grepjob.cpp:155
 #, kde-format
@@ -76,7 +77,7 @@ msgstr "Najít v souborech"
 #: grepjob.cpp:174
 #, kde-format
 msgid "No files found matching the wildcard patterns"
-msgstr ""
+msgstr "Nebyly nalezeny žádné soubory odpovídající vzorům se zástupnými znaky"
 
 #: grepjob.cpp:188
 #, kde-format
@@ -84,15 +85,15 @@ msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
 "https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
 msgid "Captures are not allowed in pattern string"
-msgstr ""
+msgstr "V řetězci vzoru není povoleno zachycení"
 
 #: grepjob.cpp:209
 #, kde-format
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Hledání <b>%2</b> v jednom souboru"
+msgstr[1] "Hledání <b>%2</b> ve %1 souborech"
+msgstr[2] "Hledání <b>%2</b> v %1 souborech"
 
 #: grepjob.cpp:235
 #, kde-format
@@ -160,7 +161,7 @@ msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
 "its row and column"
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
-msgstr ""
+msgstr "Nepodařilo se nahradit <b>%1</b> za <b>%2</b> v %3:%4:%5"
 
 #: grepoutputview.cpp:71
 #, kde-format
@@ -213,13 +214,13 @@ msgstr "Vyprázdnit historii hledání"
 #: grepoutputview.cpp:324
 #, kde-format
 msgid "Do you want to replace with an empty string?"
-msgstr ""
+msgstr "Chcete to nahradit prázdným řetězcem?"
 
 #: grepoutputview.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
-msgstr ""
+msgstr "Spustit nahrazení"
 
 #: grepoutputview.cpp:326
 #, kde-format
@@ -239,14 +240,14 @@ msgstr "Nahrazující &text:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr ""
+msgstr "Zadejte vzor pro nahrazení"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr ""
+msgstr "Použít nahrazení na vybrané položky"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
@@ -265,7 +266,7 @@ msgstr "H&ledat/nahradit v souborech..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr ""
+msgstr "Hledání výrazů v několika souborech"
 
 #: grepviewplugin.cpp:84
 #, kde-format
@@ -276,6 +277,10 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
+"Otevře dialogové okno 'Najít/Nahradit v souborech'. Zde můžete zadat "
+"regulární výraz, který se poté vyhledá ve všech souborech v vámi zadaných "
+"adresářích. Zobrazeny budou nalezené výskyty a můžete přímo přejít na "
+"konkrétní výskyt. Můžete také provést nahrazení."
 
 #: grepviewplugin.cpp:132 grepviewplugin.cpp:155
 #, kde-format
@@ -294,7 +299,7 @@ msgstr "H&ledat/nahradit v souborech..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr ""
+msgstr "Zadejte regulární výraz, který chcete vyhledat"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
@@ -384,6 +389,90 @@ msgid ""
 "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
 "style:italic;\">man pcresyntax.</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Zde zadejte regulární "
+"výraz, který chcete vyhledat.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Pokud níže nezaškrtnete "
+"volbu \"Regulární výraz\", bude tento text považován za prostý řetězec. To "
+"znamená, že všechny metaznaky jsou ošetřeny (escaped).</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Možné metaznaky jsou:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> – Odpovídá "
+"libovolnému znaku</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> – Odpovídá začátku řádku</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> – Odpovídá konci řádku</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> – Odpovídá hranici slova</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Odpovídá jakémukoli znaku bílého místa</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Existují následující "
+"operátory opakování:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - Předcházející "
+"položka se vyskytuje nejvýše jednou</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - Předcházející položka se vyskytuje nulakrát nebo "
+"vícekrát</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - Předcházející položka se vyskytuje jednou nebo "
+"vícekrát</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> – Předcházející prvek "
+"se musí vyskytovat právě <span style=\" font-style:italic;\">n</span>krát</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> – Předcházející prvek "
+"se musí vyskytovat <span style=\" font-style:italic;\">n</span>krát nebo "
+"vícekrát</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> – Předcházející prvek "
+"se může vyskytovat nejvýše <span style=\" font-style:italic;\">n</span>krát</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> – Předcházející prvek se vyskytuje alespoň <span style=\" font-style:"
+"italic;\">n</span>krát, ale nejvýše <span style=\" font-style:italic;\">m</"
+"span>krát.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Dále jsou k dispozici "
+"zpětné odkazy na podvýrazy v závorkách, a to pomocí zápisu \\<span style=\" "
+"font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Pro další informace "
+"navštivte <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> nebo <span style=\" font-"
+"style:italic;\">man pcresyntax.</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
@@ -397,7 +486,7 @@ msgstr "Šablona:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
-msgstr ""
+msgstr "Toto je šablona regulárního výrazu."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
 #: grepwidget.ui:85
@@ -407,13 +496,15 @@ msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
+"Toto je šablona regulárního výrazu. <i>%s</i> bude nahrazeno vzorem, zatímco "
+"<i>%%</i> bude nahrazeno výrazem <i>%</i>."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr ""
+msgstr "Rychlý výběr umístění ze sady adresářů"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
@@ -433,7 +524,7 @@ msgstr "Hloubka:"
 #: grepwidget.ui:115
 #, kde-format
 msgid "Maximum level of subdirectory recursion"
-msgstr ""
+msgstr "Maximální úroveň rekurze podadresářů"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
@@ -443,6 +534,10 @@ msgid ""
 "Depth=0 means searching only in files directly inside selected search "
 "locations. Full Depth means no recursion limit."
 msgstr ""
+"Pro každé vyhledávací umístění se má sestupovat maximálně o počet úrovní "
+"adresářů daný hodnotou Hloubka. Hodnota Hloubka=0 znamená vyhledávání pouze "
+"v souborech, které se nacházejí přímo ve vybraných vyhledávacích umístěních. "
+"Hodnota Plná hloubka znamená, že není stanoven žádný limit rekurze."
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
@@ -485,7 +580,7 @@ msgstr "Rozlišovat při hledání velká/malá."
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr ""
+msgstr "Umístění:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
@@ -517,7 +612,7 @@ msgstr "Vyřadit:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr ""
+msgstr "Vzor souborů, které mají být vyřazeny"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:237
@@ -529,6 +624,10 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
+"Zde zadejte vzor názvu souborů, které mají být z vyhledávání vyřazeny. "
+"Můžete zadat několik vzorů oddělených čárkami nebo mezerami.<p>Každý vzor je "
+"interně ohraničen hvězdičkami, takže každý vzor může odpovídat částem cest k "
+"souborům.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:317
@@ -542,21 +641,21 @@ msgstr "Regulární výraz:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr ""
+msgstr "Povolit nebo zakázat regulární výrazy."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:343
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr ""
+msgstr "Omezit na soubory projektu:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:372
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr ""
+msgstr "Zadejte šablonu pro nahrazení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:379
@@ -573,6 +672,9 @@ msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
+"Vyberte umístění, ve kterém chcete provést vyhledávání. Může se jednat o "
+"adresář, soubor nebo seznam adresářů a souborů oddělených středníky (bez "
+"mezer)."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:417

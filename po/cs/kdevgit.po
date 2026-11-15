@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2013, 2016, 2017, 2020.
 # Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-24 00:42+0000\n"
-"PO-Revision-Date: 2023-02-08 14:27+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-14 10:23+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Poedit 3.10\n"
 
 #: committoolview.cpp:200 committoolview.cpp:201
 #, kde-format
@@ -31,37 +32,38 @@ msgstr "Obnovit"
 #: committoolview.cpp:219
 #, kde-format
 msgid "Stage selected"
-msgstr ""
+msgstr "Přidat vybrané"
 
 #: committoolview.cpp:221
 #, kde-format
 msgid "Unstage selected"
-msgstr ""
+msgstr "Zrušit přidání vybraného"
 
 #: committoolview.cpp:223
 #, kde-format
 msgid "Revert unstaged edits"
-msgstr ""
+msgstr "Vrátit nepřidané úpravy"
 
 #: committoolview.cpp:474
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
+"Odeslání commitu se nezdařilo. Viz zobrazení nástroje pro správu verzí."
 
 #: diffviewsctrl.cpp:50
 #, kde-format
 msgid "Stage selected lines or hunk"
-msgstr ""
+msgstr "Přidat vybrané řádky nebo blok"
 
 #: diffviewsctrl.cpp:52
 #, kde-format
 msgid "Unstage selected lines or hunk"
-msgstr ""
+msgstr "Zrušit přidání vybraných řádků nebo bloku"
 
 #: diffviewsctrl.cpp:54
 #, kde-format
 msgid "Revert selected lines or hunk"
-msgstr ""
+msgstr "Vrátit přidání vybraných řádků nebo bloku"
 
 #: diffviewsctrl.cpp:56
 #, kde-format
@@ -71,32 +73,32 @@ msgstr "Přejít na řádek zdroje"
 #: diffviewsctrl.cpp:112
 #, kde-format
 msgid "Unstage selected lines"
-msgstr ""
+msgstr "Zrušit přidání vybraných řádků"
 
 #: diffviewsctrl.cpp:113
 #, kde-format
 msgid "Stage selected lines"
-msgstr ""
+msgstr "Přidat vybrané řádky"
 
 #: diffviewsctrl.cpp:114
 #, kde-format
 msgid "Revert selected lines"
-msgstr ""
+msgstr "Vrátit přidání vybraných řádků"
 
 #: diffviewsctrl.cpp:116
 #, kde-format
 msgid "Unstage selected hunk"
-msgstr ""
+msgstr "Zrušit přidání vybraného bloku"
 
 #: diffviewsctrl.cpp:117
 #, kde-format
 msgid "Stage selected hunk"
-msgstr ""
+msgstr "Přidat vybraný blok"
 
 #: diffviewsctrl.cpp:118
 #, kde-format
 msgid "Revert selected hunk"
-msgstr ""
+msgstr "Vrátit přidání vybraného bloku"
 
 #: diffviewsctrl.cpp:128 diffviewsctrl.cpp:134
 #, kde-format
@@ -111,22 +113,22 @@ msgstr "G"
 #: diffviewsctrl.cpp:181
 #, kde-format
 msgid "%1 (staged)"
-msgstr ""
+msgstr "%1 (přidáno)"
 
 #: diffviewsctrl.cpp:183
 #, kde-format
 msgid "Staged (%1)"
-msgstr ""
+msgstr "Přidáno (%1)"
 
 #: diffviewsctrl.cpp:185
 #, kde-format
 msgid "Unstaged (%1)"
-msgstr ""
+msgstr "Přidání zrušeno (%1)"
 
 #: diffviewsctrl.cpp:187
 #, kde-format
 msgid "%1 (unstaged)"
-msgstr ""
+msgstr "%1 (přidání zrušeno)"
 
 #: diffviewsctrl.cpp:345
 #, kde-format
@@ -134,6 +136,8 @@ msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr ""
+"Vybrané řádky budou vráceny do původního stavu a změny budou ztraceny. Tuto "
+"operaci nelze vrátit zpět. Chcete pokračovat?"
 
 #: diffviewsctrl.cpp:347
 #, kde-format
@@ -144,24 +148,24 @@ msgstr "Vrátit zpět"
 #: gitmessagehighlighter.cpp:66
 #, kde-format
 msgid "Try to keep summary length below %1 characters."
-msgstr ""
+msgstr "Zkusit udržet délku shrnutí pod %1 znaků."
 
 #: gitmessagehighlighter.cpp:82
 #, kde-format
 msgid "Separate summary from details with one empty line."
-msgstr ""
+msgstr "Oddělit shrnutí od podrobností jedním prázdným řádkem."
 
 #: gitmessagehighlighter.cpp:92
 #, kde-format
 msgid "Try to keep line length below %1 characters."
-msgstr ""
+msgstr "Snažit se, aby délka řádku nepřesáhla %1 znaků."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
 #: gitnameemaildialog.ui:17
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
-msgstr ""
+msgstr "Nastavení jména a e-mailu pro Git"
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: gitnameemaildialog.ui:23
@@ -172,6 +176,10 @@ msgid ""
 "written to the Git configuration, either locally for the current project "
 "only, or globally for all Git projects.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Ještě jste nenastavili jméno a e-mail, které budou "
+"přiřazeny k vašim Git commitům.<br/>Hodnoty, které zde zadáte, budou zapsány "
+"do nastavení Git, a to buď lokálně pouze pro aktuální projekt, nebo globálně "
+"pro všechny projekty Git.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gitnameemaildialog.ui:35
@@ -192,7 +200,7 @@ msgstr "E-mai&l:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Write to global config"
-msgstr ""
+msgstr "Zapsat do globálního nastavení"
 
 #: gitplugin.cpp:190
 #, kde-format
@@ -214,40 +222,40 @@ msgstr "Rebase"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
-msgstr ""
+msgstr "Úschovna Git"
 
 #: gitplugin.cpp:258
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
-msgstr ""
+msgstr "Správce úschovny"
 
 #: gitplugin.cpp:259
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
-msgstr ""
+msgstr "Uložit do úschovny"
 
 #: gitplugin.cpp:260
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
-msgstr ""
+msgstr "Použít úschovnu"
 
 #: gitplugin.cpp:385 gitplugin.cpp:396
 #, kde-format
 msgid "Did not specify the list of files"
-msgstr ""
+msgstr "Nebyl uveden seznam souborů"
 
 #: gitplugin.cpp:458
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
-msgstr ""
+msgstr "Změny se nepodařilo obnovit (prázdný seznam cest)"
 
 #: gitplugin.cpp:492
 #, kde-format
 msgid "Could not revert changes"
-msgstr ""
+msgstr "Změny se nepodařilo vrátit zpět"
 
 #: gitplugin.cpp:503
 #, kde-format
@@ -259,17 +267,17 @@ msgstr ""
 #: gitplugin.cpp:528
 #, kde-format
 msgid "No files or message specified"
-msgstr ""
+msgstr "Nebyly zadány žádné soubory ani zpráva"
 
 #: gitplugin.cpp:532 gitplugin.cpp:551
 #, kde-format
 msgid "Email or name for Git not specified"
-msgstr ""
+msgstr "E-mailová adresa nebo jméno pro Git nebylo zadáno"
 
 #: gitplugin.cpp:548
 #, kde-format
 msgid "No message specified"
-msgstr ""
+msgstr "Není zadána žádná zpráva"
 
 #: gitplugin.cpp:622
 #, kde-format
@@ -280,6 +288,7 @@ msgstr "Žádné soubory k odstranění"
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
+"Jsou zde změny čekající na zpracování, chcete je nejprve uložit do úscovny?"
 
 #: gitplugin.cpp:903
 #, kde-format
@@ -331,36 +340,36 @@ msgstr "Zrušit"
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
-msgstr ""
+msgstr "Přidané změny"
 
 #: repostatusmodel.cpp:81
 #, kde-format
 msgctxt "Files in a vcs which have changes not yet staged for commit"
 msgid "Unstaged changes"
-msgstr ""
+msgstr "Nepřidané změny"
 
 #: repostatusmodel.cpp:84
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr ""
+msgstr "Konflikty"
 
 #: repostatusmodel.cpp:86
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
-msgstr ""
+msgstr "Nesledované soubory"
 
 #: repostatusmodel.cpp:96
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "Přidáno"
 
 #: repostatusmodel.cpp:97
 #, kde-format
 msgid "Files with changes staged for commit"
-msgstr ""
+msgstr "Soubory s přidanými změnami pro commit"
 
 #: repostatusmodel.cpp:102
 #, kde-format
@@ -377,7 +386,7 @@ msgstr "Soubory se změnami"
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflicts"
 msgid "Conflicts"
-msgstr ""
+msgstr "Konflikty"
 
 #: repostatusmodel.cpp:111
 #, kde-format
@@ -388,100 +397,100 @@ msgstr "Soubory s nevyřešenými konflikty (sloučení)"
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "Nesledováno"
 
 #: repostatusmodel.cpp:117
 #, kde-format
 msgid "Files not tracked in VCS"
-msgstr ""
+msgstr "Soubory, které nejsou sledovány ve VCS"
 
 #: repostatusmodel.cpp:242
 #, kde-format
 msgctxt "@item file has unstaged changes"
 msgid "Modified (unstaged)"
-msgstr ""
+msgstr "Upraveno (nepřidáno)"
 
 #: repostatusmodel.cpp:244
 #, kde-format
 msgctxt "@item file was deleted from worktree"
 msgid "Deleted (unstaged)"
-msgstr ""
+msgstr "Smazáno (nepřidáno)"
 
 #: repostatusmodel.cpp:246
 #, kde-format
 msgctxt "@item file was renamed in worktree"
 msgid "Renamed (unstaged)"
-msgstr ""
+msgstr "Přejmenováno (nepřidáno)"
 
 #: repostatusmodel.cpp:248
 #, kde-format
 msgctxt "@item file was copied in worktree"
 msgid "Copied (unstaged)"
-msgstr ""
+msgstr "Zkopírováno (nepřidáno)"
 
 #: repostatusmodel.cpp:250
 #, kde-format
 msgctxt "@item file has staged changes"
 msgid "Modified (staged)"
-msgstr ""
+msgstr "Upraveno (přidáno)"
 
 #: repostatusmodel.cpp:252
 #, kde-format
 msgctxt "@item file has both staged and unstaged changes"
 msgid "Modified (unstaged changes)"
-msgstr ""
+msgstr "Upraveno (nepřidané změny)"
 
 #: repostatusmodel.cpp:254
 #, kde-format
 msgctxt "@item file has staged changes and was deleted in worktree"
 msgid "Modified (unstaged deletion)"
-msgstr ""
+msgstr "Upraveno (nepřidané smazání)"
 
 #: repostatusmodel.cpp:257
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
 msgid "Added (unstaged changes)"
-msgstr ""
+msgstr "Přidáno (nepřidané změny)"
 
 #: repostatusmodel.cpp:260
 #, kde-format
 msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
 msgid "Added (unstaged deletion)"
-msgstr ""
+msgstr "Přidáno (nepřidané smazání)"
 
 #: repostatusmodel.cpp:263
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and renamed in worktree"
 msgid "Deleted (unstaged rename)"
-msgstr ""
+msgstr "Smazáno (nepřidaná přejmenování)"
 
 #: repostatusmodel.cpp:266
 #, kde-format
 msgctxt ""
 "@item file was deleted from versioncontrolsystem and copied in worktree"
 msgid "Deleted (unstaged copy)"
-msgstr ""
+msgstr "Smazáno (nepřidaná kopie)"
 
 #: repostatusmodel.cpp:268
 #, kde-format
 msgctxt "@item file was renamed in versioncontrolsystem"
 msgid "Renamed (staged)"
-msgstr ""
+msgstr "Přejmenováno (přidáno)"
 
 #: repostatusmodel.cpp:271
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and has unstaged changes"
 msgid "Renamed (unstaged changes)"
-msgstr ""
+msgstr "Přejmenováno (nepřidané změny)"
 
 #: repostatusmodel.cpp:274
 #, kde-format
 msgctxt ""
 "@item file was renamed in versioncontrolsystem and was deleted in worktree"
 msgid "Renamed (unstaged deletion)"
-msgstr ""
+msgstr "Přejmenováno (nepřidané smazání)"
 
 #: repostatusmodel.cpp:276
 #, kde-format
@@ -494,14 +503,14 @@ msgstr "Zkopírováno"
 msgctxt ""
 "@item file was copied in versioncontrolsystem and has unstaged changes"
 msgid "Copied (unstaged changes)"
-msgstr ""
+msgstr "Zkopírováno (nepřidané změny)"
 
 #: repostatusmodel.cpp:282
 #, kde-format
 msgctxt ""
 "@item file was copied in versioncontrolsystem and was deleted in worktree"
 msgid "Copied (unstaged deletion)"
-msgstr ""
+msgstr "Zkopírováno (nepřidané smazání)"
 
 #: repostatusmodel.cpp:284
 #, kde-format
@@ -513,7 +522,7 @@ msgstr "Nevyřešené konflikty"
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "Nesledováno"
 
 #: repostatusmodel.cpp:289
 #, kde-format
@@ -524,12 +533,12 @@ msgstr "Neznámý"
 #: repostatusmodel.cpp:382
 #, kde-format
 msgid " (staged)"
-msgstr ""
+msgstr " (přidáno)"
 
 #: repostatusmodel.cpp:390
 #, kde-format
 msgid " (unstaged)"
-msgstr ""
+msgstr " (nepřidáno)"
 
 #: repostatusmodel.cpp:398
 #, kde-format
@@ -539,7 +548,7 @@ msgstr " (konflikty)"
 #: repostatusmodel.cpp:406
 #, kde-format
 msgid " (untracked)"
-msgstr ""
+msgstr " (nesledováno)"
 
 #: repostatusmodel.cpp:603
 #, kde-format
@@ -560,22 +569,22 @@ msgstr "Commit"
 #: simplecommitform.cpp:65
 #, kde-format
 msgid "Extended commit description"
-msgstr ""
+msgstr "Rozšířený popis commitu"
 
 #: simplecommitform.cpp:73
 #, kde-format
 msgid "Commit summary"
-msgstr ""
+msgstr "Shrnutí commitu"
 
 #: simplecommitform.cpp:88 simplecommitform.cpp:172
 #, kde-format
 msgid "To commit changes, please write a commit message first"
-msgstr ""
+msgstr "Chcete-li commit odeslat, napište nejprve popis změny"
 
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
 msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
-msgstr ""
+msgstr "Odeslat commit do <b>%1</b> ve větvi <b>%2</b>"
 
 #: simplecommitform.cpp:122
 #, kde-format
@@ -585,37 +594,37 @@ msgstr "Pro odeslání změn prosím nejdříve vyberte projekt"
 #: simplecommitform.cpp:163
 #, kde-format
 msgid "Please stage some changes before committing."
-msgstr ""
+msgstr "Před odesláním commitu přidejte prosím nějaké změny."
 
 #: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
-msgstr ""
+msgstr "Správce úschovny"
 
 #: stashmanagerdialog.cpp:120
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
-msgstr ""
+msgstr "Opravdu chcete zahodit úschovnu '%1?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:121 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
-msgstr "Pustit"
+msgstr "Zahodit"
 
 #: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
-msgstr ""
+msgstr "Úschovna"
 
 #: stashmanagerdialog.cpp:130
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
-msgstr ""
+msgstr "Název nové větve:"
 
 #: stashmanagerdialog.cpp:151
 #, kde-format
@@ -633,28 +642,28 @@ msgstr "%1 vytvořeno dne %2"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr ""
+msgstr "Odstranit vybranou úschovnu"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:36
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch and drop the stash"
-msgstr ""
+msgstr "Použít úschovnu a zahodit ji"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:39
 #, kde-format
 msgctxt "@action:button"
 msgid "Pop"
-msgstr "Pop"
+msgstr "Použít a zahodit"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
 #: stashmanagerdialog.ui:49
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the content of the stash"
-msgstr ""
+msgstr "Zobrazit obsah úschovny"
 
 #. i18n: ectx: property (text), widget (QPushButton, show)
 #: stashmanagerdialog.ui:52
@@ -668,7 +677,7 @@ msgstr "Zobrazit"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply stash's patch"
-msgstr ""
+msgstr "Použít úschovnu"
 
 #. i18n: ectx: property (text), widget (QPushButton, apply)
 #: stashmanagerdialog.ui:85
@@ -682,7 +691,7 @@ msgstr "Použít"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new branch and apply the stash there, then drop the stash"
-msgstr ""
+msgstr "Vytvořit novou větev a použít tam úschovnu, poté ji zahodit"
 
 #. i18n: ectx: property (text), widget (QPushButton, branch)
 #: stashmanagerdialog.ui:111
