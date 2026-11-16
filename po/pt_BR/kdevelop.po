@@ -2,7 +2,7 @@
 # Copyright (C) 2003-2020 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2003, 2025 Marcus Gama <marcus.gama@gmail.com>
+# SPDX-FileCopyrightText: 2003, 2025 Marcus Gama <marcus.gama@kde.org>
 # Helio Chissini de Castro <helio@kde.org>, 2003.
 # Lisiane Sztoltz Teixeira <lisiane@kdemail.net>, 2004, 2005.
 # Henrique Pinto <henrique.pinto@kdemail.net>, 2005.
@@ -10,8 +10,8 @@
 # Henrique Marks <henriquemarks@gmail.com>, 2008.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2008, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2020.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2009, 2010, 2012, 2016, 2018, 2019, 2020, 2021.
-# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
-# Marcus Gama <marcus.gama@gmail.com>, 2010, 2011, 2012.
+# Marcus Vinícius de Andrade Gama <marcus.gama@kde.org>, 2010.
+# Marcus Gama <marcus.gama@kde.org>, 2010, 2011, 2012.
 # Laudivan Freire de Almeida <laudivan@gmail.com>, 2012.
 msgid ""
 msgstr ""
@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-01 00:53+0000\n"
 "PO-Revision-Date: 2025-08-07 06:43-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"

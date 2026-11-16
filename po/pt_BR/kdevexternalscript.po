@@ -2,7 +2,7 @@
 # Copyright (C) 2010-2013 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# Marcus Vinícius de Andrade Gama <marcus.gama@kde.org>, 2010.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2012, 2013.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020, 2022.
 msgid ""
@@ -570,7 +570,7 @@ msgstr "Filtro..."
 
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "marcus.gama@gmail.com, alvarenga@kde.org"
+#~ msgstr "marcus.gama@kde.org, alvarenga@kde.org"
 
 #~ msgid ""
 #~ "Run external scripts or applications to manipulate the editor contents or "

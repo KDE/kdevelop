@@ -3,7 +3,7 @@
 # Translation of kdevokteta.po to Brazilian Portuguese
 #
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2012.
-# Marcus Gama <marcus.gama@gmail.com>, 2012.
+# Marcus Gama <marcus.gama@kde.org>, 2012.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2020.
 msgid ""
 msgstr ""

@@ -1,27 +1,28 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vit Pelcak <vit@pelcak.org>, 2013, 2014.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2014-12-05 13:12+0100\n"
-"Last-Translator: Vít Pelčák <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-15 22:59+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
 #, kde-format
 msgid "Choose the Location"
-msgstr ""
+msgstr "Vybrat umístění"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
@@ -46,7 +47,7 @@ msgstr "&Název třídy:"
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
 #, kde-format
 msgid "&Base class:"
-msgstr ""
+msgstr "&Základní třída:"
 
 #. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
@@ -65,37 +66,37 @@ msgstr "Nic"
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
 #, kde-format
 msgid "Inherits QObject"
-msgstr ""
+msgstr "Zdědí QObject"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
 #, kde-format
 msgid "Inherits QWidget"
-msgstr ""
+msgstr "Zdědí QWidget"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
 #, kde-format
 msgid "Inherits QDeclarativeItem - Qt Quick 1"
-msgstr ""
+msgstr "Zdědí QDeclarativeItem - Qt Quick 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
 #, kde-format
 msgid "Inherits QQuickItem - Qt Quick 2"
-msgstr ""
+msgstr "Zdědí QQuickItem - Qt Quick 2"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
 #, kde-format
 msgid "Based on QSharedData"
-msgstr ""
+msgstr "Založeno na QSharedData"
 
 #. i18n: ectx: property (text), widget (QLabel, headerLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
 #, kde-format
 msgid "&Header file:"
-msgstr ""
+msgstr "&Hlavičkový soubor:"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
@@ -107,13 +108,13 @@ msgstr "Zdrojový &soubor:"
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
 #, kde-format
 msgid "&Generate form:"
-msgstr ""
+msgstr "&Vygenerovat formulář:"
 
 #. i18n: ectx: property (text), widget (QLabel, formLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
 #, kde-format
 msgid "&Form file:"
-msgstr ""
+msgstr "&Soubor formuláře:"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
@@ -125,7 +126,7 @@ msgstr "&Cesta:"
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
 #, kde-format
 msgid "Introduction and Project Location"
-msgstr ""
+msgstr "Úvod a umístění projektu"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
@@ -137,7 +138,7 @@ msgstr "Vytvořit v:"
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
 #, kde-format
 msgid "Use as default project location"
-msgstr ""
+msgstr "Použít jako výchozí umístění projektu"
 
 #. i18n: ectx: property (text), widget (QLabel, projectLabel)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
@@ -151,16 +152,19 @@ msgid ""
 "Possible type mismatch between the argument type (%1) and the value passed "
 "as argument (%2)"
 msgstr ""
+"Možná neshoda typů mezi typem argumentu (%1) a hodnotou předanou jako "
+"argument (%2)"
 
 #: duchain/declarationbuilder.cpp:1008
 #, kde-format
 msgid "Module not found, some types or properties may not be recognized"
 msgstr ""
+"Modul nebyl nalezen, některé typy nebo vlastnosti nemusí být rozpoznány"
 
 #: duchain/declarationbuilder.cpp:1203
 #, kde-format
 msgid "Mismatch between the value type (%1) and the property type (%2)"
-msgstr ""
+msgstr "Neshoda mezi typem hodnoty (%1) a typem vlastnosti (%2)"
 
 #: navigation/propertypreviewwidget.cpp:163
 #, kde-format
@@ -170,14 +174,14 @@ msgstr "Chyba při načítání souboru QML: %1"
 #: navigation/propertywidgets/Duration.qml:21
 #, kde-format
 msgid "Duration in milliseconds"
-msgstr ""
+msgstr "Doba trvání v milisekundách"
 
 #: navigation/propertywidgets/FontFamily.qml:30
 #: navigation/propertywidgets/FontSize.qml:39
 #, kde-format
 msgctxt "example text to test a font"
 msgid "The lazy dog jumps over<br>the quick brown fox."
-msgstr ""
+msgstr "Líný pes přeskočí<br>rychlou hnědou lišku."
 
 #: navigation/propertywidgets/FontFamily.qml:37
 #, kde-format
@@ -192,19 +196,19 @@ msgstr "Velikost písma"
 #: navigation/propertywidgets/Height.qml:25
 #, kde-format
 msgid "Height of an item in pixels"
-msgstr ""
+msgstr "Výška položky v pixelech"
 
 #: navigation/propertywidgets/Opacity.qml:21
 #, kde-format
 msgid "Opacity of an item"
-msgstr ""
+msgstr "Průhlednost položky"
 
 #: navigation/propertywidgets/Spacing.qml:32
 #, kde-format
 msgid "Spacing between items"
-msgstr ""
+msgstr "Mezery mezi položkami"
 
 #: navigation/propertywidgets/Width.qml:24
 #, kde-format
 msgid "Width of an item in pixels"
-msgstr ""
+msgstr "Šířka položky v pixelech"
