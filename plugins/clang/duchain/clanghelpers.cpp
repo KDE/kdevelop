@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QRegularExpression>
+#include <QStandardPaths>
 
 #include <algorithm>
 
@@ -458,4 +459,153 @@ QString ClangHelpers::clangBuiltinIncludePath()
         return QString::fromUtf8(KDEV_CLANG_BUILTIN_DIR);
     }();
     return dir;
+}
+
+static QString findBinaryPath(const QString& binaryName)
+{
+    // 1. Check sibling bin directory next to libclang's builtin include path
+    const QString builtin = ClangHelpers::clangBuiltinIncludePath();
+    if (!builtin.isEmpty()) {
+        for (const auto& rel : {QStringLiteral("/../../../../bin/"), QStringLiteral("/../../bin/")}) {
+            const QString candidate = QDir::cleanPath(builtin + rel + binaryName);
+            if (QFileInfo::exists(candidate)) {
+                return candidate;
+            }
+        }
+    }
+
+    // 2. Check for versioned binary matching libclang's major version in PATH
+    const QString major = ClangHelpers::clangVersion().section(QLatin1Char('.'), 0, 0);
+    if (!major.isEmpty()) {
+        const QString exe = QStandardPaths::findExecutable(QStringLiteral("%1-%2").arg(binaryName, major));
+        if (!exe.isEmpty()) {
+            return exe;
+        }
+    }
+
+    // 3. Fall back to unversioned binary in PATH
+    return QStandardPaths::findExecutable(binaryName);
+}
+
+QString ClangHelpers::clangCompilerPath()
+{
+    static const QString clangPath = findBinaryPath(QStringLiteral("clang++"));
+    return clangPath;
+}
+
+QString ClangHelpers::clangScanDepsPath()
+{
+    static const QString scanDepsPath = findBinaryPath(QStringLiteral("clang-scan-deps"));
+    return scanDepsPath;
+}
+
+QString ClangHelpers::extractStdFlag(const QString& arguments)
+{
+    static const QRegularExpression stdRegex(QStringLiteral("-std=(?:c|gnu)\\+\\+[0-9a-z]+"));
+    const auto match = stdRegex.match(arguments);
+    return match.hasMatch() ? match.captured(0) : QString();
+}
+
+ClangHelpers::CppStdVersion ClangHelpers::stdVersionRank(const QString& flag)
+{
+    const QString extracted = extractStdFlag(flag);
+    if (extracted.isEmpty()) {
+        return CppStdVersion::Unknown;
+    }
+
+    const int plusPos = extracted.indexOf(QLatin1String("++"));
+    const QString ver = extracted.mid(plusPos + 2).toLower();
+    static constexpr std::pair<QLatin1String, CppStdVersion> versionMap[] = {
+        {QLatin1String("latest"), CppStdVersion::Cpp26},
+        {QLatin1String("98"), CppStdVersion::Cpp98},
+        {QLatin1String("03"), CppStdVersion::Cpp03},
+        {QLatin1String("0x"), CppStdVersion::Cpp11},
+        {QLatin1String("11"), CppStdVersion::Cpp11},
+        {QLatin1String("1y"), CppStdVersion::Cpp14},
+        {QLatin1String("14"), CppStdVersion::Cpp14},
+        {QLatin1String("1z"), CppStdVersion::Cpp17},
+        {QLatin1String("17"), CppStdVersion::Cpp17},
+        {QLatin1String("2a"), CppStdVersion::Cpp20},
+        {QLatin1String("20"), CppStdVersion::Cpp20},
+        {QLatin1String("2b"), CppStdVersion::Cpp23},
+        {QLatin1String("23"), CppStdVersion::Cpp23},
+        {QLatin1String("2c"), CppStdVersion::Cpp26},
+        {QLatin1String("26"), CppStdVersion::Cpp26},
+        {QLatin1String("2d"), CppStdVersion::Cpp29},
+        {QLatin1String("29"), CppStdVersion::Cpp29},
+    };
+    for (const auto& [name, rank] : versionMap) {
+        if (ver == name) {
+            return rank;
+        }
+    }
+    return CppStdVersion::Unknown;
+}
+
+bool ClangHelpers::isCpp20OrLater(const ParserSettings& parserSettings)
+{
+    return parserSettings.isCpp()
+        && stdVersionRank(parserSettings.parserOptions) >= CppStdVersion::Cpp20;
+}
+
+void ClangHelpers::removeHarmfulModuleArguments(QVector<QByteArray>& arguments)
+{
+    static const auto harmfulExact = {
+        QByteArrayLiteral("-fmodules-ts"),
+        QByteArrayLiteral("-fmodule-only"),
+    };
+
+    static const auto harmfulOptionsWithValue = {
+        QByteArrayLiteral("-fmodule-mapper"),
+        QByteArrayLiteral("-fdeps-format"),
+        QByteArrayLiteral("-fdeps-file"),
+        QByteArrayLiteral("-fdep-file"),
+        QByteArrayLiteral("-fdep-output"),
+    };
+
+    for (int i = 0; i < arguments.size();) {
+        const auto& arg = arguments.at(i);
+
+        const bool removeSingle = std::any_of(harmfulExact.begin(), harmfulExact.end(), [&](const QByteArray& h) {
+            return arg == h;
+        }) || std::any_of(harmfulOptionsWithValue.begin(), harmfulOptionsWithValue.end(), [&](const QByteArray& opt) {
+            return arg.size() > opt.size() && arg.startsWith(opt) && arg.at(opt.size()) == '=';
+        });
+
+        if (removeSingle) {
+            arguments.remove(i);
+            continue;
+        }
+
+        const bool removeWithNext = std::any_of(harmfulOptionsWithValue.begin(), harmfulOptionsWithValue.end(), [&](const QByteArray& opt) {
+            return arg == opt;
+        });
+
+        if (removeWithNext) {
+            arguments.remove(i);
+            if (i < arguments.size()) {
+                arguments.remove(i);
+            }
+            continue;
+        }
+
+        ++i;
+    }
+}
+
+void ClangHelpers::removeHarmfulModuleArguments(QStringList& arguments)
+{
+    QVector<QByteArray> byteArgs;
+    byteArgs.reserve(arguments.size());
+    for (const QString& arg : arguments) {
+        byteArgs.append(arg.toUtf8());
+    }
+
+    removeHarmfulModuleArguments(byteArgs);
+
+    arguments.clear();
+    arguments.reserve(byteArgs.size());
+    for (const QByteArray& arg : byteArgs) {
+        arguments.append(QString::fromUtf8(arg));
+    }
 }
