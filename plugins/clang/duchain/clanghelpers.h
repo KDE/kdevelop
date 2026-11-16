@@ -19,6 +19,7 @@
 
 class ParseSession;
 class ClangIndex;
+struct ParserSettings;
 
 namespace KDevelop
 {
@@ -110,6 +111,55 @@ KDEVCLANGPRIVATE_EXPORT QString clangBuiltinIncludePath();
  * @return True if the given @a path is a valid clang builtin directory.
  */
 KDEVCLANGPRIVATE_EXPORT bool isValidClangBuiltingIncludePath(const QString& path);
+
+/**
+ * @return Path to the clang++ compiler binary matching libclang or found in PATH.
+ * Returns an empty string if clang++ cannot be found.
+ */
+KDEVCLANGPRIVATE_EXPORT QString clangCompilerPath();
+
+/**
+ * @return Path to the clang-scan-deps binary matching libclang or found in PATH.
+ * Returns an empty string if clang-scan-deps cannot be found.
+ */
+KDEVCLANGPRIVATE_EXPORT QString clangScanDepsPath();
+
+enum class CppStdVersion {
+    Unknown,
+    Cpp98,
+    Cpp03,
+    Cpp11,
+    Cpp14,
+    Cpp17,
+    Cpp20,
+    Cpp23,
+    Cpp26,
+    Cpp29,
+};
+
+/**
+ * Extracts the C++ standard flag (e.g. "-std=c++20" or "-std=gnu++23") from an argument string,
+ * or returns an empty string if none is present.
+ */
+KDEVCLANGPRIVATE_EXPORT QString extractStdFlag(const QString& arguments);
+
+/**
+ * Returns the C++ standard version for a C++ standard flag (e.g. -std=c++98 -> Cpp98, -std=c++20 -> Cpp20, -std=c++2d -> Cpp29).
+ * Returns CppStdVersion::Unknown if not recognized or not a C++ standard version.
+ */
+KDEVCLANGPRIVATE_EXPORT CppStdVersion stdVersionRank(const QString& flag);
+
+/**
+ * @return true if @p parserSettings targets C++20 or later.
+ */
+KDEVCLANGPRIVATE_EXPORT bool isCpp20OrLater(const ParserSettings& parserSettings);
+
+/**
+ * Remove module-specific compiler arguments that conflict with libclang parsing
+ * (e.g. GCC module mapper, dependency format, and obsolete module TS flags).
+ */
+KDEVCLANGPRIVATE_EXPORT void removeHarmfulModuleArguments(QVector<QByteArray>& arguments);
+KDEVCLANGPRIVATE_EXPORT void removeHarmfulModuleArguments(QStringList& arguments);
 
 }
 

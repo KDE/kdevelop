@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QRegularExpression>
+#include <QStandardPaths>
 
 #include <algorithm>
 
@@ -458,4 +459,172 @@ QString ClangHelpers::clangBuiltinIncludePath()
         return QString::fromUtf8(KDEV_CLANG_BUILTIN_DIR);
     }();
     return dir;
+}
+
+static QString findBinaryPath(const QString& binaryName)
+{
+    // 1. Check sibling bin directory next to libclang's builtin include path
+    const QString builtin = ClangHelpers::clangBuiltinIncludePath();
+    if (!builtin.isEmpty()) {
+        for (const auto& rel : {QStringLiteral("/../../../../bin/"), QStringLiteral("/../../bin/")}) {
+            const QString candidate = QDir::cleanPath(builtin + rel + binaryName);
+            if (QFileInfo::exists(candidate)) {
+                return candidate;
+            }
+        }
+    }
+
+    // 2. Check for versioned binary matching libclang's major version in PATH
+    const QString major = ClangHelpers::clangVersion().section(QLatin1Char('.'), 0, 0);
+    if (!major.isEmpty()) {
+        const QString exe = QStandardPaths::findExecutable(QStringLiteral("%1-%2").arg(binaryName, major));
+        if (!exe.isEmpty()) {
+            return exe;
+        }
+    }
+
+    // 3. Fall back to unversioned binary in PATH
+    return QStandardPaths::findExecutable(binaryName);
+}
+
+QString ClangHelpers::clangCompilerPath()
+{
+    static const QString clangPath = findBinaryPath(QStringLiteral("clang++"));
+    return clangPath;
+}
+
+QString ClangHelpers::clangScanDepsPath()
+{
+    static const QString scanDepsPath = findBinaryPath(QStringLiteral("clang-scan-deps"));
+    return scanDepsPath;
+}
+
+static ClangHelpers::CppStdVersion stdVersionFromSuffix(const QString& suffix)
+{
+    const QString ver = suffix.toLower();
+    static constexpr std::pair<QLatin1String, ClangHelpers::CppStdVersion> versionMap[] = {
+        {QLatin1String("latest"), ClangHelpers::CppStdVersion::Cpp26},
+        {QLatin1String("98"), ClangHelpers::CppStdVersion::Cpp98},
+        {QLatin1String("03"), ClangHelpers::CppStdVersion::Cpp03},
+        {QLatin1String("0x"), ClangHelpers::CppStdVersion::Cpp11},
+        {QLatin1String("11"), ClangHelpers::CppStdVersion::Cpp11},
+        {QLatin1String("1y"), ClangHelpers::CppStdVersion::Cpp14},
+        {QLatin1String("14"), ClangHelpers::CppStdVersion::Cpp14},
+        {QLatin1String("1z"), ClangHelpers::CppStdVersion::Cpp17},
+        {QLatin1String("17"), ClangHelpers::CppStdVersion::Cpp17},
+        {QLatin1String("2a"), ClangHelpers::CppStdVersion::Cpp20},
+        {QLatin1String("20"), ClangHelpers::CppStdVersion::Cpp20},
+        {QLatin1String("2b"), ClangHelpers::CppStdVersion::Cpp23},
+        {QLatin1String("23"), ClangHelpers::CppStdVersion::Cpp23},
+        {QLatin1String("2c"), ClangHelpers::CppStdVersion::Cpp26},
+        {QLatin1String("26"), ClangHelpers::CppStdVersion::Cpp26},
+        {QLatin1String("2d"), ClangHelpers::CppStdVersion::Cpp29},
+        {QLatin1String("29"), ClangHelpers::CppStdVersion::Cpp29},
+    };
+    for (const auto& [name, rank] : versionMap) {
+        if (ver == name) {
+            return rank;
+        }
+    }
+    return ClangHelpers::CppStdVersion::Unknown;
+}
+
+static QPair<QString, ClangHelpers::CppStdVersion> findHighestStdFlag(const QString& arguments)
+{
+    static const QRegularExpression stdRegex(
+        QStringLiteral("(?:^|\\s)(--?std=(?:c|gnu)\\+\\+([0-9a-z]+)|-ansi)(?=\\s|$)"));
+    QString bestFlag;
+    auto bestRank = ClangHelpers::CppStdVersion::Unknown;
+
+    auto it = stdRegex.globalMatch(arguments);
+    while (it.hasNext()) {
+        const auto match = it.next();
+        const QString fullFlag = match.captured(1);
+        const auto rank = (fullFlag == QLatin1String("-ansi"))
+            ? ClangHelpers::CppStdVersion::Cpp98
+            : stdVersionFromSuffix(match.captured(2));
+        if (bestFlag.isEmpty() || rank > bestRank) {
+            bestRank = rank;
+            bestFlag = fullFlag;
+        }
+    }
+    return {bestFlag, bestRank};
+}
+
+QString ClangHelpers::extractStdFlag(const QString& arguments)
+{
+    return findHighestStdFlag(arguments).first;
+}
+
+ClangHelpers::CppStdVersion ClangHelpers::stdVersionRank(const QString& flag)
+{
+    return findHighestStdFlag(flag).second;
+}
+
+bool ClangHelpers::isCpp20OrLater(const ParserSettings& parserSettings)
+{
+    return parserSettings.isCpp()
+        && stdVersionRank(parserSettings.parserOptions) >= CppStdVersion::Cpp20;
+}
+
+void ClangHelpers::removeHarmfulModuleArguments(QVector<QByteArray>& arguments)
+{
+    static const auto harmfulExact = {
+        QByteArrayLiteral("-fmodules-ts"),
+        QByteArrayLiteral("-fmodule-only"),
+    };
+
+    static const auto harmfulOptionsWithValue = {
+        QByteArrayLiteral("-fmodule-mapper"),
+        QByteArrayLiteral("-fdeps-format"),
+        QByteArrayLiteral("-fdeps-file"),
+        QByteArrayLiteral("-fdep-file"),
+        QByteArrayLiteral("-fdep-output"),
+    };
+
+    for (int i = 0; i < arguments.size();) {
+        const auto& arg = arguments.at(i);
+
+        const bool removeSingle = std::any_of(harmfulExact.begin(), harmfulExact.end(), [&](const QByteArray& h) {
+            return arg == h;
+        }) || std::any_of(harmfulOptionsWithValue.begin(), harmfulOptionsWithValue.end(), [&](const QByteArray& opt) {
+            return arg.startsWith(opt) && arg.sliced(opt.size()).startsWith('=');
+        });
+
+        if (removeSingle) {
+            arguments.remove(i);
+            continue;
+        }
+
+        const bool removeWithNext = std::any_of(harmfulOptionsWithValue.begin(), harmfulOptionsWithValue.end(), [&](const QByteArray& opt) {
+            return arg == opt;
+        });
+
+        if (removeWithNext) {
+            arguments.remove(i);
+            if (i < arguments.size()) {
+                arguments.remove(i);
+            }
+            continue;
+        }
+
+        ++i;
+    }
+}
+
+void ClangHelpers::removeHarmfulModuleArguments(QStringList& arguments)
+{
+    QVector<QByteArray> byteArgs;
+    byteArgs.reserve(arguments.size());
+    for (const QString& arg : arguments) {
+        byteArgs.append(arg.toUtf8());
+    }
+
+    removeHarmfulModuleArguments(byteArgs);
+
+    arguments.clear();
+    arguments.reserve(byteArgs.size());
+    for (const QByteArray& arg : byteArgs) {
+        arguments.append(QString::fromUtf8(arg));
+    }
 }
