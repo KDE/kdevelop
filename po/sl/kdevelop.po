@@ -2,7 +2,7 @@
 # Translation of kdevelop.po to Slovenian
 # KDEVELOP translation to Slovenian language.
 # Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: kdevelop.po 1751726 2026-11-01 01:39:31Z scripty $
+# $Id$
 # $Source$
 #
 # Roman Maurer <roman.maurer@amis.net>, 2002.

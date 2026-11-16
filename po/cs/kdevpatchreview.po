@@ -1,26 +1,27 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2016, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 00:43+0000\n"
-"PO-Revision-Date: 2020-09-17 16:41+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-15 11:43+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: localpatchsource.cpp:34
 #, kde-format
 msgid "Custom Patch"
-msgstr ""
+msgstr "Vlastní oprava"
 
 #. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
 #: localpatchwidget.ui:29
@@ -41,7 +42,7 @@ msgstr "Výchozí adresář:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch/base"
-msgstr ""
+msgstr "/cesta/k/základnímu/souboru/opravy"
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
@@ -55,7 +56,7 @@ msgstr "Ze souboru"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch"
-msgstr ""
+msgstr "/cesta/k/opravě"
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70
@@ -69,21 +70,21 @@ msgstr "Z příkazové řádky"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr ""
+msgstr "Zadejte příkaz pro načtení výstupu z..."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Patch is already applied on local version"
-msgstr ""
+msgstr "Oprava je v lokální verzi již použita"
 
 #. i18n: ectx: property (text), widget (QCheckBox, applied)
 #: localpatchwidget.ui:90
 #, kde-format
 msgctxt "@option:check"
 msgid "Already applied"
-msgstr ""
+msgstr "Již bylo použito"
 
 #: patchhighlighter.cpp:80
 #, kde-format
@@ -93,7 +94,7 @@ msgstr "<b><span style=\"color:red\">Konflikt</span></b><br/>"
 #: patchhighlighter.cpp:88
 #, kde-format
 msgid "Applied.<br/>"
-msgstr ""
+msgstr "Použito.<br/>"
 
 #: patchhighlighter.cpp:91 patchhighlighter.cpp:106
 #, kde-format
@@ -123,7 +124,7 @@ msgstr "Alternativní:<br/>"
 #: patchhighlighter.cpp:199
 #, kde-format
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
-msgstr ""
+msgstr "Změnu nebylo možné provést: Text by měl být \"%1\", ale je \"%2\"."
 
 #: patchhighlighter.cpp:409 patchhighlighter.cpp:416
 #, kde-format
@@ -147,7 +148,7 @@ msgstr "Změnit"
 #, kde-format
 msgctxt "@title:window"
 msgid "Kompare Model Update"
-msgstr ""
+msgstr "Aktualizace modelu Kompare"
 
 #: patchreview.cpp:455
 #, kde-format
@@ -170,7 +171,7 @@ msgstr "Základní adresář cesty musí být absolutní adresář."
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
-msgstr ""
+msgstr "Dokončit kontrolu"
 
 #: patchreview.cpp:606
 #, kde-format
@@ -225,21 +226,21 @@ msgstr "Spustit testy"
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
-msgstr ""
+msgstr "Exportovat rozdíl..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
-msgstr ""
+msgstr "Zrušit kontrolu"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
 #: patchreview.ui:149
 #, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
-msgstr ""
+msgstr "Dokončit kontrolu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
 #: patchreview.ui:168
@@ -253,9 +254,9 @@ msgstr "Změny"
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
 msgid_plural "%2 (%1 hunks)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%2 (1 úsek)"
+msgstr[1] "%2 (%1 úseky)"
+msgstr[2] "%2 (%1 úseků)"
 
 #: patchreviewtoolview.cpp:222
 #, kde-format
@@ -268,6 +269,8 @@ msgid ""
 "Couldn't export the patch.\n"
 "%1"
 msgstr ""
+"Opravu se nepodařilo exportovat.\n"
+"%1"
 
 #: patchreviewtoolview.cpp:256
 #, kde-format
@@ -284,17 +287,17 @@ msgstr "Zrušit výběr"
 #: patchreviewtoolview.cpp:556
 #, kde-format
 msgid "Running tests: %p%"
-msgstr ""
+msgstr "Probíhají testy: %p%"
 
 #: patchreviewtoolview.cpp:584
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Test proběhl úspěšně"
+msgstr[1] "Všechny %1 testy proběhly úspěšně"
+msgstr[2] "Všech %1 testů proběhlo úspěšně"
 
 #: patchreviewtoolview.cpp:588
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
-msgstr ""
+msgstr "Výsledky testů: %1 úspěšných, %2 neúspěšných, %3 chyb"

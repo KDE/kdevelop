@@ -4,7 +4,7 @@
 #
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2020, 2022.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2011, 2014, 2015.
-# Marcus Gama <marcus.gama@gmail.com>, 2011.
+# Marcus Gama <marcus.gama@kde.org>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"

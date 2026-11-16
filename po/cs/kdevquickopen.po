@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2015, 2020.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2020-09-17 16:37+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-15 23:08+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: actionsquickopenprovider.cpp:36
 #, kde-format
@@ -27,17 +28,17 @@ msgstr "%1 (%2)"
 #: documentationquickopenprovider.cpp:33
 #, kde-format
 msgid "Documentation in the %1"
-msgstr ""
+msgstr "Dokumentace v %1"
 
 #: duchainitemquickopen.cpp:38
 #, kde-format
 msgid "Not available any more: %1"
-msgstr ""
+msgstr "Již není k dispozici: %1"
 
 #: duchainitemquickopen.cpp:124
 #, kde-format
 msgid "Not available any more"
-msgstr ""
+msgstr "Již není k dispozici"
 
 #: duchainitemquickopen.cpp:132
 #, kde-format
@@ -55,7 +56,7 @@ msgstr "Soubor: %1"
 #: kdevquickopen.rc:42
 #, kde-format
 msgid "Quick Open Toolbar"
-msgstr ""
+msgstr "Panel nástrojů rychlého otevření"
 
 #: projectfilequickopen.cpp:90 projectfilequickopen.cpp:159
 #, kde-format
@@ -66,7 +67,7 @@ msgstr "Projekt %1"
 #: projectfilequickopen.cpp:160
 #, kde-format
 msgid "Not parsed yet"
-msgstr ""
+msgstr "Ještě nebylo zpracováno"
 
 #: projectfilequickopen.cpp:179
 #, kde-format
@@ -98,19 +99,19 @@ msgstr "Projekt"
 #, kde-format
 msgctxt "@item quick open scope"
 msgid "Includes"
-msgstr "Vložené soubory"
+msgstr "Zahrnuté"
 
 #: quickopenplugin.cpp:61
 #, kde-format
 msgctxt "@item quick open scope"
 msgid "Includers"
-msgstr ""
+msgstr "Zahrnující"
 
 #: quickopenplugin.cpp:62
 #, kde-format
 msgctxt "@item quick open scope"
 msgid "Currently Open"
-msgstr ""
+msgstr "Momentálně otevřeno"
 
 #: quickopenplugin.cpp:64
 #, kde-format
@@ -140,55 +141,55 @@ msgstr "&Rychle otevřít"
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &File"
-msgstr ""
+msgstr "Rychle otevřít &soubor"
 
 #: quickopenplugin.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Class"
-msgstr ""
+msgstr "Rychle otevřít &třídu"
 
 #: quickopenplugin.cpp:297
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Function"
-msgstr ""
+msgstr "Rychle otevřít &funkci"
 
 #: quickopenplugin.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Already Open File"
-msgstr ""
+msgstr "Rychle otevřít &již otevřený soubor"
 
 #: quickopenplugin.cpp:308
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Documentation"
-msgstr ""
+msgstr "Rychle otevřít &dokumentaci"
 
 #: quickopenplugin.cpp:314
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Actions"
-msgstr ""
+msgstr "Rychle otevřít &akce"
 
 #: quickopenplugin.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Declaration"
-msgstr ""
+msgstr "Přejít na deklaraci"
 
 #: quickopenplugin.cpp:325
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Definition"
-msgstr ""
+msgstr "Přejít na definici"
 
 #: quickopenplugin.cpp:330
 #, kde-format
 msgctxt "@action"
 msgid "Embedded Quick Open"
-msgstr ""
+msgstr "Integrované rychlé otevírání"
 
 #: quickopenplugin.cpp:337
 #, kde-format
@@ -234,6 +235,8 @@ msgid ""
 "Search for files, classes, functions and more, allowing you to quickly "
 "navigate in your source code."
 msgstr ""
+"Vyhledávejte soubory, třídy, funkce a další, což vám umožní rychle se "
+"orientovat ve vašem zdrojovém kódu."
 
 #. i18n: ectx: property (text), widget (QLabel, searchLabel)
 #: quickopenwidget.ui:37

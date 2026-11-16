@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2009, 2020.
-# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# Marcus Vinícius de Andrade Gama <marcus.gama@kde.org>, 2010.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2013.
 msgid ""
 msgstr ""
@@ -60,7 +60,7 @@ msgstr ""
 
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "marcus.gama@gmail.com"
+#~ msgstr "marcus.gama@kde.org"
 
 #~ msgid "Switch between open documents using most-recently-used list"
 #~ msgstr ""

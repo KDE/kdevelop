@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vit Pelcak <vit@pelcak.org>, 2013, 2014, 2015, 2020.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-01 00:53+0000\n"
-"PO-Revision-Date: 2020-09-17 16:23+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-11-14 23:15+0100\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: filtermodel.cpp:84
 #, kde-format
@@ -47,6 +48,15 @@ msgid ""
 "code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
 "thus match any item with a relative path ending on the given pattern."
 msgstr ""
+"Vzor se zástupnými znaky určuje, zda je soubor nebo složka zahrnuta do "
+"projektu, či nikoli.<br />Porovnání vzoru s relativní cestou položky ke "
+"kořenovému adresáři projektu se provádí s rozlišováním velkých a malých "
+"písmen. Relativní cesta začíná lomítkem; koncová lomítka složek se "
+"odstraňují.<br />Vzory končící na <code>\"/\"</code> se implicitně považují "
+"za vzory, které se vztahují pouze na složky.<br />Vzorům, které výslovně "
+"nezačínají ani <code>\"/\"</code>, ani <code>\"*\"</code>, se implicitně "
+"předřazuje <code>\"*/\"</code>, a proto se shodují s jakoukoli položkou, "
+"jejíž relativní cesta končí daným vzorem."
 
 #: filtermodel.cpp:129
 #, kde-format
@@ -54,6 +64,8 @@ msgid ""
 "The target defines what type of item the filter is matched against.<br /"
 ">Filters either apply only to files, only to folders or to both."
 msgstr ""
+"Cíl určuje, na jaký typ položky se filtr vztahuje.<br />Filtry se vztahují "
+"buď pouze na soubory, pouze na složky, nebo na obojí."
 
 #: filtermodel.cpp:135 projectfilterconfigpage.cpp:46
 #, kde-format
@@ -82,6 +94,12 @@ msgid ""
 "project, you could exclude all files via <code>\"*\"</code> and then apply "
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
+"Filtry ve výchozím nastavení vylučují položky z projektu. Pomocí "
+"inkluzivních vzorců lze zahrnout položky, které odpovídaly předchozím "
+"exkluzivním vzorcům.<br />Například pokud chcete do projektu zahrnout pouze "
+"soubory končící na <code>\".cpp\"</code>, můžete nejprve vyloučit všechny "
+"soubory pomocí vzorce <code>\"*\"</code> a poté použít inkluzivní vzorec "
+"<code>\"*.cpp\"</code>."
 
 #: filtermodel.cpp:157 projectfilterconfigpage.cpp:51
 #, kde-format
@@ -93,7 +111,7 @@ msgstr "Zahrnout"
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"
-msgstr "Vyřadit"
+msgstr "Vyloučit"
 
 #: projectfilterconfigpage.cpp:172
 #, kde-format
@@ -101,11 +119,15 @@ msgid ""
 "A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
 "to make this explicit."
 msgstr ""
+"Filtr s prázdným vzorem vybere všechny položky. Chcete-li to výslovně uvést, "
+"použijte <code>\"*\"</code>."
 
 #: projectfilterconfigpage.cpp:175
 #, kde-format
 msgid "A filter ending on <code>\"/\"</code> can never match a file."
 msgstr ""
+"Filtr končící na <code>\"/\"</code> se nikdy nemůže shodovat s žádným "
+"souborem."
 
 #: projectfilterconfigpage.cpp:198
 #, kde-format
@@ -124,9 +146,9 @@ msgstr "Filtr projektů"
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Vyloučit položku z projektu"
+msgstr[1] "Vyloučit položky z projektu"
+msgstr[2] "Vyloučit položky z projektu"
 
 #: projectfilterprovider.cpp:116
 #, kde-format
@@ -135,7 +157,14 @@ msgid ""
 msgid_plural ""
 "A filter for the items was added. To undo, use the project filter settings."
 msgstr[0] ""
+"Byl přidán filtr pro danou položku. Chcete-li tuto změnu zrušit, použijte "
+"nastavení filtrů projektu."
 msgstr[1] ""
+"Byl přidán filtr pro dané položky. Chcete-li tuto změnu zrušit, použijte "
+"nastavení filtrů projektu."
+msgstr[2] ""
+"Byl přidán filtr pro dané položky. Chcete-li tuto změnu zrušit, použijte "
+"nastavení filtrů projektu."
 
 #: projectfilterprovider.cpp:118
 #, kde-format
@@ -150,6 +179,8 @@ msgid ""
 "Configure which files and folders inside the project folder should be "
 "included or excluded:"
 msgstr ""
+"Nastavit, které soubory a složky v projektové složce mají být zahrnuty nebo "
+"vyloučeny:"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
