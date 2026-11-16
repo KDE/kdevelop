@@ -20,6 +20,9 @@ private Q_SLOTS:
     void testStdVersionRank();
     void testIsCpp20OrLater();
     void testRemoveHarmfulModuleArguments();
+    void testParseP1689Json();
+    void testClangScanDeps();
+    void testCancellation();
 };
 
 #endif // TESTMODULES_H
