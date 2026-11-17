@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-11-16 00:41+0100\n"
+"PO-Revision-Date: 2026-11-17 00:59+0100\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -664,7 +664,7 @@ msgstr "Soubor nelze otevřít."
 #: language/backgroundparser/parsejob.cpp:336
 #, kde-format
 msgid "File could not be read from disk due to permissions."
-msgstr ""
+msgstr "Soubor nebylo možné načíst z disku z důvodu oprávnění."
 
 #: language/backgroundparser/parseprojectjob.cpp:74
 #, kde-format
@@ -713,7 +713,7 @@ msgstr "Žádná deklarace pod kurzorem"
 #: language/codegen/basicrefactoring.cpp:227
 #, kde-format
 msgid "Declaration is located in non-writable file %1."
-msgstr ""
+msgstr "Deklarace se nachází v souboru %1, do kterého nelze zapisovat."
 
 #: language/codegen/basicrefactoring.cpp:296
 #, kde-format
@@ -731,12 +731,12 @@ msgstr "Používá"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Declaration Info"
-msgstr ""
+msgstr "Informace o deklaraci"
 
 #: language/codegen/basicrefactoring.cpp:309
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\""
-msgstr ""
+msgstr "Přejmenování \"%1\" na \"%2\""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
@@ -759,6 +759,8 @@ msgid ""
 "<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
 "forward-declarations, etc. will be renamed too&quot;</p></body></html>"
 msgstr ""
+"<html><head/><body><p>&quot;Poznámka: Přejmenovány budou také všechny "
+"přetížené funkce, přetížení, předběžné deklarace atd.&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
@@ -778,7 +780,7 @@ msgstr "Z&rušit"
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
-msgstr ""
+msgstr "%1:%2->%3:%4"
 
 #: language/codegen/documentchangeset.cpp:252
 #, kde-format
@@ -793,11 +795,12 @@ msgctxt ""
 msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
 msgstr ""
+"Nesoulad ve změně v %1 mezi %2, nalezeno %3 (zaznamenáno \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
-msgstr ""
+msgstr "Nepodařilo se nahradit text v dokumentu: %1"
 
 #: language/codegen/documentchangeset.cpp:467
 #, kde-format
@@ -805,7 +808,7 @@ msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
 "<encountered>) -> <newText>"
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
-msgstr ""
+msgstr "Nekonzistentní změna v %1 na %2 = \"%3\" (zjištěno \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:539
 #, kde-format
@@ -817,6 +820,8 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
+"Nekonzistentní požadavek na změnu na %1; překrývající se změny: \"%2\"->"
+"\"%3\"@%4 a \"%5\"->\"%6\"@%7 "
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
@@ -835,22 +840,22 @@ msgstr "&Přerušit"
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
 msgid "Alias %1 as %2"
-msgstr ""
+msgstr "Alias %1 jako %2"
 
 #: language/duchain/aliasdeclaration.cpp:50
 #, kde-format
 msgid "Lost alias %1"
-msgstr ""
+msgstr "Ztracený alias %1"
 
 #: language/duchain/classfunctiondeclaration.cpp:89
 #, kde-format
 msgid "invalid member-function %1 type %2"
-msgstr ""
+msgstr "neplatná funkce člena %1 typu %2"
 
 #: language/duchain/declarationid.cpp:204
 #, kde-format
 msgid "(unknown direct declaration)"
-msgstr ""
+msgstr "(neznámá přímá deklarace)"
 
 #: language/duchain/declarationid.cpp:207
 #, kde-format
@@ -860,7 +865,7 @@ msgstr "(chybí)"
 #: language/duchain/forwarddeclaration.cpp:50
 #, kde-format
 msgid "context-free forward-declaration %1"
-msgstr ""
+msgstr "kontextově nezávislá předběžná deklarace %1"
 
 #: language/duchain/namespacealiasdeclaration.cpp:94
 #, kde-format
@@ -875,7 +880,7 @@ msgstr "Importovat %1"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:89
 #, kde-format
 msgid "lost declaration"
-msgstr ""
+msgstr "ztracená deklarace"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:96
 #, kde-format
@@ -890,7 +895,7 @@ msgstr "enumerator "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:137
 #, kde-format
 msgid " :[value-dependent]"
-msgstr ""
+msgstr " :[závislé na hodnotě]"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:159
 #, kde-format
@@ -905,7 +910,7 @@ msgstr "výčet %1 "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:179
 #, kde-format
 msgid "(resolved forward-declaration: "
-msgstr ""
+msgstr "(vyřešená předběžná deklarace: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:182
 #, kde-format
@@ -915,12 +920,12 @@ msgstr ") "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:184
 #, kde-format
 msgid "(unresolved forward-declaration) "
-msgstr ""
+msgstr "(nevyřešená předběžná deklarace) "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:199
 #, kde-format
 msgid "possible resolution from"
-msgstr ""
+msgstr "možné řešení od"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:214
 #, kde-format
@@ -975,22 +980,22 @@ msgstr "Stav: %1 "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:298
 #, kde-format
 msgid "Def.: "
-msgstr ""
+msgstr "Def.: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:300
 #, kde-format
 msgid "Decl.: "
-msgstr ""
+msgstr "Dekl.: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:310
 #, kde-format
 msgid " Def.: "
-msgstr ""
+msgstr " Def.: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:320
 #, kde-format
 msgid " Decl.: "
-msgstr ""
+msgstr " Dekl.: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:328
 #, kde-format
@@ -1011,13 +1016,13 @@ msgstr "<anonymní>"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:488
 #, kde-format
 msgid "Overrides a "
-msgstr ""
+msgstr "Přepíše "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:489
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:516
 #, kde-format
 msgid "function"
-msgstr "funkce"
+msgstr "funkci"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:491
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:519
@@ -1028,37 +1033,37 @@ msgstr " od "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:515
 #, kde-format
 msgid "Hides a "
-msgstr ""
+msgstr "Skryje "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:539
 #, kde-format
 msgid "Overridden in "
-msgstr ""
+msgstr "Přepsáno v "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:556
 #, kde-format
 msgid "Overriders possible, show all"
-msgstr ""
+msgstr "Možné přepsání, zobrazit vše"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:557
 #, kde-format
 msgid "More overriders possible, show all"
-msgstr ""
+msgstr "Možné další přepsání, zobrazit vše"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:567
 #, kde-format
 msgid "Inherited by "
-msgstr ""
+msgstr "Zděděno od "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:582
 #, kde-format
 msgid "Inheriters possible, show all"
-msgstr ""
+msgstr "Zdědění možné, zobrazit vše"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:583
 #, kde-format
 msgid "More inheriters possible, show all"
-msgstr ""
+msgstr "Možné další zdědění, zobrazit vše"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:790
 #, kde-format
@@ -1103,7 +1108,7 @@ msgstr[2] "%1 bitů"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:888
 #, kde-format
 msgid "offset in parent: %1"
-msgstr ""
+msgstr "posun v nadřazeném prvku: %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:889
 #, kde-format
@@ -1119,7 +1124,7 @@ msgstr "velikost: %1 bajtů"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:898
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "zarovnáno na: %1 bajtů"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
@@ -1135,13 +1140,13 @@ msgstr "zatím nezpracováno"
 #, kde-format
 msgctxt "Files included into this file"
 msgid "Includes"
-msgstr "Vložené soubory"
+msgstr "Zahrnuté"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
 #, kde-format
 msgctxt "Count of files this file was included into"
 msgid "Included by"
-msgstr ""
+msgstr "Zahrnuto"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:504
 #, kde-format
@@ -1166,17 +1171,17 @@ msgstr "Jmenný prostor"
 #: language/duchain/navigation/abstractnavigationcontext.cpp:516
 #, kde-format
 msgid "Namespace import"
-msgstr ""
+msgstr "Import jmenného prostoru"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:518
 #, kde-format
 msgid "Namespace alias"
-msgstr ""
+msgstr "Alias jmenného prostoru"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:525
 #, kde-format
 msgid "Forward Declaration"
-msgstr ""
+msgstr "Předběžná deklarace"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:190
 #, kde-format
@@ -1184,11 +1189,13 @@ msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
+"(Pro zobrazení podržte klávesy <em>Alt</em>. Procházejte pomocí šipek, "
+"aktivujte stisknutím kláves <em>Enter</em>)"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:192
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
-msgstr ""
+msgstr "(Podržte klávesy <em>Alt</em>, aby se zobrazil tento popisek)"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:85
 #, kde-format
@@ -1224,17 +1231,17 @@ msgstr "Řešení (%1)"
 #: language/duchain/navigation/usescollector.cpp:413
 #, kde-format
 msgid "%1 still needs an update!"
-msgstr ""
+msgstr "%1 stále potřebuje aktualizaci!"
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:41
 #, kde-format
 msgid "Uses of "
-msgstr ""
+msgstr "Použití "
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:46
 #, kde-format
 msgid "Uses of %1"
-msgstr ""
+msgstr "Použití %1"
 
 #: language/duchain/navigation/useswidget.cpp:130
 #, kde-format
@@ -1302,9 +1309,9 @@ msgstr "Rozbalit"
 #, kde-format
 msgid "1 use found"
 msgid_plural "%1 uses found"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nalezeno 1 použití"
+msgstr[1] "Nalezeny %1 použití"
+msgstr[2] "Nalezeno %1 použití"
 
 #: language/duchain/navigation/useswidget.cpp:642
 #, kde-format
@@ -1339,7 +1346,7 @@ msgstr "Preprocesor"
 #: language/duchain/problem.cpp:207 shell/problem.cpp:78
 #, kde-format
 msgid "Lexer"
-msgstr ""
+msgstr "Lexer"
 
 #: language/duchain/problem.cpp:209 shell/problem.cpp:79
 #, kde-format
@@ -1349,12 +1356,12 @@ msgstr "Parser"
 #: language/duchain/problem.cpp:211
 #, kde-format
 msgid "Definition-Use Chain"
-msgstr ""
+msgstr "Řetězec definice a použití"
 
 #: language/duchain/problem.cpp:213 shell/problem.cpp:81
 #, kde-format
 msgid "Semantic analysis"
-msgstr ""
+msgstr "Sémantická analýza"
 
 #: language/duchain/problem.cpp:215
 #, kde-format
@@ -1372,12 +1379,12 @@ msgctxt ""
 "<severity>: <description> in <url>:[<range>]: <explanation> (found by "
 "<source>)"
 msgid "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
-msgstr ""
+msgstr "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (nalezeno %9)"
 
 #: language/duchain/problem.cpp:233
 #, kde-format
 msgid "<no explanation>"
-msgstr ""
+msgstr "<bez vysvětlení>"
 
 #: language/duchain/types/containertypes.cpp:74
 #, kde-format
@@ -1401,36 +1408,38 @@ msgid ""
 "files or - to read from STDIN, the latter is the default if nothing is "
 "provided"
 msgstr ""
+"soubory nebo – pro čtení ze standardního vstupu (STDIN); pokud není zadáno "
+"nic, je výchozí volbou další možnost"
 
 #: language/util/debuglanguageparserhelper.h:182
 #, kde-format
 msgid "print generated AST tree"
-msgstr ""
+msgstr "vytisknout generovaný strom AST"
 
 #: language/util/debuglanguageparserhelper.h:183
 #, kde-format
 msgid "print generated token stream"
-msgstr ""
+msgstr "vytisknout generovaný proud tokenů"
 
 #: language/util/debuglanguageparserhelper.h:184
 #, kde-format
 msgid "code to parse"
-msgstr ""
+msgstr "kód ke zpracování"
 
 #: outputview/outputexecutejob.cpp:186
 #, kde-format
 msgid "No build directory specified for a builder job."
-msgstr ""
+msgstr "Pro úlohu sestavení nebyl zadán žádný adresář pro sestavení."
 
 #: outputview/outputexecutejob.cpp:188
 #, kde-format
 msgid "No working directory specified for a process."
-msgstr ""
+msgstr "Pro proces nebyl zadán žádný pracovní adresář."
 
 #: outputview/outputexecutejob.cpp:200
 #, kde-format
 msgid "Invalid build directory '%1'"
-msgstr ""
+msgstr "Neplatný adresář sestavení '%1'"
 
 #: outputview/outputexecutejob.cpp:202
 #, kde-format
@@ -1440,7 +1449,7 @@ msgstr "Neplatný pracovní adresář '%1'"
 #: outputview/outputexecutejob.cpp:209
 #, kde-format
 msgid "Build directory '%1' is not a local path"
-msgstr ""
+msgstr "Adresář pro sestavení '%1' není lokální cestou"
 
 #: outputview/outputexecutejob.cpp:211
 #, kde-format
@@ -1450,7 +1459,7 @@ msgstr "Pracovní adresář '%1' není místní cesta"
 #: outputview/outputexecutejob.cpp:222
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
-msgstr ""
+msgstr "Adresář pro sestavení '%1' neexistuje nebo není adresářem"
 
 #: outputview/outputexecutejob.cpp:224
 #, kde-format
@@ -1460,7 +1469,7 @@ msgstr "Pracovní adresář '%1' neexistuje nebo není adresář"
 #: outputview/outputexecutejob.cpp:282
 #, kde-format
 msgid "Failed to specify program to start: %1"
-msgstr ""
+msgstr "Nepodařilo se určit program ke spuštění: %1"
 
 #: outputview/outputexecutejob.cpp:283
 #, kde-format
@@ -1470,22 +1479,22 @@ msgstr "*** %1 ***"
 #: outputview/outputexecutejob.cpp:309
 #, kde-format
 msgid "*** Killed process ***"
-msgstr ""
+msgstr "*** Zabitý proces ***"
 
 #: outputview/outputexecutejob.cpp:313
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
-msgstr ""
+msgstr "*** Upozornění: nepodařilo se zabít proces ***"
 
 #: outputview/outputexecutejob.cpp:335
 #, kde-format
 msgid "%1 has failed to start"
-msgstr ""
+msgstr "Spuštění %1 se nezdařilo"
 
 #: outputview/outputexecutejob.cpp:339
 #, kde-format
 msgid "%1 has crashed"
-msgstr ""
+msgstr "%1 se zhroutil"
 
 #: outputview/outputexecutejob.cpp:343
 #, kde-format
@@ -1500,7 +1509,7 @@ msgstr "Chyba při zápisu"
 #: outputview/outputexecutejob.cpp:351
 #, kde-format
 msgid "Waiting for the process has timed out"
-msgstr ""
+msgstr "Překročení časového limitu při čekání na dokončení procesu"
 
 #: outputview/outputexecutejob.cpp:355
 #, kde-format
@@ -1524,6 +1533,9 @@ msgid ""
 "KDevelop.\n"
 "The project has to be closed."
 msgstr ""
+"Základní složka projektu <b>%1</b> byla smazána nebo přesunuta mimo "
+"KDevelop.\n"
+"Projekt je nutné zavřít."
 
 #: project/abstractfilemanagerplugin.cpp:328
 #, kde-format
@@ -1538,6 +1550,9 @@ msgid ""
 "hidden.\n"
 "Do you want to continue?"
 msgstr ""
+"Pokusili jste se přejmenovat '%1' na '%2', ale druhý název je filtrován a "
+"bude skryt.\n"
+"Chcete pokračovat?"
 
 #: project/builderjob.cpp:75
 #, kde-format
@@ -1573,12 +1588,12 @@ msgstr "uklidit"
 #, kde-format
 msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
-msgstr ""
+msgstr "Různé položky"
 
 #: project/helper.cpp:67
 #, kde-format
 msgid "Cannot remove folder <i>%1</i>."
-msgstr ""
+msgstr "Nelze odstranit složku <i>%1</i>."
 
 #: project/helper.cpp:68
 #, kde-format
@@ -1588,7 +1603,7 @@ msgstr "Nelze odstranit soubor <i>%1</i>."
 #: project/helper.cpp:86
 #, kde-format
 msgid "The file <i>%1</i> already exists."
-msgstr ""
+msgstr "Soubor <i>%1</i> již existuje."
 
 #: project/helper.cpp:96
 #, kde-format
@@ -1638,7 +1653,7 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr ""
+msgstr "Zadejte cestu k položce ze stromu projektů..."
 
 #: project/projectitemlineedit.cpp:160
 #, kde-format
@@ -1655,35 +1670,35 @@ msgstr "Vyberte položku"
 #: project/projectitemlineedit.cpp:197
 #, kde-format
 msgid "Select the item you want to get the path from."
-msgstr ""
+msgstr "Vyberte položku, u které chcete zjistit cestu."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a dependency to add to the list"
-msgstr ""
+msgstr "Zadejte závislost, kterou chcete přidat do seznamu"
 
 #. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:35
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr ""
+msgstr "Zadejte závislost, kterou chcete přidat do seznamu..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add the listed target to the dependency list"
-msgstr ""
+msgstr "Přidat uvedený cíl do seznamu závislostí"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "List of indirect dependent targets."
-msgstr ""
+msgstr "Seznam nepřímých závislých cílů."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:71
@@ -1694,32 +1709,34 @@ msgid ""
 "depend on, but for which an action needs to be taken before running the "
 "application."
 msgstr ""
+"Tento seznam by měl obsahovat cíle, na nichž aplikace přímo nezávisí, u "
+"nichž je však třeba před spuštěním aplikace provést určitou akci."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
 #: project/widgets/dependencieswidget.ui:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected dependencies from the list"
-msgstr ""
+msgstr "Odeberte vybrané závislosti ze seznamu"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
 #: project/widgets/dependencieswidget.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr ""
+msgstr "Přesuňte vybranou závislost v seznamu nahoru"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr ""
+msgstr "Přesuňte vybranou závislost v seznamu dolů"
 
 #: serialization/itemrepository.h:318 serialization/itemrepository.h:1890
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
-msgstr ""
+msgstr "Zápis do %1 se nezdařil, pravděpodobně je disk plný"
 
 #: serialization/itemrepositoryregistry.cpp:75
 #, kde-format
@@ -1749,6 +1766,11 @@ msgid ""
 "Press Clear if you want KDevelop to clear the cache, otherwise press "
 "Continue if you are sure the crash has another origin."
 msgstr ""
+"Příčinou selhání může být poškození dat v mezipaměti.\n"
+"\n"
+"Stiskněte tlačítko Vyčistit, pokud chcete, aby KDevelop vymazal mezipaměť; v "
+"opačném případě stiskněte tlačítko Pokračovat, pokud jste si jisti, že "
+"selhání má jinou příčinu."
 
 #: serialization/itemrepositoryregistry.cpp:81
 #, kde-format
@@ -1769,12 +1791,15 @@ msgid ""
 "configuration for a specific use case. From here you can also navigate back "
 "to the default code area."
 msgstr ""
+"Proveďte akce ke změně oblasti.<br />Oblast je konfigurace zobrazení "
+"nástrojů pro konkrétní případ použití. Odtud se také můžete vrátit zpět do "
+"výchozí oblasti kódu."
 
 #: shell/areadisplay.cpp:70
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Back to Code"
-msgstr ""
+msgstr "Zpět ke kódu"
 
 #: shell/configdialog.cpp:30
 #, kde-format
@@ -1805,6 +1830,10 @@ msgid ""
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">this article</a> for more information."
 msgstr ""
+"<p>Při spuštění se nepodařilo najít žádné moduly.<br/>Zkontrolujte, zda je "
+"proměnná QT_PLUGIN_PATH nastavena správně.</p>Další informace najdete v <a "
+"href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">tomto článku</a>."
 
 #: shell/core.cpp:191
 #, kde-format
@@ -1848,7 +1877,7 @@ msgstr "Restartovat program"
 #: shell/debugcontroller.cpp:193
 #, kde-format
 msgid "Restarts applications from the beginning."
-msgstr ""
+msgstr "Spustí aplikace znovu od začátku."
 
 #: shell/debugcontroller.cpp:199
 #, kde-format
@@ -1866,7 +1895,7 @@ msgstr "Přerušit běh aplikace"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
-msgstr ""
+msgstr "Přeruší laděný proces nebo aktuální příkaz ladicího programu."
 
 #: shell/debugcontroller.cpp:205
 #, kde-format
@@ -1890,7 +1919,7 @@ msgstr "Pokračuje ve spuštění, dokud není dosaženo pozice kurzoru."
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
-msgstr ""
+msgstr "Nastavit pozici spuštění na kur&zor"
 
 #: shell/debugcontroller.cpp:213
 #, kde-format
@@ -1902,7 +1931,7 @@ msgstr "Přejít na kurzor"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
-msgstr ""
+msgstr "Pokračovat ve spuštění od aktuální pozice kurzoru."
 
 #: shell/debugcontroller.cpp:218
 #, kde-format
@@ -1914,7 +1943,7 @@ msgstr "Kr&ok přes"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
-msgstr ""
+msgstr "Krok přes další řádek"
 
 #: shell/debugcontroller.cpp:221
 #, kde-format
@@ -1924,36 +1953,39 @@ msgid ""
 "is a call to a function the whole function is executed and the app will stop "
 "at the line following the function call."
 msgstr ""
+"Provede jeden řádek zdrojového kódu v aktuálním zdrojovém souboru. Pokud je "
+"daný řádek voláním funkce, provede se celá funkce a aplikace se zastaví na "
+"řádku následujícím po volání funkce."
 
 #: shell/debugcontroller.cpp:229
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
-msgstr ""
+msgstr "Krok přes ins&trukci"
 
 #: shell/debugcontroller.cpp:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
-msgstr ""
+msgstr "Krok přes instrukci"
 
 #: shell/debugcontroller.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
-msgstr ""
+msgstr "Kroky přes další instrukci pro sestavení."
 
 #: shell/debugcontroller.cpp:236
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
-msgstr "Přejít dovn&itř"
+msgstr "Krok dovn&itř"
 
 #: shell/debugcontroller.cpp:238
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
-msgstr ""
+msgstr "Krok do dalšího výrazu"
 
 #: shell/debugcontroller.cpp:239
 #, kde-format
@@ -1962,24 +1994,26 @@ msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
 "function then execution will stop after the function has been entered."
 msgstr ""
+"Provede přesně jeden řádek zdrojového kódu. Pokud je daný řádek zdrojového "
+"kódu voláním funkce, provádění se zastaví po vstupu do této funkce."
 
 #: shell/debugcontroller.cpp:246
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
-msgstr ""
+msgstr "Krok do i&nstrukce"
 
 #: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
-msgstr ""
+msgstr "Krok do instrukce"
 
 #: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
-msgstr ""
+msgstr "Kroky do další instrukce pro sestavení."
 
 #: shell/debugcontroller.cpp:252
 #, kde-format
@@ -1991,7 +2025,7 @@ msgstr "Kro&k ven"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
-msgstr ""
+msgstr "Krok ven z aktuální funkce"
 
 #: shell/debugcontroller.cpp:256
 #, kde-format
@@ -2005,6 +2039,12 @@ msgid ""
 "displayed in a variable named <code>%1</code> in a section <i>%2</i> of '%3' "
 "tool view."
 msgstr ""
+"Spustí aplikaci až do dokončení právě prováděné funkce. Ladič poté zobrazí "
+"řádek následující po původním volání této funkce. Pokud se program provádí v "
+"nejvnější rámcové funkci (tj. v <code>main()</code>), nemá tato operace "
+"žádný účinek.<br>Po opuštění funkce, která není typu <code>void</code>, se "
+"její návratová hodnota a typ zobrazí v proměnné s názvem <code>%1</code> v "
+"sekci <i>%2</i> v zobrazení nástrojů '%3'."
 
 #: shell/debugcontroller.cpp:269
 #, kde-format
@@ -2015,7 +2055,7 @@ msgstr "Přepnout bod přerušení"
 #: shell/debugcontroller.cpp:270
 #, kde-format
 msgid "Ctrl+Alt+B"
-msgstr ""
+msgstr "Ctrl+Alt+B"
 
 #: shell/debugcontroller.cpp:271
 #, kde-format
@@ -2027,7 +2067,7 @@ msgstr "Přepnout bod přerušení"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
-msgstr ""
+msgstr "Přepne bod přerušení na aktuálním řádku v editoru."
 
 #: shell/debugcontroller.cpp:276
 #, kde-format
@@ -2057,13 +2097,13 @@ msgstr "Zrušit aktuální sezení"
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
-msgstr ""
+msgstr "Ladění spuštění"
 
 #: shell/debugcontroller.cpp:499 shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
-msgstr ""
+msgstr "Ladění aktuálního spuštění"
 
 #: shell/debugcontroller.cpp:500 shell/runcontroller.cpp:477
 #, kde-format
@@ -2072,6 +2112,8 @@ msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration inside a Debugger."
 msgstr ""
+"Spustí cíl nebo program uvedený v aktuálně aktivní konfiguraci spuštění v "
+"ladicím programu."
 
 #: shell/debugcontroller.cpp:504
 #, kde-format
@@ -2083,7 +2125,7 @@ msgstr "Po&kračovat"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
-msgstr ""
+msgstr "Pokračovat ve spouštění aplikace"
 
 #: shell/debugcontroller.cpp:507
 #, kde-format
@@ -2093,6 +2135,9 @@ msgid ""
 "effect when the application has been halted by the debugger (i.e. a "
 "breakpoint has been activated or the interrupt was pressed)."
 msgstr ""
+"Pokračuje ve spouštění aplikace v ladicím programu. Tato akce se projeví "
+"pouze v případě, že byla aplikace zastavena ladicím programem (tj. došlo k "
+"aktivaci bodu přerušení nebo bylo stisknuto přerušení)."
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: shell/debugger/kdevdebuggershellui.rc:25
@@ -2134,24 +2179,26 @@ msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
 "Do you want to open it as plain text?"
 msgstr ""
+"KDevelop nemohl najít editor pro soubor '%1' typu %2.\n"
+"Chcete jej otevřít jako prostý text?"
 
 #: shell/documentcontroller.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
-msgstr ""
+msgstr "Nelze najít editor"
 
 #: shell/documentcontroller.cpp:320
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "Otevřít jako prostý text"
 
 #: shell/documentcontroller.cpp:321
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "Neotevírat"
 
 #: shell/documentcontroller.cpp:609
 #, kde-format
@@ -2169,7 +2216,7 @@ msgstr "Otevřít soubor"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
-msgstr ""
+msgstr "Otevře soubor k úpravám."
 
 #: shell/documentcontroller.cpp:617
 #, kde-format
@@ -2199,6 +2246,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr ""
+"Uložit všechny otevřené dokumenty a v případě potřeby požadovat další "
+"informace."
 
 #: shell/documentcontroller.cpp:631
 #, kde-format
@@ -2210,13 +2259,13 @@ msgstr "Znovu načíst vše"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
-msgstr ""
+msgstr "Obnovit všechny otevřené dokumenty"
 
 #: shell/documentcontroller.cpp:634
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
-msgstr ""
+msgstr "Vrátit všechny otevřené dokumenty do předchozího uloženého stavu."
 
 #: shell/documentcontroller.cpp:640
 #, kde-format
@@ -2255,12 +2304,14 @@ msgid ""
 "Close all open documents, prompting for additional information when "
 "necessary."
 msgstr ""
+"Zavřít všechny otevřené dokumenty a v případě potřeby požadovat další "
+"informace."
 
 #: shell/documentcontroller.cpp:657
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
-msgstr "Uzavřít všec&hny ostatní"
+msgstr "Zavřít všec&hny ostatní"
 
 #: shell/documentcontroller.cpp:659
 #, kde-format
@@ -2275,18 +2326,19 @@ msgid ""
 "Close all open documents, with the exception of the currently active "
 "document."
 msgstr ""
+"Zavřít všechny otevřené dokumenty s výjimkou aktuálně aktivního dokumentu."
 
 #: shell/documentcontroller.cpp:665
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
-msgstr ""
+msgstr "Zobrazit poznámky k aktuálnímu dokumentu"
 
 #: shell/documentcontroller.cpp:666
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
-msgstr "Poznamenat"
+msgstr "Poznámka"
 
 #: shell/documentcontroller.cpp:1288
 #, kde-format
@@ -2294,6 +2346,8 @@ msgid ""
 "Could not annotate the document because it is not part of a version-"
 "controlled project."
 msgstr ""
+"K dokumentu nebylo možné přidat poznámku, protože není součástí projektu "
+"spravovaného systémem řízení verzí."
 
 #: shell/editorconfigpage.cpp:44
 #, kde-format
@@ -2325,18 +2379,23 @@ msgid ""
 "disable the dedicated KDevelop plugin(s) and set the environment variable "
 "<var>%3</var> (<span style='color:%4'>%5</span>)."
 msgstr ""
+"Následující jazyky jsou mnohem lépe podporovány specializovanými moduly pro "
+"KDevelop, a proto jsou v modulu %1 deaktivovány, aby se předešlo konfliktům: "
+"<var>%2</var>. Chcete-li porovnat úroveň podpory nebo obejít závažné chyby, "
+"deaktivujte příslušné moduly pro KDevelop a nastavte proměnnou prostředí "
+"<var>%3</var> (<span style='color:%4'>%5</span>)."
 
 #: shell/ktexteditorpluginintegration.cpp:338
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently set"
-msgstr ""
+msgstr "aktuálně nastaveno"
 
 #: shell/ktexteditorpluginintegration.cpp:339
 #, kde-format
 msgctxt "a certain environment variable is ..."
 msgid "currently unset"
-msgstr ""
+msgstr "aktuálně nenastaveno"
 
 #: shell/ktexteditorpluginintegration.cpp:492
 #, kde-format
@@ -2348,7 +2407,7 @@ msgstr "Zprávy"
 #, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
-msgstr ""
+msgstr "Konfigurace spuštění"
 
 #: shell/launchconfigurationdialog.cpp:57
 #, kde-format
@@ -2360,13 +2419,15 @@ msgstr "Přidat nové nastavení spuštění."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
-msgstr ""
+msgstr "Smazat vybranou konfiguraci spuštění."
 
 #: shell/launchconfigurationdialog.cpp:173
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
 msgstr ""
+"Nejsou k dispozici žádné konfigurace spuštění. (Je načtený některý z modulů "
+"Execute?)"
 
 #: shell/launchconfigurationdialog.cpp:196
 #, kde-format
@@ -2385,6 +2446,7 @@ msgstr "Smazat nastavení"
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr ""
+"Vybraná konfigurace spuštění obsahuje neuložené změny. Chcete ji uložit?"
 
 #: shell/launchconfigurationdialog.cpp:253
 #, kde-format
@@ -2396,7 +2458,7 @@ msgstr "Neuložené změny"
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
-msgstr ""
+msgstr "Pro '%1' není třeba žádné nastavení"
 
 #: shell/launchconfigurationdialog.cpp:369
 #, kde-format
@@ -2404,6 +2466,8 @@ msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
 "button to add a new one.</i>"
 msgstr ""
+"<i>Z levého panelu vyberte konfiguraci, kterou chcete upravit,<br>nebo "
+"klikněte na tlačítko \"Přidat\" a přidejte novou.</i>"
 
 #: shell/launchconfigurationdialog.cpp:437
 #, kde-format
@@ -2454,7 +2518,7 @@ msgstr "Načtené moduly"
 #: shell/loadedpluginsdialog.cpp:285
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
-msgstr ""
+msgstr "<html><font size=\"4\">Moduly pro <b>%1</b> načteny</font></html>"
 
 #: shell/mainwindow.cpp:476
 #, kde-format
@@ -2471,7 +2535,7 @@ msgstr "Nastavit %1"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
-msgstr ""
+msgstr "Přizpůsobte si %1."
 
 #: shell/mainwindow_p.cpp:228
 #, kde-format
@@ -2489,7 +2553,7 @@ msgstr "Nastavit upozorňování"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
-msgstr ""
+msgstr "Zobrazí dialogové okno, ve kterém můžete nastavit upozornění."
 
 #: shell/mainwindow_p.cpp:234
 #, kde-format
@@ -2501,13 +2565,13 @@ msgstr "Načtené moduly"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
-msgstr ""
+msgstr "Zobrazit seznam všech načtených modulů"
 
 #: shell/mainwindow_p.cpp:236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
-msgstr ""
+msgstr "Zobrazí dialogové okno s informacemi o všech načtených modulech."
 
 #: shell/mainwindow_p.cpp:239
 #, kde-format
@@ -2549,13 +2613,13 @@ msgstr "Přepnutí do předchozího okna."
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Next Outputmark"
-msgstr ""
+msgstr "Přejít na další výstupní značku"
 
 #: shell/mainwindow_p.cpp:261
 #, kde-format
 msgctxt "@action"
 msgid "Jump to Previous Outputmark"
-msgstr ""
+msgstr "Přejít na předchozí výstupní značku"
 
 #: shell/mainwindow_p.cpp:268
 #, kde-format
@@ -2573,7 +2637,7 @@ msgstr "Rozdělit vodorovně"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
-msgstr ""
+msgstr "Rozdělí aktuální pohled vodorovně."
 
 #: shell/mainwindow_p.cpp:276
 #, kde-format
@@ -2591,7 +2655,7 @@ msgstr "Rozdělit svisle"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
-msgstr ""
+msgstr "Rozdělí aktuální pohled svisle."
 
 #: shell/mainwindow_p.cpp:283
 #, kde-format
@@ -2609,7 +2673,7 @@ msgstr "Následující rozdělený pohled"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
-msgstr ""
+msgstr "Přepne na další rozdělený pohled."
 
 #: shell/mainwindow_p.cpp:291
 #, kde-format
@@ -2627,7 +2691,7 @@ msgstr "Předchozí rozdělený pohled"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
-msgstr ""
+msgstr "Přepne na předchozí rozdělený pohled."
 
 #: shell/mainwindow_p.cpp:303
 #, kde-format
@@ -2651,7 +2715,7 @@ msgstr "Nový soubor"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Creates an empty file."
-msgstr ""
+msgstr "Vytvoří prázdný soubor."
 
 #: shell/mainwindow_p.cpp:312
 #, kde-format
@@ -2669,7 +2733,7 @@ msgstr "Přidat nástrojový pohled"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
-msgstr ""
+msgstr "Přidá do tohoto okna nový nástrojový pohled."
 
 #: shell/mainwindow_p.cpp:320
 #, kde-format
@@ -2716,7 +2780,7 @@ msgstr "Přidat nástrojový pohled"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Lock the Panel from Hiding"
-msgstr ""
+msgstr "Zabránit skrytí panelu"
 
 #: shell/openprojectdialog.cpp:132
 #, kde-format
@@ -2736,6 +2800,8 @@ msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
+"Vyberte konfigurační soubor systému sestavení, existující projekt v KDevelop "
+"nebo libovolnou složku, kterou chcete otevřít jako projekt"
 
 #: shell/openprojectdialog.cpp:156 shell/openprojectdialog.cpp:177
 #, kde-format
@@ -2757,7 +2823,7 @@ msgstr "Otevřít \"%1\" jako projekt"
 #: shell/openprojectdialog.cpp:232
 #, kde-format
 msgid "Selected URL is invalid"
-msgstr ""
+msgstr "Zadaná URL adresa je neplatná"
 
 #: shell/openprojectdialog.cpp:277
 #, kde-format
@@ -2789,12 +2855,14 @@ msgid ""
 "process.\n"
 "Do you want to overwrite the external changes?"
 msgstr ""
+"Dokument \"%1\" obsahuje neuložené změny a byl upraven externím procesem.\n"
+"Chcete přepsat změny provedené externím procesem?"
 
 #: shell/partdocument.cpp:118 shell/textdocument.cpp:410
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "Přepsat externí změny"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -2804,7 +2872,7 @@ msgstr "Modul"
 #: shell/problem.cpp:80
 #, kde-format
 msgid "DuchainBuilder"
-msgstr ""
+msgstr "DuchainBuilder"
 
 #: shell/problem.cpp:82
 #, kde-format
@@ -2911,22 +2979,22 @@ msgstr "Načítání %1"
 msgid ""
 "Unable to load the project file %1.<br>The project has been removed from the "
 "session."
-msgstr ""
+msgstr "Nelze načíst projektový soubor %1.<br>Projekt byl odstraněn ze sezení."
 
 #: shell/project.cpp:252
 #, kde-format
 msgid "Unable to create hidden dir (%1) for developer file"
-msgstr ""
+msgstr "Nelze vytvořit skrytý adresář (%1) pro vývojářský soubor"
 
 #: shell/project.cpp:268
 #, kde-format
 msgid "Unable to get project file: %1"
-msgstr ""
+msgstr "Nelze načíst soubor projektu: %1"
 
 #: shell/project.cpp:308
 #, kde-format
 msgid "Could not load %1, a project with the same name '%2' is already open."
-msgstr ""
+msgstr "Nelze načíst %1, projekt se stejným názvem '%2' je již otevřený."
 
 #: shell/project.cpp:339
 #, kde-format
@@ -2934,6 +3002,9 @@ msgid ""
 "Could not load project management plugin <b>%1</b>.<br>Check that the "
 "required programs are installed, or see console output for more information."
 msgstr ""
+"Nepodařilo se načíst modul pro správu projektů <b>%1</b>.<br>Zkontrolujte, "
+"zda jsou nainstalovány požadované programy, nebo si pro další informace "
+"prohlédněte výstup konzole."
 
 #: shell/project.cpp:349
 #, kde-format
@@ -2941,6 +3012,7 @@ msgid ""
 "The project importing plugin (%1) does not support the IProjectFileManager "
 "interface."
 msgstr ""
+"Modul pro import projektů (%1) nepodporuje rozhraní IProjectFileManager."
 
 #: shell/project.cpp:402
 #, kde-format
@@ -2953,6 +3025,8 @@ msgid ""
 "Could not store developer specific project configuration.\n"
 "Attention: The project settings you changed will be lost."
 msgstr ""
+"Nepodařilo se uložit konfiguraci projektu specifickou pro vývojáře.\n"
+"Upozornění: Nastavení projektu, která jste změnili, budou ztracena."
 
 #: shell/projectcontroller.cpp:157
 #, kde-format
@@ -2968,7 +3042,7 @@ msgstr "Neplatné umístění: %1"
 #: shell/projectcontroller.cpp:310
 #, kde-format
 msgid "Already opening %1, not opening again"
-msgstr ""
+msgstr "Již otevřeno %1, znovu se neotevře"
 
 #: shell/projectcontroller.cpp:467
 #, kde-format
@@ -2982,6 +3056,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr ""
+"Pokračovat v otevření projektu a použít právě zadanou konfiguraci projektu"
 
 #: shell/projectcontroller.cpp:469
 #, kde-format
@@ -2994,6 +3069,7 @@ msgstr "Otevřít existující soubor"
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
+"Pokračovat v otevření projektu, ale použít stávající konfiguraci projektu"
 
 #: shell/projectcontroller.cpp:472
 #, kde-format
@@ -3007,22 +3083,24 @@ msgid ""
 "There already exists a project configuration file at %1.\n"
 "Do you want to override it or open the existing file?"
 msgstr ""
+"Soubor s konfigurací projektu již existuje v adresáři %1.\n"
+"Chcete jej přepsat, nebo otevřít stávající soubor?"
 
 #: shell/projectcontroller.cpp:478
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
-msgstr ""
+msgstr "Přepsat stávající konfiguraci projektu"
 
 #: shell/projectcontroller.cpp:496
 #, kde-format
 msgid "Unable to create configuration file %1"
-msgstr ""
+msgstr "Nelze vytvořit konfigurační soubor %1"
 
 #: shell/projectcontroller.cpp:510
 #, kde-format
 msgid "Reopen the current project?"
-msgstr ""
+msgstr "Znovu otevřít aktuální projekt?"
 
 #: shell/projectcontroller.cpp:511
 #, kde-format
@@ -3052,6 +3130,11 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
+"Otevřít stávající projekt KDevelop nebo importovat stávající projekt do "
+"KDevelop. Tato položka umožňuje vybrat soubor projektu KDevelop nebo "
+"stávající adresář a otevřít jej v KDevelop. Při otevření stávajícího "
+"adresáře, který ještě neobsahuje soubor projektu KDevelop, bude tento soubor "
+"vytvořen."
 
 #: shell/projectcontroller.cpp:565
 #, kde-format
@@ -3071,6 +3154,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
+"Provede uživatele procesem stažení projektu a následně jej importuje do "
+"KDevelop."
 
 #: shell/projectcontroller.cpp:583
 #, kde-format
@@ -3082,7 +3167,7 @@ msgstr "Zavřít projekt(y)"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
-msgstr ""
+msgstr "Zavře všechny aktuálně vybrané projekty"
 
 #: shell/projectcontroller.cpp:591
 #, kde-format
@@ -3094,7 +3179,7 @@ msgstr "Otevřít konfiguraci..."
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr ""
+msgstr "Odeslat commit aktuálního projektu..."
 
 #: shell/projectcontroller.cpp:598
 #, kde-format
@@ -3112,13 +3197,13 @@ msgstr "Otevřít nedávný projekt"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
-msgstr ""
+msgstr "Otevře nedávno otevřený projekt."
 
 #: shell/projectcontroller.cpp:615
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
-msgstr ""
+msgstr "Otevřít projekt pro aktuální soubor"
 
 #: shell/projectcontroller.cpp:764
 #, kde-format
@@ -3128,13 +3213,13 @@ msgstr "Projekt je už otevřen: %1"
 #: shell/projectcontroller.cpp:768
 #, kde-format
 msgid "No active document"
-msgstr ""
+msgstr "Žádný aktivní dokument"
 
 #: shell/projectcontroller.cpp:849
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr "Projekt je už otevřen"
+msgstr "Projekt je již otevřen"
 
 #: shell/projectcontroller.cpp:852
 #, kde-format
@@ -3142,12 +3227,14 @@ msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr ""
+"Projekt, který se pokoušíte otevřít, je již otevřený alespoň v jednom dalším "
+"sezení.<br>Co chcete udělat?"
 
 #: shell/projectcontroller.cpp:856
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
-msgstr ""
+msgstr "Přidat projekt do aktuálního sezení"
 
 #: shell/projectcontroller.cpp:860
 #, kde-format
@@ -3172,7 +3259,7 @@ msgstr "Znovu zpracovat celý projekt"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
-msgstr ""
+msgstr "Vyberte modul pro správu, který chcete v tomto projektu použít"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
@@ -3187,7 +3274,7 @@ msgstr "Správce projektu:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Provide a name for the project"
-msgstr ""
+msgstr "Zadejte název projektu"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
@@ -3200,12 +3287,12 @@ msgstr "Název:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
-msgstr ""
+msgstr "Ze souborového systému"
 
 #: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
-msgstr ""
+msgstr "Nelze vytvořit adresář: %1"
 
 #: shell/projectsourcepage.cpp:208
 #, kde-format
@@ -3218,16 +3305,17 @@ msgstr "%1 : %p%"
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
+"Chcete-li projekt zkontrolovat, musíte zadat platný nebo neexistující adresář"
 
 #: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
-msgstr ""
+msgstr "Je třeba zadat zdroj pro váš vzdálený projekt"
 
 #: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
-msgstr ""
+msgstr "Jako cílovou složku projektu je třeba zadat prázdnou složku"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
@@ -3255,7 +3343,7 @@ msgstr "Adresář:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr ""
+msgstr "Vyberte adresář, který chcete použít..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3292,19 +3380,19 @@ msgstr "Spustit"
 #: shell/runcontroller.cpp:438
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
-msgstr ""
+msgstr "Aktuální konfigurace spouštění nepodporuje režim '%1'."
 
 #: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
-msgstr ""
+msgstr "Konfigurace spouštění..."
 
 #: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
-msgstr ""
+msgstr "Otevřít dialogové okno s konfigurací spouštění"
 
 #: shell/runcontroller.cpp:462
 #, kde-format
@@ -3313,12 +3401,14 @@ msgid ""
 "Opens a dialog to setup new launch configurations, or to change the existing "
 "ones."
 msgstr ""
+"Otevře dialogové okno pro nastavení nových konfigurací spuštění nebo pro "
+"úpravu stávajících."
 
 #: shell/runcontroller.cpp:465
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
-msgstr ""
+msgstr "Provést spouštění"
 
 #: shell/runcontroller.cpp:466
 #, kde-format
@@ -3330,7 +3420,7 @@ msgstr "Spustit"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
-msgstr ""
+msgstr "Provést aktuální spouštění"
 
 #: shell/runcontroller.cpp:469
 #, kde-format
@@ -3339,6 +3429,7 @@ msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration."
 msgstr ""
+"Spustí cíl nebo program uvedený v aktuálně aktivní konfiguraci spuštění."
 
 #: shell/runcontroller.cpp:475
 #, kde-format
@@ -3373,7 +3464,7 @@ msgstr "Zastavit všechny běžící úlohy"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
-msgstr ""
+msgstr "Požaduje zastavení všech běžících úloh."
 
 #: shell/runcontroller.cpp:500
 #, kde-format
@@ -3391,42 +3482,43 @@ msgstr "Zastavit"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
-msgstr ""
+msgstr "Nabídka umožňující zastavit jednotlivé úlohy"
 
 #: shell/runcontroller.cpp:504
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
-msgstr ""
+msgstr "Seznam úloh, které lze zastavit jednotlivě."
 
 #: shell/runcontroller.cpp:508
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
-msgstr ""
+msgstr "Aktuální konfigurace spouštění"
 
 #: shell/runcontroller.cpp:509
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
-msgstr ""
+msgstr "Aktuální konfigurace spouštění"
 
 #: shell/runcontroller.cpp:510
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
+"Vyberte, která konfigurace spouštění se má použít při vyvolání spouštění."
 
 #: shell/runcontroller.cpp:623
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
-msgstr ""
+msgstr "<%1> Nepojmenovaná úloha"
 
 #: shell/runcontroller.cpp:1006
 #, kde-format
 msgid "New %1 Launcher"
-msgstr ""
+msgstr "Nový spouštěč %1"
 
 #: shell/runcontroller.cpp:1043
 #, kde-format
@@ -3442,7 +3534,7 @@ msgstr "Hostitelský systém"
 #: shell/runtimecontroller.cpp:88
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr ""
+msgstr "Umožňuje vybrat běhové prostředí"
 
 #: shell/runtimecontroller.cpp:92
 #, kde-format
@@ -3458,19 +3550,19 @@ msgstr "Uložit změněné soubory?"
 #: shell/savedialog.cpp:52
 #, kde-format
 msgid "The following files have been modified. Save them?"
-msgstr ""
+msgstr "Byly upraveny následující soubory. Chcete je uložit?"
 
 #: shell/savedialog.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
-msgstr ""
+msgstr "Neukládat &nic"
 
 #: shell/savedialog.cpp:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
-msgstr ""
+msgstr "Zahodit všechny změny"
 
 #: shell/session.cpp:139 shell/session.cpp:162
 #, kde-format
@@ -3502,6 +3594,8 @@ msgid ""
 "Active session.\n"
 "pid %1, app %2, host %3"
 msgstr ""
+"Aktivní sezení. \n"
+"pid %1, aplikace %2, hostitel %3"
 
 #: shell/sessionchooserdialog.cpp:96
 #, kde-format
@@ -3512,13 +3606,13 @@ msgstr "Běžící"
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
-msgstr "Nelze smazat sezení"
+msgstr "Sezení nelze smazat"
 
 #: shell/sessionchooserdialog.cpp:192
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
-msgstr ""
+msgstr "<p>Zamčené sezení nelze smazat."
 
 #: shell/sessionchooserdialog.cpp:195
 #, kde-format
@@ -3533,6 +3627,8 @@ msgid ""
 "The session <b>%1</b> and all contained settings will be deleted. The "
 "projects will stay unaffected. Do you really want to continue?"
 msgstr ""
+"Sezení <b>%1</b> a všechna nastavení v ní obsažená budou smazána. Projekty "
+"tím nebudou ovlivněny. Opravdu chcete pokračovat?"
 
 #: shell/sessionchooserdialog.cpp:204
 #, kde-format

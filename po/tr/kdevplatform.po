@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-11-15 20:09+0300\n"
+"PO-Revision-Date: 2026-11-16 19:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3920,15 +3920,15 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
-"Bu stil için önizleme görünürlüğünü açın/kapatın.\n"
-"Önizleme, biçimlendirmesi dosya yoluna bağımlı olan stiller için devre dışı "
+"Bu stil için ön izleme görünürlüğünü açın/kapatın.\n"
+"Ön izleme, biçimlendirmesi dosya yoluna bağımlı olan stiller için devre dışı "
 "olmalıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
 #, kde-format
 msgid "Show Preview"
-msgstr "Önizlemeyi Göster"
+msgstr "Ön izlemeyi göster"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreview)
 #. i18n: ectx: property (text), widget (QLabel, previewLabel)
@@ -3937,7 +3937,7 @@ msgstr "Önizlemeyi Göster"
 #, kde-format
 msgctxt "@label"
 msgid "Preview:"
-msgstr "Önizleme:"
+msgstr "Ön izleme:"
 
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
