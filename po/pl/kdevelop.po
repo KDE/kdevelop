@@ -1,5 +1,5 @@
 # translation of kdevelop.po to
-# Version: $Revision: 1751726 $
+# Version: $Revision$
 # KDevelop polish translation file.
 # Translation work:
 # SPDX-FileCopyrightText: 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2025 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
