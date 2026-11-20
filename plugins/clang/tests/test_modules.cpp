@@ -17,10 +17,14 @@
 
 #include "testfilepaths.h"
 #include "../duchain/clanghelpers.h"
+#include "../duchain/clangmodule.h"
 #include "../duchain/clangmodulegraph.h"
+#include "../duchain/clangmoduleprecompilejob.h"
 #include "../duchain/clangmodulerepository.h"
 #include "../duchain/clangmodulescanner.h"
 #include "../clangsettings/clangsettingsmanager.h"
+#include <ThreadWeaver/DependencyPolicy>
+#include <ThreadWeaver/Queue>
 
 using namespace KDevelop;
 
@@ -102,6 +106,17 @@ void TestModules::testIsCpp20OrLater()
 
     settings.parserOptions = QStringLiteral("-std=c++latest");
     QVERIFY(ClangHelpers::isCpp20OrLater(settings));
+}
+
+void TestModules::testIsCppModuleUnit()
+{
+    const QString modulesDir = QStringLiteral(TEST_FILES_DIR "/modules");
+    QVERIFY(QDir(modulesDir).exists());
+
+    QVERIFY(ClangModule::isCppModuleUnit(modulesDir + QStringLiteral("/export.cpp"), {}));
+    QVERIFY(ClangModule::isCppModuleUnit(modulesDir + QStringLiteral("/test_submodule.cpp"), {}));
+    QVERIFY(ClangModule::isCppModuleUnit(modulesDir + QStringLiteral("/test_module.cpp"), {}));
+    QVERIFY(!ClangModule::isCppModuleUnit(modulesDir + QStringLiteral("/consumer.cpp"), {}));
 }
 
 void TestModules::testRemoveHarmfulModuleArguments()
@@ -232,11 +247,73 @@ void TestModules::testClangScanDeps()
     QVERIFY(desc.requiredModules.contains(QStringLiteral("module_example")));
 }
 
+void TestModules::testScanAndPrecompileModules()
+{
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
+    }
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString sandbox = tempDir.path();
+    const QString srcDir = sandbox + QStringLiteral("/src");
+    const QString incDir = sandbox + QStringLiteral("/include");
+    const QString buildDir = sandbox + QStringLiteral("/build");
+
+    QDir().mkpath(srcDir);
+    QDir().mkpath(incDir);
+    QDir().mkpath(buildDir);
+
+    const QString testFilesDir = QStringLiteral(TEST_FILES_DIR "/modules");
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/export.cpp"), srcDir + QStringLiteral("/export.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_submodule.cpp"), srcDir + QStringLiteral("/test_submodule.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_module.cpp"), srcDir + QStringLiteral("/test_module.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_module_export.h"), incDir + QStringLiteral("/test_module_export.h")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_submodule.hpp"), incDir + QStringLiteral("/test_submodule.hpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_module.hpp"), incDir + QStringLiteral("/test_module.hpp")));
+
+    ClangModule::clearModules();
+    const QStringList baseArgs = {QStringLiteral("-std=c++23"), QStringLiteral("-I") + incDir, QStringLiteral("-I") + srcDir};
+
+    auto expMod = ClangModule::scanAndRegisterModuleFile(srcDir + QStringLiteral("/export.cpp"), baseArgs, buildDir);
+    QVERIFY(expMod);
+    QCOMPARE(expMod->name(), QStringLiteral("module_example"));
+
+    auto subMod = ClangModule::scanAndRegisterModuleFile(srcDir + QStringLiteral("/test_submodule.cpp"), baseArgs, buildDir);
+    QVERIFY(subMod);
+    QCOMPARE(subMod->name(), QStringLiteral("test.submodule"));
+
+    auto modMod = ClangModule::scanAndRegisterModuleFile(srcDir + QStringLiteral("/test_module.cpp"), baseArgs, buildDir);
+    QVERIFY(modMod);
+    QCOMPARE(modMod->name(), QStringLiteral("test.mod"));
+
+    ClangModule::Map modTargets;
+    modTargets.insert(expMod->name(), expMod);
+    modTargets.insert(subMod->name(), subMod);
+    modTargets.insert(modMod->name(), modMod);
+
+    const auto moduleArgs = ClangModule::precompileModules(
+        {QStringLiteral("test.mod")}, modTargets, {incDir, srcDir}, QStringLiteral("-std=c++23"));
+
+    QVERIFY(!moduleArgs.isEmpty());
+
+    QStringList flags;
+    for (const auto& arg : moduleArgs) {
+        flags << QString::fromUtf8(arg);
+    }
+
+    QVERIFY(flags.filter(QStringLiteral("-fmodule-file=module_example=")).size() > 0);
+    QVERIFY(flags.filter(QStringLiteral("-fmodule-file=test.submodule=")).size() > 0);
+    QVERIFY(flags.filter(QStringLiteral("-fmodule-file=test.mod=")).size() > 0);
+}
+
 void TestModules::testCancellation()
 {
-    const QString scanDeps = ClangHelpers::clangScanDepsPath();
-    if (scanDeps.isEmpty()) {
-        QSKIP("clang-scan-deps is not available on this system");
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
     }
 
     QTemporaryDir tempDir;
@@ -265,6 +342,24 @@ void TestModules::testCancellation()
         return true;
     });
     QVERIFY(!abortedScan.success);
+
+    // 2. scanAndRegisterModuleFile with abort
+    auto abortedReg = ClangModule::scanAndRegisterModuleFile(expFile, baseArgs, buildDir, [] {
+        return true;
+    });
+    QVERIFY(!abortedReg);
+
+    // 3. precompileModules with abort
+    auto validMod = ClangModule::scanAndRegisterModuleFile(expFile, baseArgs, buildDir);
+    QVERIFY(validMod);
+    ClangModule::Map modTargets;
+    modTargets.insert(validMod->name(), validMod);
+
+    const auto abortedPrecompile = ClangModule::precompileModules(
+        {validMod->name()}, modTargets, {incDir, srcDir}, QStringLiteral("-std=c++23"), buildDir, [] {
+            return true;
+        });
+    QVERIFY(abortedPrecompile.isEmpty());
 }
 
 void TestModules::testModuleGraphBasic()
@@ -472,4 +567,330 @@ void TestModules::testModuleRepository()
 
     repo.removeFileScan(consumerFile);
     QVERIFY(!repo.findFileScan(consumerFile).has_value());
+}
+void TestModules::testRepositoryCachedLookup()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString testFile = tempDir.path() + QStringLiteral("/cache_test.cppm");
+    {
+        QFile file(testFile);
+        QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+        file.write("export module CacheTest;\n");
+    }
+
+    ClangModule::clearModules();
+
+    auto mod = ClangModule::Ptr::create(QStringLiteral("CacheTest"), testFile, tempDir.path(), QStringList{});
+    ClangModule::registerModule(mod);
+
+    // Verify it is found in registeredModule
+    auto found = ClangModule::registeredModule(QStringLiteral("CacheTest"));
+    QVERIFY(found != nullptr);
+    QCOMPARE(found->name(), QStringLiteral("CacheTest"));
+
+    // Modify file on disk (update mtime into future)
+    const auto newTime = QFileInfo(testFile).lastModified().addSecs(10);
+    {
+        QFile file(testFile);
+        QVERIFY(file.open(QIODevice::ReadWrite));
+        QVERIFY(file.setFileTime(newTime, QFileDevice::FileModificationTime));
+    }
+
+    // Now registeredModule should detect that mtime changed and invalidate
+    auto stale = ClangModule::registeredModule(QStringLiteral("CacheTest"));
+    QVERIFY(stale == nullptr);
+
+    ClangModule::clearModules();
+}
+
+void TestModules::testPrecompileModulesCycleDetection()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString fileA = tempDir.path() + QStringLiteral("/mod_a.cppm");
+    const QString fileB = tempDir.path() + QStringLiteral("/mod_b.cppm");
+    {
+        QFile fA(fileA);
+        QVERIFY(fA.open(QIODevice::WriteOnly));
+        fA.write("export module CycleA; import CycleB;\n");
+
+        QFile fB(fileB);
+        QVERIFY(fB.open(QIODevice::WriteOnly));
+        fB.write("export module CycleB; import CycleA;\n");
+    }
+
+    ClangModule::clearModules();
+
+    auto modA = ClangModule::Ptr::create(QStringLiteral("CycleA"), fileA, tempDir.path(),
+                                         QStringList{QStringLiteral("-std=c++20")},
+                                         QStringList{QStringLiteral("CycleB")});
+    auto modB = ClangModule::Ptr::create(QStringLiteral("CycleB"), fileB, tempDir.path(),
+                                         QStringList{QStringLiteral("-std=c++20")},
+                                         QStringList{QStringLiteral("CycleA")});
+
+    ClangModule::registerModule(modA);
+    ClangModule::registerModule(modB);
+
+    ClangModule::Map modules;
+    modules.insert(QStringLiteral("CycleA"), modA);
+    modules.insert(QStringLiteral("CycleB"), modB);
+
+    // precompileModules should detect the circular dependency CycleA -> CycleB -> CycleA and abort safely
+    const auto args = ClangModule::precompileModules({QStringLiteral("CycleA")}, modules, {}, QStringLiteral("-std=c++20"), tempDir.path());
+    QVERIFY(args.isEmpty());
+
+    ClangModule::clearModules();
+}
+
+void TestModules::testProjectModuleDiscovery()
+{
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
+    }
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString srcDir = tempDir.path() + QStringLiteral("/src");
+    const QString buildDir = tempDir.path() + QStringLiteral("/build");
+    QDir().mkpath(srcDir);
+    QDir().mkpath(buildDir);
+
+    const QString moduleFile = srcDir + QStringLiteral("/hello.cppm");
+    const QString consumerFile = srcDir + QStringLiteral("/use.cpp");
+
+    {
+        QFile modF(moduleFile);
+        QVERIFY(modF.open(QIODevice::WriteOnly | QIODevice::Text));
+        modF.write("export module Hello;\n"
+                   "export int getNumber() { return 42; }\n");
+
+        QFile useF(consumerFile);
+        QVERIFY(useF.open(QIODevice::WriteOnly | QIODevice::Text));
+        useF.write("import Hello;\n"
+                   "int main() { return getNumber(); }\n");
+    }
+
+    // Reset module caches to verify discovery works without prior registration
+    ClangModule::clearModules();
+    QVERIFY(ClangModule::registeredModule(QStringLiteral("Hello")) == nullptr);
+
+    // Calling moduleArgumentsForFile on use.cpp should discover hello.cppm, precompile it,
+    // and return the -fmodule-file argument for Hello.
+    const auto moduleArgs = ClangModule::moduleArgumentsForFile(
+        consumerFile, buildDir, {}, QStringLiteral("-std=c++20"));
+
+    QVERIFY(!moduleArgs.isEmpty());
+    bool foundHelloArg = false;
+    for (const auto& arg : moduleArgs) {
+        if (arg.startsWith("-fmodule-file=Hello=")) {
+            foundHelloArg = true;
+            break;
+        }
+    }
+    QVERIFY(foundHelloArg);
+    QVERIFY(ClangModule::registeredModule(QStringLiteral("Hello")) != nullptr);
+
+    ClangModule::clearModules();
+}
+
+void TestModules::testModuleProblemsReporting()
+{
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
+    }
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString srcDir = tempDir.path() + QStringLiteral("/src");
+    const QString buildDir = tempDir.path() + QStringLiteral("/build");
+    QDir().mkpath(srcDir);
+    QDir().mkpath(buildDir);
+
+    // 1. Test Circular Module Dependency Problem Reporting
+    const QString fileA = srcDir + QStringLiteral("/cycle_a.cppm");
+    const QString fileB = srcDir + QStringLiteral("/cycle_b.cppm");
+    const QString cycleConsumer = srcDir + QStringLiteral("/cycle_consumer.cpp");
+
+    {
+        QFile fA(fileA);
+        QVERIFY(fA.open(QIODevice::WriteOnly | QIODevice::Text));
+        fA.write("export module CycleProbA; import CycleProbB;\n");
+
+        QFile fB(fileB);
+        QVERIFY(fB.open(QIODevice::WriteOnly | QIODevice::Text));
+        fB.write("export module CycleProbB; import CycleProbA;\n");
+
+        QFile fC(cycleConsumer);
+        QVERIFY(fC.open(QIODevice::WriteOnly | QIODevice::Text));
+        fC.write("import CycleProbA; int main() { return 0; }\n");
+    }
+
+    ClangModule::clearModules();
+    QList<ProblemPointer> cycleProblems;
+    ClangModule::moduleArgumentsForFile(cycleConsumer, buildDir, {}, QStringLiteral("-std=c++20"), {}, {}, &cycleProblems);
+
+    QVERIFY(!cycleProblems.isEmpty());
+    bool foundCycleError = false;
+    for (const auto& p : cycleProblems) {
+        if (p->severity() == IProblem::Error && p->description().contains(QStringLiteral("Circular module dependency detected"))) {
+            foundCycleError = true;
+            break;
+        }
+    }
+    QVERIFY(foundCycleError);
+
+    // 2. Test Module Precompilation Syntax Failure Reporting
+    const QString brokenModule = srcDir + QStringLiteral("/broken_mod.cppm");
+    const QString brokenConsumer = srcDir + QStringLiteral("/broken_consumer.cpp");
+
+    {
+        QFile fMod(brokenModule);
+        QVERIFY(fMod.open(QIODevice::WriteOnly | QIODevice::Text));
+        // Invalid C++ syntax inside module interface
+        fMod.write("export module BrokenProbMod; int broken_syntax = ;\n");
+
+        QFile fUse(brokenConsumer);
+        QVERIFY(fUse.open(QIODevice::WriteOnly | QIODevice::Text));
+        fUse.write("import BrokenProbMod; int main() { return 0; }\n");
+    }
+
+    ClangModule::clearModules();
+    QList<ProblemPointer> brokenProblems;
+    ClangModule::moduleArgumentsForFile(brokenConsumer, buildDir, {}, QStringLiteral("-std=c++20"), {}, {}, &brokenProblems);
+
+    QVERIFY(!brokenProblems.isEmpty());
+    bool foundBrokenError = false;
+    for (const auto& p : brokenProblems) {
+        if (p->severity() == IProblem::Error && p->description().contains(QStringLiteral("Failed to precompile module 'BrokenProbMod'"))) {
+            foundBrokenError = true;
+            QVERIFY(!p->explanation().isEmpty()); // captures compiler stderr
+            break;
+        }
+    }
+    QVERIFY(foundBrokenError);
+
+    ClangModule::clearModules();
+}
+
+void TestModules::testModulePrecompileJobThreadWeaver()
+{
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
+    }
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString srcDir = tempDir.path() + QStringLiteral("/src");
+    const QString buildDir = tempDir.path() + QStringLiteral("/build");
+    QDir().mkpath(srcDir);
+    QDir().mkpath(buildDir);
+
+    const QString coreFile = srcDir + QStringLiteral("/core.cppm");
+    const QString utilFile = srcDir + QStringLiteral("/util.cppm");
+    const QString appFile = srcDir + QStringLiteral("/app.cppm");
+
+    {
+        QFile f1(coreFile);
+        QVERIFY(f1.open(QIODevice::WriteOnly | QIODevice::Text));
+        f1.write("export module CoreMod; export int coreValue() { return 42; }\n");
+
+        QFile f2(utilFile);
+        QVERIFY(f2.open(QIODevice::WriteOnly | QIODevice::Text));
+        f2.write("export module UtilMod; export int utilValue() { return 100; }\n");
+
+        QFile f3(appFile);
+        QVERIFY(f3.open(QIODevice::WriteOnly | QIODevice::Text));
+        f3.write("export module AppMod; import CoreMod; import UtilMod; export int appValue() { return coreValue() + utilValue(); }\n");
+    }
+
+    ClangModule::clearModules();
+
+    auto coreMod = ClangModule::scanAndRegisterModuleFile(coreFile, {QStringLiteral("-std=c++20")}, buildDir);
+    auto utilMod = ClangModule::scanAndRegisterModuleFile(utilFile, {QStringLiteral("-std=c++20")}, buildDir);
+    auto appMod = ClangModule::scanAndRegisterModuleFile(appFile, {QStringLiteral("-std=c++20")}, buildDir);
+
+    QVERIFY(coreMod);
+    QVERIFY(utilMod);
+    QVERIFY(appMod);
+
+    ClangModule::Map moduleMap;
+    moduleMap.insert(coreMod->name(), coreMod);
+    moduleMap.insert(utilMod->name(), utilMod);
+    moduleMap.insert(appMod->name(), appMod);
+
+    // 1. Test createJobs prerequisite chaining
+    const auto jobs = ClangModulePrecompileJob::createJobs(
+        {QStringLiteral("AppMod")}, moduleMap, clangCompiler, {}, QStringLiteral("-std=c++20"), buildDir);
+
+    QCOMPARE(jobs.size(), 3);
+
+    // Verify jobs are ordered or linked: CoreMod and UtilMod are prerequisites for AppMod
+    QSharedPointer<ClangModulePrecompileJob> appJob;
+    for (const auto& job : jobs) {
+        if (job->moduleName() == QLatin1String("AppMod")) {
+            appJob = job;
+        }
+    }
+    QVERIFY(appJob);
+
+    // 2. Execute via ThreadWeaver::Queue
+    ThreadWeaver::Queue queue;
+    for (const auto& job : jobs) {
+        queue.enqueue(job);
+    }
+    queue.finish();
+
+    for (const auto& job : jobs) {
+        QVERIFY2(job->success(), qPrintable(QStringLiteral("Job for module %1 failed").arg(job->moduleName())));
+        QVERIFY(!job->moduleFileArg().isEmpty());
+    }
+
+    // Verify PCM files exist on disk
+    QVERIFY(QFile::exists(coreMod->pcmPath(buildDir)));
+    QVERIFY(QFile::exists(utilMod->pcmPath(buildDir)));
+    QVERIFY(QFile::exists(appMod->pcmPath(buildDir)));
+
+    // 3. Test abort requested on precompile job
+    ClangModule::clearModules();
+    const auto abortedJobs = ClangModulePrecompileJob::createJobs(
+        {QStringLiteral("AppMod")}, moduleMap, clangCompiler, {}, QStringLiteral("-std=c++20"), buildDir, [] {
+            return true;
+        });
+    QVERIFY(abortedJobs.isEmpty());
+
+    // 4. Test cycle handling in createJobs
+    const QString cycleA = srcDir + QStringLiteral("/tw_cycle_a.cppm");
+    const QString cycleB = srcDir + QStringLiteral("/tw_cycle_b.cppm");
+    {
+        QFile fA(cycleA);
+        QVERIFY(fA.open(QIODevice::WriteOnly | QIODevice::Text));
+        fA.write("export module TWCycleA; import TWCycleB;\n");
+
+        QFile fB(cycleB);
+        QVERIFY(fB.open(QIODevice::WriteOnly | QIODevice::Text));
+        fB.write("export module TWCycleB; import TWCycleA;\n");
+    }
+
+    auto modCA = ClangModule::scanAndRegisterModuleFile(cycleA, {QStringLiteral("-std=c++20")}, buildDir);
+    auto modCB = ClangModule::scanAndRegisterModuleFile(cycleB, {QStringLiteral("-std=c++20")}, buildDir);
+    ClangModule::Map cycleMap;
+    cycleMap.insert(modCA->name(), modCA);
+    cycleMap.insert(modCB->name(), modCB);
+
+    QList<ProblemPointer> cycleProblems;
+    const auto cycleJobs = ClangModulePrecompileJob::createJobs(
+        {QStringLiteral("TWCycleA")}, cycleMap, clangCompiler, {}, QStringLiteral("-std=c++20"), buildDir, {}, &cycleProblems);
+    QVERIFY(cycleJobs.isEmpty());
+    QVERIFY(!cycleProblems.isEmpty());
+
+    ClangModule::clearModules();
 }

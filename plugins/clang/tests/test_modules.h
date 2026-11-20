@@ -19,15 +19,22 @@ private Q_SLOTS:
 
     void testStdVersionRank();
     void testIsCpp20OrLater();
+    void testIsCppModuleUnit();
     void testRemoveHarmfulModuleArguments();
     void testParseP1689Json();
     void testClangScanDeps();
+    void testScanAndPrecompileModules();
     void testCancellation();
     void testModuleGraphBasic();
     void testModuleGraphTopologicalSort();
     void testModuleGraphCycleDetection();
     void testModuleGraphMultiTargetSort();
     void testModuleRepository();
+    void testRepositoryCachedLookup();
+    void testPrecompileModulesCycleDetection();
+    void testProjectModuleDiscovery();
+    void testModuleProblemsReporting();
+    void testModulePrecompileJobThreadWeaver();
 };
 
 #endif // TESTMODULES_H
