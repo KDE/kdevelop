@@ -47,6 +47,7 @@ set(kdevclangprivate_SRCS
 
     duchain/builder.cpp
     duchain/clangdiagnosticevaluator.cpp
+    duchain/clangdependencyscanner.cpp
     duchain/clangducontext.cpp
     duchain/clanghelpers.cpp
     duchain/clangindex.cpp
