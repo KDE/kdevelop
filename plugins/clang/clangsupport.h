@@ -17,6 +17,7 @@
 
 class ClangIndex;
 class ClangRefactoring;
+class ClangDependencyScanner;
 namespace KDevelop
 {
 class IDocument;
@@ -47,6 +48,7 @@ public:
     KDevelop::ICodeHighlighting* codeHighlighting() const override;
     KDevelop::BasicRefactoring* refactoring() const override;
     KDevelop::ICreateClassHelper* createClassHelper() const override;
+    KDevelop::IDependencyScanner* dependencyScanner() const override;
 
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
@@ -86,6 +88,7 @@ private:
     KDevelop::ICodeHighlighting *m_highlighting;
     ClangRefactoring *m_refactoring;
     QScopedPointer<ClangIndex> m_index;
+    QScopedPointer<ClangDependencyScanner> m_dependencyScanner;
 };
 
 #endif

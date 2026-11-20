@@ -12,6 +12,7 @@
 #include "todoextractor.h"
 #include "clanghelpers.h"
 #include "clangindex.h"
+#include "clangmodule.h"
 #include "clangparsingenvironment.h"
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
@@ -106,6 +107,26 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
         // see e.g.
         // https://youtrack.jetbrains.com/issue/CPP-29091/In-template-call-to-builtinoperatordelete-selects-non-usual-deallocation-function-gcc-12#focus=Comments-27-6067190.0-0
         arguments.append(sizedDealloc);
+    }
+
+    // If multiple C++ -std=/--std=/-ansi flags are present (e.g. session default + project CMake flags),
+    // keep only the highest standard version.
+    auto bestStdRank = ClangHelpers::CppStdVersion::Unknown;
+    int bestStdIndex = -1;
+    for (int i = 0; i < arguments.size(); ++i) {
+        const auto rank = ClangHelpers::stdVersionRank(QString::fromUtf8(arguments.at(i)));
+        if (rank != ClangHelpers::CppStdVersion::Unknown && (bestStdIndex == -1 || rank > bestStdRank)) {
+            bestStdRank = rank;
+            bestStdIndex = i;
+        }
+    }
+    if (bestStdIndex != -1) {
+        for (int i = arguments.size() - 1; i >= 0; --i) {
+            if (i != bestStdIndex
+                && ClangHelpers::stdVersionRank(QString::fromUtf8(arguments.at(i))) != ClangHelpers::CppStdVersion::Unknown) {
+                arguments.removeAt(i);
+            }
+        }
     }
 }
 
@@ -280,17 +301,23 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> smartArgs;
 
+    const auto moduleArgs = environment.moduleArguments();
+
     /// the number of arguments, for which one element is appended to smartArgs and two elements - to clangArguments
     const auto argumentCountToDouble = totalSize(frameworkDirectories) + pchInclude.isValid() + 6;
-    smartArgs.reserve(totalSize(includes) + argumentCountToDouble);
-    clangArguments.reserve(arguments.size() + smartArgs.capacity() + argumentCountToDouble + extraArgs.size());
+    smartArgs.reserve(totalSize(includes) + argumentCountToDouble + moduleArgs.size());
+    clangArguments.reserve(arguments.size() + smartArgs.capacity() + argumentCountToDouble + extraArgs.size() + moduleArgs.size());
 
-    std::transform(arguments.constBegin(), arguments.constEnd(),
+    auto filteredArgs = arguments;
+    ClangHelpers::removeHarmfulModuleArguments(filteredArgs);
+
+    std::transform(filteredArgs.constBegin(), filteredArgs.constEnd(),
                    std::back_inserter(clangArguments),
                    [] (const QByteArray &argument) { return argument.constData(); });
 
     // NOTE: the PCH include must come before all other includes!
-    if (pchInclude.isValid()) {
+    // However, C++20 module units cannot be parsed with an unrelated -include PCH flag.
+    if (pchInclude.isValid() && !ClangModule::isCppModuleUnit(tuUrl.str(), unsavedFiles)) {
         clangArguments << "-include";
         QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
         smartArgs << pchFile;
@@ -348,6 +375,13 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     // append extra args from environment variable
     for (const QByteArray& arg : extraArgs) {
         clangArguments << arg.constData();
+    }
+
+    m_extraProblems = environment.moduleProblems();
+
+    for (const auto& arg : moduleArgs) {
+        smartArgs << arg;
+        clangArguments << smartArgs.last().constData();
     }
 
     QVector<CXUnsavedFile> unsaved;
@@ -622,6 +656,10 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 
     TodoExtractor extractor(unit(), file);
     problems << extractor.problems();
+
+    for (const auto& problem : std::as_const(d->m_extraProblems)) {
+        problems << problem;
+    }
 
 #if CINDEX_VERSION_MINOR > 30
     // note that the below warning is triggered on every reparse when there is a precompiled preamble

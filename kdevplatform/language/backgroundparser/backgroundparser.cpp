@@ -27,6 +27,7 @@
 #include <ThreadWeaver/DebuggingAids>
 
 #include <interfaces/icore.h>
+#include <interfaces/idependencyscanner.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguagesupport.h>
@@ -382,6 +383,10 @@ public:
                 continue;
             }
 
+            if (auto* scanner = language->dependencyScanner()) {
+                scheduleDependencyScan(url, scanner);
+            }
+
             ParseJob* job = language->createParseJob(url);
             if (!job) {
                 continue; // Language part did not produce a valid ParseJob.
@@ -544,8 +549,56 @@ public:
     QHash<IndexedString, DocumentParsePlan> m_documents;
     // The documents ordered by priority
     QMap<int, QSet<IndexedString>> m_documentsForPriority;
+    void scheduleDependencyScan(const IndexedString& url, IDependencyScanner* scanner)
+    {
+        if (m_shuttingDown || !scanner) {
+            return;
+        }
+        {
+            QMutexLocker lock(&m_scanJobsMutex);
+            if (m_activeDependencyScans.contains(url)) {
+                return;
+            }
+        }
+
+        const ThreadWeaver::JobPointer scanJob = scanner->createDependencyScanJob(url);
+        if (!scanJob) {
+            return;
+        }
+
+        {
+            QMutexLocker lock(&m_scanJobsMutex);
+            if (m_activeDependencyScans.contains(url)) {
+                return;
+            }
+            m_activeDependencyScans.insert(url);
+        }
+
+        if (auto* twJob = dynamic_cast<ThreadWeaver::Job*>(scanJob.data())) {
+            QPointer<BackgroundParser> parserPtr(m_parser);
+            twJob->onFinish([this, parserPtr, url](const ThreadWeaver::JobInterface&) {
+                {
+                    QMutexLocker lock(&m_scanJobsMutex);
+                    m_activeDependencyScans.remove(url);
+                }
+                if (parserPtr && !m_shuttingDown) {
+                    QMetaObject::invokeMethod(parserPtr.data(), [parserPtr, url]() {
+                        if (parserPtr) {
+                            parserPtr->addDocument(url, TopDUContext::AllDeclarationsContextsAndUses,
+                                                   BackgroundParser::NormalPriority);
+                        }
+                    }, Qt::QueuedConnection);
+                }
+            });
+        }
+
+        m_weaver.enqueue(scanJob);
+    }
+
     // Currently running parse jobs
     QHash<IndexedString, ThreadWeaver::QObjectDecorator*> m_parseJobs;
+    mutable QMutex m_scanJobsMutex;
+    QSet<IndexedString> m_activeDependencyScans;
     // The url for each managed document. Those may temporarily differ from the real url.
     QHash<KTextEditor::Document*, IndexedString> m_managedTextDocumentUrls;
     // Projects currently in progress of loading

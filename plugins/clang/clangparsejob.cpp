@@ -40,6 +40,7 @@
 #include "util/clangutils.h"
 
 #include "clangsupport.h"
+#include <language/interfaces/idependencyscanner.h>
 #include "duchain/documentfinderhelpers.h"
 
 #include <KTextEditor/Document>
@@ -240,6 +241,18 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(tuUrlStr));
         m_environment.addParserArguments(IDefinesAndIncludesManager::manager()->parserArgumentsInBackground(tuUrlStr));
         m_environment.setPchInclude(userDefinedPchIncludeForFile(tuUrlStr));
+
+        if (auto* scanner = clang()->dependencyScanner()) {
+            const auto tuUrl = m_environment.translationUnitUrl();
+            const auto cachedArgs = scanner->cachedModuleArguments(tuUrl);
+            if (!cachedArgs.isEmpty()) {
+                m_environment.setModuleArguments(cachedArgs);
+            }
+            const auto cachedProblems = scanner->cachedProblems(tuUrl);
+            if (!cachedProblems.isEmpty()) {
+                m_environment.setModuleProblems(cachedProblems);
+            }
+        }
     }
 
     if (abortRequested()) {
