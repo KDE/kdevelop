@@ -9,6 +9,11 @@
 
 #include <util/path.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/problem.h>
+
+#include <QByteArray>
+#include <QList>
+#include <QVector>
 
 #include "clangprivateexport.h"
 
@@ -90,6 +95,12 @@ public:
     ParserSettings parserSettings() const;
     void addParserArguments(const QString &parserArguments);
 
+    void setModuleArguments(const QVector<QByteArray>& arguments);
+    QVector<QByteArray> moduleArguments() const;
+
+    void setModuleProblems(const QList<KDevelop::ProblemPointer>& problems);
+    QList<KDevelop::ProblemPointer> moduleProblems() const;
+
     /**
      * Hash all contents of this environment and return the result.
      *
@@ -115,6 +126,8 @@ private:
     KDevelop::IndexedString m_tuUrl;
     Quality m_quality = Unknown;
     ParserSettings m_parserSettings;
+    QVector<QByteArray> m_moduleArguments;
+    QList<KDevelop::ProblemPointer> m_moduleProblems;
 };
 
 #endif // CLANGPARSINGENVIRONMENT_H

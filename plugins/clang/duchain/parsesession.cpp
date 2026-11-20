@@ -12,6 +12,7 @@
 #include "todoextractor.h"
 #include "clanghelpers.h"
 #include "clangindex.h"
+#include "clangmodule.h"
 #include "clangparsingenvironment.h"
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
@@ -285,12 +286,16 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     smartArgs.reserve(totalSize(includes) + argumentCountToDouble);
     clangArguments.reserve(arguments.size() + smartArgs.capacity() + argumentCountToDouble + extraArgs.size());
 
-    std::transform(arguments.constBegin(), arguments.constEnd(),
+    smartArgs = arguments;
+    ClangHelpers::removeHarmfulModuleArguments(smartArgs);
+
+    std::transform(smartArgs.constBegin(), smartArgs.constEnd(),
                    std::back_inserter(clangArguments),
                    [] (const QByteArray &argument) { return argument.constData(); });
 
     // NOTE: the PCH include must come before all other includes!
-    if (pchInclude.isValid()) {
+    // However, C++20 module units cannot be parsed with an unrelated -include PCH flag.
+    if (pchInclude.isValid() && !ClangModule::isCppModuleUnit(tuUrl.str(), unsavedFiles)) {
         clangArguments << "-include";
         QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
         smartArgs << pchFile;
@@ -348,6 +353,14 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     // append extra args from environment variable
     for (const QByteArray& arg : extraArgs) {
         clangArguments << arg.constData();
+    }
+
+    m_extraProblems = environment.moduleProblems();
+
+    const auto moduleArgs = environment.moduleArguments();
+    for (const auto& arg : moduleArgs) {
+        smartArgs << arg;
+        clangArguments << smartArgs.last().constData();
     }
 
     QVector<CXUnsavedFile> unsaved;
@@ -622,6 +635,10 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 
     TodoExtractor extractor(unit(), file);
     problems << extractor.problems();
+
+    for (const auto& problem : std::as_const(d->m_extraProblems)) {
+        problems << problem;
+    }
 
 #if CINDEX_VERSION_MINOR > 30
     // note that the below warning is triggered on every reparse when there is a precompiled preamble

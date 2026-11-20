@@ -9,6 +9,7 @@
 #include "clangsupport.h"
 
 #include "clangparsejob.h"
+#include "duchain/clangdependencyscanner.h"
 
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
@@ -185,6 +186,7 @@ ClangSupport::ClangSupport(QObject* parent, const KPluginMetaData& metaData, con
     m_highlighting = new ClangHighlighting(this);
     m_refactoring = new ClangRefactoring(this);
     m_index.reset(new ClangIndex);
+    m_dependencyScanner.reset(new ClangDependencyScanner);
 
     auto model = new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
     connect(model, &CodeCompletion::registeredToView,
@@ -202,6 +204,12 @@ ClangSupport::ClangSupport(QObject* parent, const KPluginMetaData& metaData, con
 
     connect(ICore::self()->documentController(), &IDocumentController::documentActivated,
             this, &ClangSupport::documentActivated);
+    connect(ICore::self()->documentController(), &IDocumentController::documentSaved,
+            this, [this](IDocument* doc) {
+        if (doc && m_dependencyScanner) {
+            m_dependencyScanner->invalidate(IndexedString(doc->url()));
+        }
+    });
 }
 
 ClangSupport::~ClangSupport()
@@ -256,6 +264,11 @@ ICreateClassHelper* ClangSupport::createClassHelper() const
 ClangIndex* ClangSupport::index()
 {
     return m_index.data();
+}
+
+KDevelop::IDependencyScanner* ClangSupport::dependencyScanner() const
+{
+    return m_dependencyScanner.data();
 }
 
 bool ClangSupport::areBuddies(const QUrl &url1, const QUrl& url2)

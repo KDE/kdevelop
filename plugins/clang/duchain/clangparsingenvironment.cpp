@@ -139,6 +139,10 @@ uint ClangParsingEnvironment::hash() const
 
     hash << qHash(m_pchInclude);
     hash << qHash(m_parserSettings.parserOptions);
+    hash << m_moduleArguments.size();
+    for (const auto& arg : m_moduleArguments) {
+        hash << qHash(arg);
+    }
     return hash;
 }
 
@@ -150,7 +154,8 @@ bool ClangParsingEnvironment::operator==(const ClangParsingEnvironment& other) c
         && m_pchInclude == other.m_pchInclude
         && m_quality == other.m_quality
         && m_tuUrl == other.m_tuUrl
-        && m_parserSettings == other.m_parserSettings;
+        && m_parserSettings == other.m_parserSettings
+        && m_moduleArguments == other.m_moduleArguments;
 }
 
 void ClangParsingEnvironment::setParserSettings(const ParserSettings& parserSettings)
@@ -166,5 +171,25 @@ ParserSettings ClangParsingEnvironment::parserSettings() const
 void ClangParsingEnvironment::addParserArguments(const QString& parserArguments)
 {
     m_parserSettings.parserOptions += QLatin1Char(' ') + parserArguments;
+}
+
+void ClangParsingEnvironment::setModuleArguments(const QVector<QByteArray>& arguments)
+{
+    m_moduleArguments = arguments;
+}
+
+QVector<QByteArray> ClangParsingEnvironment::moduleArguments() const
+{
+    return m_moduleArguments;
+}
+
+void ClangParsingEnvironment::setModuleProblems(const QList<KDevelop::ProblemPointer>& problems)
+{
+    m_moduleProblems = problems;
+}
+
+QList<KDevelop::ProblemPointer> ClangParsingEnvironment::moduleProblems() const
+{
+    return m_moduleProblems;
 }
 

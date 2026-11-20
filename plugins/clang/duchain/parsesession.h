@@ -67,6 +67,7 @@ private:
     QTemporaryFile m_definesFile;
     // cached ProblemPointer representation for diagnostics
     QVector<ClangProblem::Ptr> m_diagnosticsCache;
+    QList<KDevelop::ProblemPointer> m_extraProblems;
 };
 
 /**

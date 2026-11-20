@@ -18,11 +18,13 @@
 #include "testfilepaths.h"
 #include "../duchain/clangdependencyscanner.h"
 #include "../duchain/clanghelpers.h"
+#include "../duchain/clangindex.h"
 #include "../duchain/clangmodule.h"
 #include "../duchain/clangmodulegraph.h"
 #include "../duchain/clangmoduleprecompilejob.h"
 #include "../duchain/clangmodulerepository.h"
 #include "../duchain/clangmodulescanner.h"
+#include "../duchain/parsesession.h"
 #include "../clangsettings/clangsettingsmanager.h"
 #include <ThreadWeaver/DependencyPolicy>
 #include <ThreadWeaver/Queue>
@@ -967,6 +969,103 @@ void TestModules::testDependencyScanner()
     scanner.invalidate(indexedConsumer);
     QVERIFY(scanner.cachedModuleArguments(indexedConsumer).isEmpty());
     QVERIFY(scanner.createDependencyScanJob(indexedConsumer));
+
+    ClangModule::clearModules();
+}
+
+void TestModules::testParseModulesEndToEnd()
+{
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
+    }
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString sandbox = tempDir.path();
+    const QString srcDir = sandbox + QStringLiteral("/src");
+    const QString incDir = sandbox + QStringLiteral("/include");
+    const QString buildDir = sandbox + QStringLiteral("/build");
+
+    QDir().mkpath(srcDir);
+    QDir().mkpath(incDir);
+    QDir().mkpath(buildDir);
+
+    const QString testFilesDir = QStringLiteral(TEST_FILES_DIR "/modules");
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/export.cpp"), srcDir + QStringLiteral("/export.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_submodule.cpp"), srcDir + QStringLiteral("/test_submodule.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_module.cpp"), srcDir + QStringLiteral("/test_module.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/consumer.cpp"), srcDir + QStringLiteral("/consumer.cpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_module_export.h"), incDir + QStringLiteral("/test_module_export.h")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_submodule.hpp"), incDir + QStringLiteral("/test_submodule.hpp")));
+    QVERIFY(QFile::copy(testFilesDir + QStringLiteral("/test_module.hpp"), incDir + QStringLiteral("/test_module.hpp")));
+
+    ClangModule::clearModules();
+
+    const QString consumerPath = srcDir + QStringLiteral("/consumer.cpp");
+    const IndexedString indexedConsumer(consumerPath);
+
+    // 1. Run independent dependency scan jobs via ClangDependencyScanner
+    ClangDependencyScanner scanner;
+    ClangDependencyScanner::ScanConfig cfg;
+    cfg.buildDir = buildDir;
+    cfg.searchIncludePaths = {incDir, srcDir};
+    cfg.parserOptions = QStringLiteral("-std=c++23");
+
+    // Note: test fixture module interfaces use .cpp rather than .cppm, so scan them explicitly
+    const QStringList moduleUnits = {
+        srcDir + QStringLiteral("/export.cpp"),
+        srcDir + QStringLiteral("/test_submodule.cpp"),
+        srcDir + QStringLiteral("/test_module.cpp"),
+    };
+    {
+        ThreadWeaver::Queue modQueue;
+        for (const QString& modUnit : moduleUnits) {
+            const IndexedString indexedMod(modUnit);
+            scanner.setScanConfig(indexedMod, cfg);
+            if (auto job = scanner.createDependencyScanJob(indexedMod)) {
+                modQueue.enqueue(job);
+            }
+        }
+        modQueue.finish();
+    }
+
+    scanner.setScanConfig(indexedConsumer, cfg);
+
+    const auto scanJob = scanner.createDependencyScanJob(indexedConsumer);
+    QVERIFY(scanJob);
+
+    ThreadWeaver::Queue queue;
+    queue.enqueue(scanJob);
+    queue.finish();
+
+    const auto cachedArgs = scanner.cachedModuleArguments(indexedConsumer);
+    QVERIFY(!cachedArgs.isEmpty());
+
+    // 2. Parse consumer.cpp using cached module arguments (zero process launching in ParseSessionData)
+    ClangIndex index;
+    ClangParsingEnvironment env;
+    env.setTranslationUnitUrl(indexedConsumer);
+    env.setWorkingDirectory(Path(buildDir));
+    env.addIncludes(Path::List{Path(incDir), Path(srcDir)});
+    env.setModuleArguments(cachedArgs);
+    env.setModuleProblems(scanner.cachedProblems(indexedConsumer));
+
+    ParserSettings settings;
+    settings.parserOptions = QStringLiteral("-std=c++23");
+    env.setParserSettings(settings);
+
+    auto sessionData = QExplicitlySharedDataPointer<ParseSessionData>(
+        new ParseSessionData({}, &index, env));
+    ParseSession session(sessionData);
+
+    QVERIFY(session.unit() != nullptr);
+
+    const auto problems = session.problemsForFile(session.file(consumerPath.toUtf8()));
+    for (const auto& problem : problems) {
+        QVERIFY2(problem->severity() != IProblem::Error, qPrintable(problem->description()));
+    }
 
     ClangModule::clearModules();
 }
