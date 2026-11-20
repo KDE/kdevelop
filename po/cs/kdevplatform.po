@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:12+0000\n"
-"PO-Revision-Date: 2026-11-17 00:59+0100\n"
+"PO-Revision-Date: 2026-11-19 03:35+0100\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.08.3\n"
+"X-Generator: Poedit 3.10\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3654,6 +3654,8 @@ msgid ""
 "The current session and all contained settings will be deleted. The projects "
 "will stay unaffected. Do you really want to continue?"
 msgstr ""
+"Aktuální sezení a všechna nastavení v něm obsažená budou smazána. Projekty "
+"tím nebudou ovlivněny. Opravdu chcete pokračovat?"
 
 #: shell/sessioncontroller.cpp:157
 #, kde-format
@@ -3676,7 +3678,7 @@ msgstr "Začít nové sezení"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr ""
+msgstr "Spustit novou instanci KDevelop s prázdným sezením"
 
 #: shell/sessioncontroller.cpp:281
 #, kde-format
@@ -3688,7 +3690,7 @@ msgstr "Začít nové pojmenované sezení..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty named session"
-msgstr ""
+msgstr "Spustit novou instanci KDevelop s prázdným pojmenovaným sezením"
 
 #: shell/sessioncontroller.cpp:288
 #, kde-format
@@ -3755,12 +3757,14 @@ msgid ""
 "Running %1 instance (PID: %2) detected, making this one visible instead of "
 "starting a new one"
 msgstr ""
+"Zjištěna spuštěná instance %1 (PID: %2), proto bude tato instance zobrazena "
+"namísto spuštění nové"
 
 #: shell/sessionlock.cpp:164
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
-msgstr ""
+msgstr "Spuštěná instance %1 (PID: %2) se zřejmě zasekla"
 
 #: shell/sessionlock.cpp:170
 #, kde-format
@@ -3769,6 +3773,8 @@ msgid ""
 "The given application did not respond to a DBUS call, it may have crashed or "
 "is hanging."
 msgstr ""
+"Daná aplikace neodpověděla na volání DBUS; pravděpodobně došlo k jejímu "
+"selhání nebo se zasekla."
 
 #: shell/sessionlock.cpp:175
 #, kde-format
@@ -3776,12 +3782,16 @@ msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr ""
+"Nepodařilo se uzamknout sezení %1 <em> </em>, které již uzamkl uživatel %2 v "
+"%3 (PID %4)."
 
 #: shell/sessionlock.cpp:179
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
+"Nepodařilo se uzamknout sezení %1<em></em> (soubor pro uzamčení není k "
+"dispozici)."
 
 #: shell/sessionlock.cpp:183
 #, kde-format
@@ -3790,12 +3800,14 @@ msgid ""
 "<p>Please, close the offending application instance or choose another "
 "session to launch.</p>"
 msgstr ""
+"<p>Zavřete prosím problematickou instanci aplikace nebo vyberte jiné sezení "
+"pro spuštění.</p>"
 
 #: shell/sessionlock.cpp:189
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
-msgstr ""
+msgstr "Znovu spustit"
 
 #: shell/sessionlock.cpp:192
 #, kde-format
@@ -3807,13 +3819,13 @@ msgstr "Zvolit jiné sezení"
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
-msgstr ""
+msgstr "Nepodařilo se uzamknout sezení %1"
 
 #: shell/sessionlock.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
-msgstr ""
+msgstr "Sezení %1 je již aktivní v jiné spuštěné instanci."
 
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
@@ -3828,7 +3840,7 @@ msgstr "Nastavit analyzátory"
 #: shell/settings/bgpreferences.cpp:73
 #, kde-format
 msgid "Configure Background Parser"
-msgstr ""
+msgstr "Nastavení zpracování na pozadí"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:20
@@ -3839,13 +3851,16 @@ msgid ""
 "enabled. Disabling the background parser will disable large parts of "
 "KDevelop's functionality.</p>"
 msgstr ""
+"<p>Zapne nebo vypne zpracování na pozadí.<br>Pokud si nejste jisti, nechte "
+"tuto funkci zapnutou. Vypnutí zpracování na pozadí znemožní používání velké "
+"části funkcí programu KDevelop.</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
 #, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr ""
+msgstr "Zapnout zpracování na pozadí"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -3854,6 +3869,8 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "The time to wait before the document is re-analyzed when you edit it."
 msgstr ""
+"Doba, po kterou je třeba počkat, než bude dokument po úpravách znovu "
+"analyzován."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
@@ -3878,6 +3895,8 @@ msgid ""
 "The maximum number of parallel instances the background parser uses. If "
 "unsure, select 1 or 2."
 msgstr ""
+"Maximální počet paralelních instancí, které používá zpracování běžící na "
+"pozadí. Pokud si nejste jisti, vyberte hodnotu 1 nebo 2."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/bgpreferences.ui:64
@@ -3896,7 +3915,7 @@ msgstr " vlákna"
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
 msgid "Configure Documentation"
-msgstr ""
+msgstr "Nastavení dokumentace"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:42
@@ -3906,6 +3925,9 @@ msgid ""
 "Preview should be disabled for styles whose formatting depends on the file "
 "path."
 msgstr ""
+"Přepnout zobrazení náhledu pro tento styl.\n"
+"Náhled by měl být deaktivován u stylů, jejichž formátování závisí na cestě k "
+"souboru."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPreviewCheckBox)
 #: shell/settings/editstyledialog.ui:45
@@ -3965,7 +3987,7 @@ msgstr "Zadejte název nového profilu prostředí"
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr ""
+msgstr "Režim hromadných úprav"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
@@ -4014,19 +4036,16 @@ msgstr "Odstranit proměnnou"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr ""
+msgstr "Režim hromadných úprav"
 
 #: shell/settings/languagepreferences.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid " file"
-#| msgid_plural " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "%v file"
 msgid_plural "%v files"
-msgstr[0] " soubor"
-msgstr[1] " soubory"
-msgstr[2] " souborů"
+msgstr[0] "%v soubor"
+msgstr[1] "%v soubory"
+msgstr[2] "%v souborů"
 
 #: shell/settings/languagepreferences.cpp:77
 #, kde-format
@@ -4036,7 +4055,7 @@ msgstr "Podpora jazyků"
 #: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
-msgstr ""
+msgstr "Nastavení doplňování kódu a sémantického zvýrazňování"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
@@ -4053,13 +4072,15 @@ msgstr "Doplnění kódu"
 msgctxt "@info:tooltip"
 msgid "If disabled, the code completion widget will never show automatically."
 msgstr ""
+"Pokud je tato funkce vypnutá, widget pro automatické doplňování kódu se "
+"nikdy automaticky nezobrazí."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: shell/settings/languagepreferences.ui:38
 #, kde-format
 msgctxt "@label"
 msgid "Enable automatic invocation:"
-msgstr ""
+msgstr "Povolit automatické zobrazení:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:58
@@ -4069,13 +4090,15 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "codecompletion item."
 msgstr ""
+"Zvolte, zda se mají zobrazit doplňkové informace k aktuálně vybrané položce "
+"automatického doplňování kódu."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:61
 #, kde-format
 msgctxt "@label"
 msgid "Additional information for current item:"
-msgstr ""
+msgstr "Dodatečné informace k aktuální položce:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
 #: shell/settings/languagepreferences.ui:71
@@ -4085,6 +4108,8 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "code completion item."
 msgstr ""
+"Zvolte, zda se mají zobrazit doplňkové informace k aktuálně vybrané položce "
+"automatického doplňování kódu."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
@@ -4095,6 +4120,9 @@ msgid ""
 "<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
 "in what cases full code completion will be displayed.</p>"
 msgstr ""
+"<p>Uživatelské rozhraní pro doplňování kódu nabízí minimalistický a podrobný "
+"režim.<br>Zvolte, v jakých případech se bude zobrazovat úplné doplňování "
+"kódu.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
@@ -4115,7 +4143,7 @@ msgstr "Nikdy"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
-msgstr ""
+msgstr "Při ručním povolení"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
@@ -4129,7 +4157,7 @@ msgstr "Vždy"
 #, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
-msgstr ""
+msgstr "Sémantické zvýrazňování kódu"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
@@ -4140,13 +4168,15 @@ msgid ""
 "<p>This setting decides about the intensity of colors for local variables, "
 "for example function arguments, variables and the like.</p>"
 msgstr ""
+"<p>Toto nastavení určuje sytost barev u lokálních proměnných, například u "
+"argumentů funkcí, proměnných a podobně.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
 #: shell/settings/languagepreferences.ui:134
 #, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr ""
+msgstr "Intenzita lokálního zbarvení:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -4161,24 +4191,30 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Ve výchozím nastavení se globální barvy pro typy, funkce, jmenné prostory "
+"a podobně generují automaticky a přizpůsobují se vybranému motivu editoru na "
+"základě globální intenzity barevného zvýraznění. Pokud chcete mít nad "
+"barvami plnou kontrolu, můžete místo toho jako zdroj barev použít motiv "
+"editoru. Barvy pak můžete doladit v nastavení v části Editor &gt; Barevné "
+"motivy &gt; Zvýraznění stylů textu &gt; KDevelop/Sémantické barvy. </p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
 #, kde-format
 msgid "Auto-Generated"
-msgstr ""
+msgstr "Automaticky vygenerované"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:175
 #, kde-format
 msgid "From Editor Theme"
-msgstr ""
+msgstr "Z editoru motivů"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
 #, kde-format
 msgid "Global colors:"
-msgstr ""
+msgstr "Globální barvy:"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -4189,13 +4225,15 @@ msgid ""
 "<p>This settings lets you change the intensity of globally accessible types, "
 "for example classes, methods, functions etc.</p>"
 msgstr ""
+"<p>Toto nastavení umožňuje upravit viditelnost globálně přístupných typů, "
+"jako jsou například třídy, metody, funkce atd.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221
 #, kde-format
 msgctxt "@label:slider"
 msgid "Global colorization intensity:"
-msgstr ""
+msgstr "Celková intenzita zbarvení:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
@@ -4206,13 +4244,15 @@ msgid ""
 "<p>Highlight semantic problems, such as non-existent or inaccessible "
 "declarations.</p>"
 msgstr ""
+"<p>Zvýraznit sémantické problémy, jako jsou neexistující nebo nepřístupné "
+"deklarace.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/languagepreferences.ui:234
 #, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr ""
+msgstr "Zvýraznit sémantické problémy:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4223,13 +4263,15 @@ msgid ""
 "<p>When enabled, lines with errors will get additionally highlighted and "
 "their positions get marked in the scrollbar.</p>"
 msgstr ""
+"<p>Je-li tato funkce zapnutá, řádky s chybami budou navíc zvýrazněny a "
+"jejich pozice budou označeny na posuvníku.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
 #, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr ""
+msgstr "Zvýraznit problematické řádky:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
@@ -4238,6 +4280,8 @@ msgid ""
 "<html><head/><body><p>Use bold font for declarations such as classes, "
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Pro deklarace, jako jsou třídy, funkce, lokální "
+"proměnné atd., používat tučné písmo.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
@@ -4251,7 +4295,7 @@ msgstr "Tučné písmo pro deklarace:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr ""
+msgstr "Problémy zobrazené jako poznámky v textu:"
 
 # žádné parametry funkce v inspektoru funkcí
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
@@ -4273,14 +4317,14 @@ msgstr "Chyby"
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Warnings and Errors"
-msgstr ""
+msgstr "Varování a chyby"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:319
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Hints, Warnings and Errors"
-msgstr ""
+msgstr "Tipy, varování a chyby"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
@@ -4288,13 +4332,15 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Space-separated list of words that make a comment represent a TODO item"
 msgstr ""
+"Seznam slov oddělených mezerami, která v komentáři označují položku k "
+"vyřízení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:330
 #, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
-msgstr ""
+msgstr "Slova označující položky k vyřízení:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
@@ -4303,13 +4349,15 @@ msgctxt "@info:tooltip"
 msgid ""
 "Space-separated list of words that make a comment represent a TODO item."
 msgstr ""
+"Seznam slov oddělených mezerami, která v komentáři označují položku k "
+"vyřízení."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr ""
+msgstr "Zpracování projektu"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4322,13 +4370,17 @@ msgid ""
 "information. Global code navigation and quickopen capabilities will be "
 "reduced.</p>"
 msgstr ""
+"<p>Pokud projekt obsahuje více souborů, než je tento počet, bude projekt\n"
+"zpracován ve zjednodušeném režimu, což zvýší efektivitu díky sběru menšího "
+"množství informací. Funkce globální navigace v kódu a rychlého otevírání "
+"budou omezeny.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/settings/languagepreferences.ui:382
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
-msgstr ""
+msgstr "Minimální velikost projektu pro zjednodušené zpracování:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: shell/settings/languagepreferences.ui:415
@@ -4342,7 +4394,7 @@ msgstr "Úložiště a paměť"
 #, kde-format
 msgctxt "@label"
 msgid "Store precompiled preambles in:"
-msgstr ""
+msgstr "Ukložit předkompilované preambule do:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:436
@@ -4360,6 +4412,18 @@ msgid ""
 "17 or later.\n"
 "</p>"
 msgstr ""
+"<P>Předkompilované preambule zůstávají v dočasném adresáři i po pádu "
+"programu KDevelop a jsou smazány až při opětovném spuštění tohoto sezení."
+"<BR>\n"
+"Jsou-li preambule uloženy v paměti, je zaručeno, že při ukončení programu "
+"zmizí, i když dojde k pádu programu KDevelop.<BR>\n"
+"Volba uložení do dočasného adresáře sezení má smysl na systémech s omezenou "
+"pamětí RAM, kde dočasný adresář nepoužívá tmpfs, protože soubory preambulí "
+"mohou zabírat gigabajty místa.<BR>\n"
+"Změna této volby se projeví až po restartování KDevelop.<BR>\n"
+"Tato volba má účinek pouze v případě, že byl KDevelop sestaven s Clangem "
+"verze 17 nebo novější.\n"
+"</P>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_precompiledPreambleStorage)
 #: shell/settings/languagepreferences.ui:440
@@ -4373,7 +4437,7 @@ msgstr "Paměť"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Session Temporary Directory"
-msgstr ""
+msgstr "Dočasný adresář sezení"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4433,7 +4497,7 @@ msgstr "Analyzátory"
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
-msgstr ""
+msgstr "Běhová prostředí"
 
 #: shell/settings/pluginpreferences.cpp:45
 #, kde-format
@@ -4458,6 +4522,8 @@ msgid ""
 "Schedule all project source code to be parsed by the language support in the "
 "background"
 msgstr ""
+"Naplánujte zpracování veškerého zdrojového kódu projektu pomocí jazykové "
+"podpory na pozadí"
 
 #. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:15
@@ -4470,18 +4536,24 @@ msgid ""
 "may\n"
 "        be slower."
 msgstr ""
+"Je-li tato volba zapnutá, KDevelop naplánuje zpracování veškerého zdrojového "
+"kódu\n"
+"        nalezeného aktuálním systémem sestavování pomocí příslušné části\n"
+"        pro podporu jazyka. Tím se zajistí komplexnější podpora jazyka, ale "
+"může to\n"
+"        být pomalejší."
 
 #. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:19
 #, kde-format
 msgid "Chooses the base directory where new projects are created."
-msgstr ""
+msgstr "Určuje základní adresář, do kterého se budou vytvářet nové projekty."
 
 #. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:23
 #, kde-format
 msgid "Save all open documents before building anything"
-msgstr ""
+msgstr "Než začnete se sestavováním, uložte všechny otevřené dokumenty"
 
 #. i18n: ectx: whatsthis, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:24
@@ -4490,6 +4562,8 @@ msgid ""
 "If this option is set all open documents will be automatically saved before "
 "any build is started."
 msgstr ""
+"Je-li tato možnost zapnutá, budou všechny otevřené dokumenty automaticky "
+"uloženy před spuštěním každého sestavení."
 
 #: shell/settings/projectpreferences.cpp:44
 #, kde-format
@@ -4508,7 +4582,7 @@ msgstr "Nastavit projekty"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the base directory where new projects are to be created"
-msgstr ""
+msgstr "Vyberte základní adresář, do kterého se mají vytvářet nové projekty"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
@@ -4522,38 +4596,38 @@ msgstr "Základní adresář projektu:"
 #, kde-format
 msgctxt "@info:tolltip"
 msgid "Parse all files in a project after the project has been opened"
-msgstr ""
+msgstr "Po otevření projektu zpracovat všechny soubory v projektu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Schedule all project files for parsing"
-msgstr ""
+msgstr "Naplánovat zpracování všech souborů projektu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:57
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified documents when the \"build\" action is triggered"
-msgstr ""
+msgstr "Při spuštění akce \"sestavení\" uložit všechny upravené dokumenty"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:60
 #, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
-msgstr ""
+msgstr "Před sestavením uložit všechny dokumenty"
 
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
 msgid "Runtimes"
-msgstr ""
+msgstr "Běhová prostředí"
 
 #: shell/settings/runtimespreferences.cpp:33
 #, kde-format
 msgid "Configure Runtimes"
-msgstr ""
+msgstr "Nastavení běhových prostředí"
 
 #: shell/settings/sourceformattersettings.cpp:75
 #: shell/sourceformattercontroller.cpp:220
@@ -4581,13 +4655,15 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
 msgstr ""
+"Přepsat režim odsazování editoru podle stylu formátování u dokumentů bez "
+"řádku režimu Kate."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr ""
+msgstr "Přepsat režim odsazování Kate"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
@@ -4654,7 +4730,7 @@ msgstr "Uživatelské rozhraní"
 #, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr ""
+msgstr "Chování okna doku"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4664,13 +4740,14 @@ msgid ""
 "<p>Controls whether the bottom left corner is occupied by the dock at the "
 "left, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>Určuje, zda je levý dolní roh obsazen dokem vlevo, nebo dokem dole.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
-msgstr ""
+msgstr "V levém dolním rohu se nachází:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4680,20 +4757,21 @@ msgid ""
 "<p>Controls whether the bottom right corner is occupied by the dock at the "
 "right, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>Určuje, zda je pravý dolní roh obsazen dokem vpravo, nebo dokem dole.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
-msgstr ""
+msgstr "V pravém dolním rohu se nachází:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Left Dock"
-msgstr ""
+msgstr "Levý dok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4701,14 +4779,14 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Bottom Dock"
-msgstr ""
+msgstr "Dolní dok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
 #: shell/settings/uiconfig.ui:70
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Right Dock"
-msgstr ""
+msgstr "Pravý dok"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/uiconfig.ui:86
@@ -4722,7 +4800,7 @@ msgstr "Prohlížení s kartami"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
-msgstr ""
+msgstr "Určuje, zda se nové karty mají otevírat vedle aktivní karty."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
@@ -4739,13 +4817,16 @@ msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
+"Je-li tato funkce zapnutá, mohou moduly seskupovat související soubory vedle "
+"sebe.\n"
+"Například se hlavičkový soubor otevře vedle souboru s implementací."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
 #, kde-format
 msgctxt "@option:check"
 msgid "Arrange related documents side by side"
-msgstr ""
+msgstr "Uspořádat související dokumenty vedle sebe"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:116
@@ -4754,7 +4835,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
-msgstr ""
+msgstr "Zapne nebo vypne zobrazení lišty karet v horní části okna editoru."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
@@ -4771,6 +4852,8 @@ msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
 msgstr ""
+"Zapne nebo vypne zobrazení tlačítka pro zavření na každé kartě v liště karet "
+"v horní části okna editoru."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
@@ -4794,21 +4877,22 @@ msgid ""
 "When enabled, tabs and other widgets are colored based on the project "
 "affiliation"
 msgstr ""
+"Je-li tato funkce zapnutá, záložky a další ovládací prvky se barevně odliší "
+"podle toho, ke kterému projektu patří"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:154
 #, kde-format
 msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
-msgstr ""
+msgstr "Barevné widgety podle příslušnosti k projektu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, projectTreeGroupBox)
 #: shell/settings/uiconfig.ui:167
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:group"
 msgid "Project Tree"
-msgstr "Projekty"
+msgstr "Strom projektu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:173
@@ -4817,13 +4901,15 @@ msgctxt "@info:tooltip"
 msgid ""
 "Collapse all child items whenever an item in the project tree is collapsed."
 msgstr ""
+"Sbalit všechny podřízené položky vždy, když je sbalena nějaká položka ve "
+"stromové struktuře projektu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_RecursiveProjectTreeCollapse)
 #: shell/settings/uiconfig.ui:176
 #, kde-format
 msgctxt "@option:check"
 msgid "Collapse items recursively"
-msgstr ""
+msgstr "Sbalit položky rekurzivně"
 
 #: shell/settings/uipreferences.cpp:56
 #, kde-format
@@ -4834,31 +4920,32 @@ msgstr "Nastavit uživatelské rozhraní"
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
-msgstr ""
+msgstr "&Přeformátovat zdroj"
 
 #: shell/sourceformattercontroller.cpp:230
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
-msgstr ""
+msgstr "Přeformátovat řádek"
 
 #: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
-msgstr ""
+msgstr "Přeformátovat soubory..."
 
 #: shell/sourceformattercontroller.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr ""
+msgstr "Naformátovat soubor(y) pomocí nakonfigurovaných formátovačů zdrojů"
 
 #: shell/sourceformattercontroller.cpp:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr ""
+"Funkce formátování s využitím nakonfigurovaných formátovačů zdrojových dat."
 
 #: shell/sourceformattercontroller.cpp:614
 #, kde-format
@@ -4873,6 +4960,8 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"Přeformátuje vybraný text nebo celý soubor (pokud není nic vybráno) pomocí "
+"nástroje <i>%1</i> ve stylu <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:619
 #, kde-format
@@ -4887,12 +4976,15 @@ msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
+"Přeformátování řádku zdrojového kódu pod kurzorem pomocí nástroje <i>%1</i> "
+"se stylem <b>%2</b>."
 
 #: shell/sourceformattercontroller.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
+"Přeformátovat výběr nebo soubor pomocí nakonfigurovaného formátovače zdroje"
 
 #: shell/sourceformattercontroller.cpp:628
 #, kde-format
@@ -4901,12 +4993,15 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Přeformátovat vybraný text nebo celý soubor (pokud není nic vybráno) pomocí "
+"nakonfigurovaného formátovače zdroje."
 
 #: shell/sourceformattercontroller.cpp:630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr ""
+"Přeformátovat aktuální řádek pomocí nakonfigurovaného formátovače zdroje"
 
 #: shell/sourceformattercontroller.cpp:632
 #, kde-format
@@ -4915,41 +5010,43 @@ msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
+"Přeformátování řádku pod kurzorem ve zdrojovém textu pomocí "
+"nakonfigurovaného formátovače zdrojového textu."
 
 #: shell/sourceformattercontroller.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
-msgstr ""
+msgstr "Přeformátovat soubory?"
 
 #: shell/sourceformattercontroller.cpp:868
 #, kde-format
 msgid "Reformat all files in the selected folder?"
-msgstr ""
+msgstr "Chcete přeformátovat všechny soubory ve vybrané složce?"
 
 #: shell/sourceformattercontroller.cpp:872
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
-msgstr ""
+msgstr "Přeformátovat"
 
 #: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
-msgstr ""
+msgstr "Přeformátování"
 
 #: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
-msgstr ""
+msgstr "Přeformátovat soubory"
 
 #: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Přeformátování jednoho souboru"
+msgstr[1] "Přeformátování %1 souborů"
+msgstr[2] "Přeformátování %1 souborů"
 
 #: shell/sourceformatterselectionedit.cpp:1077
 #, kde-format
@@ -4958,12 +5055,15 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
+"Styl %1 se používá také pro následující jazyky:\n"
+"%2.\n"
+"Opravdu ho chcete smazat?"
 
 #: shell/sourceformatterselectionedit.cpp:1079
 #, kde-format
 msgctxt "@title:window"
 msgid "Deleting Style"
-msgstr ""
+msgstr "Smazání stylu"
 
 #: shell/sourceformatterselectionedit.cpp:1139
 #, kde-format
@@ -5000,6 +5100,19 @@ msgid ""
 "project. This occurs because source formatter maps MIME types to languages.</"
 "p>"
 msgstr ""
+"<p>Z níže uvedeného rozevíracího seznamu <i>Jazyk</i> postupně vyberte "
+"jazyky, které používáte, a pro každý z nich zvolte požadovaný formátovač a "
+"styl. <i>Stisknutím klávesy Ctrl a kliknutím</i> na vybraný styl jeho výběr "
+"zrušíte.</p>\n"
+"<p>Nastavení správného formátovače a stylu pro každý používaný jazyk je "
+"velmi důležité: ovlivňuje to nejen explicitní akce <i>Přeformátovat zdroj</"
+"i>/<i>Řádek</i>/<i>Soubory...</i>, ale také formátování automaticky "
+"generovaného, automaticky refaktorovaného nebo automaticky opraveného kódu "
+"(například možnosti kontextové nabídky <i>Přejmenovat</i>).</p>\n"
+"<p>Všimněte si, že KDevelop formátuje všechny soubory <i>*.h</i> pomocí "
+"formátovače a stylu nakonfigurovaného pro jazyk <i>C</i>, a to i hlavičky C+"
+"+, které patří do čistě C++ projektu. K tomu dochází, protože formátovač "
+"zdrojového kódu přiřazuje MIME typy k jazykům.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:134
@@ -5012,7 +5125,7 @@ msgstr "Formátovač:"
 #: shell/sourceformatterselectionedit.ui:152
 #, kde-format
 msgid "Description of a selected formatter"
-msgstr ""
+msgstr "Popis vybraného formátovače"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/sourceformatterselectionedit.ui:183
@@ -5052,12 +5165,15 @@ msgid ""
 "\n"
 "Are you sure you want to overwrite it? (External changes will be lost.)"
 msgstr ""
+"Soubor \"%1\" byl na disku změněn.\n"
+"\n"
+"Opravdu jej chcete přepsat? (Externí změny budou ztraceny.)"
 
 #: shell/textdocument.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
-msgstr ""
+msgstr "Dokument byl externě upraven"
 
 #: shell/textdocument.cpp:665
 #, kde-format
@@ -5086,7 +5202,7 @@ msgstr "Kontrola"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Tool View to Add"
-msgstr ""
+msgstr "Vyberte pohled nástroje, který chcete přidat"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:75
 #, kde-format
@@ -5103,6 +5219,7 @@ msgstr "<b>Pracovní sada</b>"
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
 msgstr ""
+"Odstranit tuto pracovní sadu. Dokumenty v ní obsažené tím nebudou ovlivněny."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:121
 #, kde-format
@@ -5123,6 +5240,8 @@ msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
 msgstr ""
+"Přidat všechny dokumenty, které jsou součástí této pracovní sady, do "
+"aktuálně aktivní pracovní sady"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:137
 #, kde-format
@@ -5137,24 +5256,26 @@ msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
+"Odstranit všechny dokumenty, které jsou součástí této pracovní sady, z "
+"aktuálně aktivní pracovní sady"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Click to open and activate this document."
-msgstr ""
+msgstr "Kliknutím otevřete a aktivujete tento dokument."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
-msgstr ""
+msgstr "Odstranit tento soubor z aktuální pracovní sady"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
-msgstr ""
+msgstr "Přidat tento soubor do aktuální pracovní sady"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:314
 #, kde-format
@@ -5183,7 +5304,7 @@ msgstr "Zavřít setříděný seznam otevřených dokumentů"
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
-msgstr ""
+msgstr "(Přepnout stisknutím kláves Ctrl+Tab)"
 
 #: sublime/container.cpp:779
 #, kde-format
@@ -5213,13 +5334,13 @@ msgstr "Zavřít vše"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
-msgstr ""
+msgstr "Přepnout pohled nástroje '%1'"
 
 #: sublime/idealbuttonbarwidget.cpp:352
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
-msgstr ""
+msgstr "Kliknutím pravým tlačítkem myši můžete přidat nový pohled nástroje."
 
 #: sublime/idealcontroller.cpp:88
 #, kde-format
@@ -5230,23 +5351,23 @@ msgstr "%1 Panel nástrojů"
 #: sublime/idealcontroller.cpp:381
 #, kde-format
 msgid "Left Button Bar"
-msgstr ""
+msgstr "Levý panel tlačítka"
 
 #: sublime/idealcontroller.cpp:382
 #, kde-format
 msgid "Right Button Bar"
-msgstr ""
+msgstr "Pravý panel tlačítka"
 
 #: sublime/idealcontroller.cpp:387
 #, kde-format
 msgid "Bottom Button Bar"
-msgstr ""
+msgstr "Dolní panel tlačítka"
 
 #: sublime/idealdockwidget.cpp:121
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
-msgstr ""
+msgstr "Poloha pohledu nástroje"
 
 #: sublime/idealdockwidget.cpp:125
 #, kde-format
@@ -5270,7 +5391,7 @@ msgstr "Vpravo"
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
-msgstr ""
+msgstr "Oddělený"
 
 #: sublime/idealdockwidget.cpp:150
 #, kde-format
@@ -5282,49 +5403,51 @@ msgstr "Přiřadit zkratku..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
-msgstr ""
+msgstr "Pomocí této zkratky můžete zobrazit panel nástrojů."
 
 #: sublime/idealdockwidget.cpp:154
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
-msgstr ""
+msgstr "Odstranit pohled nástroje"
 
 #: sublime/idealdockwidget.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
-msgstr ""
+msgstr "Přiřadit zkratku pro zobrazení nástroje '%1'"
 
 #: sublime/mainwindow_p.cpp:49
 #, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
-msgstr ""
+msgstr "Režim soustředění"
 
 #: sublime/mainwindow_p.cpp:51
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
+"Odstranit většinu ovládacích prvků, abyste se mohli soustředit na to "
+"podstatné"
 
 #: sublime/mainwindow_p.cpp:60
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
-msgstr ""
+msgstr "Zobrazit levý dok"
 
 #: sublime/mainwindow_p.cpp:64
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
-msgstr ""
+msgstr "Zobrazit pravý dok"
 
 #: sublime/mainwindow_p.cpp:68
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
-msgstr ""
+msgstr "Zobrazit dolní dok"
 
 #: sublime/mainwindow_p.cpp:72
 #, kde-format
@@ -5336,7 +5459,7 @@ msgstr "Přepnout na Editor"
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
-msgstr ""
+msgstr "Skrýt/Obnovit doky"
 
 #: sublime/mainwindow_p.cpp:82
 #, kde-format
@@ -5348,7 +5471,7 @@ msgstr "Následující nástrojový pohled"
 #, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
-msgstr ""
+msgstr "Předchozí pohled nástroje"
 
 #: sublime/mainwindow_p.cpp:94
 #, kde-format
@@ -5371,12 +5494,12 @@ msgstr "Zavřít zprávu"
 #: util/duchainify/main.cpp:268
 #, kde-format
 msgid "duchainify"
-msgstr ""
+msgstr "duchainify"
 
 #: util/duchainify/main.cpp:269
 #, kde-format
 msgid "DUChain builder application"
-msgstr ""
+msgstr "Aplikace pro sestavení DUChain"
 
 #: util/duchainify/main.cpp:270
 #, kde-format
@@ -5396,12 +5519,13 @@ msgstr "Zobrazit varování"
 #: util/duchainify/main.cpp:281
 #, kde-format
 msgid "Show warnings and debug output"
-msgstr ""
+msgstr "Zobrazit varování a výstup ladění"
 
 #: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
+"Provést aktualizaci nejvyšších kontextů odpovídajících zadaným souborům"
 
 #: util/duchainify/main.cpp:287
 #, kde-format
@@ -5409,11 +5533,13 @@ msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr ""
+"Provést aktualizaci nejvyšších kontextů odpovídajících zadaným souborům a "
+"všem zahrnutým souborům"
 
 #: util/duchainify/main.cpp:289
 #, kde-format
 msgid "Number of threads to use"
-msgstr ""
+msgstr "Počet vláken, která se mají použít"
 
 #: util/duchainify/main.cpp:292
 #, kde-format
@@ -5422,47 +5548,53 @@ msgid ""
 "declarations (default), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 msgstr ""
+"Funkce, které se mají sestavit. Možnosti: empty, simplified-visible-"
+"declarations, visible-declarations (výchozí), all-declarations, all-"
+"declarations-and-uses, all-declarations-and-uses-and-AST"
 
 #: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
-msgstr ""
+msgstr "Vytisknout kompletní řetězec definice a použití po úspěšném zpracování"
 
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Print parent contexts when dumping contexts"
-msgstr ""
+msgstr "Při výpisu kontextů vytisknout nadřazené kontexty"
 
 #: util/duchainify/main.cpp:300
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
-msgstr ""
+msgstr "Po úspěšném zpracování vytisknout celý repozitář definic DUChain"
 
 #: util/duchainify/main.cpp:303
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
+"Po úspěšném zpracování vytisknout celý repozitář DUChain "
+"PersistentSymbolTable"
 
 #: util/duchainify/main.cpp:306
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
+"Číslo určující maximální hloubku, do které se tisknou podrobnosti deklarace"
 
 #: util/duchainify/main.cpp:309
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
-msgstr ""
+msgstr "Výpis grafu DUChain (ve formátu .dot)"
 
 #: util/duchainify/main.cpp:311
 #, kde-format
 msgid "Print problems encountered during parsing"
-msgstr ""
+msgstr "Vytisknout problémy, ke kterým došlo během zpracování"
 
 #: util/duchainify/main.cpp:313
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
-msgstr ""
+msgstr "Rekurzivně vypisovat chyby z importovaných kontextů."
 
 #: util/environmentselectionmodel.cpp:40
 #, kde-format
@@ -5474,7 +5606,7 @@ msgstr "Profil"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr ""
+msgstr "Použít výchozí profil (aktuálně: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format
@@ -5485,12 +5617,12 @@ msgstr "%1 (neexistuje)"
 #: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
-msgstr ""
+msgstr "Úloha byla přerušena"
 
 #: util/projecttestjob.cpp:81
 #, kde-format
 msgid "Run all tests in %1"
-msgstr ""
+msgstr "Spustit všechny testy v %1"
 
 #: util/shellutils.cpp:175
 #, kde-format
@@ -5498,18 +5630,20 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
+"K následujícím souborům nemáte oprávnění k zápisu; chcete před uložením "
+"přidat oprávnění k zápisu pro vlastníka?"
 
 #: util/shellutils.cpp:178
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
-msgstr ""
+msgstr "Některé soubory jsou chráněny proti zápisu"
 
 #: util/shellutils.cpp:179
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr ""
+msgstr "Nastavit oprávnění k zápisu"
 
 #: util/shellutils.cpp:180
 #, kde-format
@@ -5520,13 +5654,13 @@ msgstr "Ignorovat"
 #: util/shellutils.cpp:192
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr ""
+msgstr "U některých souborů se nepodařilo přidat oprávnění k zápisu."
 
 #: util/shellutils.cpp:193
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
-msgstr ""
+msgstr "Nastavení oprávnění se nezdařilo"
 
 #: util/shellutils.cpp:232
 #, kde-format
@@ -5537,6 +5671,8 @@ msgid ""
 "There is a quoting error in the %1 for the launch configuration '%2'. "
 "Aborting start."
 msgstr ""
+"V %1 došlo k chybě při zadávání hodnot pro nastavení spuštění '%2'. Spuštění "
+"se přerušuje."
 
 #: util/shellutils.cpp:238
 #, kde-format
@@ -5547,6 +5683,8 @@ msgid ""
 "A shell meta character was included in the %1 for the launch configuration "
 "'%2', this is not supported currently. Aborting start."
 msgstr ""
+"V konfiguračním řetězci %1 pro nastavení spuštění '%2' byl obsažen metaznak "
+"shellu; toto není v současné době podporováno. Spuštění se přerušuje."
 
 #: util/shellutils.cpp:247
 #, kde-format
@@ -5557,6 +5695,8 @@ msgid ""
 "KShell::splitArgs(<the %1>) reported an unknown error code %2 for the launch "
 "configuration '%3'. Aborting start."
 msgstr ""
+"Funkce KShell::splitArgs(<the %1>) nahlásila neznámý kód chyby %2 pro "
+"nastavení spuštění '%3'. Spuštění se přerušuje."
 
 #: util/shellutils.cpp:274
 #, kde-format
@@ -5567,6 +5707,8 @@ msgid ""
 "Splitting the %1 for the launch configuration '%2' yields an empty list. "
 "Aborting start."
 msgstr ""
+"Rozdělení %1 pro nastavení spuštění '%2' vede k prázdnému seznamu. Spuštění "
+"se přerušuje."
 
 #: util/shellutils.cpp:291
 #, kde-format
@@ -5575,6 +5717,7 @@ msgctxt ""
 "%2 - launch configuration name"
 msgid "Empty %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"Pro nastavení spuštění '%2' byl zadán prázdný %1. Spuštění se přerušuje."
 
 #: util/shellutils.cpp:306
 #, kde-format
@@ -5584,6 +5727,8 @@ msgctxt ""
 msgid ""
 "No valid %1 specified for the launch configuration '%2'. Aborting start."
 msgstr ""
+"Pro nastavení spuštění '%2' nebyl zadán žádný platný parametr %1. Spuštění "
+"se přerušuje."
 
 #: vcs/dvcs/dvcsjob.cpp:166
 #, kde-format
@@ -5607,12 +5752,12 @@ msgstr ""
 #: vcs/dvcs/dvcsjob.cpp:256
 #, kde-format
 msgid "Command finished with error %1."
-msgstr ""
+msgstr "Příkaz skončil s chybou %1."
 
 #: vcs/dvcs/dvcsjob.cpp:270
 #, kde-format
 msgid "Command exited with value %1."
-msgstr ""
+msgstr "Příkaz skončil s hodnotou %1."
 
 #: vcs/dvcs/dvcsjob.cpp:370
 #, kde-format
@@ -5629,13 +5774,13 @@ msgstr "Větve..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
-msgstr ""
+msgstr "Správce větví"
 
 #: vcs/dvcs/ui/branchmanager.cpp:114
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
-msgstr ""
+msgstr "Před vytvořením nové větve musíte ze seznamu vybrat základní větev."
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
@@ -5647,7 +5792,7 @@ msgstr "Nová větev"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
-msgstr ""
+msgstr "Název nové větve:"
 
 #: vcs/dvcs/ui/branchmanager.cpp:126
 #, kde-format
@@ -5655,6 +5800,8 @@ msgid ""
 "Branch \"%1\" already exists.\n"
 "Please, choose another name."
 msgstr ""
+"Větev \"%1\" již existuje.\n"
+"Zvolte prosím jiný název."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
 #, kde-format
@@ -5662,16 +5809,18 @@ msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
+"V současné době se nacházíte ve větvi \"%1\".\n"
+"Chcete-li ji smazat, přepněte prosím do jiné větve."
 
 #: vcs/dvcs/ui/branchmanager.cpp:147
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr ""
+msgstr "Opravdu chcete nevratně smazat větev \"%1\"?"
 
 #: vcs/dvcs/ui/branchmanager.cpp:167 vcs/dvcs/ui/branchmanager.cpp:246
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr ""
+msgstr "Již jste ve větvi \"%1\"\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:188
 #, kde-format
@@ -5690,18 +5839,18 @@ msgstr "Musíte ze seznamu vybrat větev pro sloučení do současné větve."
 #: vcs/dvcs/ui/branchmanager.cpp:234 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
-msgstr ""
+msgstr "Nepodařilo se vytvořit opravu pro aktuální verzi."
 
 #: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
-msgstr ""
+msgstr "Nelze načíst rozdíly"
 
 #: vcs/dvcs/ui/branchmanager.cpp:276
 #, kde-format
 msgid "There are no committed differences."
-msgstr ""
+msgstr "Neexistují žádné commitované rozdíly."
 
 #: vcs/dvcs/ui/branchmanager.cpp:277 vcs/vcspluginhelper.cpp:279
 #, kde-format
@@ -5714,7 +5863,7 @@ msgstr "Podpora VCS"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Creates new branch based on the selected branch"
-msgstr ""
+msgstr "Vytvoří novou větev na základě vybrané větve"
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
@@ -5728,7 +5877,7 @@ msgstr "Nový"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
-msgstr ""
+msgstr "Stejné jako příkaz git branch -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
@@ -5745,27 +5894,29 @@ msgid ""
 "<p>Show changes between the current branch (or staging area, if not empty) "
 "and the last commit on the selected branch.</p>"
 msgstr ""
+"<p>Zobrazit změny mezi aktuální větví (nebo oblastí pro přípravu, pokud není "
+"prázdná) a posledním commitem ve vybrané větvi.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
-msgstr ""
+msgstr "Porovnat s větví"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
-msgstr ""
+msgstr "Načíst do vybrané větve"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
 #, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "Načíst"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
@@ -5787,17 +5938,17 @@ msgstr "Zdrojový adresář:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr "Commit zpráva:"
+msgstr "Zpráva commitu:"
 
 #: vcs/models/brancheslistmodel.cpp:63
 #, kde-format
 msgid "Branch \"%1\" already exists."
-msgstr ""
+msgstr "Větev \"%1\" již existuje."
 
 #: vcs/models/brancheslistmodel.cpp:68
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
-msgstr ""
+msgstr "Opravdu chcete přejmenovat \"%1\" na \"%2\"?"
 
 #: vcs/models/vcsannotationmodel.cpp:116
 #, kde-format
@@ -5812,7 +5963,7 @@ msgstr "Datum:"
 #: vcs/models/vcsannotationmodel.cpp:118
 #, kde-format
 msgid "Commit message:"
-msgstr "Commit zpráva:"
+msgstr "Zpráva commitu:"
 
 #: vcs/models/vcseventmodel.cpp:88
 #, kde-format
@@ -5950,7 +6101,7 @@ msgstr "Umístění zdroje"
 #, kde-format
 msgctxt "@title:column"
 msgid "Source Revision"
-msgstr ""
+msgstr "Revize zdroje"
 
 #: vcs/vcspluginhelper.cpp:83
 #, kde-format
@@ -6027,7 +6178,7 @@ msgstr "Nejsou tu žádné rozdíly."
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
-msgstr ""
+msgstr "Nelze zjistit rozdíly"
 
 #: vcs/vcspluginhelper.cpp:356
 #, kde-format
@@ -6041,6 +6192,8 @@ msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
+"Nelze zobrazit poznámky, editoru chybí rozhraní KTextEditor::"
+"AnnotationInterface."
 
 #: vcs/vcspluginhelper.cpp:424
 #, kde-format
@@ -6049,6 +6202,9 @@ msgid ""
 "not a text document:\n"
 "%1"
 msgstr ""
+"Nelze provést akci s poznámkami, protože dokument nebyl nalezen nebo se "
+"nejednalo o textový dokument:\n"
+"%1"
 
 #: vcs/vcspluginhelper.cpp:451 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
@@ -6106,14 +6262,14 @@ msgstr "Od: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
-msgstr ""
+msgstr "Vybrat soubory k odeslání commitu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
-msgstr ""
+msgstr "Soubory pro commit:"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:53
 #, kde-format
@@ -6123,12 +6279,12 @@ msgstr "Staré zprávy"
 #: vcs/widgets/vcsdiffpatchsources.cpp:109
 #, kde-format
 msgid "For more detailed information please see the Version Control tool view."
-msgstr ""
+msgstr "Podrobnější informace najdete v zobrazení nástroje Správa verzí."
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
 msgid "Unable to commit"
-msgstr "Nelze provést commit"
+msgstr "Commit nelze odeslat"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
@@ -6150,46 +6306,50 @@ msgid ""
 "With message:\n"
 " <pre>%2</pre></qt>"
 msgstr ""
+"<qt>Bude odeslán commit s následujícími soubory:\n"
+"<ul>%1</ul>\n"
+"Se zprávou:\n"
+"<pre>%2</pre></qt>"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:259
 #, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
-msgstr ""
+msgstr "Chystá se odeslat commit do repozitáře"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
-msgstr ""
+msgstr "Rozdíl mezi revizí %1 a %2:"
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr ""
+msgstr "Rozdíl mezi revizemi:"
 
 #: vcs/widgets/vcseventwidget.cpp:78
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff to Previous Revision"
-msgstr ""
+msgstr "Rozdíl oproti předchozí revizi"
 
 #: vcs/widgets/vcseventwidget.cpp:81
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff between Revisions"
-msgstr ""
+msgstr "Rozdíl mezi revizemi"
 
 #: vcs/widgets/vcseventwidget.cpp:138
 #, kde-format
 msgctxt "@title:window"
 msgid "Difference To Previous"
-msgstr ""
+msgstr "Rozdíl oproti předchozí"
 
 #: vcs/widgets/vcseventwidget.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Difference between Revisions"
-msgstr ""
+msgstr "Rozdíl mezi revizemi"
