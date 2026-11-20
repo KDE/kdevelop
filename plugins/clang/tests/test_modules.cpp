@@ -17,6 +17,8 @@
 
 #include "testfilepaths.h"
 #include "../duchain/clanghelpers.h"
+#include "../duchain/clangmodulegraph.h"
+#include "../duchain/clangmodulerepository.h"
 #include "../duchain/clangmodulescanner.h"
 #include "../clangsettings/clangsettingsmanager.h"
 
@@ -263,4 +265,211 @@ void TestModules::testCancellation()
         return true;
     });
     QVERIFY(!abortedScan.success);
+}
+
+void TestModules::testModuleGraphBasic()
+{
+    ClangModuleGraph graph;
+    QCOMPARE(graph.size(), 0);
+    QVERIFY(!graph.hasCycle());
+
+    const IndexedString modA(QStringLiteral("mod.a"));
+    const IndexedString modB(QStringLiteral("mod.b"));
+    const IndexedString modC(QStringLiteral("mod.c"));
+
+    graph.addModule(modA, {});
+    graph.addModule(modB, {modA});
+    graph.addModule(modC, {modB});
+
+    QCOMPARE(graph.size(), 3);
+    QVERIFY(graph.contains(modA));
+    QVERIFY(graph.contains(modB));
+    QVERIFY(graph.contains(modC));
+
+    QCOMPARE(graph.dependenciesOf(modB), QList<IndexedString>{modA});
+    QCOMPARE(graph.dependentsOf(modA), QList<IndexedString>{modB});
+
+    graph.removeModule(modB);
+    QCOMPARE(graph.size(), 2);
+    QVERIFY(!graph.contains(modB));
+    QVERIFY(graph.dependentsOf(modA).isEmpty());
+
+    graph.clear();
+    QCOMPARE(graph.size(), 0);
+}
+
+void TestModules::testModuleGraphTopologicalSort()
+{
+    ClangModuleGraph graph;
+    const IndexedString a(QStringLiteral("A"));
+    const IndexedString b(QStringLiteral("B"));
+    const IndexedString c(QStringLiteral("C"));
+    const IndexedString d(QStringLiteral("D"));
+
+    graph.addModule(a, {});
+    graph.addModule(b, {a});
+    graph.addModule(c, {a});
+    graph.addModule(d, {b, c});
+
+    QVERIFY(!graph.hasCycle());
+    const auto sortRes = graph.topologicalSort();
+    QVERIFY(sortRes.success);
+    QVERIFY(sortRes.cycle.isEmpty());
+    QCOMPARE(sortRes.order.size(), 4);
+
+    const int idxA = sortRes.order.indexOf(a);
+    const int idxB = sortRes.order.indexOf(b);
+    const int idxC = sortRes.order.indexOf(c);
+    const int idxD = sortRes.order.indexOf(d);
+
+    QVERIFY(idxA < idxB);
+    QVERIFY(idxA < idxC);
+    QVERIFY(idxB < idxD);
+    QVERIFY(idxC < idxD);
+
+    const auto depsD = graph.dependenciesFor(d);
+    QVERIFY(depsD.success);
+    QCOMPARE(depsD.order.last(), d);
+    QVERIFY(depsD.order.indexOf(a) < depsD.order.indexOf(d));
+
+    const auto depsB = graph.dependenciesFor(b);
+    QVERIFY(depsB.success);
+    QCOMPARE(depsB.order.size(), 2);
+    QCOMPARE(depsB.order.at(0), a);
+    QCOMPARE(depsB.order.at(1), b);
+}
+
+void TestModules::testModuleGraphCycleDetection()
+{
+    ClangModuleGraph graph;
+    const IndexedString a(QStringLiteral("A"));
+    const IndexedString b(QStringLiteral("B"));
+    const IndexedString c(QStringLiteral("C"));
+
+    graph.addModule(a, {b});
+    graph.addModule(b, {a});
+
+    QVERIFY(graph.hasCycle());
+    const auto cycle = graph.findCycle();
+    QVERIFY(!cycle.isEmpty());
+    QCOMPARE(cycle.first(), cycle.last());
+    const QString cycleStr = ClangModuleGraph::formatCycleString(cycle);
+    QVERIFY(cycleStr.contains(QStringLiteral(" -> ")));
+
+    const auto sortRes = graph.topologicalSort();
+    QVERIFY(!sortRes.success);
+    QVERIFY(!sortRes.cycle.isEmpty());
+
+    graph.clear();
+    graph.addModule(a, {b});
+    graph.addModule(b, {c});
+    graph.addModule(c, {a});
+
+    QVERIFY(graph.hasCycle());
+    const auto cycle3 = graph.findCycle();
+    QCOMPARE(cycle3.size(), 4);
+    QCOMPARE(cycle3.first(), cycle3.last());
+
+    graph.clear();
+    graph.addModule(a, {a});
+    QVERIFY(graph.hasCycle());
+    const auto selfCycle = graph.findCycle();
+    QCOMPARE(selfCycle, (QList<IndexedString>{a, a}));
+}
+
+void TestModules::testModuleGraphMultiTargetSort()
+{
+    ClangModuleGraph graph;
+    const IndexedString a(QStringLiteral("mod.A"));
+    const IndexedString b(QStringLiteral("mod.B"));
+    const IndexedString c(QStringLiteral("mod.C"));
+    const IndexedString d(QStringLiteral("mod.D"));
+
+    graph.addModule(a, {b});
+    graph.addModule(b, {});
+    graph.addModule(c, {b});
+    graph.addModule(d, {c});
+
+    const auto res = graph.dependenciesFor(QList<IndexedString>{a, d});
+    QVERIFY(res.success);
+    QVERIFY(res.cycle.isEmpty());
+
+    const int idxB = res.order.indexOf(b);
+    const int idxA = res.order.indexOf(a);
+    const int idxC = res.order.indexOf(c);
+    const int idxD = res.order.indexOf(d);
+
+    QVERIFY(idxB != -1);
+    QVERIFY(idxA != -1);
+    QVERIFY(idxC != -1);
+    QVERIFY(idxD != -1);
+
+    QVERIFY(idxB < idxA);
+    QVERIFY(idxB < idxC);
+    QVERIFY(idxC < idxD);
+}
+
+void TestModules::testModuleRepository()
+{
+    auto& repo = ClangModuleRepository::self();
+    repo.clear();
+    QCOMPARE(repo.allModules().size(), 0);
+
+    const IndexedString modName(QStringLiteral("test.repository.module"));
+    const IndexedString srcFile(QStringLiteral("/path/to/repo_mod.cppm"));
+    const IndexedString workDir(QStringLiteral("/path/to/build"));
+    const qint64 modTime = 123456789;
+    const QList<IndexedString> deps = {IndexedString(QStringLiteral("dep.one")), IndexedString(QStringLiteral("dep.two"))};
+
+    ClangModuleRepository::ModuleMetadata meta;
+    meta.moduleName = modName;
+    meta.sourceFile = srcFile;
+    meta.workingDir = workDir;
+    meta.sourceModificationTime = modTime;
+    meta.dependencies = deps;
+
+    repo.insert(meta);
+
+    QVERIFY(repo.contains(modName));
+    QCOMPARE(repo.allModules().size(), 1);
+    QCOMPARE(repo.allModules().first(), modName);
+
+    const auto found = repo.find(modName);
+    QVERIFY(found.has_value());
+    QCOMPARE(found->moduleName, modName);
+    QCOMPARE(found->sourceFile, srcFile);
+    QCOMPARE(found->workingDir, workDir);
+    QCOMPARE(found->sourceModificationTime, modTime);
+    QCOMPARE(found->dependencies, deps);
+
+    ClangModuleGraph graph;
+    repo.loadIntoGraph(graph);
+    QVERIFY(graph.contains(modName));
+    QCOMPARE(graph.dependenciesOf(modName), deps);
+
+    repo.remove(modName);
+    QVERIFY(!repo.contains(modName));
+    QVERIFY(!repo.find(modName).has_value());
+    QCOMPARE(repo.allModules().size(), 0);
+
+    // Test FileScanMetadata storage
+    const IndexedString consumerFile(QStringLiteral("/path/to/consumer.cpp"));
+    ClangModuleRepository::FileScanMetadata fileMeta;
+    fileMeta.sourceFile = consumerFile;
+    fileMeta.sourceModificationTime = 987654321;
+    fileMeta.requiredModules = {modName};
+    fileMeta.compileFlags = {IndexedString(QStringLiteral("-std=c++23")), IndexedString(QStringLiteral("-DFOO=1"))};
+    fileMeta.moduleArguments = {IndexedString(QStringLiteral("-fmodule-file=test.repository.module=test.pcm"))};
+
+    repo.insertFileScan(fileMeta);
+    const auto foundScan = repo.findFileScan(consumerFile);
+    QVERIFY(foundScan.has_value());
+    QCOMPARE(foundScan->sourceFile, consumerFile);
+    QCOMPARE(foundScan->sourceModificationTime, 987654321);
+    QCOMPARE(foundScan->requiredModules, fileMeta.requiredModules);
+    QCOMPARE(foundScan->compileFlags, fileMeta.compileFlags);
+    QCOMPARE(foundScan->moduleArguments, fileMeta.moduleArguments);
+
+    repo.removeFileScan(consumerFile);
+    QVERIFY(!repo.findFileScan(consumerFile).has_value());
 }
