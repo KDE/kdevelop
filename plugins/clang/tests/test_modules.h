@@ -23,6 +23,11 @@ private Q_SLOTS:
     void testParseP1689Json();
     void testClangScanDeps();
     void testCancellation();
+    void testModuleGraphBasic();
+    void testModuleGraphTopologicalSort();
+    void testModuleGraphCycleDetection();
+    void testModuleGraphMultiTargetSort();
+    void testModuleRepository();
 };
 
 #endif // TESTMODULES_H
