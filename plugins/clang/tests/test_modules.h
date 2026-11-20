@@ -35,6 +35,7 @@ private Q_SLOTS:
     void testProjectModuleDiscovery();
     void testModuleProblemsReporting();
     void testModulePrecompileJobThreadWeaver();
+    void testDependencyScanner();
 };
 
 #endif // TESTMODULES_H

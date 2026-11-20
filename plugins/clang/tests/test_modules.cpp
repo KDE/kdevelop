@@ -16,6 +16,7 @@
 #include <tests/testplugincontroller.h>
 
 #include "testfilepaths.h"
+#include "../duchain/clangdependencyscanner.h"
 #include "../duchain/clanghelpers.h"
 #include "../duchain/clangmodule.h"
 #include "../duchain/clangmodulegraph.h"
@@ -891,6 +892,85 @@ void TestModules::testModulePrecompileJobThreadWeaver()
         {QStringLiteral("TWCycleA")}, cycleMap, clangCompiler, {}, QStringLiteral("-std=c++20"), buildDir, {}, &cycleProblems);
     QVERIFY(cycleJobs.isEmpty());
     QVERIFY(!cycleProblems.isEmpty());
+
+    ClangModule::clearModules();
+}
+
+
+void TestModules::testDependencyScanner()
+{
+    const QString clangCompiler = ClangHelpers::clangCompilerPath();
+    if (clangCompiler.isEmpty()) {
+        QSKIP("clang++ is not available on this system");
+    }
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+
+    const QString srcDir = tempDir.path() + QStringLiteral("/src");
+    const QString buildDir = tempDir.path() + QStringLiteral("/build");
+    QDir().mkpath(srcDir);
+    QDir().mkpath(buildDir);
+
+    const QString modFile = srcDir + QStringLiteral("/greet.cppm");
+    const QString consumerFile = srcDir + QStringLiteral("/main.cpp");
+
+    {
+        QFile fMod(modFile);
+        QVERIFY(fMod.open(QIODevice::WriteOnly | QIODevice::Text));
+        fMod.write("export module Greet; export int greetVal() { return 7; }\n");
+
+        QFile fUse(consumerFile);
+        QVERIFY(fUse.open(QIODevice::WriteOnly | QIODevice::Text));
+        fUse.write("import Greet; int main() { return greetVal(); }\n");
+    }
+
+    ClangModule::clearModules();
+    ClangDependencyScanner scanner;
+    const IndexedString indexedConsumer(consumerFile);
+
+    // Cache is initially empty (read-only lookup, no process launched)
+    QVERIFY(scanner.cachedModuleArguments(indexedConsumer).isEmpty());
+    QVERIFY(scanner.cachedCompileFlags(indexedConsumer).isEmpty());
+
+    ClangDependencyScanner::ScanConfig cfg;
+    cfg.buildDir = buildDir;
+    cfg.searchIncludePaths = {srcDir};
+    cfg.parserOptions = QStringLiteral("-std=c++20");
+    cfg.compileArgs = {QStringLiteral("-DFROM_BUILD_SYSTEM=1")};
+    scanner.setScanConfig(indexedConsumer, cfg);
+
+    // Create and execute independent background scan job via ThreadWeaver
+    const auto job = scanner.createDependencyScanJob(indexedConsumer);
+    QVERIFY(job);
+
+    ThreadWeaver::Queue queue;
+    queue.enqueue(job);
+    queue.finish();
+
+    // Now cached results are populated in ItemRepository
+    const auto cachedArgs = scanner.cachedModuleArguments(indexedConsumer);
+    QVERIFY(!cachedArgs.isEmpty());
+    bool hasGreetArg = false;
+    for (const auto& arg : cachedArgs) {
+        if (arg.startsWith("-fmodule-file=Greet=")) {
+            hasGreetArg = true;
+            break;
+        }
+    }
+    QVERIFY(hasGreetArg);
+
+    const auto cachedFlags = scanner.cachedCompileFlags(indexedConsumer);
+    QVERIFY(cachedFlags.contains(QStringLiteral("-DFROM_BUILD_SYSTEM=1")));
+    QVERIFY(cachedFlags.contains(QStringLiteral("-std=c++20")));
+
+    // Up-to-date file should not create a redundant scan job
+    QVERIFY(!scanner.createDependencyScanJob(indexedConsumer));
+
+    // Invalidation clears cache and allows rescanning
+    scanner.invalidate(indexedConsumer);
+    QVERIFY(scanner.cachedModuleArguments(indexedConsumer).isEmpty());
+    QVERIFY(scanner.createDependencyScanJob(indexedConsumer));
 
     ClangModule::clearModules();
 }
