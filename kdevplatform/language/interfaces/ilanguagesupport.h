@@ -30,6 +30,7 @@ class ParseJob;
 class TopDUContext;
 class ICodeHighlighting;
 class ICreateClassHelper;
+class IDependencyScanner;
 class ILanguageSupportPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport
@@ -76,6 +77,11 @@ public:
      * Reimplementing this method is therefore not necessary to have classes created in this language.
      * */
     virtual ICreateClassHelper* createClassHelper() const;
+
+    /**
+     * Should return a dependency scanner instance for this language, or nullptr.
+     */
+    virtual IDependencyScanner* dependencyScanner() const;
 
     /**
      * Every thread that does background-parsing should read-lock its language's parse-mutex while parsing.

@@ -6,6 +6,7 @@
 */
 
 #include "ilanguagesupport.h"
+#include "idependencyscanner.h"
 #include "../duchain/duchain.h"
 #include "../duchain/stringhelpers.h"
 
@@ -90,6 +91,11 @@ QReadWriteLock* ILanguageSupport::parseLock() const
     Q_D(const ILanguageSupport);
 
     return &d->lock;
+}
+
+IDependencyScanner* ILanguageSupport::dependencyScanner() const
+{
+    return nullptr;
 }
 
 int ILanguageSupport::suggestedReparseDelayForChange(KTextEditor::Document* doc,

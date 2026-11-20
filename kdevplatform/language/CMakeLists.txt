@@ -113,6 +113,7 @@ set(KDevPlatformLanguage_LIB_SRCS
 
     interfaces/abbreviations.cpp
     interfaces/iastcontainer.cpp
+    interfaces/idependencyscanner.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iquickopen.cpp
@@ -204,6 +205,7 @@ install(FILES
 
 install(FILES
     interfaces/ilanguagesupport.h
+    interfaces/idependencyscanner.h
     interfaces/icodehighlighting.h
     interfaces/quickopendataprovider.h
     interfaces/quickopenfilter.h
