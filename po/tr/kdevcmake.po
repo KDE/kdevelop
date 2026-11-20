@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-10-08 19:00+0300\n"
+"PO-Revision-Date: 2026-11-19 19:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -226,12 +226,12 @@ msgstr "CMake yürütülebiliri bulunamıyor. Sistemde kurulu bir tane var mı?"
 #: cmakedocumentation.cpp:81
 #, kde-format
 msgid "<br /><em>Cache Value:</em> %1\n"
-msgstr "<br /><em>Önbellek Değeri:</em> %1\n"
+msgstr "<br /><em>Ön bellek değeri:</em> %1\n"
 
 #: cmakedocumentation.cpp:84
 #, kde-format
 msgid "<br /><em>Cache Documentation:</em> %1\n"
-msgstr "<br /><em>Önbellek Belgelendirmesi:</em> %1\n"
+msgstr "<br /><em>Ön bellek belgelendirmesi:</em> %1\n"
 
 #: cmakefileapiimportjob.cpp:41
 #, kde-format
@@ -283,7 +283,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
-msgstr "Önbellek Değerleri"
+msgstr "Ön Bellek Değerleri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
