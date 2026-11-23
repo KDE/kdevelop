@@ -135,7 +135,7 @@ msgstr "CMake 可执行文件(&E)："
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatically reconfigure when CMake project files change"
-msgstr ""
+msgstr "CMake 工程文件更改时自动重新配置"
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format

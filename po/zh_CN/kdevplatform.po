@@ -3947,14 +3947,11 @@ msgid "Batch edit mode"
 msgstr "批量编辑模式"
 
 #: shell/settings/languagepreferences.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid " file"
-#| msgid_plural " files"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "%v file"
 msgid_plural "%v files"
-msgstr[0] " 文件"
+msgstr[0] ""
 
 #: shell/settings/languagepreferences.cpp:77
 #, kde-format
