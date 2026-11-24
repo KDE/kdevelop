@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-07 00:43+0000\n"
-"PO-Revision-Date: 2026-10-12 11:51+0300\n"
+"PO-Revision-Date: 2026-11-23 18:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -66,7 +66,7 @@ msgid ""
 "The default level. Very similar to level 0, slightly more false-positives "
 "but very few."
 msgstr ""
-"Öntanımlı düzey. Düzey 0’a pek benzerdir; az da olsa yanlış pozitifler "
+"Varsayılan düzey. Düzey 0’a pek benzerdir; az da olsa yanlış pozitifler "
 "çıkabilir."
 
 #: checksdb.cpp:43
@@ -75,7 +75,7 @@ msgid ""
 "Also very few false-positives, but contains noisy checks which not everyone "
 "agree should be default."
 msgstr ""
-"Yine pek az yanlış pozitifler; ancak herkesin öntanımlı olması konusunda "
+"Yine pek az yanlış pozitifler; ancak herkesin varsayılan olması konusunda "
 "düşünce birliğine varmadığı birkaç gürültülü denetim içerir."
 
 #: checksdb.cpp:46
@@ -147,7 +147,7 @@ msgstr "Denetim kümesini kaldır"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "Öntanımlı olarak ayarla"
+msgstr "Varsayılan olarak ayarla"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
 #: config/checksetmanagewidget.ui:88
@@ -166,13 +166,13 @@ msgstr "Özel"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default (currently: %1)"
-msgstr "Öntanımlıyı kullan (şu anda: %1)"
+msgstr "Varsayılanı kullan (şu anda: %1)"
 
 #: config/checksetselectionlistmodel.cpp:64
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (default selection)"
-msgstr "%1 (öntanımlı seçim)"
+msgstr "%1 (varsayılan seçim)"
 
 #: config/checkswidget.cpp:37
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-11-19 19:38+0300\n"
+"PO-Revision-Date: 2026-11-23 18:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1404,7 +1404,7 @@ msgid ""
 "files or - to read from STDIN, the latter is the default if nothing is "
 "provided"
 msgstr ""
-"dosyadan veya STDIN’den okumak, bir şey verilmediğinde öntanımlı ikincidir"
+"dosyadan veya STDIN’den okumak, bir şey verilmediğinde varsayılan ikincidir"
 
 #: language/util/debuglanguageparserhelper.h:182
 #, kde-format
@@ -1786,7 +1786,7 @@ msgid ""
 "to the default code area."
 msgstr ""
 "Alanı değiştirmek için eylemleri çalıştır.<br />Bir alan özel bir kullanım "
-"durumu için bir araç görünümü yapılandırmasıdır. Buradan öntanımlı kod "
+"durumu için bir araç görünümü yapılandırmasıdır. Buradan varsayılan kod "
 "alanına da geri dönebilirsiniz."
 
 #: shell/areadisplay.cpp:70
@@ -3953,7 +3953,7 @@ msgstr "Çevre Değişkenlerini Yapılandır"
 #: shell/settings/environmentprofilelistmodel.cpp:48
 #, kde-format
 msgid "%1 (default profile)"
-msgstr "%1 (öntanımlı profil)"
+msgstr "%1 (varsayılan profil)"
 
 #: shell/settings/environmentprofilemodel.cpp:91
 #, kde-format
@@ -4018,7 +4018,7 @@ msgstr "Profili kaldır"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set as default"
-msgstr "Öntanımlı olarak ayarla"
+msgstr "Varsayılan olarak ayarla"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
 #: shell/settings/environmentwidget.ui:114
@@ -4184,7 +4184,7 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
-"<p>Öntanımlı olarak, türler, işlevler, ad alanları ve benzer ögeler için "
+"<p>Varsayılan olarak, türler, işlevler, ad alanları ve benzer ögeler için "
 "olan global renkler kendiliğinden oluşturulur ve global renklendirme "
 "yoğunluğuna bağlı olarak seçili düzenleyici temasına uyum sağlayacaktır. "
 "Renkler üzerinde tam denetime iye olmak istiyorsanız renk kaynağı olarak "
@@ -5542,7 +5542,7 @@ msgid ""
 "declarations-and-uses-and-AST"
 msgstr ""
 "Yapılacak özellikler. Seçenekler: empty, simplified-visible-declarations, "
-"visible-declarations (öntanımlı), all-declarations, all-declarations-and-"
+"visible-declarations (varsayılan), all-declarations, all-declarations-and-"
 "uses, all-declarations-and-uses-and-AST"
 
 #: util/duchainify/main.cpp:296
@@ -5597,7 +5597,7 @@ msgstr "Profil"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr "Öntanımlı profili kullan (geçerli: %1)"
+msgstr "Varsayılan profili kullan (geçerli: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format

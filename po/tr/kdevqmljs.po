@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevqmljs\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2026-11-15 19:08+0300\n"
+"PO-Revision-Date: 2026-11-23 17:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -136,7 +136,7 @@ msgstr "Şurada oluştur:"
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
 #, kde-format
 msgid "Use as default project location"
-msgstr "Öntanımlı proje konumu olarak kullan"
+msgstr "Varsayılan proje konumu olarak kullan"
 
 #. i18n: ectx: property (text), widget (QLabel, projectLabel)
 #: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98

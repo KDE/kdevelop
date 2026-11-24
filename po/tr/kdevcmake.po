@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-10 00:42+0000\n"
-"PO-Revision-Date: 2026-11-19 19:42+0300\n"
+"PO-Revision-Date: 2026-11-23 18:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -104,15 +104,15 @@ msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
 "will let CMake use its default install prefix."
 msgstr ""
-"Projenin altına kurulacağı önek. Bunu boş bırakmak, CMake’in kendi öntanımlı "
-"yapı önekini kullanmasına izin verir."
+"Projenin altına kurulacağı önek. Bunu boş bırakmak, CMake’in kendi "
+"varsayılan yapı önekini kullanmasına izin verir."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr "CMake’in öntanımlı kurulum öneki"
+msgstr "CMake’in varsayılan kurulum öneki"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119

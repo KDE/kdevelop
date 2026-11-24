@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-07 00:43+0000\n"
-"PO-Revision-Date: 2026-05-02 18:56+0300\n"
+"PO-Revision-Date: 2026-11-23 17:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -445,7 +445,7 @@ msgstr "Ad:"
 #: settings/mesonoptionbaseview.ui:48
 #, kde-format
 msgid "Reset to default value"
-msgstr "Öntanımlı değere sıfırla"
+msgstr "Varsayılan değere sıfırla"
 
 #. i18n: ectx: property (title), widget (QGroupBox, c_main)
 #: settings/mesonoptionsview.ui:32
@@ -562,7 +562,7 @@ msgstr "<html><head/><body><h3>projeAdı</h3></body></html>"
 #: settings/mesonrewriterpage.ui:112
 #, kde-format
 msgid "Project default options"
-msgstr "Öntanımlı proje seçenekleri"
+msgstr "Varsayılan proje seçenekleri"
 
 #. i18n: ectx: property (text), widget (QPushButton, b_newOpt)
 #: settings/mesonrewriterpage.ui:152
