@@ -3,28 +3,24 @@
 # SPDX-FileCopyrightText: 2017, 2019 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2020 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2022 Alois Spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevastyle\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:12+0000\n"
-"PO-Revision-Date: 2022-11-11 12:46+0100\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2026-11-15 15:53+0100\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: astyle_plugin.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Artistic Style</b> is a source code indenter, formatter, and "
-#| "beautifier for the C, C++, C# and Java programming languages.<br />Home "
-#| "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
-#| "sourceforge.net</a>"
+#, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
 "for the C, C++, C# and Java programming languages.<p style='margin-top:0;"
@@ -32,8 +28,9 @@ msgid ""
 "\">http://astyle.sourceforge.net</a></p>"
 msgstr ""
 "<b>Artistic Style</b> ist ein Quelltext-Einrücker, -Formatierer und -"
-"Verschönerer für die Programmiersprachen C, C++, C# und Java.<br/>Webseite: "
-"<a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net/</a>"
+"Verschönerer für die Programmiersprachen C, C++, C# und Java.<p "
+"style='margin-top:0;white-space:pre'>Webseite: <a href=\"http://astyle."
+"sourceforge.net/\">http://astyle.sourceforge.net/</a></p>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33
@@ -266,7 +263,7 @@ msgid ""
 "from their immediately preceding closing brackets."
 msgstr ""
 "Nach schließenden Klammern umbrechen, wenn ein beendender\n"
-"Block-Header (z. B. „else“, „catch“ ...) beginnt."
+"Block-Header (z. B. „else“, „catch“ …) beginnt."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
 #: astyle_preferences.ui:329
@@ -383,7 +380,7 @@ msgid ""
 "2. Comments are broken from the block.\n"
 msgstr ""
 "Wie --break-blocks, bis auf das Einfügen von Leerzeilen\n"
-"um beendende Block-Header (z. B. „else“, „catch“ ...).\n"
+"um beendende Block-Header (z. B. „else“, „catch“ …).\n"
 "\n"
 "Bekannte Probleme:\n"
 "\n"
@@ -492,7 +489,7 @@ msgid ""
 "'while', ...)"
 msgstr ""
 "Leerzeichen nach Headern von Klammer-Ausdrücken einfügen (z. B. „if“, „for“, "
-"„while“, ...)"
+"„while“, …)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
 #: astyle_preferences.ui:510
