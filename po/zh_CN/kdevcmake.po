@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevcmake.pot\n"
-"X-Crowdin-File-ID: 54516\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevcmake.pot\n"
+"X-Crowdin-File-ID: 54806\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -135,7 +135,7 @@ msgstr "CMake 可执行文件(&E)："
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatically reconfigure when CMake project files change"
-msgstr ""
+msgstr "CMake 工程文件更改时自动重新配置"
 
 #: cmakecodecompletionmodel.cpp:192
 #, kde-format

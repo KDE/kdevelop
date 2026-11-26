@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevcompileanalyzercommon.pot\n"
-"X-Crowdin-File-ID: 54634\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevcompileanalyzercommon.pot\n"
+"X-Crowdin-File-ID: 54962\n"
 
 #: compileanalyzeproblemmodel.cpp:85
 #, kde-format

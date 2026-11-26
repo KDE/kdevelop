@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kdevelop/kdevokteta.pot\n"
-"X-Crowdin-File-ID: 54660\n"
+"X-Crowdin-File: /kf6-stable/messages/kdevelop/kdevokteta.pot\n"
+"X-Crowdin-File-ID: 54792\n"
 
 #. i18n: ectx: Menu (permission)
 #: kdevokteta.rc:10
