@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-11-23 17:58+0300\n"
+"PO-Revision-Date: 2026-11-26 18:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -45,12 +45,13 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
-"<b>Özel biçim dizisi</b>\n"
+"<b>Özel biçim dizgesi</b>\n"
 "<p>Seçilen ifade yazdırılırken kullanılacak C biçimli dizi belirtin. "
 "Örneğin:\n"
 "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
-"Eğer özel biçim dizisi etkinleştirilmezse tüm ifadelerin adları ve değerleri "
-"tüm ifadeler için biçim belirleyici olarak “%d” ile yazdırılacaktır."
+"Eğer özel biçim dizgesi etkinleştirilmezse tüm ifadelerin adları ve "
+"değerleri tüm ifadeler için biçim belirleyici olarak “%d” ile "
+"yazdırılacaktır."
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
@@ -87,7 +88,7 @@ msgstr "İzlemeyi etkinleştir"
 #, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
-msgstr "Özel biçim dizisi"
+msgstr "Özel biçim dizgesi"
 
 #: debugsession.cpp:166
 #, kde-format
